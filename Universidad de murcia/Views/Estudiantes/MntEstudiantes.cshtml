@@ -1,0 +1,47 @@
+﻿@model IEnumerable<UniversidadDeMurcia.Models.Estudiante>
+
+@{
+    ViewData["Title"] = "Mantenimiento de estudiantes";
+}
+
+<h2>Estudiantes</h2>
+
+<p>
+    <a asp-action="IraCrearEstudiante">Nuevo estudiante</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InscritoEl)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InscritoEl)
+            </td>
+            <td>
+                <a asp-action="IraEditarEstudiante" asp-route-id="@item.ID">Editar</a> |
+                <a asp-action="IraDetalleEstudiante" asp-route-id="@item.ID">Detalles</a> |
+                <a asp-action="IraBorrarEstudiante" asp-route-id="@item.ID">Eliminar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

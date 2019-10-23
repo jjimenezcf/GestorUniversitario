@@ -1,0 +1,43 @@
+﻿@model UniversidadDeMurcia.Models.Estudiante
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edición del estudiante</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ModificarEstudiante">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InscritoEl" class="control-label"></label>
+                <input asp-for="InscritoEl" class="form-control" />
+                <span asp-validation-for="InscritoEl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Aceptar" class="btn btn-outline-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div> 
+    <a asp-action="IraMntEstudiantes">Mantenimiento de estudiantes</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

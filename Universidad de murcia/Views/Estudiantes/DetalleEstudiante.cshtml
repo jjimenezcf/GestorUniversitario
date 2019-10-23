@@ -1,0 +1,67 @@
+﻿@model UniversidadDeMurcia.Models.Estudiante
+
+@{
+    ViewData["Title"] = $"Detalle de el estudiante {Model.ID}";
+}
+
+<h2>Detalles del estudiante: @Html.DisplayFor(model => model.Apellido) </h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Apellido)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Apellido)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InscritoEl)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InscritoEl)
+        </dd>
+
+    </dl>
+    <div>
+        <div style="display: inline-block; vertical-align: top; width : 30%">
+            <p class="font-weight-bolder">Inscripciones</p>
+        </div>
+        <div style="display: inline-block; vertical-align: top;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Grado</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Inscripciones)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Curso.Titulo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Grado)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="IraEditarEstudiante" asp-route-id="@Model.ID">Editar</a>
+</div>
+<div>
+    <a asp-action="IraMntEstudiantes">Mantenimiento de estudiantes</a>
+</div>

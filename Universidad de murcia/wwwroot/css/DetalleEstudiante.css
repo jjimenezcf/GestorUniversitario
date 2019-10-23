@@ -1,0 +1,10 @@
+﻿.ladoIzquierdo {
+    display: inline-block;
+    vertical-align: top;
+    width: 30%
+}
+
+.ladoDerecho {
+    display: inline-block;
+    vertical-align: top;
+}
