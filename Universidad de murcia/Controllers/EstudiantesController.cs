@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Extensiones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniversidadDeMurcia.Datos;
@@ -8,6 +9,7 @@ using UniversidadDeMurcia.Models;
 
 namespace UniversidadDeMurcia.Controllers
 {
+
     public class EstudiantesController : BaseController
     {
         private readonly ContextoUniversitario _context;
@@ -15,7 +17,7 @@ namespace UniversidadDeMurcia.Controllers
         public EstudiantesController(ContextoUniversitario context, Gestor.Errores.Errores gestorErrores):
             base(gestorErrores)
         {
-            _context = context;            
+            _context = context;
         }
 
         public IActionResult Index()
@@ -23,9 +25,22 @@ namespace UniversidadDeMurcia.Controllers
             return RedirectToAction(nameof(IraMntEstudiantes));
         }
 
-        public async Task<IActionResult> IraMntEstudiantes()
+        public async Task<IActionResult> IraMntEstudiantes(string orden)
         {
-            return View("MntEstudiantes", await _context.Estudiantes.ToListAsync());
+            ViewBag.Mantenimiento = nameof(IraMntEstudiantes);
+            ViewData[Estudiante.Parametro.Nombre] = orden.IsNullOrEmpty()  || orden == Estudiante.OrdenadoPor.NombreAsc ? Estudiante.OrdenadoPor.NombreDes: Estudiante.OrdenadoPor.NombreAsc;
+            ViewData[Estudiante.Parametro.InscritoEl] = orden == Estudiante.OrdenadoPor.InscritoElAsc ? Estudiante.OrdenadoPor.InscritoElDes: Estudiante.OrdenadoPor.InscritoElAsc;
+
+            var estudiantes = from s in _context.Estudiantes select s;
+            estudiantes = orden switch
+            {
+                Estudiante.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
+                Estudiante.OrdenadoPor.NombreDes => estudiantes.OrderByDescending(s => s.Apellido),
+                Estudiante.OrdenadoPor.InscritoElDes => estudiantes.OrderByDescending(s => s.InscritoEl),
+                Estudiante.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
+                _ => estudiantes.OrderBy(s => s.Apellido),
+            };
+            return View("MntEstudiantes", await estudiantes.AsNoTracking().ToListAsync());
         }
 
         public IActionResult IraCrearEstudiante()

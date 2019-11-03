@@ -25,21 +25,18 @@ namespace UniversidadDeMurcia
 
         private static void CreateDbIfNotExists(IWebHost host)
         {
-            using (var scope = host.Services.CreateScope())
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            try
             {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var contexto = services.GetRequiredService<ContextoUniversitario>();
-                    InicializadorBD.Inicializar(contexto);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Error al inicializar la BD.");
-                }
+                var contexto = services.GetRequiredService<ContextoUniversitario>();
+                InicializadorBD.Inicializar(contexto);
             }
-
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "Error al inicializar la BD.");
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

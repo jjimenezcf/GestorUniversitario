@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UniversidadDeMurcia.Models
 {
     public class Estudiante
     {
+        public static class Parametro
+        {
+            public const string Nombre = nameof(Nombre);
+            public const string InscritoEl = nameof(InscritoEl);
+        }
+
+        public static class OrdenadoPor
+        {
+            internal const string NombreDes = nameof(NombreAsc);
+            internal const string NombreAsc = nameof(NombreDes);
+            internal const string InscritoElDes = nameof(InscritoElDes);
+            internal const string InscritoElAsc = nameof(InscritoElAsc);
+        }
+
         public int ID { get; set; }
         public string Apellido { get; set; }
         public string Nombre { get; set; }
