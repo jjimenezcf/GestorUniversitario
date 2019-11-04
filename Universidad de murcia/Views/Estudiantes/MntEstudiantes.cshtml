@@ -1,25 +1,25 @@
 ﻿@model IEnumerable<UniversidadDeMurcia.Models.Estudiante>
 
 @{
-    ViewData["Title"] = "Mantenimiento de estudiantes";
+    ViewData["Title"] = @ViewBag.Crud.TituloDelCrud;
 }
 
 <h2>Estudiantes</h2>
 
 <p>
-    <a asp-action="IraCrearEstudiante">Nuevo estudiante</a>
+    <a asp-action=@ViewBag.Crud.IraCrear>@ViewBag.Crud.TituloDeLaCreacion</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-               <a asp-action=@ViewBag.Mantenimiento asp-route-orden ="@ViewData[Estudiante.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
+               <a asp-action=@ViewBag.Crud.IrAlCrud  asp-route-orden ="@ViewData[Estudiante.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
-                <a asp-action=@ViewBag.Mantenimiento asp-route-orden="@ViewData[Estudiante.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
+                <a asp-action=@ViewBag.Crud.IrAlCrud asp-route-orden="@ViewData[Estudiante.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
             </th>
             <th></th>
         </tr>
@@ -37,9 +37,9 @@
                 @Html.DisplayFor(modelItem => item.InscritoEl)
             </td>
             <td>
-                <a asp-action="IraEditarEstudiante" asp-route-id="@item.ID">Editar</a> |
-                <a asp-action="IraDetalleEstudiante" asp-route-id="@item.ID">Detalles</a> |
-                <a asp-action="IraBorrarEstudiante" asp-route-id="@item.ID">Eliminar</a>
+                <a asp-action=@ViewBag.Crud.IraEditar asp-route-id="@item.ID">Editar</a> |
+                <a asp-action=@ViewBag.Crud.IraDetalle asp-route-id="@item.ID">Detalles</a> |
+                <a asp-action=@ViewBag.Crud.IraBorrar asp-route-id="@item.ID">Eliminar</a>
             </td>
         </tr>
     }
