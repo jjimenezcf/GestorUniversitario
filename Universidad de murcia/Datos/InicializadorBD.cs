@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace UniversidadDeMurcia.Datos
         public static void Inicializar(ContextoUniversitario context)
         {
             context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             // Look for any students.
             if (context.Estudiantes.Any())
@@ -39,13 +41,13 @@ namespace UniversidadDeMurcia.Datos
 
             var courses = new Curso[]
             {
-            new Curso{CursoID=1050,Titulo="Chemistry",Creditos=3},
-            new Curso{CursoID=4022,Titulo="Microeconomics",Creditos=3},
-            new Curso{CursoID=4041,Titulo="Macroeconomics",Creditos=3},
-            new Curso{CursoID=1045,Titulo="Calculus",Creditos=4},
-            new Curso{CursoID=3141,Titulo="Trigonometry",Creditos=4},
-            new Curso{CursoID=2021,Titulo="Composition",Creditos=3},
-            new Curso{CursoID=2042,Titulo="Literature",Creditos=4}
+            new Curso{Titulo="Chemistry",Creditos=3},
+            new Curso{Titulo="Microeconomics",Creditos=3},
+            new Curso{Titulo="Macroeconomics",Creditos=3},
+            new Curso{Titulo="Calculus",Creditos=4},
+            new Curso{Titulo="Trigonometry",Creditos=4},
+            new Curso{Titulo="Composition",Creditos=3},
+            new Curso{Titulo="Literature",Creditos=4}
             };
             foreach (Curso curso in courses)
             {
