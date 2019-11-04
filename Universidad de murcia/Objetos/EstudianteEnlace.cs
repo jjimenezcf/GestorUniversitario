@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UniversidadDeMurcia.Models
+﻿namespace UniversidadDeMurcia.Objetos
 {
-    public class Estudiante: Elemento
+    public class EstudianteEnlace
     {
         public static class Parametro
         {
@@ -19,10 +16,5 @@ namespace UniversidadDeMurcia.Models
             internal const string InscritoElAsc = nameof(InscritoElAsc);
         }
 
-        public string Apellido { get; set; }
-        public string Nombre { get; set; }
-        public DateTime InscritoEl { get; set; }
-
-        public ICollection<Inscripcion> Inscripciones { get; set; }
     }
 }

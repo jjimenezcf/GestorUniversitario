@@ -1,4 +1,4 @@
-﻿namespace UniversidadDeMurcia.Models
+﻿namespace GestorUniversitario.ModeloDeClases
 {
     public class Elemento
     {

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Gestor.Errores;
-using UniversidadDeMurcia.Datos;
+using GestorUniversitario.ModeloDeClases;
 using Microsoft.EntityFrameworkCore;
-using UniversidadDeMurcia.Models;
+using GestorUniversitario.ContextosDeBd;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -147,7 +145,7 @@ namespace UniversidadDeMurcia.Controllers
             return base.View(viewName, model);
         }
         
-        protected async Task<IActionResult> CrearObjeto(Models.Elemento objeto)
+        protected async Task<IActionResult> CrearObjeto(Elemento objeto)
         {
             try
             {
@@ -166,7 +164,7 @@ namespace UniversidadDeMurcia.Controllers
             return View("CrearEstudiante", objeto);
         }
 
-        protected async Task<IActionResult> ModificarObjeto(int id, Models.Elemento elemento)
+        protected async Task<IActionResult> ModificarObjeto(int id, Elemento elemento)
         {
             if (id != elemento.Id)
             {

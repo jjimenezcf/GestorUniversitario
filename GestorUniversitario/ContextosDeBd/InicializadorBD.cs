@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UniversidadDeMurcia.Datos;
-using UniversidadDeMurcia.Models;
+using GestorUniversitario.ModeloDeClases;
 
-namespace UniversidadDeMurcia.Datos
+namespace GestorUniversitario.ContextosDeBd
 {
     public class InicializadorBD
     {

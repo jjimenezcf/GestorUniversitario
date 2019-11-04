@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Extensiones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UniversidadDeMurcia.Datos;
-using UniversidadDeMurcia.Models;
+using GestorUniversitario.ContextosDeBd;
+using GestorUniversitario.ModeloDeClases;
+using UniversidadDeMurcia.Objetos;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -25,16 +26,21 @@ namespace UniversidadDeMurcia.Controllers
 
         public async Task<IActionResult> IraMntEstudiantes(string orden)
         {
-            ViewData[Estudiante.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == Estudiante.OrdenadoPor.NombreAsc ? Estudiante.OrdenadoPor.NombreDes : Estudiante.OrdenadoPor.NombreAsc;
-            ViewData[Estudiante.Parametro.InscritoEl] = orden == Estudiante.OrdenadoPor.InscritoElAsc ? Estudiante.OrdenadoPor.InscritoElDes : Estudiante.OrdenadoPor.InscritoElAsc;
+            ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc 
+                                                        ? EstudianteEnlace.OrdenadoPor.NombreDes 
+                                                        : EstudianteEnlace.OrdenadoPor.NombreAsc;
+
+            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden == EstudianteEnlace.OrdenadoPor.InscritoElAsc 
+                                                        ? EstudianteEnlace.OrdenadoPor.InscritoElDes 
+                                                        : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
             var estudiantes = from s in ContextoDeBd.Estudiantes select s;
             estudiantes = orden switch
             {
-                Estudiante.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
-                Estudiante.OrdenadoPor.NombreDes => estudiantes.OrderByDescending(s => s.Apellido),
-                Estudiante.OrdenadoPor.InscritoElDes => estudiantes.OrderByDescending(s => s.InscritoEl),
-                Estudiante.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
+                EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
+                EstudianteEnlace.OrdenadoPor.NombreDes => estudiantes.OrderByDescending(s => s.Apellido),
+                EstudianteEnlace.OrdenadoPor.InscritoElDes => estudiantes.OrderByDescending(s => s.InscritoEl),
+                EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
             return View(CrudDelObjeto.VistaDelCrud, await estudiantes.AsNoTracking().ToListAsync());

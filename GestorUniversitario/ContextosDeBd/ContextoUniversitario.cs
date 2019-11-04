@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using UniversidadDeMurcia.Models;
+using GestorUniversitario.ModeloDeClases;
 
-namespace UniversidadDeMurcia.Datos
+namespace GestorUniversitario.ContextosDeBd
 {
 
 

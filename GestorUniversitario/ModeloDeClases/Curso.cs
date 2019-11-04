@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UniversidadDeMurcia.Models
+namespace GestorUniversitario.ModeloDeClases
 {
     public class Curso : Elemento
     {
