@@ -21,8 +21,8 @@ namespace UniversidadDeMurcia.Datos
             IQueryable<Objeto> objetos = tipo switch
             {
                 nameof(Estudiante) => Estudiantes,
-                //nameof(Inscripcion) => Inscripciones,
-                //nameof(Curso) => Cursos,
+                nameof(Inscripcion) => Inscripciones,
+                nameof(Curso) => Cursos,
                 _ => null,
             };
             return objetos;
