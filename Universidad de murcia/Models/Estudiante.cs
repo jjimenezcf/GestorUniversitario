@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UniversidadDeMurcia.Models
 {
-    public class Estudiante
+    public class Estudiante: Objeto
     {
         public static class Parametro
         {
@@ -19,7 +19,6 @@ namespace UniversidadDeMurcia.Models
             internal const string InscritoElAsc = nameof(InscritoElAsc);
         }
 
-        public int ID { get; set; }
         public string Apellido { get; set; }
         public string Nombre { get; set; }
         public DateTime InscritoEl { get; set; }
