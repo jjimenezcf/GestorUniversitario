@@ -9,6 +9,10 @@
 *.userosscache
 *.sln.docstates
 
+# Ficheros de configuración en MVC Core
+appsettings.json
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
