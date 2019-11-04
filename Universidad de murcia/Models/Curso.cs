@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniversidadDeMurcia.Models
 {
-    public class Curso : Objeto
+    public class Curso : Elemento
     {
         public string Titulo { get; set; }
         public int Creditos { get; set; }

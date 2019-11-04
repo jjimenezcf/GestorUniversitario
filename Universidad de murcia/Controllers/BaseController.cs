@@ -157,7 +157,7 @@ namespace UniversidadDeMurcia.Controllers
             return base.View(viewName, model);
         }
         
-        protected async Task<IActionResult> CrearObjeto(Models.Objeto objeto)
+        protected async Task<IActionResult> CrearObjeto(Models.Elemento objeto)
         {
             try
             {
@@ -176,9 +176,9 @@ namespace UniversidadDeMurcia.Controllers
             return View("CrearEstudiante", objeto);
         }
 
-        protected async Task<IActionResult> ModificarObjeto(int id, Models.Objeto objeto)
+        protected async Task<IActionResult> ModificarObjeto(int id, Models.Elemento elemento)
         {
-            if (id != objeto.ID)
+            if (id != elemento.Id)
             {
                 return NotFound();
             }
@@ -187,12 +187,12 @@ namespace UniversidadDeMurcia.Controllers
             {
                 try
                 {
-                    ContextoDeBd.Update(objeto);
+                    ContextoDeBd.Update(elemento);
                     await ContextoDeBd.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ExisteObjetoEnBd(objeto.ID))
+                    if (!ExisteObjetoEnBd(elemento.Id))
                     {
                         return NotFound();
                     }
@@ -204,13 +204,13 @@ namespace UniversidadDeMurcia.Controllers
                 return RedirectToAction(CrudDelObjeto.IrAlCrud);
             }
 
-            return View(CrudDelObjeto.VistaDeEdicion, objeto);
+            return View(CrudDelObjeto.VistaDeEdicion, elemento);
         }
 
 
         private bool ExisteObjetoEnBd(int id)
         {
-            return ContextoDeBd.Objetos(CrudDelObjeto.NombreDelObjeto).Any(e => e.ID == id);
+            return ContextoDeBd.Elementos(CrudDelObjeto.NombreDelObjeto).Any(e => e.Id == id);
         }
 
     }

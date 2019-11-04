@@ -10,8 +10,8 @@ using UniversidadDeMurcia.Datos;
 namespace UniversidadDeMurcia.Migrations
 {
     [DbContext(typeof(ContextoUniversitario))]
-    [Migration("20191104094227_Las entidades heredan de objetos")]
-    partial class Lasentidadesheredandeobjetos
+    [Migration("20191104101510_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace UniversidadDeMurcia.Migrations
 
             modelBuilder.Entity("UniversidadDeMurcia.Models.Curso", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -34,14 +34,14 @@ namespace UniversidadDeMurcia.Migrations
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Curso");
                 });
 
             modelBuilder.Entity("UniversidadDeMurcia.Models.Estudiante", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -55,14 +55,14 @@ namespace UniversidadDeMurcia.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Estudiante");
                 });
 
             modelBuilder.Entity("UniversidadDeMurcia.Models.Inscripcion", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -76,7 +76,7 @@ namespace UniversidadDeMurcia.Migrations
                     b.Property<int?>("Grado")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("CursoID");
 

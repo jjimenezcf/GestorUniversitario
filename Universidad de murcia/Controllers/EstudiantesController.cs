@@ -91,7 +91,7 @@ namespace UniversidadDeMurcia.Controllers
 
         private bool EstudianteExists(int id)
         {
-            return ContextoDeBd.Estudiantes.Any(e => e.ID == id);
+            return ContextoDeBd.Estudiantes.Any(e => e.Id == id);
         }
 
         private async Task<Estudiante> LeerEstudianteAsync(int? id)
@@ -101,7 +101,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = await ContextoDeBd.Estudiantes.FirstOrDefaultAsync(m => m.ID == id);
+            var estudiante = await ContextoDeBd.Estudiantes.FirstOrDefaultAsync(m => m.Id == id);
             if (estudiante == null)
             {
                 GestorErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -121,7 +121,7 @@ namespace UniversidadDeMurcia.Controllers
                 .Include(i => i.Inscripciones)
                 .ThenInclude(e => e.Curso)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (estudiante == null)
             {
                 GestorErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

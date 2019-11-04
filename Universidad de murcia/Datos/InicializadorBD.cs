@@ -57,18 +57,18 @@ namespace UniversidadDeMurcia.Datos
 
             var enrollments = new Inscripcion[]
             {
-            new Inscripcion{EstudianteID=1,CursoID=1050,Grado=Grado.A},
-            new Inscripcion{EstudianteID=1,CursoID=4022,Grado=Grado.C},
-            new Inscripcion{EstudianteID=1,CursoID=4041,Grado=Grado.B},
-            new Inscripcion{EstudianteID=2,CursoID=1045,Grado=Grado.B},
-            new Inscripcion{EstudianteID=2,CursoID=3141,Grado=Grado.F},
-            new Inscripcion{EstudianteID=2,CursoID=2021,Grado=Grado.F},
-            new Inscripcion{EstudianteID=3,CursoID=1050},
-            new Inscripcion{EstudianteID=4,CursoID=1050},
-            new Inscripcion{EstudianteID=4,CursoID=4022,Grado=Grado.F},
-            new Inscripcion{EstudianteID=5,CursoID=4041,Grado=Grado.C},
-            new Inscripcion{EstudianteID=6,CursoID=1045},
-            new Inscripcion{EstudianteID=7,CursoID=3141,Grado=Grado.A},
+            new Inscripcion{EstudianteID=1,CursoID=1,Grado=Grado.A},
+            new Inscripcion{EstudianteID=1,CursoID=2,Grado=Grado.C},
+            new Inscripcion{EstudianteID=1,CursoID=3,Grado=Grado.B},
+            new Inscripcion{EstudianteID=2,CursoID=2,Grado=Grado.B},
+            new Inscripcion{EstudianteID=2,CursoID=3,Grado=Grado.F},
+            new Inscripcion{EstudianteID=2,CursoID=4,Grado=Grado.F},
+            new Inscripcion{EstudianteID=3,CursoID=5},
+            new Inscripcion{EstudianteID=4,CursoID=6},
+            new Inscripcion{EstudianteID=4,CursoID=5,Grado=Grado.F},
+            new Inscripcion{EstudianteID=5,CursoID=1,Grado=Grado.C},
+            new Inscripcion{EstudianteID=6,CursoID=3},
+            new Inscripcion{EstudianteID=7,CursoID=2,Grado=Grado.A},
             };
             foreach (Inscripcion inscripcion in enrollments)
             {

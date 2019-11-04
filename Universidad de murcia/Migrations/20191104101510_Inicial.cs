@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace UniversidadDeMurcia.Migrations
 {
-    public partial class inicial : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,20 +11,21 @@ namespace UniversidadDeMurcia.Migrations
                 name: "Curso",
                 columns: table => new
                 {
-                    CursoID = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(nullable: true),
                     Creditos = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Curso", x => x.CursoID);
+                    table.PrimaryKey("PK_Curso", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Estudiante",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Apellido = table.Column<string>(nullable: true),
                     Nombre = table.Column<string>(nullable: true),
@@ -32,14 +33,14 @@ namespace UniversidadDeMurcia.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estudiante", x => x.ID);
+                    table.PrimaryKey("PK_Estudiante", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Inscripcion",
                 columns: table => new
                 {
-                    InscripcionID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CursoID = table.Column<int>(nullable: false),
                     EstudianteID = table.Column<int>(nullable: false),
@@ -47,18 +48,18 @@ namespace UniversidadDeMurcia.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Inscripcion", x => x.InscripcionID);
+                    table.PrimaryKey("PK_Inscripcion", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Inscripcion_Curso_CursoID",
                         column: x => x.CursoID,
                         principalTable: "Curso",
-                        principalColumn: "CursoID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Inscripcion_Estudiante_EstudianteID",
                         column: x => x.EstudianteID,
                         principalTable: "Estudiante",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

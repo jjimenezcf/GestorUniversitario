@@ -1,7 +1,7 @@
 ﻿@model UniversidadDeMurcia.Models.Estudiante
 
 @{
-    ViewData["Title"] = $"Detalle de el estudiante {Model.ID}";
+    ViewData["Title"] = $"Detalle de el estudiante {Model.Id}";
 }
 
 <h2>Detalles del estudiante: @Html.DisplayFor(model => model.Apellido) </h2>
@@ -33,7 +33,8 @@
         <div style="display: inline-block; vertical-align: top; width : 30%">
             <p class="font-weight-bolder">Inscripciones</p>
         </div>
-        <div style="display: inline-block; vertical-align: top;">
+        @*style="display: inline-block; vertical-align: top;*@
+        <div class="ladoDerecho">
             <table class="table">
                 <thead>
                     <tr>
@@ -60,7 +61,7 @@
     </div>
 </div>
 <div>
-    <a asp-action="IraEditarEstudiante" asp-route-id="@Model.ID">Editar</a>
+    <a asp-action="IraEditarEstudiante" asp-route-id="@Model.Id">Editar</a>
 </div>
 <div>
     <a asp-action="IraMntEstudiantes">Mantenimiento de estudiantes</a>

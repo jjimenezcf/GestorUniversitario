@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UniversidadDeMurcia.Models
 {
-    public class Estudiante: Objeto
+    public class Estudiante: Elemento
     {
         public static class Parametro
         {

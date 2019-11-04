@@ -12,7 +12,7 @@ namespace UniversidadDeMurcia.Models
         A, B, C, D, F
     }
 
-    public class Inscripcion : Objeto
+    public class Inscripcion : Elemento
     {
         public int CursoID { get; set; }
         public int EstudianteID { get; set; }

@@ -16,16 +16,16 @@ namespace UniversidadDeMurcia.Datos
         public DbSet<Inscripcion> Inscripciones { get; set; }
         public DbSet<Estudiante> Estudiantes { get; set; }
 
-        public IQueryable<Objeto> Objetos(string tipo)
+        public IQueryable<Elemento> Elementos(string tipo)
         {
-            IQueryable<Objeto> objetos = tipo switch
+            IQueryable<Elemento> elementos = tipo switch
             {
                 nameof(Estudiante) => Estudiantes,
                 nameof(Inscripcion) => Inscripciones,
                 nameof(Curso) => Cursos,
                 _ => null,
             };
-            return objetos;
+            return elementos;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
