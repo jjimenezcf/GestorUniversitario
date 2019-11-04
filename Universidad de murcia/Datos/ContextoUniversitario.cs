@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using UniversidadDeMurcia.Models;
 
 namespace UniversidadDeMurcia.Datos
@@ -14,6 +15,18 @@ namespace UniversidadDeMurcia.Datos
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Inscripcion> Inscripciones { get; set; }
         public DbSet<Estudiante> Estudiantes { get; set; }
+
+        public IQueryable<Objeto> Objetos(string tipo)
+        {
+            IQueryable<Objeto> objetos = tipo switch
+            {
+                nameof(Estudiante) => Estudiantes,
+                nameof(Inscripcion) => Inscripciones,
+                nameof(Curso) => Cursos,
+                _ => null,
+            };
+            return objetos;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
