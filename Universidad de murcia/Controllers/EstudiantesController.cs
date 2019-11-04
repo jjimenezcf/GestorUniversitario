@@ -10,11 +10,11 @@ using UniversidadDeMurcia.Models;
 namespace UniversidadDeMurcia.Controllers
 {
 
-    public class EstudiantesController : BaseController
+    public class EstudiantesController : EntidadController<Estudiante>
     {
 
         public EstudiantesController(ContextoUniversitario context, Gestor.Errores.Errores gestorErrores):
-            base(context, gestorErrores, nameof(Estudiante))
+            base(context, gestorErrores)
         {
         }
 
@@ -87,11 +87,6 @@ namespace UniversidadDeMurcia.Controllers
             ContextoDeBd.Estudiantes.Remove(estudiante);
             await ContextoDeBd.SaveChangesAsync();
             return RedirectToAction(nameof(IraMntEstudiantes));
-        }
-
-        private bool EstudianteExists(int id)
-        {
-            return ContextoDeBd.Estudiantes.Any(e => e.Id == id);
         }
 
         private async Task<Estudiante> LeerEstudianteAsync(int? id)
