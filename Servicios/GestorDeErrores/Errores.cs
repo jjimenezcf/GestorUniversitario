@@ -38,6 +38,12 @@ namespace Gestor.Errores
             Gestor.Correo.Correo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, error);
         }
 
+
+        public static void EnviaError(string asunto, Exception error)
+        {
+            Gestor.Correo.Correo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
+        }
+
         public void LanzarExcepcion(string error)
         {
             throw new Exception(error);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestorUniversitario.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class InicializarBd : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

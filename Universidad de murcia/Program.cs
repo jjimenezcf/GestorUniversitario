@@ -32,6 +32,7 @@ namespace UniversidadDeMurcia
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "Error al inicializar la BD.");
+                Gestor.Errores.Errores.EnviaError("Error al inicializar la BD.", ex);
             }
         }
 
