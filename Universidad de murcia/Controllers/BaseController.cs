@@ -7,11 +7,11 @@ namespace UniversidadDeMurcia.Controllers
     public class BaseController : Controller
     {
 
-        protected Errores GestorErrores { get; }
+        protected Errores GestorDeErrores { get; }
 
-        public BaseController(Errores gestorErrores)
+        public BaseController(Errores gestorDeErrores)
         {
-            GestorErrores = gestorErrores;
+            GestorDeErrores = gestorDeErrores;
         }
     }
 }

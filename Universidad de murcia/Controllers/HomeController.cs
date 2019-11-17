@@ -9,8 +9,8 @@ namespace UniversidadDeMurcia.Controllers
     public class HomeController : BaseController
     {
         
-        public HomeController(Errores gestroErrores):
-            base(gestroErrores)
+        public HomeController(Errores gestorDeErrores):
+            base(gestorDeErrores)
         {
             
         }
@@ -57,7 +57,7 @@ namespace UniversidadDeMurcia.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(Exception e)
         {
-            GestorErrores.Enviar($"Error al ejecutar la petición",e);
+            GestorDeErrores.Enviar($"Error al ejecutar la petición",e);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

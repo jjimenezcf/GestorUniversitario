@@ -21,7 +21,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction(CrudDelObjeto.IrAlCrud);
+            return RedirectToAction(GestorDelCrud.IrAlMantenimiento);
         }
 
         public async Task<IActionResult> IraMntEstudiantes(string orden)
@@ -43,27 +43,27 @@ namespace UniversidadDeMurcia.Controllers
                 EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
-            return View(CrudDelObjeto.VistaDelCrud, await estudiantes.AsNoTracking().ToListAsync());
+            return View(GestorDelCrud.VistaDelCrud, await estudiantes.AsNoTracking().ToListAsync());
         }
 
         public IActionResult IraCrearEstudiante()
         {
-            return View(CrudDelObjeto.VistaDeCreacion);
+            return View(GestorDelCrud.VistaDeCreacion);
         }
 
         public async Task<IActionResult> IraDetalleEstudiante(int? id)
         {
-            return View(CrudDelObjeto.VistaDeDetalle, await LeerDetalleAsync(id));
+            return View(GestorDelCrud.VistaDeDetalle, await LeerDetalleAsync(id));
         }
 
         public async Task<IActionResult> IraBorrarEstudiante(int? id)
         {
-            return View(CrudDelObjeto.VistaDeBorrado, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.VistaDeBorrado, await LeerEstudianteAsync(id));
         }
 
         public async Task<IActionResult> IraEditarEstudiante(int? id)
         {
-            return View(CrudDelObjeto.VistaDeEdicion, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.VistaDeEdicion, await LeerEstudianteAsync(id));
         }
 
 
@@ -99,13 +99,13 @@ namespace UniversidadDeMurcia.Controllers
         {
             if (id == null)
             {
-                GestorErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
+                GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
             var estudiante = await ContextoDeBd.Estudiantes.FirstOrDefaultAsync(m => m.Id == id);
             if (estudiante == null)
             {
-                GestorErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
+                GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
             }
 
             return estudiante;
@@ -115,7 +115,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             if (id == null)
             {
-                GestorErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
+                GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
             var estudiante = await ContextoDeBd.Estudiantes
@@ -125,7 +125,7 @@ namespace UniversidadDeMurcia.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (estudiante == null)
             {
-                GestorErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
+                GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
             }
 
             return estudiante;

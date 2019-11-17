@@ -10,7 +10,7 @@ using GestorUniversitario.ContextosDeBd;
 
 namespace UniversidadDeMurcia.Controllers
 {
-    internal class Mantenimiento<T>
+    internal class MantenimientoCrud<T>
     {
         private string NombreDelObjeto => typeof(T).Name;
 
@@ -18,13 +18,13 @@ namespace UniversidadDeMurcia.Controllers
         public string Titulo => $"Mantenimiento de {NombreDelObjeto}s";
         public string Ir => $"IraMnt{NombreDelObjeto}s";
 
-        public Mantenimiento()
+        public MantenimientoCrud()
         {
             
         }
     }
 
-    internal class Creacion<T>
+    internal class CreacionCrud<T>
     {
         private string NombreDelObjeto => typeof(T).Name;
 
@@ -32,13 +32,13 @@ namespace UniversidadDeMurcia.Controllers
         public string Titulo => $"Creación de {NombreDelObjeto}";
         public string Ir => $"IraCrear{NombreDelObjeto}";
 
-        public Creacion()
+        public CreacionCrud()
         {
         }
     }
 
 
-    internal class Edicion<T>
+    internal class EdicionCrud<T>
     {
         private string NombreDelObjeto => typeof(T).Name;
 
@@ -46,13 +46,13 @@ namespace UniversidadDeMurcia.Controllers
         public string Titulo => $"Edición de {NombreDelObjeto}";
         public string Ir => $"IraEditar{NombreDelObjeto}";
 
-        public Edicion()
+        public EdicionCrud()
         {
         }
     }
 
 
-    internal class Detalle<T>
+    internal class DetalleCrud<T>
     {
         private string NombreDelObjeto => typeof(T).Name;
 
@@ -60,12 +60,12 @@ namespace UniversidadDeMurcia.Controllers
         public string Titulo => $"Detalle de {NombreDelObjeto}";
         public string Ir => $"IraDetalle{NombreDelObjeto}";
 
-        public Detalle()
+        public DetalleCrud()
         { 
         }
     }
 
-    internal class Borrado<T>
+    internal class BorradoCrud<T>
     {
         private string NombreDelObjeto => typeof(T).Name;
 
@@ -73,26 +73,26 @@ namespace UniversidadDeMurcia.Controllers
         public string Titulo => $"Borrado de {NombreDelObjeto}";
         public string Ir => $"IraBorrar{NombreDelObjeto}";
 
-        public Borrado()
+        public BorradoCrud()
         {
         }
     }
 
-    public class CrudBag<T>
+    public class GestorCrud<T>
     {
         internal string CrearObjeto => $"Crear{NombreDelObjeto}";
 
         public string NombreDelObjeto => typeof(T).Name;
 
-        private Mantenimiento<T> _Mantenimiento { get; }
-        private Creacion<T> _Creacion { get; }
-        private Edicion<T> _Edicion { get; }
-        private Detalle<T> _Detalle { get; }
-        private Borrado<T> _Borrado { get; }
+        private MantenimientoCrud<T> _Mantenimiento { get; }
+        private CreacionCrud<T> _Creacion { get; }
+        private EdicionCrud<T> _Edicion { get; }
+        private DetalleCrud<T> _Detalle { get; }
+        private BorradoCrud<T> _Borrado { get; }
 
         public string VistaDelCrud => _Mantenimiento.Vista;
         public string TituloDelCrud => _Mantenimiento.Titulo;
-        public string IrAlCrud => _Mantenimiento.Ir;
+        public string IrAlMantenimiento => _Mantenimiento.Ir;
 
         public string VistaDeCreacion => _Creacion.Vista;
         public string TituloDeLaCreacion => _Creacion.Titulo;
@@ -110,13 +110,13 @@ namespace UniversidadDeMurcia.Controllers
         public string TituloDelBorrado => _Borrado.Titulo;
         public string IraBorrar => _Borrado.Ir;
 
-        public CrudBag()
+        public GestorCrud()
         {
-            _Mantenimiento = new Mantenimiento<T>();
-            _Creacion = new Creacion<T>();
-            _Edicion = new Edicion<T>();
-            _Detalle = new Detalle<T>();
-            _Borrado = new Borrado<T>();
+            _Mantenimiento = new MantenimientoCrud<T>();
+            _Creacion = new CreacionCrud<T>();
+            _Edicion = new EdicionCrud<T>();
+            _Detalle = new DetalleCrud<T>();
+            _Borrado = new BorradoCrud<T>();
         }
     }
 
@@ -127,21 +127,19 @@ namespace UniversidadDeMurcia.Controllers
         protected ContextoUniversitario ContextoDeBd { get; }
 
 
-        protected CrudBag<T> CrudDelObjeto { get; }
+        protected GestorCrud<T> GestorDelCrud { get; }
 
-        protected DbSet<Estudiante> ObjetoDeBd => ContextoDeBd.Estudiantes;
-
-
+        
         public EntidadController(ContextoUniversitario contexto, Errores gestorErrores) :
             base(gestorErrores)
         {
             ContextoDeBd = contexto;
-            CrudDelObjeto = new CrudBag<T>();
+            GestorDelCrud = new GestorCrud<T>();
         }
 
         public override ViewResult View(string viewName, object model)
         {
-            ViewBag.Crud = CrudDelObjeto;
+            ViewBag.Crud = GestorDelCrud;
             return base.View(viewName, model);
         }
         
@@ -153,15 +151,15 @@ namespace UniversidadDeMurcia.Controllers
                 {
                     ContextoDeBd.Add(objeto);
                     await ContextoDeBd.SaveChangesAsync();
-                    return RedirectToAction(CrudDelObjeto.IrAlCrud);
+                    return RedirectToAction(GestorDelCrud.IrAlMantenimiento);
                 }
             }
             catch (DbUpdateException e)
             {
                 ModelState.AddModelError("", $"No es posible crear el registro.");
-                GestorErrores.Enviar("Error al crear un estudiante", e);
+                GestorDeErrores.Enviar("Error al crear un estudiante", e);
             }
-            return View("CrearEstudiante", objeto);
+            return View((GestorDelCrud.VistaDeCreacion, objeto));
         }
 
         protected async Task<IActionResult> ModificarObjeto(int id, Elemento elemento)
@@ -189,10 +187,10 @@ namespace UniversidadDeMurcia.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(CrudDelObjeto.IrAlCrud);
+                return RedirectToAction(GestorDelCrud.IrAlMantenimiento);
             }
 
-            return View(CrudDelObjeto.VistaDeEdicion, elemento);
+            return View(GestorDelCrud.VistaDeEdicion, elemento);
         }
 
 

@@ -13,13 +13,13 @@
     <thead>
         <tr>
             <th>
-               <a asp-action=@ViewBag.Crud.IrAlCrud  asp-route-orden ="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
+               <a asp-action=@ViewBag.Crud.IrAlMantenimiento  asp-route-orden ="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
-                <a asp-action=@ViewBag.Crud.IrAlCrud asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
+                <a asp-action=@ViewBag.Crud.IrAlMantenimiento asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
             </th>
             <th></th>
         </tr>
