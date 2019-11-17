@@ -17,14 +17,11 @@ namespace UniversidadDeMurcia.Controllers
         public EstudiantesController(ContextoUniversitario context, Gestor.Errores.Errores gestorErrores):
             base(context, gestorErrores)
         {
+            GestorDelCrud.GestorDeCreacion.AsignarTitulo("Crear un nuevo estudiante");
         }
 
-        public IActionResult Index()
-        {
-            return RedirectToAction(GestorDelCrud.IrAlMantenimiento);
-        }
 
-        public async Task<IActionResult> IraMntEstudiantes(string orden)
+        public async Task<IActionResult> IraMantenimientoEstudiante(string orden)
         {
             ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc 
                                                         ? EstudianteEnlace.OrdenadoPor.NombreDes 
@@ -43,27 +40,27 @@ namespace UniversidadDeMurcia.Controllers
                 EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
-            return View(GestorDelCrud.VistaDelCrud, await estudiantes.AsNoTracking().ToListAsync());
+            return View(GestorDelCrud.GestorDeMantenimiento.Vista, await estudiantes.AsNoTracking().ToListAsync());
         }
 
         public IActionResult IraCrearEstudiante()
         {
-            return View(GestorDelCrud.VistaDeCreacion);
+            return View(GestorDelCrud.GestorDeCreacion.Vista, new Estudiante());
         }
 
         public async Task<IActionResult> IraDetalleEstudiante(int? id)
         {
-            return View(GestorDelCrud.VistaDeDetalle, await LeerDetalleAsync(id));
+            return View(GestorDelCrud.GestorDeDetalle.Vista, await LeerDetalleAsync(id));
         }
 
         public async Task<IActionResult> IraBorrarEstudiante(int? id)
         {
-            return View(GestorDelCrud.VistaDeBorrado, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.GestorDeBorrado.Vista, await LeerEstudianteAsync(id));
         }
 
         public async Task<IActionResult> IraEditarEstudiante(int? id)
         {
-            return View(GestorDelCrud.VistaDeEdicion, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.GestorDeEdicion.Vista, await LeerEstudianteAsync(id));
         }
 
 
@@ -78,21 +75,21 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(ModificarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("ID,Apellido,Nombre,InscritoEl")] Estudiante estudiante)
+        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] Estudiante estudiante)
         {
             return await ModificarObjeto(id, estudiante);
         }
 
 
 
-        [HttpPost, ActionName("EliminarEstudiante")]
+        [HttpPost, ActionName(nameof(BorrarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EliminarEstudiante(int id)
+        public async Task<IActionResult> BorrarEstudiante(int id)
         {
             var estudiante = await ContextoDeBd.Estudiantes.FindAsync(id);
             ContextoDeBd.Estudiantes.Remove(estudiante);
             await ContextoDeBd.SaveChangesAsync();
-            return RedirectToAction(nameof(IraMntEstudiantes));
+            return RedirectToAction(GestorDelCrud.GestorDeMantenimiento.Ir);
         }
 
         private async Task<Estudiante> LeerEstudianteAsync(int? id)

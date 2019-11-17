@@ -1,15 +1,15 @@
 ﻿@model GestorUniversitario.ModeloDeClases.Estudiante
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>Edición del estudiante</h2>
+<h2>@ViewBag.Crud.GestorDeEdicion.Titulo</h2>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="ModificarEstudiante">
+        <form asp-action=@ViewBag.Crud.GestorDeEdicion.Accion>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -28,14 +28,14 @@
                 <span asp-validation-for="InscritoEl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Aceptar" class="btn btn-outline-success" />
+                <input type="submit" value=@ViewBag.Crud.GestorDeEdicion.Formulario class="btn btn-outline-success" />
             </div>
         </form>
     </div>
 </div>
 
-<div> 
-    <a asp-action=@ViewBag.Crud.IrAlMantenimiento>@ViewBag.Crud.TituloDelCrud</a>
+<div>
+    <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir>@ViewBag.Crud.GestorDeMantenimiento.Titulo</a>
 </div>
 
 @section Scripts {

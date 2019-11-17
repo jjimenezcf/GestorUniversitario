@@ -1,12 +1,11 @@
 ﻿@model GestorUniversitario.ModeloDeClases.Estudiante
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>Eliminar estudiante</h2>
+<h2>@ViewBag.Crud.GestorDeBorrado.Titulo</h2>
 
 <div>
-    <h4>Estudiante</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -29,11 +28,11 @@
         </dd>
     </dl>
 
-    <form asp-action="EliminarEstudiante">
+    <form asp-action=@ViewBag.Crud.GestorDeBorrado.Accion>
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Eliminar" class="btn btn-outline-warning" />
+        <input type="submit" value=@ViewBag.Crud.GestorDeBorrado.Formulario class="btn btn-outline-warning" />
     </form>
     <div>
-        <a asp-action=@ViewBag.Crud.IrAlMantenimiento>@ViewBag.Crud.TituloDelCrud</a>
+        <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir>@ViewBag.Crud.GestorDeMantenimiento.Titulo</a>
     </div>
 </div>

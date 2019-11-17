@@ -1,7 +1,7 @@
 ﻿@model GestorUniversitario.ModeloDeClases.Estudiante
 
 @{
-    ViewData["Title"] = $"Detalle de el estudiante {Model.Id}";
+    ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
 <h2>Detalles del estudiante: @Html.DisplayFor(model => model.Apellido) </h2>
@@ -61,8 +61,8 @@
     </div>
 </div>
 <div>
-    <a asp-action=@ViewBag.Crud.IraEditar asp-route-id="@Model.Id">Editar</a>
+    <a asp-action=@ViewBag.Crud.GestorDeEdicion.Ir asp-route-id="@Model.Id">Editar</a>
 </div>
 <div>
-    <a asp-action=@ViewBag.Crud.IrAlMantenimiento>@ViewBag.Crud.TituloDelCrud</a>
+    <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir>@ViewBag.Crud.GestorDeMantenimiento.Titulo</a>
 </div>

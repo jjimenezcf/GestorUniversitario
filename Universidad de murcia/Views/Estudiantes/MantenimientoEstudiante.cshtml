@@ -1,0 +1,48 @@
+﻿@model IEnumerable<GestorUniversitario.ModeloDeClases.Estudiante>
+
+@{
+    ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
+}
+
+<h2>@ViewBag.Crud.GestorDeMantenimiento.Titulo</h2>
+
+<p>
+    <a asp-action=@ViewBag.Crud.GestorDeCreacion.Ir>@ViewBag.Crud.GestorDeCreacion.Titulo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InscritoEl)
+                </td>
+                <td>
+                    <a asp-action=@ViewBag.Crud.GestorDeEdicion.Ir asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action=@ViewBag.Crud.GestorDeDetalle.Ir asp-route-id="@item.Id">Detalles</a> |
+                    <a asp-action=@ViewBag.Crud.GestorDeBorrado.Ir asp-route-id="@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
