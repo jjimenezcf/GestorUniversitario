@@ -1,14 +1,69 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using GestorUniversitario.ModeloDeClases;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using Gestor.Errores;
 
 namespace GestorUniversitario.ContextosDeBd
 {
 
-
-    public class ContextoUniversitario : DbContext
+    public class GestorDeElementos: DbContext
     {
-        public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) : base(options)
+        public GestorDeElementos(DbContextOptions<ContextoUniversitario> options) :
+        base(options)
+        { 
+        }
+        public EntityEntry Crear(object nuevo)
+        {
+            EntityEntry nuevoElemento = null;
+            try
+            {
+                antesDeCrear(nuevo);
+                nuevoElemento = base.Add(nuevo);
+                despuesDeCrear(nuevoElemento);
+            }
+            catch (Exception e)
+            {
+                var mensajeError = Errores.Concatenar(e);
+                var nueva = new Exception("Error al crear el elemento");
+                nueva.Data["ErrorOriginal"] = mensajeError;
+                throw nueva;
+            }
+            finally
+            {
+                trasCrear(nuevoElemento);
+            }
+
+            return nuevoElemento;
+        }
+
+
+        private void antesDeCrear(object nuevo)
+        {
+        }
+
+        private void despuesDeCrear(EntityEntry elemento)
+        {
+        }
+
+        private void trasCrear(EntityEntry nuevoElemento)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task Crear(GestorDeElementos gestor,  Elemento elemento)
+        {
+            gestor.Crear(elemento);
+            await gestor.SaveChangesAsync();
+        }
+    }
+
+    public class ContextoUniversitario : GestorDeElementos
+    {
+        public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) :
+        base(options)
         {
         }
 
@@ -40,5 +95,6 @@ namespace GestorUniversitario.ContextosDeBd
             modelBuilder.Entity<Inscripcion>().ToTable("Inscripcion");
             modelBuilder.Entity<Estudiante>().ToTable("Estudiante");
         }
+
     }
 }

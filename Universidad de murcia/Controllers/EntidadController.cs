@@ -5,6 +5,7 @@ using Gestor.Errores;
 using GestorUniversitario.ModeloDeClases;
 using Microsoft.EntityFrameworkCore;
 using GestorUniversitario.ContextosDeBd;
+using System;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -141,24 +142,25 @@ namespace UniversidadDeMurcia.Controllers
             return base.View(viewName, model);
         }
 
-        protected async Task<IActionResult> CrearObjeto(Elemento objeto)
+        protected async Task<IActionResult> CrearObjeto(Elemento elemeto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ContextoDeBd.Add(objeto);
-                    await ContextoDeBd.SaveChangesAsync();
+                    await GestorDeElementos.Crear(ContextoDeBd, elemeto);
                     return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
                 }
             }
-            catch (DbUpdateException e)
+            catch (Exception e)
             {
                 ModelState.AddModelError("", $"No es posible crear el registro.");
                 GestorDeErrores.Enviar("Error al crear un estudiante", e);
             }
-            return View((GestorDelCrud.Creador.Vista, objeto));
+            return View((GestorDelCrud.Creador.Vista, elemeto));
         }
+
+
 
         protected async Task<IActionResult> ModificarObjeto(int id, Elemento elemento)
         {
