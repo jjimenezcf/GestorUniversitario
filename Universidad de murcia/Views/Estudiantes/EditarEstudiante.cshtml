@@ -4,12 +4,12 @@
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>@ViewBag.Crud.GestorDeEdicion.Titulo</h2>
+<h2>@ViewBag.Crud.Editor.Titulo</h2>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action=@ViewBag.Crud.GestorDeEdicion.Accion>
+        <form asp-action=@ViewBag.Crud.Editor.Accion>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -28,14 +28,14 @@
                 <span asp-validation-for="InscritoEl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value=@ViewBag.Crud.GestorDeEdicion.Formulario class="btn btn-outline-success" />
+                <input type="submit" value=@ViewBag.Crud.Editor.Formulario class="btn btn-outline-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir>@ViewBag.Crud.GestorDeMantenimiento.Titulo</a>
+    <a asp-action=@ViewBag.Crud.Mantenimiento.Ir>@ViewBag.Crud.Mantenimiento.Titulo</a>
 </div>
 
 @section Scripts {

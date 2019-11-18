@@ -73,9 +73,11 @@ namespace UniversidadDeMurcia.Controllers
 
     public class DetalleCrud<T> : BaseCrud<T>
     {
-        public DetalleCrud() :
+        public string TituloDetalle;
+        public DetalleCrud(string titulo) :
         base("Detalle")
         {
+            TituloDetalle = titulo;
             AsignarTitulo($"Detalle de {NombreDelObjeto}");
         }
     }
@@ -94,20 +96,20 @@ namespace UniversidadDeMurcia.Controllers
         public string NombreDelObjeto => typeof(T).Name;
         public string Titulo {get;set;}
 
-        public MantenimientoCrud<T> GestorDeMantenimiento { get; }
-        public CreacionCrud<T> GestorDeCreacion { get; }
-        public EdicionCrud<T> GestorDeEdicion { get; }
-        public DetalleCrud<T> GestorDeDetalle { get; }
-        public BorradoCrud<T> GestorDeBorrado { get; }
+        public MantenimientoCrud<T> Mantenimiento { get; }
+        public CreacionCrud<T> Creador { get; }
+        public EdicionCrud<T> Editor { get; }
+        public DetalleCrud<T> Detalle { get; }
+        public BorradoCrud<T> Supresor { get; }
 
-        public GestorCrud(string titulo)
+        public GestorCrud(string titulo, string tituloDetalle)
         {
             Titulo = titulo;
-            GestorDeMantenimiento = new MantenimientoCrud<T>();
-            GestorDeCreacion = new CreacionCrud<T>();
-            GestorDeEdicion = new EdicionCrud<T>();
-            GestorDeDetalle = new DetalleCrud<T>();
-            GestorDeBorrado = new BorradoCrud<T>();
+            Mantenimiento = new MantenimientoCrud<T>();
+            Creador = new CreacionCrud<T>();
+            Editor = new EdicionCrud<T>();
+            Detalle = new DetalleCrud<T>(tituloDetalle);
+            Supresor = new BorradoCrud<T>();
         }
     }
 
@@ -125,12 +127,12 @@ namespace UniversidadDeMurcia.Controllers
         base(gestorErrores)
         {
             ContextoDeBd = contexto;
-            GestorDelCrud = new GestorCrud<T>("Gestor de estudiantes");
+            GestorDelCrud = new GestorCrud<T>("Gestor de estudiantes", "Inscripciones");
         }
 
         public IActionResult Index()
         {
-            return RedirectToAction(GestorDelCrud.GestorDeMantenimiento.Ir);
+            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
         public override ViewResult View(string viewName, object model)
@@ -147,7 +149,7 @@ namespace UniversidadDeMurcia.Controllers
                 {
                     ContextoDeBd.Add(objeto);
                     await ContextoDeBd.SaveChangesAsync();
-                    return RedirectToAction(GestorDelCrud.GestorDeMantenimiento.Ir);
+                    return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
                 }
             }
             catch (DbUpdateException e)
@@ -155,7 +157,7 @@ namespace UniversidadDeMurcia.Controllers
                 ModelState.AddModelError("", $"No es posible crear el registro.");
                 GestorDeErrores.Enviar("Error al crear un estudiante", e);
             }
-            return View((GestorDelCrud.GestorDeCreacion.Vista, objeto));
+            return View((GestorDelCrud.Creador.Vista, objeto));
         }
 
         protected async Task<IActionResult> ModificarObjeto(int id, Elemento elemento)
@@ -183,10 +185,10 @@ namespace UniversidadDeMurcia.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(GestorDelCrud.GestorDeMantenimiento.Ir);
+                return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
             }
 
-            return View(GestorDelCrud.GestorDeEdicion.Vista, elemento);
+            return View(GestorDelCrud.Editor.Vista, elemento);
         }
 
 

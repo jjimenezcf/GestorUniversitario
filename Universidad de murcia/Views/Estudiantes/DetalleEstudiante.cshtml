@@ -4,23 +4,25 @@
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>Detalles del estudiante: @Html.DisplayFor(model => model.Apellido) </h2>
+    <h2>
+       @Html.DisplayFor(model => model.Apellido),  @Html.DisplayFor(model => model.Nombre)
+    </h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+        @*<dt>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Apellido)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>*@
         <dt>
             @Html.DisplayNameFor(model => model.InscritoEl)
         </dt>
@@ -31,7 +33,7 @@
     </dl>
     <div>
         <div style="display: inline-block; vertical-align: top; width : 30%">
-            <p class="font-weight-bolder">Inscripciones</p>
+            <p class="font-weight-bolder">@ViewBag.Crud.Detalle.TituloDetalle</p>
         </div>
         @*style="display: inline-block; vertical-align: top;*@
         <div class="ladoDerecho">
@@ -61,8 +63,8 @@
     </div>
 </div>
 <div>
-    <a asp-action=@ViewBag.Crud.GestorDeEdicion.Ir asp-route-id="@Model.Id">Editar</a>
+    <a asp-action=@ViewBag.Crud.Editor.Ir asp-route-id="@Model.Id">Editar</a>
 </div>
 <div>
-    <a asp-action=@ViewBag.Crud.GestorDeMantenimiento.Ir>@ViewBag.Crud.GestorDeMantenimiento.Titulo</a>
+    <a asp-action=@ViewBag.Crud.Mantenimiento.Ir>@ViewBag.Crud.Mantenimiento.Titulo</a>
 </div>

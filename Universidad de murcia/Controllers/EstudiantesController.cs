@@ -17,7 +17,7 @@ namespace UniversidadDeMurcia.Controllers
         public EstudiantesController(ContextoUniversitario context, Gestor.Errores.Errores gestorErrores):
             base(context, gestorErrores)
         {
-            GestorDelCrud.GestorDeCreacion.AsignarTitulo("Crear un nuevo estudiante");
+            GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
         }
 
 
@@ -40,27 +40,27 @@ namespace UniversidadDeMurcia.Controllers
                 EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
-            return View(GestorDelCrud.GestorDeMantenimiento.Vista, await estudiantes.AsNoTracking().ToListAsync());
+            return View(GestorDelCrud.Mantenimiento.Vista, await estudiantes.AsNoTracking().ToListAsync());
         }
 
         public IActionResult IraCrearEstudiante()
         {
-            return View(GestorDelCrud.GestorDeCreacion.Vista, new Estudiante());
+            return View(GestorDelCrud.Creador.Vista, new Estudiante());
         }
 
         public async Task<IActionResult> IraDetalleEstudiante(int? id)
         {
-            return View(GestorDelCrud.GestorDeDetalle.Vista, await LeerDetalleAsync(id));
+            return View(GestorDelCrud.Detalle.Vista, await LeerDetalleAsync(id));
         }
 
         public async Task<IActionResult> IraBorrarEstudiante(int? id)
         {
-            return View(GestorDelCrud.GestorDeBorrado.Vista, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.Supresor.Vista, await LeerEstudianteAsync(id));
         }
 
         public async Task<IActionResult> IraEditarEstudiante(int? id)
         {
-            return View(GestorDelCrud.GestorDeEdicion.Vista, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.Editor.Vista, await LeerEstudianteAsync(id));
         }
 
 
@@ -89,7 +89,7 @@ namespace UniversidadDeMurcia.Controllers
             var estudiante = await ContextoDeBd.Estudiantes.FindAsync(id);
             ContextoDeBd.Estudiantes.Remove(estudiante);
             await ContextoDeBd.SaveChangesAsync();
-            return RedirectToAction(GestorDelCrud.GestorDeMantenimiento.Ir);
+            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
         private async Task<Estudiante> LeerEstudianteAsync(int? id)
