@@ -1,37 +1,38 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Extensiones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GestorUniversitario.ContextosDeBd;
-using GestorUniversitario.ModeloDeClases;
+using GestorUniversitario.IuModelo;
 using UniversidadDeMurcia.Objetos;
+using GestorUniversitario.BdModelo;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace UniversidadDeMurcia.Controllers
 {
 
-    public class EstudiantesController : EntidadController<Estudiante>
+    public class EstudiantesController : EntidadController<BdEstudiante, IuEstudiante>
     {
 
-        public EstudiantesController(ContextoUniversitario context, Gestor.Errores.Errores gestorErrores):
-            base(context, gestorErrores)
+        public EstudiantesController(GestorDeElementos<BdEstudiante, IuEstudiante> gestorElementos, Gestor.Errores.Errores gestorErrores):
+            base(gestorElementos, gestorErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
         }
 
 
-        public async Task<IActionResult> IraMantenimientoEstudiante(string orden)
+        public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc 
-                                                        ? EstudianteEnlace.OrdenadoPor.NombreDes 
+            ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc
+                                                        ? EstudianteEnlace.OrdenadoPor.NombreDes
                                                         : EstudianteEnlace.OrdenadoPor.NombreAsc;
 
-            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden == EstudianteEnlace.OrdenadoPor.InscritoElAsc 
-                                                        ? EstudianteEnlace.OrdenadoPor.InscritoElDes 
+            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden == EstudianteEnlace.OrdenadoPor.InscritoElAsc
+                                                        ? EstudianteEnlace.OrdenadoPor.InscritoElDes
                                                         : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
-            var estudiantes = from s in ContextoDeBd.Estudiantes select s;
+            var estudiantes =  (IEnumerable<IuEstudiante>)entorno.LeerTodos();
             estudiantes = orden switch
             {
                 EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
@@ -40,33 +41,33 @@ namespace UniversidadDeMurcia.Controllers
                 EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
-            return View(GestorDelCrud.Mantenimiento.Vista, await estudiantes.AsNoTracking().ToListAsync());
+            return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
         }
 
         public IActionResult IraCrearEstudiante()
         {
-            return View(GestorDelCrud.Creador.Vista, new Estudiante());
+            return View(GestorDelCrud.Creador.Vista, new IuEstudiante());
         }
 
-        public async Task<IActionResult> IraDetalleEstudiante(int? id)
+        public IActionResult IraDetalleEstudiante(int? id)
         {
-            return View(GestorDelCrud.Detalle.Vista, await LeerDetalleAsync(id));
+            return View(GestorDelCrud.Detalle.Vista, LeerDetalle(id));
         }
 
-        public async Task<IActionResult> IraBorrarEstudiante(int? id)
+        public IActionResult IraBorrarEstudiante(int? id)
         {
-            return View(GestorDelCrud.Supresor.Vista, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.Supresor.Vista, LeerEstudiante(id));
         }
 
-        public async Task<IActionResult> IraEditarEstudiante(int? id)
+        public IActionResult IraEditarEstudiante(int? id)
         {
-            return View(GestorDelCrud.Editor.Vista, await LeerEstudianteAsync(id));
+            return View(GestorDelCrud.Editor.Vista, LeerEstudiante(id));
         }
 
 
         [HttpPost, ActionName(nameof(CrearEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] Estudiante estudiante)
+        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] IuEstudiante estudiante)
         {
             return await CrearObjeto(estudiante);
         }
@@ -75,7 +76,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(ModificarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] Estudiante estudiante)
+        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] IuEstudiante estudiante)
         {
             return await ModificarObjeto(id, estudiante);
         }
@@ -86,20 +87,19 @@ namespace UniversidadDeMurcia.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BorrarEstudiante(int id)
         {
-            var estudiante = await ContextoDeBd.Estudiantes.FindAsync(id);
-            ContextoDeBd.Estudiantes.Remove(estudiante);
-            await ContextoDeBd.SaveChangesAsync();
+            
+            await entorno.BorrarPorId(id);
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
-        private async Task<Estudiante> LeerEstudianteAsync(int? id)
+        private IuEstudiante LeerEstudiante(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = await ContextoDeBd.Estudiantes.FirstOrDefaultAsync(m => m.Id == id);
+            var estudiante = (IuEstudiante)entorno.LeerPorId((int) id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -108,18 +108,14 @@ namespace UniversidadDeMurcia.Controllers
             return estudiante;
         }
 
-        private async Task<Estudiante> LeerDetalleAsync(int? id)
+        private IuEstudiante LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = await ContextoDeBd.Estudiantes
-                .Include(i => i.Inscripciones)
-                .ThenInclude(e => e.Curso)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var estudiante = (IuEstudiante)entorno.LeerTodoPorId((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

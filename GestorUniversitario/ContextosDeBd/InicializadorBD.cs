@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using GestorUniversitario.ModeloDeClases;
+using GestorUniversitario.BdModelo;
 
 namespace GestorUniversitario.ContextosDeBd
 {
@@ -19,55 +19,55 @@ namespace GestorUniversitario.ContextosDeBd
                 return;   // DB has been seeded
             }
 
-            var estudiantes = new Estudiante[]
+            var estudiantes = new BdEstudiante[]
             {
-            new Estudiante{Apellido="Carson",Nombre="Alexander",InscritoEl=DateTime.Parse("2005-09-01")},
-            new Estudiante{Apellido="Meredith",Nombre="Alonso",InscritoEl=DateTime.Parse("2002-09-01")},
-            new Estudiante{Apellido="Arturo",Nombre="Anand",InscritoEl=DateTime.Parse("2003-09-01")},
-            new Estudiante{Apellido="Gytis",Nombre="Barzdukas",InscritoEl=DateTime.Parse("2002-09-01")},
-            new Estudiante{Apellido="Yan",Nombre="Li",InscritoEl=DateTime.Parse("2002-09-01")},
-            new Estudiante{Apellido="Peggy",Nombre="Justice",InscritoEl=DateTime.Parse("2001-09-01")},
-            new Estudiante{Apellido="Laura",Nombre="Norman",InscritoEl=DateTime.Parse("2003-09-01")},
-            new Estudiante{Apellido="Nino",Nombre="Olivetto",InscritoEl=DateTime.Parse("2005-09-01")}
+            new BdEstudiante{Apellido="Carson",Nombre="Alexander",InscritoEl=DateTime.Parse("2005-09-01")},
+            new BdEstudiante{Apellido="Meredith",Nombre="Alonso",InscritoEl=DateTime.Parse("2002-09-01")},
+            new BdEstudiante{Apellido="Arturo",Nombre="Anand",InscritoEl=DateTime.Parse("2003-09-01")},
+            new BdEstudiante{Apellido="Gytis",Nombre="Barzdukas",InscritoEl=DateTime.Parse("2002-09-01")},
+            new BdEstudiante{Apellido="Yan",Nombre="Li",InscritoEl=DateTime.Parse("2002-09-01")},
+            new BdEstudiante{Apellido="Peggy",Nombre="Justice",InscritoEl=DateTime.Parse("2001-09-01")},
+            new BdEstudiante{Apellido="Laura",Nombre="Norman",InscritoEl=DateTime.Parse("2003-09-01")},
+            new BdEstudiante{Apellido="Nino",Nombre="Olivetto",InscritoEl=DateTime.Parse("2005-09-01")}
             };
-            foreach (Estudiante estudiante in estudiantes)
+            foreach (BdEstudiante estudiante in estudiantes)
             {
                 context.Estudiantes.Add(estudiante);
             }
             context.SaveChanges();
 
-            var courses = new Curso[]
+            var courses = new BdCurso[]
             {
-            new Curso{Titulo="Chemistry",Creditos=3},
-            new Curso{Titulo="Microeconomics",Creditos=3},
-            new Curso{Titulo="Macroeconomics",Creditos=3},
-            new Curso{Titulo="Calculus",Creditos=4},
-            new Curso{Titulo="Trigonometry",Creditos=4},
-            new Curso{Titulo="Composition",Creditos=3},
-            new Curso{Titulo="Literature",Creditos=4}
+            new BdCurso{Titulo="Chemistry",Creditos=3},
+            new BdCurso{Titulo="Microeconomics",Creditos=3},
+            new BdCurso{Titulo="Macroeconomics",Creditos=3},
+            new BdCurso{Titulo="Calculus",Creditos=4},
+            new BdCurso{Titulo="Trigonometry",Creditos=4},
+            new BdCurso{Titulo="Composition",Creditos=3},
+            new BdCurso{Titulo="Literature",Creditos=4}
             };
-            foreach (Curso curso in courses)
+            foreach (BdCurso curso in courses)
             {
                 context.Cursos.Add(curso);
             }
             context.SaveChanges();
 
-            var enrollments = new Inscripcion[]
+            var enrollments = new BdInscripcion[]
             {
-            new Inscripcion{EstudianteID=1,CursoID=1,Grado=Grado.A},
-            new Inscripcion{EstudianteID=1,CursoID=2,Grado=Grado.C},
-            new Inscripcion{EstudianteID=1,CursoID=3,Grado=Grado.B},
-            new Inscripcion{EstudianteID=2,CursoID=2,Grado=Grado.B},
-            new Inscripcion{EstudianteID=2,CursoID=3,Grado=Grado.F},
-            new Inscripcion{EstudianteID=2,CursoID=4,Grado=Grado.F},
-            new Inscripcion{EstudianteID=3,CursoID=5},
-            new Inscripcion{EstudianteID=4,CursoID=6},
-            new Inscripcion{EstudianteID=4,CursoID=5,Grado=Grado.F},
-            new Inscripcion{EstudianteID=5,CursoID=1,Grado=Grado.C},
-            new Inscripcion{EstudianteID=6,CursoID=3},
-            new Inscripcion{EstudianteID=7,CursoID=2,Grado=Grado.A},
+            new BdInscripcion{EstudianteID=1,CursoID=1,Grado=Grado.A},
+            new BdInscripcion{EstudianteID=1,CursoID=2,Grado=Grado.C},
+            new BdInscripcion{EstudianteID=1,CursoID=3,Grado=Grado.B},
+            new BdInscripcion{EstudianteID=2,CursoID=2,Grado=Grado.B},
+            new BdInscripcion{EstudianteID=2,CursoID=3,Grado=Grado.F},
+            new BdInscripcion{EstudianteID=2,CursoID=4,Grado=Grado.F},
+            new BdInscripcion{EstudianteID=3,CursoID=5},
+            new BdInscripcion{EstudianteID=4,CursoID=6},
+            new BdInscripcion{EstudianteID=4,CursoID=5,Grado=Grado.F},
+            new BdInscripcion{EstudianteID=5,CursoID=1,Grado=Grado.C},
+            new BdInscripcion{EstudianteID=6,CursoID=3},
+            new BdInscripcion{EstudianteID=7,CursoID=2,Grado=Grado.A},
             };
-            foreach (Inscripcion inscripcion in enrollments)
+            foreach (BdInscripcion inscripcion in enrollments)
             {
                 context.Inscripciones.Add(inscripcion);
             }

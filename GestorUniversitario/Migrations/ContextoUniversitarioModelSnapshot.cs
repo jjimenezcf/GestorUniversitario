@@ -19,7 +19,7 @@ namespace GestorUniversitario.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GestorUniversitario.ModeloDeClases.Curso", b =>
+            modelBuilder.Entity("GestorUniversitario.IuModelo.Curso", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace GestorUniversitario.Migrations
                     b.ToTable("Curso");
                 });
 
-            modelBuilder.Entity("GestorUniversitario.ModeloDeClases.Estudiante", b =>
+            modelBuilder.Entity("GestorUniversitario.IuModelo.IuEstudiante", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace GestorUniversitario.Migrations
                     b.ToTable("Estudiante");
                 });
 
-            modelBuilder.Entity("GestorUniversitario.ModeloDeClases.Inscripcion", b =>
+            modelBuilder.Entity("GestorUniversitario.IuModelo.Inscripcion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,15 +83,15 @@ namespace GestorUniversitario.Migrations
                     b.ToTable("Inscripcion");
                 });
 
-            modelBuilder.Entity("GestorUniversitario.ModeloDeClases.Inscripcion", b =>
+            modelBuilder.Entity("GestorUniversitario.IuModelo.Inscripcion", b =>
                 {
-                    b.HasOne("GestorUniversitario.ModeloDeClases.Curso", "Curso")
+                    b.HasOne("GestorUniversitario.IuModelo.Curso", "Curso")
                         .WithMany("Inscripciones")
                         .HasForeignKey("CursoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestorUniversitario.ModeloDeClases.Estudiante", "Estudiante")
+                    b.HasOne("GestorUniversitario.IuModelo.IuEstudiante", "Estudiante")
                         .WithMany("Inscripciones")
                         .HasForeignKey("EstudianteID")
                         .OnDelete(DeleteBehavior.Cascade)

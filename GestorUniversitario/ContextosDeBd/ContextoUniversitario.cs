@@ -1,80 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GestorUniversitario.BdModelo;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using GestorUniversitario.ModeloDeClases;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using Gestor.Errores;
+
 
 namespace GestorUniversitario.ContextosDeBd
 {
 
-    public class GestorDeElementos: DbContext
-    {
-        public GestorDeElementos(DbContextOptions<ContextoUniversitario> options) :
-        base(options)
-        { 
-        }
-        public EntityEntry Crear(object nuevo)
-        {
-            EntityEntry nuevoElemento = null;
-            try
-            {
-                antesDeCrear(nuevo);
-                nuevoElemento = base.Add(nuevo);
-                despuesDeCrear(nuevoElemento);
-            }
-            catch (Exception e)
-            {
-                var mensajeError = Errores.Concatenar(e);
-                var nueva = new Exception("Error al crear el elemento");
-                nueva.Data["ErrorOriginal"] = mensajeError;
-                throw nueva;
-            }
-            finally
-            {
-                trasCrear(nuevoElemento);
-            }
-
-            return nuevoElemento;
-        }
-
-
-        private void antesDeCrear(object nuevo)
-        {
-        }
-
-        private void despuesDeCrear(EntityEntry elemento)
-        {
-        }
-
-        private void trasCrear(EntityEntry nuevoElemento)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static async Task Crear(GestorDeElementos gestor,  Elemento elemento)
-        {
-            gestor.Crear(elemento);
-            await gestor.SaveChangesAsync();
-        }
-    }
-
-    public class ContextoUniversitario : GestorDeElementos
+    public class ContextoUniversitario : DbContext
     {
         public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) :
         base(options)
         {
         }
 
-        public DbSet<Curso> Cursos { get; set; }
-        public DbSet<Inscripcion> Inscripciones { get; set; }
-        public DbSet<Estudiante> Estudiantes { get; set; }
+        public DbSet<BdCurso> Cursos { get; set; }
+        public DbSet<BdInscripcion> Inscripciones { get; set; }
+        public DbSet<BdEstudiante> Estudiantes { get; set; }
 
         public IQueryable<T> Elementos<T>() => default(T) switch {
-            Curso _ => (IQueryable<T>) Cursos,
-            Inscripcion _ => (IQueryable<T>) Inscripciones,
-            Estudiante _ => (IQueryable<T>) Estudiantes,
+            BdCurso _ => (IQueryable<T>) Cursos,
+            BdInscripcion _ => (IQueryable<T>) Inscripciones,
+            BdEstudiante _ => (IQueryable<T>) Estudiantes,
             _ => default
         };
 
@@ -91,9 +37,9 @@ namespace GestorUniversitario.ContextosDeBd
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Curso>().ToTable("Curso");
-            modelBuilder.Entity<Inscripcion>().ToTable("Inscripcion");
-            modelBuilder.Entity<Estudiante>().ToTable("Estudiante");
+            modelBuilder.Entity<BdCurso>().ToTable("Curso");
+            modelBuilder.Entity<BdInscripcion>().ToTable("Inscripcion");
+            modelBuilder.Entity<BdEstudiante>().ToTable("Estudiante");
         }
 
     }
