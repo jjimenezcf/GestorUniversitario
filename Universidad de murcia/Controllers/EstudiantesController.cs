@@ -2,21 +2,20 @@
 using System.Threading.Tasks;
 using Extensiones;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using GestorUniversitario.IuModelo;
 using UniversidadDeMurcia.Objetos;
 using GestorUniversitario.BdModelo;
-using GestorDeElementos;
 using System.Collections.Generic;
+using GestorUniversitario.ContextosDeBd;
 
 namespace UniversidadDeMurcia.Controllers
 {
 
-    public class EstudiantesController : EntidadController<BdEstudiante, IuEstudiante>
+    public class EstudiantesController : EntidadController<ContextoUniversitario, BdEstudiante, IuEstudiante>
     {
 
-        public EstudiantesController(GestorDeElementos<BdEstudiante, IuEstudiante> gestorElementos, Gestor.Errores.Errores gestorErrores):
-            base(gestorElementos, gestorErrores)
+        public EstudiantesController(GestorUniversitario.GestorUniversitario gestorUniversitario, Gestor.Errores.Errores gestorErrores):
+            base(gestorUniversitario, gestorErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
         }

@@ -4,33 +4,42 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GestorDeElementos
 {
-    public class GestorDeElementos<Tbd, Tiu> where Tbd : BdElemento where Tiu : IuElemento
+    public abstract class GestorDeElementos<Tctx, Tbd, Tiu> where Tbd : BdElemento where Tiu : IuElemento where Tctx : DbContext
     {
         protected ClaseDeElemetos<Tbd, Tiu> Metadatos;
-        private DbContext _Contexto;
+        private Tctx _Contexto;
 
-
-        public GestorDeElementos(DbContext contexto, Tbd bdClase, Tiu iuClase)
+        public GestorDeElementos()
         {
-            _Contexto = contexto;
-            Metadatos = ClaseDeElemetos<Tbd, Tiu>.ObtenerGestorDeLaClase(bdClase, iuClase);
+            
         }
 
-
-        public async Task InsertarElementoAsync(IuElemento iuElemento)
+        public GestorDeElementos(Tctx contexto)
         {
-            BdElemento elementoBD = MapearModeloParaLaBd(iuElemento);
+            IniciarClase(contexto);
+        }
+
+        protected virtual void IniciarClase(Tctx contexto)
+        {
+            _Contexto = contexto;
+            Metadatos = ClaseDeElemetos<Tbd, Tiu>.ObtenerGestorDeLaClase();
+        }
+
+        public async Task InsertarElementoAsync(Tiu iuElemento)
+        {
+            BdElemento elementoBD = MapearElementoParaLaBd(iuElemento);
             _Contexto.Add(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
 
-        public async Task ModificarElementoAsync(IuElemento iuElemento)
+        public async Task ModificarElementoAsync(Tiu iuElemento)
         {
-            BdElemento elementoBD = MapearModeloParaLaBd(iuElemento);
+            BdElemento elementoBD = MapearElementoParaLaBd(iuElemento);
             _Contexto.Update(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
@@ -43,27 +52,35 @@ namespace GestorDeElementos
 
         public IEnumerable<IuElemento> LeerTodos()
         {
-            throw new NotImplementedException();
+            var elementosDeBd = _Contexto.Set<Tbd>().AsNoTracking().ToList();
+            return MapearElementosParaLaIu(elementosDeBd);
+        }
 
-            //await _Contexto.Elementos
-            //.AsNoTracking()
+        private IEnumerable<IuElemento> MapearElementosParaLaIu(List<Tbd> elementosDeBd)
+        {
+            var lista = new List<Tiu>();
+            foreach (var elementoBd in elementosDeBd)
+            {
+                lista.Add(MaperaElementoParaLaIu(elementoBd));
+            }
+            return lista.AsEnumerable();
         }
 
         public IuElemento LeerPorId(int id)
         {
 
-            BdElemento bdElemento = null;
+            Tbd bdElemento = null;
 
             //await _Contexto.Elementos
             //.AsNoTracking()
             //.FirstOrDefaultAsync(m => m.Id == id);
 
-            return MapearModeloParaLaIu(bdElemento);
+            return MaperaElementoParaLaIu(bdElemento);
         }
 
         public IuElemento LeerTodoPorId(int id)
         {
-            BdElemento bdElemento = null;
+            Tbd bdElemento = null;
 
             //await _Contexto.Elementos
             //.Include(i => i.Inscripciones)
@@ -71,7 +88,7 @@ namespace GestorDeElementos
             //.AsNoTracking()
             //.FirstOrDefaultAsync(m => m.Id == id);
 
-            return MapearModeloParaLaIu(bdElemento);
+            return MaperaElementoParaLaIu(bdElemento);
         }
 
         public async Task BorrarPorId(int id)
@@ -81,18 +98,32 @@ namespace GestorDeElementos
             await _Contexto.SaveChangesAsync();
         }
 
-        private BdElemento MapearModeloParaLaBd(IuElemento iuElemento)
+        private Tbd MapearElementoParaLaBd(Tiu iuElemento)
         {
             var bdElemento = Metadatos.NuevoElementoBd();
             return bdElemento;
         }
 
-        private IuElemento MapearModeloParaLaIu(BdElemento bdElemento)
+        private Tiu MaperaElementoParaLaIu(Tbd bdElemento)
         {
             var iuElemento = Metadatos.NuevoElementoIu();
+            PropertyInfo[] propiedadesBd = typeof(Tbd).GetProperties();
+            PropertyInfo[] propiedadesIu = typeof(Tiu).GetProperties();
+
+            foreach (PropertyInfo pBd in propiedadesBd)
+            {
+                foreach (PropertyInfo pIu in propiedadesIu)
+                {
+                    if (pIu.Name == pBd.Name)
+                    {
+                        pIu.SetValue(iuElemento, pBd.GetValue(bdElemento));
+                        break;
+                    }
+                }
+            }
             return iuElemento;
         }
 
-
+   
     }
 }

@@ -7,7 +7,7 @@ namespace UniversidadDeMurcia.Controllers
 {
     public class BaseCrud<T>
     {
-        protected string NombreDelObjeto => typeof(T).Name;
+        protected string NombreDelObjeto => typeof(T).Name.Replace("Iu","");
         private string _verbo;
         private string _accion;
 

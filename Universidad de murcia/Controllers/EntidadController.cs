@@ -12,19 +12,19 @@ using GestorDeElementos.IuModelo;
 namespace UniversidadDeMurcia.Controllers
 {
         
-    public class EntidadController<Tbd, Tiu> : BaseController where Tbd : BdElemento where Tiu : IuElemento
+    public class EntidadController<Tctx, Tbd, Tiu> : BaseController where Tctx: DbContext  where Tbd : BdElemento where Tiu : IuElemento
     {
 
-        protected GestorDeElementos<Tbd,Tiu> entorno { get; }
+        protected GestorDeElementos<Tctx, Tbd,Tiu> entorno { get; }
 
 
         protected GestorCrud<Tiu> GestorDelCrud { get; }
 
 
-        public EntidadController(GestorDeElementos<Tbd,Tiu> contexto, Errores gestorErrores) :
+        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos, Errores gestorErrores) :
         base(gestorErrores)
         {
-            entorno = contexto;
+            entorno = gestorDeElementos;
             GestorDelCrud = new GestorCrud<Tiu>("Gestor de estudiantes", "Inscripciones");
         }
 
@@ -39,7 +39,7 @@ namespace UniversidadDeMurcia.Controllers
             return base.View(viewName, model);
         }
 
-        protected async Task<IActionResult> CrearObjeto(IuElemento iuElemento)
+        protected async Task<IActionResult> CrearObjeto(Tiu iuElemento)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace UniversidadDeMurcia.Controllers
 
 
 
-        protected async Task<IActionResult> ModificarObjeto(int id, IuElemento elemento)
+        protected async Task<IActionResult> ModificarObjeto(int id, Tiu elemento)
         {
             if (id != elemento.Id)
             {

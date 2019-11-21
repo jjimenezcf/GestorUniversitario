@@ -4,18 +4,13 @@ namespace GestorDeElementos
 {
     public class ClaseDeElemetos<Tbd,Tiu>
     {
-        public Tbd BdClase { get; set; }
-        public Tiu IuClase { get; set; }
-
-        ClaseDeElemetos(Tbd bdClase, Tiu iuClase)
+        public ClaseDeElemetos()
         {
-            BdClase = bdClase;
-            IuClase = iuClase;
         }
 
-        internal static ClaseDeElemetos<Tbd,Tiu> ObtenerGestorDeLaClase(Tbd bdClase, Tiu iuClase)
+        internal static ClaseDeElemetos<Tbd,Tiu> ObtenerGestorDeLaClase()
         {
-            return new ClaseDeElemetos<Tbd,Tiu> (bdClase,iuClase);
+            return new ClaseDeElemetos<Tbd,Tiu> ();
         }
 
         internal Tbd NuevoElementoBd()
