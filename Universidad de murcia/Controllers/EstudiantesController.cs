@@ -14,8 +14,8 @@ namespace UniversidadDeMurcia.Controllers
     public class EstudiantesController : EntidadController<ContextoUniversitario, BdEstudiante, IuEstudiante>
     {
 
-        public EstudiantesController(GestorUniversitario.GestorUniversitario gestorUniversitario, Gestor.Errores.Errores gestorErrores):
-            base(gestorUniversitario, gestorErrores)
+        public EstudiantesController(GestorUniversitario.GestorDeEstudiantes gestorDeEstudiantes, Gestor.Errores.Errores gestorDeErrores):
+            base(gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
         }
@@ -87,7 +87,7 @@ namespace UniversidadDeMurcia.Controllers
         public async Task<IActionResult> BorrarEstudiante(int id)
         {
             
-            await entorno.BorrarPorId(id);
+            entorno.BorrarPorId(id);
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
@@ -98,7 +98,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (IuEstudiante)entorno.LeerPorId((int) id);
+            var estudiante = (IuEstudiante)entorno.LeerElementoPorId((int) id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -114,7 +114,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (IuEstudiante)entorno.LeerTodoPorId((int)id);
+            var estudiante = (IuEstudiante)entorno.LeerElementoConDetalle((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

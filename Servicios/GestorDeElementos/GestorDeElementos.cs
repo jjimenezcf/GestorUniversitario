@@ -12,7 +12,9 @@ namespace GestorDeElementos
     public abstract class GestorDeElementos<Tctx, Tbd, Tiu> where Tbd : BdElemento where Tiu : IuElemento where Tctx : DbContext
     {
         protected ClaseDeElemetos<Tbd, Tiu> Metadatos;
-        private Tctx _Contexto;
+        protected Tctx _Contexto;
+
+        protected abstract Tbd LeerConDetalle(int Id);
 
         public GestorDeElementos()
         {
@@ -46,7 +48,7 @@ namespace GestorDeElementos
 
         public bool ExisteObjetoEnBd(int id)
         {
-            return true; //_Contexto.Elementos<T>().Any(e => e.Id == id);
+            return _Contexto.Set<Tbd>().Any(e => e.Id == id);
         }
 
 
@@ -66,41 +68,48 @@ namespace GestorDeElementos
             return lista.AsEnumerable();
         }
 
-        public IuElemento LeerPorId(int id)
+        public IuElemento LeerElementoPorId(int id)
         {
-
-            Tbd bdElemento = null;
-
-            //await _Contexto.Elementos
-            //.AsNoTracking()
-            //.FirstOrDefaultAsync(m => m.Id == id);
-
-            return MaperaElementoParaLaIu(bdElemento);
+            var elementoDeBd = _Contexto.Set<Tbd>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            return MaperaElementoParaLaIu(elementoDeBd);
         }
 
-        public IuElemento LeerTodoPorId(int id)
+        public BdElemento LeerRegistroPorId(int id)
         {
-            Tbd bdElemento = null;
-
-            //await _Contexto.Elementos
-            //.Include(i => i.Inscripciones)
-            //.ThenInclude(e => e.Curso)
-            //.AsNoTracking()
-            //.FirstOrDefaultAsync(m => m.Id == id);
-
-            return MaperaElementoParaLaIu(bdElemento);
+            return _Contexto.Set<Tbd>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 
-        public async Task BorrarPorId(int id)
+
+        public IuElemento LeerElementoConDetalle(int id)
         {
-            var bdElemto = LeerPorId(id);
-            _Contexto.Remove(bdElemto);
-            await _Contexto.SaveChangesAsync();
+            var elementoLeido = LeerConDetalle(id);
+            return MaperaElementoParaLaIu(elementoLeido);
+        }
+
+        public void BorrarPorId(int id)
+        {
+            var bdElemeto = LeerRegistroPorId(id);
+            _Contexto.Remove(bdElemeto);
+            _Contexto.SaveChangesAsync();
         }
 
         private Tbd MapearElementoParaLaBd(Tiu iuElemento)
         {
             var bdElemento = Metadatos.NuevoElementoBd();
+            PropertyInfo[] propiedadesBd = typeof(Tbd).GetProperties();
+            PropertyInfo[] propiedadesIu = typeof(Tiu).GetProperties();
+
+            foreach (PropertyInfo pBd in propiedadesBd)
+            {
+                foreach (PropertyInfo pIu in propiedadesIu)
+                {
+                    if (pIu.Name == pBd.Name)
+                    {
+                        pBd.SetValue(bdElemento, pIu.GetValue(iuElemento));
+                        break;
+                    }
+                }
+            }
             return bdElemento;
         }
 

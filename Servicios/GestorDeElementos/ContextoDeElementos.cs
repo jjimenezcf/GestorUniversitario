@@ -7,12 +7,15 @@ using System.Linq;
 
 namespace GestorDeElementos
 {
-    public class ContextoDeElementos: DbContext
+    public class ContextoDeElementos : DbContext
     {
         public ContextoDeElementos(DbContextOptions options) :
         base(options)
         {
         }
-        
+
+        public DbSet<BdCatalogoDeBd> CatalogoDeBd { get; set; }
     }
 }
+
+
