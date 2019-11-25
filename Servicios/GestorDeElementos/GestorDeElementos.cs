@@ -12,9 +12,10 @@ namespace GestorDeElementos
     public abstract class GestorDeElementos<Tctx, Tbd, Tiu> where Tbd : BdElemento where Tiu : IuElemento where Tctx : DbContext
     {
         protected ClaseDeElemetos<Tbd, Tiu> Metadatos;
-        protected Tctx _Contexto;
+        public Tctx _Contexto;
 
         protected abstract Tbd LeerConDetalle(int Id);
+        protected abstract void MapearDetalleParaLaIu(Tiu iuElemento, Tbd bdElemento, PropertyInfo propiedadOrigen);
 
         public GestorDeElementos()
         {
@@ -113,19 +114,24 @@ namespace GestorDeElementos
             return bdElemento;
         }
 
-        private Tiu MaperaElementoParaLaIu(Tbd bdElemento)
+        public Tiu MaperaElementoParaLaIu(Tbd bdElemento)
         {
             var iuElemento = Metadatos.NuevoElementoIu();
             PropertyInfo[] propiedadesBd = typeof(Tbd).GetProperties();
             PropertyInfo[] propiedadesIu = typeof(Tiu).GetProperties();
 
-            foreach (PropertyInfo pBd in propiedadesBd)
+            foreach (PropertyInfo propiedadOrigen in propiedadesBd)
             {
-                foreach (PropertyInfo pIu in propiedadesIu)
+                foreach (PropertyInfo propiedadDestino in propiedadesIu)
                 {
-                    if (pIu.Name == pBd.Name)
+                    if (propiedadDestino.Name == propiedadOrigen.Name)
                     {
-                        pIu.SetValue(iuElemento, pBd.GetValue(bdElemento));
+                        if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
+                        {
+                            MapearDetalleParaLaIu(iuElemento, bdElemento, propiedadOrigen);
+                        }
+
+                        propiedadDestino.SetValue(iuElemento, propiedadOrigen.GetValue(bdElemento));
                         break;
                     }
                 }
@@ -133,6 +139,5 @@ namespace GestorDeElementos
             return iuElemento;
         }
 
-   
     }
 }

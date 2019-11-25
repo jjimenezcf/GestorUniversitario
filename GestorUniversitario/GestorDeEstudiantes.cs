@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace GestorUniversitario
 {
-    public class GestorDeEstudiantes: GestorDeElementos<ContextoUniversitario, BdEstudiante, IuEstudiante>
+    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, BdEstudiante, IuEstudiante>
     {
 
         public GestorDeEstudiantes(ContextoUniversitario contexto)
-            :base(contexto)
+            : base(contexto)
         {
 
         }
@@ -28,5 +29,19 @@ namespace GestorUniversitario
                             .FirstOrDefault(m => m.Id == Id);
         }
 
+        protected override void MapearDetalleParaLaIu(IuEstudiante iuElemento, BdEstudiante bdElemento, PropertyInfo propiedadOrigen)
+        {
+            var gestorDeInscripciones = new GestorDeInscripciones(_Contexto);
+
+            if (bdElemento.Inscripciones == null)
+                return;
+
+            foreach (var inscripcion in bdElemento.Inscripciones)
+            {
+                iuElemento.Inscripciones.Add(gestorDeInscripciones.MaperaElementoParaLaIu(inscripcion));
+            }
+        }
     }
+
+
 }
