@@ -1,5 +1,5 @@
-﻿using GestorDeElementos.BdModelo;
-using GestorDeElementos.IuModelo;
+﻿using GestorDeElementos.ModeloBd;
+using GestorDeElementos.ModeloIu;
 using GestorUniversitario.ContextosDeBd;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +39,7 @@ namespace UniversidadDeMurcia
 
             services.AddScoped<Gestor.Errores.Errores>();
             services.AddScoped<GestorUniversitario.GestorDeEstudiantes>();
+            services.AddScoped<GestorUniversitario.GestorDeCursos>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

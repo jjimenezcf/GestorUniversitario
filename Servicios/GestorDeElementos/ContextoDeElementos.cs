@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using GestorDeElementos.BdModelo;
+using GestorDeElementos.ModeloBd;
 using System.Linq;
 
 namespace GestorDeElementos

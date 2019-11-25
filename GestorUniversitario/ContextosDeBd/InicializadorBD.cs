@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using GestorUniversitario.BdModelo;
+using GestorUniversitario.ModeloBd;
+using GestorUniversitario.ModeloBd.Enumerados;
 
 namespace GestorUniversitario.ContextosDeBd
 {

@@ -1,4 +1,4 @@
-﻿namespace GestorDeElementos.BdModelo
+﻿namespace GestorDeElementos.ModeloBd
 {
     public class RegistroBase
     {

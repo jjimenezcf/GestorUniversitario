@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Extensiones;
 using Microsoft.AspNetCore.Mvc;
-using GestorUniversitario.IuModelo;
+using GestorUniversitario.ModeloIu;
 using UniversidadDeMurcia.Objetos;
-using GestorUniversitario.BdModelo;
+using GestorUniversitario.ModeloBd;
 using System.Collections.Generic;
 using GestorUniversitario.ContextosDeBd;
 
@@ -84,9 +84,9 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(BorrarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BorrarEstudiante(int id)
+        public IActionResult BorrarEstudiante(int id)
         {
-            
+
             entorno.BorrarPorId(id);
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }

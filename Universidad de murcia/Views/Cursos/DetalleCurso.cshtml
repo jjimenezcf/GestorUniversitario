@@ -1,33 +1,21 @@
-﻿@model GestorUniversitario.ModeloIu.ElementoEstudiante
+﻿@model GestorUniversitario.ModeloIu.ElementoCurso
 
 @{
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
     <h2>
-       @Html.DisplayFor(model => model.Apellido),  @Html.DisplayFor(model => model.Nombre)
+       @Html.DisplayFor(model => model.Titulo),  @Html.DisplayFor(model => model.Creditos)
     </h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
-        @*<dt>
-                @Html.DisplayNameFor(model => model.Apellido)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Apellido)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Nombre)
-            </dd>*@
         <dt>
-            @Html.DisplayNameFor(model => model.InscritoEl)
+            @Html.DisplayNameFor(model => model.Inscripciones)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.InscritoEl)
+            @Html.DisplayFor(model => model.Inscripciones)
         </dd>
 
     </dl>
@@ -46,7 +34,7 @@
 
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Inscripciones)
+                    @*@foreach (var item in Model.Inscripciones)
                     {
                         <tr>
                             <td>
@@ -56,7 +44,7 @@
                                 @Html.DisplayFor(modelItem => item.Grado)
                             </td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
             </table>
         </div>

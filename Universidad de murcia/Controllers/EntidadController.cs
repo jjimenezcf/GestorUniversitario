@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Gestor.Errores;
 using GestorDeElementos;
-using GestorDeElementos.BdModelo;
-using GestorDeElementos.IuModelo;
+using GestorDeElementos.ModeloBd;
+using GestorDeElementos.ModeloIu;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

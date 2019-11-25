@@ -1,10 +1,11 @@
 ﻿using GestorDeElementos;
-using GestorUniversitario.BdModelo;
+using GestorUniversitario.ModeloBd;
 using GestorUniversitario.ContextosDeBd;
-using GestorUniversitario.IuModelo;
+using GestorUniversitario.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,18 +30,25 @@ namespace GestorUniversitario
                             .FirstOrDefault(m => m.Id == Id);
         }
 
-        protected override void MapearDetalleParaLaIu(ElementoEstudiante elemento, RegistroDeEstudiante registro, PropertyInfo propiedadOrigen)
+        protected override void MapearDetalleParaLaIu(RegistroDeEstudiante registro, ElementoEstudiante elemento)
         {
-            var gestorDeInscripciones = new GestorDeInscripciones(_Contexto);
+            var gestor = new GestorDeInscripciones(_Contexto);
 
             if (registro.Inscripciones == null)
                 return;
 
-            foreach (var inscripcion in registro.Inscripciones)
+            elemento.Inscripciones = new Collection<ElementoInscripcionesDeUnEstudiante>();
+            foreach (var registroDeInscripcion in registro.Inscripciones)
             {
-                elemento.Inscripciones.Add(gestorDeInscripciones.MaperaElementoParaLaIu(inscripcion));
+                var elemetoInscripcion = gestor.MapearElemento(registroDeInscripcion, new List<string> {"Estudiante"} );
+                elemento.Inscripciones.Add(elemetoInscripcion);
             }
         }
+
+        protected override void MapearElemento(RegistroDeEstudiante registro, ElementoEstudiante elemtoEstudiante, PropertyInfo propiedad)
+        { 
+        }
+
     }
 
 

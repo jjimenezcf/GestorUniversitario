@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using GestorDeElementos.BdModelo;
+using GestorDeElementos.ModeloBd;
 using GestorUniversitario.ContextosDeBd;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;

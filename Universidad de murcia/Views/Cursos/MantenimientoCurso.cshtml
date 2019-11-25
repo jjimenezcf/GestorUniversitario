@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestorUniversitario.ModeloIu.ElementoEstudiante>
+﻿@model IEnumerable<GestorUniversitario.ModeloIu.ElementoCurso>
 
 @{
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
@@ -13,13 +13,10 @@
     <thead>
         <tr>
             <th>
-                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.Nombre]"> @Html.DisplayNameFor(model => model.Apellido) </a>
+                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir > @Html.DisplayNameFor(model => model.Titulo) </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
+                @Html.DisplayNameFor(model => model.Creditos)
             </th>
             <th></th>
         </tr>
@@ -29,13 +26,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Apellido)
+                    @Html.DisplayFor(modelItem => item.Titulo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InscritoEl)
+                    @Html.DisplayFor(modelItem => item.Creditos)
                 </td>
                 <td>
                     <a asp-action=@ViewBag.Crud.Editor.Ir asp-route-id="@item.Id">Editar</a> |

@@ -10,6 +10,7 @@ namespace UniversidadDeMurcia.Controllers
         protected string NombreDelObjeto => typeof(T).Name.Replace("Elemento","");
         private string _verbo;
         private string _accion;
+        private string _formulario;
 
         public string Vista => $"{_verbo}{NombreDelObjeto}";
         public string Titulo { get; set; }
@@ -17,7 +18,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public string Accion => _accion ?? $"{_verbo}{NombreDelObjeto}";
 
-        public string Formulario => _verbo;
+        public string Formulario => _formulario ?? _verbo;
 
         public BaseCrud(string verbo)
         {
@@ -32,6 +33,11 @@ namespace UniversidadDeMurcia.Controllers
         public void AsignarAccion(string accion)
         {
             _accion = accion;
+        }
+
+        public void AsignarFormulario(string formulario)
+        {
+            _formulario = formulario;
         }
 
     }
@@ -62,6 +68,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             AsignarTitulo($"Edición de {NombreDelObjeto}");
             AsignarAccion($"Modificar{NombreDelObjeto}");
+            AsignarFormulario("Modificar");
         }
     }
 

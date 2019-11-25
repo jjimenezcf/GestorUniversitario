@@ -1,8 +1,8 @@
-﻿using GestorUniversitario.BdModelo;
+﻿using GestorUniversitario.ModeloBd;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using GestorDeElementos;
-using GestorDeElementos.BdModelo;
+using GestorDeElementos.ModeloBd;
 
 
 namespace GestorUniversitario.ContextosDeBd

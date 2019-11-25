@@ -1,8 +1,8 @@
-﻿using GestorDeElementos.IuModelo;
+﻿using GestorDeElementos.ModeloIu;
 using System;
 using System.Collections.Generic;
 
-namespace GestorUniversitario.IuModelo
+namespace GestorUniversitario.ModeloIu
 {
     public class ElementoEstudiante: ElementoBase
     {
@@ -10,6 +10,6 @@ namespace GestorUniversitario.IuModelo
         public string Nombre { get; set; }
         public DateTime InscritoEl { get; set; }
 
-        public ICollection<ElementoInscripcion> Inscripciones { get; set; }
+        public ICollection<ElementoInscripcionesDeUnEstudiante> Inscripciones { get; set; }
     }
 }

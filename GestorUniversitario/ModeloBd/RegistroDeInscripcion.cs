@@ -1,11 +1,8 @@
-﻿using GestorDeElementos.BdModelo;
+﻿using GestorDeElementos.ModeloBd;
+using GestorUniversitario.ModeloBd.Enumerados;
 
-namespace GestorUniversitario.BdModelo
+namespace GestorUniversitario.ModeloBd
 {    
-    public enum Grado
-    {
-        A, B, C, D, F
-    }
 
     public class RegistroDeInscripcion : RegistroBase
     {

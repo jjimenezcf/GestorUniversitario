@@ -1,15 +1,14 @@
 ﻿using GestorDeElementos;
-using GestorUniversitario.BdModelo;
+using GestorUniversitario.ModeloBd;
 using GestorUniversitario.ContextosDeBd;
-using GestorUniversitario.IuModelo;
+using GestorUniversitario.ModeloIu;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace GestorUniversitario
 {
-    public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcion>
+    public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {
 
         public GestorDeInscripciones(ContextoUniversitario contexto)
@@ -26,8 +25,25 @@ namespace GestorUniversitario
 
 
 
-        protected override void MapearDetalleParaLaIu(ElementoInscripcion iuElemento, RegistroDeInscripcion bdElemento, PropertyInfo propiedadOrigen)
+        protected override void MapearDetalleParaLaIu(RegistroDeInscripcion registroDeInscripcion, ElementoInscripcionesDeUnEstudiante elementoInscripcion )
         {
+
+        }
+
+
+        protected override void MapearElemento(RegistroDeInscripcion registro, ElementoInscripcionesDeUnEstudiante elemento, PropertyInfo propiedad)
+        {
+            if (propiedad.Name == elemento.PropiedadCurso)
+            {
+                var gestor = new GestorDeCursos(_Contexto);
+                elemento.Curso = gestor.MapearElemento(registro.Curso);
+            }
+
+            //if (propiedad.Name == "Estudiante")
+            //{
+            //    var gestor = new GestorDeEstudiantes(_Contexto);
+            //    elemento.Estudiante = gestor.MapearElemento(registro.Estudiante);
+            //}
 
         }
 
