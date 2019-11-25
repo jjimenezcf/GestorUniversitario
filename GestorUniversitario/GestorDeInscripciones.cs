@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GestorUniversitario
 {
-    public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, BdInscripcion, IuInscripcion>
+    public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcion>
     {
 
         public GestorDeInscripciones(ContextoUniversitario contexto)
@@ -19,14 +19,14 @@ namespace GestorUniversitario
 
 
 
-        protected override BdInscripcion LeerConDetalle(int Id)
+        protected override RegistroDeInscripcion LeerConDetalle(int Id)
         {
             return null;
         }
 
 
 
-        protected override void MapearDetalleParaLaIu(IuInscripcion iuElemento, BdInscripcion bdElemento, PropertyInfo propiedadOrigen)
+        protected override void MapearDetalleParaLaIu(ElementoInscripcion iuElemento, RegistroDeInscripcion bdElemento, PropertyInfo propiedadOrigen)
         {
 
         }

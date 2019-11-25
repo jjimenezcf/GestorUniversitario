@@ -14,7 +14,7 @@ namespace GestorDeElementos
         {
         }
 
-        public DbSet<BdCatalogoDeBd> CatalogoDeBd { get; set; }
+        public DbSet<RegistroDeCatalogoDeBd> CatalogoDeBd { get; set; }
     }
 }
 

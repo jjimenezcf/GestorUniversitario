@@ -15,9 +15,9 @@ namespace GestorUniversitario.ContextosDeBd
         {
         }
 
-        public DbSet<BdCurso> Cursos { get; set; }
-        public DbSet<BdInscripcion> Inscripciones { get; set; }
-        public DbSet<BdEstudiante> Estudiantes { get; set; }
+        public DbSet<RegistroDeCurso> Cursos { get; set; }
+        public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
+        public DbSet<RegistroDeEstudiante> Estudiantes { get; set; }
 
 
         //public string kk<T>(T o) => o switch
@@ -32,10 +32,10 @@ namespace GestorUniversitario.ContextosDeBd
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BdCurso>().ToTable("Curso");
-            modelBuilder.Entity<BdInscripcion>().ToTable("Inscripcion");
-            modelBuilder.Entity<BdEstudiante>().ToTable("Estudiante");
-            modelBuilder.Entity<BdCatalogoDeBd>().ToTable("TABLES", schema: "INFORMATION_SCHEMA");
+            modelBuilder.Entity<RegistroDeCurso>().ToTable("Curso");
+            modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
+            modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
+            modelBuilder.Entity<RegistroDeCatalogoDeBd>().ToTable("TABLES", schema: "INFORMATION_SCHEMA");
         }
 
     }

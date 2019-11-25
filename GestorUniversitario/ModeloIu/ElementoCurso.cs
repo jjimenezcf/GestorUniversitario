@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace GestorUniversitario.IuModelo
 {
-    public class IuCurso : IuElemento
+    public class ElementoCurso : ElementoBase
     {
         public string Titulo { get; set; }
         public int Creditos { get; set; }
 
-        public ICollection<IuInscripcion> Inscripciones { get; set; }
+        public ICollection<ElementoInscripcion> Inscripciones { get; set; }
     }
 }

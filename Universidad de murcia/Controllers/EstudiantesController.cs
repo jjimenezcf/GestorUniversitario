@@ -11,7 +11,7 @@ using GestorUniversitario.ContextosDeBd;
 namespace UniversidadDeMurcia.Controllers
 {
 
-    public class EstudiantesController : EntidadController<ContextoUniversitario, BdEstudiante, IuEstudiante>
+    public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
         public EstudiantesController(GestorUniversitario.GestorDeEstudiantes gestorDeEstudiantes, Gestor.Errores.Errores gestorDeErrores):
@@ -31,7 +31,7 @@ namespace UniversidadDeMurcia.Controllers
                                                         ? EstudianteEnlace.OrdenadoPor.InscritoElDes
                                                         : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
-            var estudiantes =  (IEnumerable<IuEstudiante>)entorno.LeerTodos();
+            var estudiantes =  (IEnumerable<ElementoEstudiante>)entorno.LeerTodos();
             estudiantes = orden switch
             {
                 EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
@@ -45,7 +45,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraCrearEstudiante()
         {
-            return View(GestorDelCrud.Creador.Vista, new IuEstudiante());
+            return View(GestorDelCrud.Creador.Vista, new ElementoEstudiante());
         }
 
         public IActionResult IraDetalleEstudiante(int? id)
@@ -66,7 +66,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(CrearEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] IuEstudiante estudiante)
+        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] ElementoEstudiante estudiante)
         {
             return await CrearObjeto(estudiante);
         }
@@ -75,7 +75,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(ModificarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] IuEstudiante estudiante)
+        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] ElementoEstudiante estudiante)
         {
             return await ModificarObjeto(id, estudiante);
         }
@@ -91,14 +91,14 @@ namespace UniversidadDeMurcia.Controllers
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
-        private IuEstudiante LeerEstudiante(int? id)
+        private ElementoEstudiante LeerEstudiante(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (IuEstudiante)entorno.LeerElementoPorId((int) id);
+            var estudiante = (ElementoEstudiante)entorno.LeerElementoPorId((int) id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -107,14 +107,14 @@ namespace UniversidadDeMurcia.Controllers
             return estudiante;
         }
 
-        private IuEstudiante LeerDetalle(int? id)
+        private ElementoEstudiante LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (IuEstudiante)entorno.LeerElementoConDetalle((int)id);
+            var estudiante = (ElementoEstudiante)entorno.LeerElementoConDetalle((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

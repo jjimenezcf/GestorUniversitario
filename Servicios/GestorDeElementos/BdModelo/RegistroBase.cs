@@ -1,6 +1,6 @@
 ﻿namespace GestorDeElementos.BdModelo
 {
-    public class BdElemento
+    public class RegistroBase
     {
         public int Id { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿namespace GestorDeElementos.IuModelo
 {
-    public class IuElemento
+    public class ElementoBase
     {
         public int Id { get; set; }
     }

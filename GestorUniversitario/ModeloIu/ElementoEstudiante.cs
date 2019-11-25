@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace GestorUniversitario.IuModelo
 {
-    public class IuEstudiante: IuElemento
+    public class ElementoEstudiante: ElementoBase
     {
         public string Apellido { get; set; }
         public string Nombre { get; set; }
         public DateTime InscritoEl { get; set; }
 
-        public ICollection<IuInscripcion> Inscripciones { get; set; }
+        public ICollection<ElementoInscripcion> Inscripciones { get; set; }
     }
 }

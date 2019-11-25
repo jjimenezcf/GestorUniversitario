@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GestorDeElementos.BdModelo
 {
-    public class BdCatalogoDeBd: BdElemento
+    public class RegistroDeCatalogoDeBd: RegistroBase
     {
         public string Catalogo { get; set; }
         public string Esquema { get; set; }

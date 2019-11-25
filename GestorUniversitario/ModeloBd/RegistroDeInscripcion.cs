@@ -7,14 +7,14 @@ namespace GestorUniversitario.BdModelo
         A, B, C, D, F
     }
 
-    public class BdInscripcion : BdElemento
+    public class RegistroDeInscripcion : RegistroBase
     {
         public int CursoID { get; set; }
         public int EstudianteID { get; set; }
         public Grado? Grado { get; set; }
 
-        public BdCurso Curso { get; set; }
-        public BdEstudiante Estudiante { get; set; }
+        public RegistroDeCurso Curso { get; set; }
+        public RegistroDeEstudiante Estudiante { get; set; }
 
     }
 

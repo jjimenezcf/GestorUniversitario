@@ -9,79 +9,79 @@ using System.Threading.Tasks;
 
 namespace GestorDeElementos
 {
-    public abstract class GestorDeElementos<Tctx, Tbd, Tiu> where Tbd : BdElemento where Tiu : IuElemento where Tctx : DbContext
+    public abstract class GestorDeElementos<TContexto, TRegistroBase, TElementoBase> where TRegistroBase : RegistroBase where TElementoBase : ElementoBase where TContexto : DbContext
     {
-        protected ClaseDeElemetos<Tbd, Tiu> Metadatos;
-        public Tctx _Contexto;
+        protected ClaseDeElemetos<TRegistroBase, TElementoBase> Metadatos;
+        public TContexto _Contexto;
 
-        protected abstract Tbd LeerConDetalle(int Id);
-        protected abstract void MapearDetalleParaLaIu(Tiu iuElemento, Tbd bdElemento, PropertyInfo propiedadOrigen);
+        protected abstract TRegistroBase LeerConDetalle(int Id);
+        protected abstract void MapearDetalleParaLaIu(TElementoBase iuElemento, TRegistroBase bdElemento, PropertyInfo propiedadOrigen);
 
         public GestorDeElementos()
         {
             
         }
 
-        public GestorDeElementos(Tctx contexto)
+        public GestorDeElementos(TContexto contexto)
         {
             IniciarClase(contexto);
         }
 
-        protected virtual void IniciarClase(Tctx contexto)
+        protected virtual void IniciarClase(TContexto contexto)
         {
             _Contexto = contexto;
-            Metadatos = ClaseDeElemetos<Tbd, Tiu>.ObtenerGestorDeLaClase();
+            Metadatos = ClaseDeElemetos<TRegistroBase, TElementoBase>.ObtenerGestorDeLaClase();
         }
 
-        public async Task InsertarElementoAsync(Tiu iuElemento)
+        public async Task InsertarElementoAsync(TElementoBase elemento)
         {
-            BdElemento elementoBD = MapearElementoParaLaBd(iuElemento);
+            RegistroBase elementoBD = MapearElementoParaLaBd(elemento);
             _Contexto.Add(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
 
-        public async Task ModificarElementoAsync(Tiu iuElemento)
+        public async Task ModificarElementoAsync(TElementoBase elemento)
         {
-            BdElemento elementoBD = MapearElementoParaLaBd(iuElemento);
+            RegistroBase elementoBD = MapearElementoParaLaBd(elemento);
             _Contexto.Update(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
 
         public bool ExisteObjetoEnBd(int id)
         {
-            return _Contexto.Set<Tbd>().Any(e => e.Id == id);
+            return _Contexto.Set<TRegistroBase>().Any(e => e.Id == id);
         }
 
 
-        public IEnumerable<IuElemento> LeerTodos()
+        public IEnumerable<ElementoBase> LeerTodos()
         {
-            var elementosDeBd = _Contexto.Set<Tbd>().AsNoTracking().ToList();
+            var elementosDeBd = _Contexto.Set<TRegistroBase>().AsNoTracking().ToList();
             return MapearElementosParaLaIu(elementosDeBd);
         }
 
-        private IEnumerable<IuElemento> MapearElementosParaLaIu(List<Tbd> elementosDeBd)
+        private IEnumerable<ElementoBase> MapearElementosParaLaIu(List<TRegistroBase> registros)
         {
-            var lista = new List<Tiu>();
-            foreach (var elementoBd in elementosDeBd)
+            var lista = new List<TElementoBase>();
+            foreach (var registro in registros)
             {
-                lista.Add(MaperaElementoParaLaIu(elementoBd));
+                lista.Add(MaperaElementoParaLaIu(registro));
             }
             return lista.AsEnumerable();
         }
 
-        public IuElemento LeerElementoPorId(int id)
+        public ElementoBase LeerElementoPorId(int id)
         {
-            var elementoDeBd = _Contexto.Set<Tbd>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            var elementoDeBd = _Contexto.Set<TRegistroBase>().AsNoTracking().FirstOrDefault(m => m.Id == id);
             return MaperaElementoParaLaIu(elementoDeBd);
         }
 
-        public BdElemento LeerRegistroPorId(int id)
+        public RegistroBase LeerRegistroPorId(int id)
         {
-            return _Contexto.Set<Tbd>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            return _Contexto.Set<TRegistroBase>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 
 
-        public IuElemento LeerElementoConDetalle(int id)
+        public ElementoBase LeerElementoConDetalle(int id)
         {
             var elementoLeido = LeerConDetalle(id);
             return MaperaElementoParaLaIu(elementoLeido);
@@ -89,16 +89,16 @@ namespace GestorDeElementos
 
         public void BorrarPorId(int id)
         {
-            var bdElemeto = LeerRegistroPorId(id);
-            _Contexto.Remove(bdElemeto);
+            var registro = LeerRegistroPorId(id);
+            _Contexto.Remove(registro);
             _Contexto.SaveChangesAsync();
         }
 
-        private Tbd MapearElementoParaLaBd(Tiu iuElemento)
+        private TRegistroBase MapearElementoParaLaBd(TElementoBase elemento)
         {
-            var bdElemento = Metadatos.NuevoElementoBd();
-            PropertyInfo[] propiedadesBd = typeof(Tbd).GetProperties();
-            PropertyInfo[] propiedadesIu = typeof(Tiu).GetProperties();
+            var registro = Metadatos.NuevoElementoBd();
+            PropertyInfo[] propiedadesBd = typeof(TRegistroBase).GetProperties();
+            PropertyInfo[] propiedadesIu = typeof(TElementoBase).GetProperties();
 
             foreach (PropertyInfo pBd in propiedadesBd)
             {
@@ -106,19 +106,19 @@ namespace GestorDeElementos
                 {
                     if (pIu.Name == pBd.Name)
                     {
-                        pBd.SetValue(bdElemento, pIu.GetValue(iuElemento));
+                        pBd.SetValue(registro, pIu.GetValue(elemento));
                         break;
                     }
                 }
             }
-            return bdElemento;
+            return registro;
         }
 
-        public Tiu MaperaElementoParaLaIu(Tbd bdElemento)
+        public TElementoBase MaperaElementoParaLaIu(TRegistroBase registro)
         {
-            var iuElemento = Metadatos.NuevoElementoIu();
-            PropertyInfo[] propiedadesBd = typeof(Tbd).GetProperties();
-            PropertyInfo[] propiedadesIu = typeof(Tiu).GetProperties();
+            var elemento = Metadatos.NuevoElementoIu();
+            PropertyInfo[] propiedadesBd = typeof(TRegistroBase).GetProperties();
+            PropertyInfo[] propiedadesIu = typeof(TElementoBase).GetProperties();
 
             foreach (PropertyInfo propiedadOrigen in propiedadesBd)
             {
@@ -128,15 +128,15 @@ namespace GestorDeElementos
                     {
                         if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
                         {
-                            MapearDetalleParaLaIu(iuElemento, bdElemento, propiedadOrigen);
+                            MapearDetalleParaLaIu(elemento, registro, propiedadOrigen);
                         }
 
-                        propiedadDestino.SetValue(iuElemento, propiedadOrigen.GetValue(bdElemento));
+                        propiedadDestino.SetValue(elemento, propiedadOrigen.GetValue(registro));
                         break;
                     }
                 }
             }
-            return iuElemento;
+            return elemento;
         }
 
     }

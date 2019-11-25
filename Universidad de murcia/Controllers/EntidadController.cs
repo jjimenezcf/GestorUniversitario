@@ -12,7 +12,7 @@ using GestorDeElementos.IuModelo;
 namespace UniversidadDeMurcia.Controllers
 {
         
-    public class EntidadController<Tctx, Tbd, Tiu> : BaseController where Tctx: DbContext  where Tbd : BdElemento where Tiu : IuElemento
+    public class EntidadController<Tctx, Tbd, Tiu> : BaseController where Tctx: DbContext  where Tbd : RegistroBase where Tiu : ElementoBase
     {
 
         protected GestorDeElementos<Tctx, Tbd,Tiu> entorno { get; }

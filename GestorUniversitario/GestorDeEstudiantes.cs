@@ -11,7 +11,7 @@ using System.Text;
 
 namespace GestorUniversitario
 {
-    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, BdEstudiante, IuEstudiante>
+    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
         public GestorDeEstudiantes(ContextoUniversitario contexto)
@@ -20,25 +20,25 @@ namespace GestorUniversitario
 
         }
 
-        protected override BdEstudiante LeerConDetalle(int Id)
+        protected override RegistroDeEstudiante LeerConDetalle(int Id)
         {
-            return _Contexto.Set<BdEstudiante>()
+            return _Contexto.Set<RegistroDeEstudiante>()
                             .Include(i => i.Inscripciones)
                             .ThenInclude(e => e.Curso)
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
         }
 
-        protected override void MapearDetalleParaLaIu(IuEstudiante iuElemento, BdEstudiante bdElemento, PropertyInfo propiedadOrigen)
+        protected override void MapearDetalleParaLaIu(ElementoEstudiante elemento, RegistroDeEstudiante registro, PropertyInfo propiedadOrigen)
         {
             var gestorDeInscripciones = new GestorDeInscripciones(_Contexto);
 
-            if (bdElemento.Inscripciones == null)
+            if (registro.Inscripciones == null)
                 return;
 
-            foreach (var inscripcion in bdElemento.Inscripciones)
+            foreach (var inscripcion in registro.Inscripciones)
             {
-                iuElemento.Inscripciones.Add(gestorDeInscripciones.MaperaElementoParaLaIu(inscripcion));
+                elemento.Inscripciones.Add(gestorDeInscripciones.MaperaElementoParaLaIu(inscripcion));
             }
         }
     }
