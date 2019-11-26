@@ -14,8 +14,8 @@ namespace Gestor.Elementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto _Contexto;
-        private GestorDeMapeos _gestorDeMapeos;
         private GestorDeErrores _gestorDeErrores;
+        private IMapper _gestorDeMapeo;
 
         protected abstract TRegistro LeerConDetalle(int Id);
         protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
@@ -31,9 +31,9 @@ namespace Gestor.Elementos
             IniciarClase(contexto);
         }
 
-        public void AsignarGestores(GestorDeMapeos gestorDeMapeos, GestorDeErrores  gestorErrores)
+        public void AsignarGestores(IMapper gestorDeMapeos, GestorDeErrores  gestorErrores)
         {
-            _gestorDeMapeos = gestorDeMapeos;
+            _gestorDeMapeo = gestorDeMapeos;
             _gestorDeErrores = gestorErrores;
         }
 
@@ -75,8 +75,8 @@ namespace Gestor.Elementos
             foreach (var registro in registros)
             {
 
-               // IMapper.Map<TElemento>(registro);
-                lista.Add(MapearElemento(registro));
+                var elemento = _gestorDeMapeo.Map<TElemento>(registro);
+                lista.Add(elemento);
             }
             return lista.AsEnumerable();
         }

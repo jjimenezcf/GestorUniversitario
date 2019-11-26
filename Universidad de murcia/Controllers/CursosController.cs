@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using Gestor.Errores;
+using AutoMapper;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -14,8 +14,8 @@ namespace UniversidadDeMurcia.Controllers
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
 
-        public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores):
-            base(gestorDeCursos, gestorDeErrores)
+        public CursosController(GestorDeCursos gestorDeCursos, IMapper gestorDeMapeo, GestorDeErrores gestorDeErrores):
+            base(gestorDeCursos, gestorDeMapeo, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo curso");
         }

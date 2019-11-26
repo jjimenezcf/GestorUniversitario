@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
 using Gestor.Elementos.Universitario;
+using AutoMapper;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -16,8 +17,8 @@ namespace UniversidadDeMurcia.Controllers
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
-        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores):
-            base(gestorDeEstudiantes, gestorDeErrores)
+        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes,IMapper gestorDeMapeo, GestorDeErrores gestorDeErrores):
+            base(gestorDeEstudiantes, gestorDeMapeo,  gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
         }
