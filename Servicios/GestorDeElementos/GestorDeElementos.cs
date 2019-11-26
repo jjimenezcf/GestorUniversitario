@@ -21,12 +21,15 @@ namespace Gestor.Elementos
         protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
         protected abstract void MapearElemento(TRegistro registro, TElemento elemento, PropertyInfo propiedad);
 
+        public static IMapper Inicializar()
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<TRegistro, TElemento>());
+            return config.CreateMapper();
+        }
+
         public GestorDeElementos(TContexto contexto)
         {
             IniciarClase(contexto);
-
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<TRegistro, TElemento>());
-            _gestorDeMapeo = config.CreateMapper();
         }
 
         public void AsignarGestores(GestorDeErrores gestorErrores)
@@ -38,6 +41,7 @@ namespace Gestor.Elementos
         {
             _Contexto = contexto;
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
+            _gestorDeMapeo = Inicializar();
         }
 
         public async Task InsertarElementoAsync(TElemento elemento)
