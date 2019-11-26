@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
+using Gestor.Mapeos;
+using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +16,8 @@ namespace Gestor.Elementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto _Contexto;
+        private GestorDeMapeos _gestorDeMapeos;
+        private GestorDeErrores _gestorDeErrores;
 
         protected abstract TRegistro LeerConDetalle(int Id);
         protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
@@ -26,6 +31,12 @@ namespace Gestor.Elementos
         public GestorDeElementos(TContexto contexto)
         {
             IniciarClase(contexto);
+        }
+
+        public void AsignarGestores(GestorDeMapeos gestorDeMapeos, GestorDeErrores  gestorErrores)
+        {
+            _gestorDeMapeos = gestorDeMapeos;
+            _gestorDeErrores = gestorErrores;
         }
 
         protected virtual void IniciarClase(TContexto contexto)

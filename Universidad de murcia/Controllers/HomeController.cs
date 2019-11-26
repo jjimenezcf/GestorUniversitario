@@ -9,7 +9,7 @@ namespace UniversidadDeMurcia.Controllers
     public class HomeController : BaseController
     {
         
-        public HomeController(Errores gestorDeErrores):
+        public HomeController(GestorDeErrores gestorDeErrores):
             base(gestorDeErrores)
         {
             

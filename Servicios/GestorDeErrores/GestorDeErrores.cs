@@ -2,9 +2,9 @@
 
 namespace Gestor.Errores
 {
-    public class Errores
+    public class GestorDeErrores
     {
-        public Errores()
+        public GestorDeErrores()
         {
         }
 

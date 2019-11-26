@@ -41,7 +41,7 @@ namespace UniversidadDeMurcia
             catch (Exception ex)
             {
                 logger.LogError(ex, $"{Environment.NewLine}Error al inicializar la BD.{Environment.NewLine}");
-                Gestor.Errores.Errores.EnviaError("Error al inicializar la BD.", ex);
+                Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
                 throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}",ex);
             }
         }

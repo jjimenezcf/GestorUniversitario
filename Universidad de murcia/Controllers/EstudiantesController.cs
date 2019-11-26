@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
 using Gestor.Elementos.Universitario;
+using Gestor.Mapeos;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -16,7 +17,7 @@ namespace UniversidadDeMurcia.Controllers
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
-        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, Errores gestorDeErrores):
+        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores):
             base(gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
@@ -33,7 +34,7 @@ namespace UniversidadDeMurcia.Controllers
                                                         ? EstudianteEnlace.OrdenadoPor.InscritoElDes
                                                         : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
-            var estudiantes =  (IEnumerable<ElementoEstudiante>)entorno.LeerTodos();
+            var estudiantes =  (IEnumerable<ElementoEstudiante>)GestorDeElementos.LeerTodos();
             estudiantes = orden switch
             {
                 EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
@@ -89,7 +90,7 @@ namespace UniversidadDeMurcia.Controllers
         public IActionResult BorrarEstudiante(int id)
         {
 
-            entorno.BorrarPorId(id);
+            GestorDeElementos.BorrarPorId(id);
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
@@ -100,7 +101,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (ElementoEstudiante)entorno.LeerElementoPorId((int) id);
+            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoPorId((int) id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -116,7 +117,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (ElementoEstudiante)entorno.LeerElementoConDetalle((int)id);
+            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

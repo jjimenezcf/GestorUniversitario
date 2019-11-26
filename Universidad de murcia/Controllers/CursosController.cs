@@ -6,6 +6,8 @@ using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ModeloIu;
+using Gestor.Errores;
+using Gestor.Mapeos;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -13,7 +15,7 @@ namespace UniversidadDeMurcia.Controllers
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
 
-        public CursosController(GestorDeCursos gestorDeCursos, Gestor.Errores.Errores gestorDeErrores):
+        public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores):
             base(gestorDeCursos, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo curso");
@@ -22,7 +24,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoCurso(string orden)
         {
-            var cursos = entorno.LeerTodos();
+            var cursos = GestorDeElementos.LeerTodos();
             return View(GestorDelCrud.Mantenimiento.Vista, cursos.ToList());
         }
 
@@ -70,7 +72,7 @@ namespace UniversidadDeMurcia.Controllers
         public IActionResult BorrarCurso(int id)
         {
 
-            entorno.BorrarPorId(id);
+            GestorDeElementos.BorrarPorId(id);
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
@@ -81,7 +83,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (ElementoCurso)entorno.LeerElementoPorId((int) id);
+            var curso = (ElementoCurso)GestorDeElementos.LeerElementoPorId((int) id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");
@@ -97,7 +99,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (ElementoCurso)entorno.LeerElementoConDetalle((int)id);
+            var curso = (ElementoCurso)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");

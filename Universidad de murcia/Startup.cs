@@ -38,7 +38,7 @@ namespace UniversidadDeMurcia
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddScoped<Gestor.Errores.Errores>();
+            services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<Gestor.Elementos.Universitario.GestorDeEstudiantes>();
             services.AddScoped<Gestor.Elementos.Universitario.GestorDeCursos>();
         }

@@ -6,6 +6,7 @@ using Gestor.Errores;
 using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
+using Gestor.Mapeos;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,16 +16,17 @@ namespace UniversidadDeMurcia.Controllers
     public class EntidadController<Tctx, Tbd, Tiu> : BaseController where Tctx: DbContext  where Tbd : RegistroBase where Tiu : ElementoBase
     {
 
-        protected GestorDeElementos<Tctx, Tbd,Tiu> entorno { get; }
+        protected GestorDeElementos<Tctx, Tbd,Tiu> GestorDeElementos { get; }
 
 
         protected GestorCrud<Tiu> GestorDelCrud { get; }
 
 
-        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos, Errores gestorErrores) :
+        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos, GestorDeErrores gestorErrores) :
         base(gestorErrores)
         {
-            entorno = gestorDeElementos;
+            GestorDeElementos = gestorDeElementos;
+            GestorDeElementos.AsignarGestores(new GestorDeMapeos(), gestorErrores);
             GestorDelCrud = new GestorCrud<Tiu>("Gestor de estudiantes", "Inscripciones");
         }
 
@@ -45,7 +47,7 @@ namespace UniversidadDeMurcia.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await entorno.InsertarElementoAsync(iuElemento);
+                    await GestorDeElementos.InsertarElementoAsync(iuElemento);
                     return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
                 }
             }
@@ -70,7 +72,7 @@ namespace UniversidadDeMurcia.Controllers
             {
                 try
                 {
-                    await entorno.ModificarElementoAsync(elemento);
+                    await GestorDeElementos.ModificarElementoAsync(elemento);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -92,7 +94,7 @@ namespace UniversidadDeMurcia.Controllers
 
         private bool ExisteObjetoEnBd(int id)
         {
-            return entorno.ExisteObjetoEnBd(id);
+            return GestorDeElementos.ExisteObjetoEnBd(id);
         }
 
     }
