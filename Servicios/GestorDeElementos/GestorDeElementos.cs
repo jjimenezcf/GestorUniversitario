@@ -1,13 +1,13 @@
-﻿using GestorDeElementos.ModeloBd;
-using GestorDeElementos.ModeloIu;
+﻿using AutoMapper;
+using Gestor.Elementos.ModeloBd;
+using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace GestorDeElementos
+namespace Gestor.Elementos
 {
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : DbContext
     {
@@ -36,14 +36,14 @@ namespace GestorDeElementos
 
         public async Task InsertarElementoAsync(TElemento elemento)
         {
-            RegistroBase elementoBD = MapearRegistro(elemento);
+            TRegistro elementoBD = MapearRegistro(elemento);
             _Contexto.Add(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
 
         public async Task ModificarElementoAsync(TElemento elemento)
         {
-            RegistroBase elementoBD = MapearRegistro(elemento);
+            TRegistro elementoBD = MapearRegistro(elemento);
             _Contexto.Update(elementoBD);
             await _Contexto.SaveChangesAsync();
         }
@@ -54,35 +54,37 @@ namespace GestorDeElementos
         }
 
 
-        public IEnumerable<ElementoBase> LeerTodos()
+        public IEnumerable<TElemento> LeerTodos()
         {
             var elementosDeBd = _Contexto.Set<TRegistro>().AsNoTracking().ToList();
             return MapearElementosParaLaIu(elementosDeBd);
         }
 
-        private IEnumerable<ElementoBase> MapearElementosParaLaIu(List<TRegistro> registros)
+        private IEnumerable<TElemento> MapearElementosParaLaIu(List<TRegistro> registros)
         {
             var lista = new List<TElemento>();
             foreach (var registro in registros)
             {
+
+               // IMapper.Map<TElemento>(registro);
                 lista.Add(MapearElemento(registro));
             }
             return lista.AsEnumerable();
         }
 
-        public ElementoBase LeerElementoPorId(int id)
+        public TElemento LeerElementoPorId(int id)
         {
             var elementoDeBd = _Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
             return MapearElemento(elementoDeBd);
         }
 
-        public RegistroBase LeerRegistroPorId(int id)
+        public TRegistro LeerRegistroPorId(int id)
         {
             return _Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 
 
-        public ElementoBase LeerElementoConDetalle(int id)
+        public TElemento LeerElementoConDetalle(int id)
         {
             var elementoLeido = LeerConDetalle(id);
             return MapearElemento(elementoLeido);
@@ -133,7 +135,7 @@ namespace GestorDeElementos
                         if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
                             MapearDetalleParaLaIu(registro, elemento);
                         else
-                        if (propiedadOrigen.PropertyType.BaseType.Name.Equals("RegistroBase"))
+                        if (propiedadOrigen.PropertyType.BaseType.Name.Equals(nameof(RegistroBase)))
                             MapearElemento(registro, elemento, propiedadOrigen);
                         else
                         if (propiedadOrigen.GetValue(registro) != null)

@@ -1,4 +1,4 @@
-﻿using GestorDeElementos.ModeloIu;
+﻿using Gestor.Elementos.ModeloIu;
 using GestorUniversitario.ModeloBd.Enumerados;
 
 namespace GestorUniversitario.ModeloIu

@@ -1,4 +1,4 @@
-﻿using GestorDeElementos.ModeloBd;
+﻿using Gestor.Elementos.ModeloBd;
 using System;
 using System.Collections.Generic;
 

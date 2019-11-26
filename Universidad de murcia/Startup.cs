@@ -1,5 +1,4 @@
-﻿using GestorDeElementos.ModeloBd;
-using GestorDeElementos.ModeloIu;
+﻿using AutoMapper;
 using GestorUniversitario.ContextosDeBd;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace UniversidadDeMurcia
 {
@@ -34,7 +34,8 @@ namespace UniversidadDeMurcia
             services.AddRazorPages();
 
             services.AddDbContext<ContextoUniversitario>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-           
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<Gestor.Errores.Errores>();

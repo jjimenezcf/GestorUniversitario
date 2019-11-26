@@ -1,4 +1,4 @@
-﻿namespace GestorDeElementos.ModeloIu
+﻿namespace Gestor.Elementos.ModeloIu
 {
     public class ElementoBase
     {

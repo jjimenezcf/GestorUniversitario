@@ -7,6 +7,9 @@ using UniversidadDeMurcia.Objetos;
 using GestorUniversitario.ModeloBd;
 using System.Collections.Generic;
 using GestorUniversitario.ContextosDeBd;
+using Gestor.Mapeos;
+using Gestor.Errores;
+using GestorUniversitario;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -14,7 +17,7 @@ namespace UniversidadDeMurcia.Controllers
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
-        public EstudiantesController(GestorUniversitario.GestorDeEstudiantes gestorDeEstudiantes, Gestor.Errores.Errores gestorDeErrores):
+        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, Errores gestorDeErrores):
             base(gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");

@@ -1,4 +1,4 @@
-﻿using GestorDeElementos.ModeloIu;
+﻿using Gestor.Elementos.ModeloIu;
 using System;
 using System.Collections.Generic;
 

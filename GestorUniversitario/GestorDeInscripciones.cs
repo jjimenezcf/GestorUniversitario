@@ -1,9 +1,7 @@
-﻿using GestorDeElementos;
+﻿using Gestor.Elementos;
 using GestorUniversitario.ModeloBd;
 using GestorUniversitario.ContextosDeBd;
 using GestorUniversitario.ModeloIu;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace GestorUniversitario

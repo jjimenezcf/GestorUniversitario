@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
-using GestorDeElementos.ModeloBd;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Gestor.Elementos.ModeloBd;
 
-namespace GestorDeElementos
+namespace Gestor.Elementos
 {
     public class ContextoDeElementos : DbContext
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GestorDeElementos
+namespace Gestor.Elementos
 {
     public class ClaseDeElemetos<Tbd,Tiu>
     {
