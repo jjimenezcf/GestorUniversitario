@@ -41,7 +41,7 @@ namespace Gestor.Elementos
         {
             _Contexto = contexto;
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
-            _gestorDeMapeo = Inicializar();
+            _gestorDeMapeo = Inicializar();            
         }
 
         public async Task InsertarElementoAsync(TElemento elemento)
@@ -67,19 +67,7 @@ namespace Gestor.Elementos
         public IEnumerable<TElemento> LeerTodos()
         {
             var elementosDeBd = _Contexto.Set<TRegistro>().AsNoTracking().ToList();
-            return MapearElementosParaLaIu(elementosDeBd);
-        }
-
-        private IEnumerable<TElemento> MapearElementosParaLaIu(List<TRegistro> registros)
-        {
-            var lista = new List<TElemento>();
-            foreach (var registro in registros)
-            {
-                
-                var elemento = (TElemento)_gestorDeMapeo.Map(registro,typeof(TRegistro),typeof(TElemento));
-                lista.Add(elemento);
-            }
-            return lista.AsEnumerable();
+            return MapearElementos(elementosDeBd);
         }
 
         public TElemento LeerElementoPorId(int id)
@@ -127,36 +115,49 @@ namespace Gestor.Elementos
             return registro;
         }
 
+        private IEnumerable<TElemento> MapearElementos(List<TRegistro> registros)
+        {
+            var lista = new List<TElemento>();
+            foreach (var registro in registros)
+            {
+
+                var elemento = MapearElemento(registro);
+                lista.Add(elemento);
+            }
+            return lista.AsEnumerable();
+        }
+
         public TElemento MapearElemento(TRegistro registro, List<string> excluirPropiedad = null)
         {
-            TElemento elemento = Metadatos.NuevoElementoIu(); 
-            PropertyInfo[] propiedadesBd = typeof(TRegistro).GetProperties();
-            PropertyInfo[] propiedadesIu = typeof(TElemento).GetProperties();
+            //TElemento elemento = Metadatos.NuevoElementoIu(); 
+            //PropertyInfo[] propiedadesBd = typeof(TRegistro).GetProperties();
+            //PropertyInfo[] propiedadesIu = typeof(TElemento).GetProperties();
 
-            foreach (PropertyInfo propiedadOrigen in propiedadesBd)
-            {
-                foreach (PropertyInfo propiedadDestino in propiedadesIu)
-                {
-                    if (excluirPropiedad != null && excluirPropiedad.Contains(propiedadDestino.Name))
-                        break;
+            //foreach (PropertyInfo propiedadOrigen in propiedadesBd)
+            //{
+            //    foreach (PropertyInfo propiedadDestino in propiedadesIu)
+            //    {
+            //        if (excluirPropiedad != null && excluirPropiedad.Contains(propiedadDestino.Name))
+            //            break;
 
-                    if (propiedadDestino.Name == propiedadOrigen.Name)
-                    {
-                        if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
-                            MapearDetalleParaLaIu(registro, elemento);
-                        else
-                        if (propiedadOrigen.PropertyType.BaseType.Name.Equals(nameof(RegistroBase)))
-                            MapearElemento(registro, elemento, propiedadOrigen);
-                        else
-                        if (propiedadOrigen.GetValue(registro) != null)
-                        {
-                            var valor = propiedadOrigen.GetValue(registro);
-                            propiedadDestino.SetValue(elemento, valor);
-                        }
-                        break;
-                    }
-                }
-            }
+            //        if (propiedadDestino.Name == propiedadOrigen.Name)
+            //        {
+            //            if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
+            //                MapearDetalleParaLaIu(registro, elemento);
+            //            else
+            //            if (propiedadOrigen.PropertyType.BaseType.Name.Equals(nameof(RegistroBase)))
+            //                MapearElemento(registro, elemento, propiedadOrigen);
+            //            else
+            //            if (propiedadOrigen.GetValue(registro) != null)
+            //            {
+            //                var valor = propiedadOrigen.GetValue(registro);
+            //                propiedadDestino.SetValue(elemento, valor);
+            //            }
+            //            break;
+            //        }
+            //    }
+            //}
+            var elemento = (TElemento)_gestorDeMapeo.Map(registro, typeof(TRegistro), typeof(TElemento));
             return elemento;
         }
         
