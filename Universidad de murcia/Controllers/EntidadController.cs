@@ -6,7 +6,6 @@ using Gestor.Errores;
 using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
-using AutoMapper;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,11 +21,11 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorCrud<Tiu> GestorDelCrud { get; }
 
 
-        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos,IMapper gestorDeMapeo, GestorDeErrores gestorErrores) :
+        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos, GestorDeErrores gestorErrores) :
         base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
-            GestorDeElementos.AsignarGestores(gestorDeMapeo, gestorErrores);
+            GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<Tiu>("Gestor de estudiantes", "Inscripciones");
         }
 

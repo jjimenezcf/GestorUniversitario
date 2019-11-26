@@ -36,6 +36,7 @@ namespace UniversidadDeMurcia
             services.AddDbContext<ContextoUniversitario>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();

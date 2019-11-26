@@ -21,19 +21,16 @@ namespace Gestor.Elementos
         protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
         protected abstract void MapearElemento(TRegistro registro, TElemento elemento, PropertyInfo propiedad);
 
-        public GestorDeElementos()
-        {
-            
-        }
-
         public GestorDeElementos(TContexto contexto)
         {
             IniciarClase(contexto);
+
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<TRegistro, TElemento>());
+            _gestorDeMapeo = config.CreateMapper();
         }
 
-        public void AsignarGestores(IMapper gestorDeMapeos, GestorDeErrores  gestorErrores)
+        public void AsignarGestores(GestorDeErrores gestorErrores)
         {
-            _gestorDeMapeo = gestorDeMapeos;
             _gestorDeErrores = gestorErrores;
         }
 
@@ -74,8 +71,8 @@ namespace Gestor.Elementos
             var lista = new List<TElemento>();
             foreach (var registro in registros)
             {
-
-                var elemento = _gestorDeMapeo.Map<TElemento>(registro);
+                
+                var elemento = (TElemento)_gestorDeMapeo.Map(registro,typeof(TRegistro),typeof(TElemento));
                 lista.Add(elemento);
             }
             return lista.AsEnumerable();
