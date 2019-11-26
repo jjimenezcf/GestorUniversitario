@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Gestor.Mapeos
+namespace Gestor.Elementos
 {
     public class GestorDeMapeos: Profile
     {
