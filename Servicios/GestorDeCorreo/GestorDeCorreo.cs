@@ -9,12 +9,12 @@ using Microsoft.Extensions.Configuration;
 namespace Gestor.Correo
 {
 
-    public class Correo
+    public class GestorDeCorreo
     {
         private SmtpClient cliente;
         private static IConfiguration Configuration { get; set; }
         private MailMessage email;
-        public Correo()
+        public GestorDeCorreo()
         {
             InicializaConfiguracion();
             cliente = new SmtpClient(Configuration["host"], Int32.Parse(Configuration["port"]))
@@ -49,7 +49,7 @@ namespace Gestor.Correo
 
         public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-            var correo = new Correo();
+            var correo = new GestorDeCorreo();
             correo.Enviar(destinatario,asunto,mensaje,esHtlm);
         }
 

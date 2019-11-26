@@ -35,13 +35,13 @@ namespace Gestor.Errores
 
         public void Enviar(string asunto, string error)
         {
-            Gestor.Correo.Correo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, error);
+            Gestor.Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, error);
         }
 
 
         public static void EnviaError(string asunto, Exception error)
         {
-            Gestor.Correo.Correo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
+            Gestor.Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
         }
 
         public void LanzarExcepcion(string error)
