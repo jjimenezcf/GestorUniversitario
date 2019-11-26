@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using Extensiones;
 using Microsoft.AspNetCore.Mvc;
-using GestorUniversitario.ModeloIu;
+using Gestor.Elementos.Universitario.ModeloIu;
 using UniversidadDeMurcia.Objetos;
-using GestorUniversitario.ModeloBd;
+using Gestor.Elementos.Universitario.ModeloBd;
 using System.Collections.Generic;
-using GestorUniversitario.ContextosDeBd;
-using Gestor.Mapeos;
+using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
-using GestorUniversitario;
+using Gestor.Elementos.Universitario;
 
 namespace UniversidadDeMurcia.Controllers
 {

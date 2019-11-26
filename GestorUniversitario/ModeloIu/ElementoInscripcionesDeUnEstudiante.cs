@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.ModeloIu;
-using GestorUniversitario.ModeloBd.Enumerados;
+using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
 
-namespace GestorUniversitario.ModeloIu
+namespace Gestor.Elementos.Universitario.ModeloIu
 {    
 
     public class ElementoInscripcionesDeUnEstudiante : ElementoBase

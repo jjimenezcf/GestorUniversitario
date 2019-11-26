@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.ModeloBd;
 using System.Collections.Generic;
 
-namespace GestorUniversitario.ModeloBd
+namespace Gestor.Elementos.Universitario.ModeloBd
 {
     public class RegistroDeCurso : RegistroBase
     {

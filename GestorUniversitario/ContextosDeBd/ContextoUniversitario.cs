@@ -1,10 +1,9 @@
-﻿using GestorUniversitario.ModeloBd;
+﻿using Gestor.Elementos.Universitario.ModeloBd;
 using Microsoft.EntityFrameworkCore;
-using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 
 
-namespace GestorUniversitario.ContextosDeBd
+namespace Gestor.Elementos.Universitario.ContextosDeBd
 {
 
     public class ContextoUniversitario : ContextoDeElementos

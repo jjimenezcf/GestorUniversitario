@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GestorUniversitario.ModeloBd
+namespace Gestor.Elementos.Universitario.ModeloBd
 {
     public class RegistroDeEstudiante: RegistroBase
     {

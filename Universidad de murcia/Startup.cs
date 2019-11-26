@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GestorUniversitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,8 +39,8 @@ namespace UniversidadDeMurcia
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<Gestor.Errores.Errores>();
-            services.AddScoped<GestorUniversitario.GestorDeEstudiantes>();
-            services.AddScoped<GestorUniversitario.GestorDeCursos>();
+            services.AddScoped<Gestor.Elementos.Universitario.GestorDeEstudiantes>();
+            services.AddScoped<Gestor.Elementos.Universitario.GestorDeCursos>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

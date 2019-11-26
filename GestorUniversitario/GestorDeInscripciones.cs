@@ -1,10 +1,10 @@
 ﻿using Gestor.Elementos;
-using GestorUniversitario.ModeloBd;
-using GestorUniversitario.ContextosDeBd;
-using GestorUniversitario.ModeloIu;
+using Gestor.Elementos.Universitario.ModeloBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ModeloIu;
 using System.Reflection;
 
-namespace GestorUniversitario
+namespace Gestor.Elementos.Universitario
 {
     public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {

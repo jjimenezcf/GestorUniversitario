@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GestorUniversitario.ModeloBd.Enumerados
+﻿namespace Gestor.Elementos.Universitario.ModeloBd.Enumerados
 {
     public enum Grado
     {

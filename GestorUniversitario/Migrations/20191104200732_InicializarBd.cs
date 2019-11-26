@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GestorUniversitario.Migrations
+namespace Gestor.Elementos.Universitario.Migrations
 {
     public partial class InicializarBd : Migration
     {

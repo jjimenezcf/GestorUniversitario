@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GestorUniversitario.ModeloIu
+namespace Gestor.Elementos.Universitario.ModeloIu
 {
     public class ElementoEstudiante: ElementoBase
     {

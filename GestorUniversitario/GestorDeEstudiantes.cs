@@ -1,14 +1,13 @@
-﻿using Gestor.Elementos;
-using GestorUniversitario.ModeloBd;
-using GestorUniversitario.ContextosDeBd;
-using GestorUniversitario.ModeloIu;
+﻿using Gestor.Elementos.Universitario.ModeloBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
-namespace GestorUniversitario
+namespace Gestor.Elementos.Universitario
 {
     public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {

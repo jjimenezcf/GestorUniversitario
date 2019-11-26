@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using GestorUniversitario.ModeloBd;
-using GestorUniversitario.ModeloBd.Enumerados;
+using Gestor.Elementos.Universitario.ModeloBd;
+using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
 
-namespace GestorUniversitario.ContextosDeBd
+namespace Gestor.Elementos.Universitario.ContextosDeBd
 {
     public class InicializadorBD
     {

@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Extensiones;
 using Microsoft.AspNetCore.Mvc;
-using GestorUniversitario.ModeloIu;
-using UniversidadDeMurcia.Objetos;
-using GestorUniversitario.ModeloBd;
 using System.Collections.Generic;
-using GestorUniversitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario;
+using Gestor.Elementos.Universitario.ModeloBd;
+using Gestor.Elementos.Universitario.ModeloIu;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -14,7 +13,7 @@ namespace UniversidadDeMurcia.Controllers
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
 
-        public CursosController(GestorUniversitario.GestorDeCursos gestorDeCursos, Gestor.Errores.Errores gestorDeErrores):
+        public CursosController(GestorDeCursos gestorDeCursos, Gestor.Errores.Errores gestorDeErrores):
             base(gestorDeCursos, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo curso");
@@ -23,7 +22,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoCurso(string orden)
         {
-            var cursos =  (IEnumerable<ElementoCurso>)entorno.LeerTodos();
+            var cursos = entorno.LeerTodos();
             return View(GestorDelCrud.Mantenimiento.Vista, cursos.ToList());
         }
 

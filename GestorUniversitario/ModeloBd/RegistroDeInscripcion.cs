@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.ModeloBd;
-using GestorUniversitario.ModeloBd.Enumerados;
+using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
 
-namespace GestorUniversitario.ModeloBd
+namespace Gestor.Elementos.Universitario.ModeloBd
 {    
 
     public class RegistroDeInscripcion : RegistroBase

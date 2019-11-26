@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using GestorUniversitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
