@@ -2,14 +2,15 @@
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using System.Reflection;
+using AutoMapper;
 
 namespace Gestor.Elementos.Universitario
 {
     public class GestorDeCursos : GestorDeElementos<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
 
-        public GestorDeCursos(ContextoUniversitario contexto)
-            : base(contexto)
+        public GestorDeCursos(ContextoUniversitario contexto, IMapper mapeador)
+            : base(contexto, mapeador)
         {
         }
                

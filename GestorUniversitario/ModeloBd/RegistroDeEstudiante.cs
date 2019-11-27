@@ -1,10 +1,11 @@
-﻿using Gestor.Elementos.ModeloBd;
+﻿using AutoMapper;
+using Gestor.Elementos.ModeloBd;
 using System;
 using System.Collections.Generic;
 
 namespace Gestor.Elementos.Universitario.ModeloBd
 {
-    public class RegistroDeEstudiante: RegistroBase
+    public class RegistroDeEstudiante : RegistroBase
     {
         public string Apellido { get; set; }
         public string Nombre { get; set; }
@@ -12,4 +13,13 @@ namespace Gestor.Elementos.Universitario.ModeloBd
 
         public ICollection<RegistroDeInscripcion> Inscripciones { get; set; }
     }
+
+    public class MapeoRegistroEstudiante : Profile
+    {
+        public MapeoRegistroEstudiante()
+        {
+            CreateMap<RegistroDeEstudiante, ModeloIu.ElementoEstudiante>();
+        }
+    }
+
 }

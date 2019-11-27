@@ -1,16 +1,16 @@
-﻿using Gestor.Elementos;
-using Gestor.Elementos.Universitario.ModeloBd;
+﻿using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using System.Reflection;
+using AutoMapper;
 
 namespace Gestor.Elementos.Universitario
 {
     public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {
 
-        public GestorDeInscripciones(ContextoUniversitario contexto)
-            : base(contexto)
+        public GestorDeInscripciones(ContextoUniversitario contexto, IMapper mapeador)
+            : base(contexto, mapeador)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Gestor.Elementos.Universitario
         {
             if (propiedad.Name == elemento.PropiedadCurso)
             {
-                var gestor = new GestorDeCursos(_Contexto);
+                var gestor = new GestorDeCursos(_Contexto, _mapeador);
                 elemento.Curso = gestor.MapearElemento(registro.Curso);
             }
 

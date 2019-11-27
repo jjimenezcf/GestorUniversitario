@@ -35,13 +35,14 @@ namespace UniversidadDeMurcia
 
             services.AddDbContext<ContextoUniversitario>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<Gestor.Elementos.Universitario.GestorDeEstudiantes>();
             services.AddScoped<Gestor.Elementos.Universitario.GestorDeCursos>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

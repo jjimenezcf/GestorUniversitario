@@ -15,20 +15,15 @@ namespace Gestor.Elementos
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto _Contexto;
         private GestorDeErrores _gestorDeErrores;
-        private IMapper _gestorDeMapeo;
+        protected IMapper _mapeador;
 
         protected abstract TRegistro LeerConDetalle(int Id);
         protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
         protected abstract void MapearElemento(TRegistro registro, TElemento elemento, PropertyInfo propiedad);
 
-        public static IMapper Inicializar()
+        public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<TRegistro, TElemento>());
-            return config.CreateMapper();
-        }
-
-        public GestorDeElementos(TContexto contexto)
-        {
+            _mapeador = mapeador;
             IniciarClase(contexto);
         }
 
@@ -40,8 +35,7 @@ namespace Gestor.Elementos
         protected virtual void IniciarClase(TContexto contexto)
         {
             _Contexto = contexto;
-            Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
-            _gestorDeMapeo = Inicializar();            
+            Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();            
         }
 
         public async Task InsertarElementoAsync(TElemento elemento)
@@ -157,7 +151,7 @@ namespace Gestor.Elementos
             //        }
             //    }
             //}
-            var elemento = (TElemento)_gestorDeMapeo.Map(registro, typeof(TRegistro), typeof(TElemento));
+            var elemento = (TElemento)_mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
             return elemento;
         }
         
