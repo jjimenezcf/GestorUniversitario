@@ -12,7 +12,15 @@ namespace Gestor.Elementos.Universitario
 {
     public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
-
+        
+        public class MapeoRegistroEstudiante : Profile
+        {
+            public MapeoRegistroEstudiante()
+            {
+                CreateMap<RegistroDeEstudiante, ModeloIu.ElementoEstudiante>();
+            }
+        }
+        
         public GestorDeEstudiantes(ContextoUniversitario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
@@ -26,25 +34,6 @@ namespace Gestor.Elementos.Universitario
                             .ThenInclude(e => e.Curso)
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
-        }
-
-        protected override void MapearDetalleParaLaIu(RegistroDeEstudiante registro, ElementoEstudiante elemento)
-        {
-            var gestor = new GestorDeInscripciones(_Contexto,_mapeador);
-
-            if (registro.Inscripciones == null)
-                return;
-
-            elemento.Inscripciones = new Collection<ElementoInscripcionesDeUnEstudiante>();
-            foreach (var registroDeInscripcion in registro.Inscripciones)
-            {
-                var elemetoInscripcion = gestor.MapearElemento(registroDeInscripcion, new List<string> {"Estudiante"} );
-                elemento.Inscripciones.Add(elemetoInscripcion);
-            }
-        }
-
-        protected override void MapearElemento(RegistroDeEstudiante registro, ElementoEstudiante elemtoEstudiante, PropertyInfo propiedad)
-        { 
         }
 
     }

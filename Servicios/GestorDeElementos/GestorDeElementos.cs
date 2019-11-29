@@ -18,8 +18,6 @@ namespace Gestor.Elementos
         protected IMapper _mapeador;
 
         protected abstract TRegistro LeerConDetalle(int Id);
-        protected abstract void MapearDetalleParaLaIu(TRegistro registro, TElemento elemento);
-        protected abstract void MapearElemento(TRegistro registro, TElemento elemento, PropertyInfo propiedad);
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
@@ -123,34 +121,6 @@ namespace Gestor.Elementos
 
         public TElemento MapearElemento(TRegistro registro, List<string> excluirPropiedad = null)
         {
-            //TElemento elemento = Metadatos.NuevoElementoIu(); 
-            //PropertyInfo[] propiedadesBd = typeof(TRegistro).GetProperties();
-            //PropertyInfo[] propiedadesIu = typeof(TElemento).GetProperties();
-
-            //foreach (PropertyInfo propiedadOrigen in propiedadesBd)
-            //{
-            //    foreach (PropertyInfo propiedadDestino in propiedadesIu)
-            //    {
-            //        if (excluirPropiedad != null && excluirPropiedad.Contains(propiedadDestino.Name))
-            //            break;
-
-            //        if (propiedadDestino.Name == propiedadOrigen.Name)
-            //        {
-            //            if (typeof(ICollection<>).Name == propiedadOrigen.PropertyType.Name)
-            //                MapearDetalleParaLaIu(registro, elemento);
-            //            else
-            //            if (propiedadOrigen.PropertyType.BaseType.Name.Equals(nameof(RegistroBase)))
-            //                MapearElemento(registro, elemento, propiedadOrigen);
-            //            else
-            //            if (propiedadOrigen.GetValue(registro) != null)
-            //            {
-            //                var valor = propiedadOrigen.GetValue(registro);
-            //                propiedadDestino.SetValue(elemento, valor);
-            //            }
-            //            break;
-            //        }
-            //    }
-            //}
             var elemento = (TElemento)_mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
             return elemento;
         }

@@ -14,12 +14,4 @@ namespace Gestor.Elementos.Universitario.ModeloBd
         public ICollection<RegistroDeInscripcion> Inscripciones { get; set; }
     }
 
-    public class MapeoRegistroEstudiante : Profile
-    {
-        public MapeoRegistroEstudiante()
-        {
-            CreateMap<RegistroDeEstudiante, ModeloIu.ElementoEstudiante>();
-        }
-    }
-
 }

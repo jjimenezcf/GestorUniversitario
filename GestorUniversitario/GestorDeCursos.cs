@@ -9,6 +9,15 @@ namespace Gestor.Elementos.Universitario
     public class GestorDeCursos : GestorDeElementos<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
 
+        public class MapeoRegistroCurso : Profile
+        {
+            public MapeoRegistroCurso()
+            {
+                CreateMap<RegistroDeCurso, ModeloIu.ElementoCurso>();
+            }
+        }
+
+
         public GestorDeCursos(ContextoUniversitario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
@@ -18,16 +27,6 @@ namespace Gestor.Elementos.Universitario
         {
             return null;
         }
-
-        protected override void MapearDetalleParaLaIu(RegistroDeCurso registro, ElementoCurso elemento)
-        {
-
-        }
-
-        protected override void MapearElemento(RegistroDeCurso registro, ElementoCurso elemento, PropertyInfo propiedad)
-        {
-
-        }
-
+        
     }
 }
