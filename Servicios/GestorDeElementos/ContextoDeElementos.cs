@@ -10,7 +10,8 @@ namespace Gestor.Elementos
         {
         }
 
-        public DbSet<RegistroDeCatalogoDeBd> CatalogoDeBd { get; set; }
+       public DbSet<RegistroDelCatalogoDelSe> CatalogoDelSe { get; set; }
+
     }
 }
 

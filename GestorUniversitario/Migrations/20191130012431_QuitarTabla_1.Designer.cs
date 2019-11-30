@@ -4,14 +4,16 @@ using Gestor.Elementos.Universitario.ContextosDeBd;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gestor.Elementos.Universitario.Migrations
 {
     [DbContext(typeof(ContextoUniversitario))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20191130012431_QuitarTabla_1")]
+    partial class QuitarTabla_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,13 +67,19 @@ namespace Gestor.Elementos.Universitario.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CursoId")
+                    b.Property<int?>("CursoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EstudianteId")
+                    b.Property<int?>("EstudianteId")
                         .HasColumnType("int");
 
                     b.Property<int?>("Grado")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCurso")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEstudiante")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -87,15 +95,11 @@ namespace Gestor.Elementos.Universitario.Migrations
                 {
                     b.HasOne("Gestor.Elementos.Universitario.ModeloBd.RegistroDeCurso", "Curso")
                         .WithMany("Inscripciones")
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CursoId");
 
                     b.HasOne("Gestor.Elementos.Universitario.ModeloBd.RegistroDeEstudiante", "Estudiante")
                         .WithMany("Inscripciones")
-                        .HasForeignKey("EstudianteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EstudianteId");
                 });
 #pragma warning restore 612, 618
         }

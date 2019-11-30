@@ -33,7 +33,8 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
             modelBuilder.Entity<RegistroDeCurso>().ToTable("Curso");
             modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
             modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
-            modelBuilder.Entity<RegistroDeCatalogoDeBd>().ToTable("TABLES", schema: "INFORMATION_SCHEMA");
+
+            modelBuilder.Entity<RegistroDelCatalogoDelSe>().ToView("CatalogoDeBd");
         }
 
     }

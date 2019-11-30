@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191130003235_AñadirColumna.cs" />
     <Compile Remove="Migrations\20191130003235_AñadirColumna.Designer.cs" />
+    <Compile Remove="Migrations\20191130021628_AnadirCatalog.cs" />
+    <Compile Remove="Migrations\20191130021628_AnadirCatalog.Designer.cs" />
   </ItemGroup>
 
 

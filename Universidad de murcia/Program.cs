@@ -26,8 +26,8 @@ namespace UniversidadDeMurcia
             try
             {
                 InicializadorBD.Inicializar(contexto);
-                var resultado = contexto.CatalogoDeBd
-                    .FromSqlRaw($"SELECT convert(int, ROW_NUMBER() OVER(ORDER BY Table_Name ASC)) as Id, TABLE_CATALOG as Catalogo, TABLE_SCHEMA as Esquema, TABLE_NAME as Tabla FROM information_schema.tables WHERE  table_name = '__EFMigrationsHistory'")
+                var resultado = contexto.CatalogoDelSe
+                    .FromSqlRaw($"SELECT * FROM dbo.CatalogoDelSe WHERE tabla = '__EFMigrationsHistory'")
                     .FirstOrDefault();
                 
                 logger.LogInformation($"{Environment.NewLine}Objeto leido: {resultado}." +

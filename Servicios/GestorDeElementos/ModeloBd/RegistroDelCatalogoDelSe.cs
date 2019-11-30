@@ -1,7 +1,6 @@
-﻿
-namespace Gestor.Elementos.ModeloBd
+﻿namespace Gestor.Elementos.ModeloBd
 {
-    public class RegistroDeCatalogoDeBd: RegistroBase
+    public class RegistroDelCatalogoDelSe: RegistroBase
     {
         public string Catalogo { get; set; }
         public string Esquema { get; set; }
