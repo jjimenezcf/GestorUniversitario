@@ -7,10 +7,8 @@
 
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191104194933_Migraciones.cs" />
-    <Compile Remove="Migrations\20191104194933_Migraciones.Designer.cs" />
-    <Compile Remove="Migrations\20191104195145_InicializarBd.cs" />
-    <Compile Remove="Migrations\20191104195145_InicializarBd.Designer.cs" />
+    <Compile Remove="Migrations\20191130003235_AñadirColumna.cs" />
+    <Compile Remove="Migrations\20191130003235_AñadirColumna.Designer.cs" />
   </ItemGroup>
 
 

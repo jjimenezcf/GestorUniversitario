@@ -24,6 +24,7 @@ namespace Gestor.Elementos.Universitario
 
         
         protected override RegistroDeInscripcion LeerConDetalle(int Id)
+
         {
             return null;
         }

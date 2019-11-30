@@ -13,7 +13,8 @@ namespace Gestor.Elementos.Universitario
         {
             public MapeoRegistroCurso()
             {
-                CreateMap<RegistroDeCurso, ModeloIu.ElementoCurso>();
+                CreateMap<RegistroDeCurso, ElementoCurso>();
+                CreateMap<ElementoCurso,RegistroDeCurso>();
             }
         }
 

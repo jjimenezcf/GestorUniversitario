@@ -17,7 +17,8 @@ namespace Gestor.Elementos.Universitario
         {
             public MapeoRegistroEstudiante()
             {
-                CreateMap<RegistroDeEstudiante, ModeloIu.ElementoEstudiante>();
+                CreateMap<RegistroDeEstudiante, ElementoEstudiante>();
+                CreateMap<ElementoEstudiante, RegistroDeEstudiante>();
             }
         }
         
