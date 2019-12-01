@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -25,11 +26,21 @@ namespace UniversidadDeMurcia
             var contexto = services.GetRequiredService<ContextoUniversitario>();
             try
             {
-                InicializadorBD.Inicializar(contexto);
+               // InicializadorBD.Inicializar(contexto);
                 var resultado = contexto.CatalogoDelSe
                     .FromSqlRaw($"SELECT * FROM dbo.CatalogoDelSe WHERE tabla = '__EFMigrationsHistory'")
                     .FirstOrDefault();
-                
+
+                //var consulta = contexto.Se
+                //    .FromSqlRaw($"select top(1) ProductVersion from dbo.__EFMigrationsHistory order by MigrationId desc")
+                //    .FirstOrDefault();
+
+                //contexto.DatosDeConexion.ServidorWeb = Environment.MachineName;
+                //contexto.DatosDeConexion.ServidorBd = contexto.Database.GetDbConnection().DataSource;
+                //contexto.DatosDeConexion.Bd = contexto.Database.GetDbConnection().Database;
+                //contexto.DatosDeConexion.Version = "1.1.1";
+                //contexto.DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
+
                 logger.LogInformation($"{Environment.NewLine}Objeto leido: {resultado}." +
                                       $"{Environment.NewLine}Id: {resultado.Id}" +
                                       $"{Environment.NewLine}BD: {resultado.Catalogo}" +

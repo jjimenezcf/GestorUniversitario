@@ -14,8 +14,11 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
             context.Database.EnsureCreated();
             context.Database.Migrate();
 
-            // Look for any students.
-            if (!context.Estudiantes.Any())
+            if (context.Estudiantes.Any())
+                return;
+
+                // Look for any students.
+                if (!context.Estudiantes.Any())
             {
                 var estudiantes = new RegistroDeEstudiante[]
                 {

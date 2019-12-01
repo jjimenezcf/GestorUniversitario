@@ -7,6 +7,11 @@
         public string Tabla { get; set; }
     }
 
+    public class ObjetoValor
+    {
+        public string Valor { get; set; }
+    }
+
     /*
      TABLE_CATALOG	    TABLE_SCHEMA	   TABLE_NAME	            TABLE_TYPE
      SistemaDeElementos	dbo	               __EFMigrationsHistory	BASE TABLE

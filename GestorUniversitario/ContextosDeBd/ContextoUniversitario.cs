@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.Universitario.ModeloBd;
 using Microsoft.EntityFrameworkCore;
 using Gestor.Elementos.ModeloBd;
-
+using System;
 
 namespace Gestor.Elementos.Universitario.ContextosDeBd
 {
@@ -11,6 +11,11 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
         public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) :
         base(options)
         {
+            DatosDeConexion.ServidorWeb = Environment.MachineName;
+            DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
+            DatosDeConexion.Bd = Database.GetDbConnection().Database;
+            DatosDeConexion.Version = "1.1.1";
+            DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
         }
 
         public DbSet<RegistroDeCurso> Cursos { get; set; }
@@ -34,7 +39,8 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
             modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
             modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
 
-            modelBuilder.Entity<RegistroDelCatalogoDelSe>().ToView("CatalogoDeBd");
+            modelBuilder.Entity<RegistroDelCatalogoDelSe>().ToView("CatalogoDelSe");
+            modelBuilder.Ignore<ObjetoValor>();
         }
 
     }

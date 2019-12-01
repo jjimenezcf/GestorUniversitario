@@ -30,7 +30,7 @@ namespace Gestor.Elementos.Universitario
 
         protected override RegistroDeEstudiante LeerConDetalle(int Id)
         {
-            return _Contexto.Set<RegistroDeEstudiante>()
+            return Contexto.Set<RegistroDeEstudiante>()
                             .Include(i => i.Inscripciones)
                             .ThenInclude(e => e.Curso)
                             .AsNoTracking()

@@ -12,21 +12,22 @@ using Gestor.Elementos.ModeloIu;
 namespace UniversidadDeMurcia.Controllers
 {
         
-    public class EntidadController<Tctx, Tbd, Tiu> : BaseController where Tctx: DbContext  where Tbd : RegistroBase where Tiu : ElementoBase
+    public class EntidadController<TContexto, TRegistro, TElemento> : BaseController 
+        where TContexto: ContextoDeElementos  
+        where TRegistro : RegistroBase 
+        where TElemento : ElementoBase
     {
 
-        protected GestorDeElementos<Tctx, Tbd,Tiu> GestorDeElementos { get; }
+        protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
+        protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-
-        protected GestorCrud<Tiu> GestorDelCrud { get; }
-
-
-        public EntidadController(GestorDeElementos<Tctx, Tbd,Tiu> gestorDeElementos, GestorDeErrores gestorErrores) :
+        public EntidadController(GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
         base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<Tiu>("Gestor de estudiantes", "Inscripciones");
+            GestorDelCrud = new GestorCrud<TElemento>("Gestor de estudiantes", "Inscripciones");
+            DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
         public IActionResult Index()
@@ -37,10 +38,11 @@ namespace UniversidadDeMurcia.Controllers
         public override ViewResult View(string viewName, object model)
         {
             ViewBag.Crud = GestorDelCrud;
+            ViewBag.DatosDeConexion = DatosDeConexion;
             return base.View(viewName, model);
         }
 
-        protected async Task<IActionResult> CrearObjeto(Tiu iuElemento)
+        protected async Task<IActionResult> CrearObjeto(TElemento iuElemento)
         {
             try
             {
@@ -60,7 +62,7 @@ namespace UniversidadDeMurcia.Controllers
 
 
 
-        protected async Task<IActionResult> ModificarObjeto(int id, Tiu elemento)
+        protected async Task<IActionResult> ModificarObjeto(int id, TElemento elemento)
         {
             if (id != elemento.Id)
             {

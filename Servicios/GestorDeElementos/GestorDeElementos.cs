@@ -13,7 +13,7 @@ namespace Gestor.Elementos
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : DbContext
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
-        public TContexto _Contexto;
+        public TContexto Contexto;
         private GestorDeErrores _gestorDeErrores;
         protected IMapper _mapeador;
 
@@ -32,45 +32,45 @@ namespace Gestor.Elementos
 
         protected virtual void IniciarClase(TContexto contexto)
         {
-            _Contexto = contexto;
+            Contexto = contexto;
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();            
         }
 
         public async Task InsertarElementoAsync(TElemento elemento)
         {
             TRegistro elementoBD = MapearRegistro(elemento);
-            _Contexto.Add(elementoBD);
-            await _Contexto.SaveChangesAsync();
+            Contexto.Add(elementoBD);
+            await Contexto.SaveChangesAsync();
         }
 
         public async Task ModificarElementoAsync(TElemento elemento)
         {
             TRegistro elementoBD = MapearRegistro(elemento);
-            _Contexto.Update(elementoBD);
-            await _Contexto.SaveChangesAsync();
+            Contexto.Update(elementoBD);
+            await Contexto.SaveChangesAsync();
         }
 
         public bool ExisteObjetoEnBd(int id)
         {
-            return _Contexto.Set<TRegistro>().Any(e => e.Id == id);
+            return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
 
         public IEnumerable<TElemento> LeerTodos()
         {
-            var elementosDeBd = _Contexto.Set<TRegistro>().AsNoTracking().ToList();
+            var elementosDeBd = Contexto.Set<TRegistro>().AsNoTracking().ToList();
             return MapearElementos(elementosDeBd);
         }
 
         public TElemento LeerElementoPorId(int id)
         {
-            var elementoDeBd = _Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            var elementoDeBd = Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
             return MapearElemento(elementoDeBd);
         }
 
         public TRegistro LeerRegistroPorId(int id)
         {
-            return _Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 
 
@@ -83,8 +83,8 @@ namespace Gestor.Elementos
         public void BorrarPorId(int id)
         {
             var registro = LeerRegistroPorId(id);
-            _Contexto.Remove(registro);
-            _Contexto.SaveChangesAsync();
+            Contexto.Remove(registro);
+            Contexto.SaveChangesAsync();
         }
 
         private TRegistro MapearRegistro(TElemento elemento)

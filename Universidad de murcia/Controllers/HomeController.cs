@@ -3,20 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using UniversidadDeMurcia.Models;
 using Gestor.Errores;
 using System;
+using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos;
 
 namespace UniversidadDeMurcia.Controllers
 {
     public class HomeController : BaseController
     {
-        
-        public HomeController(GestorDeErrores gestorDeErrores):
-            base(gestorDeErrores)
+
+        public HomeController(ContextoUniversitario contexto, GestorDeErrores gestorDeErrores):
+        base(gestorDeErrores)
         {
-            
+            DatosDeConexion = contexto.DatosDeConexion;
         }
+
 
         public IActionResult Index()
         {
+            ViewBag.DatosDeConexion = DatosDeConexion;
             return View();
         }
 
