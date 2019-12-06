@@ -23,8 +23,8 @@ namespace Gestor.Elementos
             DatosDeConexion = new DatosDeConexion();           
         }
 
-       public DbSet<RegistroDelCatalogoDelSe> CatalogoDelSe { get; set; }
-       //public DbSet<ObjetoValor> ConsultarValor { get; set; }
+       public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
+       public DbSet<ConsultaSql> ConsultarValor { get; set; }
 
     }
 }

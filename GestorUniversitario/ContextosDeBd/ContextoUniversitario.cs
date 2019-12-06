@@ -11,10 +11,12 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
         public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) :
         base(options)
         {
+            var consultaSql = new ConsultaSql("Select * from dbo.Var_Variable where variable like 'Version'");
+            GestorDeConsultas.Seleccionar(this, consultaSql, null);
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Version = "1.1.1";
+            DatosDeConexion.Version = (string)consultaSql.Registros[0][2];
             DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
         }
 
@@ -39,8 +41,8 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
             modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
             modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
 
-            modelBuilder.Entity<RegistroDelCatalogoDelSe>().ToView("CatalogoDelSe");
-            modelBuilder.Ignore<ObjetoValor>();
+            modelBuilder.Entity<CatalogoDelSe>().ToView("CatalogoDelSe");
+            modelBuilder.Ignore<ConsultaSql>();
         }
 
     }

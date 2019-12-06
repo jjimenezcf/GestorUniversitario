@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20191130021628_AnadirCatalog.Designer.cs" />
     <Compile Remove="Migrations\20191130224732_ObjetoConsultarValor.cs" />
     <Compile Remove="Migrations\20191130224732_ObjetoConsultarValor.Designer.cs" />
+    <Compile Remove="Migrations\20191206135225_DefinirObjetoValor.cs" />
+    <Compile Remove="Migrations\20191206135225_DefinirObjetoValor.Designer.cs" />
   </ItemGroup>
 
 
