@@ -26,7 +26,7 @@ namespace UniversidadDeMurcia
             var contexto = services.GetRequiredService<ContextoUniversitario>();
             try
             {
-               // InicializadorBD.Inicializar(contexto);
+                InicializadorBD.Inicializar(contexto);
                 var resultado = contexto.CatalogoDelSe
                     .FromSqlRaw($"SELECT * FROM dbo.CatalogoDelSe WHERE tabla = '__EFMigrationsHistory'")
                     .FirstOrDefault();
