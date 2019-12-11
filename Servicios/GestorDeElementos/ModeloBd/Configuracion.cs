@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Gestor.Elementos.ModeloBd
 {
@@ -7,6 +7,20 @@ namespace Gestor.Elementos.ModeloBd
         public string Catalogo { get; set; }
         public string Esquema { get; set; }
         public string Tabla { get; set; }
+    }
+
+    public class RegistroDeVariable : RegistroBase
+    {
+        [Required]
+        [MaxLength(50)]
+        public string Nombre { get; set; }
+        
+        [MaxLength(250)]
+        public string Descri { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Valor { get; set; }
     }
 
     public class VersionSql: ConsultaSql

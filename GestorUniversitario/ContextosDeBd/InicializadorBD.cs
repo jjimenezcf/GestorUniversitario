@@ -3,22 +3,47 @@ using System;
 using System.Linq;
 using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
+using Gestor.Elementos.ModeloBd;
 
 namespace Gestor.Elementos.Universitario.ContextosDeBd
 {
     public class InicializadorBD
     {
 
-        public static void Inicializar(ContextoUniversitario context)
+        public static void Inicializar(ContextoUniversitario contexto)
         {
-            context.Database.EnsureCreated();
-            context.Database.Migrate();
+            contexto.Database.EnsureCreated();
+            contexto.Database.Migrate();
 
-            if (context.Estudiantes.Any())
-                return;
+            if (!contexto.Estudiantes.Any())
+                CrearDatosIniciales(contexto);
 
-                // Look for any students.
-                if (!context.Estudiantes.Any())
+            if (!contexto.Variables.Any())
+            {
+                var variables = new RegistroDeVariable[]
+                {
+                    new RegistroDeVariable{Nombre="Versión",Descri="Versión del producto",Valor="0.0.1"}
+                };
+                foreach (RegistroDeVariable variable in variables)
+                {
+                    contexto.Variables.Add(variable);
+                }
+            }
+            else
+            {
+                var version = contexto.Variables.SingleOrDefault(v => v.Nombre == "Versión");
+                version.Valor = "0.0.2";
+                contexto.Variables.Update(version);
+            }
+
+            contexto.SaveChanges();
+
+        }
+
+        private static void CrearDatosIniciales(ContextoUniversitario contexto)
+        {
+            // Look for any students.
+            if (!contexto.Estudiantes.Any())
             {
                 var estudiantes = new RegistroDeEstudiante[]
                 {
@@ -33,12 +58,12 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
                 };
                 foreach (RegistroDeEstudiante estudiante in estudiantes)
                 {
-                    context.Estudiantes.Add(estudiante);
+                    contexto.Estudiantes.Add(estudiante);
                 }
-                context.SaveChanges();
+                contexto.SaveChanges();
             }
 
-            if (!context.Cursos.Any())
+            if (!contexto.Cursos.Any())
             {
                 var courses = new RegistroDeCurso[]
                 {
@@ -52,12 +77,12 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
                 };
                 foreach (RegistroDeCurso curso in courses)
                 {
-                    context.Cursos.Add(curso);
+                    contexto.Cursos.Add(curso);
                 }
-                context.SaveChanges();
+                contexto.SaveChanges();
             }
 
-            if (!context.Inscripciones.Any())
+            if (!contexto.Inscripciones.Any())
             {
                 var inscripciones = new RegistroDeInscripcion[]
                 {
@@ -76,11 +101,10 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
                 };
                 foreach (RegistroDeInscripcion inscripcion in inscripciones)
                 {
-                    context.Inscripciones.Add(inscripcion);
+                    contexto.Inscripciones.Add(inscripcion);
                 }
-                context.SaveChanges();
+                contexto.SaveChanges();
             }
-
         }
     }
 }
