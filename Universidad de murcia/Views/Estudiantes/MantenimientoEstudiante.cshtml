@@ -7,6 +7,8 @@
 <h2>@ViewBag.Crud.Mantenimiento.Titulo</h2>
 
 <p>
+    @Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].RenderSelector())
+    <br />
     <a asp-action=@ViewBag.Crud.Creador.Ir>@ViewBag.Crud.Creador.Titulo</a>
 </p>
 <table class="table">
@@ -46,3 +48,11 @@
         }
     </tbody>
 </table>
+
+@Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].RenderModal())
+
+@section scripts{<script type="text/ecmascript">@Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].ScriptDeSeleccion())</script> } 
+
+
+
+

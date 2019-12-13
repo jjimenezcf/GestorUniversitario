@@ -9,20 +9,19 @@ using System.Collections.Generic;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
 using Gestor.Elementos.Universitario;
+using System;
 
 namespace UniversidadDeMurcia.Controllers
 {
-
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
-
         public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores):
             base(gestorDeEstudiantes,  gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
+            GestorDelCrud.Modales["SelectorDeCurso"] = new GestorDeCursos(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector();
         }
-
-
+        
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
             ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc
@@ -42,6 +41,7 @@ namespace UniversidadDeMurcia.Controllers
                 EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
                 _ => estudiantes.OrderBy(s => s.Apellido),
             };
+
             return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
         }
 
@@ -126,4 +126,5 @@ namespace UniversidadDeMurcia.Controllers
         }
 
     }
+
 }

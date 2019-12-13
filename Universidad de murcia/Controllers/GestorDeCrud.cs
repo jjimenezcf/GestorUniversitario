@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Extensiones;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -97,6 +98,7 @@ namespace UniversidadDeMurcia.Controllers
     {
         public string NombreDelObjeto => typeof(T).Name;
         public string Titulo { get; set; }
+        public Dictionary<string, SelectorModal> Modales = new Dictionary<string, SelectorModal>();
 
         public MantenimientoCrud<T> Mantenimiento { get; }
         public CreacionCrud<T> Creador { get; }
