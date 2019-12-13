@@ -60,8 +60,6 @@ namespace UniversidadDeMurcia.Controllers
             return View((GestorDelCrud.Creador.Vista, iuElemento));
         }
 
-
-
         protected async Task<IActionResult> ModificarObjeto(int id, TElemento elemento)
         {
             if (id != elemento.Id)
@@ -77,7 +75,7 @@ namespace UniversidadDeMurcia.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ExisteObjetoEnBd(elemento.Id))
+                    if (!GestorDeElementos.ExisteObjetoEnBd(id))
                     {
                         return NotFound();
                     }
@@ -93,10 +91,6 @@ namespace UniversidadDeMurcia.Controllers
         }
 
 
-        private bool ExisteObjetoEnBd(int id)
-        {
-            return GestorDeElementos.ExisteObjetoEnBd(id);
-        }
 
     }
 
