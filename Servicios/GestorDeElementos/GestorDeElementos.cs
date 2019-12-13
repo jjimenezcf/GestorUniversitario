@@ -15,13 +15,13 @@ namespace Gestor.Elementos
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto Contexto;
         private GestorDeErrores _gestorDeErrores;
-        protected IMapper _mapeador;
+        public IMapper Mapeador;
 
         protected abstract TRegistro LeerConDetalle(int Id);
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
-            _mapeador = mapeador;
+            Mapeador = mapeador;
             IniciarClase(contexto);
         }
 
@@ -121,7 +121,7 @@ namespace Gestor.Elementos
 
         public TElemento MapearElemento(TRegistro registro, List<string> excluirPropiedad = null)
         {
-            var elemento = (TElemento)_mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
+            var elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
             return elemento;
         }
         
