@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UniversidadDeMurcia.Controllers
+namespace UniversidadDeMurcia.Utilidades
 {
     public class BaseCrud<T>
     {
@@ -50,6 +50,77 @@ namespace UniversidadDeMurcia.Controllers
         {
             AsignarTitulo($"Mantenimiento de {NombreDelObjeto}s");
         }
+
+        public string Render()
+        {
+            var htmlMantenimiento =
+                RenderCabecera() +
+                RenderFiltro() +
+                RenderGrid() +
+                RenderPie();
+
+            return htmlMantenimiento;
+        }
+        
+        private string RenderCabecera()
+        {
+            var htmlCabecera = RenderOpcionesComunes();
+            return htmlCabecera;
+        }
+
+        private string RenderOpcionesComunes()
+        {
+            var htmlOpcionesComunes = "";
+            return htmlOpcionesComunes;
+        }
+
+        private string RenderFiltro()
+        {
+            var htmlFiltro = "";
+            return htmlFiltro;
+        }
+
+        private string RenderGrid()
+        {
+           var htmlGrid = 
+                RenderCabeceraGrid() +
+                RenderDetalleGrid()+
+                RenderNavegadorGrid() +
+                RenderOpcionesGrid();
+
+            return htmlGrid;
+        }
+
+        private string RenderCabeceraGrid()
+        {
+            var htmlCabeceraGrid = "";
+            return htmlCabeceraGrid;
+        }
+
+        private string RenderDetalleGrid()
+        {
+            var htmlDetalleGrid = "";
+            return htmlDetalleGrid;
+        }
+
+        private string RenderNavegadorGrid()
+        {
+            var htmlNavegadorGrid = "";
+            return htmlNavegadorGrid;
+        }
+
+        private string RenderOpcionesGrid()
+        {
+            var htmlOpcionesGrid = "";
+            return htmlOpcionesGrid;
+        }
+
+        private string RenderPie()
+        {
+            var htmlPie = "";
+            return htmlPie;
+        }
+
     }
 
     public class CreacionCrud<T> : BaseCrud<T>

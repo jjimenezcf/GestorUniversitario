@@ -10,6 +10,7 @@ using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
 using Gestor.Elementos.Universitario;
 using System;
+using UniversidadDeMurcia.Utilidades;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -19,7 +20,7 @@ namespace UniversidadDeMurcia.Controllers
             base(gestorDeEstudiantes,  gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
-            GestorDelCrud.Modales["SelectorDeCurso"] = new GestorDeCursos(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
+            GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto,gestorDeEstudiantes.Mapeador).Selector;
         }
         
         public IActionResult IraMantenimientoEstudiante(string orden)

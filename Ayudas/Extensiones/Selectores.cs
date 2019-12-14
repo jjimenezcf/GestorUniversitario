@@ -78,7 +78,7 @@ namespace Extensiones
                     .Replace("idModal", Id)
                     .Replace("titulo", _titulo)
                     .Replace("idSelector", _idSelector)
-                    .Replace("¨", "\"");
+                    .Render();
         }
 
         public string RenderModal()
@@ -87,7 +87,7 @@ namespace Extensiones
                     .Replace("idModal", Id)
                     .Replace("titulo", _titulo)
                     .Replace("listaDeElementos", RenderizarElementos())
-                    .Replace("¨", "\"");
+                    .Render();
         }
         
         public string ScriptDeSeleccion()
@@ -95,46 +95,12 @@ namespace Extensiones
             return _funcionDeSeleccion
                    .Replace("idModal", Id)
                    .Replace("idSelector", _idSelector)
-                   .Replace("¨", "\"");
+                   .Render();
         }
 
         private string RenderizarElementos()
         {
             return _renderElementos();
-        }
-
-        public static string AnadirFila(string idModal, int numeroDeFila,List<string> valores)
-        {
-            var check = "<input type=¨checkbox¨ id=¨idCheck¨ name=¨grupoChek¨ aria-label=¨Checkbox for following text input¨>"
-                .Replace("idCheck",$"idCheck{numeroDeFila}_{idModal}")
-                .Replace("grupoChek", $"grupoChek_{idModal}")
-                .Replace("¨","\"");
-            var fila = new StringBuilder();
-            foreach (var valor in valores)
-            {
-                fila.AppendLine($"<td>{valor}</td>");
-            }
-            return $@"<tr>{fila.ToString()}<td>{check}</td><tr>";
-        }
-
-        public static string AnadirTabla(List<string> valores, StringBuilder filas)
-        {
-            var cabecera = new StringBuilder();
-            foreach (var valor in valores)
-            {
-                cabecera.AppendLine($"<th><a>{valor}<a/></th>");
-            }
-            return $@" <table class=¨table¨>
-                    <thead>
-                        <tr>
-                          {cabecera.ToString()}
-                        <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      {filas.ToString()}
-                    </tbody>
-                </table>";
         }
 
     }
