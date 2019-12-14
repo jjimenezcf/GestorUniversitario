@@ -88,14 +88,17 @@ namespace Extensiones
             return _renderElementos();
         }
 
-        public static string AnadirFila(List<string> valores)
+        public static string AnadirFila(string idSelector, int numeroDeFila,List<string> valores)
         {
-            var filas = new StringBuilder();
+            var check = "<input type=¨checkbox¨ id=¨idCheck¨ aria-label=¨Checkbox for following text input¨>"
+                .Replace("idCheck",$"idCheck{numeroDeFila}_{idSelector}")
+                .Replace("¨","\"");
+            var fila = new StringBuilder();
             foreach (var valor in valores)
             {
-                filas.AppendLine($"<td>{valor}</td>");
+                fila.AppendLine($"<td>{valor}</td>");
             }
-            return $@"<tr>{filas.ToString()}<tr>";
+            return $@"<tr>{fila.ToString()}<td>{check}</td><tr>";
         }
 
         public static string AnadirTabla(List<string> valores, StringBuilder filas)
@@ -109,6 +112,7 @@ namespace Extensiones
                     <thead>
                         <tr>
                           {cabecera.ToString()}
+                        <th></th>
                         </tr>
                     </thead>
                     <tbody>

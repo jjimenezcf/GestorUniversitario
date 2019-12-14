@@ -20,8 +20,7 @@ namespace Gestor.Elementos.Universitario
                 CreateMap<ElementoCurso,RegistroDeCurso>();
             }
         }
-
-
+        
         public GestorDeCursos(ContextoUniversitario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
@@ -41,12 +40,13 @@ namespace Gestor.Elementos.Universitario
         {
             var cursos = LeerTodos();
             var listaDeCursos = new StringBuilder();
+            int i = 0;
             foreach (var curso in cursos)
             {
                 var valores = new List<string>();
                 valores.Add(curso.Titulo);
                 valores.Add(curso.Creditos.ToString());
-                listaDeCursos.AppendLine(SelectorModal.AnadirFila(valores));
+                listaDeCursos.AppendLine(SelectorModal.AnadirFila("SelectorCurso",i++, valores));
             }
 
             var cabecera = new List<string>(new string[] { "Título", "Créditos"});
@@ -54,7 +54,5 @@ namespace Gestor.Elementos.Universitario
 
             return htmlListaDeElementos;
         }
-
-
     }
 }
