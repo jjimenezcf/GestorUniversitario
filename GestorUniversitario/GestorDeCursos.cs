@@ -20,20 +20,19 @@ namespace Gestor.Elementos.Universitario
                 CreateMap<ElementoCurso,RegistroDeCurso>();
             }
         }
-        
+
+        private SelectorModal _selector;
+        public SelectorModal Selector => _selector; 
+
         public GestorDeCursos(ContextoUniversitario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
+            _selector = new SelectorModal("Curso", RenderizarElementos);
         }
                
         protected override RegistroDeCurso LeerConDetalle(int Id)
         {
             return null;
-        }
-
-        public SelectorModal Selector()
-        {
-            return new SelectorModal("Curso", RenderizarElementos);
         }
 
         public string RenderizarElementos()
@@ -46,7 +45,7 @@ namespace Gestor.Elementos.Universitario
                 var valores = new List<string>();
                 valores.Add(curso.Titulo);
                 valores.Add(curso.Creditos.ToString());
-                listaDeCursos.AppendLine(SelectorModal.AnadirFila("SelectorCurso",i++, valores));
+                listaDeCursos.AppendLine(SelectorModal.AnadirFila(Selector.Id, i++, valores));
             }
 
             var cabecera = new List<string>(new string[] { "Título", "Créditos"});

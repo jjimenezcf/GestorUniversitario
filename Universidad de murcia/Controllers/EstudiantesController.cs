@@ -19,7 +19,7 @@ namespace UniversidadDeMurcia.Controllers
             base(gestorDeEstudiantes,  gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
-            GestorDelCrud.Modales["SelectorDeCurso"] = new GestorDeCursos(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector();
+            GestorDelCrud.Modales["SelectorDeCurso"] = new GestorDeCursos(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
         
         public IActionResult IraMantenimientoEstudiante(string orden)

@@ -36,24 +36,38 @@ namespace Extensiones
               ";
 
         const string _funcionDeSeleccion =
-            @"function Seleccionar() {
-                 document.getElementById(¨idSelector¨).value = 'trigonometría';
-              };
-             ";
+                        @"function Seleccionar() {
+                             var checkboxes = document.getElementsByName(¨grupoChek_idModal¨);
+                             var cont = 0; 
 
-        private string _idModal;
+                             for (var x=0; x < checkboxes.length; x++) {
+                              if (checkboxes[x].checked) {
+                               document.getElementById(¨idSelector¨).value = x;
+                               console.log(x);
+                              }
+                             }
+                          };
+                         ";
+
+        //@"function Seleccionar() {
+        //     document.getElementById(¨idSelector¨).value = 'trigo';
+        //  };
+        // ";
+
         private string _titulo;
         private string _idSelector;
 
         Func<string> _renderElementos;
 
+        public string Id { get; }
 
         public string jsDeSeleccion { get; set; }
         
         public SelectorModal(string elemento, Func<string> RenderElementos)
         {
+            Id = $"SelectorDe{elemento}";
+
             _titulo = $"Seleccionar {elemento}";
-            _idModal = $"SelectorDe{elemento}";
             _idSelector = $"id{elemento}Seleccionado";
             _renderElementos = RenderElementos;
         }
@@ -61,7 +75,7 @@ namespace Extensiones
         public string RenderSelector()
         {
             return _htmlSelector
-                    .Replace("idModal", _idModal)
+                    .Replace("idModal", Id)
                     .Replace("titulo", _titulo)
                     .Replace("idSelector", _idSelector)
                     .Replace("¨", "\"");
@@ -70,7 +84,7 @@ namespace Extensiones
         public string RenderModal()
         {
             return _htmlModalSelector
-                    .Replace("idModal", _idModal)
+                    .Replace("idModal", Id)
                     .Replace("titulo", _titulo)
                     .Replace("listaDeElementos", RenderizarElementos())
                     .Replace("¨", "\"");
@@ -79,6 +93,7 @@ namespace Extensiones
         public string ScriptDeSeleccion()
         {
             return _funcionDeSeleccion
+                   .Replace("idModal", Id)
                    .Replace("idSelector", _idSelector)
                    .Replace("¨", "\"");
         }
@@ -88,10 +103,11 @@ namespace Extensiones
             return _renderElementos();
         }
 
-        public static string AnadirFila(string idSelector, int numeroDeFila,List<string> valores)
+        public static string AnadirFila(string idModal, int numeroDeFila,List<string> valores)
         {
-            var check = "<input type=¨checkbox¨ id=¨idCheck¨ aria-label=¨Checkbox for following text input¨>"
-                .Replace("idCheck",$"idCheck{numeroDeFila}_{idSelector}")
+            var check = "<input type=¨checkbox¨ id=¨idCheck¨ name=¨grupoChek¨ aria-label=¨Checkbox for following text input¨>"
+                .Replace("idCheck",$"idCheck{numeroDeFila}_{idModal}")
+                .Replace("grupoChek", $"grupoChek_{idModal}")
                 .Replace("¨","\"");
             var fila = new StringBuilder();
             foreach (var valor in valores)
