@@ -22,18 +22,20 @@ namespace UniversidadDeMurcia.Utilidades
         public string RenderizarTabla()
         {
             var cursos = _gestordeCursos.LeerTodos();
-            var listaDeCursos = new List<List<string>>();
+            var listaDeCursos = new List<FilaDelGrid>();
             foreach (var curso in cursos)
             {
-                var datosDelCurso = new List<string>();
-                datosDelCurso.Add(curso.Titulo);
-                datosDelCurso.Add(curso.Creditos.ToString());
+                var datosDelCurso = new FilaDelGrid();
+                datosDelCurso.Valores.Add(curso.Titulo);
+                datosDelCurso.Valores.Add(curso.Creditos.ToString());
                 listaDeCursos.Add(datosDelCurso);
             }
 
-            var cabecera = new List<string>(new string[] { "Título", "Créditos" });
+            var columnasDelGrid = new List<ColumnaDelGrid>(); 
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Título", Ordenar = false });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Créditos", Ordenar = false });
 
-            return HtmlRender.RenderizarTabla(Selector.Id, cabecera, listaDeCursos, true);
+            return HtmlRender.RenderizarTabla(Selector.Id, columnasDelGrid, listaDeCursos, true);
         }
 
     }

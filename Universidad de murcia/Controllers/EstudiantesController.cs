@@ -23,14 +23,16 @@ namespace UniversidadDeMurcia.Controllers
             GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
-        protected override IEnumerable<ColumnaDelGrid> DefinirColumnasDelGrid()
+        protected override List<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
             var columnasDelGrid = base.DefinirColumnasDelGrid().ToList();
 
             var columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.Apellido),
-                Ordenar = true
+                Ordenar = true,
+                Ruta = "Estudiantes",
+                Accion = nameof(IraMantenimientoEstudiante)
             };
             columnasDelGrid.Add(columnaDelGrid);
 
@@ -44,7 +46,9 @@ namespace UniversidadDeMurcia.Controllers
             columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.InscritoEl),
-                Ordenar = true
+                Ordenar = true,
+                Ruta = "Estudiantes",
+                Accion = nameof(IraMantenimientoEstudiante)
             };
             columnasDelGrid.Add(columnaDelGrid);
 

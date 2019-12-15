@@ -5,22 +5,6 @@ using System.Text;
 
 namespace UniversidadDeMurcia.Utilidades
 {
-
-    public class ColumnaDelGrid
-    {
-        public string Nombre { get; set; }
-        public bool Ordenar { get; set; }
-        public string OrdenPor => $"ordenoPor{Nombre}";
-        public string Sentido = "Asc";
-    }
-
-
-    public class FilaDelGrid
-    {
-        public List<string> Valores = new List<string>();
-    }
-
-
     public class BaseCrud<T>
     {
         protected string NombreDelObjeto => typeof(T).Name.Replace("Elemento","");
@@ -63,26 +47,21 @@ namespace UniversidadDeMurcia.Utilidades
     {
 
         //public Func<IEnumerable<ColumnaGrid>> DefinirColumnasDelGrid { private get; set; }
-        public IEnumerable<ColumnaDelGrid> ColumnasDelGrid { get;}
-        public IEnumerable<FilaDelGrid> FilasDelGrid {private get; set; }
+        public List<ColumnaDelGrid> ColumnasDelGrid { get;}
+        public List<FilaDelGrid> FilasDelGrid {private get; set; }
 
         private string IdGrid => $"Grid_{Vista}";
 
-        public MantenimientoCrud(Func<IEnumerable<ColumnaDelGrid>> definirColumnasDelGrid)
+        public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid)
         :base("Mantenimiento")
         {
             AsignarTitulo($"Mantenimiento de {NombreDelObjeto}s");
             ColumnasDelGrid = definirColumnasDelGrid == null ? renderDeColumnasVacio() : definirColumnasDelGrid();
         }
 
-        private IEnumerable<ColumnaDelGrid> renderDeColumnasVacio()
+        private List<ColumnaDelGrid> renderDeColumnasVacio()
         {
              return new List<ColumnaDelGrid>();
-        }
-
-        private IEnumerable<FilaDelGrid> renderDeFilasVacio()
-        {
-            return new List<FilaDelGrid>();
         }
 
         public string Render()
@@ -116,64 +95,14 @@ namespace UniversidadDeMurcia.Utilidades
             return htmlFiltro;
         }
 
-        private string RenderGrid(IEnumerable<ColumnaDelGrid> columnasGrid, IEnumerable<FilaDelGrid> filas)
+        private string RenderGrid(List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid)
         {
-            var htmlGrid = RenderCabeceraGrid(columnasGrid);
-            htmlGrid = htmlGrid.Replace("renderizarCuerpo", RenderDetalleGrid(filas)) + 
+            var htmlGrid = HtmlRender.RenderizarTabla(IdGrid, columnasGrid, filasDelGrid, true);
+            htmlGrid = htmlGrid + 
                 RenderNavegadorGrid() +
                 RenderOpcionesGrid();
 
             return htmlGrid;
-        }
-
-        private string RenderCabeceraGrid(IEnumerable<ColumnaDelGrid> columnasGrid)
-        {
-            
-            var htmlCabeceraGrid = $@"
-                                    <table id=¨{IdGrid}¨ class=¨table¨>
-                                        <thead>
-                                            <tr>
-                                            renderColunasCabecera
-                                            </tr>
-                                        </thead>
-                                    	renderizarCuerpo
-                                    </table>                                    
-                                   ";
-            var htmlColumnaCabecera = @" <th>
-                                           <a href=¨/ruta/accion?orden=ordenPor¨>Columna.Nombre</a>
-                                         </th>
-                                       ";
-            var htmlColumnasCabecera = new StringBuilder();
-            foreach (var columna in columnasGrid)
-            {
-                var html = htmlColumnaCabecera;
-                if (columna.Ordenar)
-                {
-                    html = html.Replace("ruta", Ruta)
-                        .Replace("accion", Ir)
-                        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
-                }
-                else
-                {
-                    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
-                }
-                html=html.Replace("Columna.Nombre", columna.Nombre).Render();
-                htmlColumnasCabecera.AppendLine(html);
-            }
-            
-            return htmlCabeceraGrid.Replace("renderColunasCabecera",htmlColumnasCabecera.ToString()).Render();
-        }
-
-        private string RenderDetalleGrid(IEnumerable<FilaDelGrid> filas)
-        {
-            var htmlDetalleGrid = new StringBuilder();
-            int i = 0;
-            foreach (var fila in filas)
-            {
-                htmlDetalleGrid.Append(HtmlRender.ComponerFilaSeleccionableHtml(IdGrid, i, fila.Valores));
-            }
-            
-            return htmlDetalleGrid.ToString().Render();
         }
 
         private string RenderNavegadorGrid()
@@ -262,7 +191,7 @@ namespace UniversidadDeMurcia.Utilidades
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
 
-        public GestorCrud(Func<IEnumerable<ColumnaDelGrid>> definirColumnasDelGrid)
+        public GestorCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid)
         {
             Titulo = $"Gestor de {NombreDelObjeto}";
             Mantenimiento = new MantenimientoCrud<T>(definirColumnasDelGrid) { Ruta = Ruta };
