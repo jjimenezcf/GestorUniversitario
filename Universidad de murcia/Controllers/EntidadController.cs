@@ -7,6 +7,7 @@ using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using UniversidadDeMurcia.Utilidades;
+using System.Collections.Generic;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,8 +28,13 @@ namespace UniversidadDeMurcia.Controllers
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(null);
+            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
+        }
+
+        protected virtual IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
+        {
+            return new List<ColumnaGrid>();
         }
 
         public IActionResult Index()

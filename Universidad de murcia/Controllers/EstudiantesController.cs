@@ -16,60 +16,94 @@ namespace UniversidadDeMurcia.Controllers
 {
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
-        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores):
-            base(gestorDeEstudiantes,  gestorDeErrores)
+        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
+            base(gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
-            GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto,gestorDeEstudiantes.Mapeador).Selector;
-            GestorDelCrud.Mantenimiento.DefinirColumnasDelGrid = DefinirColumnasDelGrid;
+            GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
-        public IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
+        protected override IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
         {
-            var columnasGrid = new List<ColumnaGrid>();
-            var columnaGrid = new ColumnaGrid();
-            columnaGrid.Nombre = nameof(ElementoEstudiante.Apellido);
-            columnaGrid.Ordenar = true;
-            columnaGrid.Accion = GestorDelCrud.Mantenimiento.Ir;
-            columnaGrid.Ruta = "/Estudiantes/";
+            var columnasGrid = base.DefinirColumnasDelGrid().ToList();
+
+            var columnaGrid = new ColumnaGrid
+            {
+                Nombre = nameof(ElementoEstudiante.Apellido),
+                Ordenar = true
+            };
             columnasGrid.Add(columnaGrid);
 
-            columnaGrid = new ColumnaGrid();
-            columnaGrid.Nombre = nameof(ElementoEstudiante.Nombre);
-            columnaGrid.Ordenar = false;
+            columnaGrid = new ColumnaGrid
+            {
+                Nombre = nameof(ElementoEstudiante.Nombre),
+                Ordenar = false
+            };
             columnasGrid.Add(columnaGrid);
 
-            columnaGrid = new ColumnaGrid();
-            columnaGrid.Nombre = nameof(ElementoEstudiante.InscritoEl);
-            columnaGrid.Ordenar = true;
-            columnaGrid.Accion = GestorDelCrud.Mantenimiento.Ir;
-            columnaGrid.Ruta = "/Estudiantes/";
+            columnaGrid = new ColumnaGrid
+            {
+                Nombre = nameof(ElementoEstudiante.InscritoEl),
+                Ordenar = true
+            };
             columnasGrid.Add(columnaGrid);
 
             return columnasGrid;
         }
-        
+
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            ViewData[EstudianteEnlace.Parametro.Nombre] = orden.IsNullOrEmpty() || orden == EstudianteEnlace.OrdenadoPor.NombreAsc
-                                                        ? EstudianteEnlace.OrdenadoPor.NombreDes
-                                                        : EstudianteEnlace.OrdenadoPor.NombreAsc;
-
-            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden == EstudianteEnlace.OrdenadoPor.InscritoElAsc
-                                                        ? EstudianteEnlace.OrdenadoPor.InscritoElDes
-                                                        : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
             var estudiantes = GestorDeElementos.LeerTodos();
-            estudiantes = orden switch
-            {
-                EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
-                EstudianteEnlace.OrdenadoPor.NombreDes => estudiantes.OrderByDescending(s => s.Apellido),
-                EstudianteEnlace.OrdenadoPor.InscritoElDes => estudiantes.OrderByDescending(s => s.InscritoEl),
-                EstudianteEnlace.OrdenadoPor.InscritoElAsc => estudiantes.OrderBy(s => s.InscritoEl),
-                _ => estudiantes.OrderBy(s => s.Apellido),
-            };
+
+            PrepararProximoOrden(orden);
+
+            estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
 
             return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
+        }
+
+        private void PrepararProximoOrden(string orden)
+        {
+            ViewData[EstudianteEnlace.Parametro.Apellido] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.Apellido)}Asc"
+                                                        ? $"{nameof(ElementoEstudiante.Apellido)}Des"
+                                                        : $"{nameof(ElementoEstudiante.Apellido)}Asc";
+
+            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.InscritoEl)}Asc"
+                                                        ? $"{nameof(ElementoEstudiante.InscritoEl)}Des"
+                                                        : $"{nameof(ElementoEstudiante.InscritoEl)}Asc";
+        }
+
+        private IEnumerable<ElementoEstudiante> OrdenarListaDeEstudiantes(IEnumerable<ElementoEstudiante> estudiantes, string orden)
+        {
+            foreach (var columna in GestorDelCrud.Mantenimiento.ColumnasDelGrid)
+            {
+                if (!columna.Ordenar)
+                    continue;
+                if (orden != null && orden.Contains(columna.Nombre) && columna.Nombre == nameof(ElementoEstudiante.Apellido))
+                {
+                    if (orden.EndsWith("Des"))
+                    {
+                        columna.Sentido = "Asc";
+                        return estudiantes.OrderByDescending(c => c.Apellido);
+                    }
+                    columna.Sentido = "Des";
+                    return estudiantes.OrderBy(c => c.Apellido);
+                }
+
+                if (orden != null && orden.Contains(columna.Nombre) && columna.Nombre == nameof(ElementoEstudiante.InscritoEl))
+                {
+                    if (orden.EndsWith("Des"))
+                    {
+                        columna.Sentido = "Asc";
+                        return estudiantes.OrderByDescending(c => c.InscritoEl);
+                    }
+                    columna.Sentido = "Des";
+                    return estudiantes.OrderBy(c => c.InscritoEl);
+                }
+            }
+
+            return estudiantes.OrderBy(s => s.Apellido);
         }
 
         public IActionResult IraCrearEstudiante()
@@ -128,7 +162,7 @@ namespace UniversidadDeMurcia.Controllers
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoPorId((int) id);
+            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoPorId((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
