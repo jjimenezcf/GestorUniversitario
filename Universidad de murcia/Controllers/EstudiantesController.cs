@@ -29,19 +29,21 @@ namespace UniversidadDeMurcia.Controllers
             var columnasGrid = new List<ColumnaGrid>();
             var columnaGrid = new ColumnaGrid();
             columnaGrid.Nombre = nameof(ElementoEstudiante.Apellido);
-            columnaGrid.AplicarOrden = true;
-            columnaGrid.Ordenar = GestorDelCrud.Mantenimiento.Ir;
+            columnaGrid.Ordenar = true;
+            columnaGrid.Accion = GestorDelCrud.Mantenimiento.Ir;
+            columnaGrid.Ruta = "/Estudiantes/";
             columnasGrid.Add(columnaGrid);
 
             columnaGrid = new ColumnaGrid();
             columnaGrid.Nombre = nameof(ElementoEstudiante.Nombre);
-            columnaGrid.AplicarOrden = false;
+            columnaGrid.Ordenar = false;
             columnasGrid.Add(columnaGrid);
 
             columnaGrid = new ColumnaGrid();
             columnaGrid.Nombre = nameof(ElementoEstudiante.InscritoEl);
-            columnaGrid.AplicarOrden = true;
-            columnaGrid.Ordenar = GestorDelCrud.Mantenimiento.Ir;
+            columnaGrid.Ordenar = true;
+            columnaGrid.Accion = GestorDelCrud.Mantenimiento.Ir;
+            columnaGrid.Ruta = "/Estudiantes/";
             columnasGrid.Add(columnaGrid);
 
             return columnasGrid;

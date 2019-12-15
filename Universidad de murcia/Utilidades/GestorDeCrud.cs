@@ -9,8 +9,9 @@ namespace UniversidadDeMurcia.Utilidades
     public class ColumnaGrid
     {
         public string Nombre { get; set; }
-        public bool AplicarOrden { get; set; }
-        public string Ordenar;
+        public bool Ordenar { get; set; }
+        public string Ruta { get; set; }
+        public string Accion { get; set; }
         public string OrdenPor => $"ordenoPor{Nombre}";
     }
 
@@ -123,16 +124,24 @@ namespace UniversidadDeMurcia.Utilidades
                                     </table>                                    
                                    ";
             var htmlColumnaCabecera = @" <th>
-                                           <a asp-action={Columna.Ordenar} asp-route-orden=¨{Columna.OrdenPor}¨>Columna.Nombre</a>
+                                           <a href=¨/ruta/accion?orden=ordenPor¨>Columna.Nombre</a>
                                          </th>
                                        ";
             var htmlColumnasCabecera = new StringBuilder();
             foreach (var columna in columnasGrid)
             {
-                var html = htmlColumnaCabecera
-                    .Replace("asp-action={Columna.Ordenar}", columna.AplicarOrden ? $"asp-action={columna.Ordenar}" : "")
-                    .Replace("asp-route-orden=¨{Columna.OrdenPor}¨", columna.AplicarOrden ? $"asp-route-orden=¨{columna.OrdenPor}¨" : "")
-                    .Replace("Columna.Nombre", columna.Nombre);
+                var html = htmlColumnaCabecera;
+                if (columna.Ordenar)
+                {
+                    html = html.Replace("ruta", columna.Ruta)
+                        .Replace("accion", columna.Accion)
+                        .Replace("ordenPor", columna.OrdenPor);
+                }
+                else
+                {
+                    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
+                }
+                html=html.Replace("Columna.Nombre", columna.Nombre).Render();
                 htmlColumnasCabecera.AppendLine(html);
             }
             
