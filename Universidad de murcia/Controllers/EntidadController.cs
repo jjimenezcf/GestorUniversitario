@@ -32,9 +32,14 @@ namespace UniversidadDeMurcia.Controllers
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
-        protected virtual IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
+        protected virtual IEnumerable<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
-            return new List<ColumnaGrid>();
+            return new List<ColumnaDelGrid>();
+        }
+
+        protected virtual List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<TElemento> elementos)
+        {
+            return new List<FilaDelGrid>();
         }
 
         public IActionResult Index()

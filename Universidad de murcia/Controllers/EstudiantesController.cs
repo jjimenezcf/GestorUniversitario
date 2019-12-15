@@ -23,32 +23,47 @@ namespace UniversidadDeMurcia.Controllers
             GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
-        protected override IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
+        protected override IEnumerable<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
-            var columnasGrid = base.DefinirColumnasDelGrid().ToList();
+            var columnasDelGrid = base.DefinirColumnasDelGrid().ToList();
 
-            var columnaGrid = new ColumnaGrid
+            var columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.Apellido),
                 Ordenar = true
             };
-            columnasGrid.Add(columnaGrid);
+            columnasDelGrid.Add(columnaDelGrid);
 
-            columnaGrid = new ColumnaGrid
+            columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.Nombre),
                 Ordenar = false
             };
-            columnasGrid.Add(columnaGrid);
+            columnasDelGrid.Add(columnaDelGrid);
 
-            columnaGrid = new ColumnaGrid
+            columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.InscritoEl),
                 Ordenar = true
             };
-            columnasGrid.Add(columnaGrid);
+            columnasDelGrid.Add(columnaDelGrid);
 
-            return columnasGrid;
+            return columnasDelGrid;
+        }
+
+        protected override List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<ElementoEstudiante> elementos)
+        {
+            var filasDelGrid = base.MapearFilasAlGrid(elementos);
+
+            foreach (var estudiante in elementos)
+            {
+                var filaDelGrid = new FilaDelGrid();
+                filaDelGrid.Valores.Add(estudiante.Apellido);
+                filaDelGrid.Valores.Add(estudiante.Nombre);
+                filaDelGrid.Valores.Add(estudiante.InscritoEl.ToString());
+                filasDelGrid.Add(filaDelGrid);
+            }
+            return filasDelGrid;
         }
 
         public IActionResult IraMantenimientoEstudiante(string orden)
@@ -59,6 +74,8 @@ namespace UniversidadDeMurcia.Controllers
             PrepararProximoOrden(orden);
 
             estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
+
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearFilasAlGrid(estudiantes);
 
             return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
         }
