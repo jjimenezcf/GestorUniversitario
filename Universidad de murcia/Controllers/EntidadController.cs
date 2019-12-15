@@ -27,7 +27,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>("Gestor de estudiantes", "Inscripciones");
+            GestorDelCrud = new GestorCrud<TElemento>(null);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 

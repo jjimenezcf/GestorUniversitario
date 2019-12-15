@@ -21,6 +21,30 @@ namespace UniversidadDeMurcia.Controllers
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto,gestorDeEstudiantes.Mapeador).Selector;
+            GestorDelCrud.Mantenimiento.DefinirColumnasDelGrid = DefinirColumnasDelGrid;
+        }
+
+        public IEnumerable<ColumnaGrid> DefinirColumnasDelGrid()
+        {
+            var columnasGrid = new List<ColumnaGrid>();
+            var columnaGrid = new ColumnaGrid();
+            columnaGrid.Nombre = nameof(ElementoEstudiante.Apellido);
+            columnaGrid.AplicarOrden = true;
+            columnaGrid.Ordenar = GestorDelCrud.Mantenimiento.Ir;
+            columnasGrid.Add(columnaGrid);
+
+            columnaGrid = new ColumnaGrid();
+            columnaGrid.Nombre = nameof(ElementoEstudiante.Nombre);
+            columnaGrid.AplicarOrden = false;
+            columnasGrid.Add(columnaGrid);
+
+            columnaGrid = new ColumnaGrid();
+            columnaGrid.Nombre = nameof(ElementoEstudiante.InscritoEl);
+            columnaGrid.AplicarOrden = true;
+            columnaGrid.Ordenar = GestorDelCrud.Mantenimiento.Ir;
+            columnasGrid.Add(columnaGrid);
+
+            return columnasGrid;
         }
         
         public IActionResult IraMantenimientoEstudiante(string orden)
@@ -33,7 +57,7 @@ namespace UniversidadDeMurcia.Controllers
                                                         ? EstudianteEnlace.OrdenadoPor.InscritoElDes
                                                         : EstudianteEnlace.OrdenadoPor.InscritoElAsc;
 
-            var estudiantes =  (IEnumerable<ElementoEstudiante>)GestorDeElementos.LeerTodos();
+            var estudiantes = GestorDeElementos.LeerTodos();
             estudiantes = orden switch
             {
                 EstudianteEnlace.OrdenadoPor.NombreAsc => estudiantes.OrderBy(s => s.Apellido),
@@ -53,6 +77,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraDetalleEstudiante(int? id)
         {
+            GestorDelCrud.Detalle.AsignarTituloDetalle("Inscripciones");
             return View(GestorDelCrud.Detalle.Vista, LeerDetalle(id));
         }
 
