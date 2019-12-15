@@ -5,6 +5,14 @@ using System.Text;
 
 namespace UniversidadDeMurcia.Utilidades
 {
+
+    public class Opcion
+    {
+        public string Nombre { get; set; }
+        public string Ruta { get; set; }
+        public string Accion { get; set; }
+    }
+
     public class BaseCrud<T>
     {
         protected string NombreDelObjeto => typeof(T).Name.Replace("Elemento","");
@@ -46,17 +54,31 @@ namespace UniversidadDeMurcia.Utilidades
     public class MantenimientoCrud<T> : BaseCrud<T>
     {
 
-        //public Func<IEnumerable<ColumnaGrid>> DefinirColumnasDelGrid { private get; set; }
+        private List<Opcion> _opcionesGenerales;
         public List<ColumnaDelGrid> ColumnasDelGrid { get;}
         public List<FilaDelGrid> FilasDelGrid {private get; set; }
+        public List<Opcion> OpcionesGenerales
+        {
+            get => _opcionesGenerales;
+            set
+            {
+                if (_opcionesGenerales == null)
+                    _opcionesGenerales = value;
+                else
+                    _opcionesGenerales.AddRange(value);
+            }
+          }
 
-        private string IdGrid => $"Grid_{Vista}";
+        public Dictionary<string, SelectorModal> Modales { get; set; }
 
-        public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid)
+       private string IdGrid => $"Grid_{Vista}";
+
+        public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         :base("Mantenimiento")
         {
             AsignarTitulo($"Mantenimiento de {NombreDelObjeto}s");
             ColumnasDelGrid = definirColumnasDelGrid == null ? renderDeColumnasVacio() : definirColumnasDelGrid();
+            OpcionesGenerales = definirOpcionesGenerales();
         }
 
         private List<ColumnaDelGrid> renderDeColumnasVacio()
@@ -79,19 +101,38 @@ namespace UniversidadDeMurcia.Utilidades
         
         private string RenderCabecera()
         {
-            var htmlCabecera = RenderOpcionesComunes();
+            //
+            var htmlCabecera = $"<h2>{Titulo}</h2>" +
+                RenderOpcionesComunes();
             return htmlCabecera;
         }
 
         private string RenderOpcionesComunes()
         {
-            var htmlOpcionesComunes = "";
-            return htmlOpcionesComunes;
+            var htmlOpcionesGenerales = "";
+            var htmlOpcion = $@"
+                                       <p>
+                                           <a href=¨/ruta/accion¨>nombreAccion</a>
+                                       </p>
+                                      ";
+
+            foreach (var opcion in OpcionesGenerales)
+            {
+                var html = htmlOpcion.Replace("ruta", opcion.Ruta).Replace("accion", opcion.Accion).Replace("nombreAccion", opcion.Nombre);
+                htmlOpcionesGenerales = htmlOpcionesGenerales + html.Render();
+            }
+
+            return htmlOpcionesGenerales;
         }
 
         private string RenderFiltro()
         {
             var htmlFiltro = "";
+            foreach (var modal in Modales.Keys)
+            {
+                htmlFiltro = htmlFiltro + Modales[modal].RenderSelector();
+            }
+
             return htmlFiltro;
         }
 
@@ -120,10 +161,16 @@ namespace UniversidadDeMurcia.Utilidades
         private string RenderPie()
         {
             var htmlPie = "";
+            foreach (var modal in Modales.Keys)
+            {
+                htmlPie = htmlPie + Modales[modal].RenderModal();
+            }
+
             return htmlPie;
         }
 
     }
+
 
     public class CreacionCrud<T> : BaseCrud<T>
     {
@@ -191,11 +238,14 @@ namespace UniversidadDeMurcia.Utilidades
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
 
-        public GestorCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid)
+        public GestorCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         {
             Titulo = $"Gestor de {NombreDelObjeto}";
-            Mantenimiento = new MantenimientoCrud<T>(definirColumnasDelGrid) { Ruta = Ruta };
             Creador = new CreacionCrud<T>();
+
+            var opciones = new List<Opcion>() { new Opcion() { Nombre = Creador.Titulo, Ruta = Ruta, Accion = Creador.Ir } };
+            Mantenimiento = new MantenimientoCrud<T>(definirColumnasDelGrid, definirOpcionesGenerales) { Ruta = Ruta, OpcionesGenerales = opciones, Modales = Modales };
+
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();
             Supresor = new BorradoCrud<T>();

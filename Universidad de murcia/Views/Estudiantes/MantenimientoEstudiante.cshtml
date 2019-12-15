@@ -4,60 +4,10 @@
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>@ViewBag.Crud.Mantenimiento.Titulo</h2>
-
-<p>
-    @Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].RenderSelector())
-    <br />
-    <a asp-action=@ViewBag.Crud.Creador.Ir>@ViewBag.Crud.Creador.Titulo</a>
-</p>
-
-
 @Html.Raw(@ViewBag.Crud.Mantenimiento.Render())
 
 
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.Apellido]"> @Html.DisplayNameFor(model => model.Apellido) </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir asp-route-orden="@ViewData[UniversidadDeMurcia.Objetos.EstudianteEnlace.Parametro.InscritoEl]">  @Html.DisplayNameFor(model => model.InscritoEl)</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Apellido)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InscritoEl)
-                </td>
-                <td>
-                    <a asp-action=@ViewBag.Crud.Editor.Ir asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action=@ViewBag.Crud.Detalle.Ir asp-route-id="@item.Id">Detalles</a> |
-                    <a asp-action=@ViewBag.Crud.Supresor.Ir asp-route-id="@item.Id">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>*@
-
-@Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].RenderModal())
-
-@section scripts{
-    <script type="text/ecmascript">@Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].ScriptDeSeleccion())</script> }
+@section scripts{<script type="text/ecmascript">@Html.Raw(@ViewBag.Crud.Modales["SelectorDeCurso"].ScriptDeSeleccion())</script> }
 
 
 

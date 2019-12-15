@@ -29,13 +29,18 @@ namespace UniversidadDeMurcia.Controllers
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid);
+            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid, DefinirOpcionesGenerales);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
         protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
             return new List<ColumnaDelGrid>();
+        }
+
+        protected virtual List<Opcion> DefinirOpcionesGenerales()
+        {
+            return new List<Opcion>();
         }
 
         protected virtual List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<TElemento> elementos)
