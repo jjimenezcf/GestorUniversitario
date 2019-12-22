@@ -19,21 +19,39 @@ namespace Extensiones
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨Seleccionar('{idSelector}', 'chx_{idGrid}_{numCol}', '{numColDeSeleccion}')¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', 'chx_{idGrid}_{numCol}', '{numColDeSeleccion}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
              </div>
+             <script>
+               AlAbrirLaModal
+               AlCerrarLaModal
+             </script>
              ";
 
         const string _htmlSelector =
               @"<div class=¨input-group mb-3¨>
-                   <input id=¨idSelector¨ type = ¨text¨ class=¨form-control¨ placeholder=¨titulo¨ aria-label=¨Curso seleccionado¨ aria-describedby=¨basic-addon2¨>
+                   <input id=¨idSelector¨ type = ¨text¨ class=¨form-control¨ placeholder=¨titulo¨ aria-label=¨titulo¨ aria-describedby=¨basic-addon2¨>
                    <div class=¨input-group-append¨>
                         <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#idModal¨ >Seleccionar</button>
                    </div>
                 </div>
               ";
+
+        const string _alAbrirLaModal = @"
+                                         $('#{idModal}').on('show.bs.modal', function (event) {
+                                            AlAbrir('{idModal}', ElementosMarcados('{idSelector}'), 'chx_{idGrid}_{numCol}')
+                                          })
+                                      ";
+
+        const string _alCerrarLaModal = @"
+                                         $('#{idModal}').on('hidden.bs.modal', function (event) {
+                                            AlCerrar('{idModal}', 'chx_{idGrid}_{numCol}')
+                                          })
+                                      ";
+        /*
+         * $('#myModal').on('hidden.bs.modal', function (e) { // do something...})       * */
 
         private string _titulo;
         private string _idSelector;
@@ -73,6 +91,13 @@ namespace Extensiones
                     .Replace("listaDeElementos", RenderizarElementos())
                     .Replace("{numColDeSeleccion}", $"{NumeroDeColumnaDeSeleccion}")
                     .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}")
+                    .Replace("AlAbrirLaModal",_alAbrirLaModal
+                                              .Replace("{idModal}", Id)
+                                              .Replace("{idSelector}", _idSelector)
+                                              .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}"))
+                    .Replace("AlCerrarLaModal", _alCerrarLaModal
+                                              .Replace("{idModal}", Id)
+                                              .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}"))
                     .Render();
         }
         
