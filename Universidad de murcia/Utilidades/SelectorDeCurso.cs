@@ -35,6 +35,9 @@ namespace UniversidadDeMurcia.Utilidades
             columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Título", Ordenar = false });
             columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Créditos", Ordenar = false });
 
+            Selector.NumeroDeColumnaDeSeleccion = 0;
+            Selector.UltimaColumna = columnasDelGrid.Count;
+
             return HtmlRender.RenderizarTabla(Selector.Id, columnasDelGrid, listaDeCursos, true);
         }
 

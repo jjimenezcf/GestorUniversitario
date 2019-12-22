@@ -30,34 +30,28 @@ namespace Extensiones
             return cadena.Replace("¨", "\"");
         }
 
-        private static string ComponerFilaHtml(string id, int numeroDeFila, FilaDelGrid filaDelGrid)
+        private static string ComponerFilaHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
             var fila = new StringBuilder();
-            var input = "<input type=¨text¨ id=¨celda_id_i_j¨ name=¨columna_id_j¨ value=¨valor¨></input>";
-            var j = 0;
+            var numCol = 0;
             foreach (var valor in filaDelGrid.Valores)
             {
-                var celda = input
-                    .Replace("celda_id_i_j", $"celda_{id}_{numeroDeFila}_{j}")
-                    .Replace("columna_id_j", $"columna_{id}_{j}")
-                    .Replace("valor", valor)
+                var celda = $"<input type=¨text¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨txt_{idGrid}_{numCol}¨ value=¨{valor}¨></input>"
                     .Render();
-                j = j + 1;
+                numCol = numCol + 1;
                 fila.AppendLine($"<td>{Environment.NewLine}{celda}{Environment.NewLine}</td>");
             }
             return $@"<tr>{Environment.NewLine}{fila.ToString()}{Environment.NewLine}</tr>";
         }
 
-        private static string ComponerFilaSeleccionableHtml(string id, int numeroDeFila, FilaDelGrid filaDelGrid)
+        private static string ComponerFilaSeleccionableHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
-            var j = filaDelGrid.Valores.Count - 1;
-            var check = "<input type=¨checkbox¨ id=¨celda_id_i_j¨ name=¨columna_id_j¨ aria-label=¨Checkbox for following text input¨>"
-                    .Replace("celda_id_i_j", $"celda_{id}_{numeroDeFila}_{j}")
-                    .Replace("columna_id_j", $"columna_{id}_{j}")
-                    .Render();
-
-            var celda = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
-            return ComponerFilaHtml(id, numeroDeFila, filaDelGrid).Replace("</tr>", $"{celda}{Environment.NewLine}</tr>");
+            var numCol = filaDelGrid.Valores.Count;
+            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨chx_{idGrid}_{numCol}¨ aria-label=¨Marcar para seleccionar¨>"
+                        .Render();
+            
+            var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
+            return ComponerFilaHtml(idGrid, numFil, filaDelGrid).Replace("</tr>", $"{celdaDelCheck}{Environment.NewLine}</tr>");
         }
 
         private static string RenderCabeceraGrid(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
@@ -105,16 +99,17 @@ namespace Extensiones
             foreach (var fila in filas)
             {
                 htmlDetalleGrid.Append(ComponerFilaSeleccionableHtml(idGrid, i, fila));
+                i = i + 1;
             }
 
             return htmlDetalleGrid.ToString().Render();
         }
 
-        public static string RenderizarTabla(string idTabla, List<ColumnaDelGrid> columnasDelGrid, List<FilaDelGrid> filasDelGrid, bool incluirCheck)
+        public static string RenderizarTabla(string idGrid, List<ColumnaDelGrid> columnasDelGrid, List<FilaDelGrid> filasDelGrid, bool incluirCheck)
         {
 
-            var htmlTabla = RenderCabeceraGrid(idTabla, columnasDelGrid);
-            htmlTabla = htmlTabla.Replace("renderizarCuerpo", RenderDetalleGrid(idTabla, filasDelGrid));
+            var htmlTabla = RenderCabeceraGrid(idGrid, columnasDelGrid);
+            htmlTabla = htmlTabla.Replace("renderizarCuerpo", RenderDetalleGrid(idGrid, filasDelGrid));
 
             return htmlTabla;
         }

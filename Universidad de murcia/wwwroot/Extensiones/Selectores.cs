@@ -19,7 +19,7 @@ namespace Extensiones
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨Seleccionar()¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨Seleccionar('{idSelector}', 'chx_{idGrid}_{numCol}', '{numColDeSeleccion}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
@@ -35,25 +35,6 @@ namespace Extensiones
                 </div>
               ";
 
-        const string _funcionDeSeleccion =
-                        @"function Seleccionar() {
-                             var checkboxes = document.getElementsByName(¨grupoChek_idModal¨);
-                             var cont = 0; 
-
-                             for (var x=0; x < checkboxes.length; x++) {
-                              if (checkboxes[x].checked) {
-                               document.getElementById(¨idSelector¨).value = x;
-                               console.log(x);
-                              }
-                             }
-                          };
-                         ";
-
-        //@"function Seleccionar() {
-        //     document.getElementById(¨idSelector¨).value = 'trigo';
-        //  };
-        // ";
-
         private string _titulo;
         private string _idSelector;
 
@@ -62,7 +43,9 @@ namespace Extensiones
         public string Id { get; }
 
         public string jsDeSeleccion { get; set; }
-        
+        public int NumeroDeColumnaDeSeleccion { get; internal set; }
+        public int UltimaColumna { get; internal set; }
+
         public SelectorModal(string elemento, Func<string> RenderElementos)
         {
             Id = $"SelectorDe{elemento}";
@@ -86,18 +69,13 @@ namespace Extensiones
             return _htmlModalSelector
                     .Replace("idModal", Id)
                     .Replace("titulo", _titulo)
+                    .Replace("{idSelector}", _idSelector)
                     .Replace("listaDeElementos", RenderizarElementos())
+                    .Replace("{numColDeSeleccion}", $"{NumeroDeColumnaDeSeleccion}")
+                    .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}")
                     .Render();
         }
         
-        public string ScriptDeSeleccion()
-        {
-            return _funcionDeSeleccion
-                   .Replace("idModal", Id)
-                   .Replace("idSelector", _idSelector)
-                   .Render();
-        }
-
         private string RenderizarElementos()
         {
             return _renderElementos();
