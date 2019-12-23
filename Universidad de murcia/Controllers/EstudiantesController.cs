@@ -62,9 +62,9 @@ namespace UniversidadDeMurcia.Controllers
             foreach (var estudiante in elementos)
             {
                 var filaDelGrid = new FilaDelGrid();
-                filaDelGrid.Valores.Add(estudiante.Apellido);
-                filaDelGrid.Valores.Add(estudiante.Nombre);
-                filaDelGrid.Valores.Add(estudiante.InscritoEl.ToString());
+                filaDelGrid.Celdas.Add(estudiante.Apellido);
+                filaDelGrid.Celdas.Add(estudiante.Nombre);
+                filaDelGrid.Celdas.Add(estudiante.InscritoEl.ToString());
                 filasDelGrid.Add(filaDelGrid);
             }
             return filasDelGrid;

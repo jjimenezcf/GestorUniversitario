@@ -4,22 +4,62 @@ using System.Text;
 
 namespace Extensiones
 {
+    public enum Aliniacion  {no_definida, izquierda, centrada, derecha};
 
     public class ColumnaDelGrid
-    {
+    { 
+        private Aliniacion _alineada;
+
         public string Nombre { get; set; }
-        public bool Ordenar { get; set; }
+        public Type Tipo { get; set; } = typeof(string);
+        public bool Ordenar { get; set; } = false;
         public string OrdenPor => $"ordenoPor{Nombre}";
         public string Sentido = "Asc";
+        public bool Visible { get; set; } = true;
+        public bool Editable { get; set; } = false;
+        public IFormatProvider Mascara { get; set; } = null;
+        public Aliniacion Alineada
+        {
+            get
+            {
+                return _alineada == Aliniacion.no_definida
+                       ? (Tipo == typeof(int) || (Tipo == typeof(decimal)) || (Tipo == typeof(DateTime))
+                          ? Aliniacion.derecha
+                          : Aliniacion.izquierda)
+                       : _alineada;
+            }
+            set { _alineada = value; }
+        }
 
         public string Ruta { get; set; }
         public string Accion { get; set; }
 
     }
-    
+
+    public class CeldaDelGrid
+    {
+
+        private ColumnaDelGrid _columna;
+        private string _valor;
+        public string Valor { get { return _columna.Mascara == null ? _valor : _valor.ToString(_columna.Mascara); } set { _valor = value; } }
+        public Type Tipo { get { return _columna.Tipo; } }
+        public Aliniacion Alineada { get { return _columna.Alineada; } }
+        public bool Visible { get { return _columna.Visible; } }
+        public bool Editable { get { return _columna.Editable; } }
+
+        public string AlEntrar { get; set; }
+        public string AlSalir { get; set; }
+        public string AlCambiar { get; set; }
+
+        public CeldaDelGrid(ColumnaDelGrid columna)
+        {
+            _columna = columna;
+        }
+    }
+
     public class FilaDelGrid
     {
-        public List<string> Valores = new List<string>();
+        public List<CeldaDelGrid> Celdas = new List<CeldaDelGrid>();
     }
 
 
@@ -34,7 +74,7 @@ namespace Extensiones
         {
             var fila = new StringBuilder();
             var numCol = 0;
-            foreach (var valor in filaDelGrid.Valores)
+            foreach (var valor in filaDelGrid.Celdas)
             {
                 var celda = $"<input type=¨text¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨txt_{idGrid}_{numCol}¨ value=¨{valor}¨></input>"
                     .Render();
@@ -46,7 +86,7 @@ namespace Extensiones
 
         private static string ComponerFilaSeleccionableHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
-            var numCol = filaDelGrid.Valores.Count;
+            var numCol = filaDelGrid.Celdas.Count;
             var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨chx_{idGrid}_{numCol}¨ aria-label=¨Marcar para seleccionar¨>"
                         .Render();
             

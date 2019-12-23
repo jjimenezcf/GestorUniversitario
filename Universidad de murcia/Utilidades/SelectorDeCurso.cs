@@ -2,6 +2,7 @@
 using Extensiones;
 using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario.ModeloIu;
 using System.Collections.Generic;
 
 namespace UniversidadDeMurcia.Utilidades
@@ -14,7 +15,7 @@ namespace UniversidadDeMurcia.Utilidades
 
         public SelectorDeCurso(ContextoUniversitario contexto, IMapper mapeador)
         {
-            _gestordeCursos =  new GestorDeCursos(contexto, mapeador);
+            _gestordeCursos = new GestorDeCursos(contexto, mapeador);
             Selector = new SelectorModal("Curso", RenderizarTabla);
         }
 
@@ -22,18 +23,31 @@ namespace UniversidadDeMurcia.Utilidades
         public string RenderizarTabla()
         {
             var cursos = _gestordeCursos.LeerTodos();
+
+            var columnasDelGrid = new List<ColumnaDelGrid>();
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Id", Visible = false, Tipo = typeof(int) });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Título", Ordenar = false });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Créditos", Tipo = typeof(int) });
+
             var listaDeCursos = new List<FilaDelGrid>();
             foreach (var curso in cursos)
             {
                 var datosDelCurso = new FilaDelGrid();
-                datosDelCurso.Valores.Add(curso.Titulo);
-                datosDelCurso.Valores.Add(curso.Creditos.ToString());
+                foreach (ColumnaDelGrid columna in columnasDelGrid)
+                {
+                    CeldaDelGrid celda = new CeldaDelGrid(columna);
+                    if (columna.Nombre == "Id")
+                        celda.Valor = curso.Id.ToString();
+                    else
+                    if (columna.Nombre == "Título")
+                        celda.Valor = curso.Titulo;
+                    else
+                    if (columna.Nombre == "Créditos")
+                        celda.Valor = curso.Creditos.ToString();
+                    datosDelCurso.Celdas.Add(celda);
+                }
                 listaDeCursos.Add(datosDelCurso);
             }
-
-            var columnasDelGrid = new List<ColumnaDelGrid>(); 
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Título", Ordenar = false });
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Créditos", Ordenar = false });
 
             Selector.NumeroDeColumnaDeSeleccion = 0;
             Selector.UltimaColumna = columnasDelGrid.Count;
