@@ -9,8 +9,10 @@ namespace Extensiones
     public class ColumnaDelGrid
     { 
         private Aliniacion _alineada;
+        private string _titulo;
 
         public string Nombre { get; set; }
+        public string Titulo { get { return _titulo == null ? Nombre : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
         public bool Ordenar { get; set; } = false;
         public string OrdenPor => $"ordenoPor{Nombre}";
@@ -69,17 +71,22 @@ namespace Extensiones
         {
             return cadena.Replace("¨", "\"");
         }
-
+        //visibility: hidden
         private static string ComponerFilaHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
             var fila = new StringBuilder();
             var numCol = 0;
-            foreach (var valor in filaDelGrid.Celdas)
+            foreach (var celda in filaDelGrid.Celdas)
             {
-                var celda = $"<input type=¨text¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨txt_{idGrid}_{numCol}¨ value=¨{valor}¨></input>"
-                    .Render();
+                var estilo = "style =¨display:{visible};¨"
+                    .Replace("{visible}", celda.Visible ? "inline" : "none");
+
+                var control = $"<input type=¨text¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨txt_{idGrid}_{numCol}¨ {estilo} value=¨{celda.Valor}¨/>"
+                     .Render();
+                
                 numCol = numCol + 1;
-                fila.AppendLine($"<td>{Environment.NewLine}{celda}{Environment.NewLine}</td>");
+
+                fila.AppendLine($"<td {estilo}>{Environment.NewLine}{control}{Environment.NewLine}</td>");
             }
             return $@"<tr>{Environment.NewLine}{fila.ToString()}{Environment.NewLine}</tr>";
         }
@@ -107,25 +114,29 @@ namespace Extensiones
                                     	renderizarCuerpo
                                     </table>                                    
                                    ";
-            var htmlColumnaCabecera = @" <th>
-                                           <a href=¨/ruta/accion?orden=ordenPor¨>Columna.Nombre</a>
-                                         </th>
+
+            var htmlColumnaCabecera = @" <th style=¨display:{visible};¨>{Columna.Nombre}</th>
                                        ";
+            //<a href=¨/ruta/accion?orden=ordenPor¨>
             var htmlColumnasCabecera = new StringBuilder();
             foreach (var columna in columnasGrid)
             {
-                var html = htmlColumnaCabecera;
-                if (columna.Ordenar)
-                {
-                    html = html.Replace("ruta", columna.Ruta)
-                        .Replace("accion", columna.Accion)
-                        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
-                }
-                else
-                {
-                    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
-                }
-                html = html.Replace("Columna.Nombre", columna.Nombre).Render();
+                var html = htmlColumnaCabecera
+                    .Replace("{visible}", columna.Visible ? "inline" : "none")
+                    .Replace("{Columna.Nombre}", columna.Nombre);
+
+                //if (columna.Ordenar)
+                //{
+                //    html = html.Replace("ruta", columna.Ruta)
+                //        .Replace("accion", columna.Accion)
+                //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
+                //}
+                //else
+                //{
+                //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
+                //}
+
+                html = html.Render();
                 htmlColumnasCabecera.AppendLine(html);
             }
 

@@ -27,25 +27,19 @@ namespace UniversidadDeMurcia.Controllers
         {
             var columnasDelGrid = base.DefinirColumnasDelGrid().ToList();
 
-            var columnaDelGrid = new ColumnaDelGrid
-            {
-                Nombre = nameof(ElementoEstudiante.Apellido),
-                Ordenar = true,
-                Ruta = "Estudiantes",
-                Accion = nameof(IraMantenimientoEstudiante)
-            };
+            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Id), Tipo = typeof(int), Visible = false };
             columnasDelGrid.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid
-            {
-                Nombre = nameof(ElementoEstudiante.Nombre),
-                Ordenar = false
-            };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Apellido), Ordenar = true, Ruta = "Estudiantes", Accion = nameof(IraMantenimientoEstudiante)};
+            columnasDelGrid.Add(columnaDelGrid);
+
+            columnaDelGrid = new ColumnaDelGrid {Nombre = nameof(ElementoEstudiante.Nombre)};
             columnasDelGrid.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid
             {
                 Nombre = nameof(ElementoEstudiante.InscritoEl),
+                Tipo = typeof(DateTime),
                 Ordenar = true,
                 Ruta = "Estudiantes",
                 Accion = nameof(IraMantenimientoEstudiante)
@@ -57,17 +51,32 @@ namespace UniversidadDeMurcia.Controllers
 
         protected override List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<ElementoEstudiante> elementos)
         {
-            var filasDelGrid = base.MapearFilasAlGrid(elementos);
+            var listaDeEstudiantes = base.MapearFilasAlGrid(elementos);
+            var columnasDelGrid = GestorDelCrud.Mantenimiento.ColumnasDelGrid;
 
             foreach (var estudiante in elementos)
             {
-                var filaDelGrid = new FilaDelGrid();
-                filaDelGrid.Celdas.Add(estudiante.Apellido);
-                filaDelGrid.Celdas.Add(estudiante.Nombre);
-                filaDelGrid.Celdas.Add(estudiante.InscritoEl.ToString());
-                filasDelGrid.Add(filaDelGrid);
+                var datosDelEstudiante = new FilaDelGrid();
+                foreach (ColumnaDelGrid columna in columnasDelGrid)
+                {
+                    CeldaDelGrid celda = new CeldaDelGrid(columna);
+                    if (columna.Nombre == nameof(ElementoEstudiante.Id))
+                        celda.Valor = estudiante.Id.ToString();
+                    else
+                    if (columna.Nombre == nameof(ElementoEstudiante.Apellido))
+                        celda.Valor = estudiante.Apellido;
+                    else
+                    if (columna.Nombre == nameof(ElementoEstudiante.Nombre))
+                        celda.Valor = estudiante.Nombre.ToString();
+                    else
+                    if (columna.Nombre == nameof(ElementoEstudiante.InscritoEl))
+                        celda.Valor = estudiante.InscritoEl.ToString();
+
+                    datosDelEstudiante.Celdas.Add(celda);
+                }
+                listaDeEstudiantes.Add(datosDelEstudiante);
             }
-            return filasDelGrid;
+            return listaDeEstudiantes;
         }
 
         public IActionResult IraMantenimientoEstudiante(string orden)

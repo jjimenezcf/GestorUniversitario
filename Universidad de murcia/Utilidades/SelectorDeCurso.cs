@@ -25,9 +25,9 @@ namespace UniversidadDeMurcia.Utilidades
             var cursos = _gestordeCursos.LeerTodos();
 
             var columnasDelGrid = new List<ColumnaDelGrid>();
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Id", Visible = false, Tipo = typeof(int) });
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Título", Ordenar = false });
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = "Créditos", Tipo = typeof(int) });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Id), Visible = false, Tipo = typeof(int) });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Titulo), Titulo = "Título", Ordenar = false });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Creditos), Titulo = "Créditos", Tipo = typeof(int) });
 
             var listaDeCursos = new List<FilaDelGrid>();
             foreach (var curso in cursos)
@@ -36,14 +36,15 @@ namespace UniversidadDeMurcia.Utilidades
                 foreach (ColumnaDelGrid columna in columnasDelGrid)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
-                    if (columna.Nombre == "Id")
+                    if (columna.Nombre == nameof(ElementoCurso.Id))
                         celda.Valor = curso.Id.ToString();
                     else
-                    if (columna.Nombre == "Título")
+                    if (columna.Nombre == nameof(ElementoCurso.Titulo))
                         celda.Valor = curso.Titulo;
                     else
-                    if (columna.Nombre == "Créditos")
+                    if (columna.Nombre == nameof(ElementoCurso.Creditos))
                         celda.Valor = curso.Creditos.ToString();
+
                     datosDelCurso.Celdas.Add(celda);
                 }
                 listaDeCursos.Add(datosDelCurso);
