@@ -4,16 +4,18 @@ using System.Text;
 
 namespace Extensiones
 {
-    public enum Aliniacion  {no_definida, izquierda, centrada, derecha};
+    public enum Aliniacion  {no_definida, izquierda, centrada, derecha, justificada};
 
     public class ColumnaDelGrid
-    { 
+    {
         private Aliniacion _alineada;
         private string _titulo;
 
+        public string Id { get; set; }
         public string Nombre { get; set; }
         public string Titulo { get { return _titulo == null ? Nombre : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
+        public int Ancho { get; set; } = 0;
         public bool Ordenar { get; set; } = false;
         public string OrdenPor => $"ordenoPor{Nombre}";
         public string Sentido = "Asc";
@@ -33,8 +35,33 @@ namespace Extensiones
             set { _alineada = value; }
         }
 
+        public string AlineacionCss
+        {
+            get
+            {
+                switch (Alineada)
+                {
+                    case Aliniacion.izquierda:
+                        return "text-left";
+                    case Aliniacion.derecha:
+                        return "text-right";
+                    case Aliniacion.centrada:
+                        return "text-center";
+                    case Aliniacion.justificada:
+                        return "text-justify";
+                    default:
+                        return "text-left";
+                }
+            }
+        }
+
         public string Ruta { get; set; }
         public string Accion { get; set; }
+
+        public static string ToString(ColumnaDelGrid columna)
+        {
+            return columna.Titulo;
+        }
 
     }
 
@@ -42,12 +69,13 @@ namespace Extensiones
     {
 
         private ColumnaDelGrid _columna;
-        private string _valor;
-        public string Valor { get { return _columna.Mascara == null ? _valor : _valor.ToString(_columna.Mascara); } set { _valor = value; } }
-        public Type Tipo { get { return _columna.Tipo; } }
-        public Aliniacion Alineada { get { return _columna.Alineada; } }
-        public bool Visible { get { return _columna.Visible; } }
-        public bool Editable { get { return _columna.Editable; } }
+        public string IdCabecera => _columna.Id;
+        public string Id { get; set; }
+        public object Valor { get; set; }        
+        public Type Tipo => _columna.Tipo;
+        public string AlineacionCss => _columna.AlineacionCss;
+        public bool Visible => _columna.Visible;
+        public bool Editable => _columna.Editable;
 
         public string AlEntrar { get; set; }
         public string AlSalir { get; set; }
@@ -56,6 +84,11 @@ namespace Extensiones
         public CeldaDelGrid(ColumnaDelGrid columna)
         {
             _columna = columna;
+        }
+        
+        public static string ToString(CeldaDelGrid columna)
+        {
+            return columna.Valor.ToString();
         }
     }
 
@@ -71,76 +104,68 @@ namespace Extensiones
         {
             return cadena.Replace("¨", "\"");
         }
-        //visibility: hidden
-        private static string ComponerFilaHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
+
+
+        private static string RenderCeldaCheck(string idGrid, string idCelda)
+        {
+            var check = $"<input type=¨checkbox¨ id=¨chx_{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ aria-label=¨Marcar para seleccionar¨>";
+            var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
+            return celdaDelCheck.Render();
+        }
+
+        public static string RenderColumnaCabecera(ColumnaDelGrid columna)
+        {
+            var visible = columna.Visible ? "" : "¨display:{none};¨";
+            var ancho = columna.Ancho == 0 ? "" : $"height: {columna.Ancho}%;";
+            var estilo = visible + ancho == "" ? "" : $"style =¨{ancho} {visible}¨";
+            return $"{Environment.NewLine}<th id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss}¨ {estilo}>{columna.Titulo}</th>".Render();
+            //<a href=¨/ruta/accion?orden=ordenPor¨>
+            //if (columna.Ordenar)
+            //{
+            //    html = html.Replace("ruta", columna.Ruta)
+            //        .Replace("accion", columna.Accion)
+            //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
+            //}
+            //else
+            //{
+            //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
+            //}
+        }
+
+        public static string RenderCelda(CeldaDelGrid celda)
+        {
+            return $"<td id=¨{celda.Id}¨>{celda.Valor}</td>".Render();
+        }
+
+        private static string RenderFila(int numFil, FilaDelGrid filaDelGrid)
         {
             var fila = new StringBuilder();
-            var numCol = 0;
             foreach (var celda in filaDelGrid.Celdas)
             {
-                var estilo = "style =¨display:{visible};¨"
-                    .Replace("{visible}", celda.Visible ? "inline" : "none");
-
-                var control = $"<input type=¨text¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨txt_{idGrid}_{numCol}¨ {estilo} value=¨{celda.Valor}¨/>"
-                     .Render();
-                
-                numCol = numCol + 1;
-
-                fila.AppendLine($"<td {estilo}>{Environment.NewLine}{control}{Environment.NewLine}</td>");
+                celda.Id = $"{celda.IdCabecera}_{numFil}";                
+                fila.AppendLine(RenderCelda(celda));
             }
-            return $@"<tr>{Environment.NewLine}{fila.ToString()}{Environment.NewLine}</tr>";
+            return $@"{fila.ToString()}";
+        }
+        
+        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid filaDelGrid)
+        {
+            string filaHtml = RenderFila(numFil, filaDelGrid);
+            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"{filaDelGrid.Celdas.Count}_{numFil}");
+            return $"<tr>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
         }
 
-        private static string ComponerFilaSeleccionableHtml(string idGrid, int numFil, FilaDelGrid filaDelGrid)
+        private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
         {
-            var numCol = filaDelGrid.Celdas.Count;
-            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{numFil}_{numCol}¨ name=¨chx_{idGrid}_{numCol}¨ aria-label=¨Marcar para seleccionar¨>"
-                        .Render();
-            
-            var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
-            return ComponerFilaHtml(idGrid, numFil, filaDelGrid).Replace("</tr>", $"{celdaDelCheck}{Environment.NewLine}</tr>");
-        }
-
-        private static string RenderCabeceraGrid(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
-        {
-
-            var htmlCabeceraGrid = $@"
-                                    <table id=¨{idGrid}¨ class=¨table¨>
-                                        <thead>
-                                            <tr>
-                                            renderColunasCabecera
-                                            </tr>
-                                        </thead>
-                                    	renderizarCuerpo
-                                    </table>                                    
-                                   ";
-
-            var htmlColumnaCabecera = @" <th style=¨display:{visible};¨>{Columna.Nombre}</th>
-                                       ";
-            //<a href=¨/ruta/accion?orden=ordenPor¨>
-            var htmlColumnasCabecera = new StringBuilder();
+            var cabeceraHtml = new StringBuilder();
+            var numCol = 0;
             foreach (var columna in columnasGrid)
             {
-                var html = htmlColumnaCabecera
-                    .Replace("{visible}", columna.Visible ? "inline" : "none")
-                    .Replace("{Columna.Nombre}", columna.Nombre);
-
-                //if (columna.Ordenar)
-                //{
-                //    html = html.Replace("ruta", columna.Ruta)
-                //        .Replace("accion", columna.Accion)
-                //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
-                //}
-                //else
-                //{
-                //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
-                //}
-
-                html = html.Render();
-                htmlColumnasCabecera.AppendLine(html);
+                columna.Id = $"{idGrid}_{numCol}";
+                cabeceraHtml.Append(RenderColumnaCabecera(columna));
+                numCol++;
             }
-
-            return htmlCabeceraGrid.Replace("renderColunasCabecera", htmlColumnasCabecera.ToString()).Render();
+            return $@"<thead>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
 
         private static string RenderDetalleGrid(string idGrid, IEnumerable<FilaDelGrid> filas)
@@ -149,19 +174,15 @@ namespace Extensiones
             int i = 0;
             foreach (var fila in filas)
             {
-                htmlDetalleGrid.Append(ComponerFilaSeleccionableHtml(idGrid, i, fila));
+                htmlDetalleGrid.Append(RenderFilaSeleccionable(idGrid, i, fila));
                 i = i + 1;
             }
-
-            return htmlDetalleGrid.ToString().Render();
+            return htmlDetalleGrid.ToString();
         }
 
         public static string RenderizarTabla(string idGrid, List<ColumnaDelGrid> columnasDelGrid, List<FilaDelGrid> filasDelGrid, bool incluirCheck)
         {
-
-            var htmlTabla = RenderCabeceraGrid(idGrid, columnasDelGrid);
-            htmlTabla = htmlTabla.Replace("renderizarCuerpo", RenderDetalleGrid(idGrid, filasDelGrid));
-
+            var htmlTabla = $@"<table id=¨{idGrid}¨ class=¨table¨>{Environment.NewLine}{RenderCabecera(idGrid, columnasDelGrid)}{Environment.NewLine}{RenderDetalleGrid(idGrid, filasDelGrid)}</table>";
             return htmlTabla;
         }
     }
