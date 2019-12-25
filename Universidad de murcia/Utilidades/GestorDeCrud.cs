@@ -71,7 +71,7 @@ namespace UniversidadDeMurcia.Utilidades
 
         public Dictionary<string, SelectorModal> Modales { get; set; }
 
-       private string IdGrid => $"Grid_{Vista}";
+       private string IdGrid => $"T_{Vista}";
 
         public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         :base("Mantenimiento")
