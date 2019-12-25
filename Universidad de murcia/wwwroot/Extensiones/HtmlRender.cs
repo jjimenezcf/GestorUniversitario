@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Extensiones
 {
-    public enum Aliniacion  {no_definida, izquierda, centrada, derecha, justificada};
+    public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
 
     public class ColumnaDelGrid
     {
@@ -35,45 +35,35 @@ namespace Extensiones
             set { _alineada = value; }
         }
 
-        public string AlineacionCss
-        {
-            get
-            {
-                switch (Alineada)
-                {
-                    case Aliniacion.izquierda:
-                        return "text-left";
-                    case Aliniacion.derecha:
-                        return "text-right";
-                    case Aliniacion.centrada:
-                        return "text-center";
-                    case Aliniacion.justificada:
-                        return "text-justify";
-                    default:
-                        return "text-left";
-                }
-            }
-        }
-
         public string Ruta { get; set; }
         public string Accion { get; set; }
 
-        public static string ToString(ColumnaDelGrid columna)
+        internal string AlineacionCss()
         {
-            return columna.Titulo;
+            switch (Alineada)
+            {
+                case Aliniacion.izquierda:
+                    return "text-left";
+                case Aliniacion.derecha:
+                    return "text-right";
+                case Aliniacion.centrada:
+                    return "text-center";
+                case Aliniacion.justificada:
+                    return "text-justify";
+                default:
+                    return "text-left";
+            }
         }
 
     }
 
     public class CeldaDelGrid
     {
-
         private ColumnaDelGrid _columna;
         public string IdCabecera => _columna.Id;
         public string Id { get; set; }
-        public object Valor { get; set; }        
+        public object Valor { get; set; }
         public Type Tipo => _columna.Tipo;
-        public string AlineacionCss => _columna.AlineacionCss;
         public bool Visible => _columna.Visible;
         public bool Editable => _columna.Editable;
 
@@ -85,14 +75,14 @@ namespace Extensiones
         {
             _columna = columna;
         }
-        
-        public static string ToString(CeldaDelGrid columna)
+
+        internal string AlineacionCss()
         {
-            return columna.Valor.ToString();
+            return _columna.AlineacionCss();
         }
     }
 
-    public class FilaDelGrid
+        public class FilaDelGrid
     {
         public List<CeldaDelGrid> Celdas = new List<CeldaDelGrid>();
     }
@@ -118,7 +108,7 @@ namespace Extensiones
             var visible = columna.Visible ? "" : "hidden";
             var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
-            return $"{Environment.NewLine}<th id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss}¨ {estilo}>{columna.Titulo}</th>";
+            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss()}¨ {estilo}>{columna.Titulo}</th>";
             //<a href=¨/ruta/accion?orden=ordenPor¨>
             //if (columna.Ordenar)
             //{
@@ -135,7 +125,7 @@ namespace Extensiones
         private static string RenderCelda(CeldaDelGrid celda)
         {
             var ocultar = celda.Visible ? "" : "hidden";
-            return $"<td id=¨{celda.Id}¨ class=¨{celda.AlineacionCss}¨ {ocultar}>{celda.Valor}</td>";
+            return $"<td id=¨{celda.Id}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>{celda.Valor}</td>";
         }
 
         private static string RenderFila(int numFil, FilaDelGrid filaDelGrid)
@@ -143,12 +133,12 @@ namespace Extensiones
             var fila = new StringBuilder();
             foreach (var celda in filaDelGrid.Celdas)
             {
-                celda.Id = $"{celda.IdCabecera}_{numFil}";                
+                celda.Id = $"{celda.IdCabecera}_{numFil}";
                 fila.AppendLine(RenderCelda(celda));
             }
             return $@"{fila.ToString()}";
         }
-        
+
         private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
             string filaHtml = RenderFila(numFil, filaDelGrid);
@@ -185,7 +175,7 @@ namespace Extensiones
 
         public static string RenderizarTabla(string idGrid, List<ColumnaDelGrid> columnasDelGrid, List<FilaDelGrid> filasDelGrid, bool incluirCheck)
         {
-            var htmlTabla = $"<table id=¨{idGrid}¨ class=¨table¨ width=¨100%¨>{Environment.NewLine}{RenderCabecera(idGrid, columnasDelGrid)}{Environment.NewLine}{RenderDetalleGrid(idGrid, filasDelGrid)}</table>";
+            var htmlTabla = $"<table id=¨{idGrid}¨ class=¨table table-striped table-hover¨ width=¨100%¨>{Environment.NewLine}{RenderCabecera(idGrid, columnasDelGrid)}{Environment.NewLine}{RenderDetalleGrid(idGrid, filasDelGrid)}</table>";
             return htmlTabla.Render();
         }
     }

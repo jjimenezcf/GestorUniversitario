@@ -40,6 +40,7 @@ namespace UniversidadDeMurcia.Controllers
             {
                 Nombre = nameof(ElementoEstudiante.InscritoEl),
                 Tipo = typeof(DateTime),
+                Alineada = Aliniacion.centrada,          
                 Ordenar = true,
                 Ruta = "Estudiantes",
                 Accion = nameof(IraMantenimientoEstudiante)
