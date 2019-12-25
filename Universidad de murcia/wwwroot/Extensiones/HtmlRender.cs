@@ -108,17 +108,17 @@ namespace Extensiones
 
         private static string RenderCeldaCheck(string idGrid, string idCelda)
         {
-            var check = $"<input type=¨checkbox¨ id=¨chx_{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ aria-label=¨Marcar para seleccionar¨>";
+            var check = $"<input type=¨checkbox¨ id=¨chx_{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
             var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
-            return celdaDelCheck.Render();
+            return celdaDelCheck;
         }
 
         public static string RenderColumnaCabecera(ColumnaDelGrid columna)
         {
-            var visible = columna.Visible ? "" : "¨display:{none};¨";
-            var ancho = columna.Ancho == 0 ? "" : $"height: {columna.Ancho}%;";
-            var estilo = visible + ancho == "" ? "" : $"style =¨{ancho} {visible}¨";
-            return $"{Environment.NewLine}<th id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss}¨ {estilo}>{columna.Titulo}</th>".Render();
+            var visible = columna.Visible ? "" : "hidden";
+            var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
+            var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
+            return $"{Environment.NewLine}<th id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss}¨ {estilo}>{columna.Titulo}</th>";
             //<a href=¨/ruta/accion?orden=ordenPor¨>
             //if (columna.Ordenar)
             //{
@@ -132,9 +132,10 @@ namespace Extensiones
             //}
         }
 
-        public static string RenderCelda(CeldaDelGrid celda)
+        private static string RenderCelda(CeldaDelGrid celda)
         {
-            return $"<td id=¨{celda.Id}¨>{celda.Valor}</td>".Render();
+            var ocultar = celda.Visible ? "" : "hidden";
+            return $"<td id=¨{celda.Id}¨ class=¨{celda.AlineacionCss}¨ {ocultar}>{celda.Valor}</td>";
         }
 
         private static string RenderFila(int numFil, FilaDelGrid filaDelGrid)
@@ -165,6 +166,8 @@ namespace Extensiones
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
                 numCol++;
             }
+            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"{numCol}");
+            cabeceraHtml.Append(celdaDelCheck);
             return $@"<thead>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
 
@@ -182,8 +185,8 @@ namespace Extensiones
 
         public static string RenderizarTabla(string idGrid, List<ColumnaDelGrid> columnasDelGrid, List<FilaDelGrid> filasDelGrid, bool incluirCheck)
         {
-            var htmlTabla = $@"<table id=¨{idGrid}¨ class=¨table¨>{Environment.NewLine}{RenderCabecera(idGrid, columnasDelGrid)}{Environment.NewLine}{RenderDetalleGrid(idGrid, filasDelGrid)}</table>";
-            return htmlTabla;
+            var htmlTabla = $"<table id=¨{idGrid}¨ class=¨table¨ width=¨100%¨>{Environment.NewLine}{RenderCabecera(idGrid, columnasDelGrid)}{Environment.NewLine}{RenderDetalleGrid(idGrid, filasDelGrid)}</table>";
+            return htmlTabla.Render();
         }
     }
 }
