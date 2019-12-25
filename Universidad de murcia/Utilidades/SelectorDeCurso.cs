@@ -16,7 +16,11 @@ namespace UniversidadDeMurcia.Utilidades
         public SelectorDeCurso(ContextoUniversitario contexto, IMapper mapeador)
         {
             _gestordeCursos = new GestorDeCursos(contexto, mapeador);
-            Selector = new SelectorModal("Curso", RenderizarTabla);
+            Selector = new SelectorModal(nameof(ElementoCurso), RenderizarTabla)
+            {
+                ColumnaId = nameof(ElementoCurso.Id),
+                ColumnaMostrar = nameof(ElementoCurso.Titulo)
+            };
         }
 
 
@@ -49,11 +53,8 @@ namespace UniversidadDeMurcia.Utilidades
                 }
                 listaDeCursos.Add(datosDelCurso);
             }
-
-            Selector.NumeroDeColumnaDeSeleccion = 0;
-            Selector.UltimaColumna = columnasDelGrid.Count;
-
-            return HtmlRender.RenderizarTabla(Selector.Id, columnasDelGrid, listaDeCursos, true);
+            
+            return HtmlRender.RenderizarTabla(Selector.IdTabla, columnasDelGrid, listaDeCursos, true);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gestor.Elementos.ModeloIu;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,7 +20,7 @@ namespace Extensiones
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', 'chx_{idGrid}_{numCol}', '{numColDeSeleccion}')¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{referenciaChecks}', '{columnaId}', '{columnaMostrar}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
@@ -41,42 +42,40 @@ namespace Extensiones
 
         const string _alAbrirLaModal = @"
                                          $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{idModal}', ElementosMarcados('{idSelector}'), 'chx_{idGrid}_{numCol}')
+                                            AlAbrir('{idTabla}', '{columnaId}', ElementosMarcados('{idSelector}'))
                                           })
                                       ";
 
         const string _alCerrarLaModal = @"
                                          $('#{idModal}').on('hidden.bs.modal', function (event) {
-                                            AlCerrar('{idModal}', 'chx_{idGrid}_{numCol}')
+                                            AlCerrar('{idModal}', 'referenciaChecks')
                                           })
                                       ";
-        /*
-         * $('#myModal').on('hidden.bs.modal', function (e) { // do something...})       * */
-
         private string _titulo;
         private string _idSelector;
 
         Func<string> _renderElementos;
 
-        public string Id { get; }
+        public string IdModal { get; }
+        public string IdTabla => $"T_{IdModal}";
 
+        public string ColumnaId { get; internal set; }
+        public string ColumnaMostrar { get; internal set; }
         public string jsDeSeleccion { get; set; }
-        public int NumeroDeColumnaDeSeleccion { get; internal set; }
-        public int UltimaColumna { get; internal set; }
 
-        public SelectorModal(string elemento, Func<string> RenderElementos)
+        public SelectorModal(string claseElemento,  Func<string> RenderElementos)
         {
-            Id = $"SelectorDe{elemento}";
+            IdModal = $"SelectorDe{claseElemento}";
 
-            _titulo = $"Seleccionar {elemento}";
-            _idSelector = $"id{elemento}Seleccionado";
+            _titulo = $"Seleccionar {claseElemento}";
+            _idSelector = $"id{claseElemento}Seleccionado";
             _renderElementos = RenderElementos;
         }
 
         public string RenderSelector()
         {
             return _htmlSelector
-                    .Replace("idModal", Id)
+                    .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
                     .Replace("idSelector", _idSelector)
                     .Render();
@@ -85,19 +84,21 @@ namespace Extensiones
         public string RenderModal()
         {
             return _htmlModalSelector
-                    .Replace("idModal", Id)
+                    .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
                     .Replace("{idSelector}", _idSelector)
+                    .Replace("{referenciaChecks}", $"chx_{IdTabla}")
+                    .Replace("{columnaId}",ColumnaId)
+                    .Replace("{columnaMostrar}", ColumnaMostrar)
                     .Replace("listaDeElementos", RenderizarElementos())
-                    .Replace("{numColDeSeleccion}", $"{NumeroDeColumnaDeSeleccion}")
-                    .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}")
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
-                                              .Replace("{idModal}", Id)
-                                              .Replace("{idSelector}", _idSelector)
-                                              .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}"))
+                                              .Replace("{idModal}", IdModal)
+                                              .Replace("{idTabla}", IdTabla)
+                                              .Replace("{columnaId}", ColumnaId)
+                                              .Replace("{idSelector}", _idSelector))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
-                                              .Replace("{idModal}", Id)
-                                              .Replace("chx_{idGrid}_{numCol}", $"chx_{Id}_{UltimaColumna}"))
+                                              .Replace("{idModal}", IdModal)
+                                              .Replace("referenciaChecks", $"chx_{IdTabla}"))
                     .Render();
         }
         

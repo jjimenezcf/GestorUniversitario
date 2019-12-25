@@ -1,42 +1,43 @@
-﻿function AlSeleccionar(idSelector, referenciaChecks, numColDeSeleccion) {
+﻿function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) {
 
     var selector = document.getElementById(idSelector);
 
     blanquearSelector(selector);
     var checkboxes = $(`input[name='${referenciaChecks}']:checked`);
     for (var x = 0; x < checkboxes.length; x++) {
-        var posUlt = checkboxes[x].id.lastIndexOf("_");
-        var idColumna = checkboxes[x].id.substring(0, posUlt + 1) + numColDeSeleccion;
-        var elemento = {
-            id: document.getElementById(idColumna).value.length,
-            valor: document.getElementById(idColumna).value
-        };
+        var elemento = obtenerElementoSeleccionado(checkboxes[x].id, columnaId, columnaMostrar);
         mapearValoresAlSelector(selector, elemento);
     }
     cerrar(referenciaChecks);
 }
 
-function AlAbrir(idModal, elementosMarcados, referenciaChecks) {
-    console.log(`se ha abierto la modal ${idModal}, hay que marcar los checks del selector`);
-    marcarElementos(idModal, elementosMarcados, referenciaChecks);
+function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {
+    var e = {
+        id: parseInt(document.getElementById(idCheck.replace("chk", columnaId)).innerHTML.trim()),
+        valor: document.getElementById(idCheck.replace("chk", columnaMostrar)).innerHTML.trim()
+    };
+
+    return e;
+}
+
+function AlAbrir(idTabla, columnaId, elementosMarcados) {
+    marcarElementos(idTabla, columnaId, elementosMarcados);
 }
 
 
 function AlCerrar(idModal, referenciaChecks) {
-    console.log(`se ha abierto la modal ${idModal}, hay que desmarcar los checks del selector`);
+    console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);
     cerrar(referenciaChecks);
 }
 
 function ElementosMarcados(idSelector) {
 
-    var elementosMarcados = "";
+    var seleccionados = "";
     var selector = document.getElementById(idSelector);
     if (selector.hasAttribute("idsSeleccionados")) {
-        var a = selector.getAttribute("idsSeleccionados");
-        elementosMarcados = a.value;
+        seleccionados = selector.getAttribute("idsSeleccionados");
     }
-
-    return elementosMarcados;
+    return seleccionados;
 }
 
 
@@ -60,7 +61,7 @@ function mapearIdsAlSelector(selector, id) {
     }
 
     if (listaDeIds.trim() !== "")
-            listaDeIds = listaDeIds + ';';
+        listaDeIds = listaDeIds + ';';
     listaDeIds = listaDeIds + id;
     selector.setAttribute("idsSeleccionados", listaDeIds);
 }
@@ -79,8 +80,22 @@ function cerrar(referenciaChecks) {
     blanquearCheck(referenciaChecks);
 }
 
-function marcarElementos(idModal, elementosMarcados, referenciaChecks) {
-    console.log(`recoorer los elementos del la  ${idModal} y marcar lo elementosMarcados`);
+function marcarElementos(idTabla, columnaId, seleccionados) {
+    var array = seleccionados.split(';');
+    if (array.length === 1 && array[0] === "")
+        return;
+
+    var celdasId = document.getElementsByName(`${idTabla}_${columnaId}`);
+    var len = celdasId.length;
+    for (var i = 0; i < array.length; i++) {
+        for (var j = 0; j < len; j++) {
+            if (celdasId[j].innerHTML === array[i]) {
+                var check = document.getElementById(celdasId[j].id.replace("Id", "chk"));
+                check.checked = true;
+                break;
+            }
+        }
+    }
 }
 
 function blanquearCheck(referenciaChecks) {

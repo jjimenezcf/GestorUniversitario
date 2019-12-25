@@ -98,7 +98,7 @@ namespace Extensiones
 
         private static string RenderCeldaCheck(string idGrid, string idCelda)
         {
-            var check = $"<input type=¨checkbox¨ id=¨chx_{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
+            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
             var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
             return celdaDelCheck;
         }
@@ -125,7 +125,7 @@ namespace Extensiones
         private static string RenderCelda(CeldaDelGrid celda)
         {
             var ocultar = celda.Visible ? "" : "hidden";
-            return $"<td id=¨{celda.Id}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>{celda.Valor}</td>";
+            return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>{celda.Valor}</td>";
         }
 
         private static string RenderFila(int numFil, FilaDelGrid filaDelGrid)
@@ -142,21 +142,19 @@ namespace Extensiones
         private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid filaDelGrid)
         {
             string filaHtml = RenderFila(numFil, filaDelGrid);
-            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"{filaDelGrid.Celdas.Count}_{numFil}");
+            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}");
             return $"<tr>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
         }
 
         private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
         {
             var cabeceraHtml = new StringBuilder();
-            var numCol = 0;
             foreach (var columna in columnasGrid)
             {
-                columna.Id = $"{idGrid}_{numCol}";
+                columna.Id = $"{idGrid}_{columna.Nombre}";
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
-                numCol++;
             }
-            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"{numCol}");
+            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chx");
             cabeceraHtml.Append(celdaDelCheck);
             return $@"<thead>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
