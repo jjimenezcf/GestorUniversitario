@@ -42,7 +42,7 @@ namespace UniversidadDeMurcia.Controllers
             return new List<Opcion>();
         }
 
-        protected virtual List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<TElemento> elementos)
+        protected virtual List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<TElemento> elementos)
         {
             return new List<FilaDelGrid>();
         }

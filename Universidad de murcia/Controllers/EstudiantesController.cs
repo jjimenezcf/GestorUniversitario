@@ -21,7 +21,7 @@ namespace UniversidadDeMurcia.Controllers
             base(gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
-            GestorDelCrud.Modales["SelectorDeCurso"] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
+            GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
         protected override List<ColumnaDelGrid>DefinirColumnasDelGrid()
@@ -51,14 +51,14 @@ namespace UniversidadDeMurcia.Controllers
             return columnasDelGrid;
         }
 
-        protected override List<FilaDelGrid> MapearFilasAlGrid(IEnumerable<ElementoEstudiante> elementos)
+        protected override List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<ElementoEstudiante> elementos)
         {
-            var listaDeEstudiantes = base.MapearFilasAlGrid(elementos);
+            var listaDeEstudiantes = base.MapearElementosAlGrid(elementos);
             var columnasDelGrid = GestorDelCrud.Mantenimiento.ColumnasDelGrid;
 
             foreach (var estudiante in elementos)
             {
-                var datosDelEstudiante = new FilaDelGrid();
+                var fila = new FilaDelGrid();
                 foreach (ColumnaDelGrid columna in columnasDelGrid)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
@@ -74,34 +74,33 @@ namespace UniversidadDeMurcia.Controllers
                     if (columna.Nombre == nameof(ElementoEstudiante.InscritoEl))
                         celda.Valor = estudiante.InscritoEl.ToString();
 
-                    datosDelEstudiante.Celdas.Add(celda);
+                    fila.Celdas.Add(celda);
                 }
-                listaDeEstudiantes.Add(datosDelEstudiante);
+                listaDeEstudiantes.Add(fila);
             }
             return listaDeEstudiantes;
         }
 
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-
             var estudiantes = GestorDeElementos.LeerTodos();
 
             PrepararProximoOrden(orden);
 
             estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
 
-            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearFilasAlGrid(estudiantes);
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
 
             return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
         }
 
         private void PrepararProximoOrden(string orden)
         {
-            ViewData[EstudianteEnlace.Parametro.Apellido] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.Apellido)}Asc"
+            ViewData[nameof(ElementoEstudiante.Apellido)] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.Apellido)}Asc"
                                                         ? $"{nameof(ElementoEstudiante.Apellido)}Des"
                                                         : $"{nameof(ElementoEstudiante.Apellido)}Asc";
 
-            ViewData[EstudianteEnlace.Parametro.InscritoEl] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.InscritoEl)}Asc"
+            ViewData[nameof(ElementoEstudiante.InscritoEl)] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.InscritoEl)}Asc"
                                                         ? $"{nameof(ElementoEstudiante.InscritoEl)}Des"
                                                         : $"{nameof(ElementoEstudiante.InscritoEl)}Asc";
         }

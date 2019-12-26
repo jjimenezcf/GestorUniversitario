@@ -4,39 +4,4 @@
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
-<h2>@ViewBag.Crud.Mantenimiento.Titulo</h2>
-
-<p>
-    <a asp-action=@ViewBag.Crud.Creador.Ir>@ViewBag.Crud.Creador.Titulo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action=@ViewBag.Crud.Mantenimiento.Ir > @Html.DisplayNameFor(model => model.Titulo) </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Creditos)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Creditos)
-                </td>
-                <td>
-                    <a asp-action=@ViewBag.Crud.Editor.Ir asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action=@ViewBag.Crud.Detalle.Ir asp-route-id="@item.Id">Detalles</a> |
-                    <a asp-action=@ViewBag.Crud.Supresor.Ir asp-route-id="@item.Id">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@Html.Raw(@ViewBag.Crud.Mantenimiento.Render())
