@@ -12,7 +12,7 @@ namespace UtilidadesParaIu
         const string _alPulsarPaginaInicial = "paginaSiguiente(controlador,accion,registrosPorleer,ultLeido)";
 
         public string Id { get; private set; }
-        public string Controlador { get; set; }
+        public string Ruta { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
 
@@ -118,20 +118,20 @@ namespace UtilidadesParaIu
             return htmlDetalleGrid.ToString();
         }
 
-        private static string RenderNavegadorGrid(string idGrid)
+        private static string RenderNavegadorGrid(Grid grid)
         {
-            var htmlNavegadorGrid = @"
-            <div id=¨Nav-{idGrid}¨>
-                <div id=¨Nav-{idGrid}-1¨ data-type=¨img¨ style=¨display:inline-block¨>
-                    <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaInicial({controlador},'inicial',{registrosPorleer})¨>
+            var htmlNavegadorGrid = $@"
+            <div id=¨Nav-{grid.Id}¨>
+                <div id=¨Nav-{grid.Id}-1¨ data-type=¨img¨ style=¨display:inline-block¨>
+                    <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaInicial('{grid.Ruta}','inicial')¨>
                 </div>
-                <div id=¨Nav-{idGrid}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                    <input type=¨number¨ id=¨Nav-{idGrid}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
+                    <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                 </div>
-                <div id=¨Nav-{idGrid}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
-                    <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaAnterior({controlador},'anterior',{registrosPorleer},{ultLeido})¨>
-                    <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaSiguiente({controlador},'siguiente',{registrosPorleer},{ultLeido})¨>
-                    <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaUltima({controlador},'ultima',{registrosPorleer},{ultLeido})¨>
+                <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
+                    <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaAnterior('{grid.Ruta}','anterior')¨>
+                    <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaSiguiente('{grid.Ruta}','siguiente')¨>
+                    <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨paginaUltima('{grid.Ruta}','ultima')¨>
                 </div>
             </div>
             ";
@@ -147,7 +147,7 @@ namespace UtilidadesParaIu
         private static string RenderizarGrid(Grid grid)
         {
             var htmlTabla = $"<table id=¨{grid.Id}¨ class=¨table table-striped table-hover¨ width=¨100%¨>{Environment.NewLine}{RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}{RenderDetalleGrid(grid.Id, grid.filas)}</table>";
-            var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid.Id) : "";
+            var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());
         }
 

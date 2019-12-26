@@ -27,6 +27,7 @@ namespace Componentes
         public string RenderizarTabla()
         {
             Grid grid = new Grid(Selector.IdTabla, DefinirColumnasGrid, ObtenerFilasDelGrid) {
+                Ruta = "Cursos",
                 ConNavegador = true,
                 ConSeleccion = true
             };

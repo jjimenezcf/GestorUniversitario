@@ -136,7 +136,7 @@ namespace UtilidadesParaIu
 
         private string RenderGrid(List<ColumnaDelGrid> columnas, List<FilaDelGrid> filas)
         {
-            var grid = new Grid(IdGrid, columnas, filas);
+            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta };
             var htmlGrid = grid.ToHtml();
             return htmlGrid;
         }
