@@ -1,7 +1,6 @@
-﻿using Extensiones;
+﻿using Extensiones.Html;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace UniversidadDeMurcia.Utilidades
 {
@@ -136,26 +135,11 @@ namespace UniversidadDeMurcia.Utilidades
             return htmlFiltro;
         }
 
-        private string RenderGrid(List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid)
+        private string RenderGrid(List<ColumnaDelGrid> columnas, List<FilaDelGrid> filas)
         {
-            var htmlGrid = HtmlRender.RenderizarTabla(IdGrid, columnasGrid, filasDelGrid, true);
-            htmlGrid = htmlGrid + 
-                RenderNavegadorGrid() +
-                RenderOpcionesGrid();
-
+            var grid = new Grid(IdGrid, columnas, filas);
+            var htmlGrid = grid.ToHtml();
             return htmlGrid;
-        }
-
-        private string RenderNavegadorGrid()
-        {
-            var htmlNavegadorGrid = "";
-            return htmlNavegadorGrid;
-        }
-
-        private string RenderOpcionesGrid()
-        {
-            var htmlOpcionesGrid = "";
-            return htmlOpcionesGrid;
         }
 
         private string RenderPie()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Extensiones
+namespace Extensiones.String
 {
     public static class Cadenas
     {

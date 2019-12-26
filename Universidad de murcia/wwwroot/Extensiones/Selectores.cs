@@ -1,9 +1,6 @@
-﻿using Gestor.Elementos.ModeloIu;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace Extensiones
+namespace Extensiones.Html
 {
     public class SelectorModal
     {
@@ -45,12 +42,12 @@ namespace Extensiones
                                             AlAbrir('{idTabla}', '{columnaId}', ElementosMarcados('{idSelector}'))
                                           })
                                       ";
-
         const string _alCerrarLaModal = @"
                                          $('#{idModal}').on('hidden.bs.modal', function (event) {
                                             AlCerrar('{idModal}', 'referenciaChecks')
                                           })
                                       ";
+
         private string _titulo;
         private string _idSelector;
 

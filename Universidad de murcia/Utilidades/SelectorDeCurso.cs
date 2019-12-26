@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Extensiones;
+using Extensiones.Html;
 using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
@@ -26,14 +26,18 @@ namespace UniversidadDeMurcia.Utilidades
 
         public string RenderizarTabla()
         {
-            var cursos = _gestordeCursos.LeerTodos();
+            Grid grid = new Grid(Selector.IdTabla, DefinirColumnasGrid, ObtenerFilasDelGrid) {
+                ConNavegador = true,
+                ConSeleccion = true
+            };
 
-            var columnasDelGrid = new List<ColumnaDelGrid>();
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Id), Visible = false, Tipo = typeof(int) });
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Titulo), Titulo = "Título", Ordenar = false });
-            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Creditos), Titulo = "Créditos", Tipo = typeof(int) });
+            return grid.ToHtml();
+        }
 
+        private List<FilaDelGrid> ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
+        {
             var listaDeCursos = new List<FilaDelGrid>();
+            var cursos = _gestordeCursos.LeerTodos();
             foreach (var curso in cursos)
             {
                 var datosDelCurso = new FilaDelGrid();
@@ -53,9 +57,17 @@ namespace UniversidadDeMurcia.Utilidades
                 }
                 listaDeCursos.Add(datosDelCurso);
             }
-            
-            return HtmlRender.RenderizarTabla(Selector.IdTabla, columnasDelGrid, listaDeCursos, true);
+
+            return listaDeCursos;
         }
 
+        private static List<ColumnaDelGrid> DefinirColumnasGrid()
+        {
+            var columnasDelGrid = new List<ColumnaDelGrid>();
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Id), Visible = false, Tipo = typeof(int) });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Titulo), Titulo = "Título", Ordenar = false });
+            columnasDelGrid.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Creditos), Titulo = "Créditos", Tipo = typeof(int) });
+            return columnasDelGrid;
+        }
     }
 }
