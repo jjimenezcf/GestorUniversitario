@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Extensiones.Html
+namespace UtilidadesParaIu
 {
     public class CeldaDelGrid
     {
@@ -26,10 +25,5 @@ namespace Extensiones.Html
         {
             return _columna.AlineacionCss();
         }
-    }
-
-    public class FilaDelGrid
-    {
-        public List<CeldaDelGrid> Celdas = new List<CeldaDelGrid>();
     }
 }

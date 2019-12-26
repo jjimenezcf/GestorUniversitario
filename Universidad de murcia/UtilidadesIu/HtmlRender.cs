@@ -1,5 +1,5 @@
 ﻿
-namespace Extensiones.Html
+namespace UtilidadesParaIu
 {
     public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
     

@@ -11,11 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="wwwroot\Extensiones\ColumnaDelGrid.cs" />
-    <Compile Include="wwwroot\Extensiones\FilaDelGrid.cs" />
-    <Compile Include="wwwroot\Extensiones\Grid.cs" />
-    <Compile Include="wwwroot\Extensiones\HtmlRender.cs" />
-    <Compile Include="wwwroot\Extensiones\Selectores.cs" />
+    <Content Include="UtilidadesIu\ColumnaDelGrid.cs" />
+    <Content Include="UtilidadesIu\FilaDelGrid.cs" />
+    <Content Include="UtilidadesIu\Grid.cs" />
   </ItemGroup>
 
   <ItemGroup>

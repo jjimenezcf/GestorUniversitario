@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 
-namespace Extensiones.Html
+namespace UtilidadesParaIu
 {
     public class Grid
     {

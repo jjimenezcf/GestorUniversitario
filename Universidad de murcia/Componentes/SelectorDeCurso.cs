@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Extensiones.Html;
 using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using System.Collections.Generic;
+using UtilidadesParaIu;
 
-namespace UniversidadDeMurcia.Utilidades
+namespace Componentes
 {
     public class SelectorDeCurso
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Extensiones.Html
+namespace UtilidadesParaIu
 {
     public class SelectorModal
     {
