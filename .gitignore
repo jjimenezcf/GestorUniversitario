@@ -10,7 +10,8 @@
 *.sln.docstates
 
 # Ficheros de configuración en MVC Core
-appsettings.json
+GestorUniversitario/appsettings.json
+
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
