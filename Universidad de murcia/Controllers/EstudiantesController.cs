@@ -218,6 +218,12 @@ namespace UniversidadDeMurcia.Controllers
             return estudiante;
         }
 
+        public JsonResult Leer(string posIni, string cantidad)
+        {
+            var estudiantes = GestorDeElementos.LeerTodos();
+            return new JsonResult(estudiantes);
+        }
+
     }
 
 }

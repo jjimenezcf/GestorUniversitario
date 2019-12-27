@@ -1,15 +1,15 @@
-﻿function paginaInicial(controlador, accion) {
-    alert(`https://../${controlador}/${accion}?regPorLeer=${0}`);
+﻿function Leer(controlador) {
+    realizarPeticion(`/${controlador}/Leer?cantidad=10,posicion=0`, procesarRespuesta);
 }
 
-function paginaAnterior(controlador, accion) {
-    alert(`https://../${controlador}/${accion}?regPorLeer=${0},ultLeido=${0}`);
+function LeerAnteriores(controlador) {
+    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
 }
 
-function paginaSiguiente(controlador, accion) {
-    alert(`https://../${controlador}/${accion}?regPorLeer=${0},ultLeido=${0}`);
+function LeerSiguientes(controlador) {
+    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
 }
 
-function paginaUltima(controlador, accion) {
-    alert(`https://../${controlador}/${accion}?regPorLeer=${0},ultLeido=${0}`);
+function LeerUltimos(controlador) {
+    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
 }

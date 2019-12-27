@@ -51,5 +51,22 @@ namespace UtilidadesParaIu
             }
         }
 
+        internal string Alineacion()
+        {
+            switch (Alineada)
+            {
+                case Aliniacion.izquierda:
+                    return "left";
+                case Aliniacion.derecha:
+                    return "right";
+                case Aliniacion.centrada:
+                    return "center";
+                case Aliniacion.justificada:
+                    return "justify";
+                default:
+                    return "left";
+            }
+        }
+
     }
 }
