@@ -13,6 +13,7 @@ namespace UtilidadesParaIu
 
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
+        public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
         public Grid(string idGrid, Func<List<ColumnaDelGrid>> definirColumnasGrid, Func<List<ColumnaDelGrid>, List<FilaDelGrid>> obtenerFilasDelGrid)
         {
@@ -35,8 +36,14 @@ namespace UtilidadesParaIu
 
         public string ToHtml()
         {
-            return RenderizarGrid(this).Render();
+            return (Modelo == ModeloGrid.Tabulator ? Tabulator.RenderizarGrid(this) : RenderizarGrid(this)).Render();
         }
+
+        public string ToTabulator()
+        {
+            return Tabulator.RenderizarGrid(this);
+        }
+
 
         private static string RenderCeldaCheck(string idGrid, string idCelda)
         {
