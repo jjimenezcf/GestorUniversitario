@@ -1,9 +1,3 @@
-
-function procesarRespuesta(respuesta)
-{
-    console.log(respuesta);
-}
-
 function realizarPeticion(url, funcionDeRespuesta)
 {
 
@@ -26,5 +20,3 @@ function realizarPeticion(url, funcionDeRespuesta)
   req.addEventListener("error", respuestaErronea);
   req.send();
 }
-
-realizarPeticion('http://localhost:3000/imagenes',procesarRespuesta);
