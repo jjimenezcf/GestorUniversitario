@@ -66,7 +66,7 @@ function Celdas(idGrid, numFil, fila) {
             };
 
             if (celdaNueva.valor === "CrearCheck") {
-                celdaNueva.valor = newLine + `<input type='checkbox' id='${idGrid}_chx_${numFil}' name='chx_${idGrid}' class='text-center' aria-label='Marcar para seleccionar'>` + newLine;
+                celdaNueva.valor = newLine + `<input type='checkbox' id='${idGrid}_chk_${numFil}' name='chk_${idGrid}' class='text-center' aria-label='Marcar para seleccionar'>` + newLine;
             }
 
            this.items.push(celdaNueva);

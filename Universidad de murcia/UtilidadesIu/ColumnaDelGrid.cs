@@ -18,9 +18,10 @@ namespace UtilidadesParaIu
         private string _id;
         private string _nombre;
 
-        public string Id { get { return _id; } set { _id = value; descriptor.id = _id;  } }
-        public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre; } }
-        public string Titulo { get { return _titulo == null ? Nombre : _titulo; } set { _titulo = value; } }
+        public string Id { get { return _id.ToLower(); } set { _id = value; descriptor.id = _id;  } }
+        public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre.ToLower(); } }
+        public string Propiedad => Nombre.ToLower();
+        public string Titulo { get { return _titulo == null ? _nombre : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
         public int Ancho { get; set; } = 0;
         public bool Ordenar { get; set; } = false;
@@ -45,49 +46,14 @@ namespace UtilidadesParaIu
         public string Ruta { get; set; }
         public string Accion { get; set; }
 
-        public string AlineacionCss => parserAlineacion(Alineada);
-        public string AlineacionTabulator
-        {
-            get
-            {
-                switch (Alineada)
-                {
-                    case Aliniacion.izquierda:
-                        return "left";
-                    case Aliniacion.derecha:
-                        return "right";
-                    case Aliniacion.centrada:
-                        return "center";
-                    case Aliniacion.justificada:
-                        return "justify";
-                    default:
-                        return "left";
-                }
-            }
-        }
+        public string AlineacionCss => HtmlRender.AlineacionCss(Alineada);
+        public string AlineacionTabulator => HtmlRender.AlineacionTabulator(Alineada);
 
         public HtmlDescriptorCabecera descriptor { get; set; }
 
         public ColumnaDelGrid()
         {
             descriptor = new HtmlDescriptorCabecera();
-        }
-
-        internal string parserAlineacion(Aliniacion alineacion)
-        {
-            switch (alineacion)
-            {
-                case Aliniacion.izquierda:
-                    return "text-left";
-                case Aliniacion.derecha:
-                    return "text-right";
-                case Aliniacion.centrada:
-                    return "text-center";
-                case Aliniacion.justificada:
-                    return "text-justify";
-                default:
-                    return "text-left";
-            }
         }
     }
 }

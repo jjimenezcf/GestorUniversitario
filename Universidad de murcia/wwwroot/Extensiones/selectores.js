@@ -71,7 +71,7 @@ function blanquearSelector(selector) {
     selector.value = "";
     if (selector.hasAttribute("idsSeleccionados")) {
         var listaDeIds = selector.getAttribute("idsSeleccionados");
-        listaDeIds.value = "";
+        listaDeIds = "";
         selector.setAttribute("idsSeleccionados", listaDeIds);
     }
 }
@@ -90,7 +90,7 @@ function marcarElementos(idTabla, columnaId, seleccionados) {
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < len; j++) {
             if (celdasId[j].innerHTML === array[i]) {
-                var check = document.getElementById(celdasId[j].id.replace("Id", "chk"));
+                var check = document.getElementById(celdasId[j].id.replace("id", "chk"));
                 check.checked = true;
                 break;
             }

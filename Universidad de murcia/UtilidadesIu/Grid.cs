@@ -7,7 +7,8 @@ namespace UtilidadesParaIu
 {
     public class Grid
     {
-        public string Id { get; private set; }
+        string _id;
+        public string Id { get { return _id.ToLower(); } private set { _id = value; } }
         public string Ruta { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
@@ -46,10 +47,12 @@ namespace UtilidadesParaIu
         }
 
 
-        private static string RenderCeldaCheck(string idGrid, string idCelda)
+        private static string RenderCeldaCheck(string idGrid, string idCelda,int numFil, int numCol)
         {
-            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chx_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
-            var celdaDelCheck = $@"<td>{Environment.NewLine}{check}{Environment.NewLine}</td>";
+            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
+
+            //<td id="T_MantenimientoEstudiante_0_4" name="checkDeSeleccion" class="text-center">
+            var celdaDelCheck = $@"<td id=¨${idGrid}_${numFil}_${numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}{check}{Environment.NewLine}</td>";
             return celdaDelCheck;
         }
 
@@ -87,11 +90,11 @@ namespace UtilidadesParaIu
             var ancho = "";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
             var columna = new ColumnaDelGrid();
-            columna.Nombre = "checkDeSeleccion";
-            columna.Id = $"{idGrid}_{columna.Nombre}";
+            columna.Nombre = idGrid + "_chk_sel";
+            columna.Id = $"{idGrid}_{columna.Propiedad}";
             columna.Titulo = " ";
             columna.descriptor.visible = visible;
-            columna.descriptor.alineada = columna.parserAlineacion(Aliniacion.centrada);
+            columna.descriptor.alineada = HtmlRender.AlineacionCss(Aliniacion.centrada);
             columna.descriptor.valor = "CrearCheck";
 
             var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
@@ -120,7 +123,7 @@ namespace UtilidadesParaIu
         private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid fila)
         {
             string filaHtml = RenderFila(numFil, fila);
-            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}");
+            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}", numFil, fila.Celdas.Count);
             return $"<tr id='{idGrid}_f{numFil}'>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
         }
 
@@ -129,10 +132,10 @@ namespace UtilidadesParaIu
             var cabeceraHtml = new StringBuilder();
             foreach (var columna in columnasGrid)
             {
-                columna.Id = $"{idGrid}_{columna.Nombre}";
+                columna.Id = $"{idGrid}_{columna.Propiedad}";
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
-            cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chx");
+            cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
             return $@"<thead id='{idGrid}_cab'>{Environment.NewLine}<tr id=¨{idGrid}_c0¨>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
 
