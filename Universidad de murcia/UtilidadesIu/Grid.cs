@@ -91,11 +91,11 @@ namespace UtilidadesParaIu
             return $@"{filaHtml.ToString()}";
         }
 
-        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid filaDelGrid)
+        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid fila)
         {
-            string filaHtml = RenderFila(numFil, filaDelGrid);
+            string filaHtml = RenderFila(numFil, fila);
             string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}");
-            return $"<tr>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
+            return $"<tr id='{idGrid}_f{numFil}'>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
         }
 
         private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
@@ -108,7 +108,7 @@ namespace UtilidadesParaIu
             }
             string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chx");
             cabeceraHtml.Append(celdaDelCheck);
-            return $@"<thead>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
+            return $@"<thead id='{idGrid}_cab'>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
 
 
@@ -121,7 +121,7 @@ namespace UtilidadesParaIu
                 htmlDetalleGrid.Append(RenderFilaSeleccionable(idGrid, i, fila));
                 i = i + 1;
             }
-            return htmlDetalleGrid.ToString();
+            return $@"<tbody id='{idGrid}_body'>{htmlDetalleGrid.ToString()}</tbody>";
         }
 
         private static string RenderNavegadorGrid(Grid grid)
