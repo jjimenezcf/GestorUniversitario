@@ -107,6 +107,22 @@ namespace UniversidadDeMurcia.Controllers
             return View(GestorDelCrud.Editor.Vista, elemento);
         }
 
+        public JsonResult Leer(string posIni, string cantidad)
+        {
+            var elementos = LeerOrdenados("");
+            return new JsonResult(elementos);
+        }
+
+        protected IEnumerable<TElemento> LeerOrdenados(string orden)
+        {            
+            var elementos = GestorDeElementos.LeerTodos();
+
+            //PrepararProximoOrden(orden);
+            //estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
+
+            return elementos;
+        }
+
 
 
     }

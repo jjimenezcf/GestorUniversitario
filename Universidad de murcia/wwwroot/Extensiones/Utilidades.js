@@ -44,8 +44,8 @@ function Celdas(idGrid, numFil, fila) {
         for (const propiedad in fila) {
             if (`${propiedad.toLowerCase()}` === descriptor.propiedad.toLowerCase()) {
                 var celda = {
-                    id: `${idGrid}_${numFil}_${i}`,
-                    nombre: `${propiedad}`,
+                    id: `${idGrid}_${propiedad}_${numFil}`,
+                    nombre: `${idGrid}_${propiedad}`,
                     valor: `${fila[propiedad]}`,
                     visible: `${descriptor.visible}`,
                     alineada: `class='${descriptor.alineada}'`
@@ -66,7 +66,7 @@ function Celdas(idGrid, numFil, fila) {
             };
 
             if (celdaNueva.valor === "CrearCheck") {
-                celdaNueva.valor = `<input type='checkbox' id='${idGrid}_chx_${numFil}' name='chx_${idGrid}' class='text-center' aria-label='Marcar para seleccionar'>`;
+                celdaNueva.valor = newLine + `<input type='checkbox' id='${idGrid}_chx_${numFil}' name='chx_${idGrid}' class='text-center' aria-label='Marcar para seleccionar'>` + newLine;
             }
 
            this.items.push(celdaNueva);

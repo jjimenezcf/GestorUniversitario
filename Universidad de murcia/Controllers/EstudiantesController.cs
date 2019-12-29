@@ -215,21 +215,7 @@ namespace UniversidadDeMurcia.Controllers
             return estudiante;
         }
 
-        public JsonResult Leer(string posIni, string cantidad)
-        {
-            var estudiantes = LeerOrdenados("");
-            return new JsonResult(estudiantes);
-        }
 
-        private IEnumerable<ElementoEstudiante> LeerOrdenados(string orden)
-        {
-            var estudiantes = GestorDeElementos.LeerTodos();
-
-            PrepararProximoOrden(orden);
-
-            estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
-            return estudiantes;
-        }
     }
 
 }

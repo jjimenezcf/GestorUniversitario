@@ -69,5 +69,5 @@ function renderCeldaCheck(idGrid, idCelda){
 }
 
 function renderCelda(celda) {
-    return `<td id='${celda.id}' ${celda.visible} ${celda.alineada} >${celda.valor}</td>${newLine}`;
+    return `<td id='${celda.id}' name='${celda.nombre}' ${celda.visible} ${celda.alineada} >${celda.valor}</td>${newLine}`;
 }
