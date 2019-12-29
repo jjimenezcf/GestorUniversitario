@@ -2,13 +2,24 @@
 
 namespace UtilidadesParaIu
 {
+    public class HtmlDescriptorCabecera
+    {
+        public string id { get; set; }
+        public string propiedad { get; set; }
+        public string visible { get; set; }
+        public string alineada { get; set; }
+        public string valor { get; set; }
+    }
+
     public class ColumnaDelGrid
     {
         private Aliniacion _alineada;
         private string _titulo;
+        private string _id;
+        private string _nombre;
 
-        public string Id { get; set; }
-        public string Nombre { get; set; }
+        public string Id { get { return _id; } set { _id = value; descriptor.id = _id;  } }
+        public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre; } }
         public string Titulo { get { return _titulo == null ? Nombre : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
         public int Ancho { get; set; } = 0;
@@ -34,9 +45,37 @@ namespace UtilidadesParaIu
         public string Ruta { get; set; }
         public string Accion { get; set; }
 
-        internal string AlineacionCss()
+        public string AlineacionCss => parserAlineacion(Alineada);
+        public string AlineacionTabulator
         {
-            switch (Alineada)
+            get
+            {
+                switch (Alineada)
+                {
+                    case Aliniacion.izquierda:
+                        return "left";
+                    case Aliniacion.derecha:
+                        return "right";
+                    case Aliniacion.centrada:
+                        return "center";
+                    case Aliniacion.justificada:
+                        return "justify";
+                    default:
+                        return "left";
+                }
+            }
+        }
+
+        public HtmlDescriptorCabecera descriptor { get; set; }
+
+        public ColumnaDelGrid()
+        {
+            descriptor = new HtmlDescriptorCabecera();
+        }
+
+        internal string parserAlineacion(Aliniacion alineacion)
+        {
+            switch (alineacion)
             {
                 case Aliniacion.izquierda:
                     return "text-left";
@@ -50,23 +89,5 @@ namespace UtilidadesParaIu
                     return "text-left";
             }
         }
-
-        internal string Alineacion()
-        {
-            switch (Alineada)
-            {
-                case Aliniacion.izquierda:
-                    return "left";
-                case Aliniacion.derecha:
-                    return "right";
-                case Aliniacion.centrada:
-                    return "center";
-                case Aliniacion.justificada:
-                    return "justify";
-                default:
-                    return "left";
-            }
-        }
-
     }
 }

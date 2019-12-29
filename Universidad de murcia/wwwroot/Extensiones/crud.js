@@ -45,7 +45,7 @@ function renderDetalleGrid(idGrid, respuesta) {
         htmlDetalleGrid.appendLine(htmlFila); 
     }
     var body = $(`#${idGrid} tbody`);
-    body.html(htmlDetalleGrid.strings[0]);
+    body.html(htmlDetalleGrid.toString());
 }
 
 function renderFilaSeleccionable(idGrid, numFil, fila) {
@@ -69,5 +69,5 @@ function renderCeldaCheck(idGrid, idCelda){
 }
 
 function renderCelda(celda) {
-    return `<td id='${celda.id}'>${celda.valor}</td>${newLine}`;
+    return `<td id='${celda.id}' ${celda.visible} ${celda.alineada} >${celda.valor}</td>${newLine}`;
 }

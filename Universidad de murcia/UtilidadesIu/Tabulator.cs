@@ -52,7 +52,7 @@ namespace UtilidadesParaIu
             var visible = $", visible: {columna.Visible.ToString().ToLower()} ";
             var editable = $", editor: {columna.Editable.ToString().ToLower()} ";
             var sorter = columna.Ordenar ? $", sorter: ¨{columna.Tipo.Name.ToLower()}¨ " : "";
-            var alineacion = $", align:¨{columna.Alineacion()}¨";
+            var alineacion = $", align:¨{columna.AlineacionTabulator}¨";
 
             var descriptor = "{title: ¨Titulo¨, field: ¨Nombre¨{sorter}{ancho}{visible}{editable}{alineacion}}";
             descriptor = descriptor

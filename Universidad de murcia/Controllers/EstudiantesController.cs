@@ -83,16 +83,13 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            var estudiantes = GestorDeElementos.LeerTodos();
-
-            PrepararProximoOrden(orden);
-
-            estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
+            IEnumerable<ElementoEstudiante> estudiantes = LeerOrdenados(orden);
 
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
 
             return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
         }
+
 
         private void PrepararProximoOrden(string orden)
         {
@@ -220,10 +217,19 @@ namespace UniversidadDeMurcia.Controllers
 
         public JsonResult Leer(string posIni, string cantidad)
         {
-            var estudiantes = GestorDeElementos.LeerTodos();
+            var estudiantes = LeerOrdenados("");
             return new JsonResult(estudiantes);
         }
 
+        private IEnumerable<ElementoEstudiante> LeerOrdenados(string orden)
+        {
+            var estudiantes = GestorDeElementos.LeerTodos();
+
+            PrepararProximoOrden(orden);
+
+            estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
+            return estudiantes;
+        }
     }
 
 }

@@ -23,7 +23,7 @@ namespace UtilidadesParaIu
 
         internal string AlineacionCss()
         {
-            return _columna.AlineacionCss();
+            return _columna.AlineacionCss;
         }
     }
 }

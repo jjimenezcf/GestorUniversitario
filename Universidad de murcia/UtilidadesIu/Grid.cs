@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace UtilidadesParaIu
 {
@@ -52,25 +53,50 @@ namespace UtilidadesParaIu
             return celdaDelCheck;
         }
 
+        //<a href=¨/ruta/accion?orden=ordenPor¨>
+        //if (columna.Ordenar)
+        //{
+        //    html = html.Replace("ruta", columna.Ruta)
+        //        .Replace("accion", columna.Accion)
+        //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
+        //}
+        //else
+        //{
+        //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
+        //}
+
+        //{ title: ¨Name¨, field: ¨name¨, sorter: ¨string¨, width: 200, editor: true },
+
         private static string RenderColumnaCabecera(ColumnaDelGrid columna)
         {
             var visible = columna.Visible ? "" : "hidden";
             var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
-            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.Id}¨ class=¨{columna.AlineacionCss()}¨ {estilo}>{columna.Titulo}</th>";
-            //<a href=¨/ruta/accion?orden=ordenPor¨>
-            //if (columna.Ordenar)
-            //{
-            //    html = html.Replace("ruta", columna.Ruta)
-            //        .Replace("accion", columna.Accion)
-            //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
-            //}
-            //else
-            //{
-            //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
-            //}
 
-            //{ title: ¨Name¨, field: ¨name¨, sorter: ¨string¨, width: 200, editor: true },
+            columna.descriptor.visible = visible;
+            columna.descriptor.alineada = columna.AlineacionCss;
+
+            var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
+
+            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.descriptor.id}¨ class=¨{columna.AlineacionCss}¨ {estilo} {descriptor}>{columna.Titulo}</th>";
+        }
+
+        private static string RenderColumnaDeSeleccion(string idGrid)
+        {
+            var visible = "";
+            var ancho = "";
+            var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
+            var columna = new ColumnaDelGrid();
+            columna.Nombre = "checkDeSeleccion";
+            columna.Id = $"{idGrid}_{columna.Nombre}";
+            columna.Titulo = " ";
+            columna.descriptor.visible = visible;
+            columna.descriptor.alineada = columna.parserAlineacion(Aliniacion.centrada);
+            columna.descriptor.valor = "CrearCheck";
+
+            var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
+
+            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.descriptor.id}¨ class=¨{columna.AlineacionCss}¨ {estilo} {descriptor}>{columna.Titulo}</th>";
         }
 
 
@@ -106,9 +132,8 @@ namespace UtilidadesParaIu
                 columna.Id = $"{idGrid}_{columna.Nombre}";
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
-            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chx");
-            cabeceraHtml.Append(celdaDelCheck);
-            return $@"<thead id='{idGrid}_cab'>{Environment.NewLine}<tr>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
+            cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chx");
+            return $@"<thead id='{idGrid}_cab'>{Environment.NewLine}<tr id=¨{idGrid}_c0¨>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
         }
 
 
