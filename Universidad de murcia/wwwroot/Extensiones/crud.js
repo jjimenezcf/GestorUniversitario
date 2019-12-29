@@ -1,17 +1,17 @@
 ﻿function Leer(idGrid, controlador) {
-    LeerDatosDelGrid(`/${controlador}/Leer?cantidad=10,posicion=0`, idGrid, renderDetalleGrid);
+    LeerDatosDelGrid(`/${controlador}/Leer?posicion=${3}&cantidad=${3}&orden=Apellido`, idGrid, renderDetalleGrid);
 }
 
 function LeerAnteriores(controlador) {
-    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
+    alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
 }
 
 function LeerSiguientes(controlador) {
-    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
+    alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
 }
 
 function LeerUltimos(controlador) {
-    alert(`/${controlador}/Leer?cantidad=${0},posicion${0}`);
+    alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
 }
 
 function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {

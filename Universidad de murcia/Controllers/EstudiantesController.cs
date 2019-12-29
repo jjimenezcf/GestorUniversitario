@@ -83,7 +83,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            IEnumerable<ElementoEstudiante> estudiantes = LeerOrdenados(orden);
+            IEnumerable<ElementoEstudiante> estudiantes = LeerOrdenados(0,10,orden);
 
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
 
