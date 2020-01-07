@@ -34,6 +34,19 @@ namespace Gestor.Elementos.ModeloBd
         }
     }
 
+
+    public class ExisteTabla : ConsultaSql
+    {
+        public bool Existe => (int)Registros[0][0]==1;
+
+        public ExisteTabla(ContextoDeElementos contexto, string tabla)
+        : base(contexto, $"SELECT 1 FROM sysobjects WHERE type = 'U' AND name = {tabla}")
+        {
+            Ejecutar();
+        }
+    }
+
+
     /*
      * CREATE TABLE [dbo].[Var_Variable](
        	[ID] int IDENTITY(1,1) NOT NULL,
