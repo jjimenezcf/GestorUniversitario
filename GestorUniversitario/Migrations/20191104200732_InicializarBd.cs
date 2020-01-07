@@ -1,25 +1,37 @@
 ﻿using System;
+using Gestor.Elementos.ModeloBd;
+using Gestor.Elementos.Universitario.ContextosDeBd;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Gestor.Elementos.Universitario.Migrations
 {
     public partial class InicializarBd : Migration
     {
+        private ContextoUniversitario _Contexto;
+        public InicializarBd(ContextoUniversitario contexto)
+        {
+            _Contexto = contexto;
+        }
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Curso",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(nullable: true),
-                    Creditos = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Curso", x => x.Id);
-                });
+            var a = new ExisteTabla(_Contexto, "Curso").Existe;
+            if (a)
+            {
+                migrationBuilder.CreateTable(
+                    name: "Curso",
+                    columns: table => new
+                    {
+                        Id = table.Column<int>(nullable: false)
+                            .Annotation("SqlServer:Identity", "1, 1"),
+                        Titulo = table.Column<string>(nullable: true),
+                        Creditos = table.Column<int>(nullable: false)
+                    },
+                    constraints: table =>
+                    {
+                        table.PrimaryKey("PK_Curso", x => x.Id);
+                    });
+            }
 
             migrationBuilder.CreateTable(
                 name: "Estudiante",

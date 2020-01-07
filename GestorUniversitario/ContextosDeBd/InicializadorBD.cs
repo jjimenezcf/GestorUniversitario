@@ -13,7 +13,7 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
         public static void Inicializar(ContextoUniversitario contexto)
         {
             contexto.Database.EnsureCreated();
-            contexto.Database.Migrate();
+            //contexto.Database.Migrate();
 
             if (!contexto.Estudiantes.Any())
                 CrearDatosIniciales(contexto);
