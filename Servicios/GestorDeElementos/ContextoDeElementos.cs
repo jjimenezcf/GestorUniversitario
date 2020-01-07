@@ -8,6 +8,16 @@ namespace Gestor.Elementos
     class Literal
     {
         internal static string version = "Versión";
+        internal static string usuario = "jjimenezcf@gmail.com";
+
+        public class Tabla
+        {
+            internal static string Variable = "Var_Variable";
+        }
+        public class Vista
+        {
+            internal static string Catalogo = "CatalogoDelSe";
+        }
     }
 
 
@@ -31,10 +41,10 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Version = new ExisteTabla(this, "Var_Variable").Existe ?
+            DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable).Existe ?
              Variables.SingleOrDefault(v => v.Nombre == Literal.version).Valor :
              "0.0.0.";
-            DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
+            DatosDeConexion.Usuario = Literal.usuario;
         }
 
        public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
@@ -44,8 +54,8 @@ namespace Gestor.Elementos
         {
             base.OnModelCreating(modelBuilder);
             
-            modelBuilder.Entity<CatalogoDelSe>().ToView("CatalogoDelSe");
-            modelBuilder.Entity<RegistroDeVariable>().ToTable("Var_Variable");
+            modelBuilder.Entity<CatalogoDelSe>().ToView(Literal.Vista.Catalogo);
+            modelBuilder.Entity<RegistroDeVariable>().ToTable(Literal.Tabla.Variable);
         }
 
     }
