@@ -52,17 +52,22 @@ namespace UtilidadesParaIu
         private string _idSelector;
 
         Func<string> _renderElementos;
+        private string _idModal;
+        private string _columnaId;
+        private string _columnaMostrar;
 
-        public string IdModal { get; }
-        public string IdTabla => $"T_{IdModal}";
+        public string IdModal => _idModal.ToLower();
+        public string IdTabla => $"t_{IdModal}";
+        public string IdSelector => _idSelector.ToLower();
 
-        public string ColumnaId { get; internal set; }
-        public string ColumnaMostrar { get; internal set; }
+        public string ColumnaId { get { return _columnaId.ToLower(); }  set { _columnaId = value; } }
+        public string ColumnaMostrar { get { return _columnaMostrar.ToLower(); } set { _columnaMostrar = value; } }
+
         public string jsDeSeleccion { get; set; }
 
         public SelectorModal(string claseElemento,  Func<string> RenderElementos)
         {
-            IdModal = $"SelectorDe{claseElemento}";
+            _idModal = $"SelectorDe{claseElemento}";
 
             _titulo = $"Seleccionar {claseElemento}";
             _idSelector = $"id{claseElemento}Seleccionado";
@@ -74,7 +79,7 @@ namespace UtilidadesParaIu
             return _htmlSelector
                     .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
-                    .Replace("idSelector", _idSelector)
+                    .Replace("idSelector", IdSelector)
                     .Render();
         }
 
@@ -83,8 +88,8 @@ namespace UtilidadesParaIu
             return _htmlModalSelector
                     .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
-                    .Replace("{idSelector}", _idSelector)
-                    .Replace("{referenciaChecks}", $"chx_{IdTabla}")
+                    .Replace("{idSelector}", IdSelector)
+                    .Replace("{referenciaChecks}", $"chk_{IdTabla}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
                     .Replace("listaDeElementos", RenderizarElementos())
@@ -92,10 +97,10 @@ namespace UtilidadesParaIu
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{idTabla}", IdTabla)
                                               .Replace("{columnaId}", ColumnaId)
-                                              .Replace("{idSelector}", _idSelector))
+                                              .Replace("{idSelector}", IdSelector))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
                                               .Replace("{idModal}", IdModal)
-                                              .Replace("referenciaChecks", $"chx_{IdTabla}"))
+                                              .Replace("referenciaChecks", $"chk_{IdTabla}"))
                     .Render();
         }
         

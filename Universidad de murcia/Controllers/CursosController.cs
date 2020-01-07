@@ -69,11 +69,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoCurso(string orden)
         {
-            var cursos = GestorDeElementos.LeerTodos();
-
-            PrepararProximoOrden(orden);
-
-            cursos = OrdenarListaDeCursos(cursos, orden);
+            var cursos = LeerOrdenados(0,10,orden);
 
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(cursos);
 

@@ -2,14 +2,26 @@
 
 namespace UtilidadesParaIu
 {
+    public class HtmlDescriptorCabecera
+    {
+        public string id { get; set; }
+        public string propiedad { get; set; }
+        public string visible { get; set; }
+        public string alineada { get; set; }
+        public string valor { get; set; }
+    }
+
     public class ColumnaDelGrid
     {
         private Aliniacion _alineada;
         private string _titulo;
+        private string _id;
+        private string _nombre;
 
-        public string Id { get; set; }
-        public string Nombre { get; set; }
-        public string Titulo { get { return _titulo == null ? Nombre : _titulo; } set { _titulo = value; } }
+        public string Id { get { return _id.ToLower(); } set { _id = value; descriptor.id = _id;  } }
+        public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre.ToLower(); } }
+        public string Propiedad => Nombre.ToLower();
+        public string Titulo { get { return _titulo == null ? _nombre : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
         public int Ancho { get; set; } = 0;
         public bool Ordenar { get; set; } = false;
@@ -34,39 +46,14 @@ namespace UtilidadesParaIu
         public string Ruta { get; set; }
         public string Accion { get; set; }
 
-        internal string AlineacionCss()
-        {
-            switch (Alineada)
-            {
-                case Aliniacion.izquierda:
-                    return "text-left";
-                case Aliniacion.derecha:
-                    return "text-right";
-                case Aliniacion.centrada:
-                    return "text-center";
-                case Aliniacion.justificada:
-                    return "text-justify";
-                default:
-                    return "text-left";
-            }
-        }
+        public string AlineacionCss => HtmlRender.AlineacionCss(Alineada);
+        public string AlineacionTabulator => HtmlRender.AlineacionTabulator(Alineada);
 
-        internal string Alineacion()
-        {
-            switch (Alineada)
-            {
-                case Aliniacion.izquierda:
-                    return "left";
-                case Aliniacion.derecha:
-                    return "right";
-                case Aliniacion.centrada:
-                    return "center";
-                case Aliniacion.justificada:
-                    return "justify";
-                default:
-                    return "left";
-            }
-        }
+        public HtmlDescriptorCabecera descriptor { get; set; }
 
+        public ColumnaDelGrid()
+        {
+            descriptor = new HtmlDescriptorCabecera();
+        }
     }
 }

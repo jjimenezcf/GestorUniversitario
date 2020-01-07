@@ -5,8 +5,10 @@ namespace UtilidadesParaIu
     public class CeldaDelGrid
     {
         private ColumnaDelGrid _columna;
+        private string _id; 
+
         public string IdCabecera => _columna.Id;
-        public string Id { get; set; }
+        public string Id { get { return _id.ToLower(); } set { _id = value; } }
         public object Valor { get; set; }
         public Type Tipo => _columna.Tipo;
         public bool Visible => _columna.Visible;
@@ -23,7 +25,7 @@ namespace UtilidadesParaIu
 
         internal string AlineacionCss()
         {
-            return _columna.AlineacionCss();
+            return _columna.AlineacionCss;
         }
     }
 }

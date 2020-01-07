@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Extensiones.String;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -33,7 +36,7 @@ namespace Gestor.Elementos
         protected virtual void IniciarClase(TContexto contexto)
         {
             Contexto = contexto;
-            Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();            
+            Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
         }
 
         public async Task InsertarElementoAsync(TElemento elemento)
@@ -55,6 +58,18 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
+
+        public IEnumerable<TElemento> Leer(int posicion, int cantidad, string orden)
+        {
+            List<TRegistro> elementosDeBd;
+           elementosDeBd = Contexto.Set<TRegistro>().OrderBy(EstablecerOrden(orden)).Skip(posicion).Take(cantidad).AsNoTracking().ToList();
+            return MapearElementos(elementosDeBd);
+        }
+
+        protected virtual Expression<Func<TRegistro, string>> EstablecerOrden(string orden)
+        {
+            return x => nameof(x.Id);
+        }
 
         public IEnumerable<TElemento> LeerTodos()
         {
@@ -124,8 +139,8 @@ namespace Gestor.Elementos
             var elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
             return elemento;
         }
-        
-        public  TElemento NuevoElemento()
+
+        public TElemento NuevoElemento()
         {
             return Metadatos.NuevoElementoIu();
         }

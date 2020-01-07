@@ -8,6 +8,7 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 using System.Collections.Generic;
+using Extensiones.String;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -105,6 +106,22 @@ namespace UniversidadDeMurcia.Controllers
             }
 
             return View(GestorDelCrud.Editor.Vista, elemento);
+        }
+
+        public JsonResult Leer(string posicion, string cantidad, string orden)
+        {
+            var elementos = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            return new JsonResult(elementos);
+        }
+
+        protected IEnumerable<TElemento> LeerOrdenados(int posicion, int cantidad, string orden)
+        {            
+            var elementos = GestorDeElementos.Leer(posicion,cantidad,orden);
+
+            //PrepararProximoOrden(orden);
+            //estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
+
+            return elementos;
         }
 
 
