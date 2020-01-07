@@ -40,7 +40,7 @@ namespace Gestor.Elementos.ModeloBd
         public bool Existe => (int)Registros[0][0]==1;
 
         public ExisteTabla(ContextoDeElementos contexto, string tabla)
-        : base(contexto, $"SELECT 1 FROM sysobjects WHERE type = 'U' AND name = {tabla}")
+        : base(contexto, $"SELECT 1 FROM sysobjects WHERE type = 'U' AND name = '{tabla}'")
         {
             Ejecutar();
         }

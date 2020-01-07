@@ -5,6 +5,12 @@ using System.Linq;
 
 namespace Gestor.Elementos
 {
+    class Literal
+    {
+        internal static string version = "Versión";
+    }
+
+
     public class DatosDeConexion
     {
         public string ServidorWeb { get; set; }
@@ -25,7 +31,9 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Version = Variables.SingleOrDefault(v => v.Nombre == "Versión").Valor;
+            DatosDeConexion.Version = new ExisteTabla(this, "Var_Variable").Existe ?
+             Variables.SingleOrDefault(v => v.Nombre == Literal.version).Valor :
+             "0.0.0.";
             DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
         }
 

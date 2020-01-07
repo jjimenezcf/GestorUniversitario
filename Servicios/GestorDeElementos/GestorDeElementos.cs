@@ -66,9 +66,9 @@ namespace Gestor.Elementos
             return MapearElementos(elementosDeBd);
         }
 
-        protected virtual Expression<Func<TRegistro, string>> EstablecerOrden(string orden)
+        protected virtual Expression<Func<TRegistro, object>> EstablecerOrden(string orden)
         {
-            return x => nameof(x.Id);
+            return x => x.Id;
         }
 
         public IEnumerable<TElemento> LeerTodos()

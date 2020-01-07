@@ -40,15 +40,15 @@ namespace Gestor.Elementos.Universitario
                             .FirstOrDefault(m => m.Id == Id);
         }
 
-        protected override Expression<Func<RegistroDeEstudiante, string>> EstablecerOrden(string orden)
+        protected override Expression<Func<RegistroDeEstudiante, object>> EstablecerOrden(string orden)
         {
             switch (orden)
             {
                 case nameof(RegistroDeEstudiante.Apellido):
-                    return x => nameof(x.Apellido);
+                    return x => x.Apellido;
 
                 case nameof(RegistroDeEstudiante.InscritoEl):
-                    return x => nameof(x.InscritoEl);
+                    return x => x.InscritoEl;
             }
 
             return base.EstablecerOrden(orden);
