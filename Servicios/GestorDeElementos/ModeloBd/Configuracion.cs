@@ -2,6 +2,23 @@
 
 namespace Gestor.Elementos.ModeloBd
 {
+
+    class Literal
+    {
+        internal static string version = "Versión";
+        internal static string usuario = "jjimenezcf@gmail.com";
+        internal static string esquemaBd = "dbo";
+
+        public class Tabla
+        {
+            internal static string Variable = "Var_Variable";
+        }
+        public class Vista
+        {
+            internal static string Catalogo = "CatalogoDelSe";
+        }
+    }
+
     public class CatalogoDelSe : RegistroBase
     {
         public string Catalogo { get; set; }
@@ -28,7 +45,7 @@ namespace Gestor.Elementos.ModeloBd
         public string Version => (string)Registros[0][3];
 
         public VersionSql(ContextoDeElementos contexto)
-            :base(contexto, "Select * from dbo.Var_Variable where NOMBRE like 'Versión'")
+            :base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.version}'")
         {
             Ejecutar();
         }
@@ -45,26 +62,5 @@ namespace Gestor.Elementos.ModeloBd
             Ejecutar();
         }
     }
-
-
-    /*
-     * CREATE TABLE [dbo].[Var_Variable](
-       	[ID] int IDENTITY(1,1) NOT NULL,
-       	[NOMBRE] varchar(50) NOT NULL,
-       	[DESCRIPCION]  varchar(250) NOT NULL,
-       	[VALOR] varchar(250) NULL,
-        CONSTRAINT [PK_VARIABLE] PRIMARY KEY CLUSTERED 
-       (
-       	[ID] ASC
-       )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-        CONSTRAINT [AK_VAR_VARIABLE_NOMBRE] UNIQUE NONCLUSTERED 
-       (
-       	[NOMBRE] ASC
-       )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-       ) ON [PRIMARY]
-       GO
-       
-       insert into dbo.Var_Variable(nombre, descripcion, VALOR) values('Versión','Versión del sistema','0.1')
-     * */
 
 }

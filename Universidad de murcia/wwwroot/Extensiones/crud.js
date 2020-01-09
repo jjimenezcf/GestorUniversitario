@@ -1,5 +1,5 @@
 ﻿function Leer(idGrid, controlador) {
-    LeerDatosDelGrid(`/${controlador}/Leer?posicion=${3}&cantidad=${3}&orden=Apellido`, idGrid, renderDetalleGrid);
+    LeerDatosDelGrid(`/${controlador}/Leer?posicion=${3}&cantidad=${3}&orden=PorApellido`, idGrid, renderDetalleGrid);
 }
 
 function LeerAnteriores(controlador) {

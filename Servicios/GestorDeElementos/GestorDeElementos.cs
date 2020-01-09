@@ -14,15 +14,36 @@ using System.Threading.Tasks;
 namespace Gestor.Elementos
 {
 
-    public static class Filtros 
+    public static class Filtros
     {
         public const string FiltroPorId = "PorId";
 
-        public  static IQueryable<TRegistro> Filtro<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, string> filtros) where TRegistro : RegistroBase
+        public static IQueryable<TRegistro> Filtro<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, string> filtros) where TRegistro : RegistroBase
         {
             if (filtros.ContainsKey(FiltroPorId))
                 return set.Where(x => x.Id == filtros[FiltroPorId].Entero());
-            
+
+            return set;
+        }
+    }
+
+    public enum Ordenacion { Ascendente, Descendente };
+
+    public static class Ordenaciones
+    {
+        public const string OrdenPorId = "PorId";
+
+        public static IQueryable<TRegistro> Orden<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, Ordenacion> orden) where TRegistro : RegistroBase
+        {
+            if (orden.ContainsKey(OrdenPorId))
+            {
+                if (orden[OrdenPorId] == Ordenacion.Ascendente)
+                    return set.OrderBy(x => x.Id);
+
+                if (orden[OrdenPorId] == Ordenacion.Descendente)
+                    return set.OrderByDescending(x => x.Id);
+            }
+
             return set;
         }
     }
@@ -74,28 +95,36 @@ namespace Gestor.Elementos
         }
 
 
-        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, string orden)
+        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, Dictionary<string, Ordenacion> orden)
         {
             List<TRegistro> elementosDeBd;
             var filtros = new Dictionary<string, string>();
 
-            filtros[Filtros.FiltroPorId] = "1";
+            //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
             var total = registros.Count();
-            elementosDeBd = registros.OrderBy(EstablecerOrden(orden)).Skip(posicion).Take(cantidad).AsNoTracking().ToList();
+
+            registros = AplicarOrden(registros, orden);
+
+            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList();
             return (MapearElementos(elementosDeBd), total);
+        }
+
+        protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, Dictionary<string, Ordenacion> orden)
+        {
+            return registros.Orden(orden);
         }
 
         protected virtual IQueryable<TRegistro> IncluirFiltros(IQueryable<TRegistro> registros, Dictionary<string, string> filtros)
         {
-           return registros.Filtro(filtros);
+            return registros.Filtro(filtros);
         }
 
-        protected virtual Expression<Func<TRegistro, object>> EstablecerOrden(string orden)
-        {
-            return x => x.Id;
-        }
+        //protected virtual Expression<Func<TRegistro, object>> EstablecerOrden(string orden)
+        //{
+        //    return x => x.Id;
+        //}
 
         public IEnumerable<TElemento> LeerTodos()
         {

@@ -110,11 +110,60 @@ namespace UniversidadDeMurcia.Controllers
 
         public JsonResult Leer(string posicion, string cantidad, string orden)
         {
-            var (elementos, total) = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            var ordenParseado = ParsearOrdenacion(orden);
+
+            var (elementos, total) = LeerOrdenados(posicion.Entero(), cantidad.Entero(), ordenParseado);
             return new JsonResult(elementos);
         }
 
-        protected (IEnumerable<TElemento>,int) LeerOrdenados(int posicion, int cantidad, string orden)
+        public static Dictionary<string, Ordenacion> ParsearOrdenacion(string orden)
+        {
+            var ordenParseado = new Dictionary<string, Ordenacion>();
+            
+            if (!orden.IsNullOrEmpty())
+            {
+                var ordenes = orden.Split(';');
+                var i = 0;
+                while (i < ordenes.Length)
+                {
+                    if (ordenes[i].IsNullOrEmpty())
+                        break;
+                    else
+                    {
+                        if (i + 1 == ordenes.Length && !ordenes[i].IsNullOrEmpty())
+                        {
+                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
+                            break;
+                        }
+
+                        if (ordenes[i + 1].IsNullOrEmpty())
+                        {
+                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
+                            break;
+                        }
+
+                        if (ordenes[i + 1] == Ordenacion.Ascendente.ToString())
+                        {
+                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
+                            break;
+                        }
+
+                        if (ordenes[i + 1] == Ordenacion.Descendente.ToString())
+                        {
+                            ordenParseado[ordenes[i]] = Ordenacion.Descendente;
+                            break;
+                        }
+
+                        i = i + 2;
+                    }
+
+                }
+            }
+
+            return ordenParseado;
+        }
+
+        protected (IEnumerable<TElemento>,int) LeerOrdenados(int posicion, int cantidad, Dictionary<string,Ordenacion> orden)
         {
             var (elementos, total) = GestorDeElementos.Leer(posicion,cantidad,orden);
 
