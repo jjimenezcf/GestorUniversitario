@@ -69,15 +69,19 @@
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
+        <br />
+        <br />
         </main>
 
         <footer class="border-top footer text-muted">
-            <div class="text-left">
-                &copy;@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd
-            </div>
-            <div class="text-right">
-                Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Usuario
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="text-center">
+                <div style="float: left">
+                    &copy;@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd
+                </div>
+                <div style="float: right">
+                    Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Usuario
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
             </div>
         </footer>
 

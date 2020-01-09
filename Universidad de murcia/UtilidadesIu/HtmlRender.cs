@@ -11,7 +11,10 @@ namespace UtilidadesParaIu
     {
         public static string Render(this string cadena)
         {
-            return cadena.Replace("¨", "\"");
+            while (cadena.IndexOf("< ") >= 0)
+                cadena.Replace("< ", "<");
+
+            return cadena.Replace("¨", "\"");            
         }
 
         public static string AlineacionCss(Aliniacion alineacion)

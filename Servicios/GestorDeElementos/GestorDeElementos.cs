@@ -126,10 +126,10 @@ namespace Gestor.Elementos
         //    return x => x.Id;
         //}
 
-        public IEnumerable<TElemento> LeerTodos()
+        public (IEnumerable<TElemento>,int) LeerTodos()
         {
             var elementosDeBd = Contexto.Set<TRegistro>().AsNoTracking().ToList();
-            return MapearElementos(elementosDeBd);
+            return (MapearElementos(elementosDeBd), Contexto.Set<TRegistro>().Count());
         }
 
         public TElemento LeerElementoPorId(int id)

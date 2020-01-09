@@ -24,6 +24,16 @@ namespace UniversidadDeMurcia.Controllers
             GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
+
+        public IActionResult IraMantenimientoEstudiante(string orden)
+        {
+            var (estudiantes, total) = LeerOrdenados(0, 10, ParsearOrdenacion(orden));
+            GestorDelCrud.Mantenimiento.TotalEnBd = total;
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
+
+            return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
+        }
+
         protected override List<ColumnaDelGrid>DefinirColumnasDelGrid()
         {
             var columnasDelGrid = base.DefinirColumnasDelGrid().ToList();
@@ -81,14 +91,6 @@ namespace UniversidadDeMurcia.Controllers
             return listaDeEstudiantes;
         }
 
-        public IActionResult IraMantenimientoEstudiante(string orden)
-        {
-            var (estudiantes, total) = LeerOrdenados(0,10, ParsearOrdenacion(orden));
-
-            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
-
-            return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
-        }
 
 
         private void PrepararProximoOrden(string orden)

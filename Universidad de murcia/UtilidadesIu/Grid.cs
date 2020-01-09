@@ -12,15 +12,16 @@ namespace UtilidadesParaIu
         public string Ruta { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
+        public int TotalEnBd { get; set; }
 
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
-        public Grid(string idGrid, Func<List<ColumnaDelGrid>> definirColumnasGrid, Func<List<ColumnaDelGrid>, List<FilaDelGrid>> obtenerFilasDelGrid)
+        public Grid(string idGrid, Func<List<ColumnaDelGrid>> definirColumnasGrid, Func<List<ColumnaDelGrid>, (List<FilaDelGrid>, int)> obtenerFilasDelGrid)
         {
             columnas = definirColumnasGrid();
-            filas = obtenerFilasDelGrid(columnas);
+            (filas, TotalEnBd) = obtenerFilasDelGrid(columnas);
             IniciarClase(idGrid, columnas, filas);
         }
 
@@ -155,17 +156,22 @@ namespace UtilidadesParaIu
         private static string RenderNavegadorGrid(Grid grid)
         {
             var htmlNavegadorGrid = $@"
-            <div id=¨Nav-{grid.Id}¨>
-                <div id=¨Nav-{grid.Id}-1¨ data-type=¨img¨ style=¨display:inline-block¨>
-                    <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
+            <div class=¨text-center¨>
+                <div id=¨Nav-{grid.Id}¨ style=¨float: left¨>
+                    <div id=¨Nav-{grid.Id}-1¨ data-type=¨img¨ style=¨display:inline-block¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
+                    </div>
+                    <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
+                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                    </div>
+                    <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}','{grid.Ruta}')¨>
+                    </div>
                 </div>
-                <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                    <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
-                </div>
-                <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
-                    <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
-                    <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}','{grid.Ruta}')¨>
-                    <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}','{grid.Ruta}')¨>
+                <div  style=¨float: right¨>
+                   {grid.filas.Count} de {grid.TotalEnBd}
                 </div>
             </div>
             ";

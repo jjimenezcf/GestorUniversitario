@@ -20,17 +20,22 @@
     <div>
         <table id="example-table"></table>
     </div>
-    <div id="Nav-{IdGrid}">
-        <div id="Nav-{IdGrid}-1" data-type="img" style="display:inline-block">
-            <img src="/images/paginaAnterior.png" alt="Primera página" title="Ir al primer registro" width="22" height="22" onClick="paginaAnterior()">
-            <img src="/images/paginaInicial.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
+    <div class="text-center">
+        <div id="Nav-{IdGrid}" style="float: left">
+            <div id="Nav-{IdGrid}-1" data-type="img" style="display:inline-block">
+                <img src="/images/paginaAnterior.png" alt="Primera página" title="Ir al primer registro" width="22" height="22" onClick="paginaAnterior()">
+                <img src="/images/paginaInicial.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
+            </div>
+            <div id="Nav-{IdGrid}-2" class="mx-sm-3" style="display:inline-block">
+                <input type="number" id="Nav-{IdGrid}-Reg" value="10" min="5" step="5" max="999" style="width: 50px;margin-top: 5px;align-content:center; border-radius: 10px">
+            </div>
+            <div id="Nav-{IdGrid}-3" data-type="img" style="display:inline-block">
+                <img src="/images/paginaSiguiente.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
+                <img src="/images/paginaUltima.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
+            </div>
         </div>
-        <div id="Nav-{IdGrid}-2" class="mx-sm-3" style="display:inline-block">
-            <input type="number" id="Nav-{IdGrid}-Reg" value="10" min="5" step="5" max="999" style="width: 50px;margin-top: 5px;align-content:center; border-radius: 10px">
-        </div>
-        <div id="Nav-{IdGrid}-3" data-type="img" style="display:inline-block">
-            <img src="/images/paginaSiguiente.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
-            <img src="/images/paginaUltima.png" alt="Primera página" title="Ir al primer registro" width="22" height="22">
+        <div id="Nav-{IdGrid}-4" style="float: right">
+            leidos: x de 20000
         </div>
     </div>
 </body>
@@ -44,16 +49,16 @@
 
     var table = new Tabulator("#example-table", {
         columns: [
-{title: "Id", field: "Id", visible:false , editor: false },
-{title: "Apellido", field: "Apellido", sorter: "string" , visible:true , editor: false },
-{title: "Nombre", field: "Nombre", visible:true , editor: false },
-{title: "InscritoEl", field: "InscritoEl", sorter: "datetime" , visible:true , editor: false },
+            { title: "Id", field: "Id", visible: false, editor: false },
+            { title: "Apellido", field: "Apellido", sorter: "string", visible: true, editor: false },
+            { title: "Nombre", field: "Nombre", visible: true, editor: false },
+            { title: "InscritoEl", field: "InscritoEl", sorter: "datetime", visible: true, editor: false },
         ],
     });
 
 </script>
 
-                <!--var table = new Tabulator("#T_MantenimientoEstudiante", {
+<!--var table = new Tabulator("#T_MantenimientoEstudiante", {
                     columns: [
 
 { title: "Id", field: "Id", sorter: "string", width: 0, editor: False },

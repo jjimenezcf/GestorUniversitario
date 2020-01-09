@@ -35,10 +35,11 @@ namespace Componentes
             return grid.ToHtml();
         }
 
-        private List<FilaDelGrid> ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
+        private (List<FilaDelGrid>, int) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
         {
             var listaDeCursos = new List<FilaDelGrid>();
-            var cursos = _gestordeCursos.LeerTodos();
+            var (cursos,total) = _gestordeCursos.LeerTodos();
+            
             foreach (var curso in cursos)
             {
                 var datosDelCurso = new FilaDelGrid();
@@ -59,7 +60,7 @@ namespace Componentes
                 listaDeCursos.Add(datosDelCurso);
             }
 
-            return listaDeCursos;
+            return (listaDeCursos,total);
         }
 
         private static List<ColumnaDelGrid> DefinirColumnasGrid()

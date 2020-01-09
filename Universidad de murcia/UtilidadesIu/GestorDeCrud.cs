@@ -19,6 +19,7 @@ namespace UtilidadesParaIu
         private string _formulario;
 
         public string Ruta { get; set; }
+        public int TotalEnBd { get; set; }
         public string Vista => $"{_verbo}{NombreDelObjeto}";
         public string Titulo { get; set; }
         public string Ir => $"Ira{_verbo}{NombreDelObjeto}";
@@ -136,7 +137,7 @@ namespace UtilidadesParaIu
 
         private string RenderGrid(List<ColumnaDelGrid> columnas, List<FilaDelGrid> filas)
         {
-            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta };
+            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             return htmlGrid;
         }
