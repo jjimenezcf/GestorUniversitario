@@ -110,18 +110,15 @@ namespace UniversidadDeMurcia.Controllers
 
         public JsonResult Leer(string posicion, string cantidad, string orden)
         {
-            var elementos = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            var (elementos, total) = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
             return new JsonResult(elementos);
         }
 
-        protected IEnumerable<TElemento> LeerOrdenados(int posicion, int cantidad, string orden)
-        {            
-            var elementos = GestorDeElementos.Leer(posicion,cantidad,orden);
+        protected (IEnumerable<TElemento>,int) LeerOrdenados(int posicion, int cantidad, string orden)
+        {
+            var (elementos, total) = GestorDeElementos.Leer(posicion,cantidad,orden);
 
-            //PrepararProximoOrden(orden);
-            //estudiantes = OrdenarListaDeEstudiantes(estudiantes, orden);
-
-            return elementos;
+            return (elementos, total);
         }
 
 

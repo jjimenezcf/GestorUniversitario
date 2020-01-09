@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Extensiones.String
 {
@@ -22,6 +23,4 @@ namespace Extensiones.String
             return numero;
         }
     }
-
-
 }

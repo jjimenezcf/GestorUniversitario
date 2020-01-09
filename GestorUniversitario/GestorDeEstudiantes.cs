@@ -13,6 +13,20 @@ using Extensiones.String;
 
 namespace Gestor.Elementos.Universitario
 {
+    static class FiltroEstudiante
+    {
+        public const string FiltroPorApellido= "PorApellido";
+
+        public static IQueryable<RegistroDeEstudiante> Filtro(this IQueryable<RegistroDeEstudiante> set, Dictionary<string, string> filtros)
+        {
+            if (filtros.ContainsKey(FiltroPorApellido))
+                return set.Where(x => x.Apellido == filtros[FiltroPorApellido]);
+
+            return set;
+        }
+    }
+
+
     public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
@@ -29,6 +43,12 @@ namespace Gestor.Elementos.Universitario
             : base(contexto, mapeador)
         {
 
+        }
+
+        protected override IQueryable<RegistroDeEstudiante> IncluirFiltros(IQueryable<RegistroDeEstudiante> registros, Dictionary<string, string> filtros)
+        {
+            registros = base.IncluirFiltros(registros, filtros);
+            return registros.Filtro(filtros);
         }
 
         protected override RegistroDeEstudiante LeerConDetalle(int Id)

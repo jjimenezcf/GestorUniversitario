@@ -13,6 +13,21 @@ using System.Threading.Tasks;
 
 namespace Gestor.Elementos
 {
+
+    public static class Filtros 
+    {
+        public const string FiltroPorId = "PorId";
+
+        public  static IQueryable<TRegistro> Filtro<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, string> filtros) where TRegistro : RegistroBase
+        {
+            if (filtros.ContainsKey(FiltroPorId))
+                return set.Where(x => x.Id == filtros[FiltroPorId].Entero());
+            
+            return set;
+        }
+    }
+
+
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : DbContext
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
@@ -59,11 +74,22 @@ namespace Gestor.Elementos
         }
 
 
-        public IEnumerable<TElemento> Leer(int posicion, int cantidad, string orden)
+        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, string orden)
         {
             List<TRegistro> elementosDeBd;
-           elementosDeBd = Contexto.Set<TRegistro>().OrderBy(EstablecerOrden(orden)).Skip(posicion).Take(cantidad).AsNoTracking().ToList();
-            return MapearElementos(elementosDeBd);
+            var filtros = new Dictionary<string, string>();
+
+            filtros[Filtros.FiltroPorId] = "1";
+            IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
+
+            var total = registros.Count();
+            elementosDeBd = registros.OrderBy(EstablecerOrden(orden)).Skip(posicion).Take(cantidad).AsNoTracking().ToList();
+            return (MapearElementos(elementosDeBd), total);
+        }
+
+        protected virtual IQueryable<TRegistro> IncluirFiltros(IQueryable<TRegistro> registros, Dictionary<string, string> filtros)
+        {
+           return registros.Filtro(filtros);
         }
 
         protected virtual Expression<Func<TRegistro, object>> EstablecerOrden(string orden)
