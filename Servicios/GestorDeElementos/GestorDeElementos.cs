@@ -4,15 +4,25 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Gestor.Elementos
 {
+
+    //public static class Auditoria
+    //{
+    //    public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta)
+    //    {
+    //        var a = ((System.Data.Objects.ObjectQuery)consulta).ToTraceString();
+    //        return consulta;
+    //    }
+    //}
+
 
     public static class Filtros
     {
@@ -120,11 +130,6 @@ namespace Gestor.Elementos
         {
             return registros.Filtro(filtros);
         }
-
-        //protected virtual Expression<Func<TRegistro, object>> EstablecerOrden(string orden)
-        //{
-        //    return x => x.Id;
-        //}
 
         public (IEnumerable<TElemento>,int) LeerTodos()
         {

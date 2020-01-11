@@ -18,13 +18,6 @@ namespace UtilidadesParaIu
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
-        public Grid(string idGrid, Func<List<ColumnaDelGrid>> definirColumnasGrid, Func<List<ColumnaDelGrid>, (List<FilaDelGrid>, int)> obtenerFilasDelGrid)
-        {
-            columnas = definirColumnasGrid();
-            (filas, TotalEnBd) = obtenerFilasDelGrid(columnas);
-            IniciarClase(idGrid, columnas, filas);
-        }
-
         public Grid(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid)
         {
             IniciarClase(idGrid, columnasGrid, filasDelGrid);

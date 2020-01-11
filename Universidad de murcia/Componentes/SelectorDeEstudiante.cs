@@ -26,9 +26,13 @@ namespace Componentes
 
         public string RenderizarTabla()
         {
-            Grid grid = new Grid(Selector.IdTabla, DefinirColumnasGrid, ObtenerFilasDelGrid)
+            var descriptorColumnas = DefinirColumnasGrid();
+            var filas = ObtenerFilasDelGrid(descriptorColumnas);
+
+            Grid grid = new Grid(Selector.IdTabla, descriptorColumnas, filas.filas)
             {
                 Ruta = "Estudiantes",
+                TotalEnBd = filas.totalBD,
                 ConNavegador = true,
                 ConSeleccion = true
             };
@@ -36,7 +40,7 @@ namespace Componentes
             return grid.ToHtml();
         }
 
-        private (List<FilaDelGrid>,int) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
+        private (List<FilaDelGrid> filas,int totalBD) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
         {
             var listaDeEstudiantes = new List<FilaDelGrid>();
             var (Estudiantes, total) = _gestordeEstudiantes.LeerTodos();
