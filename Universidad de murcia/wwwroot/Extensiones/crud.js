@@ -1,13 +1,13 @@
 ﻿function Leer(idGrid, controlador) {
-    LeerDatosDelGrid(`/${controlador}/Leer?posicion=${3}&cantidad=${3}&orden=PorApellido`, idGrid, renderDetalleGrid);
+    LeerDatosDelGrid(`/${controlador}/Leer?idGrid=${idGrid}&posicion=${0}&cantidad=${5}&orden=PorApellido`, idGrid, sustituirGrid);
 }
 
 function LeerAnteriores(controlador) {
     alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
 }
 
-function LeerSiguientes(idGrid,controlador) {
-    LeerDatosDelGrid(`/${controlador}/LeerSiguientes?posicion=${3}&cantidad=${4}&orden=PorApellido`, idGrid, sustituirGrid);
+function LeerSiguientes(idGrid, controlador) {
+    LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${5}&cantidad=${5}&orden=PorApellido`, idGrid, sustituirGrid);
 }
 
 function LeerUltimos(controlador) {

@@ -21,6 +21,10 @@ namespace Gestor.Elementos
         public ContextoDeElementos(DbContextOptions options) :
         base(options)
         {
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder();
+
+            dbContextOptionsBuilder.AddInterceptors(new LogSql()); 
+
             DatosDeConexion = new DatosDeConexion();
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;

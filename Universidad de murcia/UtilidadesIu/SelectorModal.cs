@@ -48,6 +48,9 @@ namespace UtilidadesParaIu
                                           })
                                       ";
 
+
+        public string ClaseDeElemento { get; private set; }
+
         private string _titulo;
         private string _idSelector;
 
@@ -57,20 +60,19 @@ namespace UtilidadesParaIu
         private string _columnaMostrar;
 
         public string IdModal => _idModal.ToLower();
-        public string IdTabla => $"t_{IdModal}";
+        public string IdGrig => $"GridSel_{ClaseDeElemento}".ToLower();
         public string IdSelector => _idSelector.ToLower();
 
         public string ColumnaId { get { return _columnaId.ToLower(); }  set { _columnaId = value; } }
         public string ColumnaMostrar { get { return _columnaMostrar.ToLower(); } set { _columnaMostrar = value; } }
 
-        public string jsDeSeleccion { get; set; }
-
-        public SelectorModal(string claseElemento,  Func<string> funcionParaRenderizarTabla)
+        public SelectorModal(string claseDeElemento,  Func<string> funcionParaRenderizarTabla)
         {
-            _idModal = $"SelectorDe{claseElemento}";
+            ClaseDeElemento = claseDeElemento;
+            _idModal = $"Selector_{ClaseDeElemento}";
 
-            _titulo = $"Seleccionar {claseElemento}";
-            _idSelector = $"id{claseElemento}Seleccionado";
+            _titulo = $"Seleccionar {ClaseDeElemento}";
+            _idSelector = $"id_{ClaseDeElemento}_Seleccionado";
             _funcionParaRenderizarGrid = funcionParaRenderizarTabla;
         }
 
@@ -89,19 +91,19 @@ namespace UtilidadesParaIu
                     .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
                     .Replace("{idSelector}", IdSelector)
-                    .Replace("{referenciaChecks}", $"chk_{IdTabla}")
+                    .Replace("{referenciaChecks}", $"chk_{IdGrig}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
-                    .Replace("{idContenedor}", $"contenedor_{IdTabla}")
+                    .Replace("{idContenedor}", $"contenedor_{IdGrig}")
                     .Replace("listaDeElementos", RenderTablaDeSeleccion())
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)
-                                              .Replace("{idTabla}", IdTabla)
+                                              .Replace("{idTabla}", IdGrig)
                                               .Replace("{columnaId}", ColumnaId)
                                               .Replace("{idSelector}", IdSelector))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
                                               .Replace("{idModal}", IdModal)
-                                              .Replace("referenciaChecks", $"chk_{IdTabla}"))
+                                              .Replace("referenciaChecks", $"chk_{IdGrig}"))
                     .Render();
         }
         

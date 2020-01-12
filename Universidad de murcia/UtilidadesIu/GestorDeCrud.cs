@@ -52,7 +52,7 @@ namespace UtilidadesParaIu
 
     public class MantenimientoCrud<T> : BaseCrud<T>
     {
-
+        public string ClaseDeElemento{ get; private set; }
         private List<Opcion> _opcionesGenerales;
         public List<ColumnaDelGrid> ColumnasDelGrid { get; }
         public List<FilaDelGrid> FilasDelGrid { private get; set; }
@@ -70,12 +70,13 @@ namespace UtilidadesParaIu
 
         public Dictionary<string, SelectorModal> Modales { get; set; }
 
-        private string IdGrid => $"T_{Vista}";
+        private string IdGrid => $"GridMnt_{ClaseDeElemento}".ToLower();
 
-        public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
-        : base("Mantenimiento")
+        public MantenimientoCrud(string modo, string claseDeElemento, Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
+        : base(modo)
         {
-            AsignarTitulo($"Mantenimiento de {NombreDelObjeto}s");
+            ClaseDeElemento = claseDeElemento;
+            AsignarTitulo($"{modo} de {ClaseDeElemento}s");
             ColumnasDelGrid = definirColumnasDelGrid == null ? renderDeColumnasVacio() : definirColumnasDelGrid();
             OpcionesGenerales = definirOpcionesGenerales();
         }
@@ -93,9 +94,9 @@ namespace UtilidadesParaIu
             return htmlMantenimiento.Render();
         }
         
-        public string RenderGridSiguiente()
+        public string RenderGridSiguiente(string idGrid)
         {
-            var grid = new Grid(IdGrid, ColumnasDelGrid, FilasDelGrid) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(idGrid, ColumnasDelGrid, FilasDelGrid) { Ruta = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }
@@ -234,13 +235,13 @@ namespace UtilidadesParaIu
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
 
-        public GestorCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
+        public GestorCrud(string claseDeElemento, Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         {
             Titulo = $"Gestor de {NombreDelObjeto}";
             Creador = new CreacionCrud<T>();
 
             var opciones = new List<Opcion>() { new Opcion() { Nombre = Creador.Titulo, Ruta = Ruta, Accion = Creador.Ir } };
-            Mantenimiento = new MantenimientoCrud<T>(definirColumnasDelGrid, definirOpcionesGenerales) { Ruta = Ruta, OpcionesGenerales = opciones, Modales = Modales };
+            Mantenimiento = new MantenimientoCrud<T>("Mantenimiento", claseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales) { Ruta = Ruta, OpcionesGenerales = opciones, Modales = Modales };
 
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();

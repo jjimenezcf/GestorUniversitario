@@ -29,7 +29,7 @@ namespace Componentes
             var descriptorColumnas = DefinirColumnasGrid();
             var filas = ObtenerFilasDelGrid(descriptorColumnas);
 
-            Grid grid = new Grid(Selector.IdTabla, descriptorColumnas, filas.filas)
+            Grid grid = new Grid(Selector.IdGrig, descriptorColumnas, filas.filas)
             {
                 Ruta = "Estudiantes",
                 TotalEnBd = filas.totalBD,

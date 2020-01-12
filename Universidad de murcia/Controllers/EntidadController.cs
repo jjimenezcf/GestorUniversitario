@@ -24,12 +24,12 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-        public EntidadController(GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
+        public EntidadController(string claseDeElemento, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
         base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid, DefinirOpcionesGenerales);
+            GestorDelCrud = new GestorCrud<TElemento>(claseDeElemento, DefinirColumnasDelGrid, DefinirOpcionesGenerales);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -38,18 +38,21 @@ namespace UniversidadDeMurcia.Controllers
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
-        public JsonResult Leer(string posicion, string cantidad, string orden)
+        public string Leer(string idGrid, string posicion, string cantidad, string orden)
         {
             var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
-            return new JsonResult(resultado.elementos);
+            //return new JsonResult(resultado.elementos);
+            GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
+            return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
-        public string LeerSiguientes(string posicion, string cantidad, string orden)
+        public string LeerSiguientes(string idGrid, string posicion, string cantidad, string orden)
         {
             var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
-            return GestorDelCrud.Mantenimiento.RenderGridSiguiente();
+            return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
         public override ViewResult View(string viewName, object model)

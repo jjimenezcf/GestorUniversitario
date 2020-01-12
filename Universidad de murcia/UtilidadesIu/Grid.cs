@@ -45,8 +45,7 @@ namespace UtilidadesParaIu
         {
             var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
 
-            //<td id="T_MantenimientoEstudiante_0_4" name="checkDeSeleccion" class="text-center">
-            var celdaDelCheck = $@"<td id=¨${idGrid}_${numFil}_${numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}{check}{Environment.NewLine}</td>";
+            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}{check}{Environment.NewLine}</td>";
             return celdaDelCheck;
         }
 
@@ -144,9 +143,9 @@ namespace UtilidadesParaIu
                         <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
-                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}','{grid.Ruta}')¨>
-                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}','{grid.Ruta}')¨>
                     </div>
                 </div>
                 <div  style=¨float: right¨>

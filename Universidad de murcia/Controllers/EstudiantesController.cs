@@ -17,8 +17,8 @@ namespace UniversidadDeMurcia.Controllers
 {
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
-        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
-            base(gestorDeEstudiantes, gestorDeErrores)
+        public EstudiantesController( GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
+            base("Estudiante", gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
@@ -27,7 +27,7 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            var resultado = LeerOrdenados(0, 10, orden);
+            var resultado = LeerOrdenados(0, 5, orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
 

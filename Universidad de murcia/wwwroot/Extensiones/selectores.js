@@ -90,7 +90,7 @@ function marcarElementos(idTabla, columnaId, seleccionados) {
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < len; j++) {
             if (celdasId[j].innerHTML === array[i]) {
-                var check = document.getElementById(celdasId[j].id.replace("id", "chk"));
+                var check = document.getElementById(celdasId[j].id.replace("_id_", "_chk_"));
                 check.checked = true;
                 break;
             }
