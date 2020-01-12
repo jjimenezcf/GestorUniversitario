@@ -32,7 +32,7 @@ namespace UtilidadesParaIu
 
         public string ToHtml()
         {
-            return (Modelo == ModeloGrid.Tabulator ? Tabulator.RenderizarGrid(this) : RenderizarGrid(this)).Render();
+            return (Modelo == ModeloGrid.Tabulator ? Tabulator.RenderizarGrid(this) : RenderizarGrid(this));
         }
 
         public string ToTabulator()
@@ -49,20 +49,6 @@ namespace UtilidadesParaIu
             var celdaDelCheck = $@"<td id=¨${idGrid}_${numFil}_${numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}{check}{Environment.NewLine}</td>";
             return celdaDelCheck;
         }
-
-        //<a href=¨/ruta/accion?orden=ordenPor¨>
-        //if (columna.Ordenar)
-        //{
-        //    html = html.Replace("ruta", columna.Ruta)
-        //        .Replace("accion", columna.Accion)
-        //        .Replace("ordenPor", $"{columna.OrdenPor}{columna.Sentido}");
-        //}
-        //else
-        //{
-        //    html = html.Replace(" href=¨/ruta/accion?orden=ordenPor¨", "");
-        //}
-
-        //{ title: ¨Name¨, field: ¨name¨, sorter: ¨string¨, width: 200, editor: true },
 
         private static string RenderColumnaCabecera(ColumnaDelGrid columna)
         {

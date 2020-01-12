@@ -12,7 +12,7 @@ namespace UtilidadesParaIu
                    <div class=¨modal-header¨>
                      <h5 class=¨modal-title¨ id=¨exampleModalLabel¨>titulo</h5>
                    </div>
-                   <div class=¨modal-body¨>
+                   <div id=¨{idContenedor}¨ class=¨modal-body¨>
                      listaDeElementos
                    </div>
                    <div class=¨modal-footer¨>
@@ -51,7 +51,7 @@ namespace UtilidadesParaIu
         private string _titulo;
         private string _idSelector;
 
-        Func<string> _renderElementos;
+        Func<string> _funcionParaRenderizarGrid;
         private string _idModal;
         private string _columnaId;
         private string _columnaMostrar;
@@ -65,13 +65,13 @@ namespace UtilidadesParaIu
 
         public string jsDeSeleccion { get; set; }
 
-        public SelectorModal(string claseElemento,  Func<string> RenderElementos)
+        public SelectorModal(string claseElemento,  Func<string> funcionParaRenderizarTabla)
         {
             _idModal = $"SelectorDe{claseElemento}";
 
             _titulo = $"Seleccionar {claseElemento}";
             _idSelector = $"id{claseElemento}Seleccionado";
-            _renderElementos = RenderElementos;
+            _funcionParaRenderizarGrid = funcionParaRenderizarTabla;
         }
 
         public string RenderSelector()
@@ -92,7 +92,8 @@ namespace UtilidadesParaIu
                     .Replace("{referenciaChecks}", $"chk_{IdTabla}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
-                    .Replace("listaDeElementos", RenderizarElementos())
+                    .Replace("{idContenedor}", $"contenedor_{IdTabla}")
+                    .Replace("listaDeElementos", RenderTablaDeSeleccion())
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{idTabla}", IdTabla)
@@ -104,9 +105,9 @@ namespace UtilidadesParaIu
                     .Render();
         }
         
-        private string RenderizarElementos()
+        private string RenderTablaDeSeleccion()
         {
-            return _renderElementos();
+            return _funcionParaRenderizarGrid();
         }
 
     }

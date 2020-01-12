@@ -33,6 +33,32 @@ namespace UniversidadDeMurcia.Controllers
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
+        public IActionResult Index()
+        {
+            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+        }
+
+        public JsonResult Leer(string posicion, string cantidad, string orden)
+        {
+            var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            return new JsonResult(resultado.elementos);
+        }
+
+        public string LeerSiguientes(string posicion, string cantidad, string orden)
+        {
+            var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
+            return GestorDelCrud.Mantenimiento.RenderGridSiguiente();
+        }
+
+        public override ViewResult View(string viewName, object model)
+        {
+            ViewBag.Crud = GestorDelCrud;
+            ViewBag.DatosDeConexion = DatosDeConexion;
+            return base.View(viewName, model);
+        }
+        
         protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
             return new List<ColumnaDelGrid>();
@@ -42,24 +68,12 @@ namespace UniversidadDeMurcia.Controllers
         {
             return new List<Opcion>();
         }
-
+        
         protected virtual List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<TElemento> elementos)
         {
             return new List<FilaDelGrid>();
         }
-
-        public IActionResult Index()
-        {
-            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
-        }
-
-        public override ViewResult View(string viewName, object model)
-        {
-            ViewBag.Crud = GestorDelCrud;
-            ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(viewName, model);
-        }
-
+  
         protected async Task<IActionResult> CrearObjeto(TElemento iuElemento)
         {
             try
@@ -107,19 +121,18 @@ namespace UniversidadDeMurcia.Controllers
 
             return View(GestorDelCrud.Editor.Vista, elemento);
         }
-
-        public JsonResult Leer(string posicion, string cantidad, string orden)
+        
+        protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(int posicion, int cantidad, string orden)
         {
-            var ordenParseado = ParsearOrdenacion(orden);
+            var (elementos, total) = GestorDeElementos.Leer(posicion,cantidad, ParsearOrdenacion(orden));
 
-            var (elementos, total) = LeerOrdenados(posicion.Entero(), cantidad.Entero(), ordenParseado);
-            return new JsonResult(elementos);
+            return (elementos, total);
         }
 
-        public static Dictionary<string, Ordenacion> ParsearOrdenacion(string orden)
+        private static Dictionary<string, Ordenacion> ParsearOrdenacion(string orden)
         {
             var ordenParseado = new Dictionary<string, Ordenacion>();
-            
+
             if (!orden.IsNullOrEmpty())
             {
                 var ordenes = orden.Split(';');
@@ -162,15 +175,6 @@ namespace UniversidadDeMurcia.Controllers
 
             return ordenParseado;
         }
-
-        protected (IEnumerable<TElemento>,int) LeerOrdenados(int posicion, int cantidad, Dictionary<string,Ordenacion> orden)
-        {
-            var (elementos, total) = GestorDeElementos.Leer(posicion,cantidad,orden);
-
-            return (elementos, total);
-        }
-
-
 
     }
 

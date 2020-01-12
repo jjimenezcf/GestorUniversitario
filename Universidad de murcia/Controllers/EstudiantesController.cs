@@ -27,11 +27,11 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
-            var (estudiantes, total) = LeerOrdenados(0, 10, ParsearOrdenacion(orden));
-            GestorDelCrud.Mantenimiento.TotalEnBd = total;
-            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(estudiantes);
+            var resultado = LeerOrdenados(0, 10, orden);
+            GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
 
-            return View(GestorDelCrud.Mantenimiento.Vista, estudiantes.ToList());
+            return View(GestorDelCrud.Mantenimiento.Vista, resultado.elementos.ToList());
         }
 
         protected override List<ColumnaDelGrid>DefinirColumnasDelGrid()
@@ -90,52 +90,7 @@ namespace UniversidadDeMurcia.Controllers
             }
             return listaDeEstudiantes;
         }
-
-
-
-        private void PrepararProximoOrden(string orden)
-        {
-            ViewData[nameof(ElementoEstudiante.Apellido)] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.Apellido)}Asc"
-                                                        ? $"{nameof(ElementoEstudiante.Apellido)}Des"
-                                                        : $"{nameof(ElementoEstudiante.Apellido)}Asc";
-
-            ViewData[nameof(ElementoEstudiante.InscritoEl)] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoEstudiante.InscritoEl)}Asc"
-                                                        ? $"{nameof(ElementoEstudiante.InscritoEl)}Des"
-                                                        : $"{nameof(ElementoEstudiante.InscritoEl)}Asc";
-        }
-
-        private IEnumerable<ElementoEstudiante> OrdenarListaDeEstudiantes(IEnumerable<ElementoEstudiante> estudiantes, string orden)
-        {
-            foreach (var columna in GestorDelCrud.Mantenimiento.ColumnasDelGrid)
-            {
-                if (!columna.Ordenar)
-                    continue;
-                if (orden != null && orden.Contains(columna.Nombre) && columna.Nombre == nameof(ElementoEstudiante.Apellido))
-                {
-                    if (orden.EndsWith("Des"))
-                    {
-                        columna.Sentido = "Asc";
-                        return estudiantes.OrderByDescending(c => c.Apellido);
-                    }
-                    columna.Sentido = "Des";
-                    return estudiantes.OrderBy(c => c.Apellido);
-                }
-
-                if (orden != null && orden.Contains(columna.Nombre) && columna.Nombre == nameof(ElementoEstudiante.InscritoEl))
-                {
-                    if (orden.EndsWith("Des"))
-                    {
-                        columna.Sentido = "Asc";
-                        return estudiantes.OrderByDescending(c => c.InscritoEl);
-                    }
-                    columna.Sentido = "Des";
-                    return estudiantes.OrderBy(c => c.InscritoEl);
-                }
-            }
-
-            return estudiantes.OrderBy(s => s.Apellido);
-        }
-
+        
         public IActionResult IraCrearEstudiante()
         {
             return View(GestorDelCrud.Creador.Vista, new ElementoEstudiante());

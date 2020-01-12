@@ -6,8 +6,8 @@ function LeerAnteriores(controlador) {
     alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
 }
 
-function LeerSiguientes(controlador) {
-    alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
+function LeerSiguientes(idGrid,controlador) {
+    LeerDatosDelGrid(`/${controlador}/LeerSiguientes?posicion=${3}&cantidad=${4}&orden=PorApellido`, idGrid, sustituirGrid);
 }
 
 function LeerUltimos(controlador) {
@@ -33,6 +33,34 @@ function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
     req.addEventListener("load", respuestaCorrecta);
     req.addEventListener("error", respuestaErronea);
     req.send();
+}
+
+function RenderSiguientes(url, idGrid, funcionDeRespuesta) {
+    function respuestaCorrecta() {
+        if (req.status >= 200 && req.status < 400) {
+            funcionDeRespuesta(idGrid, req.responseText);
+        }
+        else {
+            console.log(req.status + ' ' + req.statusText);
+        }
+    }
+
+    function respuestaErronea() {
+        console.log('Error de conexión');
+    }
+
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.addEventListener("load", respuestaCorrecta);
+    req.addEventListener("error", respuestaErronea);
+    req.send();
+}
+
+function sustituirGrid(idGrid, htmlGrid) {
+    var htmlContenedorGrid = document.getElementById(`contenedor_${idGrid}`);
+    console.log(htmlGrid);
+    htmlContenedorGrid.innerHTML = htmlGrid;
+
 }
 
 

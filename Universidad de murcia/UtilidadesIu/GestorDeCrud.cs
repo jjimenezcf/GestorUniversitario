@@ -13,7 +13,7 @@ namespace UtilidadesParaIu
 
     public class BaseCrud<T>
     {
-        protected string NombreDelObjeto => typeof(T).Name.Replace("Elemento","");
+        protected string NombreDelObjeto => typeof(T).Name.Replace("Elemento", "");
         private string _verbo;
         private string _accion;
         private string _formulario;
@@ -54,8 +54,8 @@ namespace UtilidadesParaIu
     {
 
         private List<Opcion> _opcionesGenerales;
-        public List<ColumnaDelGrid> ColumnasDelGrid { get;}
-        public List<FilaDelGrid> FilasDelGrid {private get; set; }
+        public List<ColumnaDelGrid> ColumnasDelGrid { get; }
+        public List<FilaDelGrid> FilasDelGrid { private get; set; }
         public List<Opcion> OpcionesGenerales
         {
             get => _opcionesGenerales;
@@ -66,23 +66,18 @@ namespace UtilidadesParaIu
                 else
                     _opcionesGenerales.AddRange(value);
             }
-          }
+        }
 
         public Dictionary<string, SelectorModal> Modales { get; set; }
 
-       private string IdGrid => $"T_{Vista}";
+        private string IdGrid => $"T_{Vista}";
 
         public MantenimientoCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
-        :base("Mantenimiento")
+        : base("Mantenimiento")
         {
             AsignarTitulo($"Mantenimiento de {NombreDelObjeto}s");
             ColumnasDelGrid = definirColumnasDelGrid == null ? renderDeColumnasVacio() : definirColumnasDelGrid();
             OpcionesGenerales = definirOpcionesGenerales();
-        }
-
-        private List<ColumnaDelGrid> renderDeColumnasVacio()
-        {
-             return new List<ColumnaDelGrid>();
         }
 
         public string Render()
@@ -95,9 +90,21 @@ namespace UtilidadesParaIu
                 RenderGrid(ColumnasDelGrid, FilasDelGrid) +
                 RenderPie();
 
-            return htmlMantenimiento;
+            return htmlMantenimiento.Render();
         }
         
+        public string RenderGridSiguiente()
+        {
+            var grid = new Grid(IdGrid, ColumnasDelGrid, FilasDelGrid) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var htmlGrid = grid.ToHtml();
+            return htmlGrid.Render();
+        }
+
+        private List<ColumnaDelGrid> renderDeColumnasVacio()
+        {
+            return new List<ColumnaDelGrid>();
+        }
+
         private string RenderCabecera()
         {
             //
@@ -118,7 +125,7 @@ namespace UtilidadesParaIu
             foreach (var opcion in OpcionesGenerales)
             {
                 var html = htmlOpcion.Replace("ruta", opcion.Ruta).Replace("accion", opcion.Accion).Replace("nombreAccion", opcion.Nombre);
-                htmlOpcionesGenerales = htmlOpcionesGenerales + html.Render();
+                htmlOpcionesGenerales = htmlOpcionesGenerales + html;
             }
 
             return htmlOpcionesGenerales;
@@ -137,9 +144,14 @@ namespace UtilidadesParaIu
 
         private string RenderGrid(List<ColumnaDelGrid> columnas, List<FilaDelGrid> filas)
         {
+            const string htmlDiv = @"<div id = ¨idContenedor¨>     
+                                     contenido 
+                                    </div>";
+
             var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
-            return htmlGrid;
+            var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor_{grid.Id}").Replace("contenido", htmlGrid);
+            return htmlContenedor;
         }
 
         private string RenderPie()
@@ -210,7 +222,7 @@ namespace UtilidadesParaIu
         public string NombreDelObjeto => typeof(T).Name;
         public string Ruta
         {
-            get { return _ruta ?? $"{NombreDelObjeto.Replace("Elemento","")}s"; }
+            get { return _ruta ?? $"{NombreDelObjeto.Replace("Elemento", "")}s"; }
             set { _ruta = value; }
         }
         public string Titulo { get; set; }
