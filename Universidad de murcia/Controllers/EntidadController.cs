@@ -9,6 +9,7 @@ using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 using System.Collections.Generic;
 using Extensiones.String;
+using UniversidadDeMurcia.UtilidadesIu;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,12 +25,12 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-        public EntidadController(string claseDeElemento, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
+        public EntidadController(GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
         base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(claseDeElemento, DefinirColumnasDelGrid, DefinirOpcionesGenerales);
+            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid, DefinirOpcionesGenerales);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -40,8 +41,8 @@ namespace UniversidadDeMurcia.Controllers
 
         public string Leer(string idGrid, string posicion, string cantidad, string orden)
         {
-            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
-            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
+            GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
             var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
@@ -50,8 +51,8 @@ namespace UniversidadDeMurcia.Controllers
 
         public string LeerSiguientes(string idGrid, string posicion, string cantidad, string orden)
         {
-            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
-            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
+            GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
             var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
@@ -60,8 +61,8 @@ namespace UniversidadDeMurcia.Controllers
 
         public string LeerAnteriores(string idGrid, string posicion, string cantidad, string orden)
         {
-            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
-            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
+            GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
             var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
@@ -139,58 +140,11 @@ namespace UniversidadDeMurcia.Controllers
         
         protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(string orden)
         {
-            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.Posicion
-                                                          , GestorDelCrud.Mantenimiento.Cant_Por_Leer
-                                                          , ParsearOrdenacion(orden));
+            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.PosicionInicial
+                                                          , GestorDelCrud.Mantenimiento.CantidadPorLeer
+                                                          , Utilidades.ParsearOrdenacion(orden));
 
             return (elementos, total);
-        }
-
-        private static Dictionary<string, Ordenacion> ParsearOrdenacion(string orden)
-        {
-            var ordenParseado = new Dictionary<string, Ordenacion>();
-
-            if (!orden.IsNullOrEmpty())
-            {
-                var ordenes = orden.Split(';');
-                var i = 0;
-                while (i < ordenes.Length)
-                {
-                    if (ordenes[i].IsNullOrEmpty())
-                        break;
-                    else
-                    {
-                        if (i + 1 == ordenes.Length && !ordenes[i].IsNullOrEmpty())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
-
-                        if (ordenes[i + 1].IsNullOrEmpty())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
-
-                        if (ordenes[i + 1] == Ordenacion.Ascendente.ToString())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
-
-                        if (ordenes[i + 1] == Ordenacion.Descendente.ToString())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Descendente;
-                            break;
-                        }
-
-                        i = i + 2;
-                    }
-
-                }
-            }
-
-            return ordenParseado;
         }
 
     }

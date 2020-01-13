@@ -12,36 +12,36 @@ namespace UtilidadesParaIu
         public string Ruta { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
+
         public int TotalEnBd { get; set; }
-        public int Posicion { get; set; }
-        public int Can_Por_Leer { get; set; }
+        private int _PosicionInicial { get; set; }
+        private int _CantidadPorLeer { get; set; }
+        public int Ultimo_Leido => _PosicionInicial + filas.Count;
 
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
-        public Grid(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid)
+        public Grid(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
         {
-            IniciarClase(idGrid, columnasGrid, filasDelGrid);
+            IniciarClase(idGrid, columnasGrid, filasDelGrid, posicionInicial, cantidadPorLeer);
         }
 
-        private void IniciarClase(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid)
+        private void IniciarClase(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
         {
             Id = idGrid;
             columnas = columnasGrid;
             filas = filasDelGrid;
+            _PosicionInicial = posicionInicial;
+            _CantidadPorLeer = cantidadPorLeer;
         }
 
         public string ToHtml()
         {
-            return (Modelo == ModeloGrid.Tabulator ? Tabulator.RenderizarGrid(this) : RenderizarGrid(this));
+            return (Modelo == ModeloGrid.Tabulator 
+                              ? Tabulator.RenderizarGrid(this) 
+                              : RenderizarGrid(this));
         }
-
-        public string ToTabulator()
-        {
-            return Tabulator.RenderizarGrid(this);
-        }
-
 
         private static string RenderCeldaCheck(string idGrid, string idCelda,int numFil, int numCol)
         {
@@ -142,7 +142,7 @@ namespace UtilidadesParaIu
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨{grid.Can_Por_Leer}¨ min=¨5¨ step=¨5¨ max=¨999¨ posicion=¨{grid.Posicion}¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨{grid._CantidadPorLeer}¨ min=¨1¨ step=¨1¨ max=¨999¨ posicion=¨{grid.Ultimo_Leido}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>

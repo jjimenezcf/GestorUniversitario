@@ -3,6 +3,7 @@ using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using System.Collections.Generic;
+using UniversidadDeMurcia.UtilidadesIu;
 using UtilidadesParaIu;
 
 namespace Componentes
@@ -16,34 +17,18 @@ namespace Componentes
         public SelectorDeEstudiante(ContextoUniversitario contexto, IMapper mapeador)
         {
             _gestordeEstudiantes = new GestorDeEstudiantes(contexto, mapeador);
-            Selector = new SelectorModal(nameof(ElementoEstudiante), RenderizarTabla)
+            Selector = new SelectorModal(nameof(ElementoEstudiante), DefinirColumnasGrid(), ObtenerFilasDelGrid, 0, 5)
             {
-                ColumnaId = nameof(ElementoEstudiante.Id),
-                ColumnaMostrar = nameof(ElementoEstudiante.Apellido)
+                ColumnaId = nameof(ElementoEstudiante.Id)
+               ,ColumnaMostrar = nameof(ElementoEstudiante.Apellido)
             };
-        }
-
-
-        public string RenderizarTabla()
-        {
-            var descriptorColumnas = DefinirColumnasGrid();
-            var filas = ObtenerFilasDelGrid(descriptorColumnas);
-
-            Grid grid = new Grid(Selector.IdGrig, descriptorColumnas, filas.filas)
-            {
-                Ruta = "Estudiantes",
-                TotalEnBd = filas.totalBD,
-                ConNavegador = true,
-                ConSeleccion = true
-            };
-
-            return grid.ToHtml();
         }
 
         private (List<FilaDelGrid> filas,int totalBD) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
         {
             var listaDeEstudiantes = new List<FilaDelGrid>();
-            var (Estudiantes, total) = _gestordeEstudiantes.LeerTodos();
+            var (Estudiantes, total) = _gestordeEstudiantes.Leer(Selector.PosicionInicial, Selector.CantidadPorLeer, Utilidades.ParsearOrdenacion(""));
+
             foreach (var Estudiante in Estudiantes)
             {
                 var datosDelEstudiante = new FilaDelGrid();

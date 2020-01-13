@@ -3,6 +3,7 @@ using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using System.Collections.Generic;
+using UniversidadDeMurcia.UtilidadesIu;
 using UtilidadesParaIu;
 
 namespace Componentes
@@ -16,34 +17,18 @@ namespace Componentes
         public SelectorDeCurso(ContextoUniversitario contexto, IMapper mapeador)
         {
             _gestordeCursos = new GestorDeCursos(contexto, mapeador);
-            Selector = new SelectorModal(nameof(ElementoCurso), RenderizarTabla)
+            Selector = new SelectorModal(nameof(ElementoCurso), DefinirColumnasGrid(), ObtenerFilasDelGrid, 0,5)
             {
-                ColumnaId = nameof(ElementoCurso.Id),
-                ColumnaMostrar = nameof(ElementoCurso.Titulo)
+                ColumnaId = nameof(ElementoCurso.Id)
+               , ColumnaMostrar = nameof(ElementoCurso.Titulo)
             };
         }
-
-
-        public string RenderizarTabla()
-        {
-            var descriptorColumnas = DefinirColumnasGrid();
-            var filas = ObtenerFilasDelGrid(descriptorColumnas);
-
-            Grid grid = new Grid(Selector.IdGrig, descriptorColumnas, filas.filas) {
-                Ruta = "Cursos",
-                TotalEnBd = filas.totalBd,
-                ConNavegador = true,
-                ConSeleccion = true
-            };
-
-            return grid.ToHtml();
-        }
-
+        
         private (List<FilaDelGrid> filas, int totalBd) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
         {
             var listaDeCursos = new List<FilaDelGrid>();
-            var (cursos,total) = _gestordeCursos.LeerTodos();
-            
+            var (cursos, total) = _gestordeCursos.Leer(Selector.PosicionInicial, Selector.CantidadPorLeer, Utilidades.ParsearOrdenacion(""));
+
             foreach (var curso in cursos)
             {
                 var datosDelCurso = new FilaDelGrid();
@@ -64,7 +49,7 @@ namespace Componentes
                 listaDeCursos.Add(datosDelCurso);
             }
 
-            return (listaDeCursos,total);
+            return (listaDeCursos, total);
         }
 
         private static List<ColumnaDelGrid> DefinirColumnasGrid()

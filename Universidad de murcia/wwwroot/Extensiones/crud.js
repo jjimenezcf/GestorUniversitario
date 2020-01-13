@@ -1,5 +1,11 @@
 ﻿function Leer(idGrid, controlador) {
-    LeerDatosDelGrid(`/${controlador}/Leer?idGrid=${idGrid}&posicion=${0}&cantidad=${5}&orden=PorApellido`, idGrid, sustituirGrid);
+    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    if (htmlImputCantidad === null)
+        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+    else {
+        var cantidad = htmlImputCantidad.value;
+        LeerDatosDelGrid(`/${controlador}/Leer?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+    }
 }
 
 function LeerAnteriores(controlador) {
@@ -7,7 +13,14 @@ function LeerAnteriores(controlador) {
 }
 
 function LeerSiguientes(idGrid, controlador) {
-    LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${5}&cantidad=${5}&orden=PorApellido`, idGrid, sustituirGrid);
+    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    if (htmlImputCantidad === null)
+        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+    else {
+        var cantidad = htmlImputCantidad.value;
+        var posicion = htmlImputCantidad.getAttribute("posicion");
+        LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+    }
 }
 
 function LeerUltimos(controlador) {
@@ -70,7 +83,7 @@ function renderDetalleGrid(idGrid, respuesta) {
     var i = 0;
     for (i = 0; i < filas.length; i++) {
         var htmlFila = renderFilaSeleccionable(idGrid, i, filas[i]);
-        htmlDetalleGrid.appendLine(htmlFila); 
+        htmlDetalleGrid.appendLine(htmlFila);
     }
     var body = $(`#${idGrid} tbody`);
     body.html(htmlDetalleGrid.toString());
@@ -93,7 +106,7 @@ function renderFila(idGrid, numFil, fila) {
     return htmlCeldas.toString();
 }
 
-function renderCeldaCheck(idGrid, idCelda){
+function renderCeldaCheck(idGrid, idCelda) {
 }
 
 function renderCelda(celda) {

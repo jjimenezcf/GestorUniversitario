@@ -73,8 +73,8 @@ namespace UtilidadesParaIu
         public Dictionary<string, SelectorModal> Modales { get; set; }
 
         private string IdGrid => $"GridMnt_{ClaseDeElemento}".ToLower();
-        public int Posicion { get; set; }
-        public int Cant_Por_Leer { get; set; }
+        public int PosicionInicial { get; set; }
+        public int CantidadPorLeer { get; set; }
 
         public MantenimientoCrud(string modo, string claseDeElemento, Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         : base(modo)
@@ -100,7 +100,7 @@ namespace UtilidadesParaIu
         
         public string RenderGridSiguiente(string idGrid)
         {
-            var grid = new Grid(idGrid, ColumnasDelGrid, FilasDelGrid) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(idGrid, ColumnasDelGrid, FilasDelGrid, PosicionInicial, CantidadPorLeer) { Ruta = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }
@@ -153,7 +153,7 @@ namespace UtilidadesParaIu
                                      contenido 
                                     </div>";
 
-            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta, TotalEnBd = TotalEnBd, Posicion = Posicion, Can_Por_Leer= Cant_Por_Leer };
+            var grid = new Grid(IdGrid, columnas, filas, PosicionInicial, CantidadPorLeer) { Ruta = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor_{grid.Id}").Replace("contenido", htmlGrid);
             return htmlContenedor;
@@ -222,14 +222,9 @@ namespace UtilidadesParaIu
     public class GestorCrud<T>
     {
 
-        private string _ruta;
-
         public string NombreDelObjeto => typeof(T).Name;
-        public string Ruta
-        {
-            get { return _ruta ?? $"{NombreDelObjeto.Replace("Elemento", "")}s"; }
-            set { _ruta = value; }
-        }
+        public string ClaseDeElemento => NombreDelObjeto.Replace("Elemento", "");
+        
         public string Titulo { get; set; }
         public Dictionary<string, SelectorModal> Modales = new Dictionary<string, SelectorModal>();
 
@@ -239,19 +234,21 @@ namespace UtilidadesParaIu
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
 
-        public GestorCrud(string claseDeElemento, Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
+        private string _Ruta => $"{NombreDelObjeto.Replace("Elemento", "")}s";
+
+        public GestorCrud(Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         {
             Titulo = $"Gestor de {NombreDelObjeto}";
             Creador = new CreacionCrud<T>();
 
-            var opciones = new List<Opcion>() { new Opcion() { Nombre = Creador.Titulo, Ruta = Ruta, Accion = Creador.Ir } };
-            Mantenimiento = new MantenimientoCrud<T>("Mantenimiento", claseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
+            var opciones = new List<Opcion>() { new Opcion() { Nombre = Creador.Titulo, Ruta = _Ruta, Accion = Creador.Ir } };
+            Mantenimiento = new MantenimientoCrud<T>("Mantenimiento", ClaseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
             {
-                Ruta = Ruta
+                Ruta = _Ruta
                ,OpcionesGenerales = opciones
                ,Modales = Modales
-               ,Posicion = 0
-               ,Cant_Por_Leer = 5
+               ,PosicionInicial = 0 //todo: --> recuperar de BD
+               ,CantidadPorLeer = 5 //todo: --> recuperar de BD
             };
 
             Editor = new EdicionCrud<T>();

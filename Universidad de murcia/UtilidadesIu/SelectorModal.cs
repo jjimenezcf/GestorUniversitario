@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace UtilidadesParaIu
 {
@@ -49,31 +50,45 @@ namespace UtilidadesParaIu
                                       ";
 
 
-        public string ClaseDeElemento { get; private set; }
-
+        private string NombreDelObjeto { get; set; }
+        
         private string _titulo;
         private string _idSelector;
 
-        Func<string> _funcionParaRenderizarGrid;
         private string _idModal;
         private string _columnaId;
         private string _columnaMostrar;
 
-        public string IdModal => _idModal.ToLower();
-        public string IdGrig => $"GridSel_{ClaseDeElemento}".ToLower();
-        public string IdSelector => _idSelector.ToLower();
+        private string _ClaseDeElemento => $"{NombreDelObjeto.Replace("Elemento", "")}";
+        private string _Ruta => $"{_ClaseDeElemento}s";
+
+        private string IdModal => _idModal.ToLower();
+        private string IdGrig => $"GridSel_{_ClaseDeElemento}".ToLower();
+        private string IdSelector => _idSelector.ToLower();
 
         public string ColumnaId { get { return _columnaId.ToLower(); }  set { _columnaId = value; } }
         public string ColumnaMostrar { get { return _columnaMostrar.ToLower(); } set { _columnaMostrar = value; } }
 
-        public SelectorModal(string claseDeElemento,  Func<string> funcionParaRenderizarTabla)
-        {
-            ClaseDeElemento = claseDeElemento;
-            _idModal = $"Selector_{ClaseDeElemento}";
 
-            _titulo = $"Seleccionar {ClaseDeElemento}";
-            _idSelector = $"id_{ClaseDeElemento}_Seleccionado";
-            _funcionParaRenderizarGrid = funcionParaRenderizarTabla;
+        public int TotalEnBd { get; set; }
+        public int PosicionInicial { get; private set; }
+        public int CantidadPorLeer { get; private set; }
+        
+        private Func<List<ColumnaDelGrid>, (List<FilaDelGrid> filas, int totalBd)> LeerFilasParaElGrid { get; set; }
+        private List<ColumnaDelGrid> DescriptorDeColumnas { get; set; }
+
+        public SelectorModal(string nombreDelObjeto, List<ColumnaDelGrid> descriptorDeColumnas, Func<List<ColumnaDelGrid>, (List<FilaDelGrid> filas, int totalBd)> leerFilasParaElGrid, int posicionInicial, int cantidadPorLeer)
+        {
+            NombreDelObjeto = nombreDelObjeto;
+            _idModal = $"Selector_{_ClaseDeElemento}";
+
+            _titulo = $"Seleccionar {NombreDelObjeto}";
+            _idSelector = $"id_{_ClaseDeElemento}_Seleccionado";
+            DescriptorDeColumnas = descriptorDeColumnas;
+            LeerFilasParaElGrid = leerFilasParaElGrid;
+
+            PosicionInicial = posicionInicial;
+            CantidadPorLeer = cantidadPorLeer;
         }
 
         public string RenderSelector()
@@ -95,7 +110,7 @@ namespace UtilidadesParaIu
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
                     .Replace("{idContenedor}", $"contenedor_{IdGrig}")
-                    .Replace("listaDeElementos", RenderTablaDeSeleccion())
+                    .Replace("listaDeElementos", RenderGridDeSeleccion())
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{idTabla}", IdGrig)
@@ -107,9 +122,19 @@ namespace UtilidadesParaIu
                     .Render();
         }
         
-        private string RenderTablaDeSeleccion()
+        private string RenderGridDeSeleccion()
         {
-            return _funcionParaRenderizarGrid();
+            var resultado = LeerFilasParaElGrid(DescriptorDeColumnas);
+
+            Grid grid = new Grid(IdGrig, DescriptorDeColumnas, resultado.filas, PosicionInicial, CantidadPorLeer)
+            {
+                Ruta = _Ruta,
+                TotalEnBd = resultado.totalBd,
+                ConNavegador = true,
+                ConSeleccion = true
+            };
+
+            return grid.ToHtml();
         }
 
     }
