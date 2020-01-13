@@ -40,8 +40,9 @@ namespace UniversidadDeMurcia.Controllers
 
         public string Leer(string idGrid, string posicion, string cantidad, string orden)
         {
-            var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
-            //return new JsonResult(resultado.elementos);
+            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
+            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
             return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
@@ -49,12 +50,23 @@ namespace UniversidadDeMurcia.Controllers
 
         public string LeerSiguientes(string idGrid, string posicion, string cantidad, string orden)
         {
-            var resultado = LeerOrdenados(posicion.Entero(), cantidad.Entero(), orden);
+            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
+            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
             return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
+        public string LeerAnteriores(string idGrid, string posicion, string cantidad, string orden)
+        {
+            GestorDelCrud.Mantenimiento.Posicion = posicion.Entero();
+            GestorDelCrud.Mantenimiento.Cant_Por_Leer = cantidad.Entero();
+            var resultado = LeerOrdenados(orden);
+            GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
+            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
+            return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
+        }
         public override ViewResult View(string viewName, object model)
         {
             ViewBag.Crud = GestorDelCrud;
@@ -125,9 +137,11 @@ namespace UniversidadDeMurcia.Controllers
             return View(GestorDelCrud.Editor.Vista, elemento);
         }
         
-        protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(int posicion, int cantidad, string orden)
+        protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(string orden)
         {
-            var (elementos, total) = GestorDeElementos.Leer(posicion,cantidad, ParsearOrdenacion(orden));
+            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.Posicion
+                                                          , GestorDelCrud.Mantenimiento.Cant_Por_Leer
+                                                          , ParsearOrdenacion(orden));
 
             return (elementos, total);
         }

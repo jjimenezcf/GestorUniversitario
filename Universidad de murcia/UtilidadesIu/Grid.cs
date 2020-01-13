@@ -13,6 +13,8 @@ namespace UtilidadesParaIu
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
         public int TotalEnBd { get; set; }
+        public int Posicion { get; set; }
+        public int Can_Por_Leer { get; set; }
 
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
@@ -140,7 +142,7 @@ namespace UtilidadesParaIu
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨10¨ min=¨5¨ step=¨5¨ max=¨999¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨{grid.Can_Por_Leer}¨ min=¨5¨ step=¨5¨ max=¨999¨ posicion=¨{grid.Posicion}¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>

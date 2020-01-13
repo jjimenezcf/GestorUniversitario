@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Extensiones.String;
+using Gestor.Elementos;
+using System;
 using System.Collections.Generic;
 
 namespace UtilidadesParaIu
@@ -71,6 +73,8 @@ namespace UtilidadesParaIu
         public Dictionary<string, SelectorModal> Modales { get; set; }
 
         private string IdGrid => $"GridMnt_{ClaseDeElemento}".ToLower();
+        public int Posicion { get; set; }
+        public int Cant_Por_Leer { get; set; }
 
         public MantenimientoCrud(string modo, string claseDeElemento, Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<Opcion>> definirOpcionesGenerales)
         : base(modo)
@@ -149,7 +153,7 @@ namespace UtilidadesParaIu
                                      contenido 
                                     </div>";
 
-            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(IdGrid, columnas, filas) { Ruta = Ruta, TotalEnBd = TotalEnBd, Posicion = Posicion, Can_Por_Leer= Cant_Por_Leer };
             var htmlGrid = grid.ToHtml();
             var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor_{grid.Id}").Replace("contenido", htmlGrid);
             return htmlContenedor;
@@ -241,7 +245,14 @@ namespace UtilidadesParaIu
             Creador = new CreacionCrud<T>();
 
             var opciones = new List<Opcion>() { new Opcion() { Nombre = Creador.Titulo, Ruta = Ruta, Accion = Creador.Ir } };
-            Mantenimiento = new MantenimientoCrud<T>("Mantenimiento", claseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales) { Ruta = Ruta, OpcionesGenerales = opciones, Modales = Modales };
+            Mantenimiento = new MantenimientoCrud<T>("Mantenimiento", claseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
+            {
+                Ruta = Ruta
+               ,OpcionesGenerales = opciones
+               ,Modales = Modales
+               ,Posicion = 0
+               ,Cant_Por_Leer = 5
+            };
 
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();

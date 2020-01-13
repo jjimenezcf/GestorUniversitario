@@ -3,7 +3,7 @@
 }
 
 function LeerAnteriores(controlador) {
-    alert(`/${controlador}/Leer?posicion=${0},cantidad=${3}`);
+    LeerDatosDelGrid(`/${controlador}/LeerAnteriores?idGrid=${idGrid}&posicion=${5}&cantidad=${5}&orden=PorApellido`, idGrid, sustituirGrid);
 }
 
 function LeerSiguientes(idGrid, controlador) {
