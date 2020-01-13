@@ -4,7 +4,9 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -15,42 +17,31 @@ using System.Threading.Tasks;
 namespace Gestor.Elementos
 {
 
-    //public static class Auditoria
-    //{
-    //    public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta)
-    //    {
-    //        var a = ((System.Data.Objects.ObjectQuery)consulta).ToTraceString();
-    //        return consulta;
-    //    }
-    //}
+    public static class Auditoria
+    {
+        public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta) where TRegistro : class
+        {
+            var a = consulta.ToSql();
+            return consulta;
+        }
+    }
 
-    //public static class IQueryableExtensions
-    //{
-    //    private static readonly TypeInfo QueryCompilerTypeInfo = typeof(QueryCompiler).GetTypeInfo();
-
-    //    private static readonly FieldInfo QueryCompilerField = typeof(EntityQueryProvider).GetTypeInfo().DeclaredFields.First(x => x.Name == "_queryCompiler");
-
-    //    private static readonly FieldInfo QueryModelGeneratorField = QueryCompilerTypeInfo.DeclaredFields.First(x => x.Name == "_queryModelGenerator");
-
-    //    private static readonly FieldInfo DataBaseField = QueryCompilerTypeInfo.DeclaredFields.Single(x => x.Name == "_database");
-
-    //    private static readonly PropertyInfo DatabaseDependenciesField = typeof(Database).GetTypeInfo().DeclaredProperties.Single(x => x.Name == "Dependencies");
-
-    //    public static string ToSql<TEntity>(this IQueryable<TEntity> query) where TEntity : class
-    //    {
-    //        var queryCompiler = (QueryCompiler)QueryCompilerField.GetValue(query.Provider);
-    //        var modelGenerator = (QueryModelGenerator)QueryModelGeneratorField.GetValue(queryCompiler);
-    //        var queryModel = modelGenerator.ParseQuery(query.Expression);
-    //        var database = (IDatabase)DataBaseField.GetValue(queryCompiler);
-    //        var databaseDependencies = (DatabaseDependencies)DatabaseDependenciesField.GetValue(database);
-    //        var queryCompilationContext = databaseDependencies.QueryCompilationContextFactory.Create(false);
-    //        var modelVisitor = (RelationalQueryModelVisitor)queryCompilationContext.CreateQueryModelVisitor();
-    //        modelVisitor.CreateQueryExecutor<TEntity>(queryModel);
-    //        var sql = modelVisitor.Queries.First().ToString();
-
-    //        return sql;
-    //    }
-    //}
+    public static class IQueryableExtensions
+    {
+        public static string ToSql<TRegistro>(this IQueryable<TRegistro> query) where TRegistro : class
+        {
+            var enumerator = query.Provider.Execute<IEnumerable<TRegistro>>(query.Expression).GetEnumerator();
+            var enumeratorType = enumerator.GetType();
+            var selectFieldInfo = enumeratorType.GetField("_selectExpression", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _selectExpression on type {enumeratorType.Name}");
+            var sqlGeneratorFieldInfo = enumeratorType.GetField("_querySqlGeneratorFactory", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _querySqlGeneratorFactory on type {enumeratorType.Name}");
+            var selectExpression = selectFieldInfo.GetValue(enumerator) as SelectExpression ?? throw new InvalidOperationException($"could not get SelectExpression");
+            var factory = sqlGeneratorFieldInfo.GetValue(enumerator) as IQuerySqlGeneratorFactory ?? throw new InvalidOperationException($"could not get IQuerySqlGeneratorFactory");
+            var sqlGenerator = factory.Create();
+            var command = sqlGenerator.GetCommand(selectExpression);
+            var sql = command.CommandText;
+            return sql;
+        }
+    }
 
 
     public static class Filtros
@@ -142,7 +133,7 @@ namespace Gestor.Elementos
             //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
-            var total = registros.Count();
+            var total = registros.LogSql().Count();
 
             registros = AplicarOrden(registros, orden);
 
