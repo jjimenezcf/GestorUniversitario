@@ -2,6 +2,8 @@
 using Gestor.Elementos.ModeloBd;
 using System;
 using System.Linq;
+using GestorDeElementos.Utilidades;
+using Extensiones;
 
 namespace Gestor.Elementos
 {
@@ -18,12 +20,27 @@ namespace Gestor.Elementos
     {
         public DatosDeConexion DatosDeConexion { get; set; }
 
+        private TrazaSql _traza = null;
+        public TrazaSql Traza
+        {
+            get
+            {
+                if (_traza == null)
+                    _traza = CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"traza_{DateTime.Now}.txt");
+                return _traza;
+            }
+            private set
+            {
+                _traza = value;
+            }
+        }
+
         public ContextoDeElementos(DbContextOptions options) :
         base(options)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder();
 
-            dbContextOptionsBuilder.AddInterceptors(new LogSql()); 
+            dbContextOptionsBuilder.AddInterceptors(new LogSql());
 
             DatosDeConexion = new DatosDeConexion();
             DatosDeConexion.ServidorWeb = Environment.MachineName;
@@ -33,6 +50,11 @@ namespace Gestor.Elementos
              ObtenerVersion() :
              "0.0.0.";
             DatosDeConexion.Usuario = Literal.usuario;
+        }
+
+        public TrazaSql CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
+        {
+            return new TrazaSql(nivel, ruta, fichero,  $"Traza iniciada por {DatosDeConexion.Usuario}");
         }
 
         private string ObtenerVersion()
@@ -50,6 +72,12 @@ namespace Gestor.Elementos
 
             modelBuilder.Entity<CatalogoDelSe>().ToView(Literal.Vista.Catalogo);
             modelBuilder.Entity<RegistroDeVariable>().ToTable(Literal.Tabla.Variable);
+        }
+
+        public override void Dispose()
+        {
+            Traza.CerrarTraza("Cerrada la conexión");
+            base.Dispose();
         }
 
     }

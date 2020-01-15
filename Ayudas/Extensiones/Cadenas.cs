@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Extensiones.String
 {
@@ -22,5 +23,16 @@ namespace Extensiones.String
             int.TryParse(str, out numero);
             return numero;
         }
+
+        public static string RemplazarCaracteres(this string str, string caracterDeRemplazo = "")
+        {
+            return str.RemplazarCaracteres(@"[^\w\.@-_]", caracterDeRemplazo);
+        }
+
+        public static string RemplazarCaracteres(this string str, string caracteresNoValidos = @"[^\w\.@-_]", string caracterDeRemplazo = "")
+        {
+            return Regex.Replace(str, caracteresNoValidos, caracterDeRemplazo, RegexOptions.None);
+        }
+
     }
 }

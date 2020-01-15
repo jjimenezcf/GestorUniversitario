@@ -19,9 +19,10 @@ namespace Gestor.Elementos
 
     public static class Auditoria
     {
-        public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta) where TRegistro : class
+        public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
         {
             var a = consulta.ToSql();
+            contexto.Traza.AnotarTrazaSql(a, "--");
             return consulta;
         }
     }
@@ -79,7 +80,7 @@ namespace Gestor.Elementos
     }
 
 
-    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : DbContext
+    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : ContextoDeElementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto Contexto;
@@ -133,7 +134,7 @@ namespace Gestor.Elementos
             //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
-            var total = registros.LogSql().Count();
+            var total = registros.LogSql(Contexto, filtros).Count();
 
             registros = AplicarOrden(registros, orden);
 
