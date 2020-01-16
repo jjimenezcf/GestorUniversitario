@@ -49,7 +49,7 @@ namespace Extensiones
         private readonly NivelDeTraza _nivel;
         private bool abierto { get; set; }
         private bool escribirNivel => _nivel != NivelDeTraza.Siempre;
-        public bool LaTrazaEstaAbierta => abierto;
+        public bool EstaAbierta => abierto;
         public Stopwatch Cronometro = new Stopwatch();
 
 
@@ -154,26 +154,31 @@ namespace Extensiones
 
         }
 
-        public void Debug(object mensaje)
+        public void Debug(string mensaje)
         {
-            if (mensaje != null) Log(NivelDeTraza.Debug, mensaje.ToString());
+            if (!mensaje.IsNullOrEmpty())
+                Log(NivelDeTraza.Debug, mensaje.ToString());
         }
 
-        public void Info(object mensaje)
+        public void Info(string mensaje)
         {
-            if (mensaje != null) Log(NivelDeTraza.Info, mensaje.ToString());
+            if (!mensaje.IsNullOrEmpty())
+                Log(NivelDeTraza.Info, mensaje.ToString());
         }
-        public void Error(object mensaje)
+        public void Error(string mensaje)
         {
-            if (mensaje != null) Log(NivelDeTraza.Error, mensaje.ToString());
+            if (!mensaje.IsNullOrEmpty())
+                Log(NivelDeTraza.Error, mensaje.ToString());
         }
-        public void Advertencia(object mensaje)
+        public void Advertencia(string mensaje)
         {
-            if (mensaje != null) Log(NivelDeTraza.Advertencia, mensaje.ToString());
+            if (!mensaje.IsNullOrEmpty())
+                Log(NivelDeTraza.Advertencia, mensaje.ToString());
         }
-        public void Registrar(object mensaje)
+        public void Registrar(string mensaje)
         {
-            if (mensaje != null) Log(NivelDeTraza.Siempre, mensaje.ToString());
+            if (!mensaje.IsNullOrEmpty()) 
+                Log(NivelDeTraza.Siempre, mensaje.ToString());
         }
 
         public void Separador()

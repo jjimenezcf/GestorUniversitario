@@ -4,7 +4,7 @@
         console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
-        LeerDatosDelGrid(`/${controlador}/Leer?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
     }
 }
 
@@ -18,7 +18,7 @@ function LeerAnteriores(idGrid, controlador) {
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
     }
 }
 
@@ -34,7 +34,7 @@ function LeerSiguientes(idGrid, controlador) {
         if (posicion + cantidad >= totalEnBd)
             LeerUltimos(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
     }
 }
 
@@ -48,7 +48,7 @@ function LeerUltimos(idGrid, controlador) {
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerSiguientes?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
     }
 }
 

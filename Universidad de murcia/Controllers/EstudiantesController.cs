@@ -17,16 +17,25 @@ namespace UniversidadDeMurcia.Controllers
 {
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
+
         public EstudiantesController( GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
             base(gestorDeEstudiantes, gestorDeErrores)
         {
+            GestorDeElementos.IniciarTraza();
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
 
+        protected override void Dispose(bool disposing)
+        {
+            GestorDeElementos.CerrarTraza();
+            base.Dispose(disposing);
+        }
+
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
+            
             var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);

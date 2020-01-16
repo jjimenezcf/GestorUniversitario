@@ -20,20 +20,7 @@ namespace Gestor.Elementos
     {
         public DatosDeConexion DatosDeConexion { get; set; }
 
-        private TrazaSql _traza = null;
-        public TrazaSql Traza
-        {
-            get
-            {
-                if (_traza == null)
-                    _traza = CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"traza_{DateTime.Now}.txt");
-                return _traza;
-            }
-            private set
-            {
-                _traza = value;
-            }
-        }
+        public TrazaSql Traza { get; private set; }
 
         public ContextoDeElementos(DbContextOptions options) :
         base(options)
@@ -50,11 +37,6 @@ namespace Gestor.Elementos
              ObtenerVersion() :
              "0.0.0.";
             DatosDeConexion.Usuario = Literal.usuario;
-        }
-
-        public TrazaSql CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
-        {
-            return new TrazaSql(nivel, ruta, fichero,  $"Traza iniciada por {DatosDeConexion.Usuario}");
         }
 
         private string ObtenerVersion()
@@ -74,12 +56,32 @@ namespace Gestor.Elementos
             modelBuilder.Entity<RegistroDeVariable>().ToTable(Literal.Tabla.Variable);
         }
 
-        public override void Dispose()
+        public void IniciarTraza()
         {
-            Traza.CerrarTraza("Cerrada la conexión");
-            base.Dispose();
+            if (Traza == null)
+                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"traza_{DateTime.Now}.txt");
+            else
+            if (!Traza.EstaAbierta)
+                Traza.Abrir(true);
         }
 
+        public void CerrarTraza()
+        {
+            if (Traza != null)
+            {
+                if (!Traza.EstaAbierta)
+                    Traza.Abrir(true);
+
+                Traza.CerrarTraza("Conexión cerrada");
+            }
+        }
+
+        private void CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
+        {
+            Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Usuario}");
+        }
+
+        
     }
 }
 

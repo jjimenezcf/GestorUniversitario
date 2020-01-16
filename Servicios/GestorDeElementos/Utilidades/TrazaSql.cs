@@ -36,7 +36,7 @@ namespace GestorDeElementos.Utilidades
 
         public void AnotarTrazaSql(string setenciaSql, string parametros, double duracion)
         {
-            if (LaTrazaEstaAbierta)
+            if (EstaAbierta)
             {
                 duraciAcomulada += duracion;
                 string logTraza = $"Sentencia SQL:{Environment.NewLine}{setenciaSql}{Environment.NewLine}" +
@@ -52,7 +52,7 @@ namespace GestorDeElementos.Utilidades
 
         public void AnotarTrazaSql(string setenciaSql, string parametros)
         {
-            if (LaTrazaEstaAbierta)
+            if (EstaAbierta)
             {
                 string logTraza = $"Sentencia SQL:{Environment.NewLine}{setenciaSql}{Environment.NewLine}" +
                                   $"Parámetros:   {parametros}." + Environment.NewLine;
@@ -64,7 +64,7 @@ namespace GestorDeElementos.Utilidades
 
         public void AnotarExcepcion(Exception exc)
         {
-            if (LaTrazaEstaAbierta)
+            if (EstaAbierta)
             {
                 string logTraza = $"Excepcioón genrada: {Environment.NewLine}{exc.MensajeCompleto(true)}{Environment.NewLine}";
                 logTraza = $"{logTraza}";
@@ -75,7 +75,7 @@ namespace GestorDeElementos.Utilidades
 
         public void AnotarMensaje(string asunto, string mensaje)
         {
-            if (LaTrazaEstaAbierta)
+            if (EstaAbierta)
             {
                 string logTraza = $"{asunto}{Environment.NewLine}{mensaje}{Environment.NewLine}";
                 Registrar(logTraza);

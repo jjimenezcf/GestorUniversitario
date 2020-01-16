@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Gestor.Elementos
 {
 
-    public static class Auditoria
+    public static class IQueryableExtensions
     {
         public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
         {
@@ -25,10 +25,7 @@ namespace Gestor.Elementos
             contexto.Traza.AnotarTrazaSql(a, "--");
             return consulta;
         }
-    }
 
-    public static class IQueryableExtensions
-    {
         public static string ToSql<TRegistro>(this IQueryable<TRegistro> query) where TRegistro : class
         {
             var enumerator = query.Provider.Execute<IEnumerable<TRegistro>>(query.Expression).GetEnumerator();
@@ -42,8 +39,19 @@ namespace Gestor.Elementos
             var sql = command.CommandText;
             return sql;
         }
-    }
 
+        public static int Count<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
+        {
+            source.LogSql(contexto, filtros);
+            return source.Count();
+        }
+
+        public static List<TRegistro> ToList<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
+        {
+            source.LogSql(contexto, filtros);
+            return source.ToList();
+        }
+    }
 
     public static class Filtros
     {
@@ -134,11 +142,11 @@ namespace Gestor.Elementos
             //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
-            var total = registros.LogSql(Contexto, filtros).Count();
+            var total = registros.Count(Contexto, filtros);
 
             registros = AplicarOrden(registros, orden);
 
-            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList();
+            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList(Contexto, filtros);
             return (MapearElementos(elementosDeBd), total);
         }
 
@@ -152,7 +160,7 @@ namespace Gestor.Elementos
             return registros.Filtro(filtros);
         }
 
-        public (IEnumerable<TElemento>,int) LeerTodos()
+        public (IEnumerable<TElemento>, int) LeerTodos()
         {
             var elementosDeBd = Contexto.Set<TRegistro>().AsNoTracking().ToList();
             return (MapearElementos(elementosDeBd), Contexto.Set<TRegistro>().Count());
@@ -225,6 +233,17 @@ namespace Gestor.Elementos
         {
             return Metadatos.NuevoElementoIu();
         }
+
+        public void IniciarTraza()
+        {
+            Contexto.IniciarTraza();
+        }
+
+        public void CerrarTraza()
+        {
+            Contexto.CerrarTraza();
+        }
+
 
     }
 }
