@@ -50,6 +50,16 @@ namespace GestorDeElementos.Utilidades
             }
         }
 
+        public void AnotarTrazaSql(string traza)
+        {
+            if (EstaAbierta)
+            {
+                Registrar(traza);
+                Separador();
+                sentenciasEjecutadas++;
+            }
+        }
+
         public void AnotarTrazaSql(string setenciaSql, string parametros)
         {
             if (EstaAbierta)
