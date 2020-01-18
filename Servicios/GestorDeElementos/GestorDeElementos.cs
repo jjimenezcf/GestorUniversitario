@@ -1,57 +1,17 @@
 ﻿using AutoMapper;
-using Extensiones.String;
 using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Utilidades;
 
 namespace Gestor.Elementos
 {
-
-    public static class IQueryableExtensions
-    {
-        public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-        {
-            var a = consulta.ToSql();
-            contexto.Traza.AnotarTrazaSql(a, "--");
-            return consulta;
-        }
-
-        public static string ToSql<TRegistro>(this IQueryable<TRegistro> query) where TRegistro : class
-        {
-            var enumerator = query.Provider.Execute<IEnumerable<TRegistro>>(query.Expression).GetEnumerator();
-            var enumeratorType = enumerator.GetType();
-            var selectFieldInfo = enumeratorType.GetField("_selectExpression", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _selectExpression on type {enumeratorType.Name}");
-            var sqlGeneratorFieldInfo = enumeratorType.GetField("_querySqlGeneratorFactory", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _querySqlGeneratorFactory on type {enumeratorType.Name}");
-            var selectExpression = selectFieldInfo.GetValue(enumerator) as SelectExpression ?? throw new InvalidOperationException($"could not get SelectExpression");
-            var factory = sqlGeneratorFieldInfo.GetValue(enumerator) as IQuerySqlGeneratorFactory ?? throw new InvalidOperationException($"could not get IQuerySqlGeneratorFactory");
-            var sqlGenerator = factory.Create();
-            var command = sqlGenerator.GetCommand(selectExpression);
-            var sql = command.CommandText;
-            return sql;
-        }
-
-        public static int Count<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-        {
-            source.LogSql(contexto, filtros);
-            return source.Count();
-        }
-
-        public static List<TRegistro> ToList<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-        {
-            source.LogSql(contexto, filtros);
-            return source.ToList();
-        }
-    }
 
     public static class Filtros
     {
@@ -88,7 +48,10 @@ namespace Gestor.Elementos
     }
 
 
-    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> where TRegistro : RegistroBase where TElemento : ElementoBase where TContexto : ContextoDeElementos
+    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> 
+        where TRegistro : RegistroBase 
+        where TElemento : ElementoBase 
+        where TContexto : ContextoDeElementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto Contexto;
@@ -108,6 +71,7 @@ namespace Gestor.Elementos
             _gestorDeErrores = gestorErrores;
         }
 
+        
         protected virtual void IniciarClase(TContexto contexto)
         {
             Contexto = contexto;
@@ -133,6 +97,10 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
+        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad)
+        {
+            return Leer(posicion, cantidad, new Dictionary<string, Ordenacion>());
+        }
 
         public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, Dictionary<string, Ordenacion> orden)
         {
@@ -142,11 +110,11 @@ namespace Gestor.Elementos
             //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
-            var total = registros.Count(Contexto, filtros);
+            var total = registros.Count();
 
             registros = AplicarOrden(registros, orden);
 
-            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList(Contexto, filtros);
+            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList();
             return (MapearElementos(elementosDeBd), total);
         }
 
@@ -233,17 +201,6 @@ namespace Gestor.Elementos
         {
             return Metadatos.NuevoElementoIu();
         }
-
-        public void IniciarTraza()
-        {
-            Contexto.IniciarTraza();
-        }
-
-        public void CerrarTraza()
-        {
-            Contexto.CerrarTraza();
-        }
-
 
     }
 }

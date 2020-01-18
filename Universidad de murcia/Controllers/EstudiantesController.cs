@@ -11,7 +11,8 @@ using Gestor.Errores;
 using Gestor.Elementos.Universitario;
 using UtilidadesParaIu;
 using Componentes;
-using Extensiones.String;
+using Utilidades;
+
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -21,18 +22,11 @@ namespace UniversidadDeMurcia.Controllers
         public EstudiantesController( GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
             base(gestorDeEstudiantes, gestorDeErrores)
         {
-            GestorDeElementos.IniciarTraza();
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
-
-        protected override void Dispose(bool disposing)
-        {
-            GestorDeElementos.CerrarTraza();
-            base.Dispose(disposing);
-        }
-
+        
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
             

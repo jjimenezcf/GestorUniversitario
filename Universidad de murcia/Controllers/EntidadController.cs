@@ -8,7 +8,7 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 using System.Collections.Generic;
-using Extensiones.String;
+using Utilidades;
 using UniversidadDeMurcia.UtilidadesIu;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,9 +29,17 @@ namespace UniversidadDeMurcia.Controllers
         base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
+            GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid, DefinirOpcionesGenerales);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            GestorDeElementos.Contexto.CerrarTraza();
+            base.Dispose(disposing);
         }
 
         public IActionResult Index()
@@ -123,7 +131,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.PosicionInicial
                                                           , GestorDelCrud.Mantenimiento.CantidadPorLeer
-                                                          , Utilidades.ParsearOrdenacion(orden));
+                                                          , orden.ParsearOrdenacion());
 
             return (elementos, total);
         }

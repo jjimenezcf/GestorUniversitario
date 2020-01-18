@@ -27,6 +27,7 @@ namespace UniversidadDeMurcia
             try
             {
                 InicializadorBD.Inicializar(contexto);
+                contexto.IniciarTraza();
                 var resultado = contexto.CatalogoDelSe
                     .FromSqlRaw($"SELECT * FROM dbo.CatalogoDelSe WHERE tabla = '__EFMigrationsHistory'")
                     .FirstOrDefault();
@@ -46,14 +47,19 @@ namespace UniversidadDeMurcia
                                       $"{Environment.NewLine}BD: {resultado.Catalogo}" +
                                       $"{Environment.NewLine}Esquema: {resultado.Esquema}" +
                                       $"{Environment.NewLine}Tabla: {resultado.Tabla}");
-                
+
                 logger.LogInformation($"{Environment.NewLine}Contexto {contexto.GetType().Name} inicializado.{Environment.NewLine}BD: {contexto.Database.GetDbConnection().Database}");
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, $"{Environment.NewLine}Error al inicializar la BD.{Environment.NewLine}");
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}",ex);
+                throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}", ex);
+            }
+            finally
+            {
+                if (contexto != null)
+                    contexto.CerrarTraza();
             }
         }
 

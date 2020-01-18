@@ -5,10 +5,11 @@ namespace Gestor.Elementos.ModeloBd
 
     class Literal
     {
-        internal static string version = "Versión";
-        internal static string usuario = "jjimenezcf@gmail.com";
-        internal static string esquemaBd = "dbo";
-
+        internal static readonly string  DebugarSqls = nameof(DebugarSqls);
+        internal static readonly string version = "Versión";
+        internal static readonly string usuario = "jjimenezcf@gmail.com";
+        internal static readonly string esquemaBd = "dbo";
+        
         public class Tabla
         {
             internal static string Variable = "Var_Variable";
@@ -58,6 +59,18 @@ namespace Gestor.Elementos.ModeloBd
 
         public ExisteTabla(ContextoDeElementos contexto, string tabla)
         : base(contexto, $"SELECT 1 FROM sysobjects WHERE type = 'U' AND name = '{tabla}'")
+        {
+            Ejecutar();
+        }
+    }
+
+
+    public class DebugarSql : ConsultaSql
+    {
+        public bool DebugarSqls => (Registros.Count == 1 ? Registros[0][3].ToString() == "S": false);
+
+        public DebugarSql(ContextoDeElementos contexto)
+        : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.DebugarSqls}'")
         {
             Ejecutar();
         }

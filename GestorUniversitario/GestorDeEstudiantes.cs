@@ -3,13 +3,8 @@ using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using AutoMapper;
-using System.Linq.Expressions;
-using System;
-using Extensiones.String;
 
 namespace Gestor.Elementos.Universitario
 {

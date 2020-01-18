@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Extensiones;
 using Microsoft.Extensions.Configuration;
 
 namespace Gestor.Correo

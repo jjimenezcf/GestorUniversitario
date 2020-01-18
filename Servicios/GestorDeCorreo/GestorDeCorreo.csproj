@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Ayudas\Extensiones\Extensiones.csproj" />
+    <ProjectReference Include="..\..\Ayudas\Extensiones\Utilidades.csproj" />
   </ItemGroup>
 
   <ItemGroup>

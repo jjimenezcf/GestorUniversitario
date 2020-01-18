@@ -1,15 +1,12 @@
-﻿using Extensiones.String;
-using Gestor.Elementos;
-using System;
+﻿using Gestor.Elementos;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Utilidades;
 
 namespace UniversidadDeMurcia.UtilidadesIu
 {
-    public static class Utilidades
+    public static class parametrosMvc
     {
-        public static Dictionary<string, Ordenacion> ParsearOrdenacion(string orden)
+        public static Dictionary<string, Ordenacion> ParsearOrdenacion(this string orden)
         {
             var ordenParseado = new Dictionary<string, Ordenacion>();
 

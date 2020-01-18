@@ -3,9 +3,10 @@ using Gestor.Elementos.ModeloBd;
 using System;
 using System.Linq;
 using GestorDeElementos.Utilidades;
-using Extensiones;
+using Utilidades.Traza;
 using System.Data.Common;
 using Z.EntityFramework.Extensions;
+using System.Diagnostics;
 
 namespace Gestor.Elementos
 {
@@ -50,6 +51,13 @@ namespace Gestor.Elementos
             return registro == null ? "0.0.0" : registro.Valor;
         }
 
+        private bool Debuggar()
+        {
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.DebugarSqls);
+            return registro == null ? false : registro.Valor=="S";
+
+        }
+
         public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
         public DbSet<RegistroDeVariable> Variables { get; set; }
 
@@ -63,10 +71,13 @@ namespace Gestor.Elementos
 
         public void IniciarTraza()
         {
+            if (!Debuggar())
+                return;
+
             if (Traza == null)
                 CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"traza_{DateTime.Now}.txt");
             else
-            if (!Traza.EstaAbierta)
+            if (!Traza.Abierta)
                 Traza.Abrir(true);
         }
 
@@ -74,7 +85,7 @@ namespace Gestor.Elementos
         {
             if (Traza != null)
             {
-                if (!Traza.EstaAbierta)
+                if (!Traza.Abierta)
                     Traza.Abrir(true);
 
                 Traza.CerrarTraza("Conexión cerrada");
@@ -87,80 +98,85 @@ namespace Gestor.Elementos
             _interceptadorDeConsultas.Traza = Traza;
         }
 
-        
+
     }
 
     public class InterceptadorDeConsultas : DbCommandInterceptor
     {
         public TrazaSql Traza { get; set; }
+        private DbCommand _sentenciaSql { get; set; }
+        private Stopwatch _cronoSql;
 
-        public InterceptadorDeConsultas()
+
+        public override void NonQueryExecuting(DbCommand sentenciaSql, DbCommandInterceptionContext<int> interceptionContext)
         {
+            base.NonQueryExecuting(sentenciaSql, interceptionContext);
+            _sentenciaSql = sentenciaSql;
+            _cronoSql = new Stopwatch();
+            _cronoSql.Start();
         }
-
         public override void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
         {
             base.NonQueryExecuted(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.NonQueryExecuted", interceptionContext.Result.ToString(), command.CommandText);
+            RegistrarTraza();
+        }
+        public override void NonQueryError(DbCommand sentenciaSql, DbCommandInterceptionContext<int> interceptionContext, Exception exception)
+        {
+            base.NonQueryError(sentenciaSql, interceptionContext, exception);
+            RegistrarError(exception);
         }
 
-        public override void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+
+        public override void ReaderExecuting(DbCommand sentenciaSql, DbCommandInterceptionContext<DbDataReader> interceptionContext)
         {
-            base.NonQueryExecuting(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.NonQueryExecuting", interceptionContext.EventData.ToString(), command.CommandText);
+            base.ReaderExecuting(sentenciaSql, interceptionContext);
+            _sentenciaSql = sentenciaSql;
+            _cronoSql = new Stopwatch();
+            _cronoSql.Start();
+        }
+        public override void ReaderExecuted(DbCommand sentenciaSql, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        {
+            base.ReaderExecuted(sentenciaSql, interceptionContext);
+            RegistrarTraza();
+        }
+        public override void ReaderError(DbCommand sentenciaSql, DbCommandInterceptionContext<DbDataReader> interceptionContext, Exception exception)
+        {
+            base.ReaderError(sentenciaSql, interceptionContext, exception);
+            RegistrarError(exception);
         }
 
-        public override void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+
+
+        public override void ScalarExecuting(DbCommand sentenciaSql, DbCommandInterceptionContext<object> interceptionContext)
         {
-            base.ReaderExecuted(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.ReaderExecuted", interceptionContext.Result.ToString(), command.CommandText);
+            base.ScalarExecuting(sentenciaSql, interceptionContext);
+            RegistrarTraza();
+        }
+        public override void ScalarExecuted(DbCommand sentenciaSql, DbCommandInterceptionContext<object> interceptionContext)
+        {
+            base.ScalarExecuted(sentenciaSql, interceptionContext);
+            RegistrarTraza();
+        }
+        public override void ScalarError(DbCommand sentenciaSql, DbCommandInterceptionContext<object> interceptionContext, Exception exception)
+        {
+            base.ScalarError(sentenciaSql, interceptionContext, exception);
+            RegistrarError(exception);
         }
 
-        public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        private void RegistrarTraza()
         {
-            base.ReaderExecuting(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.ReaderExecuting", interceptionContext.EventData.ToString(), command.CommandText);
-        }
+            _cronoSql.Stop();
 
-        public override void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
-        {
-            base.ScalarExecuted(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.ScalarExecuted", interceptionContext.Result.ToString(), command.CommandText);
-        }
-
-        public override void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
-        {
-            base.ScalarExecuting(command, interceptionContext);
-            RegistrarTraza("InterceptadorDeConsultas.ScalarExecuting", interceptionContext.EventData.ToString(), command.CommandText);
-        }
-
-        public override void NonQueryError(DbCommand command, DbCommandInterceptionContext<int> interceptionContext, Exception exception)
-        {
-            base.NonQueryError(command, interceptionContext, exception);
-            RegistrarError("InterceptadorDeConsultas.NonQueryError", interceptionContext.EventData.ToString(), command.CommandText, exception.Message);
-        }
-
-        public override void ReaderError(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext, Exception exception)
-        {
-            base.ReaderError(command, interceptionContext, exception);
-            RegistrarError("InterceptadorDeConsultas.NonQueryError", interceptionContext.EventData.ToString(), command.CommandText, exception.Message);
-        }
-
-        public override void ScalarError(DbCommand command, DbCommandInterceptionContext<object> interceptionContext, Exception exception)
-        {
-            base.ScalarError(command, interceptionContext, exception);
-            RegistrarError("InterceptadorDeConsultas.NonQueryError", interceptionContext.EventData.ToString(), command.CommandText, exception.Message);
-        }
-
-        private void RegistrarTraza(string method, string command, string commandText)
-        {
             if (Traza != null)
-              Traza.AnotarTrazaSql($"Intercepted on: {method} \n {command} \n {commandText}");
+                Traza.AnotarTrazaSql(_sentenciaSql.CommandText, _sentenciaSql.Parameters, _cronoSql.ElapsedMilliseconds);
         }
 
-        private void RegistrarError(string method, string command, string commandText, string exception)
+        private void RegistrarError(Exception excepcion)
         {
-            Console.WriteLine("Intercepted on: {0} \n {1} \n {2} \n {3}", method, command, commandText, exception);
+            _cronoSql.Stop();
+
+            if (Traza != null)
+                Traza.AnotarExcepcion(excepcion);
         }
     }
 }

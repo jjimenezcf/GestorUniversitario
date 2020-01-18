@@ -27,7 +27,7 @@ namespace Componentes
         private (List<FilaDelGrid> filas, int totalBd) ObtenerFilasDelGrid(List<ColumnaDelGrid> columnasDelGrid)
         {
             var listaDeCursos = new List<FilaDelGrid>();
-            var (cursos, total) = _gestordeCursos.Leer(Selector.PosicionInicial, Selector.CantidadPorLeer, Utilidades.ParsearOrdenacion(""));
+            var (cursos, total) = _gestordeCursos.Leer(Selector.PosicionInicial, Selector.CantidadPorLeer);
 
             foreach (var curso in cursos)
             {

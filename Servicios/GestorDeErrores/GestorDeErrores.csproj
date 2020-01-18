@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Ayudas\Extensiones\Extensiones.csproj" />
+    <ProjectReference Include="..\..\Ayudas\Extensiones\Utilidades.csproj" />
     <ProjectReference Include="..\GestorDeCorreo\GestorDeCorreo.csproj" />
   </ItemGroup>
 

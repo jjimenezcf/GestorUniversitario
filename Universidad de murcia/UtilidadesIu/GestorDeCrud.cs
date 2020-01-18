@@ -1,6 +1,4 @@
-﻿using Extensiones.String;
-using Gestor.Elementos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace UtilidadesParaIu

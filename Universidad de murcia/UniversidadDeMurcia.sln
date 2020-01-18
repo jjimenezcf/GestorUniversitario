@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversidadDeMurcia", "Univ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeErrores", "..\Servicios\GestorDeErrores\GestorDeErrores.csproj", "{C81A6CF1-2457-4588-936F-026EC7F2A221}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensiones", "..\Ayudas\Extensiones\Extensiones.csproj", "{9F572B22-183A-45C2-80CD-5649F8EDA322}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilidades", "..\Ayudas\Extensiones\Utilidades.csproj", "{9F572B22-183A-45C2-80CD-5649F8EDA322}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeCorreo", "..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj", "{618CACF4-AFF6-4833-9F60-0A87F379543B}"
 EndProject

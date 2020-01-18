@@ -1,11 +1,8 @@
-﻿using Extensiones.String;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
-namespace Extensiones
+namespace Utilidades.Traza
 {
 
     public enum NivelDeTraza
@@ -42,15 +39,15 @@ namespace Extensiones
 
     public class Traza
     {
-
         private StreamWriter _sw;
         private readonly string _fichero;
         private readonly string _ruta;
         private readonly NivelDeTraza _nivel;
-        private bool abierto { get; set; }
+        private bool _Abierta { get; set; }
         private bool escribirNivel => _nivel != NivelDeTraza.Siempre;
-        public bool EstaAbierta => abierto;
-        public Stopwatch Cronometro = new Stopwatch();
+
+        protected Stopwatch Cronometro = new Stopwatch();
+        public bool Abierta => _Abierta;
 
 
         /// <summary>
@@ -73,7 +70,7 @@ namespace Extensiones
             if (_nivel == NivelDeTraza.Off)
                 return;
 
-            if (abierto)
+            if (_Abierta)
                 return;
 
             if (!Directory.Exists(_ruta))
@@ -92,17 +89,17 @@ namespace Extensiones
             try
             {
                 _sw = new StreamWriter(fichero, anadir);
-                abierto = true;
+                _Abierta = true;
             }
             catch
             {
-                abierto = false;
+                _Abierta = false;
             }
         }
 
         public void Cerrar()
         {
-            if (!abierto)
+            if (!_Abierta)
                 return;
             try
             {
@@ -110,7 +107,7 @@ namespace Extensiones
             }
             finally
             {
-                abierto = false;
+                _Abierta = false;
             }
         }
 
@@ -123,13 +120,13 @@ namespace Extensiones
 
         private void Escribir(string log)
         {
-            if (abierto)
+            if (_Abierta)
                 _sw.WriteLine(log);
         }
 
-        public void Log(NivelDeTraza tipoNivel, string mensaje)
+        private void Log(NivelDeTraza tipoNivel, string mensaje)
         {
-            if (!abierto)
+            if (!_Abierta)
                 return;
 
             if (tipoNivel == NivelDeTraza.Siempre)
@@ -154,34 +151,34 @@ namespace Extensiones
 
         }
 
-        public void Debug(string mensaje)
+        private void Debug(string mensaje)
         {
             if (!mensaje.IsNullOrEmpty())
                 Log(NivelDeTraza.Debug, mensaje.ToString());
         }
 
-        public void Info(string mensaje)
+        private void Info(string mensaje)
         {
             if (!mensaje.IsNullOrEmpty())
                 Log(NivelDeTraza.Info, mensaje.ToString());
         }
-        public void Error(string mensaje)
+        private void Error(string mensaje)
         {
             if (!mensaje.IsNullOrEmpty())
                 Log(NivelDeTraza.Error, mensaje.ToString());
         }
-        public void Advertencia(string mensaje)
+        private void Advertencia(string mensaje)
         {
             if (!mensaje.IsNullOrEmpty())
                 Log(NivelDeTraza.Advertencia, mensaje.ToString());
         }
-        public void Registrar(string mensaje)
+        protected void Registrar(string mensaje)
         {
             if (!mensaje.IsNullOrEmpty()) 
                 Log(NivelDeTraza.Siempre, mensaje.ToString());
         }
 
-        public void Separador()
+        protected void Separador()
         {
             Escribir("---------------------------------------" + Environment.NewLine);
         }

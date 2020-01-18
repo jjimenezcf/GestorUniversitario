@@ -1,7 +1,7 @@
-﻿using Extensiones;
+﻿using Utilidades.Traza;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Data.Common;
+using Utilidades;
 
 namespace GestorDeElementos.Utilidades
 {
@@ -34,13 +34,14 @@ namespace GestorDeElementos.Utilidades
             return mensaje;
         }
 
-        public void AnotarTrazaSql(string setenciaSql, string parametros, double duracion)
+        public void AnotarTrazaSql(string setenciaSql, DbParameterCollection dbParametros, double duracion)
         {
-            if (EstaAbierta)
+            if (Abierta)
             {
+                var parametros = dbParametros.ParsearParametros();
                 duraciAcomulada += duracion;
                 string logTraza = $"Sentencia SQL:{Environment.NewLine}{setenciaSql}{Environment.NewLine}" +
-                                  $"Parámetros:      {parametros}." + Environment.NewLine +
+                                  $"Parámetros:      {Environment.NewLine}{parametros}" +
                                   $"Duracion SQL:    {duracion.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
                                   $"Total SQLs:      {duraciAcomulada.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
                                   $"Tiempo petición: {Cronometro.ElapsedMilliseconds.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine;
@@ -49,32 +50,11 @@ namespace GestorDeElementos.Utilidades
                 sentenciasEjecutadas++;
             }
         }
-
-        public void AnotarTrazaSql(string traza)
-        {
-            if (EstaAbierta)
-            {
-                Registrar(traza);
-                Separador();
-                sentenciasEjecutadas++;
-            }
-        }
-
-        public void AnotarTrazaSql(string setenciaSql, string parametros)
-        {
-            if (EstaAbierta)
-            {
-                string logTraza = $"Sentencia SQL:{Environment.NewLine}{setenciaSql}{Environment.NewLine}" +
-                                  $"Parámetros:   {parametros}." + Environment.NewLine;
-                Registrar(logTraza);
-                Separador();
-                sentenciasEjecutadas++;
-            }
-        }
+        
 
         public void AnotarExcepcion(Exception exc)
         {
-            if (EstaAbierta)
+            if (Abierta)
             {
                 string logTraza = $"Excepcioón genrada: {Environment.NewLine}{exc.MensajeCompleto(true)}{Environment.NewLine}";
                 logTraza = $"{logTraza}";
@@ -85,7 +65,7 @@ namespace GestorDeElementos.Utilidades
 
         public void AnotarMensaje(string asunto, string mensaje)
         {
-            if (EstaAbierta)
+            if (Abierta)
             {
                 string logTraza = $"{asunto}{Environment.NewLine}{mensaje}{Environment.NewLine}";
                 Registrar(logTraza);
