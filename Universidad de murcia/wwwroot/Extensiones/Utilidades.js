@@ -1,6 +1,13 @@
 
 const newLine = "\n";
 
+const TipoMensaje = { Info:"informativo"};
+
+function Mensaje(tipo, mensaje) {
+    var control = document.getElementById("Mensaje");
+    control.value = mensaje;
+}
+
 function StringBuilder(value) {
     this.strings = new Array();
     this.append(value);
