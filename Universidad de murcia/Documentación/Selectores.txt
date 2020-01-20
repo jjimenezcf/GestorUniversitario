@@ -1,0 +1,26 @@
+Al marcar un check de selección
+- selectores[selector].count ++
+- selectores[selector].Item.Add(el id del registro seleccionado)
+- Si selectores[selector].count >= selectores[selector].max
+	bloquear en el dom el resto de check de selección
+	Indicar en el selectores[selector].enable = false
+
+Al desmarcar un check de selección
+- Restar uno al selectores[selector].count (si es menor que cero => inicializar selector)
+- Quitar al selectores[selector].item el id del registro seleccionado
+- Si selectores[selector].count = selectores[selector].max-1
+    Desbloquear en el dom los check de selección
+    Indicar en el selectores[selector].enable = true
+	
+Al abrir el selector
+- Parsear el Json del selector a selectores
+
+
+Al modificar el selector
+
+
+Al cerrar el selector
+
+	
+  
+	
