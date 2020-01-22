@@ -14,7 +14,7 @@ namespace UtilidadesParaIu
                      <h5 class=¨modal-title¨ id=¨exampleModalLabel¨>titulo</h5>
                    </div>
                    <div id=¨{idContenedor}¨ class=¨modal-body¨>
-                     listaDeElementos
+                     {gridDeElementos}
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
@@ -40,7 +40,7 @@ namespace UtilidadesParaIu
 
         const string _alAbrirLaModal = @"
                                          $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{idTabla}', '{columnaId}', ElementosMarcados('{idSelector}'))
+                                            AlAbrir('{IdGrig}', '{columnaId}', ElementosMarcados('{idSelector}'))
                                           })
                                       ";
         const string _alCerrarLaModal = @"
@@ -102,28 +102,6 @@ namespace UtilidadesParaIu
 
         public string RenderModal()
         {
-            return _htmlModalSelector
-                    .Replace("idModal", IdModal)
-                    .Replace("titulo", _titulo)
-                    .Replace("{idSelector}", IdSelector)
-                    .Replace("{referenciaChecks}", $"chk_{IdGrig}")
-                    .Replace("{columnaId}",ColumnaId)
-                    .Replace("{columnaMostrar}", ColumnaMostrar)
-                    .Replace("{idContenedor}", $"contenedor_{IdGrig}")
-                    .Replace("listaDeElementos", RenderGridDeSeleccion())
-                    .Replace("AlAbrirLaModal",_alAbrirLaModal
-                                              .Replace("{idModal}", IdModal)
-                                              .Replace("{idTabla}", IdGrig)
-                                              .Replace("{columnaId}", ColumnaId)
-                                              .Replace("{idSelector}", IdSelector))
-                    .Replace("AlCerrarLaModal", _alCerrarLaModal
-                                              .Replace("{idModal}", IdModal)
-                                              .Replace("referenciaChecks", $"chk_{IdGrig}"))
-                    .Render();
-        }
-        
-        private string RenderGridDeSeleccion()
-        {
             var resultado = LeerFilasParaElGrid(DescriptorDeColumnas);
 
             Grid grid = new Grid(IdGrig, DescriptorDeColumnas, resultado.filas, PosicionInicial, CantidadPorLeer)
@@ -134,8 +112,24 @@ namespace UtilidadesParaIu
                 ConSeleccion = true
             };
 
-            return grid.ToHtml();
+            return _htmlModalSelector
+                    .Replace("idModal", IdModal)
+                    .Replace("titulo", _titulo)
+                    .Replace("{idSelector}", IdSelector)
+                    .Replace("{referenciaChecks}", $"chk_{IdGrig}")
+                    .Replace("{columnaId}",ColumnaId)
+                    .Replace("{columnaMostrar}", ColumnaMostrar)
+                    .Replace("{idContenedor}", $"contenedor_{IdGrig}")
+                    .Replace("{gridDeElementos}",grid.ToHtml())
+                    .Replace("AlAbrirLaModal",_alAbrirLaModal
+                                              .Replace("{idModal}", IdModal)
+                                              .Replace("{IdGrig}", IdGrig)
+                                              .Replace("{columnaId}", ColumnaId)
+                                              .Replace("{idSelector}", IdSelector))
+                    .Replace("AlCerrarLaModal", _alCerrarLaModal
+                                              .Replace("{idModal}", IdModal)
+                                              .Replace("referenciaChecks", $"chk_{IdGrig}"))
+                    .Render();
         }
-
     }
 }

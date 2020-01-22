@@ -1,12 +1,16 @@
-﻿class SelectorInfo {
-    constructor(nombre, maximo) {
+﻿class InfoSelector {
+    constructor(nombre, maximo, seleccionados) {
         this._nombre = nombre;
         this._maximo = maximo;
-        this._seleccionados = new Array();
+        if (seleccionados === "")
+            this._seleccionados = new Array();
+        else
+            this._seleccionados = seleccionados.split(';');
     }
 
     get Nombre() { return this._nombre; }
     get Cantidad() { return this._seleccionados.length; }
+    get Seleccionados() { return this._seleccionados };
 
     Insertar(idSeleccionado) {
         if (this._seleccionados.length < this._maximo)
@@ -17,15 +21,23 @@
 
     Quitar(idSeleccionado) {
         var pos = this._seleccionados.indexOf(idSeleccionado);
-        if (pos >= 0) 
+        if (pos >= 0)
             this._seleccionados.splice(pos, 1);
         else
-            Mensaje(TipoMensaje.Info,`No se ha localizado el elemento con id  ${idSeleccionado}`);        
+            Mensaje(TipoMensaje.Info, `No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
 }
 
 var Selectores = new Array();
 
+
+
+function AlAbrir(idGrid, columnaId, elementosMarcados) {
+    var seleccionados = elementosMarcados;
+    //var navegador = document.getElementById(`Nav-${idGrid}-Reg`);
+    var infoSelector = new InfoSelector(idGrid, 1, seleccionados);
+    marcarElementos(idGrid, columnaId, infoSelector);
+}
 
 function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) {
 
@@ -41,18 +53,24 @@ function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) 
 }
 
 function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {
+
+    //
+    // remplazar la c por la c_ i_
+    // remplazar la _chk_ por _columnaId_
+    //
+    //
+
+    var inputId = document.getElementById(idCheck.replace("_chk_", `_${columnaId}_`).replace("c_", "i_"));
+    var inputMostra = document.getElementById(idCheck.replace("_chk_", `_${columnaMostrar}_`).replace("c_", "i_"));
+
     var e = {
-        id: parseInt(document.getElementById(idCheck.replace("chk", columnaId)).innerHTML.trim()),
-        valor: document.getElementById(idCheck.replace("chk", columnaMostrar)).innerHTML.trim()
+        id: parseInt(inputId.value),
+        valor: inputMostra.value
     };
 
     return e;
 }
 
-function AlAbrir(idTabla, columnaId, elementosMarcados) {
-    var selectorInfo = new SelectorInfo(idTabla,1);
-    marcarElementos(selectorInfo, idTabla, columnaId, elementosMarcados);
-}
 
 
 function AlCerrar(idModal, referenciaChecks) {
@@ -67,7 +85,7 @@ function ElementosMarcados(idSelector) {
     if (selector.hasAttribute("idsSeleccionados")) {
         seleccionados = selector.getAttribute("idsSeleccionados");
     }
-    
+
     return seleccionados;
 }
 
@@ -109,23 +127,22 @@ function blanquearSelector(selector) {
 
 function cerrar(referenciaChecks) {
     blanquearCheck(referenciaChecks);
-    
+
 }
 
-function marcarElementos(selectorInfo, idTabla, columnaId, seleccionados) {
-    var array = seleccionados.split(';');
-    if (array.length === 1 && array[0] === "")
+function marcarElementos(idGrid, columnaId, infoSelector) {
+
+    var array = infoSelector.Seleccionados;
+    if (array.length === 0)
         return;
 
-    Mensaje(TipoMensaje.Info, `Creado el selector ${selectorInfo.Nombre}`);
-
-    var celdasId = document.getElementsByName(`${idTabla}_${columnaId}`);
+    var celdasId = document.getElementsByName(`i_${idGrid}_${columnaId}`);
     var len = celdasId.length;
     for (var i = 0; i < array.length; i++) {
-        selectorInfo.Insertar(array[i]);
         for (var j = 0; j < len; j++) {
-            if (celdasId[j].innerHTML === array[i]) {
-                var check = document.getElementById(celdasId[j].id.replace("_id_", "_chk_"));
+            if (celdasId[j].value === array[i]) {
+                var idCheck = celdasId[j].id.replace(`_${columnaId}_`, "_chk_").replace("i_", "c_");
+                var check = document.getElementById(idCheck);
                 check.checked = true;
                 break;
             }

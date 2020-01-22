@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Web;
 
 namespace UtilidadesParaIu
 {
@@ -79,7 +80,7 @@ namespace UtilidadesParaIu
 
         private static string RenderCeldaCheck(string idGrid, string idCelda, int numFil, int numCol)
         {
-            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
+            var check = $"<input type=¨checkbox¨ id=¨c_{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
 
             var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
                                 $@"  {check}{Environment.NewLine}" +
@@ -88,10 +89,10 @@ namespace UtilidadesParaIu
             return celdaDelCheck;
         }
 
-        private static string RenderCelda(CeldaDelGrid celda)
+        private static string RenderCeldaInput(CeldaDelGrid celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
-            var input = $" <input id=¨i_{celda.Id}¨ name=¨i_{celda.IdCabecera}¨ style=¨width:100%; border:0¨ {editable} value=¨{celda.Valor}¨/>";
+            var input = $" <input id=¨i_{celda.Id}¨ name=¨i_{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ style=¨width:100%; border:0¨ {editable} value=¨{celda.Valor}¨/>";
 
             var ocultar = celda.Visible ? "" : "hidden";
             return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
@@ -105,7 +106,7 @@ namespace UtilidadesParaIu
             foreach (var celda in fila.Celdas)
             {
                 celda.Id = $"{celda.IdCabecera}_{numFil}";
-                filaHtml.AppendLine(RenderCelda(celda));
+                filaHtml.AppendLine(RenderCeldaInput(celda));
             }
             return $@"{filaHtml.ToString()}";
         }
@@ -146,7 +147,6 @@ namespace UtilidadesParaIu
 
         private static string RenderNavegadorGrid(Grid grid)
         {
-            var jsonDeMarcados = "{¨marcados¨: [{}]}";
             var htmlNavegadorGrid = $@"
             <div class=¨text-center¨>
                 <div id=¨Nav-{grid.Id}¨ style=¨float: left¨>
@@ -158,7 +158,7 @@ namespace UtilidadesParaIu
                                              min=¨1¨ step=¨1¨ max=¨999¨ 
                                              posicion=¨{grid.Ultimo_Leido}¨  
                                              totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
-                                             seleccionados=¨{jsonDeMarcados}¨
+                                             seleccionados=¨¨
                                              style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
