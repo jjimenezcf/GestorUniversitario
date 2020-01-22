@@ -43,13 +43,6 @@ namespace UtilidadesParaIu
                               : RenderizarGrid(this));
         }
 
-        private static string RenderCeldaCheck(string idGrid, string idCelda,int numFil, int numCol)
-        {
-            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
-
-            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}{check}{Environment.NewLine}</td>";
-            return celdaDelCheck;
-        }
 
         private static string RenderColumnaCabecera(ColumnaDelGrid columna)
         {
@@ -84,10 +77,26 @@ namespace UtilidadesParaIu
         }
 
 
+        private static string RenderCeldaCheck(string idGrid, string idCelda, int numFil, int numCol)
+        {
+            var check = $"<input type=¨checkbox¨ id=¨{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
+
+            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
+                                $@"  {check}{Environment.NewLine}" +
+                                $@"</td>";
+
+            return celdaDelCheck;
+        }
+
         private static string RenderCelda(CeldaDelGrid celda)
         {
+            var editable = !celda.Editable ? "readonly" : "";
+            var input = $" <input id=¨i_{celda.Id}¨ name=¨i_{celda.IdCabecera}¨ style=¨width:100%; border:0¨ {editable} value=¨{celda.Valor}¨/>";
+
             var ocultar = celda.Visible ? "" : "hidden";
-            return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>{celda.Valor}</td>";
+            return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
+                   $"   {input}" +
+                   $"</td>";
         }
 
         private static string RenderFila(int numFil, FilaDelGrid fila)
@@ -105,7 +114,9 @@ namespace UtilidadesParaIu
         {
             string filaHtml = RenderFila(numFil, fila);
             string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}", numFil, fila.Celdas.Count);
-            return $"<tr id='{idGrid}_f{numFil}'>{Environment.NewLine}{filaHtml}{celdaDelCheck}{Environment.NewLine}</tr>{Environment.NewLine}";
+            return $"<tr id='{idGrid}_f{numFil}'>{Environment.NewLine}" +
+                   $"   {filaHtml}{celdaDelCheck}{Environment.NewLine}" +
+                   $"</tr>{Environment.NewLine}";
         }
 
         private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
@@ -135,6 +146,7 @@ namespace UtilidadesParaIu
 
         private static string RenderNavegadorGrid(Grid grid)
         {
+            var jsonDeMarcados = "{¨marcados¨: [{}]}";
             var htmlNavegadorGrid = $@"
             <div class=¨text-center¨>
                 <div id=¨Nav-{grid.Id}¨ style=¨float: left¨>
@@ -142,7 +154,12 @@ namespace UtilidadesParaIu
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨{grid._CantidadPorLeer}¨ min=¨1¨ step=¨1¨ max=¨999¨ posicion=¨{grid.Ultimo_Leido}¨  totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                        <input type=¨number¨ id=¨Nav-{grid.Id}-Reg¨ value=¨{grid._CantidadPorLeer}¨ 
+                                             min=¨1¨ step=¨1¨ max=¨999¨ 
+                                             posicion=¨{grid.Ultimo_Leido}¨  
+                                             totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
+                                             seleccionados=¨{jsonDeMarcados}¨
+                                             style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
@@ -166,7 +183,10 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid grid)
         {
-            var htmlTabla = $"<table id=¨{grid.Id}¨ class=¨table table-striped table-hover¨ width=¨100%¨>{Environment.NewLine}{RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}{RenderDetalleGrid(grid.Id, grid.filas)}</table>";
+            var htmlTabla = $"<table id=¨{grid.Id}¨ class=¨table table-striped table-hover¨ width=¨100%¨>{Environment.NewLine}" +
+                            $"   {RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}" +
+                            $"   {RenderDetalleGrid(grid.Id, grid.filas)}" +
+                            $"</table>";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());
         }
