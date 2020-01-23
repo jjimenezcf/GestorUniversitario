@@ -1,37 +1,4 @@
-﻿class InfoSelector {
-    constructor(nombre, maximo, seleccionados) {
-        this._nombre = nombre;
-        this._maximo = maximo;
-        if (seleccionados === "")
-            this._seleccionados = new Array();
-        else
-            this._seleccionados = seleccionados.split(';');
-    }
-
-    get Nombre() { return this._nombre; }
-    get Cantidad() { return this._seleccionados.length; }
-    get Seleccionados() { return this._seleccionados };
-
-    Insertar(idSeleccionado) {
-        if (this._seleccionados.length < this._maximo)
-            this._seleccionados.push(idSeleccionado);
-        else
-            Mensaje(`Solo se pueden seleccionar ${this._maximo} elementos`);
-    }
-
-    Quitar(idSeleccionado) {
-        var pos = this._seleccionados.indexOf(idSeleccionado);
-        if (pos >= 0)
-            this._seleccionados.splice(pos, 1);
-        else
-            Mensaje(TipoMensaje.Info, `No se ha localizado el elemento con id  ${idSeleccionado}`);
-    }
-}
-
-var Selectores = new Array();
-
-
-
+﻿
 function AlAbrir(idGrid, columnaId, elementosMarcados) {
     var seleccionados = elementosMarcados;
     //var navegador = document.getElementById(`Nav-${idGrid}-Reg`);

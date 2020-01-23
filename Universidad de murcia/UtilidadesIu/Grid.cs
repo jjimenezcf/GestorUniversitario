@@ -80,9 +80,15 @@ namespace UtilidadesParaIu
 
         private static string RenderCeldaCheck(string idGrid, string idCelda, int numFil, int numCol)
         {
-            var check = $"<input type=¨checkbox¨ id=¨c_{idGrid}_{idCelda}¨ name=¨chk_{idGrid}¨ class=¨text-center¨ aria-label=¨Marcar para seleccionar¨>";
+            var check = $"<input type=¨checkbox¨ id=¨c_{idGrid}_{idCelda}¨ " +
+                        $"                       name=¨chk_{idGrid}¨ " +
+                        $"                       class=¨text-center¨ " +
+                        $"                       aria-label=¨Marcar para seleccionar¨" +
+                        $"                       onclick=¨MarcarParaSeleccionar('{idGrid}','c_{idGrid}_{idCelda}');¨ /> ";
 
-            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ name=¨{idGrid}_chk_sel¨ class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
+            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ 
+                                       name=¨{idGrid}_chk_sel¨ 
+                                       class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
                                 $@"  {check}{Environment.NewLine}" +
                                 $@"</td>";
 
@@ -92,7 +98,12 @@ namespace UtilidadesParaIu
         private static string RenderCeldaInput(CeldaDelGrid celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
-            var input = $" <input id=¨i_{celda.Id}¨ name=¨i_{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ style=¨width:100%; border:0¨ {editable} value=¨{celda.Valor}¨/>";
+            var input = $" <input id=¨i_{celda.Id}¨ " +
+                        $"        name=¨i_{celda.IdCabecera}¨ " +
+                        $"        class=¨{celda.AlineacionCss()}¨ " +
+                        $"        style=¨width:100%; border:0¨ " +
+                        $"        {editable} " +
+                        $"        value=¨{celda.Valor}¨/>";
 
             var ocultar = celda.Visible ? "" : "hidden";
             return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
@@ -183,7 +194,9 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid grid)
         {
-            var htmlTabla = $"<table id=¨{grid.Id}¨ class=¨table table-striped table-hover¨ width=¨100%¨>{Environment.NewLine}" +
+            var htmlTabla = $"<table id=¨{grid.Id}¨ " +
+                            $"       class=¨table table-striped table-hover¨ " +
+                            $"       width=¨100%¨>{Environment.NewLine}" +
                             $"   {RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}" +
                             $"   {RenderDetalleGrid(grid.Id, grid.filas)}" +
                             $"</table>";

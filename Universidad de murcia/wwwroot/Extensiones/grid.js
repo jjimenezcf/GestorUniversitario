@@ -1,4 +1,13 @@
-﻿function Leer(idGrid, controlador) {
+﻿
+
+//************************************************************************************************************************************************************************************/
+
+/// Funciones de navegación de un grid
+
+//************************************************************************************************************************************************************************************/
+
+
+function Leer(idGrid, controlador) {
     var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
