@@ -17,8 +17,9 @@ namespace UtilidadesParaIu
         public int TotalEnBd { get; set; }
         private int _PosicionInicial { get; set; }
         private int _CantidadPorLeer { get; set; }
+        public int Seleccionables { get; set; }
         public int Ultimo_Leido => _PosicionInicial + filas.Count;
-
+        
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
@@ -35,6 +36,7 @@ namespace UtilidadesParaIu
             filas = filasDelGrid;
             _PosicionInicial = posicionInicial;
             _CantidadPorLeer = cantidadPorLeer;
+            Seleccionables = 1;
         }
 
         public string ToHtml()
@@ -169,7 +171,6 @@ namespace UtilidadesParaIu
                                              min=¨1¨ step=¨1¨ max=¨999¨ 
                                              posicion=¨{grid.Ultimo_Leido}¨  
                                              totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
-                                             seleccionados=¨¨
                                              style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨Nav-{grid.Id}-3¨ data-type=¨img¨ style=¨display:inline-block¨>
@@ -194,9 +195,11 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid grid)
         {
-            var htmlTabla = $"<table id=¨{grid.Id}¨ " +
-                            $"       class=¨table table-striped table-hover¨ " +
-                            $"       width=¨100%¨>{Environment.NewLine}" +
+            var htmlTabla = $@"<table id=¨{grid.Id}¨ 
+                                      class=¨table table-striped table-hover¨ 
+                                      width=¨100%¨
+                                      seleccionables ={ grid.Seleccionables}
+                                      seleccionados =¨¨>{Environment.NewLine}" +
                             $"   {RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}" +
                             $"   {RenderDetalleGrid(grid.Id, grid.filas)}" +
                             $"</table>";

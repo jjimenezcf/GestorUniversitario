@@ -6,62 +6,53 @@
 //************************************************************************************************************************************************************************************/
 
 class InfoSelector {
-    constructor(nombre, maximo, seleccionados) {
-        this._nombre = nombre;
-        this._maximo = maximo;
-        if (seleccionados === "")
-            this._seleccionados = new Array();
-        else
-            this._seleccionados = seleccionados.split(';');
+
+
+    get Id() { return this._id; }
+    get Cantidad() { return this._seleccionados.length; }
+    get Seleccionados() { return this._seleccionados; }
+
+    constructor(idGrid) {
+        this._id = idGrid;
+        this._grid = document.getElementById(idGrid);
+        this._seleccionables = this._grid.getAttribute("seleccionables");
+        this._seleccionados = new Array();
+
     }
 
-    get Nombre() { return this._nombre; }
-    get Cantidad() { return this._seleccionados.length; }
-    get Seleccionados() { return this._seleccionados };
+    deshabilitarCheck(deshabilitar) {
+        var checkboxes = document.getElementsByName(`chk_${this._id}`);
+        for (var x = 0; x < checkboxes.length; x++) {
+            if (!checkboxes[x].checked) {
+                checkboxes[x].disabled = deshabilitar;
+            }
+        }
+    }
 
     Insertar(idSeleccionado) {
-        if (this._seleccionados.length < this._maximo)
+        if (this._seleccionados.length < this._seleccionables) {
             this._seleccionados.push(idSeleccionado);
-        else
-            Mensaje(`Solo se pueden seleccionar ${this._maximo} elementos`);
+
+            if (this._seleccionados.length >= this._seleccionables)
+                this.deshabilitarCheck(true);
+        }
     }
 
     Quitar(idSeleccionado) {
         var pos = this._seleccionados.indexOf(idSeleccionado);
-        if (pos >= 0)
+        if (pos >= 0) {
             this._seleccionados.splice(pos, 1);
+
+            if (this._seleccionados.length < this._seleccionables)
+                this.deshabilitarCheck(false);
+        }
         else
             Mensaje(TipoMensaje.Info, `No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
+
 }
 
-class InfoSelectores {
-    constructor() {
-        this._infoSelectores = new Array();
-    }
-
-    get Selectores() { return this._infoSelectores; }
-
-    Buscar(nombreInfoSelector) {
-        for (var i = 0; i < this._infoSelectores.length; i++) {
-            if (this._infoSelectores[i].Nombre === nombreInfoSelector)
-                return i;
-        }
-        return -1;
-    }
-
-    Anadir(infoSelector) {
-        return this._infoSelectores.push(infoSelector);
-    }
-
-    Obtener(ind) {
-        if (ind < 0 || ind >= this._infoSelectores.length)
-            return undefined;
-        return this._infoSelectores[ind];
-    }
-}
-
-var infoSelectores = new InfoSelectores();
+var infoSelectores = {};
 
 
 function MarcarParaSeleccionar(idGrid, idCheck) {
@@ -73,12 +64,20 @@ function MarcarParaSeleccionar(idGrid, idCheck) {
 }
 
 function anadirAlInfoSelector(idGrid, idCheck) {
-    var ind = infoSelectores.Buscar(`${idGrid}`);
-    if (ind < 0)
-        ind = infoSelectores.Anadir(new InfoSelector(idGrid, 5, "")) - 1;
-    var infoSelector = infoSelectores.Obtener(ind);
+    if (!infoSelectores[`${idGrid}`])
+        infoSelectores[`${idGrid}`] = new InfoSelector(idGrid);
+
+    var selector = infoSelectores[`${idGrid}`];
     var id = obtenerIdDeLaFila(idCheck);
-    infoSelector.Insertar(id);
+    selector.Insertar(id);
+}
+
+
+function quitarDelSelector(idGrid, idCheck) {
+
+    var selector = infoSelectores[`${idGrid}`];
+    var id = obtenerIdDeLaFila(idCheck);
+    selector.Quitar(id);
 }
 
 function obtenerIdDeLaFila(idCheck) {

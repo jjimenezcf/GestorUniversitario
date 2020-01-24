@@ -1,8 +1,8 @@
 ﻿
 function AlAbrir(idGrid, columnaId, elementosMarcados) {
-    var seleccionados = elementosMarcados;
+    //var marcados = elementosMarcados;
     //var navegador = document.getElementById(`Nav-${idGrid}-Reg`);
-    var infoSelector = new InfoSelector(idGrid, 1, seleccionados);
+    var infoSelector = new InfoSelector(idGrid);
     marcarElementos(idGrid, columnaId, infoSelector);
 }
 
