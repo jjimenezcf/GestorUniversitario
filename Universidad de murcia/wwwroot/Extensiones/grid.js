@@ -8,9 +8,9 @@
 
 
 function Leer(idGrid, controlador) {
-    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
@@ -18,9 +18,9 @@ function Leer(idGrid, controlador) {
 }
 
 function LeerAnteriores(idGrid, controlador) {
-    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion") - 2 * cantidad;
@@ -32,9 +32,9 @@ function LeerAnteriores(idGrid, controlador) {
 }
 
 function LeerSiguientes(idGrid, controlador) {
-    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion");
@@ -48,9 +48,9 @@ function LeerSiguientes(idGrid, controlador) {
 }
 
 function LeerUltimos(idGrid, controlador) {
-    var htmlImputCantidad = document.getElementById(`Nav-${idGrid}-Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento Nav-${idGrid}-Reg  no está definido`);
+        console.log(`El elemento${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("totalEnBd") - cantidad;
