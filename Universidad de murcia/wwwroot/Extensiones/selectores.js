@@ -13,20 +13,28 @@ function AlAbrir(idGrid, columnaId, elementosMarcados) {
 
 function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) {
 
-    var selector = document.getElementById(idSelector);
+    var htmlSelector = document.getElementById(idSelector);
 
-    blanquearSelector(selector);
+    blanquearSelector(htmlSelector);
+
+    /*TODO:
+     * 
+     * Recorrer la lista de del infoSelector asociado y de ahí se obtiene el id y el valor de la columna a mostrar.
+     * Esto sustituye al código de abajo
+     * 
+     */
+
     var checkboxes = $(`input[name='${referenciaChecks}']:checked`);
     for (var x = 0; x < checkboxes.length; x++) {
         var elemento = obtenerElementoSeleccionado(checkboxes[x].id, columnaId, columnaMostrar);
-        mapearValoresAlSelector(selector, elemento);
+        mapearValoresAlSelector(htmlSelector, elemento);
     }
     cerrar(idSelector,referenciaChecks);
 }
 
 function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {    
     var e = {
-        id: parseInt(obtenerIdDeLaFilaChequeada(idCheck)),
+        id: parseInt(ObtenerIdDeLaFilaChequeada(idCheck)),
         valor: obtenerValorDeLaColumnaChequeada(idCheck, columnaMostrar)
     };
 
@@ -94,15 +102,18 @@ function cerrar(idGrid, referenciaChecks) {
 
 function marcarElementos(idGrid, columnaId, marcados) {
 
-    var array = marcados.split(";");
-    if (array.length === 0 || (array.length === 1 && array[0]===""))
+    var arrayDeIds = marcados.split(";");
+    if (arrayDeIds.length === 0 || (arrayDeIds.length === 1 && arrayDeIds[0]===""))
         return;
 
     var celdasId = document.getElementsByName(`${columnaId}.${idGrid}`);
     var len = celdasId.length;
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < arrayDeIds.length; i++) {
+        if (parseInt(arrayDeIds[i]) <= 0)
+            continue;
+
         for (var j = 0; j < len; j++) {
-            if (celdasId[j].value === array[i]) {
+            if (celdasId[j].value === arrayDeIds[i]) {
                 var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
                 var check = document.getElementById(idCheck);
                 check.checked = true;

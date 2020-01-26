@@ -119,7 +119,7 @@ namespace UtilidadesParaIu
                     .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
-                    .Replace("{idContenedor}", $"contenedor_{IdGrid}")
+                    .Replace("{idContenedor}", $"contenedor.{IdGrid}")
                     .Replace("{gridDeElementos}",grid.ToHtml())
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)

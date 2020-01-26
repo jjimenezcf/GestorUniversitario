@@ -13,7 +13,7 @@ function Leer(idGrid, controlador) {
         console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
-        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 
@@ -27,7 +27,7 @@ function LeerAnteriores(idGrid, controlador) {
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 
@@ -43,7 +43,7 @@ function LeerSiguientes(idGrid, controlador) {
         if (posicion + cantidad >= totalEnBd)
             LeerUltimos(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 
@@ -57,11 +57,12 @@ function LeerUltimos(idGrid, controlador) {
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, sustituirGrid);
+            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 
 function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
+
     function respuestaCorrecta() {
         if (req.status >= 200 && req.status < 400) {
             funcionDeRespuesta(idGrid, req.responseText);
@@ -82,11 +83,59 @@ function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
     req.send();
 }
 
-function sustituirGrid(idGrid, htmlGrid) {
-    var htmlContenedorGrid = document.getElementById(`contenedor_${idGrid}`);
-    console.log(htmlGrid);
-    htmlContenedorGrid.innerHTML = htmlGrid;
+function SustituirGrid(idGrid, htmlGrid) {
+    var htmlContenedorGrid = document.getElementById(`contenedor.${idGrid}`);
+    if (!htmlGrid) {
+        console.log(`No se ha localizado el contenedor contenedor.${idGrid}`);
+        return;
+    }
 
+    htmlContenedorGrid.innerHTML = htmlGrid;
+    if (infoSelectores.Cantidad > 0) {
+        var infSel = infoSelectores.Obtener(idGrid);
+        if (infSel !== undefined && infSel.Cantidad > 0) {
+            marcarElementos(idGrid, 'id', infSel.ToString());
+            infSel.SincronizarCheck();
+        }
+    }
+
+}
+
+
+function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
+    var check = document.getElementById(idCheck);
+    if (check.checked)
+        AnadirAlInfoSelector(idGrid, idCheck);
+    else
+        QuitarDelSelector(idGrid, idCheck);
+}
+
+
+/* TODO
+ * Si el info selector es para mapear luego a un htmlSelector, entonces además de insertar en la lista de ids a guardar hay que insertar en la de columnas a mostrar
+ */
+function AnadirAlInfoSelector(idGrid, idCheck) {
+
+    var infSel = infoSelectores.Obtener(idGrid);
+    if (infSel === undefined) {
+        infSel = new InfoSelector(idGrid);
+        infoSelectores.Insertar(infSel);
+    }
+
+    var id = ObtenerIdDeLaFilaChequeada(idCheck);
+    infSel.Insertar(id);
+}
+
+
+function QuitarDelSelector(idGrid, idCheck) {
+
+    var infSel = infoSelectores.Obtener(idGrid);
+    if (infSel !== undefined) {
+        var id = ObtenerIdDeLaFilaChequeada(idCheck);
+        infSel.Quitar(id);
+    }
+    else
+        console.log(`El selector ${idGrid} no está definido`);
 }
 
 

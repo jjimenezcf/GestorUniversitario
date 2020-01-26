@@ -36,7 +36,7 @@ namespace UtilidadesParaIu
             filas = filasDelGrid;
             _PosicionInicial = posicionInicial;
             _CantidadPorLeer = cantidadPorLeer;
-            Seleccionables = 1;
+            Seleccionables = 2;
         }
 
         public string ToHtml()
@@ -93,11 +93,12 @@ namespace UtilidadesParaIu
             var idDelCheck = $"{idFila}.chksel";
             var nombreCheck = $"chksel.{idGrid}";
             
-            var check = $"<input type=¨checkbox¨ id=¨{idDelCheck}¨ " +
-                        $"                       name=¨{nombreCheck}¨ " +
-                        $"                       class=¨text-center¨ " +
-                        $"                       aria-label=¨Marcar para seleccionar¨" +
-                        $"                       onclick=¨TratarClickDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
+            var check = $@"<input type=¨checkbox¨ 
+                                  id=¨{idDelCheck}¨ 
+                                  name=¨{nombreCheck}¨ 
+                                  class=¨text-center¨ 
+                                  aria-label=¨Marcar para seleccionar¨
+                                  onclick=¨AlPulsarUnCheckDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
 
 
 

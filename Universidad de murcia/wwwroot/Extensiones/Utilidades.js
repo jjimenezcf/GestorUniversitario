@@ -25,8 +25,6 @@ StringBuilder.prototype.appendLine = function (value) {
     }
 };
 
-
-
 StringBuilder.prototype.clear = function () {
     this.strings.length = 0;
 };
@@ -82,7 +80,7 @@ function Celdas(idGrid, numFil, fila) {
 }
 
 
-function obtenerIdDeLaFilaChequeada(idCheck) {
+function ObtenerIdDeLaFilaChequeada(idCheck) {
     return obtenerValorDeLaColumnaChequeada(idCheck, "id");
 }
 
