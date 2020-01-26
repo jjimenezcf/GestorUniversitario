@@ -15,10 +15,8 @@ namespace UtilidadesParaIu
     {
         private Aliniacion _alineada;
         private string _titulo;
-        private string _id;
         private string _nombre;
 
-        public string Id { get { return _id.ToLower(); } set { _id = value; descriptor.id = _id;  } }
         public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre.ToLower(); } }
         public string Propiedad => Nombre.ToLower();
         public string Titulo { get { return _titulo == null ? _nombre : _titulo; } set { _titulo = value; } }

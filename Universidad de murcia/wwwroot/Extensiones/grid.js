@@ -61,7 +61,7 @@ function LeerUltimos(idGrid, controlador) {
     }
 }
 
-function RenderSiguientes(url, idGrid, funcionDeRespuesta) {
+function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
     function respuestaCorrecta() {
         if (req.status >= 200 && req.status < 400) {
             funcionDeRespuesta(idGrid, req.responseText);
@@ -95,8 +95,7 @@ function sustituirGrid(idGrid, htmlGrid) {
 /// procesar un json con las filas del grid (en desuso)
 
 //************************************************************************************************************************************************************************************/
-
-function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
+function RenderSiguientes(url, idGrid, funcionDeRespuesta) {
     function respuestaCorrecta() {
         if (req.status >= 200 && req.status < 400) {
             funcionDeRespuesta(idGrid, req.responseText);
@@ -116,6 +115,7 @@ function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
     req.addEventListener("error", respuestaErronea);
     req.send();
 }
+
 
 function renderDetalleGrid(idGrid, respuesta) {
     var filas = JSON.parse(respuesta);

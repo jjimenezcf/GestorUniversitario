@@ -81,3 +81,15 @@ function Celdas(idGrid, numFil, fila) {
     }
 }
 
+
+function obtenerIdDeLaFilaChequeada(idCheck) {
+    return obtenerValorDeLaColumnaChequeada(idCheck, "id");
+}
+
+
+function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
+    var inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
+    return inputId.value;
+}
+
+

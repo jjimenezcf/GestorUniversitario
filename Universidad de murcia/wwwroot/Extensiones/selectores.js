@@ -1,9 +1,14 @@
 ﻿
 function AlAbrir(idGrid, columnaId, elementosMarcados) {
-    //var marcados = elementosMarcados;
-    //var navegador = document.getElementById(`Nav-${idGrid}-Reg`);
-    var infoSelector = new InfoSelector(idGrid);
-    marcarElementos(idGrid, columnaId, infoSelector);
+
+    infoSelectores.Borrar(idGrid);
+    var infSel = new InfoSelector(idGrid);
+
+    var marcados = elementosMarcados;
+    marcarElementos(idGrid, columnaId, marcados);
+    infSel.Insertar(marcados.split(';'));
+
+    infoSelectores.Insertar(infSel);
 }
 
 function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) {
@@ -16,23 +21,13 @@ function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) 
         var elemento = obtenerElementoSeleccionado(checkboxes[x].id, columnaId, columnaMostrar);
         mapearValoresAlSelector(selector, elemento);
     }
-    cerrar(referenciaChecks);
+    cerrar(idSelector,referenciaChecks);
 }
 
-function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {
-
-    //
-    // remplazar la c por la c_ i_
-    // remplazar la _chk_ por _columnaId_
-    //
-    //
-
-    var inputId = document.getElementById(idCheck.replace("_chk_", `_${columnaId}_`).replace("c_", "i_"));
-    var inputMostra = document.getElementById(idCheck.replace("_chk_", `_${columnaMostrar}_`).replace("c_", "i_"));
-
+function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {    
     var e = {
-        id: parseInt(inputId.value),
-        valor: inputMostra.value
+        id: parseInt(obtenerIdDeLaFilaChequeada(idCheck)),
+        valor: obtenerValorDeLaColumnaChequeada(idCheck, columnaMostrar)
     };
 
     return e;
@@ -40,9 +35,9 @@ function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {
 
 
 
-function AlCerrar(idModal, referenciaChecks) {
+function AlCerrar(idModal, idGrid,  referenciaChecks) {
     console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);
-    cerrar(referenciaChecks);
+    cerrar(idGrid, referenciaChecks);
 }
 
 function ElementosMarcados(idSelector) {
@@ -92,23 +87,23 @@ function blanquearSelector(selector) {
     }
 }
 
-function cerrar(referenciaChecks) {
+function cerrar(idGrid, referenciaChecks) {
     blanquearCheck(referenciaChecks);
-
+    infoSelectores.Borrar(idGrid);
 }
 
-function marcarElementos(idGrid, columnaId, infoSelector) {
+function marcarElementos(idGrid, columnaId, marcados) {
 
-    var array = infoSelector.Seleccionados;
-    if (array.length === 0)
+    var array = marcados.split(";");
+    if (array.length === 0 || (array.length === 1 && array[0]===""))
         return;
 
-    var celdasId = document.getElementsByName(`i_${idGrid}_${columnaId}`);
+    var celdasId = document.getElementsByName(`${columnaId}.${idGrid}`);
     var len = celdasId.length;
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < len; j++) {
             if (celdasId[j].value === array[i]) {
-                var idCheck = celdasId[j].id.replace(`_${columnaId}_`, "_chk_").replace("i_", "c_");
+                var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
                 var check = document.getElementById(idCheck);
                 check.checked = true;
                 break;

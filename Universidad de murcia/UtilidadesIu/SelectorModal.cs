@@ -40,12 +40,12 @@ namespace UtilidadesParaIu
 
         const string _alAbrirLaModal = @"
                                          $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{IdGrig}', '{columnaId}', ElementosMarcados('{idSelector}'))
+                                            AlAbrir('{IdGrid}', '{columnaId}', ElementosMarcados('{idSelector}'))
                                           })
                                       ";
         const string _alCerrarLaModal = @"
                                          $('#{idModal}').on('hidden.bs.modal', function (event) {
-                                            AlCerrar('{idModal}', 'referenciaChecks')
+                                            AlCerrar('{idModal}', '{idGrid}', 'referenciaChecks')
                                           })
                                       ";
 
@@ -53,7 +53,6 @@ namespace UtilidadesParaIu
         private string NombreDelObjeto { get; set; }
         
         private string _titulo;
-        private string _idSelector;
 
         private string _idModal;
         private string _columnaId;
@@ -63,8 +62,8 @@ namespace UtilidadesParaIu
         private string _Ruta => $"{_ClaseDeElemento}s";
 
         private string IdModal => _idModal.ToLower();
-        private string IdGrig => $"GridSel_{_ClaseDeElemento}".ToLower();
-        private string IdSelector => _idSelector.ToLower();
+        private string IdGrid => $"{IdModal}.Grid".ToLower();
+        private string IdSelector => $"{IdModal}.Selector".ToLower();
 
         public string ColumnaId { get { return _columnaId.ToLower(); }  set { _columnaId = value; } }
         public string ColumnaMostrar { get { return _columnaMostrar.ToLower(); } set { _columnaMostrar = value; } }
@@ -83,7 +82,6 @@ namespace UtilidadesParaIu
             _idModal = $"Selector_{_ClaseDeElemento}";
 
             _titulo = $"Seleccionar {NombreDelObjeto}";
-            _idSelector = $"id_{_ClaseDeElemento}_Seleccionado";
             DescriptorDeColumnas = descriptorDeColumnas;
             LeerFilasParaElGrid = leerFilasParaElGrid;
 
@@ -104,7 +102,7 @@ namespace UtilidadesParaIu
         {
             var resultado = LeerFilasParaElGrid(DescriptorDeColumnas);
 
-            Grid grid = new Grid(IdGrig, DescriptorDeColumnas, resultado.filas, PosicionInicial, CantidadPorLeer)
+            Grid grid = new Grid(IdGrid, DescriptorDeColumnas, resultado.filas, PosicionInicial, CantidadPorLeer)
             {
                 Ruta = _Ruta,
                 TotalEnBd = resultado.totalBd,
@@ -112,23 +110,26 @@ namespace UtilidadesParaIu
                 ConSeleccion = true
             };
 
+            var nombreCheckDeSeleccion = $"chksel.{IdGrid}";
+
             return _htmlModalSelector
                     .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
                     .Replace("{idSelector}", IdSelector)
-                    .Replace("{referenciaChecks}", $"chk_{IdGrig}")
+                    .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
-                    .Replace("{idContenedor}", $"contenedor_{IdGrig}")
+                    .Replace("{idContenedor}", $"contenedor_{IdGrid}")
                     .Replace("{gridDeElementos}",grid.ToHtml())
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)
-                                              .Replace("{IdGrig}", IdGrig)
+                                              .Replace("{IdGrid}", IdGrid)
                                               .Replace("{columnaId}", ColumnaId)
                                               .Replace("{idSelector}", IdSelector))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
                                               .Replace("{idModal}", IdModal)
-                                              .Replace("referenciaChecks", $"chk_{IdGrig}"))
+                                              .Replace("{idGrid}", IdGrid)
+                                              .Replace("referenciaChecks", $"{nombreCheckDeSeleccion}"))
                     .Render();
         }
     }

@@ -38,7 +38,6 @@ namespace UtilidadesParaIu
             var tabuladorCabecera = new StringBuilder();
             foreach (var columna in columnasGrid)
             {
-                columna.Id = $"{idGrid}_{columna.Propiedad}";
                 tabuladorCabecera.Append(TabuladorColumnaCabecera(columna));
             }
 

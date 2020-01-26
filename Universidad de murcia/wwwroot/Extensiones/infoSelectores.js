@@ -8,20 +8,23 @@
 class InfoSelector {
 
 
-    get Id() { return this._id; }
+    get Id() { return this._idGrid; }
     get Cantidad() { return this._seleccionados.length; }
     get Seleccionados() { return this._seleccionados; }
 
-    constructor(idGrid) {
-        this._id = idGrid;
+    iniciarClase(idGrid) {
+        this._idGrid = idGrid;
         this._grid = document.getElementById(idGrid);
         this._seleccionables = this._grid.getAttribute("seleccionables");
         this._seleccionados = new Array();
+    }
 
+    constructor(idGrid) {
+        this.iniciarClase(idGrid);
     }
 
     deshabilitarCheck(deshabilitar) {
-        var checkboxes = document.getElementsByName(`chk_${this._id}`);
+        var checkboxes = document.getElementsByName(`chksel.${this._idGrid}`);
         for (var x = 0; x < checkboxes.length; x++) {
             if (!checkboxes[x].checked) {
                 checkboxes[x].disabled = deshabilitar;
@@ -29,12 +32,22 @@ class InfoSelector {
         }
     }
 
-    Insertar(idSeleccionado) {
-        if (this._seleccionados.length < this._seleccionables) {
-            this._seleccionados.push(idSeleccionado);
+    Insertar(idsSeleccionados) {
 
-            if (this._seleccionados.length >= this._seleccionables)
-                this.deshabilitarCheck(true);
+        if (!idsSeleccionados || (idsSeleccionados.length === 1 && idsSeleccionados[0] === ""))
+            return;
+
+        for (var i = 0; i < idsSeleccionados.length; i++) {
+
+            var idSeleccionado = idsSeleccionados[i];
+
+            if (this._seleccionados.length < this._seleccionables) {
+                if (parseInt(idSeleccionado) > 0)
+                   this._seleccionados.push(idSeleccionado);
+
+                if (this._seleccionados.length >= this._seleccionables)
+                    this.deshabilitarCheck(true);
+            }
         }
     }
 
@@ -52,10 +65,45 @@ class InfoSelector {
 
 }
 
-var infoSelectores = {};
 
 
-function MarcarParaSeleccionar(idGrid, idCheck) {
+class InfoSelectores {
+
+    _infoSelectores = new Array();
+    
+    obtener(id) {
+        if (!this._infoSelectores || this._infoSelectores.length === 0)
+            return;
+
+        for (var i = 0; this._infoSelectores.length; i++) {
+            if (this._infoSelectores[i].Id === id)
+                return this._infoSelectores[i];
+        }
+        return undefined;
+    }
+
+
+    Insertar(infoSelector) {
+        var infSel = this.obtener(infoSelector.Id);
+        if (!infSel)
+            this._infoSelectores.push(infoSelector);
+
+        return this._infoSelectores.length;
+    }
+
+    Borrar(id) {
+        var infSel = this.obtener(id);
+        if (infSel)
+            this._infoSelectores.splice(infSel, 1);
+
+        return this._infoSelectores.length;
+    }
+}
+
+var infoSelectores = new InfoSelectores();
+
+
+function TratarClickDeSeleccion(idGrid, idCheck) {
     var check = document.getElementById(idCheck);
     if (check.checked)
         anadirAlInfoSelector(idGrid, idCheck);
@@ -68,7 +116,7 @@ function anadirAlInfoSelector(idGrid, idCheck) {
         infoSelectores[`${idGrid}`] = new InfoSelector(idGrid);
 
     var selector = infoSelectores[`${idGrid}`];
-    var id = obtenerIdDeLaFila(idCheck);
+    var id = obtenerIdDeLaFilaChequeada(idCheck);
     selector.Insertar(id);
 }
 
@@ -76,11 +124,7 @@ function anadirAlInfoSelector(idGrid, idCheck) {
 function quitarDelSelector(idGrid, idCheck) {
 
     var selector = infoSelectores[`${idGrid}`];
-    var id = obtenerIdDeLaFila(idCheck);
+    var id = obtenerIdDeLaFilaChequeada(idCheck);
     selector.Quitar(id);
 }
 
-function obtenerIdDeLaFila(idCheck) {
-    var inputId = document.getElementById(idCheck.replace("_chk_", `_id_`).replace("c_", "i_"));
-    return inputId.value;
-}

@@ -47,7 +47,7 @@ namespace UtilidadesParaIu
         }
 
 
-        private static string RenderColumnaCabecera(ColumnaDelGrid columna)
+        private static string RenderColumnaCabecera(string idCabecera, ColumnaDelGrid columna)
         {
             var visible = columna.Visible ? "" : "hidden";
             var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
@@ -58,7 +58,13 @@ namespace UtilidadesParaIu
 
             var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
 
-            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.descriptor.id}¨ class=¨{columna.AlineacionCss}¨ {estilo} {descriptor}>{columna.Titulo}</th>";
+            return $@"{Environment.NewLine}<th scope=¨col¨ 
+                                               id= ¨{idCabecera}.{columna.Propiedad}¨ 
+                                               class=¨{columna.AlineacionCss}¨ 
+                                               {estilo} 
+                                               {descriptor}>
+                                             {columna.Titulo}
+                                           </th>";
         }
 
         private static string RenderColumnaDeSeleccion(string idGrid)
@@ -68,7 +74,6 @@ namespace UtilidadesParaIu
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
             var columna = new ColumnaDelGrid();
             columna.Nombre = idGrid + "_chk_sel";
-            columna.Id = $"{idGrid}_{columna.Propiedad}";
             columna.Titulo = " ";
             columna.descriptor.visible = visible;
             columna.descriptor.alineada = HtmlRender.AlineacionCss(Aliniacion.centrada);
@@ -79,56 +84,81 @@ namespace UtilidadesParaIu
             return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.descriptor.id}¨ class=¨{columna.AlineacionCss}¨ {estilo} {descriptor}>{columna.Titulo}</th>";
         }
 
-
-        private static string RenderCeldaCheck(string idGrid, string idCelda, int numFil, int numCol)
+        private static string RenderCeldaCheck(string idGrid, string idFila, int numCol)
         {
-            var check = $"<input type=¨checkbox¨ id=¨c_{idGrid}_{idCelda}¨ " +
-                        $"                       name=¨chk_{idGrid}¨ " +
+
+            var idDelTd = $"{idFila}.{numCol}";
+            var nombreTd = $"td.chksel.{idGrid}";
+
+            var idDelCheck = $"{idFila}.chksel";
+            var nombreCheck = $"chksel.{idGrid}";
+            
+            var check = $"<input type=¨checkbox¨ id=¨{idDelCheck}¨ " +
+                        $"                       name=¨{nombreCheck}¨ " +
                         $"                       class=¨text-center¨ " +
                         $"                       aria-label=¨Marcar para seleccionar¨" +
-                        $"                       onclick=¨MarcarParaSeleccionar('{idGrid}','c_{idGrid}_{idCelda}');¨ /> ";
+                        $"                       onclick=¨TratarClickDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
 
-            var celdaDelCheck = $@"<td id=¨{idGrid}_{numFil}_{numCol}¨ 
-                                       name=¨{idGrid}_chk_sel¨ 
+
+
+            var tdDelCheck = $@"<td id=¨{idDelTd}¨ 
+                                       name=¨{nombreTd}¨ 
                                        class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
-                                $@"  {check}{Environment.NewLine}" +
-                                $@"</td>";
+                             $@"  {check}{Environment.NewLine}" +
+                             $@"</td>";
 
-            return celdaDelCheck;
+            return tdDelCheck;
         }
 
-        private static string RenderCeldaInput(CeldaDelGrid celda)
+        private static string RenderCeldaInput(string idGrid, string idFila, int numCol, CeldaDelGrid celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
-            var input = $" <input id=¨i_{celda.Id}¨ " +
-                        $"        name=¨i_{celda.IdCabecera}¨ " +
+
+
+            var idDelTd = $"{idFila}.{numCol}";
+            var nombreTd = $"td.chksel.{idGrid}";
+
+            var idDelInput = $"{idFila}.{celda.Propiedad}";
+            var nombreInput = $"{celda.Propiedad}.{idGrid}";
+
+
+            var input = $" <input id=¨{idDelInput}¨ " +
+                        $"        name=¨{nombreInput}¨ " +
                         $"        class=¨{celda.AlineacionCss()}¨ " +
                         $"        style=¨width:100%; border:0¨ " +
                         $"        {editable} " +
                         $"        value=¨{celda.Valor}¨/>";
 
+
             var ocultar = celda.Visible ? "" : "hidden";
-            return $"<td id=¨{celda.Id}¨ name=¨{celda.IdCabecera}¨ class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
+
+            return $@"<td id=¨{idDelTd}¨ 
+                          name=¨{nombreTd}¨ 
+                          class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
                    $"   {input}" +
-                   $"</td>";
+                   $" </td>";
         }
 
-        private static string RenderFila(int numFil, FilaDelGrid fila)
+        private static string RenderFila(string idGrid, string idFila, FilaDelGrid fila)
         {
             var filaHtml = new StringBuilder();
+            var numCol = 0;
             foreach (var celda in fila.Celdas)
             {
-                celda.Id = $"{celda.IdCabecera}_{numFil}";
-                filaHtml.AppendLine(RenderCeldaInput(celda));
+                filaHtml.AppendLine(RenderCeldaInput(idGrid, idFila, numCol, celda));
+                numCol++;
             }
             return $@"{filaHtml.ToString()}";
         }
 
         private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid fila)
         {
-            string filaHtml = RenderFila(numFil, fila);
-            string celdaDelCheck = RenderCeldaCheck($"{idGrid}", $"chk_{numFil}", numFil, fila.Celdas.Count);
-            return $"<tr id='{idGrid}_f{numFil}'>{Environment.NewLine}" +
+            var idFila = $"{idGrid}.d.tr.{numFil}";
+
+            string filaHtml = RenderFila(idGrid, idFila, fila);
+            string celdaDelCheck = RenderCeldaCheck(idGrid, idFila, fila.Celdas.Count);
+
+            return $"<tr id='{idFila}'>{Environment.NewLine}" +
                    $"   {filaHtml}{celdaDelCheck}{Environment.NewLine}" +
                    $"</tr>{Environment.NewLine}";
         }
@@ -136,13 +166,17 @@ namespace UtilidadesParaIu
         private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
         {
             var cabeceraHtml = new StringBuilder();
+            var idCabecera = $"{idGrid}.c.tr.0";
             foreach (var columna in columnasGrid)
             {
-                columna.Id = $"{idGrid}_{columna.Propiedad}";
-                cabeceraHtml.Append(RenderColumnaCabecera(columna));
+                cabeceraHtml.Append(RenderColumnaCabecera(idCabecera,columna));
             }
             cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
-            return $@"<thead id='{idGrid}_cab'>{Environment.NewLine}<tr id=¨{idGrid}_c0¨>{cabeceraHtml.ToString()}{Environment.NewLine}</tr>{Environment.NewLine}</thead>";
+            return $@"<thead id='{idGrid}.cabecera'>{Environment.NewLine}
+                         <tr id=¨{idCabecera}¨>
+                            {cabeceraHtml.ToString()}{Environment.NewLine}
+                         </tr>{Environment.NewLine}
+                      </thead>";
         }
 
 
@@ -155,7 +189,9 @@ namespace UtilidadesParaIu
                 htmlDetalleGrid.Append(RenderFilaSeleccionable(idGrid, i, fila));
                 i = i + 1;
             }
-            return $@"<tbody id='{idGrid}_body'>{htmlDetalleGrid.ToString()}</tbody>";
+            return $@"<tbody id='{idGrid}.detalle'>
+                         {htmlDetalleGrid.ToString()}
+                      </tbody>";
         }
 
         private static string RenderNavegadorGrid(Grid grid)
@@ -198,7 +234,7 @@ namespace UtilidadesParaIu
             var htmlTabla = $@"<table id=¨{grid.Id}¨ 
                                       class=¨table table-striped table-hover¨ 
                                       width=¨100%¨
-                                      seleccionables ={ grid.Seleccionables}
+                                      seleccionables ={grid.Seleccionables}
                                       seleccionados =¨¨>{Environment.NewLine}" +
                             $"   {RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}" +
                             $"   {RenderDetalleGrid(grid.Id, grid.filas)}" +
