@@ -123,7 +123,7 @@ function AnadirAlInfoSelector(idGrid, idCheck) {
     }
 
     var id = ObtenerIdDeLaFilaChequeada(idCheck);
-    infSel.Insertar(id);
+    infSel.InsertarId(id);
 }
 
 

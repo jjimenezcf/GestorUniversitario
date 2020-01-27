@@ -17,12 +17,14 @@ class InfoSelector {
     get Id() { return this._idGrid; }
     get Cantidad() { return this._seleccionados.length; }
     get Seleccionados() { return this._seleccionados; }
-
+    
     iniciarClase(idGrid) {
         this._idGrid = idGrid;
         this._grid = document.getElementById(idGrid);
         this._seleccionables = this._grid.getAttribute("seleccionables");
         this._seleccionados = new Array();
+        this._MostrarEnSelector = new Array();
+        this._EsModal = false;
     }
 
     constructor(idGrid) {
@@ -38,7 +40,7 @@ class InfoSelector {
 
         //Si has marcado y los seleccionados son más o igual que los seleccionables --> ok a deshabilitar
         if (deshabilitar === true && this.Seleccionados.length >= this._seleccionables)
-            ejecutar= true;
+            ejecutar = true;
 
         if (ejecutar) {
             var checkboxes = document.getElementsByName(`chksel.${this._idGrid}`);
@@ -50,25 +52,51 @@ class InfoSelector {
         }
     }
 
-    Insertar(idsSeleccionados) {
+    Modal(valor) { this._EsModal = valor; }
 
-        if (!idsSeleccionados || (idsSeleccionados.length === 1 && idsSeleccionados[0] === ""))
-            return;
+    InsertarId(id) {
+        if (!id || isNaN(parseInt(id))) {
+            console.log(`Ha intentado insertar en la lista un id no válido ${id}`);
+            return -1;
+        }
 
-        for (var i = 0; i < idsSeleccionados.length; i++) {
+        if (this._seleccionados.length < this._seleccionables) {
+            this._seleccionados.push(id);
+        }
 
-            var idSeleccionado = idsSeleccionados[i];
+        this.deshabilitarCheck(true);
+        return this.Cantidad;
+    }
 
-            if (this._seleccionados.length < this._seleccionables) {
-                if (parseInt(idSeleccionado) > 0)
-                    this._seleccionados.push(idSeleccionado);
+    InsertarElemento(id, textoMostrar) {
 
-                this.deshabilitarCheck(true);
-            }
-            else {
-                console.log(`Está intentando añadir un elemento a la lista seleccionable ${this.Id} y esta lista sólo admite ${this._seleccionables}`);
+        if (this._EsModal) {
+            var pos = this.InsertarId(id);
+            if (pos === this._seleccionados.length) {
+                this._MostrarEnSelector.push(textoMostrar);
             }
         }
+        else {
+            console.log(`Ha intentado insertar un elemento en un infoSelector no válido por no estar declarado como Modal`);
+            return -1;
+        }
+
+        return pos;
+    }
+
+    InsertarIds(ids) {
+
+        if (!ids || ids.length === 1 && isNaN(parseInt(ids))) {
+            console.log(`Ha intentado insertar en la lista un array de ids no válidos ${ids}`);
+            return -2;
+        }
+
+        for (var i = 0; i < ids.length; i++) {
+            var idSeleccionado = ids[i];
+            this.InsertarId(idSeleccionado);
+        }
+
+        return this.Cantidad;
     }
 
     Quitar(idSeleccionado) {
@@ -112,7 +140,7 @@ class InfoSelectores {
         if (!this._infoSelectores || this._infoSelectores.length === 0)
             return;
 
-        for (var i = 0; i<this.Cantidad; i++) {
+        for (var i = 0; i < this.Cantidad; i++) {
             if (this._infoSelectores[i].Id === id)
                 return this._infoSelectores[i];
         }

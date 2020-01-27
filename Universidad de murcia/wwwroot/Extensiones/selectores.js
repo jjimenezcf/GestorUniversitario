@@ -3,11 +3,10 @@ function AlAbrir(idGrid, columnaId, elementosMarcados) {
 
     infoSelectores.Borrar(idGrid);
     var infSel = new InfoSelector(idGrid);
-
+    infSel.Modal(true);
     var marcados = elementosMarcados;
     marcarElementos(idGrid, columnaId, marcados);
-    infSel.Insertar(marcados.split(';'));
-
+    infSel.InsertarIds(marcados.split(';'));
     infoSelectores.Insertar(infSel);
 }
 
