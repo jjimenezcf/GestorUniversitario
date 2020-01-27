@@ -5,18 +5,14 @@
 
 //************************************************************************************************************************************************************************************/
 
-//TODO:
-// Añadir tres propiedades más 
-//  Si es para un htmlSelector
-//  El id del htmSelector
-//  La columna a mostrar en el htmlSelector vinculado
-
 class InfoSelector {
 
 
     get Id() { return this._idGrid; }
     get Cantidad() { return this._seleccionados.length; }
     get Seleccionados() { return this._seleccionados; }
+    get ColumnaMostrar() { return this._columnaMostrar; }
+    get EsModalDeSeleccion() { return this._EsModal; }
     
     iniciarClase(idGrid) {
         this._idGrid = idGrid;
@@ -52,7 +48,32 @@ class InfoSelector {
         }
     }
 
-    Modal(valor) { this._EsModal = valor; }
+    Modal(columnaMostar) {
+        this._EsModal = true;
+        this._columnaMostrar = columnaMostar;
+    }
+
+    LeerId(pos) {
+        if (pos >= 0 && pos < this.Cantidad) {
+            return this._seleccionados[pos];
+        }        
+        console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
+        return 0;
+    }
+
+    LeerElemento(pos) {
+        if (this._EsModal) {
+            var id = this.LeerId(pos);
+            if (id > 0) {
+                var texto = this._MostrarEnSelector[pos];
+                return { id: id, valor: texto };
+            }
+        }
+        else
+          console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
+
+        return { id: 0, valor: ''};
+    }
 
     InsertarId(id) {
         if (!id || isNaN(parseInt(id))) {

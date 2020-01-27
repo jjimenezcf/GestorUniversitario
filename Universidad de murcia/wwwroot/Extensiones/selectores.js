@@ -1,37 +1,40 @@
 ﻿
-function AlAbrir(idGrid, columnaId, elementosMarcados) {
+//TODO:
+//Pasar el Id del selector
+//Al crear el infoSelector asociado al grid, pasarle los Ids y los Literales vinculados
+//Si no se hace esto, cuando se cierra no encuentra nombres y no puede mapearlos
+function AlAbrir(idGrid, columnaId, columnaMostrar, elementosMarcados) {
 
     infoSelectores.Borrar(idGrid);
     var infSel = new InfoSelector(idGrid);
-    infSel.Modal(true);
+    infSel.Modal(columnaMostrar);
     var marcados = elementosMarcados;
     marcarElementos(idGrid, columnaId, marcados);
     infSel.InsertarIds(marcados.split(';'));
     infoSelectores.Insertar(infSel);
 }
 
-function AlSeleccionar(idSelector, referenciaChecks, columnaId, columnaMostrar) {
+function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
 
     var htmlSelector = document.getElementById(idSelector);
 
     blanquearSelector(htmlSelector);
 
-    /*TODO:
-     * 
-     * Recorrer la lista de del infoSelector asociado y de ahí se obtiene el id y el valor de la columna a mostrar.
-     * Esto sustituye al código de abajo
-     * 
-     */
+    //var checkboxes = $(`input[name='${referenciaChecks}']:checked`);
+    var infSel = infoSelectores.Obtener(idGrid);
 
-    var checkboxes = $(`input[name='${referenciaChecks}']:checked`);
-    for (var x = 0; x < checkboxes.length; x++) {
-        var elemento = obtenerElementoSeleccionado(checkboxes[x].id, columnaId, columnaMostrar);
-        mapearValoresAlSelector(htmlSelector, elemento);
+    for (var x = 0; x < infSel.Cantidad; x++) {
+        var elemento = infSel.LeerElemento(x);
+        if (elemento.id > 0 && elemento.valor !== undefined)
+            mapearValoresAlSelector(htmlSelector, elemento);
+        else
+            console.log(`Se ha leido mal el elemento del selector ${idGrid} de la posición ${x}`);
+
     }
-    cerrar(idSelector,referenciaChecks);
+    cerrar(idGrid,referenciaChecks);
 }
 
-function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {    
+function obtenerElementoSeleccionado(idCheck, columnaMostrar) {    
     var e = {
         id: parseInt(ObtenerIdDeLaFilaChequeada(idCheck)),
         valor: obtenerValorDeLaColumnaChequeada(idCheck, columnaMostrar)
@@ -39,8 +42,6 @@ function obtenerElementoSeleccionado(idCheck, columnaId, columnaMostrar) {
 
     return e;
 }
-
-
 
 function AlCerrar(idModal, idGrid,  referenciaChecks) {
     console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);

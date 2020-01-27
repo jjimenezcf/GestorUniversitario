@@ -111,9 +111,6 @@ function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
 }
 
 
-/* TODO
- * Si el info selector es para mapear luego a un htmlSelector, entonces además de insertar en la lista de ids a guardar hay que insertar en la de columnas a mostrar
- */
 function AnadirAlInfoSelector(idGrid, idCheck) {
 
     var infSel = infoSelectores.Obtener(idGrid);
@@ -123,7 +120,14 @@ function AnadirAlInfoSelector(idGrid, idCheck) {
     }
 
     var id = ObtenerIdDeLaFilaChequeada(idCheck);
-    infSel.InsertarId(id);
+    if (infSel.EsModalDeSeleccion) {
+        var textoMostrar = obtenerValorDeLaColumnaChequeada(idCheck, infSel.ColumnaMostrar);
+        infSel.InsertarElemento(id, textoMostrar);
+    }
+    else {
+        infSel.InsertarId(id);
+    }
+
 }
 
 

@@ -18,7 +18,7 @@ namespace UtilidadesParaIu
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{referenciaChecks}', '{columnaId}', '{columnaMostrar}')¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{idGrid}', '{referenciaChecks}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
@@ -40,7 +40,7 @@ namespace UtilidadesParaIu
 
         const string _alAbrirLaModal = @"
                                          $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{IdGrid}', '{columnaId}', ElementosMarcados('{idSelector}'))
+                                            AlAbrir('{IdGrid}', '{columnaId}', '{columnaMostrar}', ElementosMarcados('{idSelector}'))
                                           })
                                       ";
         const string _alCerrarLaModal = @"
@@ -116,6 +116,7 @@ namespace UtilidadesParaIu
                     .Replace("idModal", IdModal)
                     .Replace("titulo", _titulo)
                     .Replace("{idSelector}", IdSelector)
+                    .Replace("{idGrid}", IdGrid)
                     .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}",ColumnaId)
                     .Replace("{columnaMostrar}", ColumnaMostrar)
@@ -125,6 +126,7 @@ namespace UtilidadesParaIu
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{IdGrid}", IdGrid)
                                               .Replace("{columnaId}", ColumnaId)
+                                              .Replace("{columnaMostrar}", ColumnaMostrar)
                                               .Replace("{idSelector}", IdSelector))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
                                               .Replace("{idModal}", IdModal)
