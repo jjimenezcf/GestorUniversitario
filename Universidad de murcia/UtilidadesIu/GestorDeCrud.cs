@@ -98,7 +98,7 @@ namespace UtilidadesParaIu
         
         public string RenderGridSiguiente(string idGrid)
         {
-            var grid = new Grid(idGrid, ColumnasDelGrid, FilasDelGrid, PosicionInicial, CantidadPorLeer) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(idGrid, ColumnasDelGrid, FilasDelGrid, PosicionInicial, CantidadPorLeer) { Controlador = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }
@@ -151,7 +151,7 @@ namespace UtilidadesParaIu
                                      contenido 
                                     </div>";
 
-            var grid = new Grid(IdGrid, columnas, filas, PosicionInicial, CantidadPorLeer) { Ruta = Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(IdGrid, columnas, filas, PosicionInicial, CantidadPorLeer) { Controlador = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
             var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor.{grid.Id}").Replace("contenido", htmlGrid);
             return htmlContenedor;

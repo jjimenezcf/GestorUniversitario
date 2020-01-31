@@ -7,23 +7,25 @@
 //************************************************************************************************************************************************************************************/
 
 
-function Leer(idGrid, controlador) {
+function Leer(idGrid) {
     var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
+        var controlador = htmlImputCantidad.getAttribute("controlador");
         LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 
-function LeerAnteriores(idGrid, controlador) {
+function LeerAnteriores(idGrid) {
     var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion") - 2 * cantidad;
+        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
@@ -31,7 +33,7 @@ function LeerAnteriores(idGrid, controlador) {
     }
 }
 
-function LeerSiguientes(idGrid, controlador) {
+function LeerSiguientes(idGrid) {
     var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
@@ -39,7 +41,7 @@ function LeerSiguientes(idGrid, controlador) {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion");
         var totalEnBd = htmlImputCantidad.getAttribute("totalEnBd");
-
+        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion + cantidad >= totalEnBd)
             LeerUltimos(idGrid, controlador);
         else
@@ -47,13 +49,14 @@ function LeerSiguientes(idGrid, controlador) {
     }
 }
 
-function LeerUltimos(idGrid, controlador) {
+function LeerUltimos(idGrid) {
     var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento${idGrid}.Nav.2.Reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("totalEnBd") - cantidad;
+        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid, controlador);
         else
@@ -94,7 +97,7 @@ function SustituirGrid(idGrid, htmlGrid) {
     if (infoSelectores.Cantidad > 0) {
         var infSel = infoSelectores.Obtener(idGrid);
         if (infSel !== undefined && infSel.Cantidad > 0) {
-            marcarElementos(idGrid, 'id', infSel.ToString());
+            marcarElementos(idGrid, 'id', infSel);
             infSel.SincronizarCheck();
         }
     }

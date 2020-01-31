@@ -10,7 +10,7 @@ namespace UtilidadesParaIu
     {
         string _id;
         public string Id { get { return _id.ToLower(); } private set { _id = value; } }
-        public string Ruta { get; set; }
+        public string Controlador { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
 
@@ -201,19 +201,20 @@ namespace UtilidadesParaIu
             <div class=¨text-center¨>
                 <div id=¨{grid.Id}.Nav¨ style=¨float: left¨>
                     <div id=¨{grid.Id}.Nav.1¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}')¨>
                     </div>
                     <div id=¨{grid.Id}.Nav.2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
                         <input type=¨number¨ id=¨{grid.Id}.Nav.2.Reg¨ value=¨{grid._CantidadPorLeer}¨ 
                                              min=¨1¨ step=¨1¨ max=¨999¨ 
                                              posicion=¨{grid.Ultimo_Leido}¨  
+                                             controlador=¨{grid.Controlador}¨  
                                              totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
                                              style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
                     <div id=¨id=¨{grid.Id}.Nav.3¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}','{grid.Ruta}')¨>
-                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}','{grid.Ruta}')¨>
-                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}','{grid.Ruta}')¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}')¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}')¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}')¨>
                     </div>
                 </div>
                 <div  style=¨float: right¨>

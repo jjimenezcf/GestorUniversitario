@@ -90,4 +90,28 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     return inputId.value;
 }
 
+if (!String.prototype.trim) {
+    (function () {
+        // Make sure we trim BOM and NBSP
+        var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+        String.prototype.trim = function () {
+            return this.replace(rtrim, '');
+        };
+    })();
+}
+
+if (!String.prototype.isNullOrEmpty) {
+    (function () {
+        String.prototype.isNullOrEmpty = function () {
+            if (this !== undefined)
+                return this.length === 0 || this.trim() === '';
+            return true;
+        };
+    })();
+}
+
+function isNullOrEmpty(str) {
+    return str.length === 0 || str.trim() === '';
+}
+
 

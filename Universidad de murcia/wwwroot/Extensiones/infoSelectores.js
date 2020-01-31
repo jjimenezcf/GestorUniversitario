@@ -13,13 +13,13 @@ class InfoSelector {
     get Seleccionados() { return this._seleccionados; }
     get ColumnaMostrar() { return this._columnaMostrar; }
     get EsModalDeSeleccion() { return this._EsModal; }
-    
+
     iniciarClase(idGrid) {
         this._idGrid = idGrid;
         this._grid = document.getElementById(idGrid);
         this._seleccionables = this._grid.getAttribute("seleccionables");
         this._seleccionados = new Array();
-        this._MostrarEnSelector = new Array();
+        this._ParaMostrarEnSelector = new Array();
         this._EsModal = false;
     }
 
@@ -31,11 +31,11 @@ class InfoSelector {
 
         var ejecutar = false;
         //si has desmarcado checks y los seleccionados son menos que los seleccionables --> ok a habilitar
-        if (deshabilitar === false && this._seleccionados.length < this._seleccionables)
+        if (deshabilitar === false && this.Cantidad < this._seleccionables)
             ejecutar = true;
 
         //Si has marcado y los seleccionados son más o igual que los seleccionables --> ok a deshabilitar
-        if (deshabilitar === true && this.Seleccionados.length >= this._seleccionables)
+        if (deshabilitar === true && this.Cantidad >= this._seleccionables)
             ejecutar = true;
 
         if (ejecutar) {
@@ -43,6 +43,9 @@ class InfoSelector {
             for (var x = 0; x < checkboxes.length; x++) {
                 if (!checkboxes[x].checked) {
                     checkboxes[x].disabled = deshabilitar;
+                }
+                else {
+                    checkboxes[x].disabled = false;
                 }
             }
         }
@@ -56,7 +59,7 @@ class InfoSelector {
     LeerId(pos) {
         if (pos >= 0 && pos < this.Cantidad) {
             return this._seleccionados[pos];
-        }        
+        }
         console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return 0;
     }
@@ -65,14 +68,14 @@ class InfoSelector {
         if (this._EsModal) {
             var id = this.LeerId(pos);
             if (id > 0) {
-                var texto = this._MostrarEnSelector[pos];
+                var texto = this._ParaMostrarEnSelector[pos];
                 return { id: id, valor: texto };
             }
         }
         else
-          console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
+            console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
 
-        return { id: 0, valor: ''};
+        return { id: 0, valor: '' };
     }
 
     InsertarId(id) {
@@ -94,7 +97,7 @@ class InfoSelector {
         if (this._EsModal) {
             var pos = this.InsertarId(id);
             if (pos === this._seleccionados.length) {
-                this._MostrarEnSelector.push(textoMostrar);
+                this._ParaMostrarEnSelector.push(textoMostrar);
             }
         }
         else {
@@ -103,6 +106,21 @@ class InfoSelector {
         }
 
         return pos;
+    }
+
+    InsertarElementos(elementos) {
+
+        if (!elementos || elementos.length > 0) {
+            for (var i = 0; i < elementos.length; i++) {
+                var e = elementos[i];
+                this.InsertarElemento(e.id, e.valor);
+            }
+        }
+        else {
+            console.log(`Ha intentado insertar en la lista un array de elementos vacío`);
+        }
+
+        return this.Cantidad;
     }
 
     InsertarIds(ids) {

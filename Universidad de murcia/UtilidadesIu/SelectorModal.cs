@@ -40,7 +40,7 @@ namespace UtilidadesParaIu
 
         const string _alAbrirLaModal = @"
                                          $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{IdGrid}', '{columnaId}', '{columnaMostrar}', ElementosMarcados('{idSelector}'))
+                                            AlAbrir('{IdGrid}', '{idSelector}', '{columnaId}', '{columnaMostrar}')
                                           })
                                       ";
         const string _alCerrarLaModal = @"
@@ -59,7 +59,7 @@ namespace UtilidadesParaIu
         private string _columnaMostrar;
 
         private string _ClaseDeElemento => $"{NombreDelObjeto.Replace("Elemento", "")}";
-        private string _Ruta => $"{_ClaseDeElemento}s";
+        private string _Controlador => $"{_ClaseDeElemento}s";
 
         private string IdModal => _idModal.ToLower();
         private string IdGrid => $"{IdModal}.Grid".ToLower();
@@ -104,7 +104,7 @@ namespace UtilidadesParaIu
 
             Grid grid = new Grid(IdGrid, DescriptorDeColumnas, resultado.filas, PosicionInicial, CantidadPorLeer)
             {
-                Ruta = _Ruta,
+                Controlador = _Controlador,
                 TotalEnBd = resultado.totalBd,
                 ConNavegador = true,
                 ConSeleccion = true
@@ -125,9 +125,9 @@ namespace UtilidadesParaIu
                     .Replace("AlAbrirLaModal",_alAbrirLaModal
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{IdGrid}", IdGrid)
+                                              .Replace("{idSelector}", IdSelector)
                                               .Replace("{columnaId}", ColumnaId)
-                                              .Replace("{columnaMostrar}", ColumnaMostrar)
-                                              .Replace("{idSelector}", IdSelector))
+                                              .Replace("{columnaMostrar}", ColumnaMostrar))
                     .Replace("AlCerrarLaModal", _alCerrarLaModal
                                               .Replace("{idModal}", IdModal)
                                               .Replace("{idGrid}", IdGrid)

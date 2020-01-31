@@ -3,15 +3,22 @@
 //Pasar el Id del selector
 //Al crear el infoSelector asociado al grid, pasarle los Ids y los Literales vinculados
 //Si no se hace esto, cuando se cierra no encuentra nombres y no puede mapearlos
-function AlAbrir(idGrid, columnaId, columnaMostrar, elementosMarcados) {
-
+function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
+    Leer(idGrid);
     infoSelectores.Borrar(idGrid);
     var infSel = new InfoSelector(idGrid);
     infSel.Modal(columnaMostrar);
-    var marcados = elementosMarcados;
-    marcarElementos(idGrid, columnaId, marcados);
-    infSel.InsertarIds(marcados.split(';'));
+    var arrayMarcados = elementosMarcados(idSelector);
+    infSel.InsertarElementos(arrayMarcados);
     infoSelectores.Insertar(infSel);
+
+    marcarElementos(idGrid, columnaId, infSel);
+    infSel.SincronizarCheck();
+}
+
+function AlCerrar(idModal, idGrid, referenciaChecks) {
+    console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);
+    cerrar(idGrid, referenciaChecks);
 }
 
 function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
@@ -26,7 +33,7 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
     for (var x = 0; x < infSel.Cantidad; x++) {
         var elemento = infSel.LeerElemento(x);
         if (elemento.id > 0 && elemento.valor !== undefined)
-            mapearValoresAlSelector(htmlSelector, elemento);
+            mapearElementoAlHtmlSelector(htmlSelector, elemento);
         else
             console.log(`Se ha leido mal el elemento del selector ${idGrid} de la posición ${x}`);
 
@@ -43,46 +50,51 @@ function obtenerElementoSeleccionado(idCheck, columnaMostrar) {
     return e;
 }
 
-function AlCerrar(idModal, idGrid,  referenciaChecks) {
-    console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);
-    cerrar(idGrid, referenciaChecks);
-}
 
-function ElementosMarcados(idSelector) {
+function elementosMarcados(idSelector) {
 
-    var seleccionados = "";
-    var selector = document.getElementById(idSelector);
-    if (selector.hasAttribute("idsSeleccionados")) {
-        seleccionados = selector.getAttribute("idsSeleccionados");
+    var ids = "";
+    var elementos = new Array();
+    var htmlSelector = document.getElementById(idSelector);
+    if (htmlSelector.hasAttribute("idsSeleccionados")) {
+        ids = htmlSelector.getAttribute("idsSeleccionados");
+        if (!ids.isNullOrEmpty()) {
+            var listaNombres = htmlSelector.value.split('|');
+            var listaIds = ids.split(';');
+            for (var i = 0; i < listaIds.length; i++) {
+                var e = { id: listaIds[i], valor: listaNombres[i] };
+                elementos.push(e);
+            }
+        }
     }
 
-    return seleccionados;
+    return elementos;
 }
 
 
-function mapearValoresAlSelector(selector, elemento) {
+function mapearElementoAlHtmlSelector(htmlSelector, elemento) {
 
-    var valorDelSelector = selector.value;
-    if (valorDelSelector !== undefined && valorDelSelector.trim() !== "")
+    var valorDelSelector = htmlSelector.value;
+    if (!valorDelSelector.isNullOrEmpty())
         valorDelSelector = valorDelSelector + " | ";
-    selector.value = valorDelSelector + elemento.valor;
 
-    mapearIdsAlSelector(selector, elemento.id);
+    htmlSelector.value = valorDelSelector + elemento.valor;
+    mapearIdAlHtmlSelector(htmlSelector, elemento.id);
 
 }
 
-function mapearIdsAlSelector(selector, id) {
-    var listaDeIds = selector.getAttribute("idsSeleccionados");
+function mapearIdAlHtmlSelector(htmlSelector, id) {
+    var listaDeIds = htmlSelector.getAttribute("idsSeleccionados");
     if (listaDeIds === null) {
         atributo = document.createAttribute("idsSeleccionados");
-        selector.setAttributeNode(atributo);
+        htmlSelector.setAttributeNode(atributo);
         listaDeIds = "";
     }
 
-    if (listaDeIds.trim() !== "")
+    if (!listaDeIds.isNullOrEmpty())
         listaDeIds = listaDeIds + ';';
     listaDeIds = listaDeIds + id;
-    selector.setAttribute("idsSeleccionados", listaDeIds);
+    htmlSelector.setAttribute("idsSeleccionados", listaDeIds);
 }
 
 
@@ -100,20 +112,17 @@ function cerrar(idGrid, referenciaChecks) {
     infoSelectores.Borrar(idGrid);
 }
 
-function marcarElementos(idGrid, columnaId, marcados) {
+function marcarElementos(idGrid, columnaId, infSel) {
 
-    var arrayDeIds = marcados.split(";");
-    if (arrayDeIds.length === 0 || (arrayDeIds.length === 1 && arrayDeIds[0]===""))
+    if (infSel.Cantidad === 0)
         return;
 
     var celdasId = document.getElementsByName(`${columnaId}.${idGrid}`);
     var len = celdasId.length;
-    for (var i = 0; i < arrayDeIds.length; i++) {
-        if (parseInt(arrayDeIds[i]) <= 0)
-            continue;
-
+    for (var i = 0; i < infSel.Cantidad; i++) {
         for (var j = 0; j < len; j++) {
-            if (celdasId[j].value === arrayDeIds[i]) {
+            var id = infSel.LeerId(i);
+            if (celdasId[j].value === id) {
                 var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
                 var check = document.getElementById(idCheck);
                 check.checked = true;
