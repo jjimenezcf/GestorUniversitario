@@ -1,8 +1,4 @@
 ﻿
-//TODO:
-//Pasar el Id del selector
-//Al crear el infoSelector asociado al grid, pasarle los Ids y los Literales vinculados
-//Si no se hace esto, cuando se cierra no encuentra nombres y no puede mapearlos
 function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
     Leer(idGrid);
     infoSelectores.Borrar(idGrid);
