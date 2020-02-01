@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="UtilidadesIu\ColumnaDelGrid.cs" />
-    <Content Include="UtilidadesIu\FilaDelGrid.cs" />
-    <Content Include="UtilidadesIu\Grid.cs" />
+    <Content Include="UtilidadesIu\Componentes\ColumnaDelGrid.cs" />
+    <Content Include="UtilidadesIu\Componentes\FilaDelGrid.cs" />
+    <Content Include="UtilidadesIu\Componentes\Grid.cs" />
   </ItemGroup>
 
   <ItemGroup>

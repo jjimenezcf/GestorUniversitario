@@ -19,8 +19,8 @@ namespace UniversidadDeMurcia.Controllers
     public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
     {
 
-        public EstudiantesController( GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores) :
-            base(gestorDeEstudiantes, gestorDeErrores)
+        public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
+        :base(nameof(EstudiantesController), gestorDeEstudiantes, gestorDeErrores)
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;

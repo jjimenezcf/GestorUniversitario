@@ -25,13 +25,13 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-        public EntidadController(GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores) :
-        base(gestorErrores)
+        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
+        :base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(DefinirColumnasDelGrid, DefinirOpcionesGenerales);
+            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -69,9 +69,9 @@ namespace UniversidadDeMurcia.Controllers
             return new List<ColumnaDelGrid>();
         }
 
-        protected virtual List<Opcion> DefinirOpcionesGenerales()
+        protected virtual List<PeticionMvc> DefinirOpcionesGenerales()
         {
-            return new List<Opcion>();
+            return new List<PeticionMvc>();
         }
         
         protected virtual List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<TElemento> elementos)
