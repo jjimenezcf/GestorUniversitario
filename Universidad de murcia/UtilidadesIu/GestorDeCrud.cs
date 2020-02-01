@@ -10,6 +10,8 @@ namespace UtilidadesParaIu
 
         public string NombreDelObjeto => typeof(T).Name;
         public string ClaseDeElemento => NombreDelObjeto.Replace("Elemento", "");
+
+        public string Controlador { get; private set; }
         
         public string Titulo { get; set; }
         public Dictionary<string, SelectorModal> Modales = new Dictionary<string, SelectorModal>();
@@ -24,14 +26,16 @@ namespace UtilidadesParaIu
 
         public GestorCrud(string controlador,  Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<PeticionMvc>> definirOpcionesGenerales)
         {
+            Controlador = controlador.Replace("Controller", "");
             Titulo = $"Gestor de {NombreDelObjeto}";
             Creador = new CreacionCrud<T>();
 
-            var opciones = new List<PeticionMvc>() { new PeticionMvc() { Nombre = Creador.Titulo, Ruta = _Ruta, Accion = Creador.Ir } };
-            Mantenimiento = new MantenimientoCrud<T>(controlador, "Mantenimiento", ClaseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
+            var peticionesMvc = new List<PeticionMvc>() { new PeticionMvc() { Nombre = Creador.Titulo, Controlador = Controlador, Accion = Creador.Ir } };
+
+            Mantenimiento = new MantenimientoCrud<T>(Controlador, "Mantenimiento", ClaseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
             {
                 Ruta = _Ruta
-               ,OpcionesGenerales = opciones
+               ,PeticionesComunes = peticionesMvc
                ,Modales = Modales
                ,PosicionInicial = 0 //todo: --> recuperar de BD
                ,CantidadPorLeer = 5 //todo: --> recuperar de BD

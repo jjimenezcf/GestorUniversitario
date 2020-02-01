@@ -25,18 +25,19 @@ namespace UniversidadDeMurcia.UtilidadesIu
         public string Formulario => _formulario ?? _modo;
 
         public string ClaseDeElemento { get; private set; }
-        private List<PeticionMvc> _opcionesGenerales;
+        
+        private List<PeticionMvc> _peticionesComunes;
         public List<ColumnaDelGrid> ColumnasDelGrid { get; }
         public List<FilaDelGrid> FilasDelGrid { private get; set; }
-        public List<PeticionMvc> OpcionesGenerales
+        public List<PeticionMvc> PeticionesComunes
         {
-            get => _opcionesGenerales;
+            get => _peticionesComunes;
             set
             {
-                if (_opcionesGenerales == null)
-                    _opcionesGenerales = value;
+                if (_peticionesComunes == null)
+                    _peticionesComunes = value;
                 else
-                    _opcionesGenerales.AddRange(value);
+                    _peticionesComunes.AddRange(value);
             }
         }
 
@@ -54,7 +55,7 @@ namespace UniversidadDeMurcia.UtilidadesIu
             ClaseDeElemento = claseDeElemento;
             AsignarTitulo($"{modo} de {ClaseDeElemento}s");
             ColumnasDelGrid = definirColumnasDelGrid == null ? renderDeColumnasVacio() : definirColumnasDelGrid();
-            OpcionesGenerales = definirOpcionesGenerales();
+            PeticionesComunes = definirOpcionesGenerales();
         }
 
         public string Render()
@@ -99,9 +100,9 @@ namespace UniversidadDeMurcia.UtilidadesIu
                                        </p>
                                       ";
 
-            foreach (var opcion in OpcionesGenerales)
+            foreach (var opcion in PeticionesComunes)
             {
-                var html = htmlOpcion.Replace("ruta", opcion.Ruta).Replace("accion", opcion.Accion).Replace("nombreAccion", opcion.Nombre);
+                var html = htmlOpcion.Replace("ruta", opcion.Controlador).Replace("accion", opcion.Accion).Replace("nombreAccion", opcion.Nombre);
                 htmlOpcionesGenerales = htmlOpcionesGenerales + html;
             }
 
