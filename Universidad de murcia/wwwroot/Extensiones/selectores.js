@@ -1,6 +1,8 @@
 ﻿
 function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
-    Leer(idGrid);
+
+    recargarGrid(idGrid);
+
     infoSelectores.Borrar(idGrid);
     var infSel = new InfoSelector(idGrid);
     infSel.Modal(columnaMostrar);
@@ -35,6 +37,18 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
 
     }
     cerrar(idGrid,referenciaChecks);
+}
+
+function recargarGrid(idGrid) {
+    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
+    if (htmlImputCantidad === null)
+        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
+    else {
+        var cantidad = htmlImputCantidad.value;
+        var posicion = htmlImputCantidad.getAttribute("posicion");
+        if (posicion - cantidad !== 0)
+            Leer(idGrid);
+    }
 }
 
 function obtenerElementoSeleccionado(idCheck, columnaMostrar) {    
@@ -94,12 +108,12 @@ function mapearIdAlHtmlSelector(htmlSelector, id) {
 }
 
 
-function blanquearSelector(selector) {
-    selector.value = "";
-    if (selector.hasAttribute("idsSeleccionados")) {
-        var listaDeIds = selector.getAttribute("idsSeleccionados");
+function blanquearSelector(htmlSelector) {
+    htmlSelector.value = "";
+    if (htmlSelector.hasAttribute("idsSeleccionados")) {
+        var listaDeIds = htmlSelector.getAttribute("idsSeleccionados");
         listaDeIds = "";
-        selector.setAttribute("idsSeleccionados", listaDeIds);
+        htmlSelector.setAttribute("idsSeleccionados", listaDeIds);
     }
 }
 
