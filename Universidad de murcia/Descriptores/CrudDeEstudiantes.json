@@ -1,0 +1,98 @@
+{
+  "Mantenimiento": "Estudiante",
+  "Partes": [
+    {
+      "Zona": "Filtro",
+      "Bloques": [
+        {
+          "columnas": "2",
+          "controles": [
+            {
+              "tipo": "editorDeTexto",
+              "etiqueta": "Estudiante",
+              "propiedad": "Nombre",
+              "ayuda": "filtra por nombre de estudiante",
+              "accion": "filtrar",
+              "fila": "0",
+              "columna": "1"
+            }
+          ],
+          "filas": "1",
+          "nombre": "General"
+        },
+        {
+          "columnas": "2",
+          "controles": [
+            {
+              "tipo": "desplegable",
+              "etiqueta": "Orden",
+              "ayuda": "seleccionar ordenación",
+              "accion": "ordenar",
+              "fila": "0",
+              "columna": "1",
+              "valores": [
+                { "Nombre estudiante": "Nombre" },
+                { "Fecha de inscripción": "Fecha" }
+              ]
+            }
+          ],
+          "filas": "1",
+          "nombre": "Comunes"
+        },
+        {
+          "columnas": "2",
+          "controles": [
+            {
+              "tipo": "selector",
+              "etiqueta": "Curso",
+              "ayuda": "Filtrar por curso",
+              "accion": "filtrar",
+              "fila": "0",
+              "columna": "1",
+              "gestorDeElementos": "GestorDeCursos",
+              "claseDeElemento": "ElementoCurso",
+              "propiedadParaFiltrar": "Id",
+              "propiedadParaMostrar": "Titulo",
+              "columnasDelGrid": [
+                {
+                  "etiqueta": "Id",
+                  "propiedad": "Id",
+                  "visible": "false",
+                  "tipo": "int"
+                },
+                {
+                  "etiqueta": "Título",
+                  "propiedad": "Titulo",
+                  "visible": "true",
+                  "tipo": "string"
+                },
+                {
+                  "etiqueta": "Créditos",
+                  "propiedad": "Creditos",
+                  "visible": "true",
+                  "tipo": "int"
+                }
+              ],
+              "Registros":"10"
+            }
+          ],
+          "filas": "1",
+          "nombre": "Específicos"
+        }
+      ]
+    },
+    {
+      "Zona": "Grid",
+      "columnas": [],
+      "Registros": "10"
+    },
+    {
+      "Zona": "Menu",
+      "Opciones": [
+        {},
+        {},
+        {}
+      ]
+    }
+  ]
+}

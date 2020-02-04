@@ -10,12 +10,14 @@ using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
 using UniversidadDeMurcia.UtilidadesIu;
+using Newtonsoft.Json;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace UniversidadDeMurcia.Controllers
 {
-        
+
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController 
         where TContexto: ContextoDeElementos  
         where TRegistro : RegistroBase 
@@ -28,6 +30,12 @@ namespace UniversidadDeMurcia.Controllers
         public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
         :base(gestorErrores)
         {
+            var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller","")}.json";
+            if (System.IO.File.Exists(ficheroDescriptorCrud))
+            {
+                var file = new StreamReader(ficheroDescriptorCrud);
+                var jsonCrud = JsonConvert.DeserializeObject(file.ReadToEnd());
+            }
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
