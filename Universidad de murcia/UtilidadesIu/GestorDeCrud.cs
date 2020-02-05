@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UniversidadDeMurcia.Descriptores;
 using UniversidadDeMurcia.UtilidadesIu;
 
 namespace UtilidadesParaIu
@@ -44,6 +45,12 @@ namespace UtilidadesParaIu
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();
             Supresor = new BorradoCrud<T>();
+        }
+
+        public string Render()
+        {
+            var a = new CrudEstudiante();
+            return a.Render();
         }
     }
 }

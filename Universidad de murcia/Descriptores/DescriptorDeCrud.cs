@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos.ModeloIu;
+using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
+    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha}
+
     public class Posicion
     {
-        int fila { get; set; }
-        int columna { get; set; }
+        public int fila { get; set; }
+        public int columna { get; set; }
     }
 
     public class Dimension
@@ -34,25 +37,50 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class Control
     {
-        public string id { get; set; }
-        public string tipo { get; set; }
-        public string etiqueta { get; set; }
-        public string propiedad { get; set; }
-        public string ayuda { get; set; }
-        public Posicion posicion { get; set; }
-        public ICollection<Valor> valores { get; set; }
+        public string Id { get; private set; }
+        public string Etiqueta { get; private set; }
+        public string Propiedad { get; private set; }
+        public string Ayuda { get; private set; }
+        public Posicion Posicion { get; private set; }
+        
+        public TipoControl Tipo { get; protected set; }
+
+        public Control(string id, string etiqueta, string propiedad, string ayudad, Posicion posicion)
+        {
+            Id = id.ToLower();
+            Etiqueta = etiqueta;
+            Propiedad = propiedad;
+            Ayuda = ayudad;
+            Posicion = posicion;
+        }
     }
 
     public class Selector : Control
     {
-        public string propiedadParaFiltrar { get; set; } = "Id";
-        public string propiedadParaMostrar { get; set; }
-        public PanelDeSeleccion modal { get; set; }
+        public string propiedadParaFiltrar { get; private set; }
+        public string propiedadParaMostrar { get; private set; }
+        public PanelDeSeleccion Modal { get; set; }
 
-        public Selector(string idSelector)
+        public Selector(string idModal, string etiqueta, string propiedad, string ayudad, Posicion posicion, string paraFiltrar, string paraMostrar)
+        :base($"{idModal}.Selector", etiqueta, propiedad,ayudad, posicion)
         {
-            tipo = nameof(Selector);
-            id = idSelector;
+        //private string IdGrid => $"{IdModal}.Grid".ToLower();
+        //private string IdSelector => $"{IdModal}.Selector";
+
+        Tipo = TipoControl.Selector;
+            propiedadParaFiltrar = paraFiltrar;
+            propiedadParaMostrar = paraMostrar;
+            Modal = new PanelDeSeleccion(idModal, this);
+        }
+    }
+
+    public class Desplegable: Control
+    {
+        public ICollection<Valor> valores { get; set; }
+        public Desplegable(string idSelector, string etiqueta, string propiedad, string ayudad, Posicion posicion)
+        : base(idSelector, etiqueta, propiedad, ayudad, posicion)
+        {
+            Tipo = TipoControl.Desplegable;
         }
     }
 
@@ -64,10 +92,11 @@ namespace UniversidadDeMurcia.Descriptores
         public ICollection<Columnas> columnasDelGrid { get; set; }
         public string Registros { get; set; }
 
-        public PanelDeSeleccion(Selector selectorAsociado)
+        public PanelDeSeleccion(string idModal, Selector selectorAsociado)
+        : base(idModal, $"Seleccionar {selectorAsociado.propiedadParaMostrar}", selectorAsociado.propiedadParaMostrar, selectorAsociado.Ayuda, null)
         {
             selector = selectorAsociado;
-            selector.modal = this;
+            selector.Modal = this;
         }
     }
     
@@ -82,6 +111,11 @@ namespace UniversidadDeMurcia.Descriptores
             Id = identificador;
             Dimension = dimension;
             Controles = controles;
+        }
+
+        public void Add(Control c, Posicion pos)
+        {
+
         }
 
     }
@@ -125,8 +159,8 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Id = $"flt_{identificador}";
 
-            var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 4));
-            var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 4));
+            var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 2));
+            var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 2));
 
             Bloques.Add(b1);
             Bloques.Add(b2);
@@ -149,18 +183,22 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class DescriptorDeCrud<TElemento>
-    where TElemento : ElementoBase
+    public class DescriptorDeCrud
     {
         public string Elemento { get; private set; }
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid Grid { get; set; }
-        public ZonaDeOpciones Opciones { get; set; }
+        public ZonaDeOpciones Menu { get; set; }
 
-        public DescriptorDeCrud()
+        public DescriptorDeCrud(string elemento)
         {
-            Elemento = typeof(TElemento).ToString().Replace("Elemento","");
+            Elemento = elemento.Replace("Elemento","");
             Filtro = new ZonaDeFiltro(Elemento);
+        }
+
+        public string Render()
+        {
+            return HtmlRender.RenderCrud(this);
         }
 
     }
