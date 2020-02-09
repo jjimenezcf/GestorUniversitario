@@ -63,8 +63,8 @@ namespace UniversidadDeMurcia.UtilidadesIu
         {
             //IEnumerable<ColumnaGrid> columnasGrid = DefinirColumnasDelGrid();
             var htmlMantenimiento =
-                RenderCabecera() +
-                RenderFiltro() +
+                //RenderCabecera() +
+                //RenderFiltro() +
                 RenderGrid(ColumnasDelGrid, FilasDelGrid) +
                 RenderPie();
 

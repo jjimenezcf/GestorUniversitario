@@ -6,14 +6,25 @@ using Gestor.Elementos.Universitario.ModeloIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public class CrudEstudiante: DescriptorDeCrud
+    public class CrudEstudiante : DescriptorDeCrud
     {
         public CrudEstudiante()
-        :base(nameof(ElementoEstudiante))
+        : base(nameof(ElementoEstudiante), ruta: "Estudiantes", titulo: "Mantenimiento de estudiantes")
         {
-           var b = new Bloque($"{Filtro.Id}_b3", "Específico", new Dimension(1,2));
-           b.Controles.Add(new Selector("Des_Se_Cur", "Curso","cursoInscrito","seleccionar curso", new Posicion(){fila=0, columna=0}, nameof(ElementoCurso.Id),nameof(ElementoCurso.Titulo)));
-           Filtro.Add(b);            
+
+            var bloque = new Bloque($"{Filtro.Id}_b3", "Específico", new Dimension(1, 2));
+
+            var selector = new Selector(idModal: "selector_curso",
+                                        etiqueta: "Curso",
+                                        propiedad: "cursoInscrito",
+                                        ayuda: "seleccionar curso",
+                                        posicion: new Posicion() { fila = 0, columna = 0 },
+                                        paraFiltrar: nameof(ElementoCurso.Id),
+                                        paraMostrar: nameof(ElementoCurso.Titulo));
+
+            bloque.AnadirControl(selector);
+
+            Filtro.AnadirBloque(bloque);
         }
     }
 }

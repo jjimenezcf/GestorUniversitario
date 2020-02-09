@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
 using UniversidadDeMurcia.Descriptores;
 using Utilidades;
@@ -15,7 +16,7 @@ namespace UtilidadesParaIu
         public static string Render(this string cadena)
         {
             while (cadena.IndexOf("< ") >= 0)
-                cadena.Replace("< ", "<");
+                cadena = cadena.Replace("< ", "<");
 
             return cadena.Replace("¨", "\"");
         }
@@ -56,12 +57,21 @@ namespace UtilidadesParaIu
 
         public static string RenderCrud(DescriptorDeCrud crud)
         {
-            return (RenderOpcionesMenu(crud.Menu) + Environment.NewLine +
+            var htmlCrud =
+                   RenderTitulo(crud) + Environment.NewLine +
+                   RenderOpcionesMenu(crud.Menu) + Environment.NewLine +
                    RenderFiltro(crud.Filtro) + Environment.NewLine +
+                   RenderModalesFiltro(crud.Filtro) + Environment.NewLine +
                    RenderGrid(crud.Grid) + Environment.NewLine +
-                   RenderPie() + Environment.NewLine +
-                   RenderModalesFiltro(crud.Filtro)).Render();
-                   
+                   RenderPie();
+
+            return htmlCrud.Render();                   
+        }
+
+        private static string RenderTitulo(DescriptorDeCrud crud)
+        {
+            var htmlCabecera = $"<h2>{crud.Titulo}</h2>";
+            return htmlCabecera;
         }
 
         private static string RenderModalesFiltro(ZonaDeFiltro filtro)
@@ -84,67 +94,61 @@ namespace UtilidadesParaIu
             }
             return htmlModalesEnBloque;
         }
-
+        private static string RenderSelector(Selector s)
+        {
+            return $@"<div class=¨input-group mb-3¨>
+                       <input id=¨{s.Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{s.Ayuda}¨>
+                       <div class=¨input-group-append¨>
+                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{s.Modal.Id}¨ >Seleccionar</button>
+                       </div>
+                    </div>
+                  ";
+        }
         private static object RenderModal(Selector s)
         {
-            var idGrid = $"{s.Modal.Id}_grid";
-            var nombreCheckDeSeleccion = $"chksel.{idGrid}";
-            
-            string _htmlModalSelector =
-               $@"
-             <div class=¨modal fade¨ id=¨{s.Modal.Id}¨ tabindex=¨-1¨ role=¨dialog¨ aria-labelledby=¨exampleModalLabel¨ aria-hidden=¨true¨>
+
+            const string _htmlModalSelector =
+            @"
+             <div class=¨modal fade¨ id=¨idModal¨ tabindex=¨-1¨ role=¨dialog¨ aria-labelledby=¨exampleModalLabel¨ aria-hidden=¨true¨>
                <div class=¨modal-dialog¨ role=¨document¨>
                  <div class=¨modal-content¨>
                    <div class=¨modal-header¨>
-                     <h5 class=¨modal-title¨ id=¨{s.Modal.Id}_titulo¨>{s.Modal.Etiqueta}</h5>
+                     <h5 class=¨modal-title¨ id=¨exampleModalLabel¨>titulo</h5>
                    </div>
-                   <div id=¨{s.Modal.Id}_cuerpo¨ class=¨modal-body¨>
-                     elementos
+                   <div id=¨{idContenedor}¨ class=¨modal-body¨>
+                     {gridDeElementos}
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{s.Id}', '', '{nombreCheckDeSeleccion}')¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{idGrid}', '{referenciaChecks}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
              </div>
              <script>
-               {Js_AlAbrirModal(s)}
-               {Js_AlCerrarModal(s)}
+               AlAbrirLaModal
+               AlCerrarLaModal
              </script>
              ";
 
-            return _htmlModalSelector;
+
+            var nombreCheckDeSeleccion = $"chksel.{s.Id}";
+
+            return _htmlModalSelector
+                    .Replace("idModal", s.Modal.Id)
+                    .Replace("titulo", s.Modal.Ayuda)
+                    .Replace("{idSelector}", s.Id)
+                    //.Replace("{idGrid}", IdGrid)
+                    .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
+                    .Replace("{columnaId}", s.propiedadParaFiltrar)
+                    .Replace("{columnaMostrar}", s.propiedadParaMostrar)
+                    .Replace("{idContenedor}", $"contenedor.{s.Modal.Id}")
+                    .Replace("{gridDeElementos}", "")
+                    .Replace("AlAbrirLaModal", "")
+                    .Replace("AlCerrarLaModal","")
+                    .Render();
         }
 
-        private static object Js_AlAbrirModal(Selector s)
-        {
-            var idGrid = $"{s.Modal.Id}_grid";
-            const string _alAbrirLaModal = @"
-                                         $('#{idModal}').on('show.bs.modal', function (event) {
-                                            AlAbrir('{IdGrid}', '{idSelector}', '{columnaId}', '{columnaMostrar}')
-                                          })
-                                      ";
-           return _alAbrirLaModal.Replace("{idModal}", s.Modal.Id)
-                                 .Replace("{IdGrid}", idGrid)
-                                 .Replace("{idSelector}", s.Id)
-                                 .Replace("{columnaId}", s.propiedadParaFiltrar)
-                                 .Replace("{columnaMostrar}", s.propiedadParaMostrar);
-        }
-
-        private static object Js_AlCerrarModal(Selector s)
-        {
-            var idGrid = $"{s.Modal.Id}_grid";
-            var nombreCheckDeSeleccion = $"chksel.{idGrid}";
-            const string _alCerrarLaModal = @"
-                                         $('#{idModal}').on('hidden.bs.modal', function (event) {
-                                            AlCerrar('{idModal}', '{idGrid}', 'referenciaChecks')
-                                          })
-                                      ";
-            return _alCerrarLaModal.Replace("{idModal}", s.Modal.Id)
-                                   .Replace("{idGrid}", idGrid)
-                                   .Replace("referenciaChecks", nombreCheckDeSeleccion);
-        }
 
         private static string RenderPie()
         {
@@ -241,16 +245,7 @@ namespace UtilidadesParaIu
             throw new Exception($"El tipo {c.Tipo} de control no está definido");
         }
 
-        private static string RenderSelector(Selector s)
-        {
-            return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{s.Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{s.Ayuda}¨ aria-label=¨titulo¨ aria-describedby=¨basic-addon2¨>
-                       <div class=¨input-group-append¨>
-                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{s.Modal.Id}¨ >Seleccionar</button>
-                       </div>
-                    </div>
-                  ";
-        }
+
 
         private static object RenderEtiqueta(string etiqueta)
         {
@@ -259,7 +254,14 @@ namespace UtilidadesParaIu
 
         private static string RenderOpcionesMenu(ZonaDeOpciones menu)
         {
-            return "";
+            var htmlRef = "<div id=¨id¨> <a href =¨/{ruta}/{accion}¨>{titulo}</a> </div>";
+            var htmlOpciones = "";
+            foreach(Opcion o in menu.Opciones)
+            {
+                htmlOpciones = htmlOpciones + htmlRef.Replace("{id}", o.Id).Replace("{ruta}", o.Ruta).Replace("{accion}", o.Accion).Replace("{titulo}", o.Titulo);
+            }
+
+            return htmlOpciones;
         }
     }
 }

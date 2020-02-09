@@ -67,16 +67,15 @@
             </nav>
         </header>
 
-        <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
-        <br />
-        <br />
+            <br />
+            <br />
         </main>
 
         <footer class="border-top footer text-muted">
             <div class="text-info" width="100%">
-                <input id="Mensaje" style="width:100%" readonly value=""/>
+                <input id="Mensaje" style="width:100%" readonly value="" />
             </div>
             <div class="text-center">
                 <div style="float: left">
@@ -91,6 +90,8 @@
 
 
         @RenderSection("Scripts", required: false)
+
+        <partial name="_CookieConsentPartial" />
 
     </div>
 </body>
