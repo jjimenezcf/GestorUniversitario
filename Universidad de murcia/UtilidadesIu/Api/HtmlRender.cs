@@ -224,10 +224,10 @@ namespace UtilidadesParaIu
             foreach (Control c in tabla.Controles)
             {
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
-                    htmlEtiqueta = $"{RenderEtiqueta(c.Etiqueta)}";
+                    htmlEtiqueta = $"{c.RenderLabel()}";
 
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
-                    htmlControl = $"{RenderControl(c)}";
+                    htmlControl = $"{c.RenderControl()}";
             }
 
 
@@ -241,6 +241,7 @@ namespace UtilidadesParaIu
             switch (c.Tipo)
             {
                 case TipoControl.Selector: return RenderSelector(((Selector)c));
+                case TipoControl.Editor: return ((Editor)c).RenderInput();
             }
             throw new Exception($"El tipo {c.Tipo} de control no está definido");
         }

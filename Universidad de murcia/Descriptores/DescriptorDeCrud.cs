@@ -53,6 +53,25 @@ namespace UniversidadDeMurcia.Descriptores
             Ayuda = ayuda;
             Posicion = posicion;
         }
+
+        public string RenderLabel()
+        {
+            return $@"<div class=¨input-group mb-3¨>
+                         {Etiqueta}
+                      </div>
+                  ";
+        }
+
+        public string RenderControl()
+        {
+            switch (Tipo)
+            {
+                case TipoControl.Selector: return((Selector)this).RenderSelector();
+                case TipoControl.Editor: return ((Editor)this).RenderInput();
+            }
+            throw new Exception($"El tipo {this.Tipo} de control no está definido");
+        }
+
     }
 
     public class Selector : Control
@@ -70,22 +89,33 @@ namespace UniversidadDeMurcia.Descriptores
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new PanelDeSeleccion(idModal, this);
         }
+
+        public string RenderSelector()
+        {
+            return $@"<div class=¨input-group mb-3¨>
+                       <input id=¨{Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                       <div class=¨input-group-append¨>
+                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.Id}¨ >Seleccionar</button>
+                       </div>
+                    </div>
+                  ";
+        }
     }
 
     public class Editor : Control
     {
-        public string propiedadParaFiltrar { get; private set; }
-
-        public Editor(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar)
+        public Editor(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(id, etiqueta, propiedad, ayuda, posicion)
         {
-            Tipo = TipoControl.Selector;
-            propiedadParaFiltrar = paraFiltrar.ToLower();
+            Tipo = TipoControl.Editor;
         }
 
-        public string Render()
+        public string RenderInput()
         {
-            return "";
+            return $@"<div class=¨input-group mb-3¨>
+                         <input id=¨{Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                      </div>
+                  ";
         }
     }
 
@@ -195,12 +225,14 @@ namespace UniversidadDeMurcia.Descriptores
 
         public ZonaDeFiltro(string identificador)
         {
-            Id = $"flt_{identificador}";
+            Id = $"flt.{identificador}";
 
-            var editor = new Editor()
+            var editor = new Editor(id: $"{Id}.b1.filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila= 0, columna = 0 });
 
-            var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 2));
-            var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 2));
+            var b1 = new Bloque($"{Id}.b1", "General", new Dimension(1, 2));
+            var b2 = new Bloque($"{Id}.b2", "Común", new Dimension(1, 2));
+
+            b1.AnadirControl(editor);
 
             Bloques.Add(b1);
             Bloques.Add(b2);
