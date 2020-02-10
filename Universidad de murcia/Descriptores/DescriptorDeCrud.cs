@@ -64,13 +64,28 @@ namespace UniversidadDeMurcia.Descriptores
         public Selector(string idModal, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
         :base($"{idModal}.Selector", etiqueta, propiedad,ayuda, posicion)
         {
-        //private string IdGrid => $"{IdModal}.Grid".ToLower();
-        //private string IdSelector => $"{IdModal}.Selector";
 
         Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new PanelDeSeleccion(idModal, this);
+        }
+    }
+
+    public class Editor : Control
+    {
+        public string propiedadParaFiltrar { get; private set; }
+
+        public Editor(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar)
+        : base(id, etiqueta, propiedad, ayuda, posicion)
+        {
+            Tipo = TipoControl.Selector;
+            propiedadParaFiltrar = paraFiltrar.ToLower();
+        }
+
+        public string Render()
+        {
+            return "";
         }
     }
 
@@ -181,6 +196,8 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeFiltro(string identificador)
         {
             Id = $"flt_{identificador}";
+
+            var editor = new Editor()
 
             var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 2));
             var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 2));
