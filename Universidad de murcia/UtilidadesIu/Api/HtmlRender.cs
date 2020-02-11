@@ -74,7 +74,7 @@ namespace UtilidadesParaIu
             return htmlCabecera;
         }
 
-        private static string RenderModalesFiltro(ZonaDeFiltro filtro)
+        public static string RenderModalesFiltro(ZonaDeFiltro filtro)
         {
             var htmlModalesEnFiltro = "";
             foreach (Bloque b in filtro.Bloques)

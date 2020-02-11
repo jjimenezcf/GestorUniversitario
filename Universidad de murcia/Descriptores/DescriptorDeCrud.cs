@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos.ModeloIu;
+using Utilidades;
 using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
@@ -158,9 +159,57 @@ namespace UniversidadDeMurcia.Descriptores
             Controles = controles;
         }
 
-        public void Add(Control c, Posicion pos)
+        public string RenderTabla()
         {
 
+            var htmlTabla = $@"<table id=¨{Id}¨ width=¨100%¨
+                                  filas
+                               </table>";
+            var htmlFilas = "";
+            for (var i = 0; i < Dimension.Filas; i++)
+                htmlFilas = $"{htmlFilas}{(htmlFilas.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderFila(i)}";
+
+            return htmlTabla.Replace("filas", htmlFilas);
+        }
+
+        private string RenderFila(int i)
+        {
+            var idFila = $"{Id}_{i}";
+            var htmlFila = $@"<tr id=¨{idFila}¨>
+                                 columnas
+                              </tr>";
+            var htmlColumnas = "";
+            for (var j = 0; j < Dimension.Columnas; j++)
+                htmlColumnas = $"{htmlColumnas}{(htmlColumnas.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderColumnasControl(idFila, i, j)}";
+
+
+            return htmlFila.Replace("columnas", htmlColumnas);
+        }
+
+        private string RenderColumnasControl(string idFila, int i, int j)
+        {
+            var idColumna = $"{idFila}_{j}";
+            var htmlColumnaEtiqueta = $@"<td id=¨{idColumna}_e¨ style=¨width:15%¨>
+                                            etiqueta
+                                         </td>";
+            var htmlColumnaControl = $@"<td id=¨{idColumna}_c¨ style=¨width:35%¨>
+                                           control
+                                        </td>";
+            var htmlControl = "";
+            var htmlEtiqueta = "";
+            foreach (Control c in Controles)
+            {
+                if (c.Posicion.fila == i && c.Posicion.columna == j)
+                    htmlEtiqueta = $"{c.RenderLabel()}";
+
+                if (c.Posicion.fila == i && c.Posicion.columna == j)
+                    htmlControl = $"{c.RenderControl()}";
+            }
+
+
+            return htmlColumnaEtiqueta.Replace("etiqueta", htmlEtiqueta) +
+                   Environment.NewLine +
+                   htmlColumnaControl.Replace("control", htmlControl);
         }
 
     }
@@ -196,6 +245,16 @@ namespace UniversidadDeMurcia.Descriptores
             
             throw new Exception($"El control {id} no está en la zona de filtrado");
         }
+
+        public string RenderBloque()
+        {
+            string htmlBloque = $@"<div id = ¨{Id}¨>     
+                                     tabla 
+                                    </div>";
+            string htmlTabla = Tabla.RenderTabla();
+
+            return htmlBloque.Replace("tabla", htmlTabla);
+        }
     }
 
     public class ZonaDeOpciones
@@ -207,6 +266,18 @@ namespace UniversidadDeMurcia.Descriptores
             Id = $"opc_{identificador}";
             var crear = new Opcion($"{Id}.Crear", ruta, "IraCrearEstudiante", $"Nuevo estudiante");
             Opciones.Add(crear);
+        }
+
+        public string RenderOpcionesMenu()
+        {
+            var htmlRef = "<div id=¨id¨> <a href =¨/{ruta}/{accion}¨>{titulo}</a> </div>";
+            var htmlOpciones = "";
+            foreach (Opcion o in Opciones)
+            {
+                htmlOpciones = htmlOpciones + htmlRef.Replace("{id}", o.Id).Replace("{ruta}", o.Ruta).Replace("{accion}", o.Accion).Replace("{titulo}", o.Titulo);
+            }
+
+            return htmlOpciones;
         }
 
     }
@@ -253,6 +324,20 @@ namespace UniversidadDeMurcia.Descriptores
 
             throw new Exception($"El bloque {identificador} no está en la zona de filtrado");
         }
+
+        public string RenderFiltro()
+        {
+            var htmlFiltro = $@"<div id = ¨{Id}¨ style=¨width:100%¨>     
+                                     bloques 
+                                </div>";
+
+            var htmlBloques = "";
+            foreach (Bloque b in Bloques)
+                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderBloque()}";
+
+            return htmlFiltro.Replace("bloques", htmlBloques);
+        }
+
     }
 
     public class DescriptorDeCrud
@@ -276,7 +361,22 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string Render()
         {
-            return HtmlRender.RenderCrud(this);
+            var htmlCrud =
+                   RenderTitulo() + Environment.NewLine +
+                   Menu.RenderOpcionesMenu() + Environment.NewLine +
+                   Filtro.RenderFiltro() + Environment.NewLine +
+                   HtmlRender.RenderModalesFiltro(Filtro);
+                   //+ Environment.NewLine +
+                   //RenderGrid(crud.Grid) + Environment.NewLine +
+                   //RenderPie();
+
+            return htmlCrud.Render();
+        }
+
+        private string RenderTitulo()
+        {
+            var htmlCabecera = $"<h2>{Titulo}</h2>";
+            return htmlCabecera;
         }
 
     }
