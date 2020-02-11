@@ -12,6 +12,7 @@ using Utilidades;
 using UniversidadDeMurcia.UtilidadesIu;
 using Newtonsoft.Json;
 using System.IO;
+using UniversidadDeMurcia.Descriptores;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,7 +28,7 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
+        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor = null)
         :base(gestorErrores)
         {
             var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller","")}.json";
@@ -39,7 +40,7 @@ namespace UniversidadDeMurcia.Controllers
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales);
+            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales,descriptor);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 

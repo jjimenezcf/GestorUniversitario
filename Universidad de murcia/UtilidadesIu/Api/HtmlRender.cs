@@ -55,24 +55,7 @@ namespace UtilidadesParaIu
             }
         }
 
-        public static string RenderCrud(DescriptorDeCrud crud)
-        {
-            var htmlCrud =
-                   RenderTitulo(crud) + Environment.NewLine +
-                   RenderOpcionesMenu(crud.Menu) + Environment.NewLine +
-                   RenderFiltro(crud.Filtro) + Environment.NewLine +
-                   RenderModalesFiltro(crud.Filtro) + Environment.NewLine +
-                   RenderGrid(crud.Grid) + Environment.NewLine +
-                   RenderPie();
 
-            return htmlCrud.Render();                   
-        }
-
-        private static string RenderTitulo(DescriptorDeCrud crud)
-        {
-            var htmlCabecera = $"<h2>{crud.Titulo}</h2>";
-            return htmlCabecera;
-        }
 
         public static string RenderModalesFiltro(ZonaDeFiltro filtro)
         {
@@ -94,16 +77,7 @@ namespace UtilidadesParaIu
             }
             return htmlModalesEnBloque;
         }
-        private static string RenderSelector(Selector s)
-        {
-            return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{s.Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{s.Ayuda}¨>
-                       <div class=¨input-group-append¨>
-                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{s.Modal.Id}¨ >Seleccionar</button>
-                       </div>
-                    </div>
-                  ";
-        }
+
         private static object RenderModal(Selector s)
         {
 
@@ -147,122 +121,6 @@ namespace UtilidadesParaIu
                     .Replace("AlAbrirLaModal", "")
                     .Replace("AlCerrarLaModal","")
                     .Render();
-        }
-
-
-        private static string RenderPie()
-        {
-            return "";
-        }
-
-        private static string RenderGrid(ZonaDeGrid grid)
-        {
-            return "";
-        }
-
-        private static string RenderFiltro(ZonaDeFiltro filtro)
-        {
-            var htmlFiltro = $@"<div id = ¨{filtro.Id}¨ style=¨width:100%¨>     
-                                     bloques 
-                                </div>";
-
-            var htmlBloques = "";
-            foreach (Bloque b in filtro.Bloques)
-                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderBloque(b)}";
-
-            return htmlFiltro.Replace("bloques", htmlBloques);
-        }
-
-        private static string RenderBloque(Bloque bloque)
-        {
-            string htmlBloque = $@"<div id = ¨{bloque.Id}¨>     
-                                     tabla 
-                                    </div>";
-            string htmlTabla = RenderTabla(bloque.Tabla);
-
-            return htmlBloque.Replace("tabla", htmlTabla);
-        }
-
-        private static string RenderTabla(TablaBloque tabla)
-        {
-
-            var htmlTabla = $@"<table id=¨{tabla.Id}¨ width=¨100%¨
-                                  filas
-                               </table>";
-            var htmlFilas = "";
-            for (var i = 0; i < tabla.Dimension.Filas; i++)
-                htmlFilas = $"{htmlFilas}{(htmlFilas.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderFila(tabla, i)}";
-
-            return htmlTabla.Replace("filas", htmlFilas);
-        }
-
-        private static string RenderFila(TablaBloque tabla, int i)
-        {
-            var idFila = $"{tabla.Id}_{i}";
-            var htmlFila = $@"<tr id=¨{idFila}¨>
-                                 columnas
-                              </tr>";
-            var htmlColumnas = "";
-            for (var j = 0; j < tabla.Dimension.Columnas; j++)
-                htmlColumnas = $"{htmlColumnas}{(htmlColumnas.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderColumnasControl(tabla, idFila, i, j)}";
-
-
-            return htmlFila.Replace("columnas", htmlColumnas);
-        }
-
-        private static string RenderColumnasControl(TablaBloque tabla, string idFila, int i, int j)
-        {
-            var idColumna = $"{idFila}_{j}";
-            var htmlColumnaEtiqueta = $@"<td id=¨{idColumna}_e¨ style=¨width:15%¨>
-                                            etiqueta
-                                         </td>";
-            var htmlColumnaControl = $@"<td id=¨{idColumna}_c¨ style=¨width:35%¨>
-                                           control
-                                        </td>";
-            var htmlControl = "";
-            var htmlEtiqueta = "";
-            foreach (Control c in tabla.Controles)
-            {
-                if (c.Posicion.fila == i && c.Posicion.columna == j)
-                    htmlEtiqueta = $"{c.RenderLabel()}";
-
-                if (c.Posicion.fila == i && c.Posicion.columna == j)
-                    htmlControl = $"{c.RenderControl()}";
-            }
-
-
-            return htmlColumnaEtiqueta.Replace("etiqueta", htmlEtiqueta) + 
-                   Environment.NewLine+
-                   htmlColumnaControl.Replace("control", htmlControl);
-        }
-
-        private static string RenderControl(Control c)
-        {
-            switch (c.Tipo)
-            {
-                case TipoControl.Selector: return RenderSelector(((Selector)c));
-                case TipoControl.Editor: return ((Editor)c).RenderInput();
-            }
-            throw new Exception($"El tipo {c.Tipo} de control no está definido");
-        }
-
-
-
-        private static object RenderEtiqueta(string etiqueta)
-        {
-            return etiqueta;
-        }
-
-        private static string RenderOpcionesMenu(ZonaDeOpciones menu)
-        {
-            var htmlRef = "<div id=¨id¨> <a href =¨/{ruta}/{accion}¨>{titulo}</a> </div>";
-            var htmlOpciones = "";
-            foreach(Opcion o in menu.Opciones)
-            {
-                htmlOpciones = htmlOpciones + htmlRef.Replace("{id}", o.Id).Replace("{ruta}", o.Ruta).Replace("{accion}", o.Accion).Replace("{titulo}", o.Titulo);
-            }
-
-            return htmlOpciones;
         }
     }
 }

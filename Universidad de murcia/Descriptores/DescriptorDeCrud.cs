@@ -8,7 +8,7 @@ using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha}
+    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha }
 
     public class Posicion
     {
@@ -28,14 +28,6 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class Columnas
-    {
-        public string etiqueta { get; set; }
-        public string propiedad { get; set; }
-        public string visible { get; set; }
-        public string tipo { get; set; }
-    }
-
     public class Control
     {
         public string Id { get; private set; }
@@ -43,7 +35,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string Propiedad { get; private set; }
         public string Ayuda { get; private set; }
         public Posicion Posicion { get; private set; }
-        
+
         public TipoControl Tipo { get; protected set; }
 
         public Control(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
@@ -67,7 +59,7 @@ namespace UniversidadDeMurcia.Descriptores
         {
             switch (Tipo)
             {
-                case TipoControl.Selector: return((Selector)this).RenderSelector();
+                case TipoControl.Selector: return ((Selector)this).RenderSelector();
                 case TipoControl.Editor: return ((Editor)this).RenderInput();
             }
             throw new Exception($"El tipo {this.Tipo} de control no está definido");
@@ -82,10 +74,10 @@ namespace UniversidadDeMurcia.Descriptores
         public PanelDeSeleccion Modal { get; set; }
 
         public Selector(string idModal, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
-        :base($"{idModal}.Selector", etiqueta, propiedad,ayuda, posicion)
+        : base($"{idModal}.Selector", etiqueta, propiedad, ayuda, posicion)
         {
 
-        Tipo = TipoControl.Selector;
+            Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new PanelDeSeleccion(idModal, this);
@@ -120,7 +112,7 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class Desplegable: Control
+    public class Desplegable : Control
     {
         public ICollection<Valor> valores { get; set; }
         public Desplegable(string idSelector, string etiqueta, string propiedad, string ayuda, Posicion posicion)
@@ -135,7 +127,7 @@ namespace UniversidadDeMurcia.Descriptores
         public Selector selector { get; set; }
         public string gestorDeElementos { get; set; }
         public string claseDeElemento { get; set; }
-        public ICollection<Columnas> columnasDelGrid { get; set; }
+        public List<ColumnaDelGrid> Columnas { get; set; }
         public string Registros { get; set; }
 
         public PanelDeSeleccion(string idModal, Selector selectorAsociado)
@@ -145,7 +137,7 @@ namespace UniversidadDeMurcia.Descriptores
             selector.Modal = this;
         }
     }
-    
+
     public class TablaBloque
     {
         public string Id { get; private set; }
@@ -237,12 +229,12 @@ namespace UniversidadDeMurcia.Descriptores
         public Control ObtenerControl(string id)
         {
 
-            foreach(Control c in Controles)
+            foreach (Control c in Controles)
             {
                 if (c.Id == id)
                     return c;
             }
-            
+
             throw new Exception($"El control {id} no está en la zona de filtrado");
         }
 
@@ -284,21 +276,31 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class ZonaDeGrid
     {
-        public ICollection<Columnas> columnas { get; set; }
+        public List<ColumnaDelGrid> Columnas { get; private set; } = new List<ColumnaDelGrid>();
+
+        public List<FilaDelGrid> filas { get; private set; } = new List<FilaDelGrid>();
+
         public string Registros { get; set; }
+
+        public string Id { get; private set; }
+
+        public ZonaDeGrid(string identificador)
+        {
+            Id = $"grid.{identificador}";
+        }
     }
 
     public class ZonaDeFiltro
     {
         public ICollection<Bloque> Bloques { get; private set; } = new List<Bloque>();
 
-        public string Id  { get; private set; }
+        public string Id { get; private set; }
 
         public ZonaDeFiltro(string identificador)
         {
             Id = $"flt.{identificador}";
 
-            var editor = new Editor(id: $"{Id}.b1.filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila= 0, columna = 0 });
+            var editor = new Editor(id: $"{Id}.b1.filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
 
             var b1 = new Bloque($"{Id}.b1", "General", new Dimension(1, 2));
             var b2 = new Bloque($"{Id}.b2", "Común", new Dimension(1, 2));
@@ -313,10 +315,10 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Bloques.Add(bloque);
         }
-        
+
         public Bloque ObtenerBloque(string identificador)
         {
-            foreach(Bloque b in Bloques)
+            foreach (Bloque b in Bloques)
             {
                 if (b.Id == identificador)
                     return b;
@@ -340,7 +342,7 @@ namespace UniversidadDeMurcia.Descriptores
 
     }
 
-    public class DescriptorDeCrud
+    public class DescriptorDeCrud<TElemento>
     {
         public string Elemento { get; private set; }
 
@@ -352,10 +354,11 @@ namespace UniversidadDeMurcia.Descriptores
 
         public DescriptorDeCrud(string elemento, string ruta, string titulo)
         {
-            Elemento = elemento.Replace("Elemento","");
+            Elemento = elemento.Replace("Elemento", "");
             Titulo = titulo;
             Menu = new ZonaDeOpciones(Elemento, ruta);
             Filtro = new ZonaDeFiltro(Elemento);
+            Grid = new ZonaDeGrid(Elemento);
 
         }
 
@@ -366,9 +369,9 @@ namespace UniversidadDeMurcia.Descriptores
                    Menu.RenderOpcionesMenu() + Environment.NewLine +
                    Filtro.RenderFiltro() + Environment.NewLine +
                    HtmlRender.RenderModalesFiltro(Filtro);
-                   //+ Environment.NewLine +
-                   //RenderGrid(crud.Grid) + Environment.NewLine +
-                   //RenderPie();
+            //+ Environment.NewLine +
+            //RenderGrid(crud.Grid) + Environment.NewLine +
+            //RenderPie();
 
             return htmlCrud.Render();
         }
@@ -379,8 +382,17 @@ namespace UniversidadDeMurcia.Descriptores
             return htmlCabecera;
         }
 
+        protected virtual void DefinirColumnasDelGrid()
+        {
+
+        }
+
+        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos)
+        {
+
+        }
     }
-          
+
     public class Valor
     {
         public string Nombreestudiante { get; set; }
@@ -390,10 +402,10 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class Opcion
     {
-        public string Id {get; private set; }
+        public string Id { get; private set; }
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
-        public string Titulo { get; private set;  }
+        public string Titulo { get; private set; }
 
         public Opcion(string id, string ruta, string accion, string titulo)
         {
@@ -405,6 +417,7 @@ namespace UniversidadDeMurcia.Descriptores
     }
 
 
-
-
 }
+
+
+

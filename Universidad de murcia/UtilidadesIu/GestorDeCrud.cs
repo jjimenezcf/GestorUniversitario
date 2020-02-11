@@ -22,13 +22,18 @@ namespace UtilidadesParaIu
         public EdicionCrud<T> Editor { get; }
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
+        public DescriptorDeCrud<T> Descriptor { get; }
 
         private string _Ruta => $"{NombreDelObjeto.Replace("Elemento", "")}s";
 
-        public GestorCrud(string controlador,  Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<PeticionMvc>> definirOpcionesGenerales)
+        public GestorCrud(string controlador,  Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<PeticionMvc>> definirOpcionesGenerales, DescriptorDeCrud<T> descriptor = null)
         {
             Controlador = controlador.Replace("Controller", "");
             Titulo = $"Gestor de {NombreDelObjeto}";
+            Descriptor = descriptor;
+
+            
+
             Creador = new CreacionCrud<T>();
 
             var peticionesMvc = new List<PeticionMvc>() { new PeticionMvc() { Nombre = Creador.Titulo, Controlador = Controlador, Accion = Creador.Ir } };
@@ -49,8 +54,7 @@ namespace UtilidadesParaIu
 
         public string Render()
         {
-            var a = new CrudEstudiante();
-            return a.Render();
+            return Descriptor.Render();
         }
     }
 }

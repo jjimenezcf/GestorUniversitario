@@ -12,7 +12,7 @@ using Gestor.Elementos.Universitario;
 using UtilidadesParaIu;
 using Componentes;
 using Utilidades;
-
+using UniversidadDeMurcia.Descriptores;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -20,7 +20,7 @@ namespace UniversidadDeMurcia.Controllers
     {
 
         public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
-        :base(nameof(EstudiantesController), gestorDeEstudiantes, gestorDeErrores)
+        :base(nameof(EstudiantesController), gestorDeEstudiantes, gestorDeErrores, new CrudEstudiante())
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
             //GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
@@ -33,6 +33,7 @@ namespace UniversidadDeMurcia.Controllers
             var resultado = LeerOrdenados(orden);
             GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(resultado.elementos);
 
             return View(GestorDelCrud.Mantenimiento.Vista, resultado.elementos.ToList());
         }
