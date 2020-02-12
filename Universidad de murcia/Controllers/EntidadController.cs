@@ -27,6 +27,7 @@ namespace UniversidadDeMurcia.Controllers
 
         protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
+        protected DescriptorDeCrud<TElemento> Descriptor { get; private set; }
 
         public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor = null)
         :base(gestorErrores)
@@ -41,6 +42,7 @@ namespace UniversidadDeMurcia.Controllers
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales,descriptor);
+            Descriptor = descriptor;
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -66,11 +68,17 @@ namespace UniversidadDeMurcia.Controllers
             return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
+        public ViewResult ViewCrud(string viewName)
+        {
+            ViewBag.DatosDeConexion = DatosDeConexion;
+            return base.View(viewName, GestorDelCrud.Descriptor);
+        }
+
         public override ViewResult View(string viewName, object model)
         {
             ViewBag.Crud = GestorDelCrud;
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(viewName, model);
+            return base.View(viewName, GestorDelCrud.Descriptor);
         }
         
         protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()

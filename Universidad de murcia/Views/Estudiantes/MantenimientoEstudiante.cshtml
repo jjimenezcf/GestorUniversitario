@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Gestor.Elementos.Universitario.ModeloIu.ElementoEstudiante>
+﻿@model UniversidadDeMurcia.Descriptores.CrudEstudiante
 
 @{
-    ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
+    ViewData["Title"] = $"{Model.Titulo}";
 }
 
 
-@Html.Raw(@ViewBag.Crud.Render())
+@Html.Raw(Model.Render())
 
-@Html.Raw(@ViewBag.Crud.Mantenimiento.Render())
+@*@Html.Raw(@ViewBag.Crud.Mantenimiento.Render())*@
 
 
 

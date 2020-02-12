@@ -35,7 +35,7 @@ namespace UniversidadDeMurcia.Controllers
             GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
             GestorDelCrud.Descriptor.MapearElementosAlGrid(resultado.elementos);
 
-            return View(GestorDelCrud.Mantenimiento.Vista, resultado.elementos.ToList());
+            return ViewCrud(GestorDelCrud.Mantenimiento.Vista);
         }
 
         protected override List<ColumnaDelGrid>DefinirColumnasDelGrid()
