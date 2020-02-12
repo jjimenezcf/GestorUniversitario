@@ -10,10 +10,10 @@ namespace UniversidadDeMurcia.Descriptores
     public class CrudEstudiante : DescriptorDeCrud<ElementoEstudiante>
     {
         public CrudEstudiante()
-        : base(nameof(ElementoEstudiante), ruta: "Estudiantes", titulo: "Mantenimiento de estudiantes")
+        : base(ruta: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes")
         {
 
-            var bloque = new Bloque($"{Filtro.Id}_b3", "Específico", new Dimension(1, 2));
+            var bloque = new Bloque($"{Filtro.IdHtml}_b3", "Específico", new Dimension(1, 2));
 
             var selector = new Selector(idModal: "selector_curso",
                                         etiqueta: "Curso",
@@ -55,11 +55,10 @@ namespace UniversidadDeMurcia.Descriptores
             Grid.Columnas.Add(columnaDelGrid);
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<ElementoEstudiante> elementos)
+        public override void MapearElementosAlGrid((IEnumerable<ElementoEstudiante> elementos, int totalEnBd) leidos)
         {
-            base.MapearElementosAlGrid(elementos);
-
-            foreach (var estudiante in elementos)
+            base.MapearElementosAlGrid(leidos);
+            foreach (var estudiante in leidos.elementos)
             {
                 var fila = new FilaDelGrid();
                 foreach (ColumnaDelGrid columna in Grid.Columnas)
@@ -79,7 +78,7 @@ namespace UniversidadDeMurcia.Descriptores
 
                     fila.Celdas.Add(celda);
                 }
-                Grid.filas.Add(fila);
+                Grid.Filas.Add(fila);
             }
         }
 

@@ -60,18 +60,22 @@ namespace UniversidadDeMurcia.Controllers
 
         public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string orden)
         {
-            GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
-            GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
-            var resultado = LeerOrdenados(orden);
-            GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
-            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
-            return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
+
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), "", orden));
+            return GestorDelCrud.Descriptor.Grid.RenderFilasDelGrid();
+
+            //GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
+            //GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
+            //var resultado = LeerOrdenados(orden);
+            //GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
+            //GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
+            //return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
-        public ViewResult ViewCrud(string viewName)
+        public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(viewName, GestorDelCrud.Descriptor);
+            return base.View(GestorDelCrud.Descriptor.VistaCrud, GestorDelCrud.Descriptor);
         }
 
         public override ViewResult View(string viewName, object model)
@@ -151,6 +155,13 @@ namespace UniversidadDeMurcia.Controllers
                                                           , orden.ParsearOrdenacion());
 
             return (elementos, total);
+        }
+
+        protected (IEnumerable<TElemento> elementos, int totalEnBd) Leer(int posicion, int cantidad, string filtro, string orden)
+        {
+            Descriptor.Grid.CantidadPorLeer = cantidad;
+            Descriptor.Grid.PosicionInicial = posicion;
+            return GestorDeElementos.Leer(posicion, cantidad, orden.ParsearOrdenacion());
         }
 
     }

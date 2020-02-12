@@ -31,6 +31,7 @@ namespace UniversidadDeMurcia.Descriptores
     public class Control
     {
         public string Id { get; private set; }
+        public string IdHtml => Id.ToLower();
         public string Etiqueta { get; private set; }
         public string Propiedad { get; private set; }
         public string Ayuda { get; private set; }
@@ -86,9 +87,9 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderSelector()
         {
             return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
                        <div class=¨input-group-append¨>
-                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.Id}¨ >Seleccionar</button>
+                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
                        </div>
                     </div>
                   ";
@@ -106,7 +107,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderInput()
         {
             return $@"<div class=¨input-group mb-3¨>
-                         <input id=¨{Id}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                         <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
                       </div>
                   ";
         }
@@ -141,6 +142,7 @@ namespace UniversidadDeMurcia.Descriptores
     public class TablaBloque
     {
         public string Id { get; private set; }
+        public string IdHtml => Id.ToLower();
         public Dimension Dimension { get; private set; }
         public ICollection<Control> Controles { get; set; }
 
@@ -154,7 +156,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderTabla()
         {
 
-            var htmlTabla = $@"<table id=¨{Id}¨ width=¨100%¨
+            var htmlTabla = $@"<table id=¨{IdHtml}¨ width=¨100%¨
                                   filas
                                </table>";
             var htmlFilas = "";
@@ -166,7 +168,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderFila(int i)
         {
-            var idFila = $"{Id}_{i}";
+            var idFila = $"{IdHtml}_{i}";
             var htmlFila = $@"<tr id=¨{idFila}¨>
                                  columnas
                               </tr>";
@@ -209,6 +211,7 @@ namespace UniversidadDeMurcia.Descriptores
     public class Bloque
     {
         public string Id { get; private set; }
+        public string IdHtml => Id.ToLower();
 
         public string Titulo { get; private set; }
 
@@ -220,7 +223,7 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Id = identificador;
             Titulo = titulo;
-            Tabla = new TablaBloque($"{Id}_Tbl", dimension, new List<Control>());
+            Tabla = new TablaBloque($"{IdHtml}_Tbl", dimension, new List<Control>());
         }
         public void AnadirControl(Control c)
         {
@@ -240,7 +243,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string RenderBloque()
         {
-            string htmlBloque = $@"<div id = ¨{Id}¨>     
+            string htmlBloque = $@"<div id = ¨{IdHtml}¨>     
                                      tabla 
                                     </div>";
             string htmlTabla = Tabla.RenderTabla();
@@ -251,12 +254,15 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class ZonaDeOpciones
     {
-        public string Id { get; private set; }
+        private string Id { get; set; }
+        public string IdHtml => Id.ToLower();
+
+
         public ICollection<Opcion> Opciones { get; private set; } = new List<Opcion>();
         public ZonaDeOpciones(string identificador, string ruta)
         {
             Id = $"opc_{identificador}";
-            var crear = new Opcion($"{Id}.Crear", ruta, "IraCrearEstudiante", $"Nuevo estudiante");
+            var crear = new Opcion($"{IdHtml}.Crear", ruta, "IraCrearEstudiante", $"Nuevo estudiante");
             Opciones.Add(crear);
         }
 
@@ -274,20 +280,44 @@ namespace UniversidadDeMurcia.Descriptores
 
     }
 
-    public class ZonaDeGrid
+    public class ZonaDeGrid<TElemento>
     {
         public List<ColumnaDelGrid> Columnas { get; private set; } = new List<ColumnaDelGrid>();
 
-        public List<FilaDelGrid> filas { get; private set; } = new List<FilaDelGrid>();
+        public List<FilaDelGrid> Filas { get; private set; } = new List<FilaDelGrid>();
 
-        public string Registros { get; set; }
+        public int CantidadPorLeer { get; set; } = 5;
+        public int PosicionInicial { get; set; }
 
-        public string Id { get; private set; }
+        public DescriptorDeCrud<TElemento> Crud { get; private set; }
+        private string Id { get; set; }
 
-        public ZonaDeGrid(string identificador)
+        public string IdHtml => Id.ToLower();
+
+        public int TotalEnBd { get; set; }
+
+        public ZonaDeGrid(DescriptorDeCrud<TElemento> crud)
         {
-            Id = $"grid.{identificador}";
+            Crud = crud;
+            Id = $"grid.{crud.Id}";
         }
+
+        public string RenderGrid()
+        {
+            const string htmlDiv = @"<div id = ¨idContenedor¨>     
+                                     contenido 
+                                    </div>";
+            var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor.{IdHtml}").Replace("contenido", RenderFilasDelGrid());
+            return htmlContenedor;
+        }
+
+        public string RenderFilasDelGrid()
+        {
+            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer) { Controlador = Crud.Ruta, TotalEnBd = TotalEnBd };
+            var htmlGrid = grid.ToHtml();
+            return htmlGrid.Render();
+        }
+
     }
 
     public class ZonaDeFiltro
@@ -295,6 +325,7 @@ namespace UniversidadDeMurcia.Descriptores
         public ICollection<Bloque> Bloques { get; private set; } = new List<Bloque>();
 
         public string Id { get; private set; }
+        public string IdHtml => Id.ToLower();
 
         public ZonaDeFiltro(string identificador)
         {
@@ -329,7 +360,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string RenderFiltro()
         {
-            var htmlFiltro = $@"<div id = ¨{Id}¨ style=¨width:100%¨>     
+            var htmlFiltro = $@"<div id = ¨{IdHtml}¨ style=¨width:100%¨>     
                                      bloques 
                                 </div>";
 
@@ -344,21 +375,26 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class DescriptorDeCrud<TElemento>
     {
-        public string Elemento { get; private set; }
+        public string Id { get; private set; }
+        public string IdHtml => Id.ToLower();
 
         public string Titulo { get; private set; }
 
         public ZonaDeOpciones Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
-        public ZonaDeGrid Grid { get; set; }
+        public ZonaDeGrid<TElemento> Grid { get; set; }
+        public string Ruta { get; private set; }
+        public string VistaCrud { get; internal set; }
 
-        public DescriptorDeCrud(string elemento, string ruta, string titulo)
+        public DescriptorDeCrud(string ruta, string vista, string titulo)
         {
-            Elemento = elemento.Replace("Elemento", "");
+            Id = typeof(TElemento).ToString().Replace("Elemento", "");
             Titulo = titulo;
-            Menu = new ZonaDeOpciones(Elemento, ruta);
-            Filtro = new ZonaDeFiltro(Elemento);
-            Grid = new ZonaDeGrid(Elemento);
+            Menu = new ZonaDeOpciones(Id, ruta);
+            Filtro = new ZonaDeFiltro(Id);
+            Grid = new ZonaDeGrid<TElemento>(this);
+            VistaCrud = vista;
+            Ruta = ruta;
 
         }
 
@@ -368,9 +404,8 @@ namespace UniversidadDeMurcia.Descriptores
                    RenderTitulo() + Environment.NewLine +
                    Menu.RenderOpcionesMenu() + Environment.NewLine +
                    Filtro.RenderFiltro() + Environment.NewLine +
-                   HtmlRender.RenderModalesFiltro(Filtro);
-            //+ Environment.NewLine +
-            //RenderGrid(crud.Grid) + Environment.NewLine +
+                   HtmlRender.RenderModalesFiltro(Filtro) + Environment.NewLine +
+                   Grid.RenderGrid() + Environment.NewLine;
             //RenderPie();
 
             return htmlCrud.Render();
@@ -387,9 +422,9 @@ namespace UniversidadDeMurcia.Descriptores
 
         }
 
-        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos)
+        public virtual void MapearElementosAlGrid((IEnumerable<TElemento> elementos, int totalEnBd) leidos)
         {
-
+            Grid.TotalEnBd = leidos.totalEnBd;
         }
     }
 

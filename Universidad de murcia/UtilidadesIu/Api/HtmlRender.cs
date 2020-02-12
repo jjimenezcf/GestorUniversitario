@@ -106,17 +106,17 @@ namespace UtilidadesParaIu
              ";
 
 
-            var nombreCheckDeSeleccion = $"chksel.{s.Id}";
+            var nombreCheckDeSeleccion = $"chksel.{s.IdHtml}";
 
             return _htmlModalSelector
-                    .Replace("idModal", s.Modal.Id)
+                    .Replace("idModal", s.Modal.IdHtml)
                     .Replace("titulo", s.Modal.Ayuda)
-                    .Replace("{idSelector}", s.Id)
+                    .Replace("{idSelector}", s.IdHtml)
                     //.Replace("{idGrid}", IdGrid)
                     .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)
-                    .Replace("{idContenedor}", $"contenedor.{s.Modal.Id}")
+                    .Replace("{idContenedor}", $"contenedor.{s.Modal.IdHtml}")
                     .Replace("{gridDeElementos}", "")
                     .Replace("AlAbrirLaModal", "")
                     .Replace("AlCerrarLaModal","")
