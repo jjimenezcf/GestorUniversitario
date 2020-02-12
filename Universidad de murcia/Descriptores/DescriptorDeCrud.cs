@@ -259,10 +259,10 @@ namespace UniversidadDeMurcia.Descriptores
 
 
         public ICollection<Opcion> Opciones { get; private set; } = new List<Opcion>();
-        public ZonaDeOpciones(string identificador, string ruta)
+        public ZonaDeOpciones(string identificador, VistaCrud vista)
         {
             Id = $"opc_{identificador}";
-            var crear = new Opcion($"{IdHtml}.Crear", ruta, "IraCrearEstudiante", $"Nuevo estudiante");
+            var crear = new Opcion($"{IdHtml}.Crear", vista.Ruta, vista.Accion, vista.TextoMenu);
             Opciones.Add(crear);
         }
 
@@ -373,8 +373,25 @@ namespace UniversidadDeMurcia.Descriptores
 
     }
 
+    public class VistaCrud
+    {
+        public string Ruta { get; private set; }
+        public string Accion { get; private set; }
+        public string TextoMenu { get; private set; }
+
+        public VistaCrud(string ruta, string vista, string texto)
+        {
+            Ruta = ruta;
+            Accion = vista;
+            TextoMenu = texto;
+        }
+    }
+
     public class DescriptorDeCrud<TElemento>
     {
+        public VistaCrud VistaMnt { get; private set; }
+        public VistaCrud VistaCreacion { get; private set; }
+
         public string Id { get; private set; }
         public string IdHtml => Id.ToLower();
 
@@ -384,18 +401,22 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
         public string Ruta { get; private set; }
-        public string VistaCrud { get; internal set; }
 
         public DescriptorDeCrud(string ruta, string vista, string titulo)
         {
-            Id = typeof(TElemento).ToString().Replace("Elemento", "");
+            VistaMnt = new VistaCrud(ruta, vista, titulo);
+            Id = typeof(TElemento).Name.Replace("Elemento", "");
             Titulo = titulo;
-            Menu = new ZonaDeOpciones(Id, ruta);
             Filtro = new ZonaDeFiltro(Id);
             Grid = new ZonaDeGrid<TElemento>(this);
-            VistaCrud = vista;
             Ruta = ruta;
+        }
 
+
+        protected void DefinirVistaDeCreacion(string accion, string textoMenu)
+        {
+            VistaCreacion = new VistaCrud(Ruta, accion, textoMenu);
+            Menu = new ZonaDeOpciones(Id, VistaCreacion);
         }
 
         public string Render()
@@ -419,7 +440,6 @@ namespace UniversidadDeMurcia.Descriptores
 
         protected virtual void DefinirColumnasDelGrid()
         {
-
         }
 
         public virtual void MapearElementosAlGrid((IEnumerable<TElemento> elementos, int totalEnBd) leidos)

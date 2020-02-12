@@ -10,6 +10,7 @@ using Componentes;
 using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
+using UniversidadDeMurcia.Descriptores;
 
 namespace UniversidadDeMurcia.Controllers
 {
@@ -17,62 +18,16 @@ namespace UniversidadDeMurcia.Controllers
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
         public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) :
-            base(nameof(CursosController), gestorDeCursos, gestorDeErrores)
+            base(nameof(CursosController), gestorDeCursos, gestorDeErrores, new CrudCurso())
         {
             GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo curso");
-            GestorDelCrud.Modales[nameof(SelectorDeEstudiante)] = new SelectorDeEstudiante(gestorDeCursos.Contexto, gestorDeCursos.Mapeador).Selector;
-        }
-
-        protected override List<ColumnaDelGrid> DefinirColumnasDelGrid()
-        {
-            var columnasDelGrid = base.DefinirColumnasDelGrid().ToList();
-
-            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoCurso.Id), Tipo = typeof(int), Visible = false };
-            columnasDelGrid.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoCurso.Titulo), Ordenar = true, Ruta = "Cursos", Accion = nameof(IraMantenimientoCurso) };
-            columnasDelGrid.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoCurso.Creditos) };
-            columnasDelGrid.Add(columnaDelGrid);
-
-            return columnasDelGrid;
-        }
-
-        protected override List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<ElementoCurso> elementos)
-        {
-            var listaDeCursos = base.MapearElementosAlGrid(elementos);
-            var columnasDelGrid = GestorDelCrud.Mantenimiento.ColumnasDelGrid;
-
-            foreach (var curso in elementos)
-            {
-                var fila = new FilaDelGrid();
-                foreach (ColumnaDelGrid columna in columnasDelGrid)
-                {
-                    CeldaDelGrid celda = new CeldaDelGrid(columna);
-                    if (columna.Nombre == nameof(ElementoCurso.Id))
-                        celda.Valor = curso.Id.ToString();
-                    else
-                    if (columna.Nombre == nameof(ElementoCurso.Titulo))
-                        celda.Valor = curso.Titulo;
-                    else
-                    if (columna.Nombre == nameof(ElementoCurso.Creditos))
-                        celda.Valor = curso.Creditos;
-
-                    fila.Celdas.Add(celda);
-                }
-                listaDeCursos.Add(fila);
-            }
-            return listaDeCursos;
+            //GestorDelCrud.Modales[nameof(SelectorDeEstudiante)] = new SelectorDeEstudiante(gestorDeCursos.Contexto, gestorDeCursos.Mapeador).Selector;
         }
 
         public IActionResult IraMantenimientoCurso(string orden)
         {
-            var (cursos, total) = LeerOrdenados(orden);
-            GestorDelCrud.Mantenimiento.TotalEnBd = total;
-            GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(cursos);
-
-            return View(GestorDelCrud.Mantenimiento.Vista, cursos.ToList());
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(orden));
+            return ViewCrud();
         }
 
         private IEnumerable<ElementoCurso> OrdenarListaDeCursos(IEnumerable<ElementoCurso> cursos, string orden)

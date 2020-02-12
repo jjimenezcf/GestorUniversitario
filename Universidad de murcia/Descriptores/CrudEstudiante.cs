@@ -27,13 +27,16 @@ namespace UniversidadDeMurcia.Descriptores
 
             Filtro.AnadirBloque(bloque);
 
-            DefinirColumnasDelGrid();
+            DefinirVistaDeCreacion(accion: "CrearEstudiante", textoMenu: "Crear estudiante");
 
+            DefinirColumnasDelGrid();
         }
 
 
         protected override void DefinirColumnasDelGrid()
         {
+            base.DefinirColumnasDelGrid();
+
             var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Id), Tipo = typeof(int), Visible = false };
             Grid.Columnas.Add(columnaDelGrid);
 

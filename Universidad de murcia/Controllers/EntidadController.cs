@@ -29,7 +29,7 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorCrud<TElemento> GestorDelCrud { get; }
         protected DescriptorDeCrud<TElemento> Descriptor { get; private set; }
 
-        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor = null)
+        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         :base(gestorErrores)
         {
             var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller","")}.json";
@@ -75,7 +75,7 @@ namespace UniversidadDeMurcia.Controllers
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(GestorDelCrud.Descriptor.VistaCrud, GestorDelCrud.Descriptor);
+            return base.View(GestorDelCrud.Descriptor.VistaMnt.Accion, GestorDelCrud.Descriptor);
         }
 
         public override ViewResult View(string viewName, object model)
