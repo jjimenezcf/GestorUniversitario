@@ -13,9 +13,10 @@ namespace UniversidadDeMurcia.Descriptores
         : base(ruta: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes")
         {
 
-            var bloque = new Bloque($"{Filtro.IdHtml}_b3", "Específico", new Dimension(1, 2));
+            var bloque = new Bloque(identificador : $"{Filtro.IdHtml}_b3", titulo: "Específico", dimension: new Dimension(1, 2));
 
-            var selector = new Selector(idModal: "selector_curso",
+            var selector = new Selector<ElementoCurso>(
+                                        padre: bloque,
                                         etiqueta: "Curso",
                                         propiedad: "cursoInscrito",
                                         ayuda: "seleccionar curso",
@@ -23,11 +24,10 @@ namespace UniversidadDeMurcia.Descriptores
                                         paraFiltrar: nameof(ElementoCurso.Id),
                                         paraMostrar: nameof(ElementoCurso.Titulo));
 
-            bloque.AnadirControl(selector);
 
             Filtro.AnadirBloque(bloque);
 
-            DefinirVistaDeCreacion(accion: "CrearEstudiante", textoMenu: "Crear estudiante");
+            DefinirVistaDeCreacion(accion: "IraCrearEstudiante", textoMenu: "Crear estudiante");
 
             DefinirColumnasDelGrid();
         }

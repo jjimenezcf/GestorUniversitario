@@ -1,0 +1,479 @@
+﻿
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <title>Mantenimiento de estudiantes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/DetalleEstudiante.css" type="text/css">
+    <link href="https://unpkg.com/tabulator-tables@4.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.5.2/dist/js/tabulator.min.js"></script>
+
+    <script src="/Extensiones/Utilidades.js"></script>
+    <script src="/Extensiones/infoSelectores.js"></script>
+    <script src="/Extensiones/selectores.js"></script>
+    <script src="/Extensiones/grid.js"></script>
+</head>
+
+
+<body>
+    <div class="container-fluid">
+        <div class="jumbotron text-center">
+            <h1>Universidad de Murcia</h1>
+        </div>
+        <header>
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3 ">
+                <a class="navbar-brand" href="#">Opciones</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Home/About">Acerca de</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Estudiantes">Estudiantes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Cursos">Cursos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Instructors">Profesores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Departments">Departamentos</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Opción" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar opción</button>
+                    </form>
+                </div>
+            </nav>
+        </header>
+
+        <main role="main" class="pb-3">
+
+
+
+            <h2>Mantenimiento de estudiantes</h2>
+            <div id="id"> <a href="/Estudiantes/IraCrearEstudiante">Crear estudiante</a> </div>
+            <div id="flt.estudiante" style="width:100%">
+                <div id="flt.estudiante.b1">
+                    <table id="flt.estudiante.b1_tbl" width="100%">
+                        <tr id="flt.estudiante.b1_tbl_0">
+                            <td id="flt.estudiante.b1_tbl_0_0_e" style="width:15%">
+                                <div class="input-group mb-3">
+                                    Nombre
+                                </div>
+
+                            </td>
+                            <td id="flt.estudiante.b1_tbl_0_0_c" style="width:35%">
+                                <div class="input-group mb-3">
+                                    <input id="flt.estudiante.b1.filtro" type="text" class="form-control" placeholder="buscar por nombre">
+                                </div>
+
+                            </td>
+                            <td id="flt.estudiante.b1_tbl_0_1_e" style="width:15%">
+                            </td>
+                            <td id="flt.estudiante.b1_tbl_0_1_c" style="width:35%">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="flt.estudiante.b2">
+                    <table id="flt.estudiante.b2_tbl" width="100%">
+                        <tr id="flt.estudiante.b2_tbl_0">
+                            <td id="flt.estudiante.b2_tbl_0_0_e" style="width:15%">
+                            </td>
+                            <td id="flt.estudiante.b2_tbl_0_0_c" style="width:35%">
+                            </td>
+                            <td id="flt.estudiante.b2_tbl_0_1_e" style="width:15%">
+                            </td>
+                            <td id="flt.estudiante.b2_tbl_0_1_c" style="width:35%">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="flt.estudiante_b3">
+                    <table id="flt.estudiante_b3_tbl" width="100%">
+                        <tr id="flt.estudiante_b3_tbl_0">
+                            <td id="flt.estudiante_b3_tbl_0_0_e" style="width:15%">
+                                <div class="input-group mb-3">
+                                    Curso
+                                </div>
+
+                            </td>
+                            <td id="flt.estudiante_b3_tbl_0_0_c" style="width:35%">
+                                <div class="input-group mb-3">
+                                    <input id="selector_curso.selector" type="text" class="form-control" placeholder="seleccionar curso">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#selector_curso">Seleccionar</button>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input id="curso.selector" type="text" class="form-control" placeholder="seleccionar curso">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#selector_curso">Seleccionar</button>
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td id="flt.estudiante_b3_tbl_0_1_e" style="width:15%">
+                            </td>
+                            <td id="flt.estudiante_b3_tbl_0_1_c" style="width:35%">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="selector.curso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">seleccionar curso</h5>
+                        </div>
+                        <div id="contenedor.selector_curso" class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="AlSeleccionar('selector_curso.selector', '{idGrid}', 'chksel.selector_curso.selector')">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="selector_curso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">seleccionar curso</h5>
+                        </div>
+                        <div id="contenedor.curso.gridmodal" class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="AlSeleccionar('curso.selector', '{idGrid}', 'chksel.curso.selector')">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+
+
+            </script>
+
+            <div id="contenedor.grid.estudiante">
+                <table id="grid.estudiante"
+                       class="table table-striped table-hover"
+                       width="100%"
+                       seleccionables=2
+                       seleccionados="">
+                    <thead id='grid.estudiante.cabecera'>
+
+                        <tr id="grid.estudiante.c.tr.0">
+
+                            <th scope="col"
+                                id="grid.estudiante.c.tr.0.id"
+                                class="text-right"
+                                hidden
+                                descriptor={"id":null,"propiedad":"id","visible":"hidden","alineada":"text-right","valor":null}>
+                                Id
+                            </th>
+                            <th scope="col"
+                                id="grid.estudiante.c.tr.0.apellido"
+                                class="text-left"
+                                descriptor={"id":null,"propiedad":"apellido","visible":"","alineada":"text-left","valor":null}>
+                                Apellido
+                            </th>
+                            <th scope="col"
+                                id="grid.estudiante.c.tr.0.nombre"
+                                class="text-left"
+                                descriptor={"id":null,"propiedad":"nombre","visible":"","alineada":"text-left","valor":null}>
+                                Nombre
+                            </th>
+                            <th scope="col"
+                                id="grid.estudiante.c.tr.0.inscritoel"
+                                class="text-center"
+                                descriptor={"id":null,"propiedad":"inscritoel","visible":"","alineada":"text-center","valor":null}>
+                                InscritoEl
+                            </th>
+                            <th scope="col" id="" class="text-left" descriptor={"id":null,"propiedad":"grid.estudiante_chk_sel","visible":"","alineada":"text-center","valor":"CrearCheck"}> </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody id='grid.estudiante.detalle'>
+                        <tr id='grid.estudiante.d.tr.0'>
+                            <td id="grid.estudiante.d.tr.0.0"
+                                name="td.chksel.grid.estudiante"
+                                class="text-right" hidden>
+                                <input id="grid.estudiante.d.tr.0.id" name="id.grid.estudiante" class="text-right" style="width:100%; border:0" readonly value="3" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.0.1"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.0.apellido" name="apellido.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Arturo" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.0.2"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.0.nombre" name="nombre.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Anand" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.0.3"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input id="grid.estudiante.d.tr.0.inscritoel" name="inscritoel.grid.estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2003 0:00:00" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.0.4"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input type="checkbox"
+                                       id="grid.estudiante.d.tr.0.chksel"
+                                       name="chksel.grid.estudiante"
+                                       class="text-center"
+                                       aria-label="Marcar para seleccionar"
+                                       onclick="AlPulsarUnCheckDeSeleccion('grid.estudiante','grid.estudiante.d.tr.0.chksel');" />
+                            </td>
+                        </tr>
+                        <tr id='grid.estudiante.d.tr.1'>
+                            <td id="grid.estudiante.d.tr.1.0"
+                                name="td.chksel.grid.estudiante"
+                                class="text-right" hidden>
+                                <input id="grid.estudiante.d.tr.1.id" name="id.grid.estudiante" class="text-right" style="width:100%; border:0" readonly value="1" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.1.1"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.1.apellido" name="apellido.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Carson" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.1.2"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.1.nombre" name="nombre.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Alexander" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.1.3"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input id="grid.estudiante.d.tr.1.inscritoel" name="inscritoel.grid.estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2005 0:00:00" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.1.4"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input type="checkbox"
+                                       id="grid.estudiante.d.tr.1.chksel"
+                                       name="chksel.grid.estudiante"
+                                       class="text-center"
+                                       aria-label="Marcar para seleccionar"
+                                       onclick="AlPulsarUnCheckDeSeleccion('grid.estudiante','grid.estudiante.d.tr.1.chksel');" />
+                            </td>
+                        </tr>
+                        <tr id='grid.estudiante.d.tr.2'>
+                            <td id="grid.estudiante.d.tr.2.0"
+                                name="td.chksel.grid.estudiante"
+                                class="text-right" hidden>
+                                <input id="grid.estudiante.d.tr.2.id" name="id.grid.estudiante" class="text-right" style="width:100%; border:0" readonly value="4" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.2.1"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.2.apellido" name="apellido.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Gytis" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.2.2"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.2.nombre" name="nombre.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Barzdukas" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.2.3"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input id="grid.estudiante.d.tr.2.inscritoel" name="inscritoel.grid.estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2002 0:00:00" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.2.4"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input type="checkbox"
+                                       id="grid.estudiante.d.tr.2.chksel"
+                                       name="chksel.grid.estudiante"
+                                       class="text-center"
+                                       aria-label="Marcar para seleccionar"
+                                       onclick="AlPulsarUnCheckDeSeleccion('grid.estudiante','grid.estudiante.d.tr.2.chksel');" />
+                            </td>
+                        </tr>
+                        <tr id='grid.estudiante.d.tr.3'>
+                            <td id="grid.estudiante.d.tr.3.0"
+                                name="td.chksel.grid.estudiante"
+                                class="text-right" hidden>
+                                <input id="grid.estudiante.d.tr.3.id" name="id.grid.estudiante" class="text-right" style="width:100%; border:0" readonly value="7" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.3.1"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.3.apellido" name="apellido.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Laura" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.3.2"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.3.nombre" name="nombre.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Norman" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.3.3"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input id="grid.estudiante.d.tr.3.inscritoel" name="inscritoel.grid.estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2003 0:00:00" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.3.4"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input type="checkbox"
+                                       id="grid.estudiante.d.tr.3.chksel"
+                                       name="chksel.grid.estudiante"
+                                       class="text-center"
+                                       aria-label="Marcar para seleccionar"
+                                       onclick="AlPulsarUnCheckDeSeleccion('grid.estudiante','grid.estudiante.d.tr.3.chksel');" />
+                            </td>
+                        </tr>
+                        <tr id='grid.estudiante.d.tr.4'>
+                            <td id="grid.estudiante.d.tr.4.0"
+                                name="td.chksel.grid.estudiante"
+                                class="text-right" hidden>
+                                <input id="grid.estudiante.d.tr.4.id" name="id.grid.estudiante" class="text-right" style="width:100%; border:0" readonly value="2" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.4.1"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.4.apellido" name="apellido.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Meredith" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.4.2"
+                                name="td.chksel.grid.estudiante"
+                                class="text-left">
+                                <input id="grid.estudiante.d.tr.4.nombre" name="nombre.grid.estudiante" class="text-left" style="width:100%; border:0" readonly value="Alonso" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.4.3"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input id="grid.estudiante.d.tr.4.inscritoel" name="inscritoel.grid.estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2002 0:00:00" />
+                            </td>
+                            <td id="grid.estudiante.d.tr.4.4"
+                                name="td.chksel.grid.estudiante"
+                                class="text-center">
+                                <input type="checkbox"
+                                       id="grid.estudiante.d.tr.4.chksel"
+                                       name="chksel.grid.estudiante"
+                                       class="text-center"
+                                       aria-label="Marcar para seleccionar"
+                                       onclick="AlPulsarUnCheckDeSeleccion('grid.estudiante','grid.estudiante.d.tr.4.chksel');" />
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <div id="grid.estudiante.Nav" style="float: left">
+                        <div id="grid.estudiante.Nav.1" data-type="img" style="display:inline-block">
+                            <img src="/images/paginaInicial.png" alt="Primera página" title="Ir al primer registro" width="22" height="22" onclick="Leer('grid.estudiante')">
+                        </div>
+                        <div id="grid.estudiante.Nav.2" class="mx-sm-3" style="display:inline-block">
+                            <input type="number" id="grid.estudiante.Nav.2.Reg" value="5"
+                                   min="1" step="1" max="999"
+                                   posicion="5"
+                                   controlador="Estudiantes"
+                                   totalEnBd="8" title="leidos 5 de 8 desde la posición 0"
+                                   style="width: 50px;margin-top: 5px;align-content:center; border-radius: 10px">
+                        </div>
+                        <div id="id=" grid.estudiante.Nav.3" data-type="img" style="display:inline-block">
+                            <img src="/images/paginaAnterior.png" alt="Primera página" title="Página anterior" width="22" height="22" onclick="LeerAnteriores('grid.estudiante')">
+                            <img src="/images/paginaSiguiente.png" alt="Siguiente página" title="Página siguiente" width="22" height="22" onclick="LeerSiguientes('grid.estudiante')">
+                            <img src="/images/paginaUltima.png" alt="Última página" title="Última página" width="22" height="22" onclick="LeerUltimos('grid.estudiante')">
+                        </div>
+                    </div>
+                    <div style="float: right">
+                        5 de 8
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+            <br />
+            <br />
+        </main>
+
+        <footer class="border-top footer text-muted">
+            <div class="text-info" width="100%">
+                <input id="Mensaje" style="width:100%" readonly value="" />
+            </div>
+            <div class="text-center">
+                <div style="float: left">
+                    &copy;JJIMENEZ64 - desarrollo2:SistemaDeElementos
+                </div>
+                <div style="float: right">
+                    Version: 0.0.2 - Usuario: jjimenezcf@gmail.com
+                    <a href="/Home/Privacy">Privacy</a>
+                </div>
+            </div>
+        </footer>
+
+
+
+
+
+
+        <nav id="cookieConsent" class="navbar navbar-default navbar-fixed-top" role="alert">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
+                        <span class="sr-only">Toggle cookie consent banner</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></span>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <p class="navbar-text">
+                        Use this space to summarize your privacy and cookie use policy.
+                    </p>
+                    <div class="navbar-right">
+                        <a class="btn btn-info navbar-btn" href="/Home/Privacy">Learn More</a>
+                        <button type="button" class="btn btn-default navbar-btn" data-cookie-string=".AspNet.Consent=yes; expires=Fri, 12 Feb 2021 18:54:05 GMT; path=/; secure; samesite=none">Accept</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <script>
+            (function () {
+                document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+                    document.cookie = el.target.dataset.cookieString;
+                    document.querySelector("#cookieConsent").classList.add("hidden");
+                }, false);
+            })();
+        </script>
+
+
+    </div>
+</body>
+</html>
+
+
+
+

@@ -82,7 +82,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             ViewBag.Crud = GestorDelCrud;
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(viewName, GestorDelCrud.Descriptor);
+            return base.View(viewName, model);
         }
         
         protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()

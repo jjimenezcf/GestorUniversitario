@@ -8,7 +8,7 @@ using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha }
+    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha, GridModal }
 
     public class Posicion
     {
@@ -41,7 +41,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public Control(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         {
-            Id = id.ToLower();
+            Id = id;
             Etiqueta = etiqueta;
             Propiedad = propiedad;
             Ayuda = ayuda;
@@ -56,32 +56,40 @@ namespace UniversidadDeMurcia.Descriptores
                   ";
         }
 
-        public string RenderControl()
+        public virtual string RenderControl()
         {
-            switch (Tipo)
-            {
-                case TipoControl.Selector: return ((Selector)this).RenderSelector();
-                case TipoControl.Editor: return ((Editor)this).RenderInput();
-            }
-            throw new Exception($"El tipo {this.Tipo} de control no está definido");
+            if (Tipo != TipoControl.Selector && Tipo!= TipoControl.Editor && Tipo!= TipoControl.GridModal)
+                throw new Exception($"El tipo {this.Tipo} de control no está definido");
+            return "htmlControl";
         }
 
     }
 
-    public class Selector : Control
+    public class Selector<Tseleccionado> : Control
     {
         public string propiedadParaFiltrar { get; private set; }
         public string propiedadParaMostrar { get; private set; }
-        public PanelDeSeleccion Modal { get; set; }
+        public GridModal<Tseleccionado> GridModal { get; set; }
 
-        public Selector(string idModal, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
-        : base($"{idModal}.Selector", etiqueta, propiedad, ayuda, posicion)
+        public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
+        : base(     
+                id: $"{typeof(Tseleccionado).Name.Replace("Elemento","")}_{TipoControl.Selector}"
+              , etiqueta
+              , propiedad
+              , ayuda
+              , posicion
+              )
         {
-
             Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
-            Modal = new PanelDeSeleccion(idModal, this);
+            GridModal = new GridModal<Tseleccionado>(this);
+            padre.AnadirSelector(this);
+        }
+
+        public override string RenderControl()
+        {
+            return base.RenderControl().Replace("htmlControl",RenderSelector());
         }
 
         public string RenderSelector()
@@ -89,7 +97,7 @@ namespace UniversidadDeMurcia.Descriptores
             return $@"<div class=¨input-group mb-3¨>
                        <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
                        <div class=¨input-group-append¨>
-                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
+                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{GridModal.IdHtml}¨ >Seleccionar</button>
                        </div>
                     </div>
                   ";
@@ -102,6 +110,11 @@ namespace UniversidadDeMurcia.Descriptores
         : base(id, etiqueta, propiedad, ayuda, posicion)
         {
             Tipo = TipoControl.Editor;
+        }
+
+        public override string RenderControl()
+        {
+            return base.RenderControl().Replace("htmlControl", RenderInput());
         }
 
         public string RenderInput()
@@ -123,19 +136,76 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class PanelDeSeleccion : Control
+    public class GridModal<Tseleccionado> : Control
     {
-        public Selector selector { get; set; }
+        public Selector<Tseleccionado> Selector { get; set; }
         public string gestorDeElementos { get; set; }
         public string claseDeElemento { get; set; }
         public List<ColumnaDelGrid> Columnas { get; set; }
         public string Registros { get; set; }
 
-        public PanelDeSeleccion(string idModal, Selector selectorAsociado)
-        : base(idModal, $"Seleccionar {selectorAsociado.propiedadParaMostrar}", selectorAsociado.propiedadParaMostrar, selectorAsociado.Ayuda, null)
+        public GridModal(Selector<Tseleccionado> selectorAsociado)
+        : base(
+          id: selectorAsociado.Id.Replace(TipoControl.Selector.ToString(), TipoControl.GridModal.ToString()),
+          etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}", 
+          propiedad: selectorAsociado.propiedadParaMostrar, 
+          ayuda: selectorAsociado.Ayuda, 
+          posicion: null)
         {
-            selector = selectorAsociado;
-            selector.Modal = this;
+            Tipo = TipoControl.GridModal;
+            Selector = selectorAsociado;
+            Selector.GridModal = this;
+        }
+
+        public override string RenderControl()
+        {
+            return base.RenderControl().Replace("htmlControl", RenderGridModal());
+        }
+
+        private string RenderGridModal()
+        {
+            var s = Selector;
+
+            const string _htmlModalSelector =
+            @"
+             <div class=¨modal fade¨ id=¨idModal¨ tabindex=¨-1¨ role=¨dialog¨ aria-labelledby=¨exampleModalLabel¨ aria-hidden=¨true¨>
+               <div class=¨modal-dialog¨ role=¨document¨>
+                 <div class=¨modal-content¨>
+                   <div class=¨modal-header¨>
+                     <h5 class=¨modal-title¨ id=¨exampleModalLabel¨>titulo</h5>
+                   </div>
+                   <div id=¨{idContenedor}¨ class=¨modal-body¨>
+                     {gridDeElementos}
+                   </div>
+                   <div class=¨modal-footer¨>
+                     <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{idGrid}', '{referenciaChecks}')¨>Seleccionar</button>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <script>
+               AlAbrirLaModal
+               AlCerrarLaModal
+             </script>
+             ";
+
+
+            var nombreCheckDeSeleccion = $"chksel.{s.IdHtml}";
+
+            return _htmlModalSelector
+                    .Replace("idModal", s.GridModal.IdHtml)
+                    .Replace("titulo", s.GridModal.Ayuda)
+                    .Replace("{idSelector}", s.IdHtml)
+                    //.Replace("{idGrid}", IdGrid)
+                    .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
+                    .Replace("{columnaId}", s.propiedadParaFiltrar)
+                    .Replace("{columnaMostrar}", s.propiedadParaMostrar)
+                    .Replace("{idContenedor}", $"contenedor.{s.GridModal.IdHtml}")
+                    .Replace("{gridDeElementos}", "")
+                    .Replace("AlAbrirLaModal", "")
+                    .Replace("AlCerrarLaModal", "")
+                    .Render();
         }
     }
 
@@ -156,7 +226,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderTabla()
         {
 
-            var htmlTabla = $@"<table id=¨{IdHtml}¨ width=¨100%¨
+            var htmlTabla = $@"<table id=¨{IdHtml}¨ width=¨100%¨>
                                   filas
                                </table>";
             var htmlFilas = "";
@@ -193,6 +263,9 @@ namespace UniversidadDeMurcia.Descriptores
             var htmlEtiqueta = "";
             foreach (Control c in Controles)
             {
+                if (c.Posicion == null)
+                    continue;
+
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
                     htmlEtiqueta = $"{c.RenderLabel()}";
 
@@ -229,6 +302,12 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Controles.Add(c);
         }
+
+        public void AnadirSelector<T>(Selector<T> s)
+        {
+            Controles.Add(s);
+            Controles.Add(s.GridModal);
+        }
         public Control ObtenerControl(string id)
         {
 
@@ -250,6 +329,20 @@ namespace UniversidadDeMurcia.Descriptores
 
             return htmlBloque.Replace("tabla", htmlTabla);
         }
+
+        public string RenderModalesBloque()
+        {
+            var htmlModalesEnBloque = "";
+            foreach (Control c in Controles)
+            {
+                if (c.Tipo == TipoControl.GridModal)
+                    htmlModalesEnBloque = 
+                        $"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
+                        $"{c.RenderControl()}";
+
+            }
+            return htmlModalesEnBloque;
+        }
     }
 
     public class ZonaDeOpciones
@@ -262,7 +355,7 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeOpciones(string identificador, VistaCrud vista)
         {
             Id = $"opc_{identificador}";
-            var crear = new Opcion($"{IdHtml}.Crear", vista.Ruta, vista.Accion, vista.TextoMenu);
+            var crear = new Opcion($"{IdHtml}_Crear", vista.Ruta, vista.Accion, vista.TextoMenu);
             Opciones.Add(crear);
         }
 
@@ -329,12 +422,12 @@ namespace UniversidadDeMurcia.Descriptores
 
         public ZonaDeFiltro(string identificador)
         {
-            Id = $"flt.{identificador}";
+            Id = $"flt_{identificador}";
 
-            var editor = new Editor(id: $"{Id}.b1.filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            var editor = new Editor(id: $"{Id}_b1_filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
 
-            var b1 = new Bloque($"{Id}.b1", "General", new Dimension(1, 2));
-            var b2 = new Bloque($"{Id}.b2", "Común", new Dimension(1, 2));
+            var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 2));
+            var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 2));
 
             b1.AnadirControl(editor);
 
@@ -369,6 +462,16 @@ namespace UniversidadDeMurcia.Descriptores
                 htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderBloque()}";
 
             return htmlFiltro.Replace("bloques", htmlBloques);
+        }
+
+
+        public string RenderModalesFiltro()
+        {
+            var htmlModalesEnFiltro = "";
+            foreach (Bloque b in Bloques)
+                htmlModalesEnFiltro = $"{htmlModalesEnFiltro}{(htmlModalesEnFiltro.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderModalesBloque()}";
+
+            return htmlModalesEnFiltro;
         }
 
     }
@@ -425,7 +528,7 @@ namespace UniversidadDeMurcia.Descriptores
                    RenderTitulo() + Environment.NewLine +
                    Menu.RenderOpcionesMenu() + Environment.NewLine +
                    Filtro.RenderFiltro() + Environment.NewLine +
-                   HtmlRender.RenderModalesFiltro(Filtro) + Environment.NewLine +
+                   Filtro.RenderModalesFiltro() + Environment.NewLine +
                    Grid.RenderGrid() + Environment.NewLine;
             //RenderPie();
 

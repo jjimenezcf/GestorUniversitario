@@ -15,7 +15,8 @@ namespace UniversidadDeMurcia.Descriptores
 
             var bloque = new Bloque($"{Filtro.IdHtml}_b3", "Específico", new Dimension(1, 2));
 
-            var selector = new Selector(idModal: "selector_estudiante",
+            var selector = new Selector<ElementoEstudiante>(
+                                        padre: bloque,
                                         etiqueta: "Estudiante",
                                         propiedad: "estudianteInscrito",
                                         ayuda: "seleccionar estudiante",
@@ -23,11 +24,9 @@ namespace UniversidadDeMurcia.Descriptores
                                         paraFiltrar: nameof(ElementoEstudiante.Id),
                                         paraMostrar: nameof(ElementoEstudiante.Apellido));
 
-            bloque.AnadirControl(selector);
-
             Filtro.AnadirBloque(bloque);
 
-            DefinirVistaDeCreacion(accion: "CrearCurso", textoMenu: "Crear curso");
+            DefinirVistaDeCreacion(accion: "IraCrearCurso", textoMenu: "Crear curso");
 
             DefinirColumnasDelGrid();
 
