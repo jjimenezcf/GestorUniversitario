@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos.ModeloIu;
+using UniversidadDeMurcia.Descriptores;
 using Utilidades;
 using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha, GridModal }
+    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha, GridModal, TablaBloque, Bloque }
+
 
     public class Posicion
     {
@@ -28,7 +30,7 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class Control
+    public class ControlHtml
     {
         public string Id { get; private set; }
         public string IdHtml => Id.ToLower();
@@ -39,8 +41,11 @@ namespace UniversidadDeMurcia.Descriptores
 
         public TipoControl Tipo { get; protected set; }
 
-        public Control(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
+        public ControlHtml Padre { get; set; }
+
+        public ControlHtml(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         {
+            Padre = padre;
             Id = id;
             Etiqueta = etiqueta;
             Propiedad = propiedad;
@@ -58,22 +63,23 @@ namespace UniversidadDeMurcia.Descriptores
 
         public virtual string RenderControl()
         {
-            if (Tipo != TipoControl.Selector && Tipo!= TipoControl.Editor && Tipo!= TipoControl.GridModal)
+            if (Tipo != TipoControl.Selector && Tipo != TipoControl.Editor && Tipo != TipoControl.GridModal)
                 throw new Exception($"El tipo {this.Tipo} de control no está definido");
             return "htmlControl";
         }
 
     }
 
-    public class Selector<Tseleccionado> : Control
+    public class Selector<Tseleccionado> : ControlHtml
     {
         public string propiedadParaFiltrar { get; private set; }
         public string propiedadParaMostrar { get; private set; }
         public GridModal<Tseleccionado> GridModal { get; set; }
 
         public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
-        : base(     
-                id: $"{typeof(Tseleccionado).Name.Replace("Elemento","")}_{TipoControl.Selector}"
+        : base(
+              padre: padre
+              , id: $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
               , etiqueta
               , propiedad
               , ayuda
@@ -83,13 +89,13 @@ namespace UniversidadDeMurcia.Descriptores
             Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
-            GridModal = new GridModal<Tseleccionado>(this);
+            GridModal = new GridModal<Tseleccionado>(padre, this);
             padre.AnadirSelector(this);
         }
 
         public override string RenderControl()
         {
-            return base.RenderControl().Replace("htmlControl",RenderSelector());
+            return base.RenderControl().Replace("htmlControl", RenderSelector());
         }
 
         public string RenderSelector()
@@ -104,12 +110,19 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class Editor : Control
+    public class Editor : ControlHtml
     {
-        public Editor(string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
-        : base(id, etiqueta, propiedad, ayuda, posicion)
+        public Editor(Bloque padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
+        : base(padre: padre
+              , id: $"edt_{id}"
+              , etiqueta
+              , propiedad
+              , ayuda
+              , posicion
+              )
         {
             Tipo = TipoControl.Editor;
+            padre.AnadirControl(this);
         }
 
         public override string RenderControl()
@@ -126,17 +139,24 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class Desplegable : Control
+    public class Desplegable : ControlHtml
     {
         public ICollection<Valor> valores { get; set; }
-        public Desplegable(string idSelector, string etiqueta, string propiedad, string ayuda, Posicion posicion)
-        : base(idSelector, etiqueta, propiedad, ayuda, posicion)
+
+        public Desplegable(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
+        : base(padre: padre
+              , id: $"ddl_{id}"
+              , etiqueta
+              , propiedad
+              , ayuda
+              , posicion
+              )
         {
             Tipo = TipoControl.Desplegable;
         }
     }
 
-    public class GridModal<Tseleccionado> : Control
+    public class GridModal<Tseleccionado> : ControlHtml
     {
         public Selector<Tseleccionado> Selector { get; set; }
         public string gestorDeElementos { get; set; }
@@ -144,13 +164,15 @@ namespace UniversidadDeMurcia.Descriptores
         public List<ColumnaDelGrid> Columnas { get; set; }
         public string Registros { get; set; }
 
-        public GridModal(Selector<Tseleccionado> selectorAsociado)
+        public GridModal(ControlHtml padre, Selector<Tseleccionado> selectorAsociado)
         : base(
+          padre: padre,
           id: selectorAsociado.Id.Replace(TipoControl.Selector.ToString(), TipoControl.GridModal.ToString()),
-          etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}", 
-          propiedad: selectorAsociado.propiedadParaMostrar, 
-          ayuda: selectorAsociado.Ayuda, 
-          posicion: null)
+          etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}",
+          propiedad: selectorAsociado.propiedadParaMostrar,
+          ayuda: selectorAsociado.Ayuda,
+          posicion: null
+        )
         {
             Tipo = TipoControl.GridModal;
             Selector = selectorAsociado;
@@ -209,16 +231,22 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class TablaBloque
+    public class TablaBloque : ControlHtml
     {
-        public string Id { get; private set; }
-        public string IdHtml => Id.ToLower();
         public Dimension Dimension { get; private set; }
-        public ICollection<Control> Controles { get; set; }
+        public ICollection<ControlHtml> Controles { get; set; }
 
-        public TablaBloque(string identificador, Dimension dimension, ICollection<Control> controles)
+        public TablaBloque(ControlHtml padre, string identificador, Dimension dimension, ICollection<ControlHtml> controles)
+        : base(
+          padre: padre,
+          id: $"tbl_{identificador}",
+          etiqueta: null,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            Id = identificador;
+            Tipo = TipoControl.TablaBloque;
             Dimension = dimension;
             Controles = controles;
         }
@@ -261,7 +289,7 @@ namespace UniversidadDeMurcia.Descriptores
                                         </td>";
             var htmlControl = "";
             var htmlEtiqueta = "";
-            foreach (Control c in Controles)
+            foreach (ControlHtml c in Controles)
             {
                 if (c.Posicion == null)
                     continue;
@@ -281,24 +309,30 @@ namespace UniversidadDeMurcia.Descriptores
 
     }
 
-    public class Bloque
+    public class Bloque : ControlHtml
     {
-        public string Id { get; private set; }
-        public string IdHtml => Id.ToLower();
-
-        public string Titulo { get; private set; }
-
         public TablaBloque Tabla { get; set; }
 
-        public ICollection<Control> Controles => Tabla.Controles;
+        public ICollection<ControlHtml> Controles => Tabla.Controles;
 
-        public Bloque(string identificador, string titulo, Dimension dimension)
+
+        public Bloque(ZonaDeFiltro padre, string titulo, Dimension dimension)
+        : base(
+          padre: padre,
+          id: $"blo_{padre.Id}_{padre.Bloques.Count}",
+          etiqueta: titulo,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            Id = identificador;
-            Titulo = titulo;
-            Tabla = new TablaBloque($"{IdHtml}_Tbl", dimension, new List<Control>());
+            Tipo = TipoControl.Bloque;
+            Tabla = new TablaBloque(this, $"{Id}", dimension, new List<ControlHtml>());
+            padre.Bloques.Add(this);
         }
-        public void AnadirControl(Control c)
+
+
+        public void AnadirControl(ControlHtml c)
         {
             Controles.Add(c);
         }
@@ -308,10 +342,10 @@ namespace UniversidadDeMurcia.Descriptores
             Controles.Add(s);
             Controles.Add(s.GridModal);
         }
-        public Control ObtenerControl(string id)
+        public ControlHtml ObtenerControl(string id)
         {
 
-            foreach (Control c in Controles)
+            foreach (ControlHtml c in Controles)
             {
                 if (c.Id == id)
                     return c;
@@ -333,10 +367,10 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderModalesBloque()
         {
             var htmlModalesEnBloque = "";
-            foreach (Control c in Controles)
+            foreach (ControlHtml c in Controles)
             {
                 if (c.Tipo == TipoControl.GridModal)
-                    htmlModalesEnBloque = 
+                    htmlModalesEnBloque =
                         $"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
                         $"{c.RenderControl()}";
 
@@ -345,35 +379,45 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class ZonaDeOpciones
+    public class ZonaDeOpciones<Telemento> : ControlHtml
     {
-        private string Id { get; set; }
-        public string IdHtml => Id.ToLower();
-
-
-        public ICollection<Opcion> Opciones { get; private set; } = new List<Opcion>();
-        public ZonaDeOpciones(string identificador, VistaCrud vista)
+        public ICollection<Opcion<Telemento>> Opciones { get; private set; } = new List<Opcion<Telemento>>();
+        
+        public ZonaDeOpciones(DescriptorDeCrud<Telemento> padre, VistaCrud vista)
+        : base(
+          padre: padre,
+          id: $"Men_{padre.Id}",
+          etiqueta: null,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            Id = $"opc_{identificador}";
-            var crear = new Opcion($"{IdHtml}_Crear", vista.Ruta, vista.Accion, vista.TextoMenu);
-            Opciones.Add(crear);
+           new Opcion<Telemento>(this, vista.Ruta, vista.Accion, vista.Etiqueta);
         }
 
         public string RenderOpcionesMenu()
         {
-            var htmlRef = "<div id=¨id¨> <a href =¨/{ruta}/{accion}¨>{titulo}</a> </div>";
+            var htmlRef = "<div id=¨{idOpc}¨>{newLine}<a href =¨/{ruta}/{accion}¨>{titulo}</a>{newLine}</div>";
+            var htmlMenu = "<div id=¨{idMenu}¨>{hmlOpciones}</div>";
             var htmlOpciones = "";
-            foreach (Opcion o in Opciones)
+            foreach (Opcion<Telemento> o in Opciones)
             {
-                htmlOpciones = htmlOpciones + htmlRef.Replace("{id}", o.Id).Replace("{ruta}", o.Ruta).Replace("{accion}", o.Accion).Replace("{titulo}", o.Titulo);
+                htmlOpciones = htmlOpciones + htmlRef
+                                             .Replace("{idOpc}", o.Id)
+                                             .Replace("{ruta}", o.Ruta)
+                                             .Replace("{accion}", o.Accion)
+                                             .Replace("{titulo}", o.Etiqueta)
+                                             .Replace("{newLine}", Environment.NewLine) + 
+                                             Environment.NewLine;
             }
 
-            return htmlOpciones;
+            return htmlMenu.Replace("{idMenu}", Id).Replace("{hmlOpciones}",$"{Environment.NewLine}{htmlOpciones}");
         }
 
     }
 
-    public class ZonaDeGrid<TElemento>
+    public class ZonaDeGrid<TElemento> : ControlHtml
     {
         public List<ColumnaDelGrid> Columnas { get; private set; } = new List<ColumnaDelGrid>();
 
@@ -382,19 +426,19 @@ namespace UniversidadDeMurcia.Descriptores
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; }
 
-        public DescriptorDeCrud<TElemento> Crud { get; private set; }
-        private string Id { get; set; }
-
-        public string IdHtml => Id.ToLower();
-
         public int TotalEnBd { get; set; }
-
-        public ZonaDeGrid(DescriptorDeCrud<TElemento> crud)
+        public ZonaDeGrid(DescriptorDeCrud<TElemento> padre)
+        : base(
+          padre: padre,
+          id: $"grid_{padre.Id}",
+          etiqueta: null,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            Crud = crud;
-            Id = $"grid.{crud.Id}";
         }
-
+        
         public string RenderGrid()
         {
             const string htmlDiv = @"<div id = ¨idContenedor¨>     
@@ -406,33 +450,35 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string RenderFilasDelGrid()
         {
-            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer) { Controlador = Crud.Ruta, TotalEnBd = TotalEnBd };
+            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer) 
+            { 
+              Controlador = ((DescriptorDeCrud<TElemento>)Padre).Ruta, 
+              TotalEnBd = TotalEnBd 
+            };
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }
 
     }
 
-    public class ZonaDeFiltro
+    public class ZonaDeFiltro : ControlHtml
     {
         public ICollection<Bloque> Bloques { get; private set; } = new List<Bloque>();
 
-        public string Id { get; private set; }
-        public string IdHtml => Id.ToLower();
-
-        public ZonaDeFiltro(string identificador)
+        public ZonaDeFiltro(ControlHtml padre)
+        : base(
+          padre: padre,
+          id: $"flt_{padre.Id}",
+          etiqueta: null,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            Id = $"flt_{identificador}";
+            var b1 = new Bloque(this, "General", new Dimension(1, 2));
+                     new Bloque(this, "Común", new Dimension(1, 2));
 
-            var editor = new Editor(id: $"{Id}_b1_filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
-
-            var b1 = new Bloque($"{Id}_b1", "General", new Dimension(1, 2));
-            var b2 = new Bloque($"{Id}_b2", "Común", new Dimension(1, 2));
-
-            b1.AnadirControl(editor);
-
-            Bloques.Add(b1);
-            Bloques.Add(b2);
+            new Editor(padre: b1, id: $"{Id}_b1_filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
 
         public void AnadirBloque(Bloque bloque)
@@ -476,41 +522,48 @@ namespace UniversidadDeMurcia.Descriptores
 
     }
 
-    public class VistaCrud
+    public class VistaCrud : ControlHtml
     {
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
-        public string TextoMenu { get; private set; }
 
-        public VistaCrud(string ruta, string vista, string texto)
+        public VistaCrud(ControlHtml padre, string ruta, string vista, string texto)
+        :base(
+          padre: padre,
+          id: $"opc_{padre.Id}",
+          etiqueta: texto,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
             Ruta = ruta;
             Accion = vista;
-            TextoMenu = texto;
         }
     }
 
-    public class DescriptorDeCrud<TElemento>
+    public class DescriptorDeCrud<TElemento> : ControlHtml
     {
         public VistaCrud VistaMnt { get; private set; }
         public VistaCrud VistaCreacion { get; private set; }
-
-        public string Id { get; private set; }
-        public string IdHtml => Id.ToLower();
-
-        public string Titulo { get; private set; }
-
-        public ZonaDeOpciones Menu { get; set; }
+        
+        public ZonaDeOpciones<TElemento> Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
         public string Ruta { get; private set; }
 
         public DescriptorDeCrud(string ruta, string vista, string titulo)
+        : base(
+          padre: null,
+          id: typeof(TElemento).Name.Replace("Elemento", ""),
+          etiqueta: titulo,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            VistaMnt = new VistaCrud(ruta, vista, titulo);
-            Id = typeof(TElemento).Name.Replace("Elemento", "");
-            Titulo = titulo;
-            Filtro = new ZonaDeFiltro(Id);
+            VistaMnt = new VistaCrud(this, ruta, vista, titulo);
+            Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
             Ruta = ruta;
         }
@@ -518,8 +571,8 @@ namespace UniversidadDeMurcia.Descriptores
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
-            VistaCreacion = new VistaCrud(Ruta, accion, textoMenu);
-            Menu = new ZonaDeOpciones(Id, VistaCreacion);
+            VistaCreacion = new VistaCrud(this, Ruta, accion, textoMenu);
+            Menu = new ZonaDeOpciones<TElemento>(this, VistaCreacion);
         }
 
         public string Render()
@@ -537,7 +590,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderTitulo()
         {
-            var htmlCabecera = $"<h2>{Titulo}</h2>";
+            var htmlCabecera = $"<h2>{this.Etiqueta}</h2>";
             return htmlCabecera;
         }
 
@@ -558,19 +611,24 @@ namespace UniversidadDeMurcia.Descriptores
     }
 
 
-    public class Opcion
+    public class Opcion<Telemento>: ControlHtml
     {
-        public string Id { get; private set; }
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
-        public string Titulo { get; private set; }
 
-        public Opcion(string id, string ruta, string accion, string titulo)
+        public Opcion(ZonaDeOpciones<Telemento> padre, string ruta, string accion, string titulo)
+        :base(
+          padre: padre,
+          id: $"opc_{padre.Id}_{padre.Opciones.Count}",
+          etiqueta: titulo,
+          propiedad: null,
+          ayuda: null,
+          posicion: null
+        )
         {
-            this.Id = id;
-            this.Ruta = ruta;
-            this.Accion = accion;
-            this.Titulo = titulo;
+            Ruta = ruta;
+            Accion = accion;
+            ((ZonaDeOpciones<Telemento>)Padre).Opciones.Add(this);
         }
     }
 

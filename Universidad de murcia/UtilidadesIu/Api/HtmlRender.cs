@@ -18,6 +18,10 @@ namespace UtilidadesParaIu
             while (cadena.IndexOf("< ") >= 0)
                 cadena = cadena.Replace("< ", "<");
 
+
+            while (cadena.IndexOf("  ") >= 0)
+                cadena = cadena.Replace("  ", " ");
+
             return cadena.Replace("¨", "\"");
         }
 

@@ -234,7 +234,7 @@ namespace UtilidadesParaIu
         private static string RenderizarGrid(Grid grid)
         {
             var htmlTabla = $@"<table id=¨{grid.Id}¨ 
-                                      class=¨table table-striped table-hover¨ 
+                                      class=¨table table-hover¨ 
                                       width=¨100%¨
                                       seleccionables ={grid.Seleccionables}
                                       seleccionados =¨¨>{Environment.NewLine}" +
