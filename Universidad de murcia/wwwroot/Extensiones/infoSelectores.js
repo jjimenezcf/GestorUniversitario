@@ -142,6 +142,7 @@ class InfoSelector {
         var pos = this._seleccionados.indexOf(idSeleccionado);
         if (pos >= 0) {
             this._seleccionados.splice(pos, 1);
+            this._ParaMostrarEnSelector.splice(pos, 1);
             this.deshabilitarCheck(false);
         }
         else
