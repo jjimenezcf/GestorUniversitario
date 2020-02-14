@@ -52,9 +52,5 @@ namespace UtilidadesParaIu
             Supresor = new BorradoCrud<T>();
         }
 
-        public string Render()
-        {
-            return Descriptor.Render();
-        }
     }
 }

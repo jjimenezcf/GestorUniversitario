@@ -9,7 +9,25 @@ using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public enum TipoControl { Selector, Editor, Label, Referencia, Desplegable, Lista, Fecha, GridModal, TablaBloque, Bloque }
+    public enum TipoControl
+    {
+        Selector,
+        Editor,
+        Desplegable,
+        GridModal,
+        TablaBloque,
+        Bloque,
+        ZonaDeOpciones,
+        ZonaDeGrid,
+        ZonaDeFiltro,
+        VistaCrud,
+        DescriptorDeCrud,
+        Opcion,
+        Label,
+        Referencia,
+        Lista,
+        Fecha
+    }
 
 
     public class Posicion
@@ -30,7 +48,7 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class ControlHtml
+    public abstract class ControlHtml
     {
         public string Id { get; private set; }
         public string IdHtml => Id.ToLower();
@@ -61,12 +79,7 @@ namespace UniversidadDeMurcia.Descriptores
                   ";
         }
 
-        public virtual string RenderControl()
-        {
-            if (Tipo != TipoControl.Selector && Tipo != TipoControl.Editor && Tipo != TipoControl.GridModal)
-                throw new Exception($"El tipo {this.Tipo} de control no está definido");
-            return "htmlControl";
-        }
+        public abstract string RenderControl();
 
     }
 
@@ -93,10 +106,6 @@ namespace UniversidadDeMurcia.Descriptores
             padre.AnadirSelector(this);
         }
 
-        public override string RenderControl()
-        {
-            return base.RenderControl().Replace("htmlControl", RenderSelector());
-        }
 
         public string RenderSelector()
         {
@@ -107,6 +116,11 @@ namespace UniversidadDeMurcia.Descriptores
                        </div>
                     </div>
                   ";
+        }
+
+        public override string RenderControl()
+        {
+            return RenderSelector();
         }
     }
 
@@ -127,7 +141,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public override string RenderControl()
         {
-            return base.RenderControl().Replace("htmlControl", RenderInput());
+            return RenderInput();
         }
 
         public string RenderInput()
@@ -154,6 +168,11 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Tipo = TipoControl.Desplegable;
         }
+
+        public override string RenderControl()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class GridModal<Tseleccionado> : ControlHtml
@@ -179,10 +198,6 @@ namespace UniversidadDeMurcia.Descriptores
             Selector.GridModal = this;
         }
 
-        public override string RenderControl()
-        {
-            return base.RenderControl().Replace("htmlControl", RenderGridModal());
-        }
 
         private string RenderGridModal()
         {
@@ -229,6 +244,11 @@ namespace UniversidadDeMurcia.Descriptores
                     .Replace("AlCerrarLaModal", "")
                     .Render();
         }
+
+        public override string RenderControl()
+        {
+            return RenderGridModal();
+        }
     }
 
     public class TablaBloque : ControlHtml
@@ -250,8 +270,13 @@ namespace UniversidadDeMurcia.Descriptores
             Dimension = dimension;
             Controles = controles;
         }
+        
+        public override string RenderControl()
+        {
+            return RenderTabla();
+        }
 
-        public string RenderTabla()
+        private string RenderTabla()
         {
 
             var htmlTabla = $@"<table id=¨{IdHtml}¨ width=¨100%¨>
@@ -354,12 +379,12 @@ namespace UniversidadDeMurcia.Descriptores
             throw new Exception($"El control {id} no está en la zona de filtrado");
         }
 
-        public string RenderBloque()
+        private string RenderBloque()
         {
             string htmlBloque = $@"<div id = ¨{IdHtml}¨>     
                                      tabla 
                                     </div>";
-            string htmlTabla = Tabla.RenderTabla();
+            string htmlTabla = Tabla.RenderControl();
 
             return htmlBloque.Replace("tabla", htmlTabla);
         }
@@ -377,12 +402,17 @@ namespace UniversidadDeMurcia.Descriptores
             }
             return htmlModalesEnBloque;
         }
+
+        public override string RenderControl()
+        {
+            return RenderBloque();
+        }
     }
 
     public class ZonaDeOpciones<Telemento> : ControlHtml
     {
         public ICollection<Opcion<Telemento>> Opciones { get; private set; } = new List<Opcion<Telemento>>();
-        
+
         public ZonaDeOpciones(DescriptorDeCrud<Telemento> padre, VistaCrud vista)
         : base(
           padre: padre,
@@ -393,10 +423,11 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
-           new Opcion<Telemento>(this, vista.Ruta, vista.Accion, vista.Etiqueta);
+            Tipo = TipoControl.ZonaDeOpciones;
+            new Opcion<Telemento>(this, vista.Ruta, vista.Accion, vista.Etiqueta);
         }
 
-        public string RenderOpcionesMenu()
+        private string RenderOpcionesMenu()
         {
             var htmlRef = "<div id=¨{idOpc}¨>{newLine}<a href =¨/{ruta}/{accion}¨>{titulo}</a>{newLine}</div>";
             var htmlMenu = "<div id=¨{idMenu}¨>{hmlOpciones}</div>";
@@ -408,13 +439,17 @@ namespace UniversidadDeMurcia.Descriptores
                                              .Replace("{ruta}", o.Ruta)
                                              .Replace("{accion}", o.Accion)
                                              .Replace("{titulo}", o.Etiqueta)
-                                             .Replace("{newLine}", Environment.NewLine) + 
+                                             .Replace("{newLine}", Environment.NewLine) +
                                              Environment.NewLine;
             }
 
-            return htmlMenu.Replace("{idMenu}", Id).Replace("{hmlOpciones}",$"{Environment.NewLine}{htmlOpciones}");
+            return htmlMenu.Replace("{idMenu}", Id).Replace("{hmlOpciones}", $"{Environment.NewLine}{htmlOpciones}");
         }
 
+        public override string RenderControl()
+        {
+           return RenderOpcionesMenu();
+        }
     }
 
     public class ZonaDeGrid<TElemento> : ControlHtml
@@ -437,9 +472,10 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
+            Tipo = TipoControl.ZonaDeGrid;
         }
-        
-        public string RenderGrid()
+
+        private string RenderGrid()
         {
             const string htmlDiv = @"<div id = ¨idContenedor¨>     
                                      contenido 
@@ -450,15 +486,19 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string RenderFilasDelGrid()
         {
-            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer) 
-            { 
-              Controlador = ((DescriptorDeCrud<TElemento>)Padre).Ruta, 
-              TotalEnBd = TotalEnBd 
+            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
+            {
+                Controlador = ((DescriptorDeCrud<TElemento>)Padre).Ruta,
+                TotalEnBd = TotalEnBd
             };
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }
 
+        public override string RenderControl()
+        {
+            return RenderGrid();
+        }
     }
 
     public class ZonaDeFiltro : ControlHtml
@@ -475,8 +515,9 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
+            Tipo = TipoControl.ZonaDeFiltro;
             var b1 = new Bloque(this, "General", new Dimension(1, 2));
-                     new Bloque(this, "Común", new Dimension(1, 2));
+            new Bloque(this, "Común", new Dimension(1, 2));
 
             new Editor(padre: b1, id: $"{Id}_b1_filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
@@ -497,7 +538,7 @@ namespace UniversidadDeMurcia.Descriptores
             throw new Exception($"El bloque {identificador} no está en la zona de filtrado");
         }
 
-        public string RenderFiltro()
+        private string RenderFiltro()
         {
             var htmlFiltro = $@"<div id = ¨{IdHtml}¨ style=¨width:100%¨>     
                                      bloques 
@@ -505,13 +546,13 @@ namespace UniversidadDeMurcia.Descriptores
 
             var htmlBloques = "";
             foreach (Bloque b in Bloques)
-                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderBloque()}";
+                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderControl()}";
 
             return htmlFiltro.Replace("bloques", htmlBloques);
         }
 
 
-        public string RenderModalesFiltro()
+        private string RenderModalesFiltro()
         {
             var htmlModalesEnFiltro = "";
             foreach (Bloque b in Bloques)
@@ -520,6 +561,10 @@ namespace UniversidadDeMurcia.Descriptores
             return htmlModalesEnFiltro;
         }
 
+        public override string RenderControl()
+        {
+            return RenderFiltro() + Environment.NewLine + RenderModalesFiltro();
+        }
     }
 
     public class VistaCrud : ControlHtml
@@ -528,7 +573,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string Accion { get; private set; }
 
         public VistaCrud(ControlHtml padre, string ruta, string vista, string texto)
-        :base(
+        : base(
           padre: padre,
           id: $"opc_{padre.Id}",
           etiqueta: texto,
@@ -537,8 +582,14 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
+            Tipo = TipoControl.VistaCrud;
             Ruta = ruta;
             Accion = vista;
+        }
+
+        public override string RenderControl()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -546,7 +597,7 @@ namespace UniversidadDeMurcia.Descriptores
     {
         public VistaCrud VistaMnt { get; private set; }
         public VistaCrud VistaCreacion { get; private set; }
-        
+
         public ZonaDeOpciones<TElemento> Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
@@ -562,6 +613,7 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
+            Tipo = TipoControl.DescriptorDeCrud;
             VistaMnt = new VistaCrud(this, ruta, vista, titulo);
             Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
@@ -575,14 +627,13 @@ namespace UniversidadDeMurcia.Descriptores
             Menu = new ZonaDeOpciones<TElemento>(this, VistaCreacion);
         }
 
-        public string Render()
+        private string RenderDescriptor()
         {
             var htmlCrud =
                    RenderTitulo() + Environment.NewLine +
-                   Menu.RenderOpcionesMenu() + Environment.NewLine +
-                   Filtro.RenderFiltro() + Environment.NewLine +
-                   Filtro.RenderModalesFiltro() + Environment.NewLine +
-                   Grid.RenderGrid() + Environment.NewLine;
+                   Menu.RenderControl() + Environment.NewLine +
+                   Filtro.RenderControl() + Environment.NewLine +                   
+                   Grid.RenderControl() + Environment.NewLine;
             //RenderPie();
 
             return htmlCrud.Render();
@@ -602,6 +653,11 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Grid.TotalEnBd = leidos.totalEnBd;
         }
+
+        public override string RenderControl()
+        {
+            return RenderDescriptor();
+        }
     }
 
     public class Valor
@@ -611,13 +667,13 @@ namespace UniversidadDeMurcia.Descriptores
     }
 
 
-    public class Opcion<Telemento>: ControlHtml
+    public class Opcion<Telemento> : ControlHtml
     {
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
 
         public Opcion(ZonaDeOpciones<Telemento> padre, string ruta, string accion, string titulo)
-        :base(
+        : base(
           padre: padre,
           id: $"opc_{padre.Id}_{padre.Opciones.Count}",
           etiqueta: titulo,
@@ -626,9 +682,15 @@ namespace UniversidadDeMurcia.Descriptores
           posicion: null
         )
         {
+            Tipo = TipoControl.Opcion;
             Ruta = ruta;
             Accion = accion;
             ((ZonaDeOpciones<Telemento>)Padre).Opciones.Add(this);
+        }
+
+        public override string RenderControl()
+        {
+            throw new NotImplementedException();
         }
     }
 
