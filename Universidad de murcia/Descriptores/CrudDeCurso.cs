@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gestor.Elementos;
 using Gestor.Elementos.Universitario.ModeloIu;
 using UtilidadesParaIu;
 
@@ -9,20 +10,18 @@ namespace UniversidadDeMurcia.Descriptores
 {
     public class CrudCurso : DescriptorDeCrud<ElementoCurso>
     {
-        public CrudCurso()
-        : base(ruta: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos")
+        public CrudCurso(ModoDescriptor modo)
+        : base(ruta: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos", modo: modo)
         {
-
-            var bloque = new Bloque(Filtro, "Específico", new Dimension(1, 2));
-
-            new Selector<ElementoEstudiante>(
-                                        padre: bloque,
-                                        etiqueta: "Estudiante",
-                                        propiedad: "estudianteInscrito",
-                                        ayuda: "seleccionar estudiante",
-                                        posicion: new Posicion() { fila = 0, columna = 0 },
-                                        paraFiltrar: nameof(ElementoEstudiante.Id),
-                                        paraMostrar: nameof(ElementoEstudiante.Apellido));
+            if (modo == ModoDescriptor.Mantenimiento)
+               new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
+                                             etiqueta: "Estudiante",
+                                             propiedad: "estudianteInscrito",
+                                             ayuda: "Seleccionar estudiante",
+                                             posicion: new Posicion() { fila = 0, columna = 0 },
+                                             paraFiltrar: nameof(ElementoEstudiante.Id),
+                                             paraMostrar: nameof(ElementoEstudiante.Apellido),
+                                             descriptor: new CrudEstudiante(ModoDescriptor.Seleccion));
 
             DefinirVistaDeCreacion(accion: "IraCrearCurso", textoMenu: "Crear curso");
 

@@ -17,11 +17,15 @@ namespace UniversidadDeMurcia.Controllers
 
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
     {
-        public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) :
-            base(nameof(CursosController), gestorDeCursos, gestorDeErrores, new CrudCurso())
+        public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) 
+        : base
+        (
+         nameof(CursosController), 
+         gestorDeCursos, 
+         gestorDeErrores, 
+         new CrudCurso(ModoDescriptor.Mantenimiento)
+        )
         {
-            GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo curso");
-            //GestorDelCrud.Modales[nameof(SelectorDeEstudiante)] = new SelectorDeEstudiante(gestorDeCursos.Contexto, gestorDeCursos.Mapeador).Selector;
         }
 
         public IActionResult IraMantenimientoCurso(string orden)

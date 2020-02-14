@@ -1,5 +1,4 @@
-﻿
-function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
+﻿function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
 
     recargarGrid(idGrid);
 

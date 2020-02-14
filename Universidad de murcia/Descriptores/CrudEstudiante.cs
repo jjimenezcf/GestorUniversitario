@@ -9,20 +9,18 @@ namespace UniversidadDeMurcia.Descriptores
 {
     public class CrudEstudiante : DescriptorDeCrud<ElementoEstudiante>
     {
-        public CrudEstudiante()
-        : base(ruta: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes")
+        public CrudEstudiante(ModoDescriptor modo)
+        : base(ruta: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes", modo: modo)
         {
-
-            var bloque = new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
-
-            new Selector<ElementoCurso>(
-                                        padre: bloque,
+            if (modo == ModoDescriptor.Mantenimiento)
+                new Selector<ElementoCurso>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Curso",
                                         propiedad: "cursoInscrito",
-                                        ayuda: "seleccionar curso",
+                                        ayuda: "Seleccionar curso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
                                         paraFiltrar: nameof(ElementoCurso.Id),
-                                        paraMostrar: nameof(ElementoCurso.Titulo));
+                                        paraMostrar: nameof(ElementoCurso.Titulo),
+                                        descriptor: new CrudCurso(ModoDescriptor.Seleccion));
 
             DefinirVistaDeCreacion(accion: "IraCrearEstudiante", textoMenu: "Crear estudiante");
 

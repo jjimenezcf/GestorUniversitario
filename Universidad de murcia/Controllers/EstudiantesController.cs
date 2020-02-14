@@ -20,10 +20,14 @@ namespace UniversidadDeMurcia.Controllers
     {
 
         public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
-        :base(nameof(EstudiantesController), gestorDeEstudiantes, gestorDeErrores, new CrudEstudiante())
+        :base
+        (
+          nameof(EstudiantesController), 
+          gestorDeEstudiantes, 
+          gestorDeErrores, 
+          new CrudEstudiante(ModoDescriptor.Mantenimiento)
+        )
         {
-            GestorDelCrud.Creador.AsignarTitulo("Crear un nuevo estudiante");
-            //GestorDelCrud.Modales[nameof(SelectorDeCurso)] = new SelectorDeCurso(gestorDeEstudiantes.Contexto, gestorDeEstudiantes.Mapeador).Selector;
         }
 
         

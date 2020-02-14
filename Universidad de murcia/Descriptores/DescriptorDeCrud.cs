@@ -29,6 +29,8 @@ namespace UniversidadDeMurcia.Descriptores
         Fecha
     }
 
+    public enum ModoDescriptor { Mantenimiento, Seleccion}
+
 
     public class Posicion
     {
@@ -89,7 +91,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string propiedadParaMostrar { get; private set; }
         public GridModal<Tseleccionado> GridModal { get; set; }
 
-        public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar)
+        public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
               padre: padre
               , id: $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
@@ -102,7 +104,7 @@ namespace UniversidadDeMurcia.Descriptores
             Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
-            GridModal = new GridModal<Tseleccionado>(padre, this);
+            GridModal = new GridModal<Tseleccionado>(padre, this, descriptor);
             padre.AnadirSelector(this);
         }
 
@@ -178,12 +180,9 @@ namespace UniversidadDeMurcia.Descriptores
     public class GridModal<Tseleccionado> : ControlHtml
     {
         public Selector<Tseleccionado> Selector { get; set; }
-        public string gestorDeElementos { get; set; }
-        public string claseDeElemento { get; set; }
-        public List<ColumnaDelGrid> Columnas { get; set; }
-        public string Registros { get; set; }
+        public DescriptorDeCrud<Tseleccionado> Descriptor { get; set; }
 
-        public GridModal(ControlHtml padre, Selector<Tseleccionado> selectorAsociado)
+        public GridModal(ControlHtml padre, Selector<Tseleccionado> selectorAsociado, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
           padre: padre,
           id: selectorAsociado.Id.Replace(TipoControl.Selector.ToString(), TipoControl.GridModal.ToString()),
@@ -196,12 +195,24 @@ namespace UniversidadDeMurcia.Descriptores
             Tipo = TipoControl.GridModal;
             Selector = selectorAsociado;
             Selector.GridModal = this;
+            Descriptor = descriptor;
         }
 
 
         private string RenderGridModal()
         {
             var s = Selector;
+
+            const string _alAbrirLaModal = @"
+                                         $('#idModal').on('show.bs.modal', function (event) {
+                                            AlAbrir('{IdGrid}', '{idSelector}', '{columnaId}', '{columnaMostrar}')
+                                          })
+                                      ";
+            const string _alCerrarLaModal = @"
+                                         $('#idModal').on('hidden.bs.modal', function (event) {
+                                            AlCerrar('{idModal}', '{idGrid}', '{nameSelCheck}')
+                                          })
+                                      ";
 
             const string _htmlModalSelector =
             @"
@@ -216,7 +227,7 @@ namespace UniversidadDeMurcia.Descriptores
                    </div>
                    <div class=¨modal-footer¨>
                      <button type = ¨button¨ class=¨btn btn-secondary¨ data-dismiss=¨modal¨>Cerrar</button>
-                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{idGrid}', '{referenciaChecks}')¨>Seleccionar</button>
+                     <button type = ¨button¨ class=¨btn btn-primary¨ data-dismiss=¨modal¨ onclick=¨AlSeleccionar('{idSelector}', '{idGrid}', '{nameSelCheck}')¨>Seleccionar</button>
                    </div>
                  </div>
                </div>
@@ -230,18 +241,30 @@ namespace UniversidadDeMurcia.Descriptores
 
             var nombreCheckDeSeleccion = $"chksel.{s.IdHtml}";
 
+            var jsAbrirModal = _alAbrirLaModal
+                .Replace("idModal", s.GridModal.IdHtml)
+                .Replace("{IdGrid}", Descriptor.Grid.IdHtml)
+                .Replace("{idSelector}", s.IdHtml)
+                .Replace("{columnaId}", s.propiedadParaFiltrar)
+                .Replace("{columnaMostrar}", s.propiedadParaMostrar);
+
+            var jsCerrarModal = _alCerrarLaModal
+                .Replace("idModal", s.GridModal.IdHtml)
+                .Replace("{IdGrid}", Descriptor.Grid.IdHtml)
+                .Replace("{nameSelCheck}", nombreCheckDeSeleccion);
+
+
             return _htmlModalSelector
                     .Replace("idModal", s.GridModal.IdHtml)
                     .Replace("titulo", s.GridModal.Ayuda)
                     .Replace("{idSelector}", s.IdHtml)
-                    //.Replace("{idGrid}", IdGrid)
-                    .Replace("{referenciaChecks}", $"{nombreCheckDeSeleccion}")
+                    .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)
                     .Replace("{idContenedor}", $"contenedor.{s.GridModal.IdHtml}")
-                    .Replace("{gridDeElementos}", "")
-                    .Replace("AlAbrirLaModal", "")
-                    .Replace("AlCerrarLaModal", "")
+                    .Replace("{gridDeElementos}", Descriptor.RenderControl())
+                    .Replace("AlAbrirLaModal", jsAbrirModal)
+                    .Replace("AlCerrarLaModal", jsCerrarModal)
                     .Render();
         }
 
@@ -602,8 +625,11 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
         public string Ruta { get; private set; }
+        public ModoDescriptor Modo { get; private set; }
 
-        public DescriptorDeCrud(string ruta, string vista, string titulo)
+
+
+        public DescriptorDeCrud(string ruta, string vista, string titulo, ModoDescriptor modo)
         : base(
           padre: null,
           id: typeof(TElemento).Name.Replace("Elemento", ""),
@@ -618,6 +644,7 @@ namespace UniversidadDeMurcia.Descriptores
             Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
             Ruta = ruta;
+            Modo = modo;
         }
 
 
@@ -629,12 +656,15 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderDescriptor()
         {
-            var htmlCrud =
+            var htmlCrud = ModoDescriptor.Mantenimiento == Modo 
+                   ?
                    RenderTitulo() + Environment.NewLine +
                    Menu.RenderControl() + Environment.NewLine +
-                   Filtro.RenderControl() + Environment.NewLine +                   
+                   Filtro.RenderControl() + Environment.NewLine +
+                   Grid.RenderControl() + Environment.NewLine
+                   :
+                   Filtro.RenderControl() + Environment.NewLine +
                    Grid.RenderControl() + Environment.NewLine;
-            //RenderPie();
 
             return htmlCrud.Render();
         }
