@@ -8,8 +8,12 @@ namespace UtilidadesParaIu
 {
     public class Grid
     {
-        string _id;
-        public string Id { get { return _id.ToLower(); } private set { _id = value; } }
+        public string Id { get; private set; }
+
+        public string IdHtml => Id.ToLower();
+
+        public string IdHtmlTabla => $"{IdHtml}_table";
+
         public string Controlador { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
         public List<FilaDelGrid> filas { get; private set; }
@@ -41,9 +45,7 @@ namespace UtilidadesParaIu
 
         public string ToHtml()
         {
-            return (Modelo == ModeloGrid.Tabulator 
-                              ? Tabulator.RenderizarGrid(this) 
-                              : RenderizarGrid(this));
+            return RenderizarGrid(this);
         }
 
 
@@ -167,13 +169,13 @@ namespace UtilidadesParaIu
         private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
         {
             var cabeceraHtml = new StringBuilder();
-            var idCabecera = $"{idGrid}.c.tr.0";
+            var idCabecera = $"{idGrid}_c_tr_0";
             foreach (var columna in columnasGrid)
             {
                 cabeceraHtml.Append(RenderColumnaCabecera(idCabecera,columna));
             }
             cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
-            return $@"<thead id='{idGrid}.cabecera'>{Environment.NewLine}
+            return $@"<thead id='{idGrid}_cabecera'>{Environment.NewLine}
                          <tr id=¨{idCabecera}¨>
                             {cabeceraHtml.ToString()}{Environment.NewLine}
                          </tr>{Environment.NewLine}
@@ -190,7 +192,7 @@ namespace UtilidadesParaIu
                 htmlDetalleGrid.Append(RenderFilaSeleccionable(idGrid, i, fila));
                 i = i + 1;
             }
-            return $@"<tbody id='{idGrid}.detalle'>
+            return $@"<tbody id='{idGrid}_detalle'>
                          {htmlDetalleGrid.ToString()}
                       </tbody>";
         }
@@ -199,22 +201,22 @@ namespace UtilidadesParaIu
         {
             var htmlNavegadorGrid = $@"
             <div class=¨text-center¨>
-                <div id=¨{grid.Id}.Nav¨ style=¨float: left¨>
-                    <div id=¨{grid.Id}.Nav.1¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.Id}')¨>
+                <div id=¨{grid.IdHtml}.Nav¨ style=¨float: left¨>
+                    <div id=¨{grid.IdHtml}.Nav.1¨ data-type=¨img¨ style=¨display:inline-block¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.IdHtml}')¨>
                     </div>
-                    <div id=¨{grid.Id}.Nav.2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨{grid.Id}.Nav.2.Reg¨ value=¨{grid._CantidadPorLeer}¨ 
+                    <div id=¨{grid.IdHtml}.Nav.2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
+                        <input type=¨number¨ id=¨{grid.IdHtml}.Nav.2.Reg¨ value=¨{grid._CantidadPorLeer}¨ 
                                              min=¨1¨ step=¨1¨ max=¨999¨ 
                                              posicion=¨{grid.Ultimo_Leido}¨  
                                              controlador=¨{grid.Controlador}¨  
                                              totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
                                              style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
-                    <div id=¨id=¨{grid.Id}.Nav.3¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.Id}')¨>
-                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.Id}')¨>
-                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.Id}')¨>
+                    <div id=¨id=¨{grid.IdHtml}.Nav.3¨ data-type=¨img¨ style=¨display:inline-block¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.IdHtml}')¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.IdHtml}')¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.IdHtml}')¨>
                     </div>
                 </div>
                 <div  style=¨float: right¨>
@@ -233,13 +235,11 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid grid)
         {
-            var htmlTabla = $@"<table id=¨{grid.Id}¨ 
+            var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ 
                                       class=¨table table-hover¨ 
-                                      width=¨100%¨
-                                      seleccionables ={grid.Seleccionables}
-                                      seleccionados =¨¨>{Environment.NewLine}" +
-                            $"   {RenderCabecera(grid.Id, grid.columnas)}{Environment.NewLine}" +
-                            $"   {RenderDetalleGrid(grid.Id, grid.filas)}" +
+                                      width=¨100%¨>{Environment.NewLine}" +
+                            $"   {RenderCabecera(grid.IdHtml, grid.columnas)}{Environment.NewLine}" +
+                            $"   {RenderDetalleGrid(grid.IdHtml, grid.filas)}" +
                             $"</table>";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());

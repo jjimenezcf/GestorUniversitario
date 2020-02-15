@@ -187,7 +187,7 @@ namespace UniversidadDeMurcia.Descriptores
         public GridModal(ControlHtml padre, Selector<Tseleccionado> selectorAsociado, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
           padre: padre,
-          id: selectorAsociado.Id.Replace(TipoControl.Selector.ToString(), TipoControl.GridModal.ToString()),
+          id: $"Modal_{(selectorAsociado.Id.Replace("_"+TipoControl.Selector.ToString(),""))}",
           etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}",
           propiedad: selectorAsociado.propiedadParaMostrar,
           ayuda: selectorAsociado.Ayuda,
@@ -264,7 +264,7 @@ namespace UniversidadDeMurcia.Descriptores
                     .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)
-                    .Replace("{idContenedor}", $"contenedor.{s.Modal.IdHtml}")
+                    .Replace("{idContenedor}", $"{s.Modal.IdHtml}_contenedor")
                     .Replace("{gridDeElementos}", Descriptor.RenderControl())
                     .Replace("AlAbrirLaModal", jsAbrirModal)
                     .Replace("AlCerrarLaModal", jsCerrarModal)
@@ -284,8 +284,8 @@ namespace UniversidadDeMurcia.Descriptores
 
         public TablaBloque(ControlHtml padre, string identificador, Dimension dimension, ICollection<ControlHtml> controles)
         : base(
-          padre: padre,
-          id: $"tbl_{identificador}",
+          padre: padre ,
+          id: $"{padre.Id}_Tabla",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -370,7 +370,7 @@ namespace UniversidadDeMurcia.Descriptores
         public Bloque(ZonaDeFiltro padre, string titulo, Dimension dimension)
         : base(
           padre: padre,
-          id: $"blo_{padre.Id}_{padre.Bloques.Count}",
+          id: $"{padre.Id}_{padre.Bloques.Count}_bloque",
           etiqueta: titulo,
           propiedad: null,
           ayuda: null,
@@ -435,14 +435,14 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class ZonaDeOpciones<Telemento> : ControlHtml
+    public class ZonaDeMenu<Telemento> : ControlHtml
     {
         public ICollection<Opcion<Telemento>> Opciones { get; private set; } = new List<Opcion<Telemento>>();
 
-        public ZonaDeOpciones(DescriptorDeCrud<Telemento> padre, VistaCrud vista)
+        public ZonaDeMenu(DescriptorDeCrud<Telemento> padre, VistaCrud vista)
         : base(
           padre: padre,
-          id: $"Men_{padre.Id}",
+          id: $"{padre.Id}_Menu",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -461,7 +461,7 @@ namespace UniversidadDeMurcia.Descriptores
             foreach (Opcion<Telemento> o in Opciones)
             {
                 htmlOpciones = htmlOpciones + htmlRef
-                                             .Replace("{idOpc}", o.Id)
+                                             .Replace("{idOpc}", o.IdHtml)
                                              .Replace("{ruta}", o.Ruta)
                                              .Replace("{accion}", o.Accion)
                                              .Replace("{titulo}", o.Etiqueta)
@@ -469,7 +469,7 @@ namespace UniversidadDeMurcia.Descriptores
                                              Environment.NewLine;
             }
 
-            return htmlMenu.Replace("{idMenu}", Id).Replace("{hmlOpciones}", $"{Environment.NewLine}{htmlOpciones}");
+            return htmlMenu.Replace("{idMenu}", IdHtml).Replace("{hmlOpciones}", $"{Environment.NewLine}{htmlOpciones}");
         }
 
         public override string RenderControl()
@@ -491,7 +491,7 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeGrid(DescriptorDeCrud<TElemento> padre)
         : base(
           padre: padre,
-          id: $"grid_{padre.Id}",
+          id: $"{padre.Id}_Grid",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -503,14 +503,16 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderGrid()
         {
-            const string htmlDiv = @"<div id = ¨idContenedor¨>     
-                                     contenido 
+            const string htmlDiv = @"<div id = ¨{idGrid}¨
+                                      seleccionables =2
+                                      seleccionados =¨¨>     
+                                     tabla_Navegador 
                                     </div>";
-            var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor.{IdHtml}").Replace("contenido", RenderFilasDelGrid());
+            var htmlContenedor = htmlDiv.Replace("{idGrid}", $"{IdHtml}").Replace("tabla_Navegador", RenderDelGrid());
             return htmlContenedor;
         }
 
-        public string RenderFilasDelGrid()
+        public string RenderDelGrid()
         {
             var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
             {
@@ -534,7 +536,7 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeFiltro(ControlHtml padre)
         : base(
           padre: padre,
-          id: $"flt_{padre.Id}",
+          id: $"{padre.Id}_Filtro",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -624,7 +626,7 @@ namespace UniversidadDeMurcia.Descriptores
         public VistaCrud VistaMnt { get; private set; }
         public VistaCrud VistaCreacion { get; private set; }
 
-        public ZonaDeOpciones<TElemento> Menu { get; set; }
+        public ZonaDeMenu<TElemento> Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
         public string Ruta { get; private set; }
@@ -654,7 +656,7 @@ namespace UniversidadDeMurcia.Descriptores
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
             VistaCreacion = new VistaCrud(this, Ruta, accion, textoMenu);
-            Menu = new ZonaDeOpciones<TElemento>(this, VistaCreacion);
+            Menu = new ZonaDeMenu<TElemento>(this, VistaCreacion);
         }
 
         private string RenderDescriptor()
@@ -705,7 +707,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
 
-        public Opcion(ZonaDeOpciones<Telemento> padre, string ruta, string accion, string titulo)
+        public Opcion(ZonaDeMenu<Telemento> padre, string ruta, string accion, string titulo)
         : base(
           padre: padre,
           id: $"opc_{padre.Id}_{padre.Opciones.Count}",
@@ -718,7 +720,7 @@ namespace UniversidadDeMurcia.Descriptores
             Tipo = TipoControl.Opcion;
             Ruta = ruta;
             Accion = accion;
-            ((ZonaDeOpciones<Telemento>)Padre).Opciones.Add(this);
+            ((ZonaDeMenu<Telemento>)Padre).Opciones.Add(this);
         }
 
         public override string RenderControl()

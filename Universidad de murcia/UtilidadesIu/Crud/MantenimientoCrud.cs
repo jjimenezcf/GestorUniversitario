@@ -128,7 +128,7 @@ namespace UniversidadDeMurcia.UtilidadesIu
 
             var grid = new Grid(IdGrid, columnas, filas, PosicionInicial, CantidadPorLeer) { Controlador = Ruta, TotalEnBd = TotalEnBd };
             var htmlGrid = grid.ToHtml();
-            var htmlContenedor = htmlDiv.Replace("idContenedor", $"contenedor.{grid.Id}").Replace("contenido", htmlGrid);
+            var htmlContenedor = htmlDiv.Replace("idContenedor", $"{grid.IdHtml}").Replace("contenido", htmlGrid);
             return htmlContenedor;
         }
 

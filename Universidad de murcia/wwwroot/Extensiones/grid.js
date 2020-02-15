@@ -87,9 +87,9 @@ function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
 }
 
 function SustituirGrid(idGrid, htmlGrid) {
-    var htmlContenedorGrid = document.getElementById(`contenedor.${idGrid}`);
+    var htmlContenedorGrid = document.getElementById(`${idGrid}`);
     if (!htmlGrid) {
-        console.log(`No se ha localizado el contenedor contenedor.${idGrid}`);
+        console.log(`No se ha localizado el contenedor ${idGrid}`);
         return;
     }
 

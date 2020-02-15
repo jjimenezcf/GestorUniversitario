@@ -62,7 +62,7 @@ namespace UniversidadDeMurcia.Controllers
         {
 
             GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), "", orden));
-            return GestorDelCrud.Descriptor.Grid.RenderFilasDelGrid();
+            return GestorDelCrud.Descriptor.Grid.RenderDelGrid();
 
             //GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
             //GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
