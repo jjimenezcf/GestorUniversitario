@@ -8,9 +8,9 @@
 
 
 function Leer(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var controlador = htmlImputCantidad.getAttribute("controlador");
@@ -19,9 +19,9 @@ function Leer(idGrid) {
 }
 
 function LeerAnteriores(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion") - 2 * cantidad;
@@ -34,9 +34,9 @@ function LeerAnteriores(idGrid) {
 }
 
 function LeerSiguientes(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}.Nav.2.Reg  no está definido`);
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("posicion");
@@ -50,9 +50,9 @@ function LeerSiguientes(idGrid) {
 }
 
 function LeerUltimos(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}.Nav.2.Reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento${idGrid}.Nav.2.Reg  no está definido`);
+        console.log(`El elemento${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = htmlImputCantidad.getAttribute("totalEnBd") - cantidad;

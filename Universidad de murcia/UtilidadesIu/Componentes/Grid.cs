@@ -13,6 +13,11 @@ namespace UtilidadesParaIu
         public string IdHtml => Id.ToLower();
 
         public string IdHtmlTabla => $"{IdHtml}_table";
+        public string IdHtmlNavegador => $"{IdHtml}_nav";
+        public string IdHtmlNavegador_1 => $"{IdHtmlNavegador}_1";
+        public string IdHtmlNavegador_2 => $"{IdHtmlNavegador}_2";
+        public string IdHtmlNavegador_3 => $"{IdHtmlNavegador}_3";
+        public string IdHtmlPorLeer => $"{IdHtmlNavegador_2}_reg";
 
         public string Controlador { get; set; }
         public List<ColumnaDelGrid> columnas { get; private set; }
@@ -201,19 +206,19 @@ namespace UtilidadesParaIu
         {
             var htmlNavegadorGrid = $@"
             <div class=¨text-center¨>
-                <div id=¨{grid.IdHtml}.Nav¨ style=¨float: left¨>
-                    <div id=¨{grid.IdHtml}.Nav.1¨ data-type=¨img¨ style=¨display:inline-block¨>
+                <div id=¨{grid.IdHtmlNavegador}¨ style=¨float: left¨>
+                    <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨ style=¨display:inline-block¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.IdHtml}')¨>
                     </div>
-                    <div id=¨{grid.IdHtml}.Nav.2¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨{grid.IdHtml}.Nav.2.Reg¨ value=¨{grid._CantidadPorLeer}¨ 
+                    <div id=¨{grid.IdHtmlNavegador_2}¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
+                        <input type=¨number¨ id=¨{grid.IdHtmlPorLeer}¨ value=¨{grid._CantidadPorLeer}¨ 
                                              min=¨1¨ step=¨1¨ max=¨999¨ 
                                              posicion=¨{grid.Ultimo_Leido}¨  
                                              controlador=¨{grid.Controlador}¨  
                                              totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
                                              style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
                     </div>
-                    <div id=¨id=¨{grid.IdHtml}.Nav.3¨ data-type=¨img¨ style=¨display:inline-block¨>
+                    <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ style=¨display:inline-block¨>
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.IdHtml}')¨>
                         <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.IdHtml}')¨>
                         <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.IdHtml}')¨>
