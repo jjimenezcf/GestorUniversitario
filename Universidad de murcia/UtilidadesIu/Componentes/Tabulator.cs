@@ -11,7 +11,7 @@ namespace UtilidadesParaIu
         public static string RenderizarGrid(Grid grid)
         {
             var tabulator = $@"
-            <div id=¨{grid.Id}¨>
+            <div id=¨{grid.IdHtml}¨>
             </div>";
 
             var seleccionable = $"selectable: {grid.ConSeleccion.ToString().ToLower()}";
@@ -25,9 +25,9 @@ namespace UtilidadesParaIu
                 });
             </script>
             "
-            .Replace("{grid.Id}", grid.Id)
+            .Replace("{grid.Id}", grid.IdHtml)
             .Replace("{seleccionable}", seleccionable)
-            .Replace("{columnas}", TabuladorCabecera(grid.Id, grid.columnas));
+            .Replace("{columnas}", TabuladorCabecera(grid.IdHtml, grid.columnas));
 
             return $"{tabulator}{Environment.NewLine}{crearTabulator}";
         }
