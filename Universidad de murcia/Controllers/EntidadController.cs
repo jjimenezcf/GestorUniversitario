@@ -13,26 +13,27 @@ using UniversidadDeMurcia.UtilidadesIu;
 using Newtonsoft.Json;
 using System.IO;
 using UniversidadDeMurcia.Descriptores;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace UniversidadDeMurcia.Controllers
 {
 
-    public class EntidadController<TContexto, TRegistro, TElemento> : BaseController 
-        where TContexto: ContextoDeElementos  
-        where TRegistro : RegistroBase 
+    public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
+        where TContexto : ContextoDeElementos
+        where TRegistro : RegistroBase
         where TElemento : ElementoBase
     {
 
-        protected GestorDeElementos<TContexto, TRegistro,TElemento> GestorDeElementos { get; }
+        protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
         protected DescriptorDeCrud<TElemento> Descriptor { get; private set; }
 
-        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro,TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
-        :base(gestorErrores)
+        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
+        : base(gestorErrores)
         {
-            var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller","")}.json";
+            var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller", "")}.json";
             if (System.IO.File.Exists(ficheroDescriptorCrud))
             {
                 var file = new StreamReader(ficheroDescriptorCrud);
@@ -41,7 +42,7 @@ namespace UniversidadDeMurcia.Controllers
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales,descriptor);
+            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales, descriptor);
             Descriptor = descriptor;
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
@@ -58,10 +59,10 @@ namespace UniversidadDeMurcia.Controllers
             return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
         }
 
-        public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string orden)
+        public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
         {
 
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), "", orden));
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
             return GestorDelCrud.Descriptor.Grid.RenderDelGrid();
 
             //GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
@@ -84,7 +85,7 @@ namespace UniversidadDeMurcia.Controllers
             ViewBag.DatosDeConexion = DatosDeConexion;
             return base.View(viewName, model);
         }
-        
+
         protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()
         {
             return new List<ColumnaDelGrid>();
@@ -94,12 +95,12 @@ namespace UniversidadDeMurcia.Controllers
         {
             return new List<PeticionMvc>();
         }
-        
+
         protected virtual List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<TElemento> elementos)
         {
             return new List<FilaDelGrid>();
         }
-  
+
         protected async Task<IActionResult> CrearObjeto(TElemento iuElemento)
         {
             try
@@ -147,21 +148,26 @@ namespace UniversidadDeMurcia.Controllers
 
             return View(GestorDelCrud.Editor.Vista, elemento);
         }
-        
+
         protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(string orden)
         {
             var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.PosicionInicial
                                                           , GestorDelCrud.Mantenimiento.CantidadPorLeer
+                                                          , new List<FiltroSql>()
                                                           , orden.ParsearOrdenacion());
 
             return (elementos, total);
         }
 
+
         protected (IEnumerable<TElemento> elementos, int totalEnBd) Leer(int posicion, int cantidad, string filtro, string orden)
         {
             Descriptor.Grid.CantidadPorLeer = cantidad;
             Descriptor.Grid.PosicionInicial = posicion;
-            return GestorDeElementos.Leer(posicion, cantidad, orden.ParsearOrdenacion());
+            
+            List<FiltroSql> filtros = JsonConvert.DeserializeObject<List<FiltroSql>>(filtro);
+
+            return GestorDeElementos.Leer(posicion, cantidad, filtros, orden.ParsearOrdenacion());
         }
 
     }

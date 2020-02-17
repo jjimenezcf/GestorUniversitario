@@ -13,14 +13,23 @@ using Utilidades;
 namespace Gestor.Elementos
 {
 
+    public class FiltroSql
+    {
+        public string Propiedad { get; set; }
+        public string Criterio { get; set; }
+        public string Valor { get; set; }
+    }
+
+
     public static class Filtros
     {
-        public const string FiltroPorId = "PorId";
+        public const string FiltroPorId = "Id";
 
-        public static IQueryable<TRegistro> Filtro<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, string> filtros) where TRegistro : RegistroBase
+        public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> set, List<FiltroSql> filtros) where TRegistro : RegistroBase
         {
-            if (filtros.ContainsKey(FiltroPorId))
-                return set.Where(x => x.Id == filtros[FiltroPorId].Entero());
+            foreach(FiltroSql filtro in filtros)
+                if (filtro.Propiedad.ToLower() == FiltroPorId.ToLower())
+                   return set.Where(x => x.Id == filtro.Valor.Entero());
 
             return set;
         }
@@ -99,15 +108,13 @@ namespace Gestor.Elementos
 
         public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad)
         {
-            return Leer(posicion, cantidad, new Dictionary<string, Ordenacion>());
+            return Leer(posicion, cantidad, new List<FiltroSql>(), new Dictionary<string, Ordenacion>());
         }
 
-        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, Dictionary<string, Ordenacion> orden)
+        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, List<FiltroSql> filtros, Dictionary<string, Ordenacion> orden)
         {
             List<TRegistro> elementosDeBd;
-            var filtros = new Dictionary<string, string>();
 
-            //filtros[Filtros.FiltroPorId] = "1";
             IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
 
             var total = registros.Count();
@@ -123,9 +130,9 @@ namespace Gestor.Elementos
             return registros.Orden(orden);
         }
 
-        protected virtual IQueryable<TRegistro> IncluirFiltros(IQueryable<TRegistro> registros, Dictionary<string, string> filtros)
+        protected virtual IQueryable<TRegistro> IncluirFiltros(IQueryable<TRegistro> registros, List<FiltroSql> filtros)
         {
-            return registros.Filtro(filtros);
+            return registros.AplicarFiltroId(filtros);
         }
 
         public (IEnumerable<TElemento>, int) LeerTodos()

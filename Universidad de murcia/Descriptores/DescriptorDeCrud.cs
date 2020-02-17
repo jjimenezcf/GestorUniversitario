@@ -29,7 +29,7 @@ namespace UniversidadDeMurcia.Descriptores
         Fecha
     }
 
-    public enum ModoDescriptor { Mantenimiento, Seleccion}
+    public enum ModoDescriptor { Mantenimiento, Seleccion }
 
 
     public class Posicion
@@ -57,12 +57,15 @@ namespace UniversidadDeMurcia.Descriptores
         public string Etiqueta { get; private set; }
         public string Propiedad { get; private set; }
         public string Ayuda { get; private set; }
-        public bool DeFiltrado { get; set; } = false;
         public Posicion Posicion { get; private set; }
-
         public TipoControl Tipo { get; protected set; }
 
+        public string TipoHtml => Tipo.ToString().ToLower();
+
         public ControlHtml Padre { get; set; }
+        public bool DeFiltrado { get; set; } = false;
+
+        public string Criterio { get; set; }
 
         public ControlHtml(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         {
@@ -84,6 +87,18 @@ namespace UniversidadDeMurcia.Descriptores
 
         public abstract string RenderControl();
 
+        public virtual string RenderAtributos(string atributos = "")
+        {
+            atributos += $"tipo=¨{TipoHtml}¨ propiedad=¨{Propiedad}¨ ";
+
+            if (DeFiltrado)
+            {
+                atributos += $"filtro=¨S¨ criterio=¨{Criterio}¨ ";
+            }
+
+            return atributos;
+        }
+
     }
 
     public class Selector<Tseleccionado> : ControlHtml
@@ -94,13 +109,13 @@ namespace UniversidadDeMurcia.Descriptores
 
         public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
-              padre: padre
-              , id: $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
-              , etiqueta
-              , propiedad
-              , ayuda
-              , posicion
-              )
+          padre: padre
+          , id: $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
+          , etiqueta
+          , propiedad
+          , ayuda
+          , posicion
+          )
         {
             Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
@@ -108,13 +123,14 @@ namespace UniversidadDeMurcia.Descriptores
             Modal = new GridModal<Tseleccionado>(padre, this, descriptor);
             padre.AnadirSelector(this);
             DeFiltrado = true;
+            Criterio = "igual";
         }
 
 
         public string RenderSelector()
         {
             return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {(DeFiltrado?$"filtro=¨S¨":"")} placeholder=¨{Ayuda}¨>
+                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {base.RenderAtributos()} placeholder=¨{Ayuda}¨>
                        <div class=¨input-group-append¨>
                             <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
                        </div>
@@ -141,18 +157,19 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Tipo = TipoControl.Editor;
             DeFiltrado = true;
+            Criterio = "contiene";
             padre.AnadirControl(this);
         }
 
         public override string RenderControl()
         {
-            return RenderInput();
+            return RenderEditor();
         }
 
-        public string RenderInput()
+        public string RenderEditor()
         {
             return $@"<div class=¨input-group mb-3¨>
-                         <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {(DeFiltrado ? $"filtro=¨S¨" : "")}  placeholder=¨{Ayuda}¨>
+                         <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {base.RenderAtributos()}  placeholder=¨{Ayuda}¨>
                       </div>
                   ";
         }
@@ -190,7 +207,7 @@ namespace UniversidadDeMurcia.Descriptores
         public GridModal(ControlHtml padre, Selector<Tseleccionado> selectorAsociado, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
           padre: padre,
-          id: $"Modal_{(selectorAsociado.Id.Replace("_"+TipoControl.Selector.ToString(),""))}",
+          id: $"Modal_{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
           etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}",
           propiedad: selectorAsociado.propiedadParaMostrar,
           ayuda: selectorAsociado.Ayuda,
@@ -287,7 +304,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public TablaBloque(ControlHtml padre, string identificador, Dimension dimension, ICollection<ControlHtml> controles)
         : base(
-          padre: padre ,
+          padre: padre,
           id: $"{padre.Id}_Tabla",
           etiqueta: null,
           propiedad: null,
@@ -299,7 +316,7 @@ namespace UniversidadDeMurcia.Descriptores
             Dimension = dimension;
             Controles = controles;
         }
-        
+
         public override string RenderControl()
         {
             return RenderTabla();
@@ -477,7 +494,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public override string RenderControl()
         {
-           return RenderOpcionesMenu();
+            return RenderOpcionesMenu();
         }
     }
 
@@ -670,7 +687,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderDescriptor()
         {
-            var htmlCrud = ModoDescriptor.Mantenimiento == Modo 
+            var htmlCrud = ModoDescriptor.Mantenimiento == Modo
                    ?
                    RenderTitulo() + Environment.NewLine +
                    Menu.RenderControl() + Environment.NewLine +

@@ -5,8 +5,53 @@
 /// Funciones de navegación de un grid
 
 //************************************************************************************************************************************************************************************/
+function ObtenerFiltros(idGrid) {
+    var arrayIds = ObtenerControlesDeFiltro(idGrid);
+    var clausulas = new Array();
+    for (let id of arrayIds) {
+        var htmlImput = document.getElementById(`${id}`);
+        var tipo = htmlImput.getAttribute('tipo');
+        var clausula = null;
+        if (tipo === "editor") {
+            clausula = ObtenerClausulaEditor(htmlImput);
+        }
+        if (tipo === "selector") {
+            clausula = ObtenerClausulaSelector(htmlImput);
+        }
+        if (clausula)
+            clausulas.push(clausula);
+    }
+    return JSON.stringify(clausulas);
+}
+
+function ObtenerClausulaSelector(htmlSelector) {
+    var propiedad = htmlSelector.getAttribute('propiedad');
+    var criterio = htmlSelector.getAttribute('criterio');
+    var valor = null;
+    var clausula = null;
+    if (htmlSelector.hasAttribute("idsSeleccionados")) {
+        ids = htmlSelector.getAttribute("idsSeleccionados");
+        if (!ids.isNullOrEmpty()) {
+            valor = ids;
+            clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+        }
+    }
+    return clausula;
+}
+
+function ObtenerClausulaEditor(htmlEditor) {
+    var propiedad = htmlEditor.getAttribute('propiedad');
+    var criterio = htmlEditor.getAttribute('criterio');
+    var valor = htmlEditor.value;
+    var clausula = null;
+    if (!valor.isNullOrEmpty())
+        clausula = {propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}`};
+
+    return clausula;
+}
+
 function ObtenerControlesDeFiltro(idGrid) {
-    var arryIds = new Array();
+    var arrayIds = new Array();
     var htmlGrid = document.getElementById(`${idGrid}`);
     var idHtmlFiltro = htmlGrid.getAttribute("zonaDeFiltro");
     var htmlFiltro = document.getElementById(`${idHtmlFiltro}`);
@@ -21,10 +66,8 @@ function ObtenerControlesDeFiltro(idGrid) {
             arrayIds.push(htmlImput.getAttribute('Id'));
         }
     }
-
     return arrayIds;
 }
-
 
 function Leer(idGrid) {
     var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
@@ -33,9 +76,8 @@ function Leer(idGrid) {
     else {
         var cantidad = htmlImputCantidad.value;
         var controlador = htmlImputCantidad.getAttribute("controlador");
-        var arrayIds = ObtenerControlesDeFiltro(idGrid);
-        var filtroJson = "";
-        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
+        var filtroJson = ObtenerFiltros(idGrid);
+        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&filtro=${filtroJson}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }
 

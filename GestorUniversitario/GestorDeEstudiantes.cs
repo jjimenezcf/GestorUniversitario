@@ -10,16 +10,19 @@ namespace Gestor.Elementos.Universitario
 {
     static class FiltroEstudiante
     {
-        public const string FiltroPorApellido= "PorApellido";
+        public const string _FiltroPorNombre = "Nombre";
 
-        public static IQueryable<RegistroDeEstudiante> Filtro(this IQueryable<RegistroDeEstudiante> set, Dictionary<string, string> filtros)
+        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> set, List<FiltroSql> filtros) where T : RegistroDeEstudiante
         {
-            if (filtros.ContainsKey(FiltroPorApellido))
-                return set.Where(x => x.Apellido == filtros[FiltroPorApellido]);
+            foreach (FiltroSql filtro in filtros)
+                if (filtro.Propiedad.ToLower() == _FiltroPorNombre.ToLower())
+                    return set.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
 
             return set;
         }
     }
+
+
 
     static class OrdenacionEstudiante
     {
@@ -68,11 +71,14 @@ namespace Gestor.Elementos.Universitario
             return registros.Orden(orden);
         }
 
-        protected override IQueryable<RegistroDeEstudiante> IncluirFiltros(IQueryable<RegistroDeEstudiante> registros, Dictionary<string, string> filtros)
+               
+
+        protected override IQueryable<RegistroDeEstudiante> IncluirFiltros(IQueryable<RegistroDeEstudiante> registros, List<FiltroSql> filtros) 
         {
             registros = base.IncluirFiltros(registros, filtros);
-            return registros.Filtro(filtros);
+            return registros.AplicarFiltroNombre(filtros);
         }
+                
 
         protected override RegistroDeEstudiante LeerConDetalle(int Id)
         {
