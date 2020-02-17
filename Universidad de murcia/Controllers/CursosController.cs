@@ -32,13 +32,6 @@ namespace UniversidadDeMurcia.Controllers
         }
 
 
-        private void PrepararProximoOrden(string orden)
-        {
-            ViewData[nameof(ElementoCurso.Titulo)] = orden.IsNullOrEmpty() || orden == $"{nameof(ElementoCurso.Titulo)}Asc"
-                                                         ? $"{nameof(ElementoCurso.Titulo)}Des"
-                                                         : $"{nameof(ElementoCurso.Titulo)}Asc";
-        }
-
         public IActionResult IraCrearCurso()
         {
             return View(GestorDelCrud.Creador.Vista, new ElementoCurso());
