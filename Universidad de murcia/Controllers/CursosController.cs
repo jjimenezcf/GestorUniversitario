@@ -18,7 +18,6 @@ namespace UniversidadDeMurcia.Controllers
         public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) 
         : base
         (
-         nameof(CursosController), 
          gestorDeCursos, 
          gestorDeErrores, 
          new CrudCurso(ModoDescriptor.Mantenimiento)

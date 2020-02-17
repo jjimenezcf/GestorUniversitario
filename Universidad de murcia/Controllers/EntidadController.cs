@@ -30,13 +30,13 @@ namespace UniversidadDeMurcia.Controllers
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
 
-        public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
+        public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : base(gestorErrores)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
-            GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales, descriptor);
+            GestorDelCrud = new GestorCrud<TElemento>(descriptor);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -47,11 +47,14 @@ namespace UniversidadDeMurcia.Controllers
             base.Dispose(disposing);
         }
 
+        //Llamada desde vista MVC
         public IActionResult Index()
         {
             return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
         }
 
+
+        //Lamada desde Grid.js
         public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
         {
             GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
@@ -71,20 +74,6 @@ namespace UniversidadDeMurcia.Controllers
             return base.View(viewName, model);
         }
 
-        protected virtual List<ColumnaDelGrid> DefinirColumnasDelGrid()
-        {
-            return new List<ColumnaDelGrid>();
-        }
-
-        protected virtual List<PeticionMvc> DefinirOpcionesGenerales()
-        {
-            return new List<PeticionMvc>();
-        }
-
-        protected virtual List<FilaDelGrid> MapearElementosAlGrid(IEnumerable<TElemento> elementos)
-        {
-            return new List<FilaDelGrid>();
-        }
 
         protected async Task<IActionResult> CrearObjeto(TElemento iuElemento)
         {

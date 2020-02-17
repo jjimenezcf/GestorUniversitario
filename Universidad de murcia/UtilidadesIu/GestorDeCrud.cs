@@ -11,10 +11,7 @@ namespace UtilidadesParaIu
 
         public string NombreDelObjeto => typeof(T).Name;
         public string ClaseDeElemento => NombreDelObjeto.Replace("Elemento", "");
-
-        public string Controlador { get; private set; }
-        
-        public string Titulo { get; set; }
+                
         public CreacionCrud<T> Creador { get; }
         public EdicionCrud<T> Editor { get; }
         public DetalleCrud<T> Detalle { get; }
@@ -25,12 +22,9 @@ namespace UtilidadesParaIu
 
         private string _Ruta => $"{NombreDelObjeto.Replace("Elemento", "")}s";
 
-        public GestorCrud(string controlador,  Func<List<ColumnaDelGrid>> definirColumnasDelGrid, Func<List<PeticionMvc>> definirOpcionesGenerales, DescriptorDeCrud<T> descriptor = null)
+        public GestorCrud(DescriptorDeCrud<T> descriptor)
         {
-            Controlador = controlador.Replace("Controller", "");
-            Titulo = $"Gestor de {NombreDelObjeto}";
-            Descriptor = descriptor;            
-
+            Descriptor = descriptor;    
             Creador = new CreacionCrud<T>();            
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();

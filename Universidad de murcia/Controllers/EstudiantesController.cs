@@ -19,7 +19,6 @@ namespace UniversidadDeMurcia.Controllers
         public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
         :base
         (
-          nameof(EstudiantesController), 
           gestorDeEstudiantes, 
           gestorDeErrores, 
           new CrudEstudiante(ModoDescriptor.Mantenimiento)
