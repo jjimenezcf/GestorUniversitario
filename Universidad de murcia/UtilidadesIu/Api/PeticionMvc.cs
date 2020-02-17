@@ -12,21 +12,6 @@ namespace UniversidadDeMurcia.UtilidadesIu
         public string Accion { get; set; }
     }
 
-    public class Control
-    {
-        
 
-    }
 
-    public class ListaDeControles
-    {
-        public List<Control> Controles = new List<Control>();
-
-    }
-
-    public class ZonaDeFiltro
-    {
-        public ListaDeControles Controles;
-
-    }
 }

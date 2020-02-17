@@ -15,8 +15,6 @@ namespace UtilidadesParaIu
         public string Controlador { get; private set; }
         
         public string Titulo { get; set; }
-        public Dictionary<string, SelectorModal> Modales = new Dictionary<string, SelectorModal>();
-
         public CreacionCrud<T> Creador { get; }
         public EdicionCrud<T> Editor { get; }
         public DetalleCrud<T> Detalle { get; }
