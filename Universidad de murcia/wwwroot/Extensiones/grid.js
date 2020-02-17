@@ -5,6 +5,25 @@
 /// Funciones de navegación de un grid
 
 //************************************************************************************************************************************************************************************/
+function ObtenerControlesDeFiltro(idGrid) {
+    var arryIds = new Array();
+    var htmlGrid = document.getElementById(`${idGrid}`);
+    var idHtmlFiltro = htmlGrid.getAttribute("zonaDeFiltro");
+    var htmlFiltro = document.getElementById(`${idHtmlFiltro}`);
+    var arrayHtmlImput = htmlFiltro.getElementsByTagName('input');
+
+    for (let htmlImput of arrayHtmlImput) {
+        var esFiltro = htmlImput.getAttribute('filtro');
+        if (esFiltro === 'S') {
+            var id = htmlImput.getAttribute('Id');
+            if (id === null)
+                console.log(`Falta el atributo id del componente de filtro ${htmlImput}`);
+            arrayIds.push(htmlImput.getAttribute('Id'));
+        }
+    }
+
+    return arrayIds;
+}
 
 
 function Leer(idGrid) {
@@ -14,6 +33,8 @@ function Leer(idGrid) {
     else {
         var cantidad = htmlImputCantidad.value;
         var controlador = htmlImputCantidad.getAttribute("controlador");
+        var arrayIds = ObtenerControlesDeFiltro(idGrid);
+        var filtroJson = "";
         LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
     }
 }

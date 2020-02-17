@@ -57,6 +57,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string Etiqueta { get; private set; }
         public string Propiedad { get; private set; }
         public string Ayuda { get; private set; }
+        public bool DeFiltrado { get; set; } = false;
         public Posicion Posicion { get; private set; }
 
         public TipoControl Tipo { get; protected set; }
@@ -106,13 +107,14 @@ namespace UniversidadDeMurcia.Descriptores
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new GridModal<Tseleccionado>(padre, this, descriptor);
             padre.AnadirSelector(this);
+            DeFiltrado = true;
         }
 
 
         public string RenderSelector()
         {
             return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {(DeFiltrado?$"filtro=¨S¨":"")} placeholder=¨{Ayuda}¨>
                        <div class=¨input-group-append¨>
                             <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
                        </div>
@@ -128,9 +130,9 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class Editor : ControlHtml
     {
-        public Editor(Bloque padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
+        public Editor(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(padre: padre
-              , id: $"edt_{id}"
+              , id: $"{padre.Id}_{propiedad}"
               , etiqueta
               , propiedad
               , ayuda
@@ -138,6 +140,7 @@ namespace UniversidadDeMurcia.Descriptores
               )
         {
             Tipo = TipoControl.Editor;
+            DeFiltrado = true;
             padre.AnadirControl(this);
         }
 
@@ -149,7 +152,7 @@ namespace UniversidadDeMurcia.Descriptores
         public string RenderInput()
         {
             return $@"<div class=¨input-group mb-3¨>
-                         <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ placeholder=¨{Ayuda}¨>
+                         <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {(DeFiltrado ? $"filtro=¨S¨" : "")}  placeholder=¨{Ayuda}¨>
                       </div>
                   ";
         }
@@ -161,7 +164,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         public Desplegable(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(padre: padre
-              , id: $"ddl_{id}"
+              , id: $"{padre.Id}_ddl"
               , etiqueta
               , propiedad
               , ayuda
@@ -503,12 +506,18 @@ namespace UniversidadDeMurcia.Descriptores
 
         private string RenderGrid()
         {
+
+            var idHtmlZonaFiltro = ((DescriptorDeCrud<TElemento>)Padre).Filtro.IdHtml;
             const string htmlDiv = @"<div id = ¨{idGrid}¨
                                       seleccionables =2
-                                      seleccionados =¨¨>     
+                                      seleccionados =¨¨
+                                      zonaDeFiltro = ¨{idFiltro}¨
+                                    >     
                                      tabla_Navegador 
                                     </div>";
-            var htmlContenedor = htmlDiv.Replace("{idGrid}", $"{IdHtml}").Replace("tabla_Navegador", RenderDelGrid());
+            var htmlContenedor = htmlDiv.Replace("{idGrid}", $"{IdHtml}")
+                                        .Replace("{idFiltro}", idHtmlZonaFiltro)
+                                        .Replace("tabla_Navegador", RenderDelGrid());
             return htmlContenedor;
         }
 
@@ -547,7 +556,7 @@ namespace UniversidadDeMurcia.Descriptores
             var b1 = new Bloque(this, "General", new Dimension(1, 2));
             new Bloque(this, "Común", new Dimension(1, 2));
 
-            new Editor(padre: b1, id: $"{Id}_b1_filtro", etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            new Editor(padre: b1, etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
 
         public void AnadirBloque(Bloque bloque)
@@ -600,10 +609,10 @@ namespace UniversidadDeMurcia.Descriptores
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
 
-        public VistaCrud(ControlHtml padre, string ruta, string vista, string texto)
+        public VistaCrud(ControlHtml padre, string id, string ruta, string vista, string texto)
         : base(
           padre: padre,
-          id: $"opc_{padre.Id}",
+          id: $"{padre.Id}_{id}",
           etiqueta: texto,
           propiedad: null,
           ayuda: null,
@@ -645,7 +654,7 @@ namespace UniversidadDeMurcia.Descriptores
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
-            VistaMnt = new VistaCrud(this, ruta, vista, titulo);
+            VistaMnt = new VistaCrud(this, "Mnt", ruta, vista, titulo);
             Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
             Ruta = ruta;
@@ -655,7 +664,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
-            VistaCreacion = new VistaCrud(this, Ruta, accion, textoMenu);
+            VistaCreacion = new VistaCrud(this, "Crear", Ruta, accion, textoMenu);
             Menu = new ZonaDeMenu<TElemento>(this, VistaCreacion);
         }
 
@@ -710,7 +719,7 @@ namespace UniversidadDeMurcia.Descriptores
         public Opcion(ZonaDeMenu<Telemento> padre, string ruta, string accion, string titulo)
         : base(
           padre: padre,
-          id: $"opc_{padre.Id}_{padre.Opciones.Count}",
+          id: $"{padre.Id}_{padre.Opciones.Count}_opc",
           etiqueta: titulo,
           propiedad: null,
           ayuda: null,

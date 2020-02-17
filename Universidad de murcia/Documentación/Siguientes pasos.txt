@@ -1,3 +1,10 @@
+0. cambiar nombre del grid, del filtro y del menu
+   En el menú renderizar el idHtml, ya que paso el Id
+   contenedor.grid_estudiante --> estudiante contenedor
+   grid_estudiante.cabecera--> estudiante_contenedor_grid-Cabecera
+   grid_estudiante.detalle --> estudiante_contenedor_grid-cuerpo
+
+
 1. Filtrar en EF con los valores de un selector
 	1. Añadir el botón de Buscar
 	2. Llamar a leer(idGrid) - Pasar Filtros y orden
