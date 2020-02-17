@@ -9,9 +9,6 @@ using System.Collections.Generic;
 using Gestor.Elementos.Universitario.ContextosDeBd;
 using Gestor.Errores;
 using Gestor.Elementos.Universitario;
-using UtilidadesParaIu;
-using Componentes;
-using Utilidades;
 using UniversidadDeMurcia.Descriptores;
 
 namespace UniversidadDeMurcia.Controllers
@@ -84,7 +81,7 @@ namespace UniversidadDeMurcia.Controllers
         {
 
             GestorDeElementos.BorrarPorId(id);
-            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+            return IraMantenimientoEstudiante("");
         }
 
         private ElementoEstudiante LeerEstudiante(int? id)

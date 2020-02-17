@@ -28,22 +28,15 @@ namespace UniversidadDeMurcia.Controllers
 
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
-        protected DescriptorDeCrud<TElemento> Descriptor { get; private set; }
+
 
         public EntidadController(string controlador, GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : base(gestorErrores)
         {
-            var ficheroDescriptorCrud = $@"~\..\Descriptores\CrudDe{controlador.Replace("Controller", "")}.json";
-            if (System.IO.File.Exists(ficheroDescriptorCrud))
-            {
-                var file = new StreamReader(ficheroDescriptorCrud);
-                var jsonCrud = JsonConvert.DeserializeObject(file.ReadToEnd());
-            }
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
             GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<TElemento>(controlador, DefinirColumnasDelGrid, DefinirOpcionesGenerales, descriptor);
-            Descriptor = descriptor;
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
@@ -56,27 +49,19 @@ namespace UniversidadDeMurcia.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+            return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
         }
 
         public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
         {
-
             GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
             return GestorDelCrud.Descriptor.Grid.RenderDelGrid();
-
-            //GestorDelCrud.Mantenimiento.PosicionInicial = posicion.Entero();
-            //GestorDelCrud.Mantenimiento.CantidadPorLeer = cantidad.Entero();
-            //var resultado = LeerOrdenados(orden);
-            //GestorDelCrud.Mantenimiento.TotalEnBd = resultado.totalEnBd;
-            //GestorDelCrud.Mantenimiento.FilasDelGrid = MapearElementosAlGrid(resultado.elementos);
-            //return GestorDelCrud.Mantenimiento.RenderGridSiguiente(idGrid);
         }
 
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(GestorDelCrud.Descriptor.VistaMnt.Accion, GestorDelCrud.Descriptor);
+            return base.View(GestorDelCrud.Descriptor.VistaMnt.Vista, GestorDelCrud.Descriptor);
         }
 
         public override ViewResult View(string viewName, object model)
@@ -108,7 +93,7 @@ namespace UniversidadDeMurcia.Controllers
                 if (ModelState.IsValid)
                 {
                     await GestorDeElementos.InsertarElementoAsync(iuElemento);
-                    return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+                    return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
                 }
             }
             catch (Exception e)
@@ -143,7 +128,7 @@ namespace UniversidadDeMurcia.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+                return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
             }
 
             return View(GestorDelCrud.Editor.Vista, elemento);
@@ -151,8 +136,8 @@ namespace UniversidadDeMurcia.Controllers
 
         protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(string orden)
         {
-            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Mantenimiento.PosicionInicial
-                                                          , GestorDelCrud.Mantenimiento.CantidadPorLeer
+            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Descriptor.Grid.PosicionInicial
+                                                          , GestorDelCrud.Descriptor.Grid.CantidadPorLeer
                                                           , new List<FiltroSql>()
                                                           , orden.ParsearOrdenacion());
 
@@ -162,10 +147,10 @@ namespace UniversidadDeMurcia.Controllers
 
         protected (IEnumerable<TElemento> elementos, int totalEnBd) Leer(int posicion, int cantidad, string filtro, string orden)
         {
-            Descriptor.Grid.CantidadPorLeer = cantidad;
-            Descriptor.Grid.PosicionInicial = posicion;
-            
-            List<FiltroSql> filtros = JsonConvert.DeserializeObject<List<FiltroSql>>(filtro);
+            GestorDelCrud.Descriptor.Grid.CantidadPorLeer = cantidad;
+            GestorDelCrud.Descriptor.Grid.PosicionInicial = posicion;
+
+            List<FiltroSql> filtros = filtro == null ? new List<FiltroSql>(): JsonConvert.DeserializeObject<List<FiltroSql>>(filtro);
 
             return GestorDeElementos.Leer(posicion, cantidad, filtros, orden.ParsearOrdenacion());
         }

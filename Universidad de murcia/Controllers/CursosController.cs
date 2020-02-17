@@ -6,8 +6,6 @@ using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ModeloIu;
 using Gestor.Errores;
-using Componentes;
-using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
 using UniversidadDeMurcia.Descriptores;
@@ -34,26 +32,6 @@ namespace UniversidadDeMurcia.Controllers
             return ViewCrud();
         }
 
-        private IEnumerable<ElementoCurso> OrdenarListaDeCursos(IEnumerable<ElementoCurso> cursos, string orden)
-        {
-            foreach (var columna in GestorDelCrud.Mantenimiento.ColumnasDelGrid)
-            {
-                if (!columna.Ordenar)
-                    continue;
-
-                if (orden != null && orden.Contains(columna.Nombre) && columna.Nombre == nameof(ElementoCurso.Titulo))
-                {
-                    if (orden.EndsWith("Des"))
-                    {
-                        columna.Sentido = "Asc";
-                        return cursos.OrderByDescending(c=>c.Titulo);
-                    }
-                    columna.Sentido = "Des";
-                    return cursos.OrderBy(c => c.Titulo);
-                }
-            }
-            return cursos.OrderBy(s => s.Titulo);
-        }
 
         private void PrepararProximoOrden(string orden)
         {
@@ -107,7 +85,7 @@ namespace UniversidadDeMurcia.Controllers
         {
 
             GestorDeElementos.BorrarPorId(id);
-            return RedirectToAction(GestorDelCrud.Mantenimiento.Ir);
+            return IraMantenimientoCurso("");
         }
 
         private ElementoCurso LeerCurso(int? id)

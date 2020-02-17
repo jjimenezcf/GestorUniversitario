@@ -459,7 +459,7 @@ namespace UniversidadDeMurcia.Descriptores
     {
         public ICollection<Opcion<Telemento>> Opciones { get; private set; } = new List<Opcion<Telemento>>();
 
-        public ZonaDeMenu(DescriptorDeCrud<Telemento> padre, VistaCrud vista)
+        public ZonaDeMenu(DescriptorDeCrud<Telemento> padre, VistaCsHtml vista)
         : base(
           padre: padre,
           id: $"{padre.Id}_Menu",
@@ -470,7 +470,7 @@ namespace UniversidadDeMurcia.Descriptores
         )
         {
             Tipo = TipoControl.ZonaDeOpciones;
-            new Opcion<Telemento>(this, vista.Ruta, vista.Accion, vista.Etiqueta);
+            new Opcion<Telemento>(this, vista.Ruta, vista.Vista, vista.Etiqueta);
         }
 
         private string RenderOpcionesMenu()
@@ -505,7 +505,7 @@ namespace UniversidadDeMurcia.Descriptores
         public List<FilaDelGrid> Filas { get; private set; } = new List<FilaDelGrid>();
 
         public int CantidadPorLeer { get; set; } = 5;
-        public int PosicionInicial { get; set; }
+        public int PosicionInicial { get; set; } = 0;
 
         public int TotalEnBd { get; set; }
         public ZonaDeGrid(DescriptorDeCrud<TElemento> padre)
@@ -621,12 +621,13 @@ namespace UniversidadDeMurcia.Descriptores
         }
     }
 
-    public class VistaCrud : ControlHtml
+    public class VistaCsHtml : ControlHtml
     {
         public string Ruta { get; private set; }
-        public string Accion { get; private set; }
+        public string Vista { get; private set; }
+        public string Ir => $"Ira{Vista}";
 
-        public VistaCrud(ControlHtml padre, string id, string ruta, string vista, string texto)
+        public VistaCsHtml(ControlHtml padre, string id, string ruta, string vista, string texto)
         : base(
           padre: padre,
           id: $"{padre.Id}_{id}",
@@ -638,7 +639,7 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Tipo = TipoControl.VistaCrud;
             Ruta = ruta;
-            Accion = vista;
+            Vista = vista;
         }
 
         public override string RenderControl()
@@ -649,8 +650,8 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class DescriptorDeCrud<TElemento> : ControlHtml
     {
-        public VistaCrud VistaMnt { get; private set; }
-        public VistaCrud VistaCreacion { get; private set; }
+        public VistaCsHtml VistaMnt { get; private set; }
+        public VistaCsHtml VistaCreacion { get; private set; }
 
         public ZonaDeMenu<TElemento> Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
@@ -671,7 +672,7 @@ namespace UniversidadDeMurcia.Descriptores
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
-            VistaMnt = new VistaCrud(this, "Mnt", ruta, vista, titulo);
+            VistaMnt = new VistaCsHtml(this, "Mnt", ruta, vista, titulo);
             Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
             Ruta = ruta;
@@ -681,7 +682,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
-            VistaCreacion = new VistaCrud(this, "Crear", Ruta, accion, textoMenu);
+            VistaCreacion = new VistaCsHtml(this, "Crear", Ruta, accion, textoMenu);
             Menu = new ZonaDeMenu<TElemento>(this, VistaCreacion);
         }
 

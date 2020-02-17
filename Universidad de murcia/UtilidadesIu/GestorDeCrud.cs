@@ -17,12 +17,13 @@ namespace UtilidadesParaIu
         public string Titulo { get; set; }
         public Dictionary<string, SelectorModal> Modales = new Dictionary<string, SelectorModal>();
 
-        public MantenimientoCrud<T> Mantenimiento { get; }
         public CreacionCrud<T> Creador { get; }
         public EdicionCrud<T> Editor { get; }
         public DetalleCrud<T> Detalle { get; }
         public BorradoCrud<T> Supresor { get; }
         public DescriptorDeCrud<T> Descriptor { get; }
+
+        public string IrAlCrud { get; set; }
 
         private string _Ruta => $"{NombreDelObjeto.Replace("Elemento", "")}s";
 
@@ -30,23 +31,9 @@ namespace UtilidadesParaIu
         {
             Controlador = controlador.Replace("Controller", "");
             Titulo = $"Gestor de {NombreDelObjeto}";
-            Descriptor = descriptor;
+            Descriptor = descriptor;            
 
-            
-
-            Creador = new CreacionCrud<T>();
-
-            var peticionesMvc = new List<PeticionMvc>() { new PeticionMvc() { Nombre = Creador.Titulo, Controlador = Controlador, Accion = Creador.Ir } };
-
-            Mantenimiento = new MantenimientoCrud<T>(Controlador, "Mantenimiento", ClaseDeElemento, definirColumnasDelGrid, definirOpcionesGenerales)
-            {
-                Ruta = _Ruta
-               ,PeticionesComunes = peticionesMvc
-               ,Modales = Modales
-               ,PosicionInicial = 0 //todo: --> recuperar de BD
-               ,CantidadPorLeer = 5 //todo: --> recuperar de BD
-            };
-
+            Creador = new CreacionCrud<T>();            
             Editor = new EdicionCrud<T>();
             Detalle = new DetalleCrud<T>();
             Supresor = new BorradoCrud<T>();
