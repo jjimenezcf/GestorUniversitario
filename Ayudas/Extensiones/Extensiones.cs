@@ -1,18 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Utilidades
 {
     public static class Cadenas
     {
-        public static bool IsNullOrEmpty(this string str, bool bQuitarBlancos = true)
+        public static bool IsNullOrEmpty(this string str, bool quitarBlancos = true)
         {
             if (str == null)
                 return true;
 
-            return string.IsNullOrEmpty(bQuitarBlancos ? str.Trim() : str);
+            return string.IsNullOrEmpty(quitarBlancos ? str.Trim() : str);
         }
 
+        public static List<int> ListaEnteros(this string str, string separador=";",  bool quitarCeros = true)
+        {
+            var l = new List<int>();
+            if (str.IsNullOrEmpty())
+                return l;
+
+            var numeros = str.Split(separador);
+            foreach(string n in numeros)
+            {
+                var i = n.Entero();
+                if (i > 0)
+                    l.Add(i);
+            }
+
+            return l;
+        }
+
+
+        
         public static string RemplazarCaracteres(this string str, string caracterDeRemplazo = "")
         {
             return str.RemplazarCaracteres(@"[^\w\.@-_]", caracterDeRemplazo);

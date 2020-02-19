@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Universitario.ModeloIu
 {
+    
+    public static class EstudiantesPor
+    {
+       public static string NombreCompleto = nameof(NombreCompleto).ToLower();
+       public static string CursosInscrito = nameof(CursosInscrito).ToLower();
+    }
+
     public class ElementoEstudiante: ElementoBase
     {
         public string Apellido { get; set; }

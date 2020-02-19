@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Universitario.ModeloIu
 {
+    public static class CursoPor
+    {
+        public static string Nombre = FiltroPor.Nombre;
+        public static string EstudianteInscrito = nameof(EstudianteInscrito).ToLower();
+    }
+
     public class ElementoCurso : ElementoBase
     {
         public string Titulo { get; set; }

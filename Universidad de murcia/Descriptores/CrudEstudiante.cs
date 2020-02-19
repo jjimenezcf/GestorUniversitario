@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gestor.Elementos.ModeloIu;
 using Gestor.Elementos.Universitario.ModeloIu;
 using UtilidadesParaIu;
 
@@ -15,7 +16,7 @@ namespace UniversidadDeMurcia.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
                 new Selector<ElementoCurso>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Curso",
-                                        propiedad: "cursoInscrito",
+                                        propiedad: EstudiantesPor.CursosInscrito,
                                         ayuda: "Seleccionar curso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
                                         paraFiltrar: nameof(ElementoCurso.Id),
@@ -23,6 +24,8 @@ namespace UniversidadDeMurcia.Descriptores
                                         descriptor: new CrudCurso(ModoDescriptor.Seleccion));
 
             DefinirVistaDeCreacion(accion: "IraCrearEstudiante", textoMenu: "Crear estudiante");
+
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(EstudiantesPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
             DefinirColumnasDelGrid();
         }

@@ -13,7 +13,7 @@ using Utilidades;
 namespace Gestor.Elementos
 {
 
-    public class FiltroSql
+    public class ClausulaDeFiltrado
     {
         public string Propiedad { get; set; }
         public string Criterio { get; set; }
@@ -21,17 +21,17 @@ namespace Gestor.Elementos
     }
 
 
-    public static class Filtros
+    public static class RegistroBaseFiltros
     {
         public const string FiltroPorId = "Id";
 
-        public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> set, List<FiltroSql> filtros) where TRegistro : RegistroBase
+        public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : RegistroBase
         {
-            foreach(FiltroSql filtro in filtros)
+            foreach(ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == FiltroPorId.ToLower())
-                   return set.Where(x => x.Id == filtro.Valor.Entero());
+                   return registros.Where(x => x.Id == filtro.Valor.Entero());
 
-            return set;
+            return registros;
         }
     }
 
@@ -108,14 +108,14 @@ namespace Gestor.Elementos
 
         public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad)
         {
-            return Leer(posicion, cantidad, new List<FiltroSql>(), new Dictionary<string, Ordenacion>());
+            return Leer(posicion, cantidad, new List<ClausulaDeFiltrado>(), new Dictionary<string, Ordenacion>());
         }
 
-        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, List<FiltroSql> filtros, Dictionary<string, Ordenacion> orden)
+        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, Dictionary<string, Ordenacion> orden)
         {
             List<TRegistro> elementosDeBd;
 
-            IQueryable<TRegistro> registros = IncluirFiltros(Contexto.Set<TRegistro>(), filtros);
+            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
 
             var total = registros.Count();
 
@@ -130,7 +130,7 @@ namespace Gestor.Elementos
             return registros.Orden(orden);
         }
 
-        protected virtual IQueryable<TRegistro> IncluirFiltros(IQueryable<TRegistro> registros, List<FiltroSql> filtros)
+        protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
         {
             return registros.AplicarFiltroId(filtros);
         }

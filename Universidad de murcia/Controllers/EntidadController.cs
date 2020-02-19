@@ -127,7 +127,7 @@ namespace UniversidadDeMurcia.Controllers
         {
             var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Descriptor.Grid.PosicionInicial
                                                           , GestorDelCrud.Descriptor.Grid.CantidadPorLeer
-                                                          , new List<FiltroSql>()
+                                                          , new List<ClausulaDeFiltrado>()
                                                           , orden.ParsearOrdenacion());
 
             return (elementos, total);
@@ -139,7 +139,7 @@ namespace UniversidadDeMurcia.Controllers
             GestorDelCrud.Descriptor.Grid.CantidadPorLeer = cantidad;
             GestorDelCrud.Descriptor.Grid.PosicionInicial = posicion;
 
-            List<FiltroSql> filtros = filtro == null ? new List<FiltroSql>(): JsonConvert.DeserializeObject<List<FiltroSql>>(filtro);
+            List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
             return GestorDeElementos.Leer(posicion, cantidad, filtros, orden.ParsearOrdenacion());
         }

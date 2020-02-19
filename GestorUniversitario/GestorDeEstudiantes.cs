@@ -5,20 +5,36 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Utilidades;
+using Gestor.Elementos.ModeloIu;
 
 namespace Gestor.Elementos.Universitario
 {
-    static class FiltroEstudiante
+    static class RegistroDeEstudianteFiltros
     {
-        public const string _FiltroPorNombre = "Nombre";
-
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> set, List<FiltroSql> filtros) where T : RegistroDeEstudiante
+        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeEstudiante
         {
-            foreach (FiltroSql filtro in filtros)
-                if (filtro.Propiedad.ToLower() == _FiltroPorNombre.ToLower())
-                    return set.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == EstudiantesPor.NombreCompleto)
+                    return regristros.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
 
-            return set;
+            return regristros;
+        }
+
+        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeEstudiante
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == EstudiantesPor.CursosInscrito)
+                {
+                    var listaIds = filtro.Valor.ListaEnteros(); 
+                    foreach(int id in listaIds)
+                    {
+                        registros = registros.Where(x => x.Inscripciones.Any(i => i.CursoId == id));
+                    }
+                }
+
+            return registros;
+
         }
     }
 
@@ -73,10 +89,15 @@ namespace Gestor.Elementos.Universitario
 
                
 
-        protected override IQueryable<RegistroDeEstudiante> IncluirFiltros(IQueryable<RegistroDeEstudiante> registros, List<FiltroSql> filtros) 
+        protected override IQueryable<RegistroDeEstudiante> AplicarFiltros(IQueryable<RegistroDeEstudiante> registros, List<ClausulaDeFiltrado> filtros) 
         {
-            registros = base.IncluirFiltros(registros, filtros);
-            return registros.AplicarFiltroNombre(filtros);
+            foreach (var f in filtros)
+                if (f.Propiedad == FiltroPor.Id)
+                    return base.AplicarFiltros(registros, filtros);
+
+            return registros
+                   .AplicarFiltroNombre(filtros)
+                   .AplicarFiltroCurso(filtros);
         }
                 
 

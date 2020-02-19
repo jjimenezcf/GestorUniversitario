@@ -16,7 +16,7 @@ namespace UniversidadDeMurcia.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
                new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
                                              etiqueta: "Estudiante",
-                                             propiedad: "estudianteInscrito",
+                                             propiedad: CursoPor.EstudianteInscrito,
                                              ayuda: "Seleccionar estudiante",
                                              posicion: new Posicion() { fila = 0, columna = 0 },
                                              paraFiltrar: nameof(ElementoEstudiante.Id),

@@ -99,6 +99,12 @@ namespace UniversidadDeMurcia.Descriptores
             return atributos;
         }
 
+        public void CambiarAtributos(string clave, string ayuda)
+        {
+            Propiedad = clave;
+            Ayuda = ayuda;
+        }
+
     }
 
     public class Selector<Tseleccionado> : ControlHtml
@@ -453,6 +459,16 @@ namespace UniversidadDeMurcia.Descriptores
         {
             return RenderBloque();
         }
+
+        internal ControlHtml BuscarControl(string propiedad)
+        {
+            foreach (ControlHtml c in Controles)
+            {
+                if (c.Id == $"{Id}_{propiedad}")
+                    return c;
+            }
+            return null;
+        }
     }
 
     public class ZonaDeMenu<Telemento> : ControlHtml
@@ -573,7 +589,19 @@ namespace UniversidadDeMurcia.Descriptores
             var b1 = new Bloque(this, "General", new Dimension(1, 2));
             new Bloque(this, "Común", new Dimension(1, 2));
 
-            new Editor(padre: b1, etiqueta: "Nombre", propiedad: "Nombre", ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            new Editor(padre: b1, etiqueta: "Nombre", propiedad: FiltroPor.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+        }
+
+        public ControlHtml BuscarControl(string propiedad)
+        {
+            ControlHtml c = null;
+            foreach (var b in Bloques)
+            {
+                c = b.BuscarControl(propiedad);
+                if (c != null)
+                    return c;
+            }
+            return c;
         }
 
         public void AnadirBloque(Bloque bloque)
@@ -679,6 +707,10 @@ namespace UniversidadDeMurcia.Descriptores
             Modo = modo;
         }
 
+        public ControlHtml BuscarControlEnFiltro(string propiedad)
+        {
+            return Filtro.BuscarControl(propiedad);
+        }
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
