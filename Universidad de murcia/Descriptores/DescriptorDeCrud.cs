@@ -29,6 +29,8 @@ namespace UniversidadDeMurcia.Descriptores
         Fecha
     }
 
+    public enum TipoCriterio {igual, contiene}
+
     public enum ModoDescriptor { Mantenimiento, Seleccion }
 
 
@@ -113,6 +115,8 @@ namespace UniversidadDeMurcia.Descriptores
         public string propiedadParaMostrar { get; private set; }
         public GridModal<Tseleccionado> Modal { get; set; }
 
+        public DescriptorDeCrud<Tseleccionado> Descriptor { get; private set; }
+
         public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor)
         : base(
           padre: padre
@@ -129,14 +133,22 @@ namespace UniversidadDeMurcia.Descriptores
             Modal = new GridModal<Tseleccionado>(padre, this, descriptor);
             padre.AnadirSelector(this);
             DeFiltrado = true;
-            Criterio = "igual";
+            Criterio = TipoCriterio.igual.ToString();
+            Descriptor = descriptor;
         }
 
 
         public string RenderSelector()
         {
             return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {base.RenderAtributos()} placeholder=¨{Ayuda}¨>
+                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ 
+                              {base.RenderAtributos()} 
+                              criterioBuscar=¨{TipoCriterio.contiene.ToString()}¨
+                              propiedadBuscar=¨{FiltroPor.Nombre}¨
+                              placeholder=¨{Ayuda}¨
+                              idGridModal=¨{Descriptor.Grid.IdHtml}¨
+                              chekSeleccionModal=¨chksel.{Descriptor.Grid.IdHtml}¨
+                              onchange =¨BuscarRegistro('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
                        </div>
@@ -163,7 +175,7 @@ namespace UniversidadDeMurcia.Descriptores
         {
             Tipo = TipoControl.Editor;
             DeFiltrado = true;
-            Criterio = "contiene";
+            Criterio = TipoCriterio.contiene.ToString();
             padre.AnadirControl(this);
         }
 
@@ -558,7 +570,7 @@ namespace UniversidadDeMurcia.Descriptores
         {
             var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
             {
-                Controlador = ((DescriptorDeCrud<TElemento>)Padre).Ruta,
+                Controlador = ((DescriptorDeCrud<TElemento>)Padre).Controlador,
                 TotalEnBd = TotalEnBd
             };
             var htmlGrid = grid.ToHtml();
@@ -684,12 +696,12 @@ namespace UniversidadDeMurcia.Descriptores
         public ZonaDeMenu<TElemento> Menu { get; set; }
         public ZonaDeFiltro Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
-        public string Ruta { get; private set; }
+        public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
 
 
 
-        public DescriptorDeCrud(string ruta, string vista, string titulo, ModoDescriptor modo)
+        public DescriptorDeCrud(string controlador, string vista, string titulo, ModoDescriptor modo)
         : base(
           padre: null,
           id: typeof(TElemento).Name.Replace("Elemento", ""),
@@ -700,10 +712,10 @@ namespace UniversidadDeMurcia.Descriptores
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
-            VistaMnt = new VistaCsHtml(this, "Mnt", ruta, vista, titulo);
+            VistaMnt = new VistaCsHtml(this, "Mnt", controlador, vista, titulo);
             Filtro = new ZonaDeFiltro(this);
             Grid = new ZonaDeGrid<TElemento>(this);
-            Ruta = ruta;
+            Controlador = controlador;
             Modo = modo;
         }
 
@@ -714,7 +726,7 @@ namespace UniversidadDeMurcia.Descriptores
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
         {
-            VistaCreacion = new VistaCsHtml(this, "Crear", Ruta, accion, textoMenu);
+            VistaCreacion = new VistaCsHtml(this, "Crear", Controlador, accion, textoMenu);
             Menu = new ZonaDeMenu<TElemento>(this, VistaCreacion);
         }
 
@@ -743,9 +755,14 @@ namespace UniversidadDeMurcia.Descriptores
         {
         }
 
-        public virtual void MapearElementosAlGrid((IEnumerable<TElemento> elementos, int totalEnBd) leidos)
+        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos)
         {
-            Grid.TotalEnBd = leidos.totalEnBd;
+
+        }
+
+        public void TotalEnBd(int totalEnBd)
+        {
+            Grid.TotalEnBd = totalEnBd;
         }
 
         public override string RenderControl()

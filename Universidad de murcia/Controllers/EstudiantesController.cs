@@ -30,6 +30,7 @@ namespace UniversidadDeMurcia.Controllers
         public IActionResult IraMantenimientoEstudiante(string orden)
         {
             GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(orden));
+            GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }
 

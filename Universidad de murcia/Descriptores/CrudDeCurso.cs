@@ -11,7 +11,7 @@ namespace UniversidadDeMurcia.Descriptores
     public class CrudCurso : DescriptorDeCrud<ElementoCurso>
     {
         public CrudCurso(ModoDescriptor modo)
-        : base(ruta: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos", modo: modo)
+        : base(controlador: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
@@ -37,10 +37,10 @@ namespace UniversidadDeMurcia.Descriptores
             Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(ElementoCurso.Creditos), Titulo = "Créditos", Tipo = typeof(int) });
         }
 
-        public override void MapearElementosAlGrid((IEnumerable<ElementoCurso> elementos, int totalEnBd) leidos)
+        public override void MapearElementosAlGrid(IEnumerable<ElementoCurso> elementos)
         {
-            base.MapearElementosAlGrid(leidos);
-            foreach (var curso in leidos.elementos)
+            base.MapearElementosAlGrid(elementos);
+            foreach (var curso in elementos)
             {
                 var fila = new FilaDelGrid();
                 foreach (ColumnaDelGrid columna in Grid.Columnas)

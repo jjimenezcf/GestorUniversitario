@@ -61,6 +61,13 @@ namespace UniversidadDeMurcia.Controllers
             return GestorDelCrud.Descriptor.Grid.RenderDelGrid();
         }
 
+        //Lamada desde Selector.js
+        public JsonResult Leer(string filtro)
+        {
+           IEnumerable<TElemento> elementos = Leer(0, -1, filtro, null);
+           return new JsonResult(elementos);
+        }
+
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
@@ -123,18 +130,26 @@ namespace UniversidadDeMurcia.Controllers
             return View(GestorDelCrud.Editor.Vista, elemento);
         }
 
-        protected (IEnumerable<TElemento> elementos, int totalEnBd) LeerOrdenados(string orden)
+        protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
-            var (elementos, total) = GestorDeElementos.Leer(GestorDelCrud.Descriptor.Grid.PosicionInicial
+            var elementos = GestorDeElementos.Leer(GestorDelCrud.Descriptor.Grid.PosicionInicial
                                                           , GestorDelCrud.Descriptor.Grid.CantidadPorLeer
                                                           , new List<ClausulaDeFiltrado>()
                                                           , orden.ParsearOrdenacion());
 
-            return (elementos, total);
+            return elementos;
+        }
+        
+        public int Contar(string filtro = null)
+        {
+            List<ClausulaDeFiltrado> filtros = filtro.IsNullOrEmpty() 
+                                               ? new List<ClausulaDeFiltrado>() 
+                                               : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+
+            return GestorDeElementos.Contar(filtros);
         }
 
-
-        protected (IEnumerable<TElemento> elementos, int totalEnBd) Leer(int posicion, int cantidad, string filtro, string orden)
+        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
             GestorDelCrud.Descriptor.Grid.CantidadPorLeer = cantidad;
             GestorDelCrud.Descriptor.Grid.PosicionInicial = posicion;

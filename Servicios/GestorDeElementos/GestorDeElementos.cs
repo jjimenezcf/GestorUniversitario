@@ -106,23 +106,35 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
-        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad)
-        {
-            return Leer(posicion, cantidad, new List<ClausulaDeFiltrado>(), new Dictionary<string, Ordenacion>());
-        }
 
-        public (IEnumerable<TElemento>, int) Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, Dictionary<string, Ordenacion> orden)
+        public IEnumerable<TElemento> Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, Dictionary<string, Ordenacion> orden)
         {
             List<TRegistro> elementosDeBd;
 
             IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
 
-            var total = registros.Count();
-
             registros = AplicarOrden(registros, orden);
 
-            elementosDeBd = registros.Skip(posicion).Take(cantidad).AsNoTracking().ToList();
-            return (MapearElementos(elementosDeBd), total);
+            registros = registros.Skip(posicion);
+
+            if (cantidad > 0)
+            {
+                registros = registros.Take(cantidad);
+            }
+
+            elementosDeBd = registros.AsNoTracking().ToList();
+
+            return MapearElementos(elementosDeBd) ;
+        }
+
+        public int Contar(List<ClausulaDeFiltrado> filtros)
+        {
+
+            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
+
+            var total = registros.Count();
+
+            return total;
         }
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, Dictionary<string, Ordenacion> orden)

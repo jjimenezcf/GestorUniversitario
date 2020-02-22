@@ -1,4 +1,7 @@
-﻿function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
+﻿
+
+
+function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
 
     recargarGrid(idGrid);
 
@@ -35,7 +38,7 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
             console.log(`Se ha leido mal el elemento del selector ${idGrid} de la posición ${x}`);
 
     }
-    cerrar(idGrid,referenciaChecks);
+    cerrar(idGrid, referenciaChecks);
 }
 
 function recargarGrid(idGrid) {
@@ -50,7 +53,7 @@ function recargarGrid(idGrid) {
     }
 }
 
-function obtenerElementoSeleccionado(idCheck, columnaMostrar) {    
+function obtenerElementoSeleccionado(idCheck, columnaMostrar) {
     var e = {
         id: parseInt(ObtenerIdDeLaFilaChequeada(idCheck)),
         valor: obtenerValorDeLaColumnaChequeada(idCheck, columnaMostrar)
@@ -148,5 +151,61 @@ function blanquearCheck(referenciaChecks) {
         checkboxes[x].checked = false;
     }
 
+}
+
+
+function BuscarRegistro(idSelector, controlador) {
+    var htmlSelector = document.getElementById(idSelector);
+    if (!htmlSelector.value.isNullOrEmpty()) {
+        var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
+        LeerParaSelector(`/${controlador}/Leer?filtro=${JSON.stringify(clausulas)}`, ProcesarRegistrosLeidos);
+    }
+    else {
+        console.log(`no hay valor para el selector ${idSelector} y controlador ${controlador}`);
+    }
+
+}
+
+function ObtenerClausulaParaBuscarRegistro(htmlSelector) {
+    var propiedad = htmlSelector.getAttribute('propiedadBuscar');
+    var criterio = htmlSelector.getAttribute('criterioBuscar');
+    var valor = htmlSelector.value;
+
+
+    var idGridModal = htmlSelector.getAttribute('idGridModal');
+    var chekSeleccionModal = htmlSelector.getAttribute('chekSeleccionModal');
+    blanquearSelector(htmlSelector);
+    cerrar(idGridModal, chekSeleccionModal);
+
+    var clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+    var clausulas = new Array();
+    clausulas.push(clausula);
+    return clausulas;
+}
+
+function LeerParaSelector(url, funcionDeRespuesta) {
+
+    function respuestaCorrecta() {
+        if (req.status >= 200 && req.status < 400) {
+            funcionDeRespuesta(req.responseText);
+        }
+        else {
+            console.log(req.status + ' ' + req.statusText);
+        }
+    }
+
+    function respuestaErronea() {
+        console.log('Error de conexión');
+    }
+
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.addEventListener("load", respuestaCorrecta);
+    req.addEventListener("error", respuestaErronea);
+    req.send();
+}
+
+function ProcesarRegistrosLeidos(registros) {
+    console.log(registros);
 }
 
