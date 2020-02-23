@@ -115,9 +115,13 @@ namespace UniversidadDeMurcia.Descriptores
         public string propiedadParaMostrar { get; private set; }
         public GridModal<Tseleccionado> Modal { get; set; }
 
+        public string idBtnSelectorHtml => $"{IdHtml}_btnSel";
+
+        public string PropiedadDondeMapear  {get; private set;}
+
         public DescriptorDeCrud<Tseleccionado> Descriptor { get; private set; }
 
-        public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor)
+        public Selector(Bloque padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor, string propiedadDondeMapear)
         : base(
           padre: padre
           , id: $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
@@ -135,22 +139,33 @@ namespace UniversidadDeMurcia.Descriptores
             DeFiltrado = true;
             Criterio = TipoCriterio.igual.ToString();
             Descriptor = descriptor;
+            PropiedadDondeMapear = propiedadDondeMapear;
         }
 
 
         public string RenderSelector()
         {
             return $@"<div class=¨input-group mb-3¨>
-                       <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ 
+                       <input id=¨{IdHtml}¨ 
+                              type = ¨text¨ 
+                              class=¨form-control¨ 
+                              placeholder=¨{Ayuda}¨
                               {base.RenderAtributos()} 
                               criterioBuscar=¨{TipoCriterio.contiene.ToString()}¨
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
-                              placeholder=¨{Ayuda}¨
+                              propiedadMostrar=¨{propiedadParaMostrar}¨
+                              propiedadFiltrar=¨{propiedadParaFiltrar}¨
                               idGridModal=¨{Descriptor.Grid.IdHtml}¨
+                              idBtnSelector=¨{idBtnSelectorHtml}¨
+                              idEditorMostrar=¨{Descriptor.Filtro.BuscarControl(PropiedadDondeMapear).IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{Descriptor.Grid.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>
-                            <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
+                            <button id=¨{idBtnSelectorHtml}¨ 
+                                    class=¨btn btn-outline-secondary¨ 
+                                    type=¨button¨ 
+                                    data-toggle=¨modal¨ 
+                                    data-target=¨#{Modal.IdHtml}¨>Seleccionar</button>
                        </div>
                     </div>
                   ";

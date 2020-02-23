@@ -25,7 +25,7 @@ function ObtenerClausulaEditor(htmlEditor) {
     var criterio = htmlEditor.getAttribute('criterio');
     var valor = htmlEditor.value;
     var clausula = null;
-    if (!valor.isNullOrEmpty())
+    if (!valor.IsNullOrEmpty())
         clausula = { propiedad: "" + propiedad, criterio: "" + criterio, valor: "" + valor };
     return clausula;
 }

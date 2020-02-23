@@ -21,7 +21,8 @@ namespace UniversidadDeMurcia.Descriptores
                                              posicion: new Posicion() { fila = 0, columna = 0 },
                                              paraFiltrar: nameof(ElementoEstudiante.Id),
                                              paraMostrar: nameof(ElementoEstudiante.Apellido),
-                                             descriptor: new CrudEstudiante(ModoDescriptor.Seleccion));
+                                             descriptor: new CrudEstudiante(ModoDescriptor.Seleccion),
+                                             propiedadDondeMapear: EstudiantesPor.NombreCompleto.ToString());
 
             DefinirVistaDeCreacion(accion: "IraCrearCurso", textoMenu: "Crear curso");
 
