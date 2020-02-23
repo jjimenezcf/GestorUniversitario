@@ -147,8 +147,8 @@ namespace UniversidadDeMurcia.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               placeholder=¨{Ayuda}¨
                               idGridModal=¨{Descriptor.Grid.IdHtml}¨
-                              chekSeleccionModal=¨chksel.{Descriptor.Grid.IdHtml}¨
-                              onchange =¨BuscarRegistro('{IdHtml}', '{Descriptor.Controlador}')¨>
+                              refCheckDeSeleccion=¨chksel.{Descriptor.Grid.IdHtml}¨
+                              onchange =¨AlCambiarTextoSelector('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button class=¨btn btn-outline-secondary¨ type=¨button¨ data-toggle=¨modal¨ data-target=¨#{Modal.IdHtml}¨ >Seleccionar</button>
                        </div>
