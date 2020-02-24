@@ -7,6 +7,9 @@ class HTMLSelector extends HTMLInputElement {
 interface HTMLInputElement {
     InicializarSelector(): void;
     InicializarAtributos(): void;
+    BanquearEditorDelGrid(): void;
+    MapearTextoAlEditorDelGrid(): void;
+    EditorDelGrid(): HTMLInputElement;
     ClausulaDeFiltrado(): ClausulaDeFiltrado;
     ClausulaDeBuscarValorEditado(): ClausulaDeFiltrado;
 }
@@ -19,6 +22,7 @@ HTMLInputElement.prototype.InicializarSelector = function (): void {
         var refCheckDeSeleccion: string = htmlSelector.getAttribute('refCheckDeSeleccion');
         if (!refCheckDeSeleccion.IsNullOrEmpty()) {
             InicializarModal(idGridModal, refCheckDeSeleccion);
+            htmlSelector.BanquearEditorDelGrid();
             htmlSelector.InicializarAtributos();
         }
         else
@@ -27,6 +31,23 @@ HTMLInputElement.prototype.InicializarSelector = function (): void {
     else
         console.log(`El atributo idGridModal del selector ${htmlSelector.id} no está bien definido `);
 };
+
+HTMLInputElement.prototype.MapearTextoAlEditorDelGrid = function (): void {
+    var htmlSelector: HTMLInputElement = this;
+    var htmlEditor: HTMLInputElement = htmlSelector.EditorDelGrid();
+
+    if (!htmlSelector.value.IsNullOrEmpty()) {
+        var listaDeIds: string = htmlSelector.getAttribute(ListaDeSeleccionados);
+        if (listaDeIds === null || listaDeIds.IsNullOrEmpty())
+            htmlEditor.value = htmlSelector.value;
+        else
+            htmlEditor.value = '';
+    }
+    else {
+        htmlEditor.value = '';
+    }
+};
+
 
 HTMLInputElement.prototype.InicializarAtributos = function (): void {
     var htmlSelector: HTMLInputElement = this;
@@ -63,20 +84,27 @@ HTMLInputElement.prototype.ClausulaDeBuscarValorEditado = function (): ClausulaD
     return clausula;
 };
 
+HTMLInputElement.prototype.BanquearEditorDelGrid = function (): void {
+    var htmlSelector: HTMLInputElement = this;
+    var htmlEditor: HTMLInputElement = htmlSelector.EditorDelGrid();
+    htmlEditor.value = '';
+};
 
+HTMLInputElement.prototype.EditorDelGrid = function (): HTMLInputElement {
+    var htmlSelector: HTMLInputElement = this;
+    var idEditorMostrar: string = htmlSelector.getAttribute('idEditorMostrar');
+    var htmlEditor: HTMLInputElement = <HTMLInputElement>document.getElementById(idEditorMostrar);
+    return htmlEditor;
+};
+
+
+/***************************************************************************************************************
+Eventos en el selector y en la ventana modal
+ ***************************************************************************************************************/
 
 function AlAbrir(idGrid: string, idSelector: string, columnaId: string, columnaMostrar: string) {
-
     var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
-    if (!htmlSelector.value.IsNullOrEmpty()) {
-        var listaDeIds: string = htmlSelector.getAttribute(ListaDeSeleccionados);
-        var idEditorMostrar: string = htmlSelector.getAttribute('idEditorMostrar');
-        var htmlEditor: HTMLInputElement = <HTMLInputElement>document.getElementById(idEditorMostrar);
-        if (listaDeIds === null || listaDeIds.IsNullOrEmpty()) 
-            htmlEditor.value = htmlSelector.value;        
-        else
-            htmlEditor.value = '';
-    }
+    htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
 
     infoSelectores.Borrar(idGrid);
@@ -111,6 +139,23 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
 
     }
     InicializarModal(idGrid, referenciaChecks);
+}
+
+
+function AlCambiarTextoSelector(idSelector: string, controlador: string) {
+    var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
+    if (!htmlSelector.value.IsNullOrEmpty()) {
+        var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
+        LeerParaSelector(`/${controlador}/Leer?filtro=${JSON.stringify(clausulas)}`, htmlSelector, ProcesarRegistrosLeidos);
+    }
+    else {
+        htmlSelector.InicializarSelector();
+        var refCheckDeSeleccion: string = htmlSelector.getAttribute('refCheckDeSeleccion');
+        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
+            blanquearCheck(refCheckDeSeleccion);
+        }
+    }
+
 }
 
 function recargarGrid(idGrid) {
@@ -215,22 +260,6 @@ function blanquearCheck(refCheckDeSeleccion: string) {
     );
 }
 
-
-function AlCambiarTextoSelector(idSelector: string, controlador: string) {
-    var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
-    if (!htmlSelector.value.IsNullOrEmpty()) {
-        var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
-        LeerParaSelector(`/${controlador}/Leer?filtro=${JSON.stringify(clausulas)}`, htmlSelector, ProcesarRegistrosLeidos);
-    }
-    else {
-        htmlSelector.InicializarSelector();
-        var refCheckDeSeleccion: string = htmlSelector.getAttribute('refCheckDeSeleccion');
-        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
-            blanquearCheck(refCheckDeSeleccion);
-        }
-    }
-
-}
 
 function ObtenerClausulaParaBuscarRegistro(htmlSelector: HTMLSelector) {
 

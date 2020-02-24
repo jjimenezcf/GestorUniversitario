@@ -47,15 +47,21 @@ function ObtenerControlesDeFiltro(idGrid) {
     }
     return arrayIds;
 }
+function urlPeticion(htmlInputCantidad, idGrid, posicion) {
+    var cantidad = htmlInputCantidad.value.Numero();
+    var controlador = htmlInputCantidad.getAttribute("controlador");
+    var filtroJson = ObtenerFiltros(idGrid);
+    var ordenJson = '[]';
+    var url = "/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + posicion + "&cantidad=" + cantidad + "&filtro=" + filtroJson + "&orden=" + ordenJson;
+    return url;
+}
 function Leer(idGrid) {
     var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
     if (htmlImputCantidad === null)
         console.log("El elemento " + idGrid + "_nav_2_reg  no est\u00E1 definido");
     else {
-        var cantidad = htmlImputCantidad.value.Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
-        var filtroJson = ObtenerFiltros(idGrid);
-        LeerDatosDelGrid("/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + 0 + "&cantidad=" + cantidad + "&filtro=" + filtroJson + "&orden=PorApellido", idGrid, SustituirGrid);
+        var url = urlPeticion(htmlImputCantidad, idGrid, 0);
+        LeerDatosDelGrid(url, idGrid, SustituirGrid);
     }
 }
 function LeerAnteriores(idGrid) {
@@ -65,11 +71,12 @@ function LeerAnteriores(idGrid) {
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = Number(htmlImputCantidad.getAttribute("posicion")) - 2 * cantidad.Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid);
-        else
-            LeerDatosDelGrid("/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + posicion + "&cantidad=" + cantidad + "&orden=PorApellido", idGrid, SustituirGrid);
+        else {
+            var url = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 function LeerSiguientes(idGrid) {
@@ -80,11 +87,12 @@ function LeerSiguientes(idGrid) {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute("posicion").Numero();
         var totalEnBd = htmlImputCantidad.getAttribute("totalEnBd").Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (totalEnBd > 0 && posicion + cantidad >= totalEnBd)
             LeerUltimos(idGrid);
-        else
-            LeerDatosDelGrid("/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + posicion + "&cantidad=" + cantidad + "&orden=PorApellido", idGrid, SustituirGrid);
+        else {
+            var url = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 function LeerUltimos(idGrid) {
@@ -94,11 +102,12 @@ function LeerUltimos(idGrid) {
     else {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute("totalEnBd").Numero() - cantidad;
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid);
-        else
-            LeerDatosDelGrid("/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + posicion + "&cantidad=" + cantidad + "&orden=PorApellido", idGrid, SustituirGrid);
+        else {
+            var url = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {

@@ -56,61 +56,72 @@ function ObtenerControlesDeFiltro(idGrid) {
     return arrayIds;
 }
 
+function urlPeticion(htmlInputCantidad: HTMLInputElement, idGrid: string, posicion: number): string {
+    var cantidad = htmlInputCantidad.value.Numero();
+    var controlador = htmlInputCantidad.getAttribute("controlador");
+    var filtroJson = ObtenerFiltros(idGrid);
+    var ordenJson = '[]';
+
+    var url: string = `/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&filtro=${filtroJson}&orden=${ordenJson}`;
+    return url;
+}
+
 function Leer(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
-        var cantidad = (<HTMLInputElement>htmlImputCantidad).value.Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
-        var filtroJson = ObtenerFiltros(idGrid);
-        LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${0}&cantidad=${cantidad}&filtro=${filtroJson}&orden=PorApellido`, idGrid, SustituirGrid);
+        var url: string = urlPeticion(htmlImputCantidad, idGrid, 0);
+        LeerDatosDelGrid(url, idGrid, SustituirGrid);
     }
 }
 
 function LeerAnteriores(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = (<HTMLInputElement>htmlImputCantidad).value;
         var posicion = Number((<HTMLInputElement>htmlImputCantidad).getAttribute("posicion")) - 2 * cantidad.Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid);
-        else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
+        else {
+            var url: string = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 
 function LeerSiguientes(idGrid: string) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad: number = (<HTMLInputElement>htmlImputCantidad).value.Numero();
         var posicion: number = htmlImputCantidad.getAttribute("posicion").Numero();
         var totalEnBd: number = htmlImputCantidad.getAttribute("totalEnBd").Numero();
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (totalEnBd > 0 && posicion + cantidad >= totalEnBd)
             LeerUltimos(idGrid);
-        else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
+        else {
+            var url: string = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 
 function LeerUltimos(idGrid) {
-    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad: number = (<HTMLInputElement>htmlImputCantidad).value.Numero();
         var posicion: number = (<HTMLInputElement>htmlImputCantidad).getAttribute("totalEnBd").Numero() - cantidad;
-        var controlador = htmlImputCantidad.getAttribute("controlador");
         if (posicion < 0)
             Leer(idGrid);
-        else
-            LeerDatosDelGrid(`/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&orden=PorApellido`, idGrid, SustituirGrid);
+        else {
+            var url: string = urlPeticion(htmlImputCantidad, idGrid, posicion);
+            LeerDatosDelGrid(url, idGrid, SustituirGrid);
+        }
     }
 }
 

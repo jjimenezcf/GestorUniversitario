@@ -26,6 +26,7 @@ HTMLInputElement.prototype.InicializarSelector = function () {
         var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
         if (!refCheckDeSeleccion.IsNullOrEmpty()) {
             InicializarModal(idGridModal, refCheckDeSeleccion);
+            htmlSelector.BanquearEditorDelGrid();
             htmlSelector.InicializarAtributos();
         }
         else
@@ -33,6 +34,20 @@ HTMLInputElement.prototype.InicializarSelector = function () {
     }
     else
         console.log("El atributo idGridModal del selector " + htmlSelector.id + " no est\u00E1 bien definido ");
+};
+HTMLInputElement.prototype.MapearTextoAlEditorDelGrid = function () {
+    var htmlSelector = this;
+    var htmlEditor = htmlSelector.EditorDelGrid();
+    if (!htmlSelector.value.IsNullOrEmpty()) {
+        var listaDeIds = htmlSelector.getAttribute(ListaDeSeleccionados);
+        if (listaDeIds === null || listaDeIds.IsNullOrEmpty())
+            htmlEditor.value = htmlSelector.value;
+        else
+            htmlEditor.value = '';
+    }
+    else {
+        htmlEditor.value = '';
+    }
 };
 HTMLInputElement.prototype.InicializarAtributos = function () {
     var htmlSelector = this;
@@ -65,17 +80,23 @@ HTMLInputElement.prototype.ClausulaDeBuscarValorEditado = function () {
     this.value = clausula.Valor;
     return clausula;
 };
+HTMLInputElement.prototype.BanquearEditorDelGrid = function () {
+    var htmlSelector = this;
+    var htmlEditor = htmlSelector.EditorDelGrid();
+    htmlEditor.value = '';
+};
+HTMLInputElement.prototype.EditorDelGrid = function () {
+    var htmlSelector = this;
+    var idEditorMostrar = htmlSelector.getAttribute('idEditorMostrar');
+    var htmlEditor = document.getElementById(idEditorMostrar);
+    return htmlEditor;
+};
+/***************************************************************************************************************
+Eventos en el selector y en la ventana modal
+ ***************************************************************************************************************/
 function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
     var htmlSelector = document.getElementById(idSelector);
-    if (!htmlSelector.value.IsNullOrEmpty()) {
-        var listaDeIds = htmlSelector.getAttribute(ListaDeSeleccionados);
-        var idEditorMostrar = htmlSelector.getAttribute('idEditorMostrar');
-        var htmlEditor = document.getElementById(idEditorMostrar);
-        if (listaDeIds === null || listaDeIds.IsNullOrEmpty())
-            htmlEditor.value = htmlSelector.value;
-        else
-            htmlEditor.value = '';
-    }
+    htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
     infoSelectores.Borrar(idGrid);
     var infSel = new InfoSelector(idGrid);
@@ -102,6 +123,20 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
             console.log("Se ha leido mal el elemento del selector " + idGrid + " de la posici\u00F3n " + x);
     }
     InicializarModal(idGrid, referenciaChecks);
+}
+function AlCambiarTextoSelector(idSelector, controlador) {
+    var htmlSelector = document.getElementById(idSelector);
+    if (!htmlSelector.value.IsNullOrEmpty()) {
+        var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
+        LeerParaSelector("/" + controlador + "/Leer?filtro=" + JSON.stringify(clausulas), htmlSelector, ProcesarRegistrosLeidos);
+    }
+    else {
+        htmlSelector.InicializarSelector();
+        var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
+        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
+            blanquearCheck(refCheckDeSeleccion);
+        }
+    }
 }
 function recargarGrid(idGrid) {
     var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
@@ -183,20 +218,6 @@ function blanquearCheck(refCheckDeSeleccion) {
         var check = c;
         check.checked = false;
     });
-}
-function AlCambiarTextoSelector(idSelector, controlador) {
-    var htmlSelector = document.getElementById(idSelector);
-    if (!htmlSelector.value.IsNullOrEmpty()) {
-        var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
-        LeerParaSelector("/" + controlador + "/Leer?filtro=" + JSON.stringify(clausulas), htmlSelector, ProcesarRegistrosLeidos);
-    }
-    else {
-        htmlSelector.InicializarSelector();
-        var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
-        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
-            blanquearCheck(refCheckDeSeleccion);
-        }
-    }
 }
 function ObtenerClausulaParaBuscarRegistro(htmlSelector) {
     var clausula = htmlSelector.ClausulaDeBuscarValorEditado();
