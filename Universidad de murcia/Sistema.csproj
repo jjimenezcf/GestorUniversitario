@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\DetalleEstudiante.css" />
+    <None Include="wwwroot\css\sistemaDeElementos.css" />
     <None Include="wwwroot\Extensiones\selectores.js" />
   </ItemGroup>
 

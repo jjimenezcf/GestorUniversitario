@@ -1,0 +1,54 @@
+﻿#tablaCabecera {
+    width: 100%;
+}
+
+
+.celdaCabeceraIzquierda {
+    background: #00b9ff;
+    text-align: left;
+    width: 15%
+}
+.celdaSeparador {
+    background: #00b9ff;
+}
+.celdaCabecera {
+    background: #00b9ff;
+    width:100px;
+}
+.estiloCeldaCabecera {
+    text-align: center;
+    border: hidden;
+    background: #00b9ff;
+    width: 100%;
+}
+.celdaCabeceraDerecha {
+    background: #00b9ff;
+    text-align:right;
+    width:15%
+}
+.estiloCeldaDerecha {
+    text-align: right;
+    border: hidden;
+    background: #00b9ff;
+}
+
+.etiquetaIzquierda {
+    text-align: left;
+    border: hidden;
+    background: #00b9ff;
+}
+.sidebar {
+    width: 0;
+    left: 0;
+    height: 100%;
+    min-height: 100%;
+    z-index: 1;
+    background-color: #00324b;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding: 1rem 0;
+    box-sizing: border-box;
+}
+
+
+

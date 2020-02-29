@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversidadDeMurcia", "UniversidadDeMurcia.csproj", "{51FAD3C8-C00A-40CA-A3ED-9C6C2B70D7FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sistema", "Sistema.csproj", "{51FAD3C8-C00A-40CA-A3ED-9C6C2B70D7FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeErrores", "..\Servicios\GestorDeErrores\GestorDeErrores.csproj", "{C81A6CF1-2457-4588-936F-026EC7F2A221}"
 EndProject
