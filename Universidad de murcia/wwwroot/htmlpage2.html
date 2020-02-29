@@ -56,6 +56,41 @@
                             <li><a href="#">Opción 4</a></li>
                             <li><a href="#">Opción 5</a></li>
                         </ul>
+
+                        <div class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3 ">
+                            <a class="navbar-brand" href="#">Opciones</a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">Acerca de</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Estudiantes" asp-action="Index">Estudiantes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Cursos" asp-action="Index">Cursos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Instructors" asp-action="Index">Profesores</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a>
+                                    </li>
+                                </ul>
+                                <form class="form-inline my-2 my-lg-0">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Opción" aria-label="Search">
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar opción</button>
+                                </form>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col">

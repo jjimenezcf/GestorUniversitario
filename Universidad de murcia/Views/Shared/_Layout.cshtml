@@ -29,7 +29,7 @@
             <table id="tablaCabecera" class="table">
                 <tr>
                     <td class="celdaCabeceraIzquierda">
-                        <input id="idproducto" type="text" class="etiquetaIzquierda" value="Sitema de elementos" readonly />
+                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" onclick="mostrar()" />
                     </td>
                     <td class="celdaSeparador">
                     </td>
@@ -80,11 +80,31 @@
             </div>
         </header>
 
-        <main role="main" class="pb-3">
-            @RenderBody()
-            <br />
-            <br />
-        </main>
+        <div class="table">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div id="sidebar" class="sidebar" style="width: 300px;">
+                        <a href="#" class="boton-cerrar" onclick="ocultar()">×</a>
+                        <ul class="menu">
+                            <li><a href="#">Opción 1</a></li>
+                            <li><a href="#">Opción 2</a></li>
+                            <li><a href="#">Opción 3</a></li>
+                            <li><a href="#">Opción 4</a></li>
+                            <li><a href="#">Opción 5</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div id="contenido" style="width: 100%" ;>
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                            <br />
+                            <br />
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer class="border-top footer text-muted">
             <div class="text-info" width="100%">
@@ -103,6 +123,19 @@
 
 
         @RenderSection("Scripts", required: false)
+
+        <script>
+            
+
+        function mostrar() {
+            document.getElementById("sidebar").style.width = "300px";
+        }
+
+        function ocultar() {
+            document.getElementById("sidebar").style.width = "0";
+            document.getElementById("contenido").style.marginLeft = "0";
+        }
+        </script>
 
         <partial name="_CookieConsentPartial" />
     </div>
