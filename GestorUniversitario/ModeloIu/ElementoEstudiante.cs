@@ -11,7 +11,7 @@ namespace Gestor.Elementos.Universitario.ModeloIu
        public static string CursosInscrito = nameof(CursosInscrito).ToLower();
     }
 
-    public class ElementoEstudiante: ElementoBase
+    public class ElementoEstudiante: Elemento
     {
         public string Apellido { get; set; }
         public string Nombre { get; set; }

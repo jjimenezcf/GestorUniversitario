@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Elementos.ModeloBd
 {
-    public class RegistroBase
+    public class Registro
     {
+        [Key]
+        [Column("ID", Order = 1, TypeName = "INT")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
     }
 
@@ -12,7 +17,8 @@ namespace Gestor.Elementos.ModeloBd
         public string Select { get; private set; }
         public int Leidos { get; set; }
         public List<string> Columnas { get; private set; }
-        public Dictionary<int, List<object>> Registros { get; private set; }
+        public Dictionary<int, List<object>> Registros { get; private set; } = new Dictionary<int, List<object>>();
+
         private int _RegistrosPorLeer;
         private ContextoDeElementos _Contexto;
 

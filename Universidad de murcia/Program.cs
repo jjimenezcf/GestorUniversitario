@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Gestor.Elementos;
+using Gestor.Elementos.Entorno;
 using Gestor.Elementos.ModeloBd;
-using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,57 +16,60 @@ namespace UniversidadDeMurcia
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-            CreateDbIfNotExists(host);
+            CrearBdSiNoExiste(host);
             host.Run();
         }
 
-        private static void CreateDbIfNotExists(IWebHost host)
+        private static void CrearBdSiNoExiste(IWebHost host)
         {
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            var contexto = services.GetRequiredService<ContextoUniversitario>();
+            IniciarContextoDeEntorno(services);
+            IniciarContextoUniversitario(services);
+        }
+
+        private static void IniciarContextoUniversitario(IServiceProvider services)
+        {
+            var cnxUniv = services.GetRequiredService<ContextoUniversitario>();
             try
             {
-                InicializadorBD.Inicializar(contexto);
-                contexto.IniciarTraza();
-                var resultado = contexto.CatalogoDelSe
-                    .FromSqlRaw($"SELECT * FROM dbo.CatalogoDelSe WHERE tabla = '__EFMigrationsHistory'")
-                    .FirstOrDefault();
-
-                //var consulta = contexto.Se
-                //    .FromSqlRaw($"select top(1) ProductVersion from dbo.__EFMigrationsHistory order by MigrationId desc")
-                //    .FirstOrDefault();
-
-                //contexto.DatosDeConexion.ServidorWeb = Environment.MachineName;
-                //contexto.DatosDeConexion.ServidorBd = contexto.Database.GetDbConnection().DataSource;
-                //contexto.DatosDeConexion.Bd = contexto.Database.GetDbConnection().Database;
-                //contexto.DatosDeConexion.Version = "1.1.1";
-                //contexto.DatosDeConexion.Usuario = "jjimenezcf@gmail.com";
-
-                logger.LogInformation($"{Environment.NewLine}Objeto leido: {resultado}." +
-                                      $"{Environment.NewLine}Id: {resultado.Id}" +
-                                      $"{Environment.NewLine}BD: {resultado.Catalogo}" +
-                                      $"{Environment.NewLine}Esquema: {resultado.Esquema}" +
-                                      $"{Environment.NewLine}Tabla: {resultado.Tabla}");
-
-                logger.LogInformation($"{Environment.NewLine}Contexto {contexto.GetType().Name} inicializado.{Environment.NewLine}BD: {contexto.Database.GetDbConnection().Database}");
+                cnxUniv.IniciarTraza();
+                ContextoUniversitario.InicializarMaestros(cnxUniv);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{Environment.NewLine}Error al inicializar la BD.{Environment.NewLine}");
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}", ex);
+                throw new Exception($"Error al conectarse al contexto {cnxUniv.GetType().Name}", ex);
             }
             finally
             {
-                if (contexto != null)
-                    contexto.CerrarTraza();
+                if (cnxUniv != null)
+                    cnxUniv.CerrarTraza();
+            }
+        }
+
+        private static void IniciarContextoDeEntorno(IServiceProvider services)
+        {
+            var cnxSe = services.GetRequiredService<ContextoEntorno>();
+            try
+            {
+                cnxSe.IniciarTraza();
+                ContextoEntorno.NuevaVersion(cnxSe);
+            }
+            catch (Exception ex)
+            {
+                Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
+                throw new Exception($"Error al conectarse al contexto {cnxSe.GetType().Name}", ex);
+            }
+            finally
+            {
+                if (cnxSe != null)
+                    cnxSe.CerrarTraza();
             }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                    .UseStartup<Startup>();
     }
 }

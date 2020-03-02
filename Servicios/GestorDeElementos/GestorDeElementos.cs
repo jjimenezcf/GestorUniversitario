@@ -25,7 +25,7 @@ namespace Gestor.Elementos
     {
         public const string FiltroPorId = "Id";
 
-        public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : RegistroBase
+        public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
         {
             foreach(ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == FiltroPorId.ToLower())
@@ -41,7 +41,7 @@ namespace Gestor.Elementos
     {
         public const string OrdenPorId = "PorId";
 
-        public static IQueryable<TRegistro> Orden<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, Ordenacion> orden) where TRegistro : RegistroBase
+        public static IQueryable<TRegistro> Orden<TRegistro>(this IQueryable<TRegistro> set, Dictionary<string, Ordenacion> orden) where TRegistro : Registro
         {
             if (orden.ContainsKey(OrdenPorId))
             {
@@ -58,8 +58,8 @@ namespace Gestor.Elementos
 
 
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> 
-        where TRegistro : RegistroBase 
-        where TElemento : ElementoBase 
+        where TRegistro : Registro 
+        where TElemento : Elemento 
         where TContexto : ContextoDeElementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;

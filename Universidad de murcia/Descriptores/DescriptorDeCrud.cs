@@ -101,9 +101,10 @@ namespace UniversidadDeMurcia.Descriptores
             return atributos;
         }
 
-        public void CambiarAtributos(string clave, string ayuda)
+        public void CambiarAtributos(string propiedad, string ayuda)
         {
-            Propiedad = clave;
+            Id = $"{Padre.Id}_{propiedad}";
+            Propiedad = propiedad;
             Ayuda = ayuda;
         }
 
@@ -145,6 +146,8 @@ namespace UniversidadDeMurcia.Descriptores
 
         public string RenderSelector()
         {
+            ControlHtml edt = Descriptor.Filtro.BuscarControl(PropiedadDondeMapear);
+
             return $@"<div class=¨input-group mb-3¨>
                        <input id=¨{IdHtml}¨ 
                               type = ¨text¨ 
@@ -157,7 +160,7 @@ namespace UniversidadDeMurcia.Descriptores
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
                               idGridModal=¨{Descriptor.Grid.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
-                              idEditorMostrar=¨{Descriptor.Filtro.BuscarControl(PropiedadDondeMapear).IdHtml}¨
+                              idEditorMostrar=¨{edt.IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{Descriptor.Grid.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace Gestor.Elementos.Universitario.ContextosDeBd
+namespace Gestor.Elementos.Universitario
 {
 
     public class ContextoUniversitario : ContextoDeElementos
@@ -25,6 +25,13 @@ namespace Gestor.Elementos.Universitario.ContextosDeBd
             modelBuilder.Entity<RegistroDeCurso>().ToTable("Curso");
             modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
             modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
+
+        }
+
+        public static void InicializarMaestros(ContextoUniversitario contexto)
+        {
+            if (!contexto.Estudiantes.Any())
+                Maestros.CrearDatosIniciales(contexto);
 
         }
 

@@ -9,7 +9,7 @@ namespace Gestor.Elementos.Universitario.ModeloIu
         public static string EstudianteInscrito = nameof(EstudianteInscrito).ToLower();
     }
 
-    public class ElementoCurso : ElementoBase
+    public class ElementoCurso : Elemento
     {
         public string Titulo { get; set; }
         public int Creditos { get; set; }

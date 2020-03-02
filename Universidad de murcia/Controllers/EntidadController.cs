@@ -22,8 +22,8 @@ namespace UniversidadDeMurcia.Controllers
 
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
         where TContexto : ContextoDeElementos
-        where TRegistro : RegistroBase
-        where TElemento : ElementoBase
+        where TRegistro : Registro
+        where TElemento : Elemento
     {
 
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }

@@ -1,5 +1,5 @@
 ﻿using Gestor.Elementos.Universitario.ModeloBd;
-using Gestor.Elementos.Universitario.ContextosDeBd;
+using Gestor.Elementos.Universitario;
 using Gestor.Elementos.Universitario.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

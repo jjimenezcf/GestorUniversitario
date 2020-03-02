@@ -7,7 +7,7 @@
     }
 
 
-    public class ElementoBase
+    public class Elemento
     {
         public int Id { get; set; }
     }

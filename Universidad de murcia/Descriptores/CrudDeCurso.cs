@@ -12,17 +12,20 @@ namespace UniversidadDeMurcia.Descriptores
     {
         public CrudCurso(ModoDescriptor modo)
         : base(controlador: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos", modo: modo)
-        {
+        {            
             if (modo == ModoDescriptor.Mantenimiento)
-               new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
-                                             etiqueta: "Estudiante",
-                                             propiedad: CursoPor.EstudianteInscrito,
-                                             ayuda: "Seleccionar estudiante",
-                                             posicion: new Posicion() { fila = 0, columna = 0 },
-                                             paraFiltrar: nameof(ElementoEstudiante.Id),
-                                             paraMostrar: nameof(ElementoEstudiante.Apellido),
-                                             descriptor: new CrudEstudiante(ModoDescriptor.Seleccion),
-                                             propiedadDondeMapear: EstudiantesPor.NombreCompleto.ToString());
+            {
+                var descEstu = new CrudEstudiante(ModoDescriptor.Seleccion);
+                new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
+                                              etiqueta: "Estudiante",
+                                              propiedad: CursoPor.EstudianteInscrito,
+                                              ayuda: "Seleccionar estudiante",
+                                              posicion: new Posicion() { fila = 0, columna = 0 },
+                                              paraFiltrar: nameof(ElementoEstudiante.Id),
+                                              paraMostrar: nameof(ElementoEstudiante.Apellido),
+                                              descriptor: descEstu,
+                                              propiedadDondeMapear: EstudiantesPor.NombreCompleto.ToString());
+            }
 
             DefinirVistaDeCreacion(accion: "IraCrearCurso", textoMenu: "Crear curso");
 

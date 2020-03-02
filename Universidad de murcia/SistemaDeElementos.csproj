@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GestorDeEntorno\GestorDeEntorno.csproj" />
     <ProjectReference Include="..\GestorUniversitario\GestorUniversitario.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeErrores\GestorDeErrores.csproj" />

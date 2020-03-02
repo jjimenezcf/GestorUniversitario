@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Universitario.ModeloBd
 {
-    public class RegistroDeCurso : RegistroBase
+    public class RegistroDeCurso : Registro
     {
         public string Titulo { get; set; }
         public int Creditos { get; set; }

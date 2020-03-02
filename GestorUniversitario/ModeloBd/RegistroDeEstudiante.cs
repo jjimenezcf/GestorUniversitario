@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Universitario.ModeloBd
 {
-    public class RegistroDeEstudiante : RegistroBase
+    public class RegistroDeEstudiante : Registro
     {
         public string Apellido { get; set; }
         public string Nombre { get; set; }

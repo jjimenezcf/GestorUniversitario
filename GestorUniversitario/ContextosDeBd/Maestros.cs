@@ -1,46 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using Gestor.Elementos.Universitario.ModeloBd;
 using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
-using Gestor.Elementos.ModeloBd;
 
-namespace Gestor.Elementos.Universitario.ContextosDeBd
+namespace Gestor.Elementos.Universitario
 {
-    public class InicializadorBD
+    public class Maestros
     {
 
-        public static void Inicializar(ContextoUniversitario contexto)
-        {
-            contexto.Database.EnsureCreated();
-            //contexto.Database.Migrate();
-
-            if (!contexto.Estudiantes.Any())
-                CrearDatosIniciales(contexto);
-
-            if (!contexto.Variables.Any())
-            {
-                var variables = new RegistroDeVariable[]
-                {
-                    new RegistroDeVariable{Nombre="Versión",Descri="Versión del producto",Valor="0.0.1"}
-                };
-                foreach (RegistroDeVariable variable in variables)
-                {
-                    contexto.Variables.Add(variable);
-                }
-            }
-            else
-            {
-                var version = contexto.Variables.SingleOrDefault(v => v.Nombre == "Versión");
-                version.Valor = "0.0.2";
-                contexto.Variables.Update(version);
-            }
-
-            contexto.SaveChanges();
-
-        }
-
-        private static void CrearDatosIniciales(ContextoUniversitario contexto)
+        public static void CrearDatosIniciales(ContextoUniversitario contexto)
         {
             // Look for any students.
             if (!contexto.Estudiantes.Any())

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Gestor.Elementos.Universitario.ModeloIu
 {    
 
-    public class ElementoInscripcionesDeUnEstudiante : ElementoBase
+    public class ElementoInscripcionesDeUnEstudiante : Elemento
     {
         public int IdCurso { get; set; }
         public int IdEstudiante { get; set; }

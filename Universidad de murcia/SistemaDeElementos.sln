@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sistema", "Sistema.csproj", "{51FAD3C8-C00A-40CA-A3ED-9C6C2B70D7FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaDeElementos", "SistemaDeElementos.csproj", "{51FAD3C8-C00A-40CA-A3ED-9C6C2B70D7FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeErrores", "..\Servicios\GestorDeErrores\GestorDeErrores.csproj", "{C81A6CF1-2457-4588-936F-026EC7F2A221}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorUniversitario", "..\GestorUniversitario\GestorUniversitario.csproj", "{432F0E29-FD3D-4D94-AC46-80C44D171219}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeElementos", "..\Servicios\GestorDeElementos\GestorDeElementos.csproj", "{14238C7E-1CB5-47FE-9869-F0774CFDA37A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeEntorno", "..\GestorDeEntorno\GestorDeEntorno.csproj", "{65B3644E-26F5-40C6-B71A-6BC4C870D282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,26 @@ Global
 		{14238C7E-1CB5-47FE-9869-F0774CFDA37A}.Release|x64.Build.0 = Release|Any CPU
 		{14238C7E-1CB5-47FE-9869-F0774CFDA37A}.Release|x86.ActiveCfg = Release|Any CPU
 		{14238C7E-1CB5-47FE-9869-F0774CFDA37A}.Release|x86.Build.0 = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|ARM.Build.0 = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|x64.Build.0 = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Debug|x86.Build.0 = Debug|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|ARM.ActiveCfg = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|ARM.Build.0 = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|ARM64.Build.0 = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|x64.ActiveCfg = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|x64.Build.0 = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|x86.ActiveCfg = Release|Any CPU
+		{65B3644E-26F5-40C6-B71A-6BC4C870D282}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
