@@ -14,14 +14,20 @@ namespace Gestor.Elementos
     class Literal
     {
         internal static readonly string usuario = "jjimenezcf@gmail.com";
-        internal static readonly string esquemaBd = "dbo";
+        internal static readonly string DebugarSqls = nameof(DebugarSqls);
+        internal static readonly string esquemaBd = "ENTORNO";
+        internal static readonly string version = "Versión";
+        internal static readonly string Version_0 = "0.0.0";
+
         public class Vista
         {
             internal static string Catalogo = "CatalogoDelSe";
         }
+        internal class Tabla
+        {
+            internal static string Variable = "Var_Elemento";
+        }
     }
-
-
     public class DatosDeConexion
     {
         public string ServidorWeb { get; set; }
@@ -30,12 +36,42 @@ namespace Gestor.Elementos
         public string Usuario { get; set; }
         public string Version { get; set; }
     }
+    public class DebugarSql : ConsultaSql
+    {
+        public bool DebugarSqls => (Registros.Count == 1 ? Registros[0][3].ToString() == "S" : false);
 
+        public DebugarSql(ContextoDeElementos contexto)
+        : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.DebugarSqls}'")
+        {
+            Ejecutar();
+        }
+    }
+    public class VersionSql : ConsultaSql
+    {
+        public string Version => (Registros.Count == 1 ? (string) Registros[0][3] : Literal.Version_0);
+
+        public VersionSql(ContextoDeElementos contexto)
+            : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.version}'")
+        {
+            Ejecutar();
+        }
+    }
     public class ContextoDeElementos : DbContext
     {
         public DatosDeConexion DatosDeConexion { get; set; }
 
-        public bool Debuggar { get; set; }
+        public bool Debuggar
+        {
+            get
+            {
+                var a = new DebugarSql(this);
+                if (a != null)
+                    return a.DebugarSqls;
+
+                return false;
+            }
+        }
+
 
         public TrazaSql Traza { get; private set; }
         private InterceptadorDeConsultas _interceptadorDeConsultas;
@@ -49,7 +85,7 @@ namespace Gestor.Elementos
 
             InicializarDatosContexto();
         }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             var conexion = "Server=(localdb)\\MSSQLLocalDB;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
@@ -63,9 +99,20 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Usuario = Literal.usuario;
+            DatosDeConexion.Usuario = Literal.usuario; 
+            DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable).Existe ?
+                                      ObtenerVersion() :
+                                      Literal.Version_0;
         }
-        
+
+        private string ObtenerVersion()
+        {
+            var a = new VersionSql(this);
+            if (a != null)
+                return a.Version;
+
+            return Literal.Version_0;
+        }
 
         public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
 
@@ -107,7 +154,6 @@ namespace Gestor.Elementos
 
 
     }
-
     public class InterceptadorDeConsultas : DbCommandInterceptor
     {
         public TrazaSql Traza { get; set; }

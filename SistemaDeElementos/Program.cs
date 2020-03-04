@@ -50,21 +50,21 @@ namespace UniversidadDeMurcia
 
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
-            var cnxSe = services.GetRequiredService<ContextoEntorno>();
+            var cnxEntorno = services.GetRequiredService<ContextoEntorno>();
             try
             {
-                cnxSe.IniciarTraza();
-                ContextoEntorno.NuevaVersion(cnxSe);
+                cnxEntorno.IniciarTraza();
+                ContextoEntorno.NuevaVersion(cnxEntorno);
             }
             catch (Exception ex)
             {
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {cnxSe.GetType().Name}", ex);
+                throw new Exception($"Error al conectarse al contexto {cnxEntorno.GetType().Name}", ex);
             }
             finally
             {
-                if (cnxSe != null)
-                    cnxSe.CerrarTraza();
+                if (cnxEntorno != null)
+                    cnxEntorno.CerrarTraza();
             }
         }
 
