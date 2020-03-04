@@ -1,31 +1,33 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GestorUniversitario.Migrations
+namespace Migraciones.Migrations
 {
-    public partial class inicial : Migration
+    public partial class inicialUniversitario : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "ENTORNO");
+                name: "UNIVERSIDAD");
 
             migrationBuilder.CreateTable(
-                name: "Curso",
+                name: "CUR_ELEMENTO",
+                schema: "UNIVERSIDAD",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(nullable: true),
-                    Creditos = table.Column<int>(nullable: false)
+                    TITULO = table.Column<string>(type: "VARCHAR(250)", nullable: false),
+                    CREDITOS = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Curso", x => x.ID);
+                    table.PrimaryKey("PK_CUR_ELEMENTO", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Estudiante",
+                name: "EST_ELEMENTO",
+                schema: "UNIVERSIDAD",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INT", nullable: false)
@@ -36,27 +38,12 @@ namespace GestorUniversitario.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estudiante", x => x.ID);
+                    table.PrimaryKey("PK_EST_ELEMENTO", x => x.ID);
                 });
 
-            //migrationBuilder.CreateTable(
-            //    name: "VAR_ELEMENTO",
-            //    schema: "ENTORNO",
-            //    columns: table => new
-            //    {
-            //        ID = table.Column<int>(type: "INT", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        NOMBRE = table.Column<string>(type: "VARCHAR(50)", nullable: false),
-            //        DESCRIPCION = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-            //        VALOR = table.Column<string>(type: "VARCHAR(50)", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_VAR_ELEMENTO", x => x.ID);
-            //    });
-
             migrationBuilder.CreateTable(
-                name: "Inscripcion",
+                name: "EST_CURSO",
+                schema: "UNIVERSIDAD",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INT", nullable: false)
@@ -67,46 +54,49 @@ namespace GestorUniversitario.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Inscripcion", x => x.ID);
+                    table.PrimaryKey("PK_EST_CURSO", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Inscripcion_Curso_CursoId",
+                        name: "FK_EST_CURSO_CUR_ELEMENTO_CursoId",
                         column: x => x.CursoId,
-                        principalTable: "Curso",
+                        principalSchema: "UNIVERSIDAD",
+                        principalTable: "CUR_ELEMENTO",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Inscripcion_Estudiante_EstudianteId",
+                        name: "FK_EST_CURSO_EST_ELEMENTO_EstudianteId",
                         column: x => x.EstudianteId,
-                        principalTable: "Estudiante",
+                        principalSchema: "UNIVERSIDAD",
+                        principalTable: "EST_ELEMENTO",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inscripcion_CursoId",
-                table: "Inscripcion",
+                name: "IX_EST_CURSO_CursoId",
+                schema: "UNIVERSIDAD",
+                table: "EST_CURSO",
                 column: "CursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inscripcion_EstudianteId",
-                table: "Inscripcion",
+                name: "IX_EST_CURSO_EstudianteId",
+                schema: "UNIVERSIDAD",
+                table: "EST_CURSO",
                 column: "EstudianteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Inscripcion");
-
-            //migrationBuilder.DropTable(
-            //    name: "VAR_ELEMENTO",
-            //    schema: "ENTORNO");
+                name: "EST_CURSO",
+                schema: "UNIVERSIDAD");
 
             migrationBuilder.DropTable(
-                name: "Curso");
+                name: "CUR_ELEMENTO",
+                schema: "UNIVERSIDAD");
 
             migrationBuilder.DropTable(
-                name: "Estudiante");
+                name: "EST_ELEMENTO",
+                schema: "UNIVERSIDAD");
         }
     }
 }

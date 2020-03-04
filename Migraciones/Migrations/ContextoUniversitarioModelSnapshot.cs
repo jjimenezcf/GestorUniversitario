@@ -4,49 +4,20 @@ using Gestor.Elementos.Universitario;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GestorUniversitario.Migrations
+namespace Migraciones.Migrations
 {
     [DbContext(typeof(ContextoUniversitario))]
-    [Migration("20200302222626_inicial")]
-    partial class inicial
+    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            //modelBuilder.Entity("Gestor.Elementos.ModeloBd.Var_Elemento", b =>
-            //    {
-            //        b.Property<int>("Id")
-            //            .ValueGeneratedOnAdd()
-            //            .HasColumnName("ID")
-            //            .HasColumnType("INT")
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            //        b.Property<string>("Descripcion")
-            //            .HasColumnName("DESCRIPCION")
-            //            .HasColumnType("VARCHAR(MAX)");
-
-            //        b.Property<string>("Nombre")
-            //            .IsRequired()
-            //            .HasColumnName("NOMBRE")
-            //            .HasColumnType("VARCHAR(50)");
-
-            //        b.Property<string>("Valor")
-            //            .IsRequired()
-            //            .HasColumnName("VALOR")
-            //            .HasColumnType("VARCHAR(50)");
-
-            //        b.HasKey("Id");
-
-            //        b.ToTable("VAR_ELEMENTO","ENTORNO");
-            //    });
 
             modelBuilder.Entity("Gestor.Elementos.Universitario.ModeloBd.RegistroDeCurso", b =>
                 {
@@ -57,14 +28,17 @@ namespace GestorUniversitario.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Creditos")
-                        .HasColumnType("int");
+                        .HasColumnName("CREDITOS")
+                        .HasColumnType("INT");
 
                     b.Property<string>("Titulo")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnName("TITULO")
+                        .HasColumnType("VARCHAR(250)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Curso");
+                    b.ToTable("CUR_ELEMENTO","UNIVERSIDAD");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Universitario.ModeloBd.RegistroDeEstudiante", b =>
@@ -86,7 +60,7 @@ namespace GestorUniversitario.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estudiante");
+                    b.ToTable("EST_ELEMENTO","UNIVERSIDAD");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Universitario.ModeloBd.RegistroDeInscripcion", b =>
@@ -112,7 +86,7 @@ namespace GestorUniversitario.Migrations
 
                     b.HasIndex("EstudianteId");
 
-                    b.ToTable("Inscripcion");
+                    b.ToTable("EST_CURSO","UNIVERSIDAD");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Universitario.ModeloBd.RegistroDeInscripcion", b =>

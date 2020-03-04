@@ -2,9 +2,11 @@
 using Gestor.Elementos.ModeloBd;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Elementos.Universitario.ModeloBd
 {
+    [Table("EST_ELEMENTO", Schema = "UNIVERSIDAD")]
     public class RegistroDeEstudiante : Registro
     {
         public string Apellido { get; set; }

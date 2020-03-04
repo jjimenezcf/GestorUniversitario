@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,15 @@ namespace Gestor.Elementos.Entorno
         public ContextoEntorno(DbContextOptions<ContextoEntorno> options) :
         base(options)
         {
-            InicializarDatosEntorno();
+
+           //InicializarDatosEntorno();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var conexion = "Server=(localdb)\\MSSQLLocalDB;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
+            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
+                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
         }
 
         public void InicializarDatosEntorno()
@@ -66,6 +75,7 @@ namespace Gestor.Elementos.Entorno
             return registro == null ? false : registro.Valor == "S";
 
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

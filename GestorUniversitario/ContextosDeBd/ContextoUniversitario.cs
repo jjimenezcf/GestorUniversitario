@@ -9,22 +9,29 @@ namespace Gestor.Elementos.Universitario
 
     public class ContextoUniversitario : ContextoDeElementos
     {
+        public DbSet<RegistroDeCurso> Cursos { get; set; }
+        public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
+        public DbSet<RegistroDeEstudiante> Estudiantes { get; set; }
+
         public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options) :
         base(options)
         {
 
         }
 
-        public DbSet<RegistroDeCurso> Cursos { get; set; }
-        public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
-        public DbSet<RegistroDeEstudiante> Estudiantes { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var conexion = "Server=(localdb)\\MSSQLLocalDB;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
+            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
+                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<RegistroDeCurso>().ToTable("Curso");
-            modelBuilder.Entity<RegistroDeInscripcion>().ToTable("Inscripcion");
-            modelBuilder.Entity<RegistroDeEstudiante>().ToTable("Estudiante");
+            modelBuilder.Entity<RegistroDeCurso>();
+            modelBuilder.Entity<RegistroDeInscripcion>();
+            modelBuilder.Entity<RegistroDeEstudiante>();
 
         }
 

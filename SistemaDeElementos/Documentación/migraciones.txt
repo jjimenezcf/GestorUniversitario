@@ -1,0 +1,5 @@
+﻿add-migration -context contextoentorno inicialEntorno
+update-database -context contextoentorno
+add-migration -context contextouniversitario inicialUniversitario
+update-database -context contextouniversitario
+Script-Migration -context contextouniversitario

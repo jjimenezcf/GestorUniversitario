@@ -165,18 +165,24 @@ namespace Gestor.Elementos
 
         private void RegistrarTraza()
         {
-            _cronoSql.Stop();
+            if (_cronoSql != null)
+            {
+                _cronoSql.Stop();
 
-            if (Traza != null)
-                Traza.AnotarTrazaSql(_sentenciaSql.CommandText, _sentenciaSql.Parameters, _cronoSql.ElapsedMilliseconds);
+                if (Traza != null)
+                    Traza.AnotarTrazaSql(_sentenciaSql.CommandText, _sentenciaSql.Parameters, _cronoSql.ElapsedMilliseconds);
+            }
         }
 
         private void RegistrarError(Exception excepcion)
         {
-            _cronoSql.Stop();
+            if (_cronoSql != null)
+            {
+                _cronoSql.Stop();
 
-            if (Traza != null)
-                Traza.AnotarExcepcion(excepcion);
+                if (Traza != null)
+                    Traza.AnotarExcepcion(excepcion);
+            }
         }
     }
 }
