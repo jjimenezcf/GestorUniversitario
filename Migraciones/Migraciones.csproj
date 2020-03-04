@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200304210352_inicialUniversitario.cs" />
+    <Compile Remove="Migrations\20200304210352_inicialUniversitario.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GestorDeEntorno\GestorDeEntorno.csproj" />
     <ProjectReference Include="..\GestorUniversitario\GestorUniversitario.csproj" />
+    <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
   </ItemGroup>
 
 </Project>

@@ -54,12 +54,6 @@ namespace Gestor.Elementos.Entorno
            //InicializarDatosEntorno();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            var conexion = "Server=(localdb)\\MSSQLLocalDB;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
-            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
-                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
-        }
 
         public void InicializarDatosEntorno()
         {

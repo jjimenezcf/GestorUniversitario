@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoEntorno))]
-    [Migration("20200304202246_inicialEntorno")]
+    [Migration("20200304210022_inicialEntorno")]
     partial class inicialEntorno
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
