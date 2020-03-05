@@ -8,7 +8,7 @@ using UniversidadDeMurcia.Descriptores;
 
 namespace UniversidadDeMurcia.Controllers
 {
-    public class EstudiantesController : EntidadController<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
+    public class EstudiantesController : EntidadController<ContextoUniversitario, Usuario, UsuarioDto>
     {
 
         public EstudiantesController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
@@ -32,7 +32,7 @@ namespace UniversidadDeMurcia.Controllers
         
         public IActionResult IraCrearEstudiante()
         {
-            return View(GestorDelCrud.Creador.Vista, new ElementoEstudiante());
+            return View(GestorDelCrud.Creador.Vista, new UsuarioDto());
         }
 
         public IActionResult IraDetalleEstudiante(int? id)
@@ -54,7 +54,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(CrearEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] ElementoEstudiante estudiante)
+        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] UsuarioDto estudiante)
         {
             return await CrearObjeto(estudiante);
         }
@@ -63,7 +63,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(ModificarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] ElementoEstudiante estudiante)
+        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] UsuarioDto estudiante)
         {
             return await ModificarObjeto(id, estudiante);
         }
@@ -79,14 +79,14 @@ namespace UniversidadDeMurcia.Controllers
             return IraMantenimientoEstudiante("");
         }
 
-        private ElementoEstudiante LeerEstudiante(int? id)
+        private UsuarioDto LeerEstudiante(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoPorId((int)id);
+            var estudiante = (UsuarioDto)GestorDeElementos.LeerElementoPorId((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");
@@ -95,14 +95,14 @@ namespace UniversidadDeMurcia.Controllers
             return estudiante;
         }
 
-        private ElementoEstudiante LeerDetalle(int? id)
+        private UsuarioDto LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del estudiante no puede ser nulo");
             }
 
-            var estudiante = (ElementoEstudiante)GestorDeElementos.LeerElementoConDetalle((int)id);
+            var estudiante = (UsuarioDto)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (estudiante == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del estudiante no se pudo localizar");

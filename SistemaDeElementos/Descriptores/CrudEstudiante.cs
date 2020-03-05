@@ -8,7 +8,7 @@ using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public class CrudEstudiante : DescriptorDeCrud<ElementoEstudiante>
+    public class CrudEstudiante : DescriptorDeCrud<UsuarioDto>
     {
         public CrudEstudiante(ModoDescriptor modo)
         : base(controlador: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes", modo: modo)
@@ -16,7 +16,7 @@ namespace UniversidadDeMurcia.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
                 new Selector<ElementoCurso>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Curso",
-                                        propiedad: EstudiantesPor.CursosInscrito,
+                                        propiedad: UsuariosPor.CursosInscrito,
                                         ayuda: "Seleccionar curso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
                                         paraFiltrar: nameof(ElementoCurso.Id),
@@ -26,7 +26,7 @@ namespace UniversidadDeMurcia.Descriptores
 
             DefinirVistaDeCreacion(accion: "IraCrearEstudiante", textoMenu: "Crear estudiante");
 
-            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(EstudiantesPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
             DefinirColumnasDelGrid();
         }
@@ -36,18 +36,21 @@ namespace UniversidadDeMurcia.Descriptores
         {
             base.DefinirColumnasDelGrid();
 
-            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Id), Tipo = typeof(int), Visible = false };
+            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Id), Tipo = typeof(int), Visible = false };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Apellido), Ordenar = true, Ruta = "Estudiantes", Accion = "IraMantenimientoEstudiante" };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Login) };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(ElementoEstudiante.Nombre) };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Apellido), Ordenar = true, Ruta = "Estudiantes", Accion = "IraMantenimientoEstudiante" };
+            Grid.Columnas.Add(columnaDelGrid);
+
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Nombre) };
             Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid
             {
-                Nombre = nameof(ElementoEstudiante.InscritoEl),
+                Nombre = nameof(UsuarioDto.InscritoEl),
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
                 Ordenar = true,
@@ -57,7 +60,7 @@ namespace UniversidadDeMurcia.Descriptores
             Grid.Columnas.Add(columnaDelGrid);
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<ElementoEstudiante> elementos)
+        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos)
         {
             base.MapearElementosAlGrid(elementos);
             foreach (var estudiante in elementos)
@@ -66,16 +69,19 @@ namespace UniversidadDeMurcia.Descriptores
                 foreach (ColumnaDelGrid columna in Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
-                    if (columna.Nombre == nameof(ElementoEstudiante.Id))
+                    if (columna.Nombre == nameof(UsuarioDto.Id))
                         celda.Valor = estudiante.Id.ToString();
                     else
-                    if (columna.Nombre == nameof(ElementoEstudiante.Apellido))
+                    if (columna.Nombre == nameof(UsuarioDto.Login))
+                        celda.Valor = estudiante.Login.ToString();
+                    else
+                    if (columna.Nombre == nameof(UsuarioDto.Apellido))
                         celda.Valor = estudiante.Apellido;
                     else
-                    if (columna.Nombre == nameof(ElementoEstudiante.Nombre))
+                    if (columna.Nombre == nameof(UsuarioDto.Nombre))
                         celda.Valor = estudiante.Nombre.ToString();
                     else
-                    if (columna.Nombre == nameof(ElementoEstudiante.InscritoEl))
+                    if (columna.Nombre == nameof(UsuarioDto.InscritoEl))
                         celda.Valor = estudiante.InscritoEl.ToString();
 
                     fila.Celdas.Add(celda);

@@ -1,0 +1,34 @@
+﻿using Gestor.Elementos.ModeloBd;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Gestor.Elementos.Universitario.ModeloBd
+{
+    [Table("USUARIO", Schema = "USUARIO")]
+    public class Usuario : Registro
+    {
+        [Required]
+        [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
+        public string Login { get; set; }
+
+        [Required]
+        [Column("APELLIDO", Order = 2, TypeName = "VARCHAR(250)")]
+        public string Apellido { get; set; }
+
+
+        [Required]
+        [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
+        public string Nombre { get; set; }
+
+
+        [Required]
+        [Column("F_ALTA", Order = 4, TypeName = "DATE")]
+        public DateTime Alta { get; set; }
+
+        public ICollection<RegistroDeInscripcion> Inscripciones { get; set; }
+
+    }
+
+}

@@ -13,18 +13,18 @@ namespace Gestor.Elementos.Universitario
             // Look for any students.
             if (!contexto.Estudiantes.Any())
             {
-                var estudiantes = new RegistroDeEstudiante[]
+                var estudiantes = new Usuario[]
                 {
-                    new RegistroDeEstudiante{Apellido="Carson",Nombre="Alexander",InscritoEl=DateTime.Parse("2005-09-01")},
-                    new RegistroDeEstudiante{Apellido="Meredith",Nombre="Alonso",InscritoEl=DateTime.Parse("2002-09-01")},
-                    new RegistroDeEstudiante{Apellido="Arturo",Nombre="Anand",InscritoEl=DateTime.Parse("2003-09-01")},
-                    new RegistroDeEstudiante{Apellido="Gytis",Nombre="Barzdukas",InscritoEl=DateTime.Parse("2002-09-01")},
-                    new RegistroDeEstudiante{Apellido="Yan",Nombre="Li",InscritoEl=DateTime.Parse("2002-09-01")},
-                    new RegistroDeEstudiante{Apellido="Peggy",Nombre="Justice",InscritoEl=DateTime.Parse("2001-09-01")},
-                    new RegistroDeEstudiante{Apellido="Laura",Nombre="Norman",InscritoEl=DateTime.Parse("2003-09-01")},
-                    new RegistroDeEstudiante{Apellido="Nino",Nombre="Olivetto",InscritoEl=DateTime.Parse("2005-09-01")}
+                    new Usuario{Apellido="Carson",Nombre="Alexander",Alta=DateTime.Parse("2005-09-01")},
+                    new Usuario{Apellido="Meredith",Nombre="Alonso",Alta=DateTime.Parse("2002-09-01")},
+                    new Usuario{Apellido="Arturo",Nombre="Anand",Alta=DateTime.Parse("2003-09-01")},
+                    new Usuario{Apellido="Gytis",Nombre="Barzdukas",Alta=DateTime.Parse("2002-09-01")},
+                    new Usuario{Apellido="Yan",Nombre="Li",Alta=DateTime.Parse("2002-09-01")},
+                    new Usuario{Apellido="Peggy",Nombre="Justice",Alta=DateTime.Parse("2001-09-01")},
+                    new Usuario{Apellido="Laura",Nombre="Norman",Alta=DateTime.Parse("2003-09-01")},
+                    new Usuario{Apellido="Nino",Nombre="Olivetto",Alta=DateTime.Parse("2005-09-01")}
                 };
-                foreach (RegistroDeEstudiante estudiante in estudiantes)
+                foreach (Usuario estudiante in estudiantes)
                 {
                     contexto.Estudiantes.Add(estudiante);
                 }

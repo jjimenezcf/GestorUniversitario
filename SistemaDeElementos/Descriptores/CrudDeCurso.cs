@@ -16,15 +16,15 @@ namespace UniversidadDeMurcia.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var descEstu = new CrudEstudiante(ModoDescriptor.Seleccion);
-                new Selector<ElementoEstudiante>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
+                new Selector<UsuarioDto>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
                                               etiqueta: "Estudiante",
                                               propiedad: CursoPor.EstudianteInscrito,
                                               ayuda: "Seleccionar estudiante",
                                               posicion: new Posicion() { fila = 0, columna = 0 },
-                                              paraFiltrar: nameof(ElementoEstudiante.Id),
-                                              paraMostrar: nameof(ElementoEstudiante.Apellido),
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.Apellido),
                                               descriptor: descEstu,
-                                              propiedadDondeMapear: EstudiantesPor.NombreCompleto.ToString());
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
             }
 
             DefinirVistaDeCreacion(accion: "IraCrearCurso", textoMenu: "Crear curso");

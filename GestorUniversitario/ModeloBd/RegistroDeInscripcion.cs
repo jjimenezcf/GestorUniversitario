@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Universitario.ModeloBd
         public Grado? Grado { get; set; }
 
         public RegistroDeCurso Curso { get; set; }
-        public RegistroDeEstudiante Estudiante { get; set; }
+        public Usuario Estudiante { get; set; }
 
     }
 

@@ -12,19 +12,19 @@ namespace Gestor.Elementos.Universitario
 {
     static class RegistroDeEstudianteFiltros
     {
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeEstudiante
+        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : Usuario
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == EstudiantesPor.NombreCompleto)
+                if (filtro.Propiedad.ToLower() == UsuariosPor.NombreCompleto)
                     return regristros.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
 
             return regristros;
         }
 
-        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeEstudiante
+        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : Usuario
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == EstudiantesPor.CursosInscrito)
+                if (filtro.Propiedad.ToLower() == UsuariosPor.CursosInscrito)
                 {
                     var listaIds = filtro.Valor.ListaEnteros(); 
                     foreach(int id in listaIds)
@@ -44,7 +44,7 @@ namespace Gestor.Elementos.Universitario
     {
         public const string OrdenPorApellido = "PorApellido";
 
-        public static IQueryable<RegistroDeEstudiante> Orden(this IQueryable<RegistroDeEstudiante> set, Dictionary<string, Ordenacion> orden)
+        public static IQueryable<Usuario> Orden(this IQueryable<Usuario> set, Dictionary<string, Ordenacion> orden)
         {
             if (orden.Count == 0)
                 return set.OrderBy(x => x.Apellido);
@@ -63,15 +63,15 @@ namespace Gestor.Elementos.Universitario
     }
 
 
-    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, RegistroDeEstudiante, ElementoEstudiante>
+    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, Usuario, UsuarioDto>
     {
 
         public class MapeoRegistroEstudiante : Profile
         {
             public MapeoRegistroEstudiante()
             {
-                CreateMap<RegistroDeEstudiante, ElementoEstudiante>();
-                CreateMap<ElementoEstudiante, RegistroDeEstudiante>();
+                CreateMap<Usuario, UsuarioDto>();
+                CreateMap<UsuarioDto, Usuario>();
             }
         }
 
@@ -81,7 +81,7 @@ namespace Gestor.Elementos.Universitario
 
         }
 
-        protected override IQueryable<RegistroDeEstudiante> AplicarOrden(IQueryable<RegistroDeEstudiante> registros, Dictionary<string, Ordenacion> orden)
+        protected override IQueryable<Usuario> AplicarOrden(IQueryable<Usuario> registros, Dictionary<string, Ordenacion> orden)
         {
             registros = base.AplicarOrden(registros, orden);
             return registros.Orden(orden);
@@ -89,7 +89,7 @@ namespace Gestor.Elementos.Universitario
 
                
 
-        protected override IQueryable<RegistroDeEstudiante> AplicarFiltros(IQueryable<RegistroDeEstudiante> registros, List<ClausulaDeFiltrado> filtros) 
+        protected override IQueryable<Usuario> AplicarFiltros(IQueryable<Usuario> registros, List<ClausulaDeFiltrado> filtros) 
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
@@ -101,9 +101,9 @@ namespace Gestor.Elementos.Universitario
         }
                 
 
-        protected override RegistroDeEstudiante LeerConDetalle(int Id)
+        protected override Usuario LeerConDetalle(int Id)
         {
-            return Contexto.Set<RegistroDeEstudiante>()
+            return Contexto.Set<Usuario>()
                             .Include(i => i.Inscripciones)
                             .ThenInclude(e => e.Curso)
                             .AsNoTracking()
