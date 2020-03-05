@@ -9,15 +9,15 @@ using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
-using UniversidadDeMurcia.UtilidadesIu;
+using MVCSistemaDeElementos.UtilidadesIu;
 using Newtonsoft.Json;
 using System.IO;
-using UniversidadDeMurcia.Descriptores;
+using MVCSistemaDeElementos.Descriptores;
 using Newtonsoft.Json.Linq;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace UniversidadDeMurcia.Controllers
+namespace MVCSistemaDeElementos.Controllers
 {
 
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController

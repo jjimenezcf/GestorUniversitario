@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using UniversidadDeMurcia.Models;
+using MVCSistemaDeElementos.Models;
 using Gestor.Errores;
 using System;
 using Gestor.Elementos;
 using Gestor.Elementos.Entorno;
 
-namespace UniversidadDeMurcia.Controllers
+namespace MVCSistemaDeElementos.Controllers
 {
     public class HomeController : BaseController
     {

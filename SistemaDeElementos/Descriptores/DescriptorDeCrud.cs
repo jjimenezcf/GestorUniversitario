@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos.ModeloIu;
-using UniversidadDeMurcia.Descriptores;
+using MVCSistemaDeElementos.Descriptores;
 using Utilidades;
 using UtilidadesParaIu;
 
-namespace UniversidadDeMurcia.Descriptores
+namespace MVCSistemaDeElementos.Descriptores
 {
     public enum TipoControl
     {

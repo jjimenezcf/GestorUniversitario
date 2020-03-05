@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Gestor.Elementos.Universitario;
-using Gestor.Elementos.Universitario.ModeloBd;
-using Gestor.Elementos.Universitario.ModeloIu;
+using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Usuario.ModeloBd;
+using Gestor.Elementos.Usuario.ModeloIu;
 using Gestor.Errores;
-using UniversidadDeMurcia.Descriptores;
+using MVCSistemaDeElementos.Descriptores;
 
-namespace UniversidadDeMurcia.Controllers
+namespace MVCSistemaDeElementos.Controllers
 {
 
     public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>

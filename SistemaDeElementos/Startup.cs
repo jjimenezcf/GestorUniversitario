@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Gestor.Elementos;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Universitario;
+using Gestor.Elementos.Usuario;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace UniversidadDeMurcia
+namespace MVCSistemaDeElementos
 {
     public class Startup
     {

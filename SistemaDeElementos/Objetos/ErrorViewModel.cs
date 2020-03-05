@@ -1,6 +1,6 @@
 using System;
 
-namespace UniversidadDeMurcia.Models
+namespace MVCSistemaDeElementos.Models
 {
     public class ErrorViewModel
     {

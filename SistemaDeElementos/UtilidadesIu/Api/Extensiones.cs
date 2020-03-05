@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Utilidades;
 
-namespace UniversidadDeMurcia.UtilidadesIu
+namespace MVCSistemaDeElementos.UtilidadesIu
 {
     public static class parametrosMvc
     {

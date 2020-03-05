@@ -3,7 +3,7 @@ using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace UniversidadDeMurcia.Controllers
+namespace MVCSistemaDeElementos.Controllers
 {
     public class BaseController : Controller
     {

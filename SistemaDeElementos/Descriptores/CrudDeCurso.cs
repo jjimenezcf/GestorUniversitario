@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos;
-using Gestor.Elementos.Universitario.ModeloIu;
+using Gestor.Elementos.Usuario.ModeloIu;
 using UtilidadesParaIu;
 
-namespace UniversidadDeMurcia.Descriptores
+namespace MVCSistemaDeElementos.Descriptores
 {
     public class CrudCurso : DescriptorDeCrud<ElementoCurso>
     {

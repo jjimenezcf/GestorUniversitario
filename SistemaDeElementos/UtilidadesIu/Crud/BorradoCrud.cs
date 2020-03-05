@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UniversidadDeMurcia.UtilidadesIu
+namespace MVCSistemaDeElementos.UtilidadesIu
 {
     public class BorradoCrud<T> : BaseCrud<T>
     {

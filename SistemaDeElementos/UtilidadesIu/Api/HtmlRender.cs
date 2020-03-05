@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
-using UniversidadDeMurcia.Descriptores;
+using MVCSistemaDeElementos.Descriptores;
 using Utilidades;
 
 namespace UtilidadesParaIu

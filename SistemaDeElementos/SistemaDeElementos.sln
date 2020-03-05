@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilidades", "..\Ayudas\Ext
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeCorreo", "..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj", "{618CACF4-AFF6-4833-9F60-0A87F379543B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorUniversitario", "..\GestorUniversitario\GestorUniversitario.csproj", "{432F0E29-FD3D-4D94-AC46-80C44D171219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeUsuarios", "..\GestorUniversitario\GestorDeUsuarios.csproj", "{432F0E29-FD3D-4D94-AC46-80C44D171219}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeElementos", "..\Servicios\GestorDeElementos\GestorDeElementos.csproj", "{14238C7E-1CB5-47FE-9869-F0774CFDA37A}"
 EndProject
