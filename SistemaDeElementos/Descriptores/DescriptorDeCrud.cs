@@ -791,8 +791,7 @@ namespace UniversidadDeMurcia.Descriptores
 
     public class Valor
     {
-        public string Nombreestudiante { get; set; }
-        public string Fechadeinscripción { get; set; }
+       
     }
 
 

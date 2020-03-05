@@ -21,7 +21,7 @@ namespace Gestor.Elementos.Universitario
             return registros;
         }
 
-        public static IQueryable<T> AplicarFiltroEstudiantes<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeCurso
+        public static IQueryable<T> AplicarFiltroUsuarios<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeCurso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == CursoPor.EstudianteInscrito)
@@ -69,7 +69,7 @@ namespace Gestor.Elementos.Universitario
 
             return registros
                 .AplicarFiltroNombre(filtros)
-                .AplicarFiltroEstudiantes(filtros);
+                .AplicarFiltroUsuarios(filtros);
         }
 
     }

@@ -10,7 +10,7 @@ using Gestor.Elementos.ModeloIu;
 
 namespace Gestor.Elementos.Universitario
 {
-    static class RegistroDeEstudianteFiltros
+    static class UsuarioRegFlt
     {
         public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioReg
         {
@@ -40,7 +40,7 @@ namespace Gestor.Elementos.Universitario
 
 
 
-    static class OrdenacionEstudiante
+    static class UsuarioRegOrd
     {
         public const string OrdenPorApellido = "PorApellido";
 
@@ -63,7 +63,7 @@ namespace Gestor.Elementos.Universitario
     }
 
 
-    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, UsuarioReg, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<ContextoUniversitario, UsuarioReg, UsuarioDto>
     {
 
         public class MapeoRegistroUsuario : Profile
@@ -75,7 +75,7 @@ namespace Gestor.Elementos.Universitario
             }
         }
 
-        public GestorDeEstudiantes(ContextoUniversitario contexto, IMapper mapeador)
+        public GestorDeUsuarios(ContextoUniversitario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
@@ -109,20 +109,6 @@ namespace Gestor.Elementos.Universitario
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
         }
-
-        //protected override Expression<Func<RegistroDeEstudiante, object>> EstablecerOrden(string orden)
-        //{
-        //    switch (orden)
-        //    {
-        //        case nameof(RegistroDeEstudiante.Apellido):
-        //            return x => x.Apellido;
-
-        //        case nameof(RegistroDeEstudiante.Alta):
-        //            return x => x.Alta;
-        //    }
-
-        //    return base.EstablecerOrden(orden);
-        //}
 
     }
 

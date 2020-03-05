@@ -11,10 +11,10 @@ namespace UniversidadDeMurcia.Controllers
     public class UsuariosController : EntidadController<ContextoUniversitario, UsuarioReg, UsuarioDto>
     {
 
-        public UsuariosController(GestorDeEstudiantes gestorDeEstudiantes, GestorDeErrores gestorDeErrores)
+        public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)
         :base
         (
-          gestorDeEstudiantes, 
+          gestorDeUsuarios, 
           gestorDeErrores, 
           new CrudUsuario(ModoDescriptor.Mantenimiento)
         )
