@@ -33,6 +33,7 @@ namespace UniversidadDeMurcia
             var cnxUniv = services.GetRequiredService<ContextoUniversitario>();
             try
             {
+                cnxUniv.Database.Migrate();
                 cnxUniv.IniciarTraza();
                 ContextoUniversitario.InicializarMaestros(cnxUniv);
             }
@@ -53,6 +54,7 @@ namespace UniversidadDeMurcia
             var cnxEntorno = services.GetRequiredService<ContextoEntorno>();
             try
             {
+                cnxEntorno.Database.Migrate();
                 cnxEntorno.IniciarTraza();
                 ContextoEntorno.NuevaVersion(cnxEntorno);
             }

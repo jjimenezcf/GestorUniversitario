@@ -91,7 +91,7 @@ namespace Gestor.Elementos
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            var conexion = "Server=(localdb)\\MSSQLLocalDB;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
+            var conexion = "Server=desarrollo2;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
             options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
                    .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
         }
@@ -102,10 +102,17 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Usuario = Literal.usuario; 
-            DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable).Existe ?
-                                      ObtenerVersion() :
-                                      Literal.Version_0;
+            DatosDeConexion.Usuario = Literal.usuario;
+            try
+            {
+                DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable).Existe ?
+                                          ObtenerVersion() :
+                                          Literal.Version_0;
+            }
+            catch
+            {
+                DatosDeConexion.Version = Literal.Version_0;
+            }
         }
 
         private string ObtenerVersion()
