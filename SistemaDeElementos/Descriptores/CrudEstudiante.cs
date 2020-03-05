@@ -8,10 +8,10 @@ using UtilidadesParaIu;
 
 namespace UniversidadDeMurcia.Descriptores
 {
-    public class CrudEstudiante : DescriptorDeCrud<UsuarioDto>
+    public class CrudUsuario : DescriptorDeCrud<UsuarioDto>
     {
-        public CrudEstudiante(ModoDescriptor modo)
-        : base(controlador: "Estudiantes", vista: "MantenimientoEstudiante", titulo: "Mantenimiento de estudiantes", modo: modo)
+        public CrudUsuario(ModoDescriptor modo)
+        : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new Selector<ElementoCurso>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
@@ -24,7 +24,7 @@ namespace UniversidadDeMurcia.Descriptores
                                         descriptor: new CrudCurso(ModoDescriptor.Seleccion),
                                         propiedadDondeMapear: FiltroPor.Nombre.ToString());
 
-            DefinirVistaDeCreacion(accion: "IraCrearEstudiante", textoMenu: "Crear estudiante");
+            DefinirVistaDeCreacion(accion: "IraCrearUsuario", textoMenu: "Crear usuario");
 
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
@@ -42,7 +42,7 @@ namespace UniversidadDeMurcia.Descriptores
             columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Login) };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Apellido), Ordenar = true, Ruta = "Estudiantes", Accion = "IraMantenimientoEstudiante" };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Apellido), Ordenar = true, Ruta = "Usuarios", Accion = "IraMantenimientoUsuario" };
             Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDto.Nombre) };
@@ -54,8 +54,8 @@ namespace UniversidadDeMurcia.Descriptores
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
                 Ordenar = true,
-                Ruta = "Estudiantes",
-                Accion = "IraMantenimientoEstudiante"
+                Ruta = "Usuarios",
+                Accion = "IraMantenimientoUsuario"
             };
             Grid.Columnas.Add(columnaDelGrid);
         }
@@ -63,26 +63,26 @@ namespace UniversidadDeMurcia.Descriptores
         public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos)
         {
             base.MapearElementosAlGrid(elementos);
-            foreach (var estudiante in elementos)
+            foreach (var usuario in elementos)
             {
                 var fila = new FilaDelGrid();
                 foreach (ColumnaDelGrid columna in Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
                     if (columna.Nombre == nameof(UsuarioDto.Id))
-                        celda.Valor = estudiante.Id.ToString();
+                        celda.Valor = usuario.Id.ToString();
                     else
                     if (columna.Nombre == nameof(UsuarioDto.Login))
-                        celda.Valor = estudiante.Login.ToString();
+                        celda.Valor = usuario.Login.ToString();
                     else
                     if (columna.Nombre == nameof(UsuarioDto.Apellido))
-                        celda.Valor = estudiante.Apellido;
+                        celda.Valor = usuario.Apellido;
                     else
                     if (columna.Nombre == nameof(UsuarioDto.Nombre))
-                        celda.Valor = estudiante.Nombre.ToString();
+                        celda.Valor = usuario.Nombre.ToString();
                     else
                     if (columna.Nombre == nameof(UsuarioDto.Alta))
-                        celda.Valor = estudiante.Alta.ToString();
+                        celda.Valor = usuario.Alta.ToString();
 
                     fila.Celdas.Add(celda);
                 }

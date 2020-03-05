@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Universitario
 {
     static class RegistroDeEstudianteFiltros
     {
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : Usuario
+        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.NombreCompleto)
@@ -21,7 +21,7 @@ namespace Gestor.Elementos.Universitario
             return regristros;
         }
 
-        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : Usuario
+        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.CursosInscrito)
@@ -44,7 +44,7 @@ namespace Gestor.Elementos.Universitario
     {
         public const string OrdenPorApellido = "PorApellido";
 
-        public static IQueryable<Usuario> Orden(this IQueryable<Usuario> set, Dictionary<string, Ordenacion> orden)
+        public static IQueryable<UsuarioReg> Orden(this IQueryable<UsuarioReg> set, Dictionary<string, Ordenacion> orden)
         {
             if (orden.Count == 0)
                 return set.OrderBy(x => x.Apellido);
@@ -63,15 +63,15 @@ namespace Gestor.Elementos.Universitario
     }
 
 
-    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, Usuario, UsuarioDto>
+    public class GestorDeEstudiantes : GestorDeElementos<ContextoUniversitario, UsuarioReg, UsuarioDto>
     {
 
-        public class MapeoRegistroEstudiante : Profile
+        public class MapeoRegistroUsuario : Profile
         {
-            public MapeoRegistroEstudiante()
+            public MapeoRegistroUsuario()
             {
-                CreateMap<Usuario, UsuarioDto>();
-                CreateMap<UsuarioDto, Usuario>();
+                CreateMap<UsuarioReg, UsuarioDto>();
+                CreateMap<UsuarioDto, UsuarioReg>();
             }
         }
 
@@ -81,7 +81,7 @@ namespace Gestor.Elementos.Universitario
 
         }
 
-        protected override IQueryable<Usuario> AplicarOrden(IQueryable<Usuario> registros, Dictionary<string, Ordenacion> orden)
+        protected override IQueryable<UsuarioReg> AplicarOrden(IQueryable<UsuarioReg> registros, Dictionary<string, Ordenacion> orden)
         {
             registros = base.AplicarOrden(registros, orden);
             return registros.Orden(orden);
@@ -89,7 +89,7 @@ namespace Gestor.Elementos.Universitario
 
                
 
-        protected override IQueryable<Usuario> AplicarFiltros(IQueryable<Usuario> registros, List<ClausulaDeFiltrado> filtros) 
+        protected override IQueryable<UsuarioReg> AplicarFiltros(IQueryable<UsuarioReg> registros, List<ClausulaDeFiltrado> filtros) 
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
@@ -101,9 +101,9 @@ namespace Gestor.Elementos.Universitario
         }
                 
 
-        protected override Usuario LeerConDetalle(int Id)
+        protected override UsuarioReg LeerConDetalle(int Id)
         {
-            return Contexto.Set<Usuario>()
+            return Contexto.Set<UsuarioReg>()
                             .Include(i => i.Inscripciones)
                             .ThenInclude(e => e.Curso)
                             .AsNoTracking()

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="es-es">
 <head>
-    <title>Mantenimiento de estudiantes</title>
+    <title>Mantenimiento de usuarios</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -72,7 +72,7 @@
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">Acerca de</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Estudiantes" asp-action="Index">Estudiantes</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Cursos" asp-action="Index">Cursos</a>
@@ -95,10 +95,10 @@
                 </div>
                 <div class="col">
                     <div id="contenido" style="width: 100%";>
-                        <h2>Mantenimiento de estudiantes</h2>
+                        <h2>Mantenimiento de usuarios</h2>
                         <div id="Men_Estudiante">
                             <div id="opc_Men_Estudiante_0">
-                                <a href="/Estudiantes/IraCrearEstudiante">Crear estudiante</a>
+                                <a href="/Usuarios/IraCrearUsuario">Crear usuario</a>
                             </div>
                         </div>
                         <div id="flt_estudiante" style="width:100%">
@@ -399,7 +399,7 @@
                                         <input type="number" id="grid_estudiante.Nav.2.Reg" value="5"
                                                min="1" step="1" max="999"
                                                posicion="5"
-                                               controlador="Estudiantes"
+                                               controlador="Usuarios"
                                                totalEnBd="8" title="leidos 5 de 8 desde la posición 0"
                                                style="width: 50px;margin-top: 5px;align-content:center; border-radius: 10px">
                                     </div>

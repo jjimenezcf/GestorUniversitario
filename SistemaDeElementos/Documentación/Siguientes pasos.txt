@@ -1,6 +1,6 @@
 0. cambiar nombre del grid, del filtro y del menu
    En el menú renderizar el idHtml, ya que paso el Id
-   contenedor.grid_estudiante --> estudiante contenedor
+   contenedor.grid_estudiante --> usuario contenedor
    grid_estudiante.cabecera--> estudiante_contenedor_grid-Cabecera
    grid_estudiante.detalle --> estudiante_contenedor_grid-cuerpo
 

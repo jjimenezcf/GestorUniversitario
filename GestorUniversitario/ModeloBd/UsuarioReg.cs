@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Gestor.Elementos.Universitario.ModeloBd
 {
     [Table("USUARIO", Schema = "USUARIO")]
-    public class Usuario : Registro
+    public class UsuarioReg : Registro
     {
         [Required]
         [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]

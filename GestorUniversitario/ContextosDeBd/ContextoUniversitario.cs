@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Universitario
     {
         public DbSet<RegistroDeCurso> Cursos { get; set; }
         public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
-        public DbSet<Usuario> Estudiantes { get; set; }
+        public DbSet<UsuarioReg> Usuarios { get; set; }
 
         public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -25,13 +25,13 @@ namespace Gestor.Elementos.Universitario
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<RegistroDeCurso>();
             modelBuilder.Entity<RegistroDeInscripcion>();
-            modelBuilder.Entity<Usuario>();
+            modelBuilder.Entity<UsuarioReg>();
 
         }
 
         public static void InicializarMaestros(ContextoUniversitario contexto)
         {
-            if (!contexto.Estudiantes.Any())
+            if (!contexto.Usuarios.Any())
                 Maestros.CrearDatosIniciales(contexto);
 
         }

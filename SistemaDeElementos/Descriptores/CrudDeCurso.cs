@@ -15,11 +15,11 @@ namespace UniversidadDeMurcia.Descriptores
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {
-                var descEstu = new CrudEstudiante(ModoDescriptor.Seleccion);
+                var descEstu = new CrudUsuario(ModoDescriptor.Seleccion);
                 new Selector<UsuarioDto>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
-                                              etiqueta: "Estudiante",
+                                              etiqueta: "Usuario",
                                               propiedad: CursoPor.EstudianteInscrito,
-                                              ayuda: "Seleccionar estudiante",
+                                              ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 0 },
                                               paraFiltrar: nameof(UsuarioDto.Id),
                                               paraMostrar: nameof(UsuarioDto.Apellido),

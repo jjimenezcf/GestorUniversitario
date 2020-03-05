@@ -95,7 +95,7 @@ namespace UniversidadDeMurcia.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("", $"No es posible crear el registro.");
-                GestorDeErrores.Enviar("Error al crear un estudiante", e);
+                GestorDeErrores.Enviar("Error al crear un usuario", e);
             }
             return View((GestorDelCrud.Creador.Vista, iuElemento));
         }
