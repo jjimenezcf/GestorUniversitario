@@ -7,6 +7,7 @@ using Utilidades.Traza;
 using System.Data.Common;
 using Z.EntityFramework.Extensions;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 
 namespace Gestor.Elementos
 {
@@ -58,7 +59,8 @@ namespace Gestor.Elementos
     }
     public class ContextoDeElementos : DbContext
     {
-        public DatosDeConexion DatosDeConexion { get; set; }
+        public DatosDeConexion DatosDeConexion { get; private set; }
+        public IConfiguration Configuracion { get; private set; }
 
         public bool Debuggar
         {
@@ -76,9 +78,10 @@ namespace Gestor.Elementos
         public TrazaSql Traza { get; private set; }
         private InterceptadorDeConsultas _interceptadorDeConsultas;
 
-        public ContextoDeElementos(DbContextOptions options) :
+        public ContextoDeElementos(DbContextOptions options, IConfiguration configuracion) :
         base(options)
         {
+            Configuracion = configuracion;
 
             _interceptadorDeConsultas = new InterceptadorDeConsultas();
             DbInterception.Add(_interceptadorDeConsultas);

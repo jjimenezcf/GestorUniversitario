@@ -3,6 +3,7 @@ using System.Linq;
 using Gestor.Elementos;
 using Gestor.Elementos.ModeloBd;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -25,8 +26,8 @@ namespace Gestor.Elementos.Entorno
         public DbSet<Fun_Accion> Acciones { get; set; }
         public DbSet<Var_Elemento> Variables { get; set; }
         
-        public ContextoEntorno(DbContextOptions<ContextoEntorno> options) :
-        base(options)
+        public ContextoEntorno(DbContextOptions<ContextoEntorno> options, IConfiguration configuracion) :
+        base(options, configuracion)
         {
         }
 

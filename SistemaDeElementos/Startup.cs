@@ -16,12 +16,13 @@ namespace UniversidadDeMurcia
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuracion { get; }
+
+        public Startup(IConfiguration configuracion)
         {
-            Configuration = configuration;
+            Configuracion = configuracion;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,9 +35,10 @@ namespace UniversidadDeMurcia
             });
 
             services.AddRazorPages();
-
-            services.AddDbContext<ContextoEntorno>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<ContextoUniversitario>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var cadenaDeConexion = Configuracion.GetConnectionString("CadenaDeConexion");
+            
+            services.AddDbContext<ContextoEntorno>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<ContextoUniversitario>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeEstudiantes>();
