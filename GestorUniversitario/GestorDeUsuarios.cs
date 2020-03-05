@@ -1,6 +1,6 @@
-﻿using Gestor.Elementos.Universitario.ModeloBd;
-using Gestor.Elementos.Universitario;
-using Gestor.Elementos.Universitario.ModeloIu;
+﻿using Gestor.Elementos.Usuario.ModeloBd;
+using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Usuario.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using AutoMapper;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Universitario
+namespace Gestor.Elementos.Usuario
 {
     static class UsuarioRegFlt
     {

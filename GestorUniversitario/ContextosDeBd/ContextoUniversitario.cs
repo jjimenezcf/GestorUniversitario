@@ -1,11 +1,11 @@
 ﻿using Gestor.Elementos.ModeloBd;
-using Gestor.Elementos.Universitario.ModeloBd;
+using Gestor.Elementos.Usuario.ModeloBd;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 
-namespace Gestor.Elementos.Universitario
+namespace Gestor.Elementos.Usuario
 {
 
     public class ContextoUniversitario : ContextoDeElementos

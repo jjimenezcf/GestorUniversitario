@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Gestor.Elementos.Universitario.ModeloIu
+namespace Gestor.Elementos.Usuario.ModeloIu
 {
     
     public static class UsuariosPor

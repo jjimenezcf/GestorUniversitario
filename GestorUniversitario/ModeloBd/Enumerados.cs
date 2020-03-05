@@ -1,4 +1,4 @@
-﻿namespace Gestor.Elementos.Universitario.ModeloBd.Enumerados
+﻿namespace Gestor.Elementos.Usuario.ModeloBd.Enumerados
 {
     public enum Grado
     {

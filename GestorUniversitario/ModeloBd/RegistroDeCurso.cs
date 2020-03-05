@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Universitario.ModeloBd
+namespace Gestor.Elementos.Usuario.ModeloBd
 {
     [Table("CUR_ELEMENTO", Schema = "UNIVERSIDAD")]
     public class RegistroDeCurso : Registro

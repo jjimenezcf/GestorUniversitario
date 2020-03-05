@@ -1,10 +1,10 @@
-﻿using Gestor.Elementos.Universitario.ModeloBd;
-using Gestor.Elementos.Universitario;
-using Gestor.Elementos.Universitario.ModeloIu;
+﻿using Gestor.Elementos.Usuario.ModeloBd;
+using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Usuario.ModeloIu;
 using System.Reflection;
 using AutoMapper;
 
-namespace Gestor.Elementos.Universitario
+namespace Gestor.Elementos.Usuario
 {
     public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {

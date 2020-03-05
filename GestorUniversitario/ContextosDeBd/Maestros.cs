@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Gestor.Elementos.Universitario.ModeloBd;
-using Gestor.Elementos.Universitario.ModeloBd.Enumerados;
+using Gestor.Elementos.Usuario.ModeloBd;
+using Gestor.Elementos.Usuario.ModeloBd.Enumerados;
 
-namespace Gestor.Elementos.Universitario
+namespace Gestor.Elementos.Usuario
 {
     public class Maestros
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Universitario.ModeloBd
+namespace Gestor.Elementos.Usuario.ModeloBd
 {
     [Table("USUARIO", Schema = "USUARIO")]
     public class UsuarioReg : Registro
