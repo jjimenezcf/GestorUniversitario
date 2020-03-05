@@ -1,9 +1,7 @@
 ﻿using Gestor.Elementos.ModeloIu;
-using Gestor.Elementos.Usuario.ModeloBd.Enumerados;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Usuario.ModeloIu
-{    
+namespace Gestor.Elementos.Usuario
+{
 
     public class ElementoInscripcionesDeUnEstudiante : Elemento
     {

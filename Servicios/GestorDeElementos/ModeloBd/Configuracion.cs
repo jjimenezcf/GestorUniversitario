@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Gestor.Elementos.ModeloBd
+﻿namespace Gestor.Elementos.ModeloBd
 {
 
     public class CatalogoDelSe : Registro

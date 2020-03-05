@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Gestor.Elementos.ModeloBd;
 using System;
-using System.Linq;
 using GestorDeElementos.Utilidades;
 using Utilidades.Traza;
 using System.Data.Common;

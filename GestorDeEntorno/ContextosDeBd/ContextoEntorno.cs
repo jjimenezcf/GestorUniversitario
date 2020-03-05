@@ -1,7 +1,4 @@
-﻿using System.Configuration;
-using System.Linq;
-using Gestor.Elementos;
-using Gestor.Elementos.ModeloBd;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

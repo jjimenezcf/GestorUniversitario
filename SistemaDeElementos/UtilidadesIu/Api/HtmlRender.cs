@@ -1,11 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
-using MVCSistemaDeElementos.Descriptores;
-using Utilidades;
-
-namespace UtilidadesParaIu
+﻿namespace UtilidadesParaIu
 {
     public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
 

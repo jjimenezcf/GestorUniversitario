@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gestor.Elementos;
-using Gestor.Elementos.Usuario.ModeloIu;
+﻿using System.Collections.Generic;
+using Gestor.Elementos.Usuario;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores

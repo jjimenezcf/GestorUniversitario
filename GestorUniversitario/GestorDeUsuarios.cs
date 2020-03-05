@@ -1,7 +1,4 @@
-﻿using Gestor.Elementos.Usuario.ModeloBd;
-using Gestor.Elementos.Usuario;
-using Gestor.Elementos.Usuario.ModeloIu;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;

@@ -1,7 +1,4 @@
-﻿using Gestor.Elementos.Usuario.ModeloBd;
-using Gestor.Elementos.Usuario;
-using Gestor.Elementos.Usuario.ModeloIu;
-using AutoMapper;
+﻿using AutoMapper;
 using System.Linq;
 using System.Collections.Generic;
 using Utilidades;

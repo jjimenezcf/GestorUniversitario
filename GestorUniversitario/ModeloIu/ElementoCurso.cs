@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.ModeloIu;
 using System.Collections.Generic;
 
-namespace Gestor.Elementos.Usuario.ModeloIu
+namespace Gestor.Elementos.Usuario
 {
     public static class CursoPor
     {

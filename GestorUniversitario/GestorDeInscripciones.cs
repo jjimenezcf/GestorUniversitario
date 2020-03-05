@@ -1,8 +1,4 @@
-﻿using Gestor.Elementos.Usuario.ModeloBd;
-using Gestor.Elementos.Usuario;
-using Gestor.Elementos.Usuario.ModeloIu;
-using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 
 namespace Gestor.Elementos.Usuario
 {
@@ -13,7 +9,7 @@ namespace Gestor.Elementos.Usuario
         {
             public MapeoRegistroInscripcion()
             {
-                CreateMap<RegistroDeInscripcion, ModeloIu.ElementoInscripcionesDeUnEstudiante>();
+                CreateMap<RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>();
             }
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MVCSistemaDeElementos.Descriptores;
+﻿using MVCSistemaDeElementos.Descriptores;
 using MVCSistemaDeElementos.UtilidadesIu;
 
 namespace UtilidadesParaIu

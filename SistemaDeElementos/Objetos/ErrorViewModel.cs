@@ -1,5 +1,3 @@
-using System;
-
 namespace MVCSistemaDeElementos.Models
 {
     public class ErrorViewModel

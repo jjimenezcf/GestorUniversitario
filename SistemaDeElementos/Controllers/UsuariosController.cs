@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Gestor.Elementos.Usuario.ModeloIu;
-using Gestor.Elementos.Usuario.ModeloBd;
 using Gestor.Elementos.Usuario;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;

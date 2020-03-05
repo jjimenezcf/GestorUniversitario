@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
@@ -21,7 +20,7 @@ namespace Migraciones.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gestor.Elementos.Usuario.ModeloBd.Est_Elemento", b =>
+            modelBuilder.Entity("Gestor.Elementos.Usuario.Est_Elemento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +47,7 @@ namespace Migraciones.Migrations
                     b.ToTable("EST_ELEMENTO","USUARIO");
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Usuario.ModeloBd.RegistroDeCurso", b =>
+            modelBuilder.Entity("Gestor.Elementos.Usuario.RegistroDeCurso", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +69,7 @@ namespace Migraciones.Migrations
                     b.ToTable("CUR_ELEMENTO","UNIVERSIDAD");
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Usuario.ModeloBd.RegistroDeInscripcion", b =>
+            modelBuilder.Entity("Gestor.Elementos.Usuario.RegistroDeInscripcion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,15 +95,15 @@ namespace Migraciones.Migrations
                     b.ToTable("EST_CURSO","UNIVERSIDAD");
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Usuario.ModeloBd.RegistroDeInscripcion", b =>
+            modelBuilder.Entity("Gestor.Elementos.Usuario.RegistroDeInscripcion", b =>
                 {
-                    b.HasOne("Gestor.Elementos.Usuario.ModeloBd.RegistroDeCurso", "Curso")
+                    b.HasOne("Gestor.Elementos.Usuario.RegistroDeCurso", "Curso")
                         .WithMany("Inscripciones")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gestor.Elementos.Usuario.ModeloBd.Est_Elemento", "Estudiante")
+                    b.HasOne("Gestor.Elementos.Usuario.Est_Elemento", "Estudiante")
                         .WithMany("Inscripciones")
                         .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)

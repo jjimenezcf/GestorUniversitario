@@ -1,8 +1,7 @@
 ﻿using Gestor.Elementos.ModeloBd;
-using Gestor.Elementos.Usuario.ModeloBd.Enumerados;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Usuario.ModeloBd
+namespace Gestor.Elementos.Usuario
 {
     [Table("EST_CURSO", Schema = "UNIVERSIDAD")]
     public class RegistroDeInscripcion : Registro

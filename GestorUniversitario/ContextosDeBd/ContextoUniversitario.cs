@@ -1,8 +1,5 @@
-﻿using Gestor.Elementos.ModeloBd;
-using Gestor.Elementos.Usuario.ModeloBd;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Linq;
 
 namespace Gestor.Elementos.Usuario
