@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoUniversitario))]
+    [DbContext(typeof(ContextoUsuario))]
     [Migration("20200304210459_inicialUniversitario")]
     partial class inicialUniversitario
     {

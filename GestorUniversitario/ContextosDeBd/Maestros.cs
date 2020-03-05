@@ -6,7 +6,7 @@ namespace Gestor.Elementos.Usuario
     public class Maestros
     {
 
-        public static void CrearDatosIniciales(ContextoUniversitario contexto)
+        public static void CrearDatosIniciales(ContextoUsuario contexto)
         {
             // Look for any students.
             if (!contexto.Usuarios.Any())

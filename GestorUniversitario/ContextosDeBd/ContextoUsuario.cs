@@ -5,13 +5,13 @@ using System.Linq;
 namespace Gestor.Elementos.Usuario
 {
 
-    public class ContextoUniversitario : ContextoDeElementos
+    public class ContextoUsuario : ContextoDeElementos
     {
         public DbSet<RegistroDeCurso> Cursos { get; set; }
         public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
         public DbSet<UsuarioReg> Usuarios { get; set; }
 
-        public ContextoUniversitario(DbContextOptions<ContextoUniversitario> options, IConfiguration configuracion) :
+        public ContextoUsuario(DbContextOptions<ContextoUsuario> options, IConfiguration configuracion) :
         base(options, configuracion)
         {
 
@@ -26,7 +26,7 @@ namespace Gestor.Elementos.Usuario
 
         }
 
-        public static void InicializarMaestros(ContextoUniversitario contexto)
+        public static void InicializarMaestros(ContextoUsuario contexto)
         {
             if (!contexto.Usuarios.Any())
                 Maestros.CrearDatosIniciales(contexto);

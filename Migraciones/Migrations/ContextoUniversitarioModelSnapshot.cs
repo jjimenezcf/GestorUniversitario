@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoUniversitario))]
+    [DbContext(typeof(ContextoUsuario))]
     partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

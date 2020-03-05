@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoUniversitario))]
+    [DbContext(typeof(ContextoUsuario))]
     [Migration("20200305204447_CambiarEsquema")]
     partial class CambiarEsquema
     {

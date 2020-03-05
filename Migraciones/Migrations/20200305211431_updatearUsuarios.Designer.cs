@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoUniversitario))]
+    [DbContext(typeof(ContextoUsuario))]
     [Migration("20200305211431_updatearUsuarios")]
     partial class updatearUsuarios
     {

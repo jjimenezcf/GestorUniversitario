@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoUniversitario))]
+    [DbContext(typeof(ContextoUsuario))]
     [Migration("20200305205437_AnadirLogin")]
     partial class AnadirLogin
     {

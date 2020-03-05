@@ -2,7 +2,7 @@
 
 namespace Gestor.Elementos.Usuario
 {
-    public class GestorDeInscripciones : GestorDeElementos<ContextoUniversitario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
+    public class GestorDeInscripciones : GestorDeElementos<ContextoUsuario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {
 
         public class MapeoRegistroInscripcion : Profile
@@ -13,7 +13,7 @@ namespace Gestor.Elementos.Usuario
             }
         }
 
-        public GestorDeInscripciones(ContextoUniversitario contexto, IMapper mapeador)
+        public GestorDeInscripciones(ContextoUsuario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
         }

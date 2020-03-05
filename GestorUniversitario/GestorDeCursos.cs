@@ -36,7 +36,7 @@ namespace Gestor.Elementos.Usuario
     }
 
 
-    public class GestorDeCursos : GestorDeElementos<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
+    public class GestorDeCursos : GestorDeElementos<ContextoUsuario, RegistroDeCurso, ElementoCurso>
     {
         public class MapeoRegistroCurso : Profile
         {
@@ -47,7 +47,7 @@ namespace Gestor.Elementos.Usuario
             }
         }
 
-        public GestorDeCursos(ContextoUniversitario contexto, IMapper mapeador)
+        public GestorDeCursos(ContextoUsuario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
             

@@ -60,7 +60,7 @@ namespace Gestor.Elementos.Usuario
     }
 
 
-    public class GestorDeUsuarios : GestorDeElementos<ContextoUniversitario, UsuarioReg, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<ContextoUsuario, UsuarioReg, UsuarioDto>
     {
 
         public class MapeoRegistroUsuario : Profile
@@ -72,7 +72,7 @@ namespace Gestor.Elementos.Usuario
             }
         }
 
-        public GestorDeUsuarios(ContextoUniversitario contexto, IMapper mapeador)
+        public GestorDeUsuarios(ContextoUsuario contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

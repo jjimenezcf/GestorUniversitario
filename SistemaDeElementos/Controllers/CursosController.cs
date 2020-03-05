@@ -7,7 +7,7 @@ using MVCSistemaDeElementos.Descriptores;
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class CursosController : EntidadController<ContextoUniversitario, RegistroDeCurso, ElementoCurso>
+    public class CursosController : EntidadController<ContextoUsuario, RegistroDeCurso, ElementoCurso>
     {
         public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) 
         : base

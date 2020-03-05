@@ -26,12 +26,12 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoUniversitario(IServiceProvider services)
         {
-            var cnxUniv = services.GetRequiredService<ContextoUniversitario>();
+            var cnxUniv = services.GetRequiredService<ContextoUsuario>();
             try
             {
                 cnxUniv.Database.Migrate();
                 cnxUniv.IniciarTraza();
-                ContextoUniversitario.InicializarMaestros(cnxUniv);
+                ContextoUsuario.InicializarMaestros(cnxUniv);
             }
             catch (Exception ex)
             {
