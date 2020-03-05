@@ -117,8 +117,8 @@ namespace Gestor.Elementos.Universitario
         //        case nameof(RegistroDeEstudiante.Apellido):
         //            return x => x.Apellido;
 
-        //        case nameof(RegistroDeEstudiante.InscritoEl):
-        //            return x => x.InscritoEl;
+        //        case nameof(RegistroDeEstudiante.Alta):
+        //            return x => x.Alta;
         //    }
 
         //    return base.EstablecerOrden(orden);

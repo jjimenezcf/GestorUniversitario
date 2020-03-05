@@ -50,7 +50,7 @@ namespace UniversidadDeMurcia.Descriptores
 
             columnaDelGrid = new ColumnaDelGrid
             {
-                Nombre = nameof(UsuarioDto.InscritoEl),
+                Nombre = nameof(UsuarioDto.Alta),
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
                 Ordenar = true,
@@ -81,8 +81,8 @@ namespace UniversidadDeMurcia.Descriptores
                     if (columna.Nombre == nameof(UsuarioDto.Nombre))
                         celda.Valor = estudiante.Nombre.ToString();
                     else
-                    if (columna.Nombre == nameof(UsuarioDto.InscritoEl))
-                        celda.Valor = estudiante.InscritoEl.ToString();
+                    if (columna.Nombre == nameof(UsuarioDto.Alta))
+                        celda.Valor = estudiante.Alta.ToString();
 
                     fila.Celdas.Add(celda);
                 }

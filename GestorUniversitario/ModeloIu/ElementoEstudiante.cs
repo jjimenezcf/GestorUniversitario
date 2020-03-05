@@ -16,7 +16,7 @@ namespace Gestor.Elementos.Universitario.ModeloIu
         public string Login { get; set; }
         public string Apellido { get; set; }
         public string Nombre { get; set; }
-        public DateTime InscritoEl { get; set; }
+        public DateTime Alta { get; set; }
 
         public ICollection<ElementoInscripcionesDeUnEstudiante> Inscripciones { get; set; }
     }

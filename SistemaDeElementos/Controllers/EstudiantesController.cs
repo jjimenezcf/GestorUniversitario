@@ -54,7 +54,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(CrearEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,InscritoEl")] UsuarioDto estudiante)
+        public async Task<IActionResult> CrearEstudiante([Bind("ID,Apellido,Nombre,Alta")] UsuarioDto estudiante)
         {
             return await CrearObjeto(estudiante);
         }
@@ -63,7 +63,7 @@ namespace UniversidadDeMurcia.Controllers
 
         [HttpPost, ActionName(nameof(ModificarEstudiante))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,InscritoEl")] UsuarioDto estudiante)
+        public async Task<IActionResult> ModificarEstudiante(int id, [Bind("Id,Apellido,Nombre,Alta")] UsuarioDto estudiante)
         {
             return await ModificarObjeto(id, estudiante);
         }

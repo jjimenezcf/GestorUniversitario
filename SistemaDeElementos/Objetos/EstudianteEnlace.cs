@@ -5,7 +5,7 @@
         public static class Parametro
         {
             public const string Apellido = nameof(Apellido);
-            public const string InscritoEl = nameof(InscritoEl);
+            public const string Alta = nameof(Alta);
         }
 
         public static class OrdenadoPor
