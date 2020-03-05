@@ -12,13 +12,14 @@ using Microsoft.Extensions.Configuration;
 namespace Gestor.Elementos
 {
 
-    class Literal
+    public class Literal
     {
         internal static readonly string usuario = "jjimenezcf@gmail.com";
         internal static readonly string DebugarSqls = nameof(DebugarSqls);
         internal static readonly string esquemaBd = "ENTORNO";
         internal static readonly string version = "Versión";
         internal static readonly string Version_0 = "0.0.0";
+        public   static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
 
         public class Vista
         {
@@ -91,7 +92,7 @@ namespace Gestor.Elementos
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            var conexion = "Server=desarrollo2;Database=SistemaDeElementos;Trusted_Connection=True;MultipleActiveResultSets=true";
+            var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
             options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
                    .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
         }
