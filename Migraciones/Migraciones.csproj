@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GestorDeEntorno\GestorDeEntorno.csproj" />
-    <ProjectReference Include="..\GestorUniversitario\GestorDePermisos.csproj" />
+    <ProjectReference Include="..\GestorDePermisos\GestorDePermisos.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
   </ItemGroup>
 
