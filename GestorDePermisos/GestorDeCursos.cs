@@ -18,15 +18,15 @@ namespace Gestor.Elementos.Permiso
             return registros;
         }
 
-        public static IQueryable<T> AplicarFiltroUsuarios<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
+        public static IQueryable<T> AplicarFiltroPermisos<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == GrupoPor.EstudianteInscrito)
+                if (filtro.Propiedad.ToLower() == GrupoPor.PermisoDeUnRol)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
                     {
-                        registros = registros.Where(x => x.Inscripciones.Any(i => i.EstudianteId == id));
+                        registros = registros.Where(x => x.Roles.Any(i => i.IdPermiso == id));
                     }
                 }
 
@@ -66,7 +66,7 @@ namespace Gestor.Elementos.Permiso
 
             return registros
                 .AplicarFiltroNombre(filtros)
-                .AplicarFiltroUsuarios(filtros);
+                .AplicarFiltroPermisos(filtros);
         }
 
     }

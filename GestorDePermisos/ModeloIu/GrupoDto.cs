@@ -6,7 +6,7 @@ namespace Gestor.Elementos.Permiso
     public static class GrupoPor
     {
         public static string Nombre = FiltroPor.Nombre;
-        public static string EstudianteInscrito = nameof(EstudianteInscrito).ToLower();
+        public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
     }
 
     public class GrupoDto : Elemento

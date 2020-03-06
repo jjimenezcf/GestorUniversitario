@@ -4,14 +4,16 @@ using Gestor.Elementos.Permiso;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoPermisos))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200306114825_AnadirTablaDeRoles")]
+    partial class AnadirTablaDeRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,8 +7,9 @@ namespace Gestor.Elementos.Permiso
 
     public class CtoPermisos : ContextoDeElementos
     {
-        public DbSet<PermisoReg> Cursos { get; set; }
-        public DbSet<RegistroDeInscripcion> Inscripciones { get; set; }
+        public DbSet<PermisoReg> Permisos { get; set; }
+        public DbSet<RolReg> Roles { get; set; }
+        public DbSet<RolPermisoReg> PermisosDeUnRol { get; set; }
 
         public CtoPermisos(DbContextOptions<CtoPermisos> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -20,7 +21,8 @@ namespace Gestor.Elementos.Permiso
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<PermisoReg>();
-            modelBuilder.Entity<RegistroDeInscripcion>();
+            modelBuilder.Entity<RolReg>();
+            modelBuilder.Entity<RolPermisoReg>();
 
         }
 

@@ -23,6 +23,11 @@ namespace Gestor.Elementos.Permiso
         [DefaultValue(0)]
         public bool Tiene { get; set; }
 
-        public ICollection<RegistroDeInscripcion> Inscripciones { get; set; }
+        [Required]
+        [Column("PERMISO", Order = 1, TypeName = "BIT")]
+        [DefaultValue(0)]
+        public bool Permiso { get; set; }
+
+        public ICollection<RolPermisoReg> Roles { get; set; }
     }
 }

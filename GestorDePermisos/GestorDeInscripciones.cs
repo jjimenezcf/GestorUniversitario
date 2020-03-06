@@ -2,14 +2,14 @@
 
 namespace Gestor.Elementos.Permiso
 {
-    public class GestorDeInscripciones : GestorDeElementos<CtoPermisos, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
+    public class GestorDeInscripciones : GestorDeElementos<CtoPermisos, RolPermisoReg, ElementoInscripcionesDeUnEstudiante>
     {
 
         public class MapeoRegistroInscripcion : Profile
         {
             public MapeoRegistroInscripcion()
             {
-                CreateMap<RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>();
+                CreateMap<RolPermisoReg, ElementoInscripcionesDeUnEstudiante>();
             }
         }
 
@@ -19,7 +19,7 @@ namespace Gestor.Elementos.Permiso
         }
 
         
-        protected override RegistroDeInscripcion LeerConDetalle(int Id)
+        protected override RolPermisoReg LeerConDetalle(int Id)
 
         {
             return null;

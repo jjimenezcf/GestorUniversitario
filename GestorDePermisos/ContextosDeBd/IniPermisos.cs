@@ -6,50 +6,32 @@ namespace Gestor.Elementos.Permiso
     public class IniPermisos
     {
 
-        public static void CrearDatosIniciales(CtoPermisos contexto)
+        public static void CrearDatosIniciales(CtoPermisos ctoPermisos)
         {
 
-            if (!contexto.Cursos.Any())
+            if (!ctoPermisos.Permisos.Any())
             {
-                var courses = new PermisoReg[]
+                var permisos = new PermisoReg[]
                 {
-                  new PermisoReg{Nombre="Chemistry",Clase=3},
-                  new PermisoReg{Nombre="Microeconomics",Clase=3},
-                  new PermisoReg{Nombre="Macroeconomics",Clase=3},
-                  new PermisoReg{Nombre="Calculus",Clase=4},
-                  new PermisoReg{Nombre="Trigonometry",Clase=4},
-                  new PermisoReg{Nombre="Composition",Clase=3},
-                  new PermisoReg{Nombre="Literature",Clase=4}
+
                 };
-                foreach (PermisoReg curso in courses)
+                foreach (PermisoReg permiso in permisos)
                 {
-                    contexto.Cursos.Add(curso);
+                    ctoPermisos.Permisos.Add(permiso);
                 }
-                contexto.SaveChanges();
+                ctoPermisos.SaveChanges();
             }
 
-            if (!contexto.Inscripciones.Any())
+            if (!ctoPermisos.PermisosDeUnRol.Any())
             {
-                var inscripciones = new RegistroDeInscripcion[]
+                var permisosDeUnRol = new RolPermisoReg[]
                 {
-                    new RegistroDeInscripcion{EstudianteId=1,CursoId=1,Grado=Grado.A},
-                    new RegistroDeInscripcion{EstudianteId=1,CursoId=2,Grado=Grado.C},
-                    new RegistroDeInscripcion{EstudianteId=1,CursoId=3,Grado=Grado.B},
-                    new RegistroDeInscripcion{EstudianteId=2,CursoId=2,Grado=Grado.B},
-                    new RegistroDeInscripcion{EstudianteId=2,CursoId=3,Grado=Grado.F},
-                    new RegistroDeInscripcion{EstudianteId=2,CursoId=4,Grado=Grado.F},
-                    new RegistroDeInscripcion{EstudianteId=3,CursoId=5},
-                    new RegistroDeInscripcion{EstudianteId=4,CursoId=6},
-                    new RegistroDeInscripcion{EstudianteId=4,CursoId=5,Grado=Grado.F},
-                    new RegistroDeInscripcion{EstudianteId=5,CursoId=1,Grado=Grado.C},
-                    new RegistroDeInscripcion{EstudianteId=6,CursoId=3},
-                    new RegistroDeInscripcion{EstudianteId=7,CursoId=2,Grado=Grado.A},
                 };
-                foreach (RegistroDeInscripcion inscripcion in inscripciones)
+                foreach (RolPermisoReg permisoDelRol in permisosDeUnRol)
                 {
-                    contexto.Inscripciones.Add(inscripcion);
+                    ctoPermisos.PermisosDeUnRol.Add(permisoDelRol);
                 }
-                contexto.SaveChanges();
+                ctoPermisos.SaveChanges();
             }
         }
     }
