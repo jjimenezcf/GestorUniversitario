@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Entorno
 {
     
     public static class UsuariosPor
@@ -17,7 +17,5 @@ namespace Gestor.Elementos.Usuario
         public string Apellido { get; set; }
         public string Nombre { get; set; }
         public DateTime Alta { get; set; }
-
-        public ICollection<ElementoInscripcionesDeUnEstudiante> Inscripciones { get; set; }
     }
 }

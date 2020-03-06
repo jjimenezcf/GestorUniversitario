@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
-using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Entorno;
+using Gestor.Elementos.Permiso;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -12,13 +13,13 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
-                new Selector<ElementoCurso>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                new Selector<GrupoDto>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Curso",
                                         propiedad: UsuariosPor.CursosInscrito,
                                         ayuda: "Seleccionar curso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
-                                        paraFiltrar: nameof(ElementoCurso.Id),
-                                        paraMostrar: nameof(ElementoCurso.Titulo),
+                                        paraFiltrar: nameof(GrupoDto.Id),
+                                        paraMostrar: nameof(GrupoDto.Titulo),
                                         descriptor: new CrudCurso(ModoDescriptor.Seleccion),
                                         propiedadDondeMapear: FiltroPor.Nombre.ToString());
 

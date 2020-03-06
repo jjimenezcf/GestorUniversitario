@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestorDeEntorno.Migrations
 {
-    [DbContext(typeof(ContextoEntorno))]
+    [DbContext(typeof(CtoEntorno))]
     [Migration("20200304210022_inicialEntorno")]
     partial class inicialEntorno
     {

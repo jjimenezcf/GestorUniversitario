@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoPermisos))]
-    [Migration("20200305204447_CambiarEsquema")]
-    partial class CambiarEsquema
+    [Migration("20200306095257_RenombrarGrupoPermiso")]
+    partial class RenombrarGrupoPermiso
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +21,7 @@ namespace Migraciones.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gestor.Elementos.Permiso.Est_Elemento", b =>
+            modelBuilder.Entity("Gestor.Elementos.Permiso.PermisoReg", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,45 +29,22 @@ namespace Migraciones.Migrations
                         .HasColumnType("INT")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnName("APELLIDO")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.Property<DateTime>("InscritoEl")
-                        .HasColumnName("F_INSCRIPCION")
-                        .HasColumnType("DATE");
+                    b.Property<int>("Clase")
+                        .HasColumnName("CLASE")
+                        .HasColumnType("INT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EST_ELEMENTO","USUARIO");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Permiso.RegistroDeCurso", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Creditos")
-                        .HasColumnName("CREDITOS")
-                        .HasColumnType("INT");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnName("TITULO")
                         .HasColumnType("VARCHAR(250)");
 
+                    b.Property<bool>("Tiene")
+                        .HasColumnName("TIENE")
+                        .HasColumnType("BIT");
+
                     b.HasKey("Id");
 
-                    b.ToTable("CUR_ELEMENTO","UNIVERSIDAD");
+                    b.ToTable("PERMISO","PERMISO");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Permiso.RegistroDeInscripcion", b =>
@@ -81,33 +59,66 @@ namespace Migraciones.Migrations
                         .HasColumnType("INT");
 
                     b.Property<int>("EstudianteId")
-                        .HasColumnType("INT");
+                        .HasColumnType("int");
 
                     b.Property<int?>("Grado")
                         .HasColumnType("int");
+
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("INT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CursoId");
 
-                    b.HasIndex("EstudianteId");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("EST_CURSO","UNIVERSIDAD");
                 });
 
+            modelBuilder.Entity("Gestor.Elementos.Permiso.UsuarioReg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Alta")
+                        .HasColumnName("F_ALTA")
+                        .HasColumnType("DATE");
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnName("APELLIDO")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnName("LOGIN")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnName("NOMBRE")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("USUARIO","USUARIO");
+                });
+
             modelBuilder.Entity("Gestor.Elementos.Permiso.RegistroDeInscripcion", b =>
                 {
-                    b.HasOne("Gestor.Elementos.Permiso.RegistroDeCurso", "Curso")
+                    b.HasOne("Gestor.Elementos.Permiso.PermisoReg", "Curso")
                         .WithMany("Inscripciones")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gestor.Elementos.Permiso.Est_Elemento", "Estudiante")
+                    b.HasOne("Gestor.Elementos.Permiso.UsuarioReg", "Usuario")
                         .WithMany("Inscripciones")
-                        .HasForeignKey("EstudianteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioId");
                 });
 #pragma warning restore 612, 618
         }

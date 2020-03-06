@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Entorno;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class UsuariosController : EntidadController<ContextoUsuario, UsuarioReg, UsuarioDto>
+    public class UsuariosController : EntidadController<CtoEntorno, UsuarioReg, UsuarioDto>
     {
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)

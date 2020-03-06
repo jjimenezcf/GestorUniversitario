@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Gestor.Elementos;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Permiso;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,8 +37,8 @@ namespace MVCSistemaDeElementos
             services.AddRazorPages();
             var cadenaDeConexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
 
-            services.AddDbContext<ContextoEntorno>(options => options.UseSqlServer(cadenaDeConexion));
-            services.AddDbContext<ContextoUsuario>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<CtoEntorno>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<CtoPermisos>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();

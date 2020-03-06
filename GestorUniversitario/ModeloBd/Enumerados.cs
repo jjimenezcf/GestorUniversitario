@@ -1,4 +1,4 @@
-﻿namespace Gestor.Elementos.Usuario
+﻿namespace Gestor.Elementos.Permiso
 {
     public enum Grado
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Permiso;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,48 +21,48 @@ namespace MVCSistemaDeElementos
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             IniciarContextoDeEntorno(services);
-            IniciarContextoUniversitario(services);
+            IniciarContextoDePermisos(services);
         }
 
-        private static void IniciarContextoUniversitario(IServiceProvider services)
+        private static void IniciarContextoDePermisos(IServiceProvider services)
         {
-            var cnxUniv = services.GetRequiredService<ContextoUsuario>();
+            var ctoPermisos = services.GetRequiredService<CtoPermisos>();
             try
             {
-                cnxUniv.Database.Migrate();
-                cnxUniv.IniciarTraza();
-                ContextoUsuario.InicializarMaestros(cnxUniv);
+                ctoPermisos.Database.Migrate();
+                ctoPermisos.IniciarTraza();
             }
             catch (Exception ex)
             {
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {cnxUniv.GetType().Name}", ex);
+                throw new Exception($"Error al conectarse al contexto {ctoPermisos.GetType().Name}", ex);
             }
             finally
             {
-                if (cnxUniv != null)
-                    cnxUniv.CerrarTraza();
+                if (ctoPermisos != null)
+                    ctoPermisos.CerrarTraza();
             }
         }
 
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
-            var cnxEntorno = services.GetRequiredService<ContextoEntorno>();
+            var ctoEntorno = services.GetRequiredService<CtoEntorno>();
             try
             {
-                cnxEntorno.Database.Migrate();
-                cnxEntorno.IniciarTraza();
-                ContextoEntorno.NuevaVersion(cnxEntorno);
+                ctoEntorno.Database.Migrate();
+                ctoEntorno.IniciarTraza();
+                CtoEntorno.NuevaVersion(ctoEntorno);
+                CtoEntorno.InicializarMaestros(ctoEntorno);
             }
             catch (Exception ex)
             {
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {cnxEntorno.GetType().Name}", ex);
+                throw new Exception($"Error al conectarse al contexto {ctoEntorno.GetType().Name}", ex);
             }
             finally
             {
-                if (cnxEntorno != null)
-                    cnxEntorno.CerrarTraza();
+                if (ctoEntorno != null)
+                    ctoEntorno.CerrarTraza();
             }
         }
 

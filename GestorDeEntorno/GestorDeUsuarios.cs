@@ -5,7 +5,7 @@ using AutoMapper;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Entorno
 {
     static class UsuarioRegFlt
     {
@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Usuario
             return regristros;
         }
 
-        public static IQueryable<T> AplicarFiltroCurso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioReg
+        public static IQueryable<T> AplicarFiltroDeRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.CursosInscrito)
@@ -26,12 +26,11 @@ namespace Gestor.Elementos.Usuario
                     var listaIds = filtro.Valor.ListaEnteros(); 
                     foreach(int id in listaIds)
                     {
-                        registros = registros.Where(x => x.Inscripciones.Any(i => i.CursoId == id));
+                        //registros = registros.Where(x => x.Inscripciones.Any(i => i.CursoId == id));
                     }
                 }
 
             return registros;
-
         }
     }
 
@@ -60,7 +59,7 @@ namespace Gestor.Elementos.Usuario
     }
 
 
-    public class GestorDeUsuarios : GestorDeElementos<ContextoUsuario, UsuarioReg, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, UsuarioReg, UsuarioDto>
     {
 
         public class MapeoRegistroUsuario : Profile
@@ -72,7 +71,7 @@ namespace Gestor.Elementos.Usuario
             }
         }
 
-        public GestorDeUsuarios(ContextoUsuario contexto, IMapper mapeador)
+        public GestorDeUsuarios(CtoEntorno contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
@@ -94,15 +93,15 @@ namespace Gestor.Elementos.Usuario
 
             return registros
                    .AplicarFiltroNombre(filtros)
-                   .AplicarFiltroCurso(filtros);
+                   .AplicarFiltroDeRelacion(filtros);
         }
                 
 
         protected override UsuarioReg LeerConDetalle(int Id)
         {
             return Contexto.Set<UsuarioReg>()
-                            .Include(i => i.Inscripciones)
-                            .ThenInclude(e => e.Curso)
+                            //.Include(i => i.Inscripciones)
+                            //.ThenInclude(e => e.Curso)
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
         }

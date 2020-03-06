@@ -1,6 +1,6 @@
 ﻿using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Permiso
 {
 
     public class ElementoInscripcionesDeUnEstudiante : Elemento
@@ -9,7 +9,7 @@ namespace Gestor.Elementos.Usuario
         public int IdEstudiante { get; set; }
         public Grado? Grado { get; set; }
 
-        public ElementoCurso Curso { get; set; }
+        public GrupoDto Curso { get; set; }
 
         public string PropiedadCurso => nameof(Curso);
     }

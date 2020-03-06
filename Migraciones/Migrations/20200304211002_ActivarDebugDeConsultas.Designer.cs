@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestorDeEntorno.Migrations
 {
-    [DbContext(typeof(ContextoEntorno))]
+    [DbContext(typeof(CtoEntorno))]
     [Migration("20200304211002_ActivarDebugDeConsultas")]
     partial class ActivarDebugDeConsultas
     {

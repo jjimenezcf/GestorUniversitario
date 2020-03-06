@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Gestor.Elementos.Usuario;
+using Gestor.Elementos.Permiso;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class CursosController : EntidadController<ContextoUsuario, RegistroDeCurso, ElementoCurso>
+    public class CursosController : EntidadController<CtoPermisos, PermisoReg, GrupoDto>
     {
         public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) 
         : base
@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult IraCrearCurso()
         {
-            return View(GestorDelCrud.Creador.Vista, new ElementoCurso());
+            return View(GestorDelCrud.Creador.Vista, new GrupoDto());
         }
 
         public IActionResult IraDetalleCurso(int? id)
@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(CrearCurso))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearCurso([Bind("Id,Titulo,Creditos")] ElementoCurso curso)
+        public async Task<IActionResult> CrearCurso([Bind("Id,Titulo,Creditos")] GrupoDto curso)
         {
             return await CrearObjeto(curso);
         }
@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(ModificarCurso))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarCurso(int id, [Bind("Id,Titulo,Creditos")] ElementoCurso curso)
+        public async Task<IActionResult> ModificarCurso(int id, [Bind("Id,Titulo,Creditos")] GrupoDto curso)
         {
             return await ModificarObjeto(id, curso);
         }
@@ -75,14 +75,14 @@ namespace MVCSistemaDeElementos.Controllers
             return IraMantenimientoCurso("");
         }
 
-        private ElementoCurso LeerCurso(int? id)
+        private GrupoDto LeerCurso(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (ElementoCurso)GestorDeElementos.LeerElementoPorId((int)id);
+            var curso = (GrupoDto)GestorDeElementos.LeerElementoPorId((int)id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");
@@ -91,14 +91,14 @@ namespace MVCSistemaDeElementos.Controllers
             return curso;
         }
 
-        private ElementoCurso LeerDetalle(int? id)
+        private GrupoDto LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (ElementoCurso)GestorDeElementos.LeerElementoConDetalle((int)id);
+            var curso = (GrupoDto)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");

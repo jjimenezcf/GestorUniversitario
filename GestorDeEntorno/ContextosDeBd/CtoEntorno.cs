@@ -16,14 +16,15 @@ namespace Gestor.Elementos.Entorno
         }
     }
        
-    public class ContextoEntorno : ContextoDeElementos
+    public class CtoEntorno : ContextoDeElementos
     {
 
         public DbSet<Fun_Elemento> Funcionalidades { get; set; }
         public DbSet<Fun_Accion> Acciones { get; set; }
         public DbSet<Var_Elemento> Variables { get; set; }
-        
-        public ContextoEntorno(DbContextOptions<ContextoEntorno> options, IConfiguration configuracion) :
+        public DbSet<UsuarioReg> Usuarios { get; set; }
+
+        public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)
         {
         }
@@ -34,6 +35,7 @@ namespace Gestor.Elementos.Entorno
             modelBuilder.Entity<Var_Elemento>();
             modelBuilder.Entity<Fun_Accion>();
             modelBuilder.Entity<Fun_Elemento>();
+            modelBuilder.Entity<UsuarioReg>();
         }
         private bool HayQueDebuggar()
         {
@@ -47,7 +49,7 @@ namespace Gestor.Elementos.Entorno
             return registro == null ? "0.0.0" : registro.Valor;
         }
 
-        public static void NuevaVersion(ContextoEntorno cnx)
+        public static void NuevaVersion(CtoEntorno cnx)
         {
             var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.version);
             if (version == null)
@@ -60,7 +62,14 @@ namespace Gestor.Elementos.Entorno
                 cnx.Variables.Update(version);
             }
             cnx.SaveChanges();
-        }   
+        }
+
+        public static void InicializarMaestros(CtoEntorno contexto)
+        {
+            if (!contexto.Usuarios.Any())
+                IniEntorno.CrearDatosIniciales(contexto);
+
+        }
 
 
     }

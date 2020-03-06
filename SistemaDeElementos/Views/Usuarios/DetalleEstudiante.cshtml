@@ -1,4 +1,4 @@
-﻿@model Gestor.Elementos.Usuario.UsuarioDto
+﻿@model Gestor.Elementos.Entorno.UsuarioDto
 
 @{
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
@@ -46,7 +46,7 @@
 
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Inscripciones)
+                    @*@foreach (var item in Model.Inscripciones)
                     {
                         <tr>
                             <td>
@@ -56,7 +56,7 @@
                                 @Html.DisplayFor(modelItem => item.Grado)
                             </td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
             </table>
         </div>

@@ -4,24 +4,24 @@ using System.Collections.Generic;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Permiso
 {
 
     static class RegistroDeCursosFiltros
     {
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeCurso
+        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == CursoPor.Nombre)
-                    return registros.Where(x => x.Titulo.Contains(filtro.Valor));
+                if (filtro.Propiedad.ToLower() == GrupoPor.Nombre)
+                    return registros.Where(x => x.Nombre.Contains(filtro.Valor));
 
             return registros;
         }
 
-        public static IQueryable<T> AplicarFiltroUsuarios<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RegistroDeCurso
+        public static IQueryable<T> AplicarFiltroUsuarios<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == CursoPor.EstudianteInscrito)
+                if (filtro.Propiedad.ToLower() == GrupoPor.EstudianteInscrito)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
@@ -36,29 +36,29 @@ namespace Gestor.Elementos.Usuario
     }
 
 
-    public class GestorDeCursos : GestorDeElementos<ContextoUsuario, RegistroDeCurso, ElementoCurso>
+    public class GestorDeCursos : GestorDeElementos<CtoPermisos, PermisoReg, GrupoDto>
     {
         public class MapeoRegistroCurso : Profile
         {
             public MapeoRegistroCurso()
             {
-                CreateMap<RegistroDeCurso, ElementoCurso>();
-                CreateMap<ElementoCurso,RegistroDeCurso>();
+                CreateMap<PermisoReg, GrupoDto>();
+                CreateMap<GrupoDto,PermisoReg>();
             }
         }
 
-        public GestorDeCursos(ContextoUsuario contexto, IMapper mapeador)
+        public GestorDeCursos(CtoPermisos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
             
         }
                
-        protected override RegistroDeCurso LeerConDetalle(int Id)
+        protected override PermisoReg LeerConDetalle(int Id)
         {
             return null;
         }
 
-        protected override IQueryable<RegistroDeCurso> AplicarFiltros(IQueryable<RegistroDeCurso> registros, List<ClausulaDeFiltrado> filtros)
+        protected override IQueryable<PermisoReg> AplicarFiltros(IQueryable<PermisoReg> registros, List<ClausulaDeFiltrado> filtros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)

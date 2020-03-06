@@ -1,7 +1,7 @@
 ﻿using Gestor.Elementos.ModeloBd;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Permiso
 {
     [Table("EST_CURSO", Schema = "UNIVERSIDAD")]
     public class RegistroDeInscripcion : Registro
@@ -10,8 +10,7 @@ namespace Gestor.Elementos.Usuario
         public int EstudianteId { get; set; }
         public Grado? Grado { get; set; }
 
-        public RegistroDeCurso Curso { get; set; }
-        public UsuarioReg Usuario { get; set; }
+        public PermisoReg Curso { get; set; }
 
     }
 

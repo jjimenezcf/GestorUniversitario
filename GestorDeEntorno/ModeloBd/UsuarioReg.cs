@@ -1,12 +1,11 @@
 ﻿using Gestor.Elementos.ModeloBd;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Entorno
 {
-    [Table("USUARIO", Schema = "USUARIO")]
+    [Table("USUARIO", Schema = "ENTORNO")]
     public class UsuarioReg : Registro
     {
         [Required]
@@ -26,8 +25,6 @@ namespace Gestor.Elementos.Usuario
         [Required]
         [Column("F_ALTA", Order = 4, TypeName = "DATE")]
         public DateTime Alta { get; set; }
-
-        public ICollection<RegistroDeInscripcion> Inscripciones { get; set; }
 
     }
 

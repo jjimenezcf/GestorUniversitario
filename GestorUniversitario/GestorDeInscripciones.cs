@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 
-namespace Gestor.Elementos.Usuario
+namespace Gestor.Elementos.Permiso
 {
-    public class GestorDeInscripciones : GestorDeElementos<ContextoUsuario, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
+    public class GestorDeInscripciones : GestorDeElementos<CtoPermisos, RegistroDeInscripcion, ElementoInscripcionesDeUnEstudiante>
     {
 
         public class MapeoRegistroInscripcion : Profile
@@ -13,7 +13,7 @@ namespace Gestor.Elementos.Usuario
             }
         }
 
-        public GestorDeInscripciones(ContextoUsuario contexto, IMapper mapeador)
+        public GestorDeInscripciones(CtoPermisos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
         }
