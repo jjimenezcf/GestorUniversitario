@@ -13,13 +13,13 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
-                new Selector<GrupoDto>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                new Selector<PermisoDto>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Curso",
                                         propiedad: UsuariosPor.CursosInscrito,
                                         ayuda: "Seleccionar curso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
-                                        paraFiltrar: nameof(GrupoDto.Id),
-                                        paraMostrar: nameof(GrupoDto.Titulo),
+                                        paraFiltrar: nameof(PermisoDto.Id),
+                                        paraMostrar: nameof(PermisoDto.Nombre),
                                         descriptor: new CrudCurso(ModoDescriptor.Seleccion),
                                         propiedadDondeMapear: FiltroPor.Nombre.ToString());
 

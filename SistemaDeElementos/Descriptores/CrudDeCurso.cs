@@ -5,7 +5,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudCurso : DescriptorDeCrud<GrupoDto>
+    public class CrudCurso : DescriptorDeCrud<PermisoDto>
     {
         public CrudCurso(ModoDescriptor modo)
         : base(controlador: "Cursos", vista: "MantenimientoCurso", titulo: "Mantenimiento de cursos", modo: modo)
@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 var descEstu = new CrudUsuario(ModoDescriptor.Seleccion);
                 new Selector<UsuarioDto>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
                                               etiqueta: "Usuario",
-                                              propiedad: GrupoPor.PermisoDeUnRol,
+                                              propiedad: PermisoPor.PermisoDeUnRol,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 0 },
                                               paraFiltrar: nameof(UsuarioDto.Id),
@@ -33,12 +33,12 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(GrupoDto.Id), Visible = false, Tipo = typeof(int) });
-            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(GrupoDto.Titulo), Titulo = "Título", Ordenar = false });
-            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(GrupoDto.Creditos), Titulo = "Créditos", Tipo = typeof(int) });
+            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Id), Visible = false, Tipo = typeof(int) });
+            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Nombre), Titulo = "Título", Ordenar = false });
+            Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Clase), Titulo = "Créditos", Tipo = typeof(int) });
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<GrupoDto> elementos)
+        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos)
         {
             base.MapearElementosAlGrid(elementos);
             foreach (var curso in elementos)
@@ -47,14 +47,14 @@ namespace MVCSistemaDeElementos.Descriptores
                 foreach (ColumnaDelGrid columna in Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
-                    if (columna.Nombre == nameof(GrupoDto.Id))
+                    if (columna.Nombre == nameof(PermisoDto.Id))
                         celda.Valor = curso.Id.ToString();
                     else
-                    if (columna.Nombre == nameof(GrupoDto.Titulo))
-                        celda.Valor = curso.Titulo;
+                    if (columna.Nombre == nameof(PermisoDto.Nombre))
+                        celda.Valor = curso.Nombre;
                     else
-                    if (columna.Nombre == nameof(GrupoDto.Creditos))
-                        celda.Valor = curso.Creditos;
+                    if (columna.Nombre == nameof(PermisoDto.Clase))
+                        celda.Valor = curso.Clase;
                     fila.Celdas.Add(celda);
                 }
                 Grid.Filas.Add(fila);

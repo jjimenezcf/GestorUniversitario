@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Permiso
 {
-    public static class GrupoPor
+    public static class PermisoPor
     {
         public static string Nombre = FiltroPor.Nombre;
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
     }
 
-    public class GrupoDto : Elemento
+    public class PermisoDto : Elemento
     {
-        public string Titulo { get; set; }
-        public int Creditos { get; set; }
+        public string Nombre { get; set; }
+        public int Clase { get; set; }
+        public int Permiso { get; set; }
 
-        public ICollection<ElementoInscripcionesDeUnEstudiante> Inscripciones { get; set; }
     }
 }

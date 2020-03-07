@@ -4,14 +4,16 @@ using Gestor.Elementos.Permiso;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoPermisos))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200307230509_anadirAk_Permiso_Nombre")]
+    partial class anadirAk_Permiso_Nombre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,7 +7,7 @@ using Gestor.Elementos.Permiso;
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class CursosController : EntidadController<CtoPermisos, PermisoReg, GrupoDto>
+    public class CursosController : EntidadController<CtoPermisos, PermisoReg, PermisoDto>
     {
         public CursosController(GestorDeCursos gestorDeCursos, GestorDeErrores gestorDeErrores) 
         : base
@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult IraCrearCurso()
         {
-            return View(GestorDelCrud.Creador.Vista, new GrupoDto());
+            return View(GestorDelCrud.Creador.Vista, new PermisoDto());
         }
 
         public IActionResult IraDetalleCurso(int? id)
@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(CrearCurso))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearCurso([Bind("Id,Titulo,Creditos")] GrupoDto curso)
+        public async Task<IActionResult> CrearCurso([Bind("Id,Titulo,Creditos")] PermisoDto curso)
         {
             return await CrearObjeto(curso);
         }
@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(ModificarCurso))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarCurso(int id, [Bind("Id,Titulo,Creditos")] GrupoDto curso)
+        public async Task<IActionResult> ModificarCurso(int id, [Bind("Id,Titulo,Creditos")] PermisoDto curso)
         {
             return await ModificarObjeto(id, curso);
         }
@@ -75,14 +75,14 @@ namespace MVCSistemaDeElementos.Controllers
             return IraMantenimientoCurso("");
         }
 
-        private GrupoDto LeerCurso(int? id)
+        private PermisoDto LeerCurso(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (GrupoDto)GestorDeElementos.LeerElementoPorId((int)id);
+            var curso = (PermisoDto)GestorDeElementos.LeerElementoPorId((int)id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");
@@ -91,14 +91,14 @@ namespace MVCSistemaDeElementos.Controllers
             return curso;
         }
 
-        private GrupoDto LeerDetalle(int? id)
+        private PermisoDto LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del curso no puede ser nulo");
             }
 
-            var curso = (GrupoDto)GestorDeElementos.LeerElementoConDetalle((int)id);
+            var curso = (PermisoDto)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (curso == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del curso no se pudo localizar");

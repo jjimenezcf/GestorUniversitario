@@ -1,21 +1,21 @@
-﻿@model Gestor.Elementos.Permiso.GrupoDto
+﻿@model Gestor.Elementos.Permiso.PermisoDto
 
 @{
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
 }
 
     <h2>
-       @Html.DisplayFor(model => model.Titulo),  @Html.DisplayFor(model => model.Creditos)
+       @Html.DisplayFor(model => model.Nombre),  @Html.DisplayFor(model => model.Clase)
     </h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Inscripciones)
+            @*@Html.DisplayNameFor(model => model.Inscripciones)*@
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Inscripciones)
+            @*@Html.DisplayFor(model => model.Inscripciones)*@
         </dd>
 
     </dl>

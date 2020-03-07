@@ -9,7 +9,7 @@ namespace Gestor.Elementos.Permiso
         public int IdEstudiante { get; set; }
         public Grado? Grado { get; set; }
 
-        public GrupoDto Curso { get; set; }
+        public PermisoDto Curso { get; set; }
 
         public string PropiedadCurso => nameof(Curso);
     }

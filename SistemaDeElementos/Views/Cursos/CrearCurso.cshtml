@@ -1,4 +1,4 @@
-﻿@model Gestor.Elementos.Permiso.GrupoDto
+﻿@model Gestor.Elementos.Permiso.PermisoDto
 
 @{
     ViewData["Title"] = $"{@ViewBag.Crud.Titulo}";
@@ -11,14 +11,14 @@
     <div class="col-md-4">
         <form asp-action=@ViewBag.Crud.Creador.Accion>
             <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Creditos" class="control-label"></label>
-                <input asp-for="Creditos" class="form-control" />
-                <span asp-validation-for="Creditos" class="text-danger"></span>
+                <label asp-for="Clase" class="control-label"></label>
+                <input asp-for="Clase" class="form-control" />
+                <span asp-validation-for="Clase" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value=@ViewBag.Crud.Creador.Formulario class="btn btn-outline-success" />

@@ -20,7 +20,10 @@ namespace Gestor.Elementos.Permiso
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<PermisoReg>();
+            modelBuilder.Entity<PermisoReg>()
+                .HasAlternateKey(p => p.Nombre)
+                .HasName("AK_PERMISO_NOMBRE");
+
             modelBuilder.Entity<RolReg>();
             modelBuilder.Entity<RolPermisoReg>();
 

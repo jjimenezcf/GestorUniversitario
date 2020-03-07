@@ -4,47 +4,50 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Utilidades;
 
 namespace Gestor.Correo
 {
 
     public class GestorDeCorreo
     {
-        private SmtpClient cliente;
-        private static IConfiguration Configuration { get; set; }
-        private MailMessage email;
+        private static SmtpClient clienteJson;
+
+        private static IConfigurationSection ServidorDeCorreo { get; set; }
+
+        private static string Usuario => ServidorDeCorreo["user"];
+        private static string Servidor => ServidorDeCorreo["host"];
+        private static bool SSL => ServidorDeCorreo["enableSsl"] == "true";
+        private static int Puerto => ServidorDeCorreo["port"].Entero();
+        private static string Password => ServidorDeCorreo["password"];
+
         public GestorDeCorreo()
         {
             InicializaConfiguracion();
-            cliente = new SmtpClient(Configuration["host"], Int32.Parse(Configuration["port"]))
+
+            clienteJson = new SmtpClient(Servidor,Puerto)
             {
-                EnableSsl = Boolean.Parse(Configuration["enableSsl"]),
+                EnableSsl =SSL,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(Configuration["user"], Configuration["password"])
+                Credentials = new NetworkCredential(Usuario,Password)
             };
         }
         private static void InicializaConfiguracion()
         {
-            var builder = new ConfigurationBuilder()
-                                    .SetBasePath(Directory.GetCurrentDirectory())
-                                    .AddXmlFile("configuracionCorreo.xml");
-            Configuration = builder.Build();
+            var generador = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                 .AddJsonFile("appsettings.json");
+            var configuration = generador.Build();
+            ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo");
         }
         public void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-            email = new MailMessage(Configuration["user"], destinatario, asunto, mensaje);
+            var email = new MailMessage(Usuario, destinatario, asunto, mensaje);
             email.IsBodyHtml = esHtlm;
-            cliente.Send(email);
+            clienteJson.Send(email);
         }
-        public void Enviar(MailMessage message)
-        {
-            cliente.Send(message);
-        }
-        public async Task EnviarAsync(MailMessage message)
-        {
-            await cliente.SendMailAsync(message);
-        }
+
 
         public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {

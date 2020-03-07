@@ -6,6 +6,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Elementos.Permiso
 {
+    enum Clase
+    {
+        Tipo = 1,
+        Estado = 2,
+        Transicion = 3,
+        CentroGestor = 4,
+        Negocio = 5,
+        Elemento = 6
+    }
+    enum Permiso
+    {
+        Gestor = 1,
+        Consultor = 2,
+        Creador = 3,
+        Administrador = 4,
+        Acceso = 5
+    }
+
     [Table("PERMISO", Schema = "PERMISO")]
     public class PermisoReg : Registro
     {
@@ -14,19 +32,15 @@ namespace Gestor.Elementos.Permiso
         public string Nombre { get; set; }
 
         [Required]
-        [Column("CLASE", Order = 1, TypeName = "INT")]
+        [Column("CLASE", Order = 3, TypeName = "decimal(2,0)")]
         [DefaultValue(0)]
         public int Clase { get; set; }
 
-        [Required]
-        [Column("TIENE", Order = 1, TypeName = "BIT")]
-        [DefaultValue(0)]
-        public bool Tiene { get; set; }
 
         [Required]
-        [Column("PERMISO", Order = 1, TypeName = "BIT")]
+        [Column("PERMISO", Order = 4, TypeName = "decimal(2,0)")]
         [DefaultValue(0)]
-        public bool Permiso { get; set; }
+        public int Permiso { get; set; }
 
         public ICollection<RolPermisoReg> Roles { get; set; }
     }

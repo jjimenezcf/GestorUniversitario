@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Permiso
         public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == GrupoPor.Nombre)
+                if (filtro.Propiedad.ToLower() == PermisoPor.Nombre)
                     return registros.Where(x => x.Nombre.Contains(filtro.Valor));
 
             return registros;
@@ -21,7 +21,7 @@ namespace Gestor.Elementos.Permiso
         public static IQueryable<T> AplicarFiltroPermisos<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoReg
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == GrupoPor.PermisoDeUnRol)
+                if (filtro.Propiedad.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
@@ -36,14 +36,14 @@ namespace Gestor.Elementos.Permiso
     }
 
 
-    public class GestorDeCursos : GestorDeElementos<CtoPermisos, PermisoReg, GrupoDto>
+    public class GestorDeCursos : GestorDeElementos<CtoPermisos, PermisoReg, PermisoDto>
     {
         public class MapeoRegistroCurso : Profile
         {
             public MapeoRegistroCurso()
             {
-                CreateMap<PermisoReg, GrupoDto>();
-                CreateMap<GrupoDto,PermisoReg>();
+                CreateMap<PermisoReg, PermisoDto>();
+                CreateMap<PermisoDto,PermisoReg>();
             }
         }
 
