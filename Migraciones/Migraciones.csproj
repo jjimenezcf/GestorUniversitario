@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200304210352_inicialUniversitario.cs" />
     <Compile Remove="Migrations\20200304210352_inicialUniversitario.Designer.cs" />
+    <Compile Remove="Migrations\20200308124317_CREAR_TABLA_ROL_pERMISO.cs" />
+    <Compile Remove="Migrations\20200308124317_CREAR_TABLA_ROL_pERMISO.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

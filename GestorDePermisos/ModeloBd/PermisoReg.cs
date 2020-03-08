@@ -24,21 +24,42 @@ namespace Gestor.Elementos.Permiso
         Acceso = 5
     }
 
-    [Table("PERMISO", Schema = "PERMISO")]
+
+    /*
+     * 
+       create table SEGURIDAD.PERMISO (
+          ID                   int                  identity,
+          NOMBRE               varchar(250)         not null,
+          CLASE                decimal(2,0)         not null,
+          PERMISO              decimal(2,0)         not null
+       )
+       go
+       
+       alter table SEGURIDAD.PERMISO
+          add constraint PK_PERMISO primary key (ID)
+       go
+       
+       alter table SEGURIDAD.PERMISO
+          add constraint AK_PERMISO_NOMBRE unique (NOMBRE)
+       go
+     * 
+     */
+
+    [Table("PERMISO", Schema = "SEGURIDAD")]
     public class PermisoReg : Registro
     {
         [Required]
-        [Column("NOMBRE", Order = 1, TypeName = "VARCHAR(250)")]
+        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
         public string Nombre { get; set; }
 
         [Required]
-        [Column("CLASE", Order = 3, TypeName = "decimal(2,0)")]
+        [Column("CLASE", TypeName = "decimal(2,0)")]
         [DefaultValue(0)]
         public int Clase { get; set; }
 
 
         [Required]
-        [Column("PERMISO", Order = 4, TypeName = "decimal(2,0)")]
+        [Column("PERMISO", TypeName = "decimal(2,0)")]
         [DefaultValue(0)]
         public int Permiso { get; set; }
 
