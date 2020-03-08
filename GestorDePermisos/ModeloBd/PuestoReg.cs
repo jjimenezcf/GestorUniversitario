@@ -38,6 +38,7 @@ namespace Gestor.Elementos.Seguridad
         public string Descripcion { get; set; }
 
         public ICollection<RolPuestoReg> Roles { get; set; }
+        public ICollection<UsuPuestoReg> Usuarios { get; set; }
     }
 
     public static class TablaPuesto

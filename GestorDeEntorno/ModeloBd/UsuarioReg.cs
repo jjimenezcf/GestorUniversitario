@@ -1,5 +1,6 @@
 ﻿using Gestor.Elementos.ModeloBd;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,7 +25,7 @@ namespace Gestor.Elementos.Entorno
 
         [Required]
         [Column("F_ALTA", Order = 4, TypeName = "DATE")]
-        public DateTime Alta { get; set; }
+        public DateTime Alta { get; set; }        
 
     }
 
