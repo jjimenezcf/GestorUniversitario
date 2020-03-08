@@ -3,14 +3,16 @@ using Gestor.Elementos.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoPermisos))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200308165153_CREAR_tablas_De_Puesto")]
+    partial class CREAR_tablas_De_Puesto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

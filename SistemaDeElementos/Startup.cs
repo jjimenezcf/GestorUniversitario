@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Gestor.Elementos;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Permiso;
+using Gestor.Elementos.Seguridad;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

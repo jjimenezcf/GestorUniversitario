@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
 
     static class RegistroDeCursosFiltros

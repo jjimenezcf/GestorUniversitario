@@ -1,7 +1,6 @@
 ﻿using Gestor.Elementos.ModeloIu;
-using System.Collections.Generic;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
     public static class PermisoPor
     {

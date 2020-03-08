@@ -1,10 +1,10 @@
 ﻿using Gestor.Elementos.ModeloBd;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
     /*
      * 
@@ -31,10 +31,20 @@ namespace Gestor.Elementos.Permiso
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
         public string Nombre { get; set; }
 
-        [Required]
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
         public ICollection<RolPermisoReg> Permisos { get; set; }
+        public ICollection<RolPuestoReg> Puestos { get; set; }
+    }
+
+    public static class TablaRol
+    {
+        public static void Definir(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RolReg>()
+                        .HasAlternateKey(p => p.Nombre)
+                        .HasName("AK_ROL_NOMBRE");
+        }
     }
 }

@@ -1,29 +1,12 @@
 ﻿using Gestor.Elementos.ModeloBd;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
-    enum Clase
-    {
-        Tipo = 1,
-        Estado = 2,
-        Transicion = 3,
-        CentroGestor = 4,
-        Negocio = 5,
-        Elemento = 6
-    }
-    enum Permiso
-    {
-        Gestor = 1,
-        Consultor = 2,
-        Creador = 3,
-        Administrador = 4,
-        Acceso = 5
-    }
-
 
     /*
      * 
@@ -42,7 +25,10 @@ namespace Gestor.Elementos.Permiso
        alter table SEGURIDAD.PERMISO
           add constraint AK_PERMISO_NOMBRE unique (NOMBRE)
        go
-     * 
+
+       alter table SEGURIDAD.PERMISO
+       add constraint AK_PERMISO_PERMISO unique (CLASE, PERMISO)
+       go 
      */
 
     [Table("PERMISO", Schema = "SEGURIDAD")]
@@ -64,5 +50,19 @@ namespace Gestor.Elementos.Permiso
         public int Permiso { get; set; }
 
         public ICollection<RolPermisoReg> Roles { get; set; }
+    }
+
+    public static class TablaPermiso
+    {
+        public static void Definir(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PermisoReg>()
+                        .HasAlternateKey(p => p.Nombre)
+                        .HasName("AK_PERMISO_NOMBRE");
+
+            modelBuilder.Entity<PermisoReg>()
+                        .HasAlternateKey(p => new { p.Clase, p.Permiso})
+                        .HasName("AK_PERMISO_PERMISO");
+        }
     }
 }

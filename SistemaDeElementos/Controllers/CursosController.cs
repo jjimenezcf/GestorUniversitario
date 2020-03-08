@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
-using Gestor.Elementos.Permiso;
+using Gestor.Elementos.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {

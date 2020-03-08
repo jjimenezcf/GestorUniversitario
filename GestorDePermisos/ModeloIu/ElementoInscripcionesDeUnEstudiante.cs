@@ -1,6 +1,6 @@
 ﻿using Gestor.Elementos.ModeloIu;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
 
     public class ElementoInscripcionesDeUnEstudiante : Elemento

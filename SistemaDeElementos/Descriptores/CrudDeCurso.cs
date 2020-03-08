@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Permiso;
+using Gestor.Elementos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores

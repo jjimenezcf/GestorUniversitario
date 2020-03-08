@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Gestor.Elementos.Permiso
+namespace Gestor.Elementos.Seguridad
 {
     public class GestorDeInscripciones : GestorDeElementos<CtoPermisos, RolPermisoReg, ElementoInscripcionesDeUnEstudiante>
     {

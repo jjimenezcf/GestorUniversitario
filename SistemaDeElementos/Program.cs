@@ -1,6 +1,6 @@
 ﻿using System;
 using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Permiso;
+using Gestor.Elementos.Seguridad;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
