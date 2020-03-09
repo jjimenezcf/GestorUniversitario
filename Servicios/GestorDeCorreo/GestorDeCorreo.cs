@@ -11,10 +11,12 @@ namespace Gestor.Correo
 
     public class GestorDeCorreo
     {
-        private static SmtpClient clienteJson;
+        private static SmtpClient SmtpCliente;
 
         private static IConfigurationSection ServidorDeCorreo { get; set; }
 
+
+        private static string Sistema => ServidorDeCorreo["Sistema"];
         private static string Usuario => ServidorDeCorreo["user"];
         private static string Servidor => ServidorDeCorreo["host"];
         private static bool SSL => ServidorDeCorreo["enableSsl"] == "true";
@@ -25,14 +27,25 @@ namespace Gestor.Correo
         {
             InicializaConfiguracion();
 
-            clienteJson = new SmtpClient(Servidor,Puerto)
+            if (Sistema == "EMUASA")
             {
-                EnableSsl =SSL,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(Usuario,Password)
-            };
+                SmtpCliente = new SmtpClient(Servidor);
+            }
+            else
+            if (Sistema == "GMAIL")
+            {
+                SmtpCliente = new SmtpClient(Servidor, Puerto)
+                {
+                    EnableSsl = SSL,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(Usuario, Password)
+                };
+            }
+
+            throw new Exception($"Sistema de correo {Sistema} no definido");
         }
+
         private static void InicializaConfiguracion()
         {
             var generador = new ConfigurationBuilder()
@@ -43,16 +56,25 @@ namespace Gestor.Correo
         }
         public void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-            var email = new MailMessage(Usuario, destinatario, asunto, mensaje);
+            MailMessage email;
+
+            if (Sistema == "EMUASA")
+                email = new MailMessage(Usuario, destinatario, asunto, mensaje);
+            else
+            if (Sistema == "GMAIL")
+                email = new MailMessage(Usuario, destinatario, asunto, mensaje);
+            else
+                throw new Exception($"Sistema de correo {Sistema} no definido");
+
             email.IsBodyHtml = esHtlm;
-            clienteJson.Send(email);
+            SmtpCliente.Send(email);
         }
 
 
         public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
             var correo = new GestorDeCorreo();
-            correo.Enviar(destinatario,asunto,mensaje,esHtlm);
+            correo.Enviar(destinatario, asunto, mensaje, esHtlm);
         }
 
 
