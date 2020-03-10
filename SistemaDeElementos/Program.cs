@@ -11,20 +11,20 @@ namespace MVCSistemaDeElementos
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
-            CrearBdSiNoExiste(host);
-            host.Run();
+            var servidorWeb = CreateWebHostBuilder(args).Build();
+            CrearBdSiNoExiste(servidorWeb);
+            servidorWeb.Run();
         }
 
-        private static void CrearBdSiNoExiste(IWebHost host)
+        private static void CrearBdSiNoExiste(IWebHost sevidorWeb)
         {
-            using var scope = host.Services.CreateScope();
+            using var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
             IniciarContextoDeEntorno(services);
-            IniciarContextoDePermisos(services);
+            IniciarContextoDeSeguro(services);
         }
 
-        private static void IniciarContextoDePermisos(IServiceProvider services)
+        private static void IniciarContextoDeSeguro(IServiceProvider services)
         {
             var ctoPermisos = services.GetRequiredService<CtoPermisos>();
             try
@@ -68,6 +68,6 @@ namespace MVCSistemaDeElementos
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>();
+                   .UseStartup<Startup>();
     }
 }

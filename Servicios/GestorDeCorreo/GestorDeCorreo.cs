@@ -16,12 +16,12 @@ namespace Gestor.Correo
         private static IConfigurationSection ServidorDeCorreo { get; set; }
 
 
-        private static string Sistema => ServidorDeCorreo["Sistema"];
-        private static string Usuario => ServidorDeCorreo["user"];
-        private static string Servidor => ServidorDeCorreo["host"];
-        private static bool SSL => ServidorDeCorreo["enableSsl"] == "true";
-        private static int Puerto => ServidorDeCorreo["port"].Entero();
-        private static string Password => ServidorDeCorreo["password"];
+        private static string Sistema => ServidorDeCorreo["Sistema"].ToUpper();
+        private static string Usuario => ServidorDeCorreo["usuario"];
+        private static string Servidor => ServidorDeCorreo["servidor"];
+        private static bool SSL => ServidorDeCorreo["sslActivo"] == "true";
+        private static int Puerto => ServidorDeCorreo["puerto"].Entero();
+        private static string Password => ServidorDeCorreo["contraseña"];
 
         public GestorDeCorreo()
         {
@@ -42,7 +42,7 @@ namespace Gestor.Correo
                     Credentials = new NetworkCredential(Usuario, Password)
                 };
             }
-
+            else
             throw new Exception($"Sistema de correo {Sistema} no definido");
         }
 
