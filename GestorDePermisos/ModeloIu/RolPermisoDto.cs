@@ -3,7 +3,7 @@
 namespace Gestor.Elementos.Seguridad
 {
 
-    public class ElementoInscripcionesDeUnEstudiante : Elemento
+    public class RolPermisoDto : Elemento
     {
         public int IdCurso { get; set; }
         public int IdEstudiante { get; set; }

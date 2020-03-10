@@ -14,13 +14,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new Selector<PermisoDto>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
-                                        etiqueta: "Curso",
+                                        etiqueta: "Permiso",
                                         propiedad: UsuariosPor.CursosInscrito,
-                                        ayuda: "Seleccionar curso",
+                                        ayuda: "Seleccionar Permiso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
                                         paraFiltrar: nameof(PermisoDto.Id),
                                         paraMostrar: nameof(PermisoDto.Nombre),
-                                        descriptor: new CrudCurso(ModoDescriptor.Seleccion),
+                                        descriptor: new CrudPermiso(ModoDescriptor.Seleccion),
                                         propiedadDondeMapear: FiltroPor.Nombre.ToString());
 
             DefinirVistaDeCreacion(accion: "IraCrearUsuario", textoMenu: "Crear usuario");

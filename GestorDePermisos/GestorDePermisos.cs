@@ -36,18 +36,18 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-    public class GestorDeCursos : GestorDeElementos<CtoPermisos, PermisoReg, PermisoDto>
+    public class GestorDePermisos : GestorDeElementos<CtoPermisos, PermisoReg, PermisoDto>
     {
-        public class MapeoRegistroCurso : Profile
+        public class MapearPermiso : Profile
         {
-            public MapeoRegistroCurso()
+            public MapearPermiso()
             {
                 CreateMap<PermisoReg, PermisoDto>();
                 CreateMap<PermisoDto,PermisoReg>();
             }
         }
 
-        public GestorDeCursos(CtoPermisos contexto, IMapper mapeador)
+        public GestorDePermisos(CtoPermisos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
             

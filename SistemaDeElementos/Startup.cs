@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();
-            services.AddScoped<GestorDeCursos>();
+            services.AddScoped<GestorDePermisos>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
