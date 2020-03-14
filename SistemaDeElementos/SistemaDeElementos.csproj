@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Views\Shared\_Layout.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="UtilidadesIu\Componentes\ColumnaDelGrid.cs" />
     <Content Include="UtilidadesIu\Componentes\FilaDelGrid.cs" />
     <Content Include="UtilidadesIu\Componentes\Grid.cs" />

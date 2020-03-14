@@ -15,6 +15,7 @@
     <script src="~/ts/tsInfoSelector.js"></script>
     <script src="~/ts/tsSelectores.js"></script>
     <script src="~/ts/tsGrid.js"></script>
+    <script src="~/ts/tsMenu.js"></script>
 </head>
 
 @using Gestor.Elementos
@@ -29,7 +30,7 @@
             <table id="tablaCabecera" class="table">
                 <tr>
                     <td class="celdaCabeceraIzquierda">
-                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" onclick="mostrar()" />
+                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" onclick="Menu.Mostrar()" menuAbierto ="false" />
                     </td>
                     <td class="celdaSeparador">
                     </td>
@@ -83,14 +84,15 @@
         <div class="table">
             <div class="row">
                 <div class="col-xs-3">
-                    <div id="sidebar" class="sidebar" style="width: 300px;">
+                    <div id="sidebar" class="sidebar" style="width: 0px;">
                         <a href="#" class="boton-cerrar" onclick="ocultar()">×</a>
                         <ul class="menu">
-                            <li><a href="#">Opción 1</a></li>
-                            <li><a href="#">Opción 2</a></li>
-                            <li><a href="#">Opción 3</a></li>
-                            <li><a href="#">Opción 4</a></li>
-                            <li><a href="#">Opción 5</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Permisos" asp-action="Index">Permisos</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -125,16 +127,8 @@
         @RenderSection("Scripts", required: false)
 
         <script>
-            
 
-        function mostrar() {
-            document.getElementById("sidebar").style.width = "300px";
-        }
 
-        function ocultar() {
-            document.getElementById("sidebar").style.width = "0";
-            document.getElementById("contenido").style.marginLeft = "0";
-        }
         </script>
 
         <partial name="_CookieConsentPartial" />
