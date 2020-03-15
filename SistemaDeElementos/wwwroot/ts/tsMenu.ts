@@ -1,15 +1,32 @@
 ﻿module Menu {
-    export function Mostrar() {
-        var idProductoHtml = document.getElementById('idproducto');
-        var menuAbierto = idProductoHtml.getAttribute("menuAbierto");
-        if (menuAbierto === undefined || menuAbierto === "false") {
-            idProductoHtml.setAttribute("menuAbierto", "true");
-            document.getElementById("sidebar").style.width = "300px";
+    export function MostrarMenu() {
+        let idProductoHtml: HTMLElement = document.getElementById('idproducto');
+        let idModalMenu: string = idProductoHtml.getAttribute('menu');
+        let idModalHtml: HTMLElement = document.getElementById(idModalMenu);
+
+        if (idModalHtml === undefined) {
+            console.log(`No se ha definido el contenedor del menú ${idModalMenu}`);
         }
         else {
-            idProductoHtml.setAttribute("menuAbierto", "false");
-            document.getElementById("sidebar").style.width = "0";
-            document.getElementById("contenido").style.marginLeft = "0";
+            var menuAbierto = idProductoHtml.getAttribute("menuAbierto");
+            if (menuAbierto === undefined || menuAbierto === "false") {
+                idProductoHtml.setAttribute("menuAbierto", "true");
+                idModalHtml.style.display = "block";
+            }
+            else {
+                idProductoHtml.setAttribute("menuAbierto", "false");
+                idModalHtml.style.display = "none";
+            }
         }
     }
+
+    export function OpcionSeleccionada(opcion: string) {
+        let urlBase: string = window.location.origin;
+        window.location.href = `${urlBase}/${opcion}`;
+    }
+
+
+
+
+
 }

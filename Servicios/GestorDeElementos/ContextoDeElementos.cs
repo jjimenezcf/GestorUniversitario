@@ -36,6 +36,13 @@ namespace Gestor.Elementos
         public string Bd { get; set; }
         public string Usuario { get; set; }
         public string Version { get; set; }
+        public string Menu { get; set; }
+
+        public string RenderMenu()
+        {
+            return Menu.Replace("¨","\"");
+        }
+
     }
     public class DebugarSql : ConsultaSql
     {
@@ -113,6 +120,31 @@ namespace Gestor.Elementos
             {
                 DatosDeConexion.Version = Literal.Version_0;
             }
+
+            DatosDeConexion.Menu = $@"
+                        <ul id='idmenuraiz'>
+                            <li>
+                                Configuracion
+                                <ul>
+                                    <li>Funcionalidad</li>
+                                    <li>
+                                        Accesos
+                                        <br />
+                                        <input id='idmenu_usuarios' type='button' class='menu-opcion' value='Usuarios' onclick=¨Menu.OpcionSeleccionada('Usuarios')¨ />
+                                        <br />
+                                        <input id='idmenu_permisos' type='button' class='menu-opcion' value='Permisos' onclick=¨Menu.OpcionSeleccionada('Permisos')¨ />
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Maestros</li>
+                            <li>Documental</li>
+                            <li>Financiera</li>
+                            <li>Jurídica</li>
+                            <li>Logística</li>
+                            <li>Técnica</li>
+                            <li>Contable</li> 
+                        </ul>
+            ";
         }
 
         private string ObtenerVersion()

@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/sistemaDeElementos.css" type="text/css">
+    <link rel="stylesheet" href="~/css/seCabecera.css" type="text/css">
+    <link rel="stylesheet" href="~/css/seMenu.css" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -30,7 +31,7 @@
             <table id="tablaCabecera" class="table">
                 <tr>
                     <td class="celdaCabeceraIzquierda">
-                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" onclick="Menu.Mostrar()" menuAbierto ="false" />
+                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" menu="idmenu" onclick="Menu.MostrarMenu()" menuAbierto="false" />
                     </td>
                     <td class="celdaSeparador">
                     </td>
@@ -46,56 +47,40 @@
                 </tr>
             </table>
 
-            <div class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3 ">
-                <a class="navbar-brand" href="#">Opciones</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">Acerca de</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Permisos" asp-action="Index">Permisos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Instructors" asp-action="Index">Profesores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a>
-                        </li>
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Opción" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar opción</button>
-                    </form>
+            <div id="idmenu" class="menu-contenedor">
+                <div class="menu-contenido">
+                    <div id="idcontenedormenu">
+                        @Html.Raw(datosDeConexion.RenderMenu())
+                        @*<ul id='idmenuraiz'>
+                            <li>
+                                Configuracion
+                                <ul>
+                                    <li>Funcionalidad</li>
+                                    <li>
+                                        Accesos
+                                        <br />
+                                        <input id='idmenu_usuarios' type='button' class='menu-opcion' value='Usuarios' onclick='Menu.OpcionSeleccionada('Usuarios')' />
+                                        <br />
+                                        <input id='idmenu_permisos' type='button' class='menu-opcion' value='Permisos' onclick='Menu.OpcionSeleccionada('Permisos')' />
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Maestros</li>
+                            <li>Documental</li>
+                            <li>Financiera</li>
+                            <li>Jurídica</li>
+                            <li>Logística</li>
+                            <li>Técnica</li>
+                            <li>Contable</li>
+                        </ul>*@
+                    </div>
                 </div>
             </div>
+
         </header>
 
         <div class="table">
             <div class="row">
-                <div class="col-xs-3">
-                    <div id="sidebar" class="sidebar" style="width: 0px;">
-                        <a href="#" class="boton-cerrar" onclick="ocultar()">×</a>
-                        <ul class="menu">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Permisos" asp-action="Index">Permisos</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="col">
                     <div id="contenido" style="width: 100%" ;>
                         <main role="main" class="pb-3">

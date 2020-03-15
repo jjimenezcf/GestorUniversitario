@@ -2,404 +2,95 @@
 <!DOCTYPE html>
 <html lang="es-es">
 <head>
-    <title>Gestor de UsuarioDto</title>
+    <title>P&#xE1;gina inicial</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/DetalleEstudiante.css" type="text/css">
-    <link href="https://unpkg.com/tabulator-tables@4.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/sistemaDeElementos.css" type="text/css">
+    <link rel="stylesheet" href="/css/seMenu.css" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.5.2/dist/js/tabulator.min.js"></script>
 
-    <script src="/Extensiones/Utilidades.js"></script>
-    <script src="/Extensiones/infoSelectores.js"></script>
-    <script src="/Extensiones/selectores.js"></script>
-    <script src="/Extensiones/grid.js"></script>
+    <script src="/ts/tsUtilidades.js"></script>
+    <script src="/ts/tsInfoSelector.js"></script>
+    <script src="/ts/tsSelectores.js"></script>
+    <script src="/ts/tsGrid.js"></script>
+    <script src="/ts/tsMenu.js"></script>
 </head>
 
 
 <body>
+
     <div class="container-fluid">
-        <div class="jumbotron text-center">
-            <h1>Universidad de Murcia</h1>
-        </div>
         <header>
+            <table id="tablaCabecera" class="table">
+                <tr>
+                    <td class="celdaCabeceraIzquierda">
+                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" menu="idmenu" onclick="Menu.Mostrar()" menuAbierto="false" />
+                    </td>
+                    <td class="celdaSeparador">
+                    </td>
+                    <td class="celdaCabecera">
+                        <input id="idConsultas" type="text" class="estiloCeldaCabecera" value="Consultas" readonly />
+                    </td>
+                    <td class="celdaCabecera">
+                        <input id="idFavoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
+                    </td>
+                    <td class="celdaCabeceraDerecha">
+                        <input id="idusuario" type="text" class="estiloCeldaDerecha" value="jjimenezcf@gmail.com" readonly />
+                    </td>
+                </tr>
+            </table>
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3 ">
-                <a class="navbar-brand" href="#">Opciones</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <div id="idmenu" class="modal">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Home/About">Acerca de</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Estudiantes">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Cursos">Cursos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Instructors">Profesores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Departments">Departamentos</a>
-                        </li>
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Opción" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar opción</button>
-                    </form>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div id="idcontenedormenu">
+                        <ul id='idmenuraiz'>
+                            <li>
+                                Configuracion
+                                <ul>
+                                    <li>Funcionalidad</li>
+                                    <li>
+                                        Accesos
+                                        <a class="nav-link text-dark" href="/Permisos">Permisos</a>
+                                        <a class="nav-link text-dark" href="/Usuarios">Usuarios</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>PHP</li>
+                            <li>MySQL</li>
+                            <li>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </nav>
+
+            </div>
+
+
         </header>
 
-        <main role="main" class="pb-3">
+        <div class="table">
+            <div class="row">
+                <div class="col">
+                    <div id="contenido" style="width: 100%" ;>
+                        <main role="main" class="pb-3">
 
-
-
-            <h2>Mantenimiento de usuarios</h2>
-            <div id="id"> <a href="/Estudiantes/IraCrearUsuario">Nuevo usuario</a> </div>
-            <div id="flt.Usuario" style="width:100%">
-                <div id="flt.Usuario.b1">
-                    <table id="flt.Usuario.b1_Tbl" width="100%">
-                                  <tr id="flt.Usuario.b1_Tbl_0">
-                                 <td id="flt.Usuario.b1_Tbl_0_0_e" style="width:15%">
-                                            <div class="input-group mb-3">
-                         Nombre
-                      </div>
-
-                                         </td>
-<td id="flt.Usuario.b1_Tbl_0_0_c" style="width:35%">
-                                           <div class="input-group mb-3">
-                         <input id="flt.usuario.b1.filtro" type = "text" class="form-control" placeholder="buscar por nombre">
-                      </div>
-
-                                        </td>
-<td id="flt.Usuario.b1_Tbl_0_1_e" style="width:15%">
-
-                                         </td>
-<td id="flt.Usuario.b1_Tbl_0_1_c" style="width:35%">
-
-                                        </td>
-                              </tr>
-                               </table>
-                </div>
-                <div id="flt.Usuario.b2">
-                    <table id="flt.Usuario.b2_Tbl" width="100%"
-                                  <tr id="flt.Usuario.b2_Tbl_0">
-                                 <td id="flt.Usuario.b2_Tbl_0_0_e" style="width:15%">
-
-                                         </td>
-<td id="flt.Usuario.b2_Tbl_0_0_c" style="width:35%">
-
-                                        </td>
-<td id="flt.Usuario.b2_Tbl_0_1_e" style="width:15%">
-
-                                         </td>
-<td id="flt.Usuario.b2_Tbl_0_1_c" style="width:35%">
-
-                                        </td>
-                              </tr>
-                               </table>
-                </div>
-                <div id="flt.Estudiante_b3">
-                    <table id="flt.Estudiante_b3_Tbl" width="100%"
-                                  <tr id="flt.Estudiante_b3_Tbl_0">
-                                 <td id="flt.Estudiante_b3_Tbl_0_0_e" style="width:15%">
-                                            <div class="input-group mb-3">
-                         Curso
-                      </div>
-
-                                         </td>
-<td id="flt.Estudiante_b3_Tbl_0_0_c" style="width:35%">
-                                           <div class="input-group mb-3">
-                       <input id="selector_curso.selector" type = "text" class="form-control" placeholder="seleccionar curso">
-                       <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#selector_curso" >Seleccionar</button>
-                       </div>
-                    </div>
-
-                                        </td>
-<td id="flt.Estudiante_b3_Tbl_0_1_e" style="width:15%">
-
-                                         </td>
-<td id="flt.Estudiante_b3_Tbl_0_1_c" style="width:35%">
-
-                                        </td>
-                              </tr>
-                               </table>
-                </div>
-            </div>
-
-            <div class="modal fade" id="selector_curso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">seleccionar curso</h5>
-                        </div>
-                        <div id="contenedor.selector_curso" class="modal-body">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="AlSeleccionar('selector_curso.selector', '{idGrid}', 'chksel.selector_curso.selector')">Seleccionar</button>
-                        </div>
+                            <div class="jumbotron">
+                            </div>
+                            <div class="row">
+                            </div>
+                            <br />
+                            <br />
+                        </main>
                     </div>
                 </div>
             </div>
-            <script>
-
-
-            </script>
-
-
-            <div id="contenedor.gridmnt_estudiante">
-                <table id="gridmnt_estudiante"
-                       class="table table-striped table-hover"
-                       width="100%"
-                       seleccionables=2
-                       seleccionados="">
-                    <thead id='gridmnt_estudiante.cabecera'>
-
-                        <tr id="gridmnt_estudiante.c.tr.0">
-
-                            <th scope="col"
-                                id="gridmnt_estudiante.c.tr.0.id"
-                                class="text-right"
-                                hidden
-                                descriptor={"id":null,"propiedad":"id","visible":"hidden","alineada":"text-right","valor":null}>
-                                Id
-                            </th>
-                            <th scope="col"
-                                id="gridmnt_estudiante.c.tr.0.apellido"
-                                class="text-left"
-                                descriptor={"id":null,"propiedad":"apellido","visible":"","alineada":"text-left","valor":null}>
-                                Apellido
-                            </th>
-                            <th scope="col"
-                                id="gridmnt_estudiante.c.tr.0.nombre"
-                                class="text-left"
-                                descriptor={"id":null,"propiedad":"nombre","visible":"","alineada":"text-left","valor":null}>
-                                Nombre
-                            </th>
-                            <th scope="col"
-                                id="gridmnt_estudiante.c.tr.0.inscritoel"
-                                class="text-center"
-                                descriptor={"id":null,"propiedad":"inscritoel","visible":"","alineada":"text-center","valor":null}>
-                                Alta
-                            </th>
-                            <th scope="col" id="" class="text-left" descriptor={"id":null,"propiedad":"gridmnt_estudiante_chk_sel","visible":"","alineada":"text-center","valor":"CrearCheck"}> </th>
-
-                        </tr>
-
-                    </thead>
-                    <tbody id='gridmnt_estudiante.detalle'>
-                        <tr id='gridmnt_estudiante.d.tr.0'>
-                            <td id="gridmnt_estudiante.d.tr.0.0"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-right" hidden>
-                                <input id="gridmnt_estudiante.d.tr.0.id" name="id.gridmnt_estudiante" class="text-right" style="width:100%; border:0" readonly value="3" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.0.1"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.0.apellido" name="apellido.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Arturo" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.0.2"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.0.nombre" name="nombre.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Anand" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.0.3"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input id="gridmnt_estudiante.d.tr.0.inscritoel" name="inscritoel.gridmnt_estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2003 0:00:00" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.0.4"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input type="checkbox"
-                                       id="gridmnt_estudiante.d.tr.0.chksel"
-                                       name="chksel.gridmnt_estudiante"
-                                       class="text-center"
-                                       aria-label="Marcar para seleccionar"
-                                       onclick="AlPulsarUnCheckDeSeleccion('gridmnt_estudiante','gridmnt_estudiante.d.tr.0.chksel');" />
-                            </td>
-                        </tr>
-                        <tr id='gridmnt_estudiante.d.tr.1'>
-                            <td id="gridmnt_estudiante.d.tr.1.0"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-right" hidden>
-                                <input id="gridmnt_estudiante.d.tr.1.id" name="id.gridmnt_estudiante" class="text-right" style="width:100%; border:0" readonly value="1" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.1.1"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.1.apellido" name="apellido.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Carson" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.1.2"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.1.nombre" name="nombre.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Alexander" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.1.3"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input id="gridmnt_estudiante.d.tr.1.inscritoel" name="inscritoel.gridmnt_estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2005 0:00:00" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.1.4"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input type="checkbox"
-                                       id="gridmnt_estudiante.d.tr.1.chksel"
-                                       name="chksel.gridmnt_estudiante"
-                                       class="text-center"
-                                       aria-label="Marcar para seleccionar"
-                                       onclick="AlPulsarUnCheckDeSeleccion('gridmnt_estudiante','gridmnt_estudiante.d.tr.1.chksel');" />
-                            </td>
-                        </tr>
-                        <tr id='gridmnt_estudiante.d.tr.2'>
-                            <td id="gridmnt_estudiante.d.tr.2.0"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-right" hidden>
-                                <input id="gridmnt_estudiante.d.tr.2.id" name="id.gridmnt_estudiante" class="text-right" style="width:100%; border:0" readonly value="4" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.2.1"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.2.apellido" name="apellido.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Gytis" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.2.2"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.2.nombre" name="nombre.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Barzdukas" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.2.3"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input id="gridmnt_estudiante.d.tr.2.inscritoel" name="inscritoel.gridmnt_estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2002 0:00:00" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.2.4"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input type="checkbox"
-                                       id="gridmnt_estudiante.d.tr.2.chksel"
-                                       name="chksel.gridmnt_estudiante"
-                                       class="text-center"
-                                       aria-label="Marcar para seleccionar"
-                                       onclick="AlPulsarUnCheckDeSeleccion('gridmnt_estudiante','gridmnt_estudiante.d.tr.2.chksel');" />
-                            </td>
-                        </tr>
-                        <tr id='gridmnt_estudiante.d.tr.3'>
-                            <td id="gridmnt_estudiante.d.tr.3.0"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-right" hidden>
-                                <input id="gridmnt_estudiante.d.tr.3.id" name="id.gridmnt_estudiante" class="text-right" style="width:100%; border:0" readonly value="7" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.3.1"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.3.apellido" name="apellido.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Laura" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.3.2"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.3.nombre" name="nombre.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Norman" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.3.3"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input id="gridmnt_estudiante.d.tr.3.inscritoel" name="inscritoel.gridmnt_estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2003 0:00:00" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.3.4"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input type="checkbox"
-                                       id="gridmnt_estudiante.d.tr.3.chksel"
-                                       name="chksel.gridmnt_estudiante"
-                                       class="text-center"
-                                       aria-label="Marcar para seleccionar"
-                                       onclick="AlPulsarUnCheckDeSeleccion('gridmnt_estudiante','gridmnt_estudiante.d.tr.3.chksel');" />
-                            </td>
-                        </tr>
-                        <tr id='gridmnt_estudiante.d.tr.4'>
-                            <td id="gridmnt_estudiante.d.tr.4.0"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-right" hidden>
-                                <input id="gridmnt_estudiante.d.tr.4.id" name="id.gridmnt_estudiante" class="text-right" style="width:100%; border:0" readonly value="2" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.4.1"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.4.apellido" name="apellido.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Meredith" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.4.2"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-left">
-                                <input id="gridmnt_estudiante.d.tr.4.nombre" name="nombre.gridmnt_estudiante" class="text-left" style="width:100%; border:0" readonly value="Alonso" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.4.3"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input id="gridmnt_estudiante.d.tr.4.inscritoel" name="inscritoel.gridmnt_estudiante" class="text-center" style="width:100%; border:0" readonly value="01/09/2002 0:00:00" />
-                            </td>
-                            <td id="gridmnt_estudiante.d.tr.4.4"
-                                name="td.chksel.gridmnt_estudiante"
-                                class="text-center">
-                                <input type="checkbox"
-                                       id="gridmnt_estudiante.d.tr.4.chksel"
-                                       name="chksel.gridmnt_estudiante"
-                                       class="text-center"
-                                       aria-label="Marcar para seleccionar"
-                                       onclick="AlPulsarUnCheckDeSeleccion('gridmnt_estudiante','gridmnt_estudiante.d.tr.4.chksel');" />
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                <div class="text-center">
-                    <div id="gridmnt_estudiante.Nav" style="float: left">
-                        <div id="gridmnt_estudiante.Nav.1" data-type="img" style="display:inline-block">
-                            <img src="/images/paginaInicial.png" alt="Primera página" title="Ir al primer registro" width="22" height="22" onclick="Leer('gridmnt_estudiante')">
-                        </div>
-                        <div id="gridmnt_estudiante.Nav.2" class="mx-sm-3" style="display:inline-block">
-                            <input type="number" id="gridmnt_estudiante.Nav.2.Reg" value="5"
-                                   min="1" step="1" max="999"
-                                   posicion="5"
-                                   controlador="Usuarios"
-                                   totalEnBd="8" title="leidos 5 de 8 desde la posición 0"
-                                   style="width: 50px;margin-top: 5px;align-content:center; border-radius: 10px">
-                        </div>
-                        <div id="id=" gridmnt_estudiante.Nav.3" data-type="img" style="display:inline-block">
-                            <img src="/images/paginaAnterior.png" alt="Primera página" title="Página anterior" width="22" height="22" onclick="LeerAnteriores('gridmnt_estudiante')">
-                            <img src="/images/paginaSiguiente.png" alt="Siguiente página" title="Página siguiente" width="22" height="22" onclick="LeerSiguientes('gridmnt_estudiante')">
-                            <img src="/images/paginaUltima.png" alt="Última página" title="Última página" width="22" height="22" onclick="LeerUltimos('gridmnt_estudiante')">
-                        </div>
-                    </div>
-                    <div style="float: right">
-                        5 de 8
-                    </div>
-                </div>
-
-            </div>
-
-
-
-
-
-            <br />
-            <br />
-        </main>
+        </div>
 
         <footer class="border-top footer text-muted">
             <div class="text-info" width="100%">
@@ -415,7 +106,6 @@
                 </div>
             </div>
         </footer>
-
 
 
 
@@ -438,7 +128,7 @@
                     </p>
                     <div class="navbar-right">
                         <a class="btn btn-info navbar-btn" href="/Home/Privacy">Learn More</a>
-                        <button type="button" class="btn btn-default navbar-btn" data-cookie-string=".AspNet.Consent=yes; expires=Fri, 12 Feb 2021 18:49:20 GMT; path=/; secure; samesite=none">Accept</button>
+                        <button type="button" class="btn btn-default navbar-btn" data-cookie-string=".AspNet.Consent=yes; expires=Mon, 15 Mar 2021 16:32:23 GMT; path=/; secure; samesite=none">Accept</button>
                     </div>
                 </div>
             </div>
@@ -451,7 +141,6 @@
                 }, false);
             })();
         </script>
-
 
     </div>
 </body>

@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\sistemaDeElementos.css" />
+    <None Include="wwwroot\css\seCabecera.css" />
     <None Include="wwwroot\Extensiones\selectores.js" />
   </ItemGroup>
 

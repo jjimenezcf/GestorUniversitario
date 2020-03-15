@@ -1,8 +1,6 @@
 ﻿#tablaCabecera {
     width: 100%;
 }
-
-
 .celdaCabeceraIzquierda {
     background: #00b9ff;
     text-align: left;
@@ -37,18 +35,7 @@
     border: hidden;
     background: #00b9ff;
 }
-.sidebar {
-    width: 0;
-    left: 0;
-    height: 100%;
-    min-height: 100%;
-    z-index: 1;
-    background-color: #00324b;
-    overflow-x: hidden;
-    transition: 0.4s;
-    padding: 1rem 0;
-    box-sizing: border-box;
-}
+
 
 
 
