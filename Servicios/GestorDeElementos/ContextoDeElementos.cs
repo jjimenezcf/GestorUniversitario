@@ -123,8 +123,7 @@ namespace Gestor.Elementos
 
             DatosDeConexion.Menu = $@"
                         <ul id='idmenuraiz'>
-                            <li>
-                                Configuracion
+                            <li><a><img src='images/home-solid.svg' width=¨12px¨ heigth=¨12px¨/>Configuración</a>
                                 <ul>
                                     <li>Funcionalidad</li>
                                     <li>

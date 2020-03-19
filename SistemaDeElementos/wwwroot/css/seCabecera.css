@@ -1,17 +1,47 @@
-﻿#tablaCabecera {
+﻿{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background: #ffffff;
+    /*font-family: scans-serif;*/
+    line-height: 18px;
+}
+
+a {
+    text-decoration:none;
+    color: #000;
+}
+
+.fa-icono {
+    width:15px;
+    height:15px;
+
+}
+
+.btn-menu .fa-icono {
+    float: left;
+}
+
+#tablaCabecera {
     width: 100%;
 }
 .celdaCabeceraIzquierda {
     background: #00b9ff;
     text-align: left;
-    width: 15%
+    width: 30%;
+    min-width: 300px;
 }
 .celdaSeparador {
     background: #00b9ff;
 }
 .celdaCabecera {
     background: #00b9ff;
-    width:100px;
+    width:10%;
 }
 .estiloCeldaCabecera {
     text-align: center;
@@ -22,7 +52,7 @@
 .celdaCabeceraDerecha {
     background: #00b9ff;
     text-align:right;
-    width:15%
+    width:30%
 }
 .estiloCeldaDerecha {
     text-align: right;
