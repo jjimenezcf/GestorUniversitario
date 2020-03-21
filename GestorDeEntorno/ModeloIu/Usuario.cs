@@ -10,7 +10,7 @@ namespace Gestor.Elementos.Entorno
        public static string CursosInscrito = nameof(CursosInscrito).ToLower();
     }
 
-    public class UsuarioDto: Elemento
+    public class EleUsuario: Elemento
     {
         public string Login { get; set; }
         public string Apellido { get; set; }

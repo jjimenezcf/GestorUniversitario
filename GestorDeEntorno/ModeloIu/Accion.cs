@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class AccionDto: Elemento
+    public class EleAccion: Elemento
     {
         public string Nombre { get; set; }
         public string Controlador {get; set; }

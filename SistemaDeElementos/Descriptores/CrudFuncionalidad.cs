@@ -7,7 +7,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudFuncionalidad : DescriptorDeCrud<FuncionalidadDto>
+    public class CrudFuncionalidad : DescriptorDeCrud<Funcion>
     {
         public CrudFuncionalidad(ModoDescriptor modo)
         : base(controlador: "Funcionalidad", vista: "MantenimientoFuncionalidad", titulo: "Mantenimiento de funcionalidad", modo: modo)

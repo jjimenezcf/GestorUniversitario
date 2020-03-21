@@ -19,17 +19,17 @@ namespace Gestor.Elementos.Entorno
             return menuHtml.Replace("¨", "\"");
         }
 
-        private static string RenderOpcionesMenu(List<FuncionalidadDto> opcionesMenu, int idMenuPadre)
+        private static string RenderOpcionesMenu(List<Funcion> opcionesMenu, int idMenuPadre)
         {
             var menuHtml = "";
-            foreach (FuncionalidadDto fDto in opcionesMenu)
+            foreach (Funcion fDto in opcionesMenu)
             {
                 menuHtml = menuHtml + RenderMenu(funcion: fDto, idMenuPadre);
             }
             return menuHtml;
         }
 
-        private static string RenderMenu(FuncionalidadDto funcion, int idMenuPadre)
+        private static string RenderMenu(Funcion funcion, int idMenuPadre)
         {
             if (funcion.Accion != null)
             {
@@ -54,7 +54,7 @@ namespace Gestor.Elementos.Entorno
             return liHtml;
         }
 
-        private static string RenderAccionMenu(AccionDto accion)
+        private static string RenderAccionMenu(EleAccion accion)
         {
             var idHtml = $"{accion.Id}";
             var opcionHtml =

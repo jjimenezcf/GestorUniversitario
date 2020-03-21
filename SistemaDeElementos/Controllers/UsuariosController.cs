@@ -6,7 +6,7 @@ using MVCSistemaDeElementos.Descriptores;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class UsuariosController : EntidadController<CtoEntorno, RegUsuario, UsuarioDto>
+    public class UsuariosController : EntidadController<CtoEntorno, RegUsuario, EleUsuario>
     {
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)
@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Controllers
         
         public IActionResult IraCrearUsuario()
         {
-            return View(GestorDelCrud.Creador.Vista, new UsuarioDto());
+            return View(GestorDelCrud.Creador.Vista, new EleUsuario());
         }
 
         public IActionResult IraDetalleUsuario(int? id)
@@ -52,7 +52,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(CrearUsuario))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearUsuario([Bind("ID,Apellido,Nombre,Alta")] UsuarioDto usuario)
+        public async Task<IActionResult> CrearUsuario([Bind("ID,Apellido,Nombre,Alta")] EleUsuario usuario)
         {
             return await CrearObjeto(usuario);
         }
@@ -61,7 +61,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         [HttpPost, ActionName(nameof(ModificarUsuario))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ModificarUsuario(int id, [Bind("Id,Apellido,Nombre,Alta")] UsuarioDto usuario)
+        public async Task<IActionResult> ModificarUsuario(int id, [Bind("Id,Apellido,Nombre,Alta")] EleUsuario usuario)
         {
             return await ModificarObjeto(id, usuario);
         }
@@ -77,14 +77,14 @@ namespace MVCSistemaDeElementos.Controllers
             return IraMantenimientoUsuario("");
         }
 
-        private UsuarioDto LeerUsuario(int? id)
+        private EleUsuario LeerUsuario(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del usuario no puede ser nulo");
             }
 
-            var usuario = (UsuarioDto)GestorDeElementos.LeerElementoPorId((int)id);
+            var usuario = (EleUsuario)GestorDeElementos.LeerElementoPorId((int)id);
             if (usuario == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del usuario no se pudo localizar");
@@ -93,14 +93,14 @@ namespace MVCSistemaDeElementos.Controllers
             return usuario;
         }
 
-        private UsuarioDto LeerDetalle(int? id)
+        private EleUsuario LeerDetalle(int? id)
         {
             if (id == null)
             {
                 GestorDeErrores.LanzarExcepcion("El id del usuario no puede ser nulo");
             }
 
-            var usuario = (UsuarioDto)GestorDeElementos.LeerElementoConDetalle((int)id);
+            var usuario = (EleUsuario)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (usuario == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del usuario no se pudo localizar");
