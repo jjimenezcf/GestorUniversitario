@@ -14,40 +14,39 @@ namespace Gestor.Elementos.Entorno
             var menu = GestorDeFuncionalidad.MenuPrincipal();
 
             var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
-                           @$"   {RenderOpcionesMenu(menu)}{Environment.NewLine}" +
+                           @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
                            @$"</ul>{Environment.NewLine}";
             return menuHtml.Replace("¨", "\"");
         }
 
-        private static string RenderOpcionesMenu(List<FuncionalidadDto> opcionesMenu)
+        private static string RenderOpcionesMenu(List<FuncionalidadDto> opcionesMenu, int idMenuPadre)
         {
             var menuHtml = "";
             foreach (FuncionalidadDto fDto in opcionesMenu)
             {
-                menuHtml = menuHtml + RenderMenu(funcion: fDto);
+                menuHtml = menuHtml + RenderMenu(funcion: fDto, idMenuPadre);
             }
             return menuHtml;
         }
 
-        private static string RenderMenu(FuncionalidadDto funcion)
+        private static string RenderMenu(FuncionalidadDto funcion, int idMenuPadre)
         {
-
-            var opcionHtml = "";
             if (funcion.Accion != null)
             {
-                opcionHtml = RenderAccionMenu(accion: funcion.Accion);
+                var opcionHtml = RenderAccionMenu(accion: funcion.Accion);
                 return opcionHtml;
             }
             
-            var subMenuHtml = funcion.Opciones != null ? RenderOpcionesMenu(funcion.Opciones) : "";
+            var subMenuHtml = funcion.Opciones != null ? RenderOpcionesMenu(funcion.Opciones, funcion.Id) : "";
 
-            var idMenuHtml = $"id_menu_{funcion.Nombre.Replace(" ", "_")}".ToLower();
+            var idMenuHtml = $"id_menu_{funcion.Id}";
+            var idMenuPadreHtml = $"id_menu_{idMenuPadre}";
             var liHtml =
                 $@"<li>{Environment.NewLine}" +
                 $@"  <a>{Environment.NewLine}" +
                 $@"     {ComponerMenu(literalOpcion: funcion.Nombre, icono: funcion.Icono, idMenu: idMenuHtml)}" + 
                 $@"  </a>{Environment.NewLine}" +
-                $@"  <ul id=¨{idMenuHtml}¨ name=¨menu¨ menu-plegado=¨true¨>{Environment.NewLine}" +
+                $@"  <ul id=¨{idMenuHtml}¨ name=¨menu¨ menu-padre=¨{idMenuPadreHtml}¨ menu-plegado=¨true¨>{Environment.NewLine}" +
                       subMenuHtml +
                 $@"  </ul>{Environment.NewLine}" +
                 $@"</li>{Environment.NewLine}";
@@ -57,7 +56,7 @@ namespace Gestor.Elementos.Entorno
 
         private static string RenderAccionMenu(AccionDto accion)
         {
-            var idHtml = $"{accion.Controlador}_{accion.Accion}_{ accion.Id}".ToLower();
+            var idHtml = $"{accion.Id}";
             var opcionHtml =
             $@"<li>{Environment.NewLine}"+
             $@"  <input id='{idHtml}' type='button' class='menu-opcion' value='{accion.Nombre}' onclick=¨Menu.OpcionSeleccionada('{idHtml}','{accion.Controlador}','{accion.Accion}')¨ />{Environment.NewLine}"+
