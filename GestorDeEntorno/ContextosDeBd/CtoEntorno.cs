@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Entorno
 
         internal class Tabla
         {
-            internal static string Variable = "Var_Elemento";
+            internal static string Variable = "VARIABLE";
         }
     }
        
@@ -33,10 +33,13 @@ namespace Gestor.Elementos.Entorno
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<RegVariable>();
-            modelBuilder.Entity<RegAccion>();
-            modelBuilder.Entity<RegFuncion>();
             modelBuilder.Entity<RegUsuario>();
+
+
+            TablaAccion.Definir(modelBuilder);
+            TablaFuncion.Definir(modelBuilder);
         }
+
         private bool HayQueDebuggar()
         {
             var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.DebugarSqls);
