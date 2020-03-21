@@ -1,4 +1,5 @@
 ﻿using Gestor.Elementos.ModeloBd;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,12 +22,22 @@ namespace Gestor.Elementos.Entorno
         [Required]
         [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
         public string Nombre { get; set; }
-
-
+        
         [Required]
         [Column("F_ALTA", Order = 4, TypeName = "DATE")]
-        public DateTime Alta { get; set; }        
+        public DateTime Alta { get; set; }
 
+    }
+    public static class TablaUsuario
+    {
+        public static void Definir(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RegUsuario>()
+            .HasIndex(v => new { v.Login })
+            .IsUnique(true)
+            .HasName("IX_USUARIO");
+
+        }
     }
 
 }

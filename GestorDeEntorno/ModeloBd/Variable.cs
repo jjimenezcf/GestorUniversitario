@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Gestor.Elementos.ModeloBd;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gestor.Elementos.Entorno
 {
-    [Table("VAR_ELEMENTO", Schema = "ENTORNO")]
+    [Table("VARIABLE", Schema = "ENTORNO")]
     public class RegVariable : Registro
     {
         [Required]
@@ -18,4 +19,18 @@ namespace Gestor.Elementos.Entorno
         [Column("VALOR", Order = 3, TypeName = "VARCHAR(50)")]
         public string Valor { get; set; }
     }
+
+    public static class TablaVariable
+    {
+        public static void Definir(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RegVariable>().Property(v => v.Descripcion).IsRequired(false);
+            modelBuilder.Entity<RegAccion>()
+            .HasIndex(v => new { v.Nombre })
+            .IsUnique(true)
+            .HasName("IX_VARIABLE");
+
+        }
+    }
+
 }

@@ -32,10 +32,9 @@ namespace Gestor.Elementos.Entorno
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<RegVariable>();
-            modelBuilder.Entity<RegUsuario>();
 
-
+            TablaUsuario.Definir(modelBuilder);
+            TablaVariable.Definir(modelBuilder);
             TablaAccion.Definir(modelBuilder);
             TablaFuncion.Definir(modelBuilder);
         }

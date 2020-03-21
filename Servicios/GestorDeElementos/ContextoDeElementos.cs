@@ -29,7 +29,7 @@ namespace Gestor.Elementos
         }
         internal class Tabla
         {
-            internal static string Variable = "Var_Elemento";
+            internal static string Variable = "Variable";
         }
     }
     public class DatosDeConexion
