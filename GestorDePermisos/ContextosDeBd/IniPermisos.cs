@@ -10,11 +10,11 @@ namespace Gestor.Elementos.Seguridad
 
             if (!ctoPermisos.Permisos.Any())
             {
-                var permisos = new PermisoReg[]
+                var permisos = new RegPermiso[]
                 {
 
                 };
-                foreach (PermisoReg permiso in permisos)
+                foreach (RegPermiso permiso in permisos)
                 {
                     ctoPermisos.Permisos.Add(permiso);
                 }
@@ -23,10 +23,10 @@ namespace Gestor.Elementos.Seguridad
 
             if (!ctoPermisos.PermisosDeUnRol.Any())
             {
-                var permisosDeUnRol = new RolPermisoReg[]
+                var permisosDeUnRol = new RegRolPermisos[]
                 {
                 };
-                foreach (RolPermisoReg permisoDelRol in permisosDeUnRol)
+                foreach (RegRolPermisos permisoDelRol in permisosDeUnRol)
                 {
                     ctoPermisos.PermisosDeUnRol.Add(permisoDelRol);
                 }

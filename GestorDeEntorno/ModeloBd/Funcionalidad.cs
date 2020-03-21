@@ -5,7 +5,7 @@ using Gestor.Elementos.ModeloBd;
 namespace Gestor.Elementos.Entorno
 {
     [Table("FUN_ACCION", Schema = "ENTORNO")]
-    public class Fun_Accion : Registro
+    public class RegAccion : Registro
     {
         [Required]
         [Column("CONTROLADOR", Order = 1, TypeName = "VARCHAR(250)")]
@@ -22,7 +22,7 @@ namespace Gestor.Elementos.Entorno
     }
 
     [Table("FUN_ELEMENTO", Schema = "ENTORNO")]
-    public class Fun_Elemento : Registro
+    public class RegFuncion : Registro
     {
         [Required]
         [Column("IDPADRE", Order = 2, TypeName = "INT")]
@@ -40,7 +40,7 @@ namespace Gestor.Elementos.Entorno
         public char Activo { get; set; }
 
         [ForeignKey("IDACCION")]
-        public virtual Fun_Accion Accion { get; set; }
+        public virtual RegAccion Accion { get; set; }
     }
 
 

@@ -8,15 +8,15 @@ using Gestor.Elementos.ModeloIu;
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeFuncionalidad : GestorDeElementos<CtoEntorno, Fun_Elemento, FuncionalidadDto>
+    public class GestorDeFuncionalidad : GestorDeElementos<CtoEntorno, RegFuncion, FuncionalidadDto>
     {
 
         public class MapearFuncionalidad : Profile
         {
             public MapearFuncionalidad()
             {
-                CreateMap<Fun_Elemento, FuncionalidadDto>();
-                CreateMap<FuncionalidadDto, Fun_Elemento>();
+                CreateMap<RegFuncion, FuncionalidadDto>();
+                CreateMap<FuncionalidadDto, RegFuncion>();
             }
         }
 
@@ -26,7 +26,7 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override Fun_Elemento LeerConDetalle(int Id)
+        protected override RegFuncion LeerConDetalle(int Id)
         {
             throw new System.NotImplementedException();
         }

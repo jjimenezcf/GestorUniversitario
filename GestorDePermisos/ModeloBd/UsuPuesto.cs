@@ -38,7 +38,7 @@ go
 namespace Gestor.Elementos.Seguridad
 {
 
-    public class UsuarioView : Registro
+    public class VisUsuario : Registro
     {
         [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
         public string Login { get; set; }
@@ -49,7 +49,7 @@ namespace Gestor.Elementos.Seguridad
         [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
         public string Nombre { get; set; }
 
-        public ICollection<UsuPuestoReg> Puestos { get; set; }
+        public ICollection<RegUsuPuesto> Puestos { get; set; }
 
     }
 
@@ -57,7 +57,7 @@ namespace Gestor.Elementos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UsuarioView>()
+            modelBuilder.Entity<VisUsuario>()
                 .ToView("V_USUARIO", "SEGURIDAD")
                 .HasNoKey();
         }
@@ -66,7 +66,7 @@ namespace Gestor.Elementos.Seguridad
 
 
     [Table("USU_PUESTO", Schema = "SEGURIDAD")]
-    public class UsuPuestoReg : Registro
+    public class RegUsuPuesto : Registro
     {
         [Column("IDUSUA", TypeName = "INT")]
         public int IdUsua { get; set; }
@@ -74,8 +74,8 @@ namespace Gestor.Elementos.Seguridad
         [Column("IDPUESTO", TypeName = "INT")]
         public int idPuesto { get; set; }
 
-        public PuestoReg Puesto { get; set; }
-        public UsuarioView Usuario { get; set; }
+        public RegPuesto Puesto { get; set; }
+        public VisUsuario Usuario { get; set; }
     }
 
     public static class TablaUsuPuesto
@@ -83,22 +83,22 @@ namespace Gestor.Elementos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
             
-            modelBuilder.Entity<UsuPuestoReg>()
+            modelBuilder.Entity<RegUsuPuesto>()
                 .HasAlternateKey(p => new { p.IdUsua, p.idPuesto })
                 .HasName("AK_USU_PUESTO");
 
-            modelBuilder.Entity<UsuPuestoReg>()
+            modelBuilder.Entity<RegUsuPuesto>()
                 .HasIndex(p => p.IdUsua)
                 .IsUnique(false)
                 .HasName("IX_USU_PUESTO_IDUSUA");
 
-            modelBuilder.Entity<UsuPuestoReg>()
+            modelBuilder.Entity<RegUsuPuesto>()
                 .HasOne(x => x.Puesto)
                 .WithMany(p => p.Usuarios)
                 .HasForeignKey(x => x.idPuesto)
                 .HasConstraintName("FK_USU_PUESTO_IDPUESTO");
 
-            modelBuilder.Entity<UsuPuestoReg>()
+            modelBuilder.Entity<RegUsuPuesto>()
                 .Ignore(x => x.Usuario)
                 //.HasOne(x => x.Usuario)
                 //.WithMany(u => u.Puestos)

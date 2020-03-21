@@ -32,7 +32,7 @@ namespace Gestor.Elementos.Seguridad
      */
 
     [Table("PERMISO", Schema = "SEGURIDAD")]
-    public class PermisoReg : Registro
+    public class RegPermiso : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -49,18 +49,18 @@ namespace Gestor.Elementos.Seguridad
         [DefaultValue(0)]
         public int Permiso { get; set; }
 
-        public ICollection<RolPermisoReg> Roles { get; set; }
+        public ICollection<RegRolPermisos> Roles { get; set; }
     }
 
     public static class TablaPermiso
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PermisoReg>()
+            modelBuilder.Entity<RegPermiso>()
                         .HasAlternateKey(p => p.Nombre)
                         .HasName("AK_PERMISO_NOMBRE");
 
-            modelBuilder.Entity<PermisoReg>()
+            modelBuilder.Entity<RegPermiso>()
                         .HasAlternateKey(p => new { p.Clase, p.Permiso})
                         .HasName("AK_PERMISO_PERMISO");
         }

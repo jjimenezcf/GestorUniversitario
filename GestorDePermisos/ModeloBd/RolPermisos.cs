@@ -34,7 +34,7 @@ namespace Gestor.Elementos.Seguridad
     */
        
     [Table("ROL_PERMISO", Schema = "SEGURIDAD")]
-    public class RolPermisoReg : Registro
+    public class RegRolPermisos : Registro
     {
         [Column("IDROL", TypeName = "INT")]
         public int IdRol { get; set; }
@@ -42,8 +42,8 @@ namespace Gestor.Elementos.Seguridad
         [Column("IDPERMISO", TypeName = "INT")]
         public int IdPermiso { get; set; }
 
-        public RolReg Rol { get; set; }
-        public PermisoReg Permiso { get; set; }
+        public RegRol Rol { get; set; }
+        public RegPermiso Permiso { get; set; }
 
     }
 
@@ -51,17 +51,17 @@ namespace Gestor.Elementos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RolPermisoReg>()
+            modelBuilder.Entity<RegRolPermisos>()
                 .HasAlternateKey(p => new { p.IdRol, p.IdPermiso })
                 .HasName("AK_ROL_PERMISO");
 
-            modelBuilder.Entity<RolPermisoReg>()
+            modelBuilder.Entity<RegRolPermisos>()
                 .HasOne(x => x.Rol)
                 .WithMany(r => r.Permisos)
                 .HasForeignKey(x => x.IdRol)
                 .HasConstraintName("FK_ROL_PERMISO_IDROL");
 
-            modelBuilder.Entity<RolPermisoReg>()
+            modelBuilder.Entity<RegRolPermisos>()
                 .HasOne(x => x.Permiso)
                 .WithMany(p => p.Roles)
                 .HasForeignKey(x => x.IdPermiso)

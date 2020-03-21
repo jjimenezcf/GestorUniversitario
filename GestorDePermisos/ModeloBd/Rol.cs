@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Seguridad
 
 
     [Table("ROL", Schema = "SEGURIDAD")]
-    public class RolReg : Registro
+    public class RegRol : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -34,15 +34,15 @@ namespace Gestor.Elementos.Seguridad
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
-        public ICollection<RolPermisoReg> Permisos { get; set; }
-        public ICollection<RolPuestoReg> Puestos { get; set; }
+        public ICollection<RegRolPermisos> Permisos { get; set; }
+        public ICollection<RegRolPuesto> Puestos { get; set; }
     }
 
     public static class TablaRol
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RolReg>()
+            modelBuilder.Entity<RegRol>()
                         .HasAlternateKey(p => p.Nombre)
                         .HasName("AK_ROL_NOMBRE");
         }

@@ -19,10 +19,10 @@ namespace Gestor.Elementos.Entorno
     public class CtoEntorno : ContextoDeElementos
     {
 
-        public DbSet<Fun_Elemento> Funcionalidades { get; set; }
-        public DbSet<Fun_Accion> Acciones { get; set; }
-        public DbSet<Var_Elemento> Variables { get; set; }
-        public DbSet<UsuarioReg> Usuarios { get; set; }
+        public DbSet<RegFuncion> Funcionalidades { get; set; }
+        public DbSet<RegAccion> Acciones { get; set; }
+        public DbSet<RegVariable> Variables { get; set; }
+        public DbSet<RegUsuario> Usuarios { get; set; }
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -32,10 +32,10 @@ namespace Gestor.Elementos.Entorno
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Var_Elemento>();
-            modelBuilder.Entity<Fun_Accion>();
-            modelBuilder.Entity<Fun_Elemento>();
-            modelBuilder.Entity<UsuarioReg>();
+            modelBuilder.Entity<RegVariable>();
+            modelBuilder.Entity<RegAccion>();
+            modelBuilder.Entity<RegFuncion>();
+            modelBuilder.Entity<RegUsuario>();
         }
         private bool HayQueDebuggar()
         {
@@ -54,7 +54,7 @@ namespace Gestor.Elementos.Entorno
             var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.version);
             if (version == null)
             {
-                cnx.Variables.Add(new Var_Elemento { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new RegVariable { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
             }
             else
             {

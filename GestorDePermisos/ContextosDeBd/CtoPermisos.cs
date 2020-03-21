@@ -6,13 +6,13 @@ namespace Gestor.Elementos.Seguridad
 
     public class CtoPermisos : ContextoDeElementos
     {
-        public DbSet<PermisoReg> Permisos { get; set; }
-        public DbSet<RolReg> Roles { get; set; }
-        public DbSet<PuestoReg> Puestos { get; set; }
-        public DbSet<UsuarioView> Usuarios { get; set; }
-        public DbSet<RolPermisoReg> PermisosDeUnRol { get; set; }
-        public DbSet<RolPuestoReg> PuestosDeUnRol { get; set; }
-        public DbSet<UsuPuestoReg> PuestosDeUnUsuario { get; set; }
+        public DbSet<RegPermiso> Permisos { get; set; }
+        public DbSet<RegRol> Roles { get; set; }
+        public DbSet<RegPuesto> Puestos { get; set; }
+        public DbSet<VisUsuario> Usuarios { get; set; }
+        public DbSet<RegRolPermisos> PermisosDeUnRol { get; set; }
+        public DbSet<RegRolPuesto> PuestosDeUnRol { get; set; }
+        public DbSet<RegUsuPuesto> PuestosDeUnUsuario { get; set; }
 
         public CtoPermisos(DbContextOptions<CtoPermisos> options, IConfiguration configuracion) :
         base(options, configuracion)

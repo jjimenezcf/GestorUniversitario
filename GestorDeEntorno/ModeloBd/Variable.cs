@@ -5,7 +5,7 @@ using Gestor.Elementos.ModeloBd;
 namespace Gestor.Elementos.Entorno
 {
     [Table("VAR_ELEMENTO", Schema = "ENTORNO")]
-    public class Var_Elemento : Registro
+    public class RegVariable : Registro
     {
         [Required]
         [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]

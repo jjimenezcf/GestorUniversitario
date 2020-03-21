@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Gestor.Elementos.Entorno
 {
     [Table("USUARIO", Schema = "ENTORNO")]
-    public class UsuarioReg : Registro
+    public class RegUsuario : Registro
     {
         [Required]
         [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
