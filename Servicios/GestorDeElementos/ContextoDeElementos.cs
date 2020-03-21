@@ -7,6 +7,9 @@ using System.Data.Common;
 using Z.EntityFramework.Extensions;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Utilidades;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Gestor.Elementos
 {
@@ -18,7 +21,7 @@ namespace Gestor.Elementos
         internal static readonly string esquemaBd = "ENTORNO";
         internal static readonly string version = "Versión";
         internal static readonly string Version_0 = "0.0.0";
-        public   static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
+        public static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
 
         public class Vista
         {
@@ -37,12 +40,7 @@ namespace Gestor.Elementos
         public string Usuario { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
-
-        public string RenderMenu()
-        {
-            return Menu.Replace("¨","\"");
-        }
-
+ 
     }
     public class DebugarSql : ConsultaSql
     {
@@ -56,7 +54,7 @@ namespace Gestor.Elementos
     }
     public class VersionSql : ConsultaSql
     {
-        public string Version => (Registros.Count == 1 ? (string) Registros[0][3] : Literal.Version_0);
+        public string Version => (Registros.Count == 1 ? (string)Registros[0][3] : Literal.Version_0);
 
         public VersionSql(ContextoDeElementos contexto)
             : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.version}'")
@@ -110,6 +108,7 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
             DatosDeConexion.Usuario = Literal.usuario;
+
             try
             {
                 DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable).Existe ?
@@ -122,28 +121,84 @@ namespace Gestor.Elementos
             }
 
             DatosDeConexion.Menu = $@"
-                        <ul id='idmenuraiz'>
-                            <li><a><img src='images/home-solid.svg' width=¨12px¨ heigth=¨12px¨/>Configuración</a>
-                                <ul>
-                                    <li>Funcionalidad</li>
-                                    <li>
-                                        Accesos
-                                        <br />
-                                        <input id='idmenu_usuarios' type='button' class='menu-opcion' value='Usuarios' onclick=¨Menu.OpcionSeleccionada('Usuarios')¨ />
-                                        <br />
-                                        <input id='idmenu_permisos' type='button' class='menu-opcion' value='Permisos' onclick=¨Menu.OpcionSeleccionada('Permisos')¨ />
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>Maestros</li>
-                            <li>Documental</li>
-                            <li>Financiera</li>
-                            <li>Jurídica</li>
-                            <li>Logística</li>
-                            <li>Técnica</li>
-                            <li>Contable</li> 
-                        </ul>
-            ";
+                     <ul id='id_menuraiz' class=¨menu-contenido¨>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Configuracion", icono: "cog-solid.svg", idMenu: "id_menu_configuracion")}</a>
+                            <ul id =¨id_menu_configuracion¨ name =¨menu¨ menu-plegado=¨true¨ >
+                                <li>
+                                  <a>{ComponerMenu(literalOpcion: "Funcionalidad", icono: "bars-solid.svg", "")}</a>
+                                </li>
+                                <li>
+                                    <a>{ComponerMenu(literalOpcion: "Accesos", icono: "cog-solid.svg", idMenu: "id_menu_accesos")}</a>
+                                    <ul id =¨id_menu_accesos¨ name =¨menu¨ menu-plegado=¨true¨>
+                                       {componerOpcion(idOpcion: "id_menu_usuarios", literal: "Usuarios")}
+                                       {componerOpcion(idOpcion: "id_menu_permisos", literal: "Permisos")}
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Maestros", icono: "cog-solid.svg", idMenu: "id_menu_maestros")}</a>
+                            <ul id=¨id_menu_maestros¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión documental", icono: "cog-solid.svg", idMenu: "id_menu_gestion_documental")}</a>
+                            <ul id=¨id_menu_gestion_documental¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión administrativa", icono: "cog-solid.svg", idMenu: "id_menu_gestion_administrativa")}</a>
+                            <ul id=¨id_menu_gestion_administrativa¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión jurídica", icono: "cog-solid.svg", idMenu: "id_menu_gestion_jurídica")}</a>
+                            <ul id=¨id_menu_gestion_jurídica¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión logística", icono: "cog-solid.svg", idMenu: "id_menu_gestion_logística")}</a>
+                            <ul id=¨id_menu_gestion_logística¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión técnica", icono: "cog-solid.svg", idMenu: "id_menu_gestion_técnica")}</a>
+                            <ul id=¨id_menu_gestion_técnica¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>{ComponerMenu(literalOpcion: "Gestión financiera", icono: "cog-solid.svg", idMenu: "id_menu_gestion_financiera")}</a>
+                            <ul id=¨id_menu_gestion_financiera¨ name=¨menu¨ menu-plegado=¨true¨>
+                            </ul>
+                        </li>
+                    </ul>            ";
+        }
+
+        private string componerOpcion(string idOpcion, string literal)
+        {
+            var opcionHtml = $@"
+                <li>
+                  <input id='{idOpcion}' type='button' class='menu-opcion' value='{literal}' onclick=¨Menu.OpcionSeleccionada('{idOpcion}')¨ />
+                </li>
+                ";
+
+            return opcionHtml;
+        }
+
+        private object ComponerMenu(string literalOpcion, string icono, string idMenu)
+        {
+            var opcionHtml = "";
+
+            if (!icono.IsNullOrEmpty() && File.Exists($@"wwwroot\images\menu\{icono}"))
+                opcionHtml = @$"<img src=¨/images/menu/{icono}¨ class=¨icono izquierdo¨ />" + "\n";
+
+            opcionHtml = $@"{opcionHtml}{literalOpcion}";
+
+            if (!idMenu.IsNullOrEmpty())
+                opcionHtml = $"{opcionHtml}\n<img src=¨/images/menu/angle-down-solid.svg¨ class=¨icono derecho¨ onclick=¨Menu.MenuPulsado('{idMenu}')¨/>";
+
+            return opcionHtml;
         }
 
         private string ObtenerVersion()

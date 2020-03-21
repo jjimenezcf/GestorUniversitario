@@ -1,10 +1,9 @@
 ﻿using Gestor.Elementos.ModeloIu;
 using System;
-using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
-    
+
     public static class UsuariosPor
     {
        public static string NombreCompleto = nameof(NombreCompleto).ToLower();

@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorDeErrores GestorDeErrores { get; }
 
         protected DatosDeConexion DatosDeConexion { get; set; }
-
+        
         public BaseController(GestorDeErrores gestorDeErrores)
         {
             GestorDeErrores = gestorDeErrores;

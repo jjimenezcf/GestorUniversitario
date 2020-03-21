@@ -20,6 +20,7 @@
 </head>
 
 @using Gestor.Elementos
+@using Gestor.Elementos.Entorno
 
 <body>
     @{
@@ -32,7 +33,7 @@
                 <tr>
                     <td class="celdaCabeceraIzquierda">
                         <img id="id_menu"
-                             src="~/images/bars-solid.svg"
+                             src="~/images/menu/bars-solid.svg"
                              class="btn-menu fa-icono"
                              modal-menu="id-modal-menu"
                              onclick="Menu.MostrarMenu()"
@@ -59,97 +60,7 @@
 
             <div id="id-modal-menu" class="modal-menu">
                 <div id="id_contenedormenu" class="menu-contenedor">
-                    @*@Html.Raw(datosDeConexion.RenderMenu())*@
-                    <ul id='id_menuraiz' class="menu-contenido">
-                        <li>
-                            <a>
-                               <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                               Configuracion
-                               <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_configuracion')"/>
-                            </a>
-                            <ul id ="id_menu_configuracion" name ="menu" menu-plegado="true" >
-                                <li><a>Funcionalidad</a></li>
-                                <li>
-                                    <a>
-                                        <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                        Accesos
-                                        <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_accesos')" />
-                                    </a>
-                                   <ul id ="id_menu_accesos" name ="menu" menu-plegado="true">
-                                       <li>
-                                           <input id='id_menu-usuarios' type='button' class='menu-opcion' value='Usuarios' onclick='Menu.OpcionSeleccionada(' Usuarios')' />
-                                       </li>
-                                       <li>
-                                           <input id='id_menu-permisos' type='button' class='menu-opcion' value='Permisos' onclick='Menu.OpcionSeleccionada(' Permisos')' />
-                                       </li>
-                                   </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/home-solid.svg" class="icono izquierdo" />
-                                Maestros
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_maestros')" />
-                            </a>
-                            <ul id="id_menu_maestros" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión documental
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_documental')" />
-                            </a>
-                            <ul id="id_menu_gestion_documental" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión administrativa
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_administrativa')" />
-                            </a>
-                            <ul id="id_menu_gestion_administrativa" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión jurídica
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_jurídica')" />
-                            </a>
-                            <ul id="id_menu_gestion_jurídica" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión logística
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_logística')" />
-                            </a>
-                            <ul id="id_menu_gestion_logística" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión técnica
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_técnica')" />
-                            </a>
-                            <ul id="id_menu_gestion_técnica" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                        <li>
-                            <a>
-                                <img src="~/images/cog-solid.svg" class="icono izquierdo" />
-                                Gestión financiera
-                                <img src="~/images/angle-down-solid.svg" class="icono derecho" onclick="Menu.MenuPulsado('id_menu_gestion_financiera')" />
-                            </a>
-                            <ul id="id_menu_gestion_financiera" name="menu" menu-plegado="true">
-                            </ul>
-                        </li>
-                    </ul>
+                    @Html.Raw(GestorDeEntorno.RenderMenuFuncional())
                 </div>
             </div>
 
