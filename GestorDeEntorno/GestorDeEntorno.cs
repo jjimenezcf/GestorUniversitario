@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Utilidades;
 
@@ -44,7 +45,7 @@ namespace Gestor.Elementos.Entorno
             var liHtml =
                 $@"<li>{Environment.NewLine}" +
                 $@"  <a>{Environment.NewLine}" +
-                $@"     {ComponerMenu(literalOpcion: funcion.Nombre, icono: "cog-solid.svg", idMenu: idMenuHtml)}" + 
+                $@"     {ComponerMenu(literalOpcion: funcion.Nombre, icono: funcion.Icono, idMenu: idMenuHtml)}" + 
                 $@"  </a>{Environment.NewLine}" +
                 $@"  <ul id=¨{idMenuHtml}¨ name=¨menu¨ menu-plegado=¨true¨>{Environment.NewLine}" +
                       subMenuHtml +
@@ -69,7 +70,7 @@ namespace Gestor.Elementos.Entorno
         {
             var opcionHtml = "";
 
-            if (!icono.IsNullOrEmpty())
+            if (!icono.IsNullOrEmpty() && File.Exists(@$"wwwroot\images\menu\{icono}"))
                 opcionHtml = @$"<img src=¨/images/menu/{icono}¨ class=¨icono izquierdo¨ />{Environment.NewLine}";
 
             opcionHtml = $@"{opcionHtml}{literalOpcion}{Environment.NewLine}";
