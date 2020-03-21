@@ -13,6 +13,9 @@ namespace Gestor.Elementos.Entorno
         public string Descripcion { get; set; }
 
         public List<FuncionalidadDto> Opciones { get; set; }
+        
         public AccionDto Accion { get; set; }
+
+        public bool Activo { get; set; }
     }
 }
