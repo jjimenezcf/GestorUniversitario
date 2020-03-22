@@ -8,31 +8,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Gestor.Elementos.Seguridad
 {
 
-    /*
-     * 
-       create table SEGURIDAD.PERMISO (
-          ID                   int                  identity,
-          NOMBRE               varchar(250)         not null,
-          CLASE                decimal(2,0)         not null,
-          PERMISO              decimal(2,0)         not null
-       )
-       go
-       
-       alter table SEGURIDAD.PERMISO
-          add constraint PK_PERMISO primary key (ID)
-       go
-       
-       alter table SEGURIDAD.PERMISO
-          add constraint AK_PERMISO_NOMBRE unique (NOMBRE)
-       go
-
-       alter table SEGURIDAD.PERMISO
-       add constraint AK_PERMISO_PERMISO unique (CLASE, PERMISO)
-       go 
-     */
-
     [Table("PERMISO", Schema = "SEGURIDAD")]
-    public class RegPermiso : Registro
+    public class rPermiso : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -49,18 +26,18 @@ namespace Gestor.Elementos.Seguridad
         [DefaultValue(0)]
         public int Permiso { get; set; }
 
-        public ICollection<RegRolPermisos> Roles { get; set; }
+        public ICollection<rRolPermiso> Roles { get; set; }
     }
 
     public static class TablaPermiso
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegPermiso>()
+            modelBuilder.Entity<rPermiso>()
                         .HasAlternateKey(p => p.Nombre)
                         .HasName("AK_PERMISO_NOMBRE");
 
-            modelBuilder.Entity<RegPermiso>()
+            modelBuilder.Entity<rPermiso>()
                         .HasAlternateKey(p => new { p.Clase, p.Permiso})
                         .HasName("AK_PERMISO_PERMISO");
         }

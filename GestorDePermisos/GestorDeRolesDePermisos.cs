@@ -2,14 +2,14 @@
 
 namespace Gestor.Elementos.Seguridad
 {
-    public class GestorDeRolesDePermisos : GestorDeElementos<CtoPermisos, RegRolPermisos, RolPermisoDto>
+    public class GestorDeRolesDePermisos : GestorDeElementos<CtoPermisos, rRolPermiso, RolPermisoDto>
     {
 
         public class MapearRolPermiso : Profile
         {
             public MapearRolPermiso()
             {
-                CreateMap<RegRolPermisos, RolPermisoDto>();
+                CreateMap<rRolPermiso, RolPermisoDto>();
             }
         }
 
@@ -19,7 +19,7 @@ namespace Gestor.Elementos.Seguridad
         }
 
         
-        protected override RegRolPermisos LeerConDetalle(int Id)
+        protected override rRolPermiso LeerConDetalle(int Id)
 
         {
             return null;

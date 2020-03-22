@@ -19,10 +19,10 @@ namespace Gestor.Elementos.Entorno
     public class CtoEntorno : ContextoDeElementos
     {
 
-        public DbSet<RegFuncion> Funcionalidades { get; set; }
-        public DbSet<RegAccion> Acciones { get; set; }
-        public DbSet<RegVariable> Variables { get; set; }
-        public DbSet<RegUsuario> Usuarios { get; set; }
+        public DbSet<rMenu> Menus { get; set; }
+        public DbSet<rVistaMvc> VistasMvc { get; set; }
+        public DbSet<rVariable> Variables { get; set; }
+        public DbSet<rUsuario> Usuarios { get; set; }
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -35,8 +35,8 @@ namespace Gestor.Elementos.Entorno
 
             TablaUsuario.Definir(modelBuilder);
             TablaVariable.Definir(modelBuilder);
-            TablaAccion.Definir(modelBuilder);
-            TablaFuncion.Definir(modelBuilder);
+            TablaVistaMvc.Definir(modelBuilder);
+            TablaMenu.Definir(modelBuilder);
         }
 
         private bool HayQueDebuggar()
@@ -56,7 +56,7 @@ namespace Gestor.Elementos.Entorno
             var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.version);
             if (version == null)
             {
-                cnx.Variables.Add(new RegVariable { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new rVariable { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
             }
             else
             {

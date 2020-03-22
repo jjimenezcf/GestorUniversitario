@@ -7,7 +7,7 @@ using Gestor.Elementos.Seguridad;
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class PermisosController : EntidadController<CtoPermisos, RegPermiso, PermisoDto>
+    public class PermisosController : EntidadController<CtoPermisos, rPermiso, PermisoDto>
     {
         public PermisosController(GestorDePermisos gestorDePermisos, GestorDeErrores gestorDeErrores) 
         : base

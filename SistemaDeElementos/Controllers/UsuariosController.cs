@@ -6,7 +6,7 @@ using MVCSistemaDeElementos.Descriptores;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class UsuariosController : EntidadController<CtoEntorno, RegUsuario, EleUsuario>
+    public class UsuariosController : EntidadController<CtoEntorno, rUsuario, EleUsuario>
     {
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)

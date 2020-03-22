@@ -6,39 +6,11 @@ using Gestor.Elementos.Entorno;
 using Gestor.Elementos.ModeloBd;
 using Microsoft.EntityFrameworkCore;
 
-/*
-create table SEGURIDAD.USU_PUESTO (
-   ID                   int                  not null,
-   IDUSUA               int                  not null,
-   IDPUESTO             int                  not null
-)
-go
-
-alter table SEGURIDAD.USU_PUESTO
-   add constraint PK_USU_PUESTO primary key (ID)
-go
-
-alter table SEGURIDAD.USU_PUESTO
-   add constraint AK_USU_PUESTO unique (IDUSUA, IDPUESTO)
-go
-
-alter table SEGURIDAD.USU_PUESTO
-   add constraint FK_USU_PUESTO_IDPUESTO foreign key (IDPUESTO)
-      references SEGURIDAD.PUESTO (ID)
-go
-
-alter table SEGURIDAD.USU_PUESTO
-   add constraint FK_USU_PUESTO_IDUSUARIO foreign key (IDUSUA)
-      references ENTORNO.USUARIO (ID)
-go
-     
- */
-
 
 namespace Gestor.Elementos.Seguridad
 {
 
-    public class VisUsuario : Registro
+    public class vUsuario : Registro
     {
         [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
         public string Login { get; set; }
@@ -57,7 +29,7 @@ namespace Gestor.Elementos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<VisUsuario>()
+            modelBuilder.Entity<vUsuario>()
                 .ToView("V_USUARIO", "SEGURIDAD")
                 .HasNoKey();
         }
@@ -74,8 +46,8 @@ namespace Gestor.Elementos.Seguridad
         [Column("IDPUESTO", TypeName = "INT")]
         public int idPuesto { get; set; }
 
-        public RegPuesto Puesto { get; set; }
-        public VisUsuario Usuario { get; set; }
+        public rPuesto Puesto { get; set; }
+        public vUsuario Usuario { get; set; }
     }
 
     public static class TablaUsuPuesto
@@ -99,12 +71,7 @@ namespace Gestor.Elementos.Seguridad
                 .HasConstraintName("FK_USU_PUESTO_IDPUESTO");
 
             modelBuilder.Entity<RegUsuPuesto>()
-                .Ignore(x => x.Usuario)
-                //.HasOne(x => x.Usuario)
-                //.WithMany(u => u.Puestos)
-                //.HasForeignKey(x => x.Usuario)
-                //.HasConstraintName("FK_USU_PUESTO_IDUSUA")
-                ;
+                .Ignore(x => x.Usuario);
 
         }
     }

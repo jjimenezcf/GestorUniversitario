@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gestor.Elementos.Entorno
 {
-    [Table("ACCION", Schema = "ENTORNO")]
-    public class RegAccion : Registro
+    [Table("VISTA_MVC", Schema = "ENTORNO")]
+    public class rVistaMvc : Registro
     {
         [Required]
         [Column("NOMBRE",  TypeName = "VARCHAR(250)")]
@@ -23,12 +23,12 @@ namespace Gestor.Elementos.Entorno
         [Column("PARAMETROS", TypeName = "VARCHAR(250)")]
         public string Parametros { get; set; }
 
-        public List<RegFuncion> Funciones { get; set; }
+        public List<rMenu> Menus { get; set; }
     }
 
 
-    [Table("FUNCION", Schema = "ENTORNO")]
-    public class RegFuncion : Registro
+    [Table("MENU", Schema = "ENTORNO")]
+    public class rMenu : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -48,53 +48,53 @@ namespace Gestor.Elementos.Entorno
         [Column("IDPADRE", TypeName = "INT")]
         public int? IdPadre { get; set; }
 
-        public RegFuncion Padre { get; set; }
+        public rMenu Padre { get; set; }
 
-        [Column("IDACCION", TypeName = "INT")]
-        public int? IdAccion { get; set; }
+        [Column("IDVISTA_MVC", TypeName = "INT")]
+        public int? IdVistaMvc { get; set; }
 
-        public virtual RegAccion Accion { get; set; }
+        public virtual rVistaMvc VistaMvc { get; set; }
     }
 
 
-    public static class TablaAccion
+    public static class TablaVistaMvc
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegAccion>().Property(p => p.Parametros).IsRequired(false);
+            modelBuilder.Entity<rVistaMvc>().Property(p => p.Parametros).IsRequired(false);
 
-            modelBuilder.Entity<RegAccion>()
+            modelBuilder.Entity<rVistaMvc>()
                .HasIndex(a => new { a.Controlador, a.Accion, a.Parametros })
                .IsUnique(true)
-               .HasName("IX_ACCION");
+               .HasName("IX_VISTA_MVC");
 
-            modelBuilder.Entity<RegAccion>()
-                .HasMany(a => a.Funciones)
-                .WithOne(a => a.Accion)
-                .HasForeignKey(f=>f.IdAccion); 
+            modelBuilder.Entity<rVistaMvc>()
+                .HasMany(a => a.Menus)
+                .WithOne(a => a.VistaMvc)
+                .HasForeignKey(f=>f.IdVistaMvc); 
         }
     }
 
-    public static class TablaFuncion
+    public static class TablaMenu
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegFuncion>().Property(p => p.IdPadre).IsRequired(false);
-            modelBuilder.Entity<RegFuncion>().Property(p => p.IdAccion).IsRequired(false);
+            modelBuilder.Entity<rMenu>().Property(p => p.IdPadre).IsRequired(false);
+            modelBuilder.Entity<rMenu>().Property(p => p.IdVistaMvc).IsRequired(false);
             
-            modelBuilder.Entity<RegFuncion>()
+            modelBuilder.Entity<rMenu>()
                 .HasOne(f => f.Padre)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(f => f.IdPadre)
-                .HasConstraintName("FK_FUNCION_IDPADRE");
+                .HasConstraintName("FK_MENU_IDPADRE");
 
-            modelBuilder.Entity<RegFuncion>()
-                        .HasOne(f => f.Accion)
-                        .WithMany(a => a.Funciones)
+            modelBuilder.Entity<rMenu>()
+                        .HasOne(f => f.VistaMvc)
+                        .WithMany(a => a.Menus)
                         .IsRequired(false)
-                        .HasForeignKey(f => f.IdAccion)
-                        .HasConstraintName("FK_FUNCION_IDACCION"); 
+                        .HasForeignKey(f => f.IdVistaMvc)
+                        .HasConstraintName("FK_MENU_IDVISTA_MVC"); 
         }
     }
 

@@ -6,29 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Elementos.Seguridad
 {
-    /*
-     * 
-     * 
-       create table SEGURIDAD.PUESTO (
-          ID                   int                  identity,
-          NOMBRE               varchar(250)         not null,
-          DESCRIPCION          varchar(MAX)         null
-       )
-       go
-       
-       alter table SEGURIDAD.PUESTO
-          add constraint PK_PUESTO primary key (ID)
-       go
-       
-       alter table SEGURIDAD.PUESTO
-          add constraint AK_PUESTO_NOMBRE unique (NOMBRE)
-       go
-       
-     */
-
 
     [Table("PUESTO", Schema = "SEGURIDAD")]
-    public class RegPuesto : Registro
+    public class rPuesto : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -37,7 +17,7 @@ namespace Gestor.Elementos.Seguridad
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
-        public ICollection<RegRolPuesto> Roles { get; set; }
+        public ICollection<rRolPuesto> Roles { get; set; }
         public ICollection<RegUsuPuesto> Usuarios { get; set; }
     }
 
@@ -45,7 +25,7 @@ namespace Gestor.Elementos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegPuesto>()
+            modelBuilder.Entity<rPuesto>()
             .HasAlternateKey(p => p.Nombre)
             .HasName("AK_PUESTO_NOMBRE");
         }
