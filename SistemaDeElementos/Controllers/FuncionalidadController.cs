@@ -11,10 +11,10 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class FuncionalidadController : EntidadController<CtoEntorno, rMenu, Funcion>
+    public class FuncionalidadController : EntidadController<CtoEntorno, R_Menu, E_Menu>
     {
 
-        public FuncionalidadController(GestorDeFuncionalidad gestorDeFuncionalidad, GestorDeErrores gestorDeErrores)
+        public FuncionalidadController(GestorDeMenus gestorDeFuncionalidad, GestorDeErrores gestorDeErrores)
         : base
         (
           gestorDeFuncionalidad,

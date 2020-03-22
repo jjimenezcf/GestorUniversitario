@@ -3,6 +3,7 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,15 +27,18 @@ namespace Gestor.Elementos
 
         public static IQueryable<TRegistro> AplicarFiltroId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
         {
-            foreach(ClausulaDeFiltrado filtro in filtros)
+            foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == FiltroPorId.ToLower())
-                   return registros.Where(x => x.Id == filtro.Valor.Entero());
+                    return registros.Where(x => x.Id == filtro.Valor.Entero());
 
             return registros;
         }
     }
 
     public enum Ordenacion { Ascendente, Descendente };
+
+
+    public enum TipoOperacion { Insertar, Modificar, Leer };
 
     public static class Ordenaciones
     {
@@ -56,9 +60,9 @@ namespace Gestor.Elementos
     }
 
 
-    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento> 
-        where TRegistro : Registro 
-        where TElemento : Elemento 
+    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
+        where TRegistro : Registro
+        where TElemento : Elemento
         where TContexto : ContextoDeElementos
     {
         protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
@@ -79,32 +83,99 @@ namespace Gestor.Elementos
             _gestorDeErrores = gestorErrores;
         }
 
-        
+
         protected virtual void IniciarClase(TContexto contexto)
         {
             Contexto = contexto;
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
         }
 
+        #region Métodos de inserción
         public async Task InsertarElementoAsync(TElemento elemento)
         {
-            TRegistro elementoBD = MapearRegistro(elemento);
+            TRegistro elementoBD = MapearRegistro(elemento, TipoOperacion.Insertar);
             Contexto.Add(elementoBD);
             await Contexto.SaveChangesAsync();
         }
 
+        public void InsertarElementos(List<TElemento> elementos)
+        {
+            foreach (var e in elementos)
+                InsertarElemento(e);
+        }
+
+        public void InsertarElemento(TElemento elemento)
+        {
+            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Insertar);
+            InsertarRegistro(registro);
+            elemento.Id = registro.Id;
+        }
+        protected void InsertarRegistros(List<TRegistro> registros)
+        {
+            using (var transaction = Contexto.Database.BeginTransaction())
+            try
+            {
+
+                foreach (var registro in registros)
+                    Contexto.Add(registro);
+
+                Contexto.SaveChanges();
+                transaction.Commit();
+            }
+            catch (Exception exc)
+            {
+                transaction.Rollback();
+                throw exc;
+            }
+        }
+        protected void InsertarRegistro(TRegistro registro)
+        {
+            using (var transaction = Contexto.Database.BeginTransaction())
+            try
+            {
+                Contexto.Add(registro);
+                Contexto.SaveChanges();
+                transaction.Commit();
+            }
+            catch (Exception exc)
+            {
+                transaction.Rollback();
+                throw exc;
+            }
+        }
+
+        #endregion
+
+        #region Métodos de modificación
+
         public async Task ModificarElementoAsync(TElemento elemento)
         {
-            TRegistro elementoBD = MapearRegistro(elemento);
-            Contexto.Update(elementoBD);
+            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Modificar);
+            await ModificarRegistroAsync(registro);
+        }
+
+        public void ModificarElemento(TElemento elemento)
+        {
+            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Modificar);
+            ModificarRegistro(registro);
+
+        }
+
+        protected void ModificarRegistro(TRegistro registro)
+        {
+            Contexto.Update(registro);
+            Contexto.SaveChanges();
+        }
+        protected async Task ModificarRegistroAsync(TRegistro registro)
+        {
+            Contexto.Update(registro);
             await Contexto.SaveChangesAsync();
         }
 
-        public bool ExisteObjetoEnBd(int id)
-        {
-            return Contexto.Set<TRegistro>().Any(e => e.Id == id);
-        }
 
+        #endregion
+
+        #region Métodos de lectura
 
         public IEnumerable<TElemento> Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, Dictionary<string, Ordenacion> orden)
         {
@@ -123,17 +194,7 @@ namespace Gestor.Elementos
 
             elementosDeBd = registros.AsNoTracking().ToList();
 
-            return MapearElementos(elementosDeBd) ;
-        }
-
-        public int Contar(List<ClausulaDeFiltrado> filtros)
-        {
-
-            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
-
-            var total = registros.Count();
-
-            return total;
+            return MapearElementos(elementosDeBd);
         }
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, Dictionary<string, Ordenacion> orden)
@@ -146,15 +207,83 @@ namespace Gestor.Elementos
             return registros.AplicarFiltroId(filtros);
         }
 
-        public (IEnumerable<TElemento>, int) LeerTodos()
+        #endregion
+
+        #region Métodos de acceso a BD
+        public bool ExisteObjetoEnBd(int id)
         {
-            var elementosDeBd = Contexto.Set<TRegistro>().AsNoTracking().ToList();
-            return (MapearElementos(elementosDeBd), Contexto.Set<TRegistro>().Count());
+            return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
+
+        public int Contar(List<ClausulaDeFiltrado> filtros)
+        {
+
+            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
+
+            var total = registros.Count();
+
+            return total;
+        }
+
+        #endregion
+
+        #region Métodos de mapeo
+
+        public List<TRegistro> MapearRegistros(List<TElemento> elementos, TipoOperacion tipoOperacion)
+        {
+            var registros = new List<TRegistro>();
+            foreach (var elemento in elementos)
+            {
+                var registro = MapearRegistro(elemento, tipoOperacion);
+                registros.Add(registro);
+            }
+            return registros;
+        }
+
+        protected TRegistro MapearRegistro(TElemento elemento, TipoOperacion tipoOperacion)
+        {
+            AntesMapearRegistro(elemento, tipoOperacion);
+            var registro = (TRegistro)Mapeador.Map(elemento, typeof(TElemento), typeof(TRegistro));
+            DespuesDeMapearRegistro(elemento, registro, tipoOperacion);
+            return registro;
+        }
+
+        protected virtual void DespuesDeMapearRegistro(TElemento elemento, TRegistro registro, TipoOperacion tipo)
+        {
+            if (TipoOperacion.Insertar == tipo)
+                registro.Id = 0;
+        }
+
+        protected virtual void AntesMapearRegistro(TElemento elemento, TipoOperacion tipo)
+        {
+        }
+
+        private IEnumerable<TElemento> MapearElementos(List<TRegistro> registros)
+        {
+            var lista = new List<TElemento>();
+            foreach (var registro in registros)
+            {
+
+                var elemento = MapearElemento(registro);
+                lista.Add(elemento);
+            }
+            return lista.AsEnumerable();
+        }
+
+        public TElemento MapearElemento(TRegistro registro, List<string> excluirPropiedad = null)
+        {
+            var elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
+            return elemento;
+        }
+
+        #endregion
+
+
+        #region codigo creo que obsoleto
 
         public TElemento LeerElementoPorId(int id)
         {
-            var elementoDeBd = Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            var elementoDeBd = LeerRegistroPorId(id);
             return MapearElemento(elementoDeBd);
         }
 
@@ -177,48 +306,7 @@ namespace Gestor.Elementos
             Contexto.SaveChangesAsync();
         }
 
-        private TRegistro MapearRegistro(TElemento elemento)
-        {
-            var registro = Metadatos.NuevoElementoBd();
-            PropertyInfo[] propiedadesBd = typeof(TRegistro).GetProperties();
-            PropertyInfo[] propiedadesIu = typeof(TElemento).GetProperties();
-
-            foreach (PropertyInfo pBd in propiedadesBd)
-            {
-                foreach (PropertyInfo pIu in propiedadesIu)
-                {
-                    if (pIu.Name == pBd.Name)
-                    {
-                        pBd.SetValue(registro, pIu.GetValue(elemento));
-                        break;
-                    }
-                }
-            }
-            return registro;
-        }
-
-        private IEnumerable<TElemento> MapearElementos(List<TRegistro> registros)
-        {
-            var lista = new List<TElemento>();
-            foreach (var registro in registros)
-            {
-
-                var elemento = MapearElemento(registro);
-                lista.Add(elemento);
-            }
-            return lista.AsEnumerable();
-        }
-
-        public TElemento MapearElemento(TRegistro registro, List<string> excluirPropiedad = null)
-        {
-            var elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
-            return elemento;
-        }
-
-        public TElemento NuevoElemento()
-        {
-            return Metadatos.NuevoElementoIu();
-        }
+        #endregion
 
     }
 }

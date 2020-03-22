@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class IniEntorno
+    public class IniciarEntorno
     {
 
         public static void CrearDatosIniciales(CtoEntorno contexto)

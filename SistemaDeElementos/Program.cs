@@ -18,7 +18,7 @@ namespace MVCSistemaDeElementos
 
         private static void CrearBdSiNoExiste(IWebHost sevidorWeb)
         {
-            using var scope = sevidorWeb.Services.CreateScope();
+            var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
             IniciarContextoDeEntorno(services);
             IniciarContextoDeSeguro(services);
@@ -47,12 +47,14 @@ namespace MVCSistemaDeElementos
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
             var ctoEntorno = services.GetRequiredService<CtoEntorno>();
+            var gestorDeMenus = services.GetRequiredService<GestorDeMenus>();
+            var gestorDeVistasMvc = services.GetRequiredService<GestorDeVistasMvc>();
             try
             {
                 ctoEntorno.Database.Migrate();
                 ctoEntorno.IniciarTraza();
                 CtoEntorno.NuevaVersion(ctoEntorno);
-                CtoEntorno.InicializarMaestros(ctoEntorno);
+                CtoEntorno.InicializarMaestros(ctoEntorno, gestorDeMenus, gestorDeVistasMvc);
             }
             catch (Exception ex)
             {

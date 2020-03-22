@@ -59,15 +59,15 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, rUsuario, EleUsuario>
+    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, rUsuario, eUsuario>
     {
 
         public class MapearUsuario : Profile
         {
             public MapearUsuario()
             {
-                CreateMap<rUsuario, EleUsuario>();
-                CreateMap<EleUsuario, rUsuario>();
+                CreateMap<rUsuario, eUsuario>();
+                CreateMap<eUsuario, rUsuario>();
             }
         }
 

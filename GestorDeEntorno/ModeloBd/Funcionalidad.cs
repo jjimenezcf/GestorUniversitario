@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Gestor.Elementos.Entorno
 {
     [Table("VISTA_MVC", Schema = "ENTORNO")]
-    public class rVistaMvc : Registro
+    public class R_VistaMvc : Registro
     {
         [Required]
         [Column("NOMBRE",  TypeName = "VARCHAR(250)")]
@@ -23,12 +23,12 @@ namespace Gestor.Elementos.Entorno
         [Column("PARAMETROS", TypeName = "VARCHAR(250)")]
         public string Parametros { get; set; }
 
-        public List<rMenu> Menus { get; set; }
+        public List<R_Menu> Menus { get; set; }
     }
 
 
     [Table("MENU", Schema = "ENTORNO")]
-    public class rMenu : Registro
+    public class R_Menu : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -42,18 +42,18 @@ namespace Gestor.Elementos.Entorno
         public string ICONO { get; set; }
 
         [Required]
-        [Column("ACTIVO", Order = 5, TypeName = "CHAR(1)")]
-        public char Activo { get; set; }
+        [Column("ACTIVO", TypeName = "BIT")]
+        public bool Activo { get; set; }
 
         [Column("IDPADRE", TypeName = "INT")]
         public int? IdPadre { get; set; }
 
-        public rMenu Padre { get; set; }
+        public R_Menu Padre { get; set; }
 
         [Column("IDVISTA_MVC", TypeName = "INT")]
         public int? IdVistaMvc { get; set; }
 
-        public virtual rVistaMvc VistaMvc { get; set; }
+        public virtual R_VistaMvc VistaMvc { get; set; }
     }
 
 
@@ -61,14 +61,14 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rVistaMvc>().Property(p => p.Parametros).IsRequired(false);
+            modelBuilder.Entity<R_VistaMvc>().Property(p => p.Parametros).IsRequired(false);
 
-            modelBuilder.Entity<rVistaMvc>()
+            modelBuilder.Entity<R_VistaMvc>()
                .HasIndex(a => new { a.Controlador, a.Accion, a.Parametros })
                .IsUnique(true)
                .HasName("IX_VISTA_MVC");
 
-            modelBuilder.Entity<rVistaMvc>()
+            modelBuilder.Entity<R_VistaMvc>()
                 .HasMany(a => a.Menus)
                 .WithOne(a => a.VistaMvc)
                 .HasForeignKey(f=>f.IdVistaMvc); 
@@ -79,17 +79,17 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rMenu>().Property(p => p.IdPadre).IsRequired(false);
-            modelBuilder.Entity<rMenu>().Property(p => p.IdVistaMvc).IsRequired(false);
+            modelBuilder.Entity<R_Menu>().Property(p => p.IdPadre).IsRequired(false);
+            modelBuilder.Entity<R_Menu>().Property(p => p.IdVistaMvc).IsRequired(false);
             
-            modelBuilder.Entity<rMenu>()
+            modelBuilder.Entity<R_Menu>()
                 .HasOne(f => f.Padre)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(f => f.IdPadre)
                 .HasConstraintName("FK_MENU_IDPADRE");
 
-            modelBuilder.Entity<rMenu>()
+            modelBuilder.Entity<R_Menu>()
                         .HasOne(f => f.VistaMvc)
                         .WithMany(a => a.Menus)
                         .IsRequired(false)

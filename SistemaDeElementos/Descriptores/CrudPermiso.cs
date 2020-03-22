@@ -13,13 +13,13 @@ namespace MVCSistemaDeElementos.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var descEstu = new CrudUsuario(ModoDescriptor.Seleccion);
-                new Selector<EleUsuario>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
+                new Selector<eUsuario>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
                                               etiqueta: "Usuario",
                                               propiedad: PermisoPor.PermisoDeUnRol,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 0 },
-                                              paraFiltrar: nameof(EleUsuario.Id),
-                                              paraMostrar: nameof(EleUsuario.Apellido),
+                                              paraFiltrar: nameof(eUsuario.Id),
+                                              paraMostrar: nameof(eUsuario.Apellido),
                                               descriptor: descEstu,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
             }

@@ -11,7 +11,7 @@ namespace Gestor.Elementos.Entorno
 
         public static string RenderMenuFuncional()
         {
-            var menu = GestorDeFuncionalidad.MenuPrincipal();
+            var menu = GestorDeMenus.MenuPrincipal();
 
             var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
                            @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
@@ -19,21 +19,21 @@ namespace Gestor.Elementos.Entorno
             return menuHtml.Replace("¨", "\"");
         }
 
-        private static string RenderOpcionesMenu(List<Funcion> opcionesMenu, int idMenuPadre)
+        private static string RenderOpcionesMenu(List<E_Menu> opcionesMenu, int idMenuPadre)
         {
             var menuHtml = "";
-            foreach (Funcion fDto in opcionesMenu)
+            foreach (E_Menu fDto in opcionesMenu)
             {
                 menuHtml = menuHtml + RenderMenu(funcion: fDto, idMenuPadre);
             }
             return menuHtml;
         }
 
-        private static string RenderMenu(Funcion funcion, int idMenuPadre)
+        private static string RenderMenu(E_Menu funcion, int idMenuPadre)
         {
-            if (funcion.Accion != null)
+            if (funcion.VistaMvc != null)
             {
-                var opcionHtml = RenderAccionMenu(accion: funcion.Accion);
+                var opcionHtml = RenderAccionMenu(accion: funcion.VistaMvc);
                 return opcionHtml;
             }
             
@@ -54,7 +54,7 @@ namespace Gestor.Elementos.Entorno
             return liHtml;
         }
 
-        private static string RenderAccionMenu(EleAccion accion)
+        private static string RenderAccionMenu(E_VistaMvc accion)
         {
             var idHtml = $"{accion.Id}";
             var opcionHtml =
@@ -82,3 +82,4 @@ namespace Gestor.Elementos.Entorno
 
     }
 }
+

@@ -19,8 +19,8 @@ namespace Gestor.Elementos.Entorno
     public class CtoEntorno : ContextoDeElementos
     {
 
-        public DbSet<rMenu> Menus { get; set; }
-        public DbSet<rVistaMvc> VistasMvc { get; set; }
+        public DbSet<R_Menu> Menus { get; set; }
+        public DbSet<R_VistaMvc> VistasMvc { get; set; }
         public DbSet<rVariable> Variables { get; set; }
         public DbSet<rUsuario> Usuarios { get; set; }
 
@@ -66,10 +66,20 @@ namespace Gestor.Elementos.Entorno
             cnx.SaveChanges();
         }
 
-        public static void InicializarMaestros(CtoEntorno contexto)
+        public static void InicializarMaestros(CtoEntorno contexto, GestorDeMenus gestorDeMenus, GestorDeVistasMvc gestorDeVistasMvc)
         {
             if (!contexto.Usuarios.Any())
-                IniEntorno.CrearDatosIniciales(contexto);
+                IniciarEntorno.CrearDatosIniciales(contexto);
+
+            if (!contexto.VistasMvc.Any())
+                gestorDeVistasMvc.InicializarVistasMvc();
+
+            if (!contexto.Menus.Any())
+                gestorDeMenus.InicializarMenu();
+
+
+
+
 
         }
 

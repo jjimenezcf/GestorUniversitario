@@ -7,7 +7,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudUsuario : DescriptorDeCrud<EleUsuario>
+    public class CrudUsuario : DescriptorDeCrud<eUsuario>
     {
         public CrudUsuario(ModoDescriptor modo)
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
@@ -35,21 +35,21 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             base.DefinirColumnasDelGrid();
 
-            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(EleUsuario.Id), Tipo = typeof(int), Visible = false };
+            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(eUsuario.Id), Tipo = typeof(int), Visible = false };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(EleUsuario.Login) };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(eUsuario.Login) };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(EleUsuario.Apellido), Ordenar = true, Ruta = "Usuarios", Accion = "IraMantenimientoUsuario" };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(eUsuario.Apellido), Ordenar = true, Ruta = "Usuarios", Accion = "IraMantenimientoUsuario" };
             Grid.Columnas.Add(columnaDelGrid);
 
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(EleUsuario.Nombre) };
+            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(eUsuario.Nombre) };
             Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid
             {
-                Nombre = nameof(EleUsuario.Alta),
+                Nombre = nameof(eUsuario.Alta),
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
                 Ordenar = true,
@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Grid.Columnas.Add(columnaDelGrid);
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<EleUsuario> elementos)
+        public override void MapearElementosAlGrid(IEnumerable<eUsuario> elementos)
         {
             base.MapearElementosAlGrid(elementos);
             foreach (var usuario in elementos)
@@ -68,19 +68,19 @@ namespace MVCSistemaDeElementos.Descriptores
                 foreach (ColumnaDelGrid columna in Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
-                    if (columna.Nombre == nameof(EleUsuario.Id))
+                    if (columna.Nombre == nameof(eUsuario.Id))
                         celda.Valor = usuario.Id.ToString();
                     else
-                    if (columna.Nombre == nameof(EleUsuario.Login))
+                    if (columna.Nombre == nameof(eUsuario.Login))
                         celda.Valor = usuario.Login.ToString();
                     else
-                    if (columna.Nombre == nameof(EleUsuario.Apellido))
+                    if (columna.Nombre == nameof(eUsuario.Apellido))
                         celda.Valor = usuario.Apellido;
                     else
-                    if (columna.Nombre == nameof(EleUsuario.Nombre))
+                    if (columna.Nombre == nameof(eUsuario.Nombre))
                         celda.Valor = usuario.Nombre.ToString();
                     else
-                    if (columna.Nombre == nameof(EleUsuario.Alta))
+                    if (columna.Nombre == nameof(eUsuario.Alta))
                         celda.Valor = usuario.Alta.ToString();
 
                     fila.Celdas.Add(celda);
