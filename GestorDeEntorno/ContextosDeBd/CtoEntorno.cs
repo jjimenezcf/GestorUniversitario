@@ -19,10 +19,10 @@ namespace Gestor.Elementos.Entorno
     public class CtoEntorno : ContextoDeElementos
     {
 
-        public DbSet<R_Menu> Menus { get; set; }
-        public DbSet<R_VistaMvc> VistasMvc { get; set; }
+        public DbSet<MenuDtm> Menus { get; set; }
+        public DbSet<VistaDtm> VistasMvc { get; set; }
         public DbSet<rVariable> Variables { get; set; }
-        public DbSet<rUsuario> Usuarios { get; set; }
+        public DbSet<UsuarioDtm> Usuarios { get; set; }
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)

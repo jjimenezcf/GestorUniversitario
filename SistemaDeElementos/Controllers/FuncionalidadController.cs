@@ -11,7 +11,7 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class FuncionalidadController : EntidadController<CtoEntorno, R_Menu, E_Menu>
+    public class FuncionalidadController : EntidadController<CtoEntorno, MenuDtm, MenuDto>
     {
 
         public FuncionalidadController(GestorDeMenus gestorDeFuncionalidad, GestorDeErrores gestorDeErrores)

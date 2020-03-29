@@ -7,9 +7,9 @@ using Gestor.Elementos.ModeloIu;
 
 namespace Gestor.Elementos.Entorno
 {
-    static class UsuarioRegFlt
+    static class FiltrosDeUsuario
     {
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : rUsuario
+        public static IQueryable<T> FiltrarPorNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.NombreCompleto)
@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Entorno
             return regristros;
         }
 
-        public static IQueryable<T> AplicarFiltroDeRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rUsuario
+        public static IQueryable<T> FiltrarPorRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.CursosInscrito)
@@ -40,18 +40,17 @@ namespace Gestor.Elementos.Entorno
     {
         public const string OrdenPorApellido = "PorApellido";
 
-        public static IQueryable<rUsuario> Orden(this IQueryable<rUsuario> set, Dictionary<string, Ordenacion> orden)
+        public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaOrdenacion> ordenacion)
         {
-            if (orden.Count == 0)
+            if (ordenacion.Count == 0)
                 return set.OrderBy(x => x.Apellido);
 
-            if (orden.ContainsKey(OrdenPorApellido))
+            foreach (var orden in ordenacion)
             {
-                if (orden[OrdenPorApellido] == Ordenacion.Ascendente)
-                    return set.OrderBy(x => x.Apellido);
-
-                if (orden[OrdenPorApellido] == Ordenacion.Descendente)
-                    return set.OrderByDescending(x => x.Apellido);
+                if (orden.Propiedad == nameof(UsuarioDtm.Apellido))
+                    return orden.modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Apellido)
+                        : set.OrderByDescending(x => x.Apellido);
             }
 
             return set;
@@ -59,15 +58,15 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, rUsuario, eUsuario>
+    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno,UsuarioDtm, UsuarioDto>
     {
 
         public class MapearUsuario : Profile
         {
             public MapearUsuario()
             {
-                CreateMap<rUsuario, eUsuario>();
-                CreateMap<eUsuario, rUsuario>();
+                CreateMap<UsuarioDtm, UsuarioDtm>();
+                CreateMap<UsuarioDtm, UsuarioDtm>();
             }
         }
 
@@ -77,29 +76,29 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override IQueryable<rUsuario> AplicarOrden(IQueryable<rUsuario> registros, Dictionary<string, Ordenacion> orden)
+        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaOrdenacion> ordenacion)
         {
-            registros = base.AplicarOrden(registros, orden);
-            return registros.Orden(orden);
+            registros = base.AplicarOrden(registros, ordenacion);
+            return registros.Orden(ordenacion);
         }
 
                
 
-        protected override IQueryable<rUsuario> AplicarFiltros(IQueryable<rUsuario> registros, List<ClausulaDeFiltrado> filtros) 
+        protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros) 
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
                     return base.AplicarFiltros(registros, filtros);
 
             return registros
-                   .AplicarFiltroNombre(filtros)
-                   .AplicarFiltroDeRelacion(filtros);
+                   .FiltrarPorNombre(filtros)
+                   .FiltrarPorRelacion(filtros);
         }
                 
 
-        protected override rUsuario LeerConDetalle(int Id)
+        protected override UsuarioDtm LeerConDetalle(int Id)
         {
-            return Contexto.Set<rUsuario>()
+            return Contexto.Set<UsuarioDtm>()
                             //.Include(i => i.Inscripciones)
                             //.ThenInclude(e => e.Curso)
                             .AsNoTracking()

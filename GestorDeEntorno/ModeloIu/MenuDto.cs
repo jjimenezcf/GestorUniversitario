@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class E_Menu : Elemento
+    public class MenuDto : Elemento
     {
-        public  E_Menu Padre { get; set; }
+        public  MenuDto Padre { get; set; }
 
         public string Nombre { get; set; }
 
@@ -14,15 +14,15 @@ namespace Gestor.Elementos.Entorno
 
         public string Descripcion { get; set; }
 
-        public List<E_Menu> Opciones { get; set; }
+        public List<MenuDto> Submenus { get; set; }
 
-        public E_VistaMvc VistaMvc { get; set; }
+        public VistaMvcDto VistaMvc { get; set; }
 
         public bool Activo { get; set; }
     }
 
 
-    public class E_VistaMvc : Elemento
+    public class VistaMvcDto : Elemento
     {
         public string Nombre { get; set; }
         public string Controlador { get; set; }

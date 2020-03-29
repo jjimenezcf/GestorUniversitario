@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Gestor.Elementos.Entorno
 {
     [Table("VISTA_MVC", Schema = "ENTORNO")]
-    public class R_VistaMvc : Registro
+    public class VistaDtm : Registro
     {
         [Required]
         [Column("NOMBRE",  TypeName = "VARCHAR(250)")]
@@ -23,12 +23,12 @@ namespace Gestor.Elementos.Entorno
         [Column("PARAMETROS", TypeName = "VARCHAR(250)")]
         public string Parametros { get; set; }
 
-        public List<R_Menu> Menus { get; set; }
+        public List<MenuDtm> Menus { get; set; }
     }
 
 
     [Table("MENU", Schema = "ENTORNO")]
-    public class R_Menu : Registro
+    public class MenuDtm : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
@@ -39,7 +39,7 @@ namespace Gestor.Elementos.Entorno
 
         [Required]
         [Column("ICONO", TypeName = "VARCHAR(250)")]
-        public string ICONO { get; set; }
+        public string Icono { get; set; }
 
         [Required]
         [Column("ACTIVO", TypeName = "BIT")]
@@ -48,12 +48,14 @@ namespace Gestor.Elementos.Entorno
         [Column("IDPADRE", TypeName = "INT")]
         public int? IdPadre { get; set; }
 
-        public R_Menu Padre { get; set; }
+        public MenuDtm Padre { get; set; }
+
+        public List<MenuDtm> Submenus { get; set; }
 
         [Column("IDVISTA_MVC", TypeName = "INT")]
         public int? IdVistaMvc { get; set; }
 
-        public virtual R_VistaMvc VistaMvc { get; set; }
+        public virtual VistaDtm VistaMvc { get; set; }
     }
 
 
@@ -61,17 +63,17 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<R_VistaMvc>().Property(p => p.Parametros).IsRequired(false);
+            modelBuilder.Entity<VistaDtm>().Property(menu => menu.Parametros).IsRequired(false);
 
-            modelBuilder.Entity<R_VistaMvc>()
-               .HasIndex(a => new { a.Controlador, a.Accion, a.Parametros })
+            modelBuilder.Entity<VistaDtm>()
+               .HasIndex(vista => new { vista.Controlador, vista.Accion, vista.Parametros })
                .IsUnique(true)
                .HasName("IX_VISTA_MVC");
 
-            modelBuilder.Entity<R_VistaMvc>()
-                .HasMany(a => a.Menus)
-                .WithOne(a => a.VistaMvc)
-                .HasForeignKey(f=>f.IdVistaMvc); 
+            modelBuilder.Entity<VistaDtm>()
+                .HasMany(vista => vista.Menus)
+                .WithOne(vista => vista.VistaMvc)
+                .HasForeignKey(menu=>menu.IdVistaMvc); 
         }
     }
 
@@ -79,22 +81,34 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<R_Menu>().Property(p => p.IdPadre).IsRequired(false);
-            modelBuilder.Entity<R_Menu>().Property(p => p.IdVistaMvc).IsRequired(false);
-            
-            modelBuilder.Entity<R_Menu>()
-                .HasOne(f => f.Padre)
+            modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdPadre).IsRequired(false);
+            modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdVistaMvc).IsRequired(false);
+
+            modelBuilder.Entity<MenuDtm>()
+                .HasOne(menu => menu.Padre)
                 .WithMany()
                 .IsRequired(false)
-                .HasForeignKey(f => f.IdPadre)
+                .HasForeignKey(menu => menu.IdPadre)
                 .HasConstraintName("FK_MENU_IDPADRE");
 
-            modelBuilder.Entity<R_Menu>()
-                        .HasOne(f => f.VistaMvc)
-                        .WithMany(a => a.Menus)
+            modelBuilder.Entity<MenuDtm>()
+                        .HasOne(menu => menu.VistaMvc)
+                        .WithMany(vista => vista.Menus)
                         .IsRequired(false)
-                        .HasForeignKey(f => f.IdVistaMvc)
-                        .HasConstraintName("FK_MENU_IDVISTA_MVC"); 
+                        .HasForeignKey(menu => menu.IdVistaMvc)
+                        .HasConstraintName("FK_MENU_IDVISTA_MVC");
+
+            modelBuilder.Entity<MenuDtm>()
+                .HasMany(menu => menu.Submenus)
+                .WithOne(m => m.Padre)
+                .IsRequired(false);
+
+            //modelBuilder.Entity<R_Menu>()
+            //            .HasMany(menu => menu.Submenus)
+            //            .WithOne()
+            //            //.HasForeignKey("IDPADRE")
+            //            //.HasConstraintName("FK_MENU_IDPADRE")
+            //            .IsRequired(false);
         }
     }
 

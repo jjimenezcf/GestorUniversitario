@@ -1772,7 +1772,7 @@ DESTINATION 0 Arial,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o21">
 <a:ModificationDate>1583690384</a:ModificationDate>
-<a:Rect>((27508,14475), (49086,28943))</a:Rect>
+<a:Rect>((27508,14475), (49086,28930))</a:Rect>
 <a:ListOfPoints>((33058,14475),(33058,28464),(49086,28464))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -1815,7 +1815,7 @@ DESTINATION 0 Arial,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o28">
 <a:ModificationDate>1583690384</a:ModificationDate>
-<a:Rect>((54975,13215), (76107,28644))</a:Rect>
+<a:Rect>((54975,13215), (76107,28626))</a:Rect>
 <a:ListOfPoints>((70520,13215),(70520,28165),(54975,28165))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -1879,7 +1879,7 @@ DESTINATION 0 Arial,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o37">
 <a:ModificationDate>1583690384</a:ModificationDate>
-<a:Rect>((65024,-2539), (75673,11969))</a:Rect>
+<a:Rect>((64986,-2539), (75710,11969))</a:Rect>
 <a:ListOfPoints>((70348,11969),(70348,-2539))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -1900,7 +1900,7 @@ DESTINATION 0 Arial,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ViewReferenceSymbol Id="o40">
 <a:ModificationDate>1583690384</a:ModificationDate>
-<a:Rect>((-7062,22080), (-2412,32300))</a:Rect>
+<a:Rect>((-7024,22080), (-2450,32300))</a:Rect>
 <a:ListOfPoints>((-4737,22080),(-4737,32300))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -3182,57 +3182,64 @@ from
    ENTORNO.USUARIO
 </a:View.SQLQuery>
 <a:TaggedSQLQuery>select
-   ID,
-   LOGIN,
-   APELLIDO,
-   NOMBRE
+   [{E6675300-CE96-4660-A3A9-B98077387F5A}=ID],
+   [{2A0438B9-3597-4147-96CA-B0AA23ED5B39}=LOGIN],
+   [{D45F323A-1C35-4910-AF23-EA2F913CD76D}=APELLIDO],
+   [{F6A80911-9DCC-4D85-8CE3-7320F35330C4}=NOMBRE]
 from
    [{A42E4411-BF1D-44ED-BD91-642F529E8EC6}=ENTORNO.USUARIO]</a:TaggedSQLQuery>
 <c:Columns>
 <o:ViewColumn Id="o117">
 <a:ObjectID>A01DD933-DA78-44A7-86F5-483D6DA47803</a:ObjectID>
-<a:Name>ID</a:Name>
+<a:Name>id</a:Name>
 <a:Code>ID</a:Code>
 <a:CreationDate>1583690147</a:CreationDate>
 <a:Creator>Juan</a:Creator>
 <a:ModificationDate>1583690211</a:ModificationDate>
 <a:Modifier>Juan</a:Modifier>
+<a:DataType>int</a:DataType>
 <c:ViewColumn.Columns>
 <o:Shortcut Ref="o106"/>
 </c:ViewColumn.Columns>
 </o:ViewColumn>
 <o:ViewColumn Id="o118">
 <a:ObjectID>4E8384AA-9451-42E8-A92E-EC3862FF23EE</a:ObjectID>
-<a:Name>LOGIN</a:Name>
+<a:Name>Login</a:Name>
 <a:Code>LOGIN</a:Code>
 <a:CreationDate>1583690147</a:CreationDate>
 <a:Creator>Juan</a:Creator>
 <a:ModificationDate>1583690211</a:ModificationDate>
 <a:Modifier>Juan</a:Modifier>
+<a:DataType>varchar(15)</a:DataType>
+<a:Length>15</a:Length>
 <c:ViewColumn.Columns>
 <o:Shortcut Ref="o110"/>
 </c:ViewColumn.Columns>
 </o:ViewColumn>
 <o:ViewColumn Id="o119">
 <a:ObjectID>38F29DA9-FE96-4574-8D8A-217FF2A27A26</a:ObjectID>
-<a:Name>APELLIDO</a:Name>
+<a:Name>Apellido</a:Name>
 <a:Code>APELLIDO</a:Code>
 <a:CreationDate>1583690147</a:CreationDate>
 <a:Creator>Juan</a:Creator>
 <a:ModificationDate>1583690211</a:ModificationDate>
 <a:Modifier>Juan</a:Modifier>
+<a:DataType>varchar(250)</a:DataType>
+<a:Length>250</a:Length>
 <c:ViewColumn.Columns>
 <o:Shortcut Ref="o114"/>
 </c:ViewColumn.Columns>
 </o:ViewColumn>
 <o:ViewColumn Id="o120">
 <a:ObjectID>9E5DA1C2-A1E2-4B68-90CF-528EF7566569</a:ObjectID>
-<a:Name>NOMBRE</a:Name>
+<a:Name>Nombre</a:Name>
 <a:Code>NOMBRE</a:Code>
 <a:CreationDate>1583690147</a:CreationDate>
 <a:Creator>Juan</a:Creator>
 <a:ModificationDate>1583690211</a:ModificationDate>
 <a:Modifier>Juan</a:Modifier>
+<a:DataType>varchar(250)</a:DataType>
+<a:Length>250</a:Length>
 <c:ViewColumn.Columns>
 <o:Shortcut Ref="o112"/>
 </c:ViewColumn.Columns>
@@ -5078,12 +5085,12 @@ PhysOpts=</a:ModelOptionsText>
 <a:Code>SISTEMA_DE_ELEMENTOS</a:Code>
 <a:CreationDate>1583682153</a:CreationDate>
 <a:Creator>Juan</a:Creator>
-<a:ModificationDate>1584820392</a:ModificationDate>
+<a:ModificationDate>1584829434</a:ModificationDate>
 <a:Modifier>Juan</a:Modifier>
 <a:TargetModelURL>file:///C|/Users/jjime/Documents/Programas/SistemaDeElementos/ModeloDeDatos/Entorno.pdm</a:TargetModelURL>
 <a:TargetModelID>8CE7A42E-0174-4CED-9634-9D6D7E68CF86</a:TargetModelID>
 <a:TargetModelClassID>CDE44E21-9669-11D1-9914-006097355D9B</a:TargetModelClassID>
-<a:TargetModelLastModificationDate>1584820392</a:TargetModelLastModificationDate>
+<a:TargetModelLastModificationDate>1584829434</a:TargetModelLastModificationDate>
 <c:SessionShortcuts>
 <o:Shortcut Ref="o108"/>
 <o:Shortcut Ref="o106"/>

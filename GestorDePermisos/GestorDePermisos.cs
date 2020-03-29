@@ -7,9 +7,9 @@ using Gestor.Elementos.ModeloIu;
 namespace Gestor.Elementos.Seguridad
 {
 
-    static class RegistroDeCursosFiltros
+    static class FiltrosDePermisos
     {
-        public static IQueryable<T> AplicarFiltroNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
+        public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == PermisoPor.Nombre)
@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Seguridad
             return registros;
         }
 
-        public static IQueryable<T> AplicarFiltroPermisos<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
+        public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == PermisoPor.PermisoDeUnRol)
@@ -65,8 +65,8 @@ namespace Gestor.Elementos.Seguridad
                   return base.AplicarFiltros(registros, filtros);
 
             return registros
-                .AplicarFiltroNombre(filtros)
-                .AplicarFiltroPermisos(filtros);
+                .FiltroPorNombre(filtros)
+                .FiltroPorRol(filtros);
         }
 
     }

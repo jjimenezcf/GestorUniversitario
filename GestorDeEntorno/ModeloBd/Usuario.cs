@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Gestor.Elementos.Entorno
 {
     [Table("USUARIO", Schema = "ENTORNO")]
-    public class rUsuario : Registro
+    public class UsuarioDtm : Registro
     {
         [Required]
         [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
@@ -32,7 +32,7 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rUsuario>()
+            modelBuilder.Entity<UsuarioDtm>()
             .HasIndex(v => new { v.Login })
             .IsUnique(true)
             .HasName("IX_USUARIO");

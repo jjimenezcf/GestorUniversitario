@@ -2,16 +2,47 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Utilidades;
 
 namespace Gestor.Elementos.Entorno
 {
+    public class ConstructorDelContexto : IDesignTimeDbContextFactory<CtoEntorno>
+    {
+        public CtoEntorno CreateDbContext(string[] arg)
+        {
+            var generador = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json");
+            var configuaracion = generador.Build();
+            var cadenaDeConexion = configuaracion.GetConnectionString(Gestor.Elementos.Literal.CadenaDeConexion);
+
+            var opciones = new DbContextOptionsBuilder<CtoEntorno>();
+            opciones.UseSqlServer(cadenaDeConexion);
+
+            return new CtoEntorno(opciones.Options,configuaracion);
+        }
+    }
+
+
     public class GestorDeEntorno
     {
 
         public static string RenderMenuFuncional()
         {
-            var menu = GestorDeMenus.MenuPrincipal();
+            string[] parametros = {""};
+
+            var contexto = new ConstructorDelContexto().CreateDbContext(parametros);
+
+            var configuradorDeMapeos = new MapperConfiguration(cfg => {cfg.CreateMap<MenuDtm, MenuDto>();});
+            IMapper mapeador = configuradorDeMapeos.CreateMapper();
+
+            var gestorDeMenus = new GestorDeMenus(contexto, mapeador);
+
+            List<MenuDto> menu = gestorDeMenus.LeerMenuSe();
 
             var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
                            @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
@@ -19,32 +50,32 @@ namespace Gestor.Elementos.Entorno
             return menuHtml.Replace("¨", "\"");
         }
 
-        private static string RenderOpcionesMenu(List<E_Menu> opcionesMenu, int idMenuPadre)
+        private static string RenderOpcionesMenu(List<MenuDto> opcionesMenu, int idMenuPadre)
         {
             var menuHtml = "";
-            foreach (E_Menu fDto in opcionesMenu)
+            foreach (MenuDto fDto in opcionesMenu)
             {
                 menuHtml = menuHtml + RenderMenu(funcion: fDto, idMenuPadre);
             }
             return menuHtml;
         }
 
-        private static string RenderMenu(E_Menu funcion, int idMenuPadre)
+        private static string RenderMenu(MenuDto funcion, int idMenuPadre)
         {
             if (funcion.VistaMvc != null)
             {
                 var opcionHtml = RenderAccionMenu(accion: funcion.VistaMvc);
                 return opcionHtml;
             }
-            
-            var subMenuHtml = funcion.Opciones != null ? RenderOpcionesMenu(funcion.Opciones, funcion.Id) : "";
+
+            var subMenuHtml = funcion.Submenus != null ? RenderOpcionesMenu(funcion.Submenus, funcion.Id) : "";
 
             var idMenuHtml = $"id_menu_{funcion.Id}";
             var idMenuPadreHtml = $"id_menu_{idMenuPadre}";
             var liHtml =
                 $@"<li>{Environment.NewLine}" +
                 $@"  <a>{Environment.NewLine}" +
-                $@"     {ComponerMenu(literalOpcion: funcion.Nombre, icono: funcion.Icono, idMenu: idMenuHtml)}" + 
+                $@"     {ComponerMenu(literalOpcion: funcion.Nombre, icono: funcion.Icono, idMenu: idMenuHtml)}" +
                 $@"  </a>{Environment.NewLine}" +
                 $@"  <ul id=¨{idMenuHtml}¨ name=¨menu¨ menu-padre=¨{idMenuPadreHtml}¨ menu-plegado=¨true¨>{Environment.NewLine}" +
                       subMenuHtml +
@@ -54,12 +85,12 @@ namespace Gestor.Elementos.Entorno
             return liHtml;
         }
 
-        private static string RenderAccionMenu(E_VistaMvc accion)
+        private static string RenderAccionMenu(VistaMvcDto accion)
         {
             var idHtml = $"{accion.Id}";
             var opcionHtml =
-            $@"<li>{Environment.NewLine}"+
-            $@"  <input id='{idHtml}' type='button' class='menu-opcion' value='{accion.Nombre}' onclick=¨Menu.OpcionSeleccionada('{idHtml}','{accion.Controlador}','{accion.Accion}')¨ />{Environment.NewLine}"+
+            $@"<li>{Environment.NewLine}" +
+            $@"  <input id='{idHtml}' type='button' class='menu-opcion' value='{accion.Nombre}' onclick=¨Menu.OpcionSeleccionada('{idHtml}','{accion.Controlador}','{accion.Accion}')¨ />{Environment.NewLine}" +
             $@"</li>{Environment.NewLine}";
 
             return opcionHtml;

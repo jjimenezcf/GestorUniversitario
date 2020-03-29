@@ -8,15 +8,15 @@ using Gestor.Elementos.ModeloIu;
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeVistasMvc : GestorDeElementos<CtoEntorno, R_VistaMvc, E_VistaMvc>
+    public class GestorDeVistasMvc : GestorDeElementos<CtoEntorno, VistaDtm, VistaMvcDto>
     {
 
         public class MapearVistasMvc : Profile
         {
             public MapearVistasMvc()
             {
-                CreateMap<R_VistaMvc, E_VistaMvc>();
-                CreateMap<E_VistaMvc, R_VistaMvc>();
+                CreateMap<VistaDtm, VistaMvcDto>();
+                CreateMap<VistaMvcDto, VistaDtm>();
             }
         }
 
@@ -26,18 +26,18 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override R_VistaMvc LeerConDetalle(int Id)
+        protected override VistaDtm LeerConDetalle(int Id)
         {
             throw new System.NotImplementedException();
         }
 
 
-        public static List<E_VistaMvc> VistasMvc()
+        public static List<VistaMvcDto> VistasMvc()
         {
-            var vistasMvc = new List<E_VistaMvc>();
+            var vistasMvc = new List<VistaMvcDto>();
 
-            vistasMvc.Add(new E_VistaMvc { Id = 0, Nombre = "Usuarios", Controlador = "Usuarios", Accion = "Index", Parametros = "" });
-            vistasMvc.Add(new E_VistaMvc { Id = 0, Nombre = "Menus", Controlador = "Menus", Accion = "Index", Parametros = "" });
+            vistasMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Usuarios", Controlador = "Usuarios", Accion = "Index", Parametros = "" });
+            vistasMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Menus", Controlador = "Menus", Accion = "Index", Parametros = "" });
 
             return vistasMvc;
         }

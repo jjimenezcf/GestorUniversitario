@@ -6,9 +6,9 @@ namespace MVCSistemaDeElementos.UtilidadesIu
 {
     public static class parametrosMvc
     {
-        public static Dictionary<string, Ordenacion> ParsearOrdenacion(this string orden)
+        public static List<ClausulaOrdenacion> ParsearOrdenacion(this string orden)
         {
-            var ordenParseado = new Dictionary<string, Ordenacion>();
+            var ordenParseado = new List<ClausulaOrdenacion>();
 
             if (!orden.IsNullOrEmpty())
             {
@@ -20,30 +20,14 @@ namespace MVCSistemaDeElementos.UtilidadesIu
                         break;
                     else
                     {
-                        if (i + 1 == ordenes.Length && !ordenes[i].IsNullOrEmpty())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
+                        var clausula = new ClausulaOrdenacion();
+                        clausula.Propiedad = ordenes[i];
+                        clausula.modo = ModoDeOrdenancion.ascendente;
 
-                        if (ordenes[i + 1].IsNullOrEmpty())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
+                        if (i + 1 < ordenes.Length && ordenes[i + 1] == ModoDeOrdenancion.descendente.ToString())
+                            clausula.modo = ModoDeOrdenancion.descendente;
 
-                        if (ordenes[i + 1] == Ordenacion.Ascendente.ToString())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Ascendente;
-                            break;
-                        }
-
-                        if (ordenes[i + 1] == Ordenacion.Descendente.ToString())
-                        {
-                            ordenParseado[ordenes[i]] = Ordenacion.Descendente;
-                            break;
-                        }
-
+                        ordenParseado.Add(clausula);
                         i = i + 2;
                     }
 

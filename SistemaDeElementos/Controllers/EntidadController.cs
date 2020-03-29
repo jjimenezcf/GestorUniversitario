@@ -130,7 +130,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
-            var elementos = GestorDeElementos.Leer(GestorDelCrud.Descriptor.Grid.PosicionInicial
+            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.Grid.PosicionInicial
                                                           , GestorDelCrud.Descriptor.Grid.CantidadPorLeer
                                                           , new List<ClausulaDeFiltrado>()
                                                           , orden.ParsearOrdenacion());
@@ -154,7 +154,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
-            return GestorDeElementos.Leer(posicion, cantidad, filtros, orden.ParsearOrdenacion());
+            return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden.ParsearOrdenacion());
         }
 
     }

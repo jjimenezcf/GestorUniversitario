@@ -9,6 +9,22 @@
     <Compile Remove="Migrations\20200304210352_inicialUniversitario.Designer.cs" />
     <Compile Remove="Migrations\20200308124317_CREAR_TABLA_ROL_pERMISO.cs" />
     <Compile Remove="Migrations\20200308124317_CREAR_TABLA_ROL_pERMISO.Designer.cs" />
+    <Compile Remove="Migrations\20200328185559_ListaDeSubmenus.cs" />
+    <Compile Remove="Migrations\20200328185559_ListaDeSubmenus.Designer.cs" />
+    <Compile Remove="Migrations\20200328192229_ListaDeSubmenus.cs" />
+    <Compile Remove="Migrations\20200328192229_ListaDeSubmenus.Designer.cs" />
+    <Compile Remove="Migrations\20200329085425_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329085425_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200329085625_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329085625_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200329085944_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329085944_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200329090304_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329090304_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200329090620_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329090620_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200329091111_anadirSubmenu.cs" />
+    <Compile Remove="Migrations\20200329091111_anadirSubmenu.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
