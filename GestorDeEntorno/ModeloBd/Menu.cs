@@ -42,6 +42,10 @@ namespace Gestor.Elementos.Entorno
         public string Icono { get; set; }
 
         [Required]
+        [Column("ORDEN", TypeName = "INT")]
+        public int orden { get; set; }
+
+        [Required]
         [Column("ACTIVO", TypeName = "BIT")]
         public bool Activo { get; set; }
 
@@ -56,6 +60,7 @@ namespace Gestor.Elementos.Entorno
         public int? IdVistaMvc { get; set; }
 
         public virtual VistaDtm VistaMvc { get; set; }
+
     }
 
 
@@ -83,6 +88,8 @@ namespace Gestor.Elementos.Entorno
         {
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdPadre).IsRequired(false);
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdVistaMvc).IsRequired(false);
+
+            modelBuilder.Entity<MenuDtm>().Property(menu => menu.orden).HasDefaultValue(0);
 
             modelBuilder.Entity<MenuDtm>()
                 .HasOne(menu => menu.Padre)
