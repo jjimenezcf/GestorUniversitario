@@ -24,7 +24,8 @@ namespace Gestor.Elementos
 
     public enum ModoDeOrdenancion { ascendente, descendente }
 
-    public class ClausulaOrdenacion {
+    public class ClausulaOrdenacion
+    {
 
         public string Propiedad { get; set; }
         public ModoDeOrdenancion modo { get; set; }
@@ -57,7 +58,7 @@ namespace Gestor.Elementos
             foreach (var orden in ordenacion)
             {
                 if (orden.Propiedad == nameof(Registro.Id))
-                    return orden.modo == ModoDeOrdenancion.ascendente 
+                    return orden.modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Id)
                         : set.OrderByDescending(x => x.Id);
             }
@@ -120,35 +121,35 @@ namespace Gestor.Elementos
         protected void InsertarRegistros(List<TRegistro> registros)
         {
             using (var transaction = Contexto.Database.BeginTransaction())
-            try
-            {
+                try
+                {
 
-                foreach (var registro in registros)
-                    Contexto.Add(registro);
+                    foreach (var registro in registros)
+                        Contexto.Add(registro);
 
-                Contexto.SaveChanges();
-                transaction.Commit();
-            }
-            catch (Exception exc)
-            {
-                transaction.Rollback();
-                throw exc;
-            }
+                    Contexto.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception exc)
+                {
+                    transaction.Rollback();
+                    throw exc;
+                }
         }
         protected void InsertarRegistro(TRegistro registro)
         {
             using (var transaction = Contexto.Database.BeginTransaction())
-            try
-            {
-                Contexto.Add(registro);
-                Contexto.SaveChanges();
-                transaction.Commit();
-            }
-            catch (Exception exc)
-            {
-                transaction.Rollback();
-                throw exc;
-            }
+                try
+                {
+                    Contexto.Add(registro);
+                    Contexto.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception exc)
+                {
+                    transaction.Rollback();
+                    throw exc;
+                }
         }
 
         #endregion
@@ -271,29 +272,39 @@ namespace Gestor.Elementos
         {
         }
 
-        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros)
+        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, Dictionary<string,object> parametros = null)
         {
+            if (parametros == null)
+                parametros = new Dictionary<string, object>();
+
             var lista = new List<TElemento>();
             foreach (var registro in registros)
             {
-                if (ValidarAntesDeMapearElElemento(registro))
-                {
-                    var elemento = MapearElemento(registro);
+                var elemento = MapearElemento(registro, parametros);
+                if (elemento != null)
                     lista.Add(elemento);
-                }
             }
             return lista.AsEnumerable();
         }
 
-        protected virtual bool ValidarAntesDeMapearElElemento(TRegistro registro)
+        protected virtual bool AntesDeMapearElemento(TRegistro registro, Dictionary<string, object> parametros)
         {
             return true;
         }
 
-        protected TElemento MapearElemento(TRegistro registro)
+        protected TElemento MapearElemento(TRegistro registro, Dictionary<string, object> parametros)
         {
-            var elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
+            TElemento elemento = null;
+            if (AntesDeMapearElemento(registro, parametros))
+            {
+                elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
+                DespuesDeMapearElemento(registro, elemento, parametros);
+            }
             return elemento;
+        }
+
+        protected virtual void DespuesDeMapearElemento(TRegistro registro, TElemento elemento, Dictionary<string, object> parametros)
+        {
         }
 
         #endregion
@@ -304,7 +315,7 @@ namespace Gestor.Elementos
         public TElemento LeerElementoPorId(int id)
         {
             var elementoDeBd = LeerRegistroPorId(id);
-            return MapearElemento(elementoDeBd);
+            return MapearElemento(elementoDeBd, new Dictionary<string, object>());
         }
 
         public TRegistro LeerRegistroPorId(int id)
@@ -316,7 +327,7 @@ namespace Gestor.Elementos
         public TElemento LeerElementoConDetalle(int id)
         {
             var elementoLeido = LeerConDetalle(id);
-            return MapearElemento(elementoLeido);
+            return MapearElemento(elementoLeido, new Dictionary<string, object>());
         }
 
         public void BorrarPorId(int id)

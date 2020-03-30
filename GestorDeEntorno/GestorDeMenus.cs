@@ -38,15 +38,15 @@ namespace Gestor.Elementos.Entorno
                   WITH menuPadre 
                   AS
                   (
-                      SELECT ID, NOMBRE, DESCRIPCION, ICONO, ACTIVO, IDPADRE, IDVISTA_MVC
+                      SELECT ID, NOMBRE, DESCRIPCION, ICONO, ACTIVO, IDPADRE, IDVISTA_MVC, ORDEN
                       FROM entorno.MENU
                       UNION ALL
                       --RECURSIVIDAD
-                      SELECT submenu.ID, submenu.NOMBRE, submenu.DESCRIPCION, submenu.ICONO, submenu.ACTIVO, submenu.IDPADRE, submenu.IDVISTA_MVC
+                      SELECT submenu.ID, submenu.NOMBRE, submenu.DESCRIPCION, submenu.ICONO, submenu.ACTIVO, submenu.IDPADRE, submenu.IDVISTA_MVC, submenu.ORDEN
                       FROM entorno.MENU AS submenu 
                   	 JOIN menuPadre AS menu ON submenu.IDPADRE = menu.id
                   )
-                  SELECT DISTINCT ID, NOMBRE, DESCRIPCION, ICONO, ACTIVO, IDPADRE, IDVISTA_MVC
+                  SELECT DISTINCT ID, NOMBRE, DESCRIPCION, ICONO, ACTIVO, IDPADRE, IDVISTA_MVC, ORDEN
                   FROM menuPadre
                   order by id
                  ";
@@ -84,11 +84,12 @@ namespace Gestor.Elementos.Entorno
             throw new System.NotImplementedException();
         }
 
-        protected override bool ValidarAntesDeMapearElElemento(MenuDtm registro)
+        protected override bool AntesDeMapearElemento(MenuDtm registro, Dictionary<string,object> parametros)
         {
-            base.ValidarAntesDeMapearElElemento(registro);
+            if (base.AntesDeMapearElemento(registro, parametros))
+                return registro.IdPadre == null;
 
-            return registro.IdPadre == null;
+            return false;
         }
 
         public List<MenuDto> LeerMenuSe()
