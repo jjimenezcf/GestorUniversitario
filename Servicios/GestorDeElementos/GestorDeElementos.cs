@@ -14,7 +14,10 @@ namespace Gestor.Elementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
 
-
+    public class ClausulaDeJoin
+    {
+        public Type Dtm { get; set; }
+    }
     public class ClausulaDeFiltrado
     {
         public string Propiedad { get; set; }
@@ -31,16 +34,28 @@ namespace Gestor.Elementos
         public ModoDeOrdenancion modo { get; set; }
     };
 
-
-    public static class RegistroBaseFiltros
+    public static partial class Joins
     {
-        public const string FiltroPorId = "Id";
+        public static IQueryable<TRegistro> JoinBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins) where TRegistro : Registro
+        {
+            return registros;
+        }
+    }
 
-        public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
+    public static partial class Filtros
+    {
+        public static IQueryable<TRegistro> FiltroBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == FiltroPorId.ToLower())
-                    return registros.Where(x => x.Id == filtro.Valor.Entero());
+                return registros.FiltrarPorId(filtro);
+
+            return registros;
+        }
+
+        public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro) where TRegistro : Registro
+        {
+            if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
+                return registros.Where(x => x.Id == filtro.Valor.Entero());
 
             return registros;
         }
@@ -49,21 +64,28 @@ namespace Gestor.Elementos
 
     public enum TipoOperacion { Insertar, Modificar, Leer };
 
-    public static class Ordenaciones
+    public static partial class Ordenaciones
     {
-        public const string OrdenPorId = "PorId";
-
-        public static IQueryable<TRegistro> Orden<TRegistro>(this IQueryable<TRegistro> set, List<ClausulaOrdenacion> ordenacion) where TRegistro : Registro
+        public static IQueryable<TRegistro> OrdenBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaOrdenacion> ordenacion) where TRegistro : Registro
         {
             foreach (var orden in ordenacion)
             {
                 if (orden.Propiedad == nameof(Registro.Id))
-                    return orden.modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Id)
-                        : set.OrderByDescending(x => x.Id);
+                    return registros.OrdenPorId(orden);
             }
 
-            return set;
+            return registros;
+        }
+
+        public static IQueryable<TRegistro> OrdenPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaOrdenacion orden) where TRegistro : Registro
+        {
+
+            if (orden.Propiedad == nameof(Registro.Id))
+                return orden.modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Id)
+                    : registros.OrderByDescending(x => x.Id);
+
+            return registros;
         }
     }
 
@@ -192,11 +214,28 @@ namespace Gestor.Elementos
             return MapearElementos(elementosDeBd);
         }
 
+        public List<TRegistro> LeerRegistros(int posicion, int cantidad)
+        {
+            return LeerRegistros(posicion, cantidad, new List<ClausulaDeFiltrado>());
+        }
+
+        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            return LeerRegistros(posicion, cantidad, filtros, new List<ClausulaOrdenacion>());
+        }
+
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden)
+        {
+            return LeerRegistros(posicion, cantidad, filtros, orden, new List<ClausulaDeJoin>());
+        }
+
+        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, List<ClausulaDeJoin> joins)
         {
             List<TRegistro> elementosDeBd;
 
-            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
+            IQueryable<TRegistro>  registros = AplicarJoins(Contexto.Set<TRegistro>(), joins);
+
+            registros = AplicarFiltros(registros, filtros);
 
             registros = AplicarOrden(registros, orden);
 
@@ -213,12 +252,17 @@ namespace Gestor.Elementos
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaOrdenacion> ordenacion)
         {
-            return registros.Orden(ordenacion);
+            return registros.OrdenBase(ordenacion);
         }
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
         {
-            return registros.FiltrarPorId(filtros);
+            return registros.FiltroBase(filtros);
+        }
+
+        protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins)
+        {
+            return registros.JoinBase(joins);
         }
 
         #endregion
@@ -272,7 +316,7 @@ namespace Gestor.Elementos
         {
         }
 
-        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, Dictionary<string,object> parametros = null)
+        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, Dictionary<string, object> parametros = null)
         {
             if (parametros == null)
                 parametros = new Dictionary<string, object>();
@@ -318,8 +362,11 @@ namespace Gestor.Elementos
             return MapearElemento(elementoDeBd, new Dictionary<string, object>());
         }
 
-        public TRegistro LeerRegistroPorId(int id)
+        public TRegistro LeerRegistroPorId(int? id)
         {
+            if (id == null)
+                return null;
+
             return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 

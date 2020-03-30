@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Gestor.Elementos.Entorno
 {
     [Table("VISTA_MVC", Schema = "ENTORNO")]
-    public class VistaDtm : Registro
+    public class VistaMvcDtm : Registro
     {
         [Required]
         [Column("NOMBRE",  TypeName = "VARCHAR(250)")]
@@ -43,7 +43,7 @@ namespace Gestor.Elementos.Entorno
 
         [Required]
         [Column("ORDEN", TypeName = "INT")]
-        public int orden { get; set; }
+        public int Orden { get; set; }
 
         [Required]
         [Column("ACTIVO", TypeName = "BIT")]
@@ -59,7 +59,7 @@ namespace Gestor.Elementos.Entorno
         [Column("IDVISTA_MVC", TypeName = "INT")]
         public int? IdVistaMvc { get; set; }
 
-        public virtual VistaDtm VistaMvc { get; set; }
+        public VistaMvcDtm VistaMvc { get; set; }
 
     }
 
@@ -68,14 +68,14 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<VistaDtm>().Property(menu => menu.Parametros).IsRequired(false);
+            modelBuilder.Entity<VistaMvcDtm>().Property(menu => menu.Parametros).IsRequired(false);
 
-            modelBuilder.Entity<VistaDtm>()
+            modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.Controlador, vista.Accion, vista.Parametros })
                .IsUnique(true)
                .HasName("IX_VISTA_MVC");
 
-            modelBuilder.Entity<VistaDtm>()
+            modelBuilder.Entity<VistaMvcDtm>()
                 .HasMany(vista => vista.Menus)
                 .WithOne(vista => vista.VistaMvc)
                 .HasForeignKey(menu=>menu.IdVistaMvc); 
@@ -89,7 +89,7 @@ namespace Gestor.Elementos.Entorno
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdPadre).IsRequired(false);
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdVistaMvc).IsRequired(false);
 
-            modelBuilder.Entity<MenuDtm>().Property(menu => menu.orden).HasDefaultValue(0);
+            modelBuilder.Entity<MenuDtm>().Property(menu => menu.Orden).HasDefaultValue(0);
 
             modelBuilder.Entity<MenuDtm>()
                 .HasOne(menu => menu.Padre)

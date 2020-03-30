@@ -8,15 +8,15 @@ using Gestor.Elementos.ModeloIu;
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeVistasMvc : GestorDeElementos<CtoEntorno, VistaDtm, VistaMvcDto>
+    public class GestorDeVistasMvc : GestorDeElementos<CtoEntorno, VistaMvcDtm, VistaMvcDto>
     {
 
         public class MapearVistasMvc : Profile
         {
             public MapearVistasMvc()
             {
-                CreateMap<VistaDtm, VistaMvcDto>();
-                CreateMap<VistaMvcDto, VistaDtm>();
+                CreateMap<VistaMvcDtm, VistaMvcDto>();
+                CreateMap<VistaMvcDto, VistaMvcDtm>();
             }
         }
 
@@ -26,7 +26,7 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override VistaDtm LeerConDetalle(int Id)
+        protected override VistaMvcDtm LeerConDetalle(int Id)
         {
             throw new System.NotImplementedException();
         }

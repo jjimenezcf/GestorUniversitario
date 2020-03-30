@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Entorno
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<rVariable>().Property(v => v.Descripcion).IsRequired(false);
-            modelBuilder.Entity<VistaDtm>()
+            modelBuilder.Entity<VistaMvcDtm>()
             .HasIndex(v => new { v.Nombre })
             .IsUnique(true)
             .HasName("IX_VARIABLE");

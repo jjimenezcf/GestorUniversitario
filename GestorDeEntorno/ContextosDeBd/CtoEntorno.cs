@@ -20,7 +20,7 @@ namespace Gestor.Elementos.Entorno
     {
 
         public DbSet<MenuDtm> Menus { get; set; }
-        public DbSet<VistaDtm> VistasMvc { get; set; }
+        public DbSet<VistaMvcDtm> VistasMvc { get; set; }
         public DbSet<rVariable> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
 

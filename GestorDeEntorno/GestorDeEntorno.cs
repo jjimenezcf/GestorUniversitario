@@ -36,8 +36,22 @@ namespace Gestor.Elementos.Entorno
             string[] parametros = {""};
 
             var contexto = new ConstructorDelContexto().CreateDbContext(parametros);
+            contexto.IniciarTraza();
 
-            var configuradorDeMapeos = new MapperConfiguration(cfg => {cfg.CreateMap<MenuDtm, MenuDto>();});
+
+            var configuradorDeMapeos = new MapperConfiguration(cfg => 
+            {
+                cfg.CreateMap<MenuDto, MenuDtm>()
+                   .ForMember(rm => rm.IdVistaMvc, em => em.MapFrom(s => s.VistaMvc != null ? s.VistaMvc.Id : int.Parse(null)))
+                   .ForMember(rm => rm.IdPadre, em => em.MapFrom(m => m.Padre != null ? m.Padre.Id : int.Parse(null)));
+
+                cfg.CreateMap<MenuDtm, MenuDto>()
+                   .ForMember(dtm => dtm.Submenus, dto => dto.MapFrom(dtm => (List<MenuDto>)null))
+                   .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => (VistaMvcDto)null))
+                   .ForMember(dtm => dtm.Padre, dto => dto.MapFrom(dtm => dtm.Padre));
+            });
+
+
             IMapper mapeador = configuradorDeMapeos.CreateMapper();
 
             var gestorDeMenus = new GestorDeMenus(contexto, mapeador);
