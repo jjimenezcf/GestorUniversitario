@@ -44,6 +44,41 @@ var Menu;
         }
     }
     Menu.MenuPulsado = MenuPulsado;
+    function SolicitarMenu(idContenedorMenu, usuario) {
+        var url = urlPeticion(usuario);
+        LeeMenu(url, idContenedorMenu, SustituirMenu);
+    }
+    Menu.SolicitarMenu = SolicitarMenu;
+    function LeeMenu(url, idContenedorMenu, funcionDeRespuesta) {
+        function respuestaCorrecta() {
+            if (req.status >= 200 && req.status < 400) {
+                funcionDeRespuesta(idContenedorMenu, req.responseText);
+            }
+            else {
+                console.log(req.status + ' ' + req.statusText);
+            }
+        }
+        function respuestaErronea() {
+            console.log('Error de conexión');
+        }
+        var req = new XMLHttpRequest();
+        req.open('GET', url, true);
+        req.addEventListener("load", respuestaCorrecta);
+        req.addEventListener("error", respuestaErronea);
+        req.send();
+    }
+    function SustituirMenu(idContenedorMenu, htmlMenu) {
+        var htmlContenedorMenu = document.getElementById("" + idContenedorMenu);
+        if (!htmlContenedorMenu) {
+            console.log("No se ha localizado el contenedor " + idContenedorMenu);
+            return;
+        }
+        htmlContenedorMenu.innerHTML = htmlMenu;
+    }
+    function urlPeticion(usuario) {
+        var url = "/Menus/RenderMenu?usuario=" + usuario;
+        return url;
+    }
     function desplegarMenu(menuHtml) {
         menuHtml.style.display = "block";
         menuHtml.compact = false;

@@ -1,68 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
+using Gestor.Elementos.Entorno;
+using Gestor.Errores;
+using Microsoft.AspNetCore.Mvc;
+using MVCSistemaDeElementos.Controllers;
+using MVCSistemaDeElementos.Descriptores;
 using Utilidades;
 
-namespace Gestor.Elementos.Entorno
+namespace MVCSistemaDeElementos.Controllers
 {
-    public class ConstructorDelContexto : IDesignTimeDbContextFactory<CtoEntorno>
+    public class MenusController : EntidadController<CtoEntorno, MenuDtm, MenuDto>
     {
-        public CtoEntorno CreateDbContext(string[] arg)
+        public GestorDeMenus GestorDeMenus { get; set; }
+
+        public MenusController(GestorDeMenus gestorDeMenus, GestorDeErrores gestorDeErrores)
+        : base
+        (
+          gestorDeMenus,
+          gestorDeErrores,
+          new CrudMenus(ModoDescriptor.Mantenimiento)
+        )
         {
-            var generador = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json");
-            var configuaracion = generador.Build();
-            var cadenaDeConexion = configuaracion.GetConnectionString(Gestor.Elementos.Literal.CadenaDeConexion);
-
-            var opciones = new DbContextOptionsBuilder<CtoEntorno>();
-            opciones.UseSqlServer(cadenaDeConexion);
-
-            return new CtoEntorno(opciones.Options,configuaracion);
+            GestorDeMenus = gestorDeMenus;
         }
-    }
 
-
-    public class GestorDeEntorno
-    {
-
-        public static string RenderMenuFuncional()
+        public string RenderMenu(string usuario)
         {
-            string[] parametros = {""};
-
-            var contexto = new ConstructorDelContexto().CreateDbContext(parametros);
-            contexto.IniciarTraza();
-
-
-            var configuradorDeMapeos = new MapperConfiguration(cfg => 
-            {
-                cfg.CreateMap<MenuDto, MenuDtm>()
-                   .ForMember(rm => rm.IdVistaMvc, em => em.MapFrom(s => s.VistaMvc != null ? s.VistaMvc.Id : int.Parse(null)))
-                   .ForMember(rm => rm.IdPadre, em => em.MapFrom(m => m.Padre != null ? m.Padre.Id : int.Parse(null)));
-
-                cfg.CreateMap<MenuDtm, MenuDto>()
-                   .ForMember(dtm => dtm.Submenus, dto => dto.MapFrom(dtm => (List<MenuDto>)null))
-                   .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => (VistaMvcDto)null))
-                   .ForMember(dtm => dtm.Padre, dto => dto.MapFrom(dtm => dtm.Padre));
-            });
-
-
-            IMapper mapeador = configuradorDeMapeos.CreateMapper();
-
-            var gestorDeMenus = new GestorDeMenus(contexto, mapeador);
-
-            List<MenuDto> menu = gestorDeMenus.LeerMenuSe();
+            List<MenuDto> menu = GestorDeMenus.LeerMenuSe();
 
             var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
                            @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
                            @$"</ul>{Environment.NewLine}";
             return menuHtml.Replace("¨", "\"");
         }
+
 
         private static string RenderOpcionesMenu(List<MenuDto> opcionesMenu, int idMenuPadre)
         {
@@ -114,7 +87,7 @@ namespace Gestor.Elementos.Entorno
         {
             var opcionHtml = "";
 
-            if (!icono.IsNullOrEmpty() && File.Exists(@$"wwwroot\images\menu\{icono}"))
+            if (!icono.IsNullOrEmpty() ) //&& File.Exists(@$"wwwroot\images\menu\{icono}"))
                 opcionHtml = @$"<img src=¨/images/menu/{icono}¨ class=¨icono izquierdo¨ />{Environment.NewLine}";
 
             opcionHtml = $@"{opcionHtml}{literalOpcion}{Environment.NewLine}";
@@ -124,7 +97,5 @@ namespace Gestor.Elementos.Entorno
 
             return opcionHtml;
         }
-
     }
 }
-

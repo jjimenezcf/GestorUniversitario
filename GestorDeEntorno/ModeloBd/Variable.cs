@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Gestor.Elementos.Entorno
 {
     [Table("VARIABLE", Schema = "ENTORNO")]
-    public class rVariable : Registro
+    public class VariableDtm : Registro
     {
         [Required]
         [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
@@ -24,7 +24,7 @@ namespace Gestor.Elementos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rVariable>().Property(v => v.Descripcion).IsRequired(false);
+            modelBuilder.Entity<VariableDtm>().Property(v => v.Descripcion).IsRequired(false);
             modelBuilder.Entity<VistaMvcDtm>()
             .HasIndex(v => new { v.Nombre })
             .IsUnique(true)

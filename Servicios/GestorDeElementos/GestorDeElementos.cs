@@ -13,7 +13,10 @@ using Utilidades;
 namespace Gestor.Elementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
+    public enum ModoDeOrdenancion { ascendente, descendente }
+    public enum TipoOperacion { Insertar, Modificar, Leer };
 
+    #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
     {
         public Type Dtm { get; set; }
@@ -24,8 +27,6 @@ namespace Gestor.Elementos
         public CriteriosDeFiltrado Criterio { get; set; }
         public string Valor { get; set; }
     }
-
-    public enum ModoDeOrdenancion { ascendente, descendente }
 
     public class ClausulaOrdenacion
     {
@@ -61,9 +62,6 @@ namespace Gestor.Elementos
         }
     }
 
-
-    public enum TipoOperacion { Insertar, Modificar, Leer };
-
     public static partial class Ordenaciones
     {
         public static IQueryable<TRegistro> OrdenBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaOrdenacion> ordenacion) where TRegistro : Registro
@@ -88,7 +86,7 @@ namespace Gestor.Elementos
             return registros;
         }
     }
-
+    #endregion
 
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
         where TRegistro : Registro

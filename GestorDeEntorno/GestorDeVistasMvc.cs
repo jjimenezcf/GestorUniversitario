@@ -15,7 +15,9 @@ namespace Gestor.Elementos.Entorno
         {
             public MapearVistasMvc()
             {
-                CreateMap<VistaMvcDtm, VistaMvcDto>();
+                CreateMap<VistaMvcDtm, VistaMvcDto>()
+                .ForMember("Menus", x => x.MapFrom(x => x.Menus));
+
                 CreateMap<VistaMvcDto, VistaMvcDtm>();
             }
         }

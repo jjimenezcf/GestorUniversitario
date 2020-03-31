@@ -1,4 +1,5 @@
 ﻿module Menu {
+
     export function MostrarMenu() {
         let idProductoHtml: HTMLElement = document.getElementById('id_menu');
         let idModalMenu: string = idProductoHtml.getAttribute('modal-menu');
@@ -49,6 +50,49 @@
         }
 
     }
+
+    export function SolicitarMenu(idContenedorMenu, usuario) {
+        var url: string = urlPeticion(usuario);
+        LeeMenu(url, idContenedorMenu, SustituirMenu);
+    }
+
+    function LeeMenu(url, idContenedorMenu, funcionDeRespuesta) {
+
+        function respuestaCorrecta() {
+            if (req.status >= 200 && req.status < 400) {
+                funcionDeRespuesta(idContenedorMenu, req.responseText);
+            }
+            else {
+                console.log(req.status + ' ' + req.statusText);
+            }
+        }
+
+        function respuestaErronea() {
+            console.log('Error de conexión');
+        }
+
+        var req = new XMLHttpRequest();
+        req.open('GET', url, true);
+        req.addEventListener("load", respuestaCorrecta);
+        req.addEventListener("error", respuestaErronea);
+        req.send();
+    }
+
+    function SustituirMenu(idContenedorMenu, htmlMenu) {
+        var htmlContenedorMenu = document.getElementById(`${idContenedorMenu}`);
+        if (!htmlContenedorMenu) {
+            console.log(`No se ha localizado el contenedor ${idContenedorMenu}`);
+            return;
+        }
+        htmlContenedorMenu.innerHTML = htmlMenu;
+    }
+
+
+    function urlPeticion(usuario: string): string {
+        var url: string = `/Menus/RenderMenu?usuario=${usuario}`;
+        return url;
+    }
+
 
     function desplegarMenu(menuHtml: HTMLMenuElement) {
         menuHtml.style.display = "block";

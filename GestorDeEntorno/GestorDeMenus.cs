@@ -64,7 +64,6 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-
     public class GestorDeMenus : GestorDeElementos<CtoEntorno, MenuDtm, MenuDto>
     {
         const string sqlMenu = @"
@@ -89,12 +88,8 @@ namespace Gestor.Elementos.Entorno
             public MapearMenus()
             {
                 CreateMap<MenuDtm, MenuDto>()
-                .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(m => m.VistaMvc != null ? m.VistaMvc.Id : int.Parse(null)));
-
-                CreateMap<MenuDto, MenuDtm>()
-                .ForMember(rm => rm.IdVistaMvc, em => em.MapFrom(s => s.VistaMvc != null ? s.VistaMvc.Id : int.Parse(null)))
-                .ForMember(rm => rm.IdPadre, em => em.MapFrom(m => m.Padre != null ? m.Padre.Id : int.Parse(null)))
-                ;
+                .ForMember(dtm => dtm.Submenus, dto => dto.MapFrom(dtm => dtm.Submenus))
+                .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => dtm.VistaMvc)); // (VistaMvcDto)null));
             }
         }
 

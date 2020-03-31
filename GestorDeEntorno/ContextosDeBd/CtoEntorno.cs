@@ -21,7 +21,7 @@ namespace Gestor.Elementos.Entorno
 
         public DbSet<MenuDtm> Menus { get; set; }
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
-        public DbSet<rVariable> Variables { get; set; }
+        public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
@@ -56,7 +56,7 @@ namespace Gestor.Elementos.Entorno
             var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.version);
             if (version == null)
             {
-                cnx.Variables.Add(new rVariable { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new VariableDtm { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
             }
             else
             {

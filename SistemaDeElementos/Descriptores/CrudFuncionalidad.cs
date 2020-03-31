@@ -7,9 +7,9 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudFuncionalidad : DescriptorDeCrud<MenuDto>
+    public class CrudMenus : DescriptorDeCrud<MenuDto>
     {
-        public CrudFuncionalidad(ModoDescriptor modo)
+        public CrudMenus(ModoDescriptor modo)
         : base(controlador: "Funcionalidad", vista: "MantenimientoFuncionalidad", titulo: "Mantenimiento de funcionalidad", modo: modo)
         {
 
