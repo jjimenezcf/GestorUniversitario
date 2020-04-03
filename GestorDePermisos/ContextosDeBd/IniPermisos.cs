@@ -5,16 +5,16 @@ namespace Gestor.Elementos.Seguridad
     public class IniPermisos
     {
 
-        public static void CrearDatosIniciales(CtoPermisos ctoPermisos)
+        public static void CrearDatosIniciales(CtoSeguridad ctoPermisos)
         {
 
             if (!ctoPermisos.Permisos.Any())
             {
-                var permisos = new rPermiso[]
+                var permisos = new PermisoDtm[]
                 {
 
                 };
-                foreach (rPermiso permiso in permisos)
+                foreach (PermisoDtm permiso in permisos)
                 {
                     ctoPermisos.Permisos.Add(permiso);
                 }

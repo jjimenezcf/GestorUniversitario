@@ -209,7 +209,14 @@ namespace Gestor.Elementos
         {
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
 
-            return MapearElementos(elementosDeBd);
+            return (IEnumerable<TElemento>)Mapeador.Map(elementosDeBd, typeof(IEnumerable<TRegistro>), typeof(IEnumerable<TElemento>));
+        }
+
+        public List<TElemento> ProyectarElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden)
+        {   
+            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, new List<ClausulaDeJoin>());
+
+            return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad)
@@ -231,7 +238,17 @@ namespace Gestor.Elementos
         {
             List<TRegistro> elementosDeBd;
 
-            IQueryable<TRegistro>  registros = AplicarJoins(Contexto.Set<TRegistro>(), joins);
+            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins);
+
+            elementosDeBd = registros.AsNoTracking().ToList();
+            return elementosDeBd;
+        }
+
+        private IQueryable<TRegistro> DefinirConsulta(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, List<ClausulaDeJoin> joins)
+        {
+            DefinirJoins(filtros, joins);
+
+            IQueryable<TRegistro> registros = AplicarJoins(Contexto.Set<TRegistro>(), joins);
 
             registros = AplicarFiltros(registros, filtros);
 
@@ -244,8 +261,12 @@ namespace Gestor.Elementos
                 registros = registros.Take(cantidad);
             }
 
-            elementosDeBd = registros.AsNoTracking().ToList();
-            return elementosDeBd;
+            return registros;
+        }
+
+        protected virtual void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins)
+        {
+           
         }
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaOrdenacion> ordenacion)

@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Entorno
 
         public string Icono { get; set; }
 
-        public string Descripcion { get; set; }
+        //public string Descripcion { get; set; }
 
         public List<MenuDto> Submenus { get; set; }
 

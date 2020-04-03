@@ -34,8 +34,6 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-
-
     static class UsuarioRegOrd
     {
         public const string OrdenPorApellido = "PorApellido";
@@ -57,7 +55,6 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-
     public class GestorDeUsuarios : GestorDeElementos<CtoEntorno,UsuarioDtm, UsuarioDto>
     {
 
@@ -65,8 +62,8 @@ namespace Gestor.Elementos.Entorno
         {
             public MapearUsuario()
             {
-                CreateMap<UsuarioDtm, UsuarioDtm>();
-                CreateMap<UsuarioDtm, UsuarioDtm>();
+                CreateMap<UsuarioDtm, UsuarioDto>();
+                CreateMap<UsuarioDto, UsuarioDtm>();
             }
         }
 

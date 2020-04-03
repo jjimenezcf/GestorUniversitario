@@ -71,11 +71,11 @@ namespace Gestor.Elementos.Entorno
             if (!contexto.Usuarios.Any())
                 IniciarEntorno.CrearDatosIniciales(contexto);
 
-            if (!contexto.VistasMvc.Any())
-                gestorDeVistasMvc.InicializarVistasMvc();
+            //if (!contexto.VistasMvc.Any())
+            //    gestorDeVistasMvc.InicializarVistasMvc();
 
-            if (!contexto.Menus.Any())
-                gestorDeMenus.InicializarMenu();
+            //if (!contexto.Menus.Any())
+            //    gestorDeMenus.InicializarMenu();
 
 
 

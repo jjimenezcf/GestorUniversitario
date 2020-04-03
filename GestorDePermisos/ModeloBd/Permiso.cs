@@ -9,20 +9,20 @@ namespace Gestor.Elementos.Seguridad
 {
 
     [Table("PERMISO", Schema = "SEGURIDAD")]
-    public class rPermiso : Registro
+    public class PermisoDtm : Registro
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
         public string Nombre { get; set; }
 
         [Required]
-        [Column("CLASE", TypeName = "decimal(2,0)")]
+        [Column("CLASE", TypeName = "VARCHAR(30)")]
         [DefaultValue(0)]
         public int Clase { get; set; }
 
 
         [Required]
-        [Column("PERMISO", TypeName = "decimal(2,0)")]
+        [Column("PERMISO", TypeName = "VARCHAR(30)")]
         [DefaultValue(0)]
         public int Permiso { get; set; }
 
@@ -33,11 +33,11 @@ namespace Gestor.Elementos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rPermiso>()
+            modelBuilder.Entity<PermisoDtm>()
                         .HasAlternateKey(p => p.Nombre)
                         .HasName("AK_PERMISO_NOMBRE");
 
-            modelBuilder.Entity<rPermiso>()
+            modelBuilder.Entity<PermisoDtm>()
                         .HasAlternateKey(p => new { p.Clase, p.Permiso})
                         .HasName("AK_PERMISO_PERMISO");
         }

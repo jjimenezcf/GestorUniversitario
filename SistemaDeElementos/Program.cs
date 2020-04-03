@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoDeSeguro(IServiceProvider services)
         {
-            var ctoPermisos = services.GetRequiredService<CtoPermisos>();
+            var ctoPermisos = services.GetRequiredService<CtoSeguridad>();
             try
             {
                 ctoPermisos.Database.Migrate();

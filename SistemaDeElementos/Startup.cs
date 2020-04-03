@@ -38,7 +38,7 @@ namespace MVCSistemaDeElementos
             var cadenaDeConexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
 
             services.AddDbContext<CtoEntorno>(options => options.UseSqlServer(cadenaDeConexion));
-            services.AddDbContext<CtoPermisos>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<CtoSeguridad>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();

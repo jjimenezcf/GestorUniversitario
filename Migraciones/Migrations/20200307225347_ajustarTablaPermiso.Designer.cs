@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(CtoPermisos))]
+    [DbContext(typeof(CtoSeguridad))]
     [Migration("20200307225347_ajustarTablaPermiso")]
     partial class ajustarTablaPermiso
     {

@@ -9,7 +9,7 @@ namespace Gestor.Elementos.Seguridad
 
     static class FiltrosDePermisos
     {
-        public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
+        public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == PermisoPor.Nombre)
@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Seguridad
             return registros;
         }
 
-        public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : rPermiso
+        public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == PermisoPor.PermisoDeUnRol)
@@ -36,29 +36,29 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-    public class GestorDePermisos : GestorDeElementos<CtoPermisos, rPermiso, PermisoDto>
+    public class GestorDePermisos : GestorDeElementos<CtoSeguridad, PermisoDtm, PermisoDto>
     {
         public class MapearPermiso : Profile
         {
             public MapearPermiso()
             {
-                CreateMap<rPermiso, PermisoDto>();
-                CreateMap<PermisoDto,rPermiso>();
+                CreateMap<PermisoDtm, PermisoDto>();
+                CreateMap<PermisoDto,PermisoDtm>();
             }
         }
 
-        public GestorDePermisos(CtoPermisos contexto, IMapper mapeador)
+        public GestorDePermisos(CtoSeguridad contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
             
         }
                
-        protected override rPermiso LeerConDetalle(int Id)
+        protected override PermisoDtm LeerConDetalle(int Id)
         {
             return null;
         }
 
-        protected override IQueryable<rPermiso> AplicarFiltros(IQueryable<rPermiso> registros, List<ClausulaDeFiltrado> filtros)
+        protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)

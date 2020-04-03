@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(CtoPermisos))]
+    [DbContext(typeof(CtoSeguridad))]
     [Migration("20200307230509_anadirAk_Permiso_Nombre")]
     partial class anadirAk_Permiso_Nombre
     {

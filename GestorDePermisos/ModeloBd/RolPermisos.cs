@@ -17,7 +17,7 @@ namespace Gestor.Elementos.Seguridad
         public int IdPermiso { get; set; }
 
         public rRol Rol { get; set; }
-        public rPermiso Permiso { get; set; }
+        public PermisoDtm Permiso { get; set; }
 
     }
 

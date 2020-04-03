@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoSeguridad))]
-    [Migration("20200308181953_CREAR_tablas_De_USUARIO_PUESTO")]
-    partial class CREAR_tablas_De_USUARIO_PUESTO
+    [Migration("20200401155056_modificarCamposDePermisos")]
+    partial class modificarCamposDePermisos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +20,7 @@ namespace Migraciones.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.PermisoReg", b =>
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.PermisoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,18 +28,20 @@ namespace Migraciones.Migrations
                         .HasColumnType("INT")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Clase")
+                    b.Property<string>("Clase")
+                        .IsRequired()
                         .HasColumnName("CLASE")
-                        .HasColumnType("decimal(2,0)");
+                        .HasColumnType("VARCHAR(30)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnName("NOMBRE")
                         .HasColumnType("VARCHAR(250)");
 
-                    b.Property<decimal>("Permiso")
+                    b.Property<string>("Permiso")
+                        .IsRequired()
                         .HasColumnName("PERMISO")
-                        .HasColumnType("decimal(2,0)");
+                        .HasColumnType("VARCHAR(30)");
 
                     b.HasKey("Id");
 
@@ -52,109 +54,7 @@ namespace Migraciones.Migrations
                     b.ToTable("PERMISO","SEGURIDAD");
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.PuestoReg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Nombre")
-                        .HasName("AK_PUESTO_NOMBRE");
-
-                    b.ToTable("PUESTO","SEGURIDAD");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.RolPermisoReg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IdPermiso")
-                        .HasColumnName("IDPERMISO")
-                        .HasColumnType("INT");
-
-                    b.Property<int>("IdRol")
-                        .HasColumnName("IDROL")
-                        .HasColumnType("INT");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("IdRol", "IdPermiso")
-                        .HasName("AK_ROL_PERMISO");
-
-                    b.HasIndex("IdPermiso");
-
-                    b.ToTable("ROL_PERMISO","SEGURIDAD");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.RolPuestoReg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IdRol")
-                        .HasColumnName("IDROL")
-                        .HasColumnType("INT");
-
-                    b.Property<int>("idPuesto")
-                        .HasColumnName("IDPUESTO")
-                        .HasColumnType("INT");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("IdRol", "idPuesto")
-                        .HasName("AK_ROL_PUESTO");
-
-                    b.HasIndex("idPuesto");
-
-                    b.ToTable("ROL_PUESTO","SEGURIDAD");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.RolReg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Nombre")
-                        .HasName("AK_ROL_NOMBRE");
-
-                    b.ToTable("ROL","SEGURIDAD");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.UsuPuestoReg", b =>
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.RegUsuPuesto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -183,16 +83,128 @@ namespace Migraciones.Migrations
                     b.ToTable("USU_PUESTO","SEGURIDAD");
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.RolPermisoReg", b =>
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rPuesto", b =>
                 {
-                    b.HasOne("Gestor.Elementos.Seguridad.PermisoReg", "Permiso")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnName("DESCRIPCION")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnName("NOMBRE")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Nombre")
+                        .HasName("AK_PUESTO_NOMBRE");
+
+                    b.ToTable("PUESTO","SEGURIDAD");
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rRol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnName("DESCRIPCION")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnName("NOMBRE")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Nombre")
+                        .HasName("AK_ROL_NOMBRE");
+
+                    b.ToTable("ROL","SEGURIDAD");
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rRolPermiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdPermiso")
+                        .HasColumnName("IDPERMISO")
+                        .HasColumnType("INT");
+
+                    b.Property<int>("IdRol")
+                        .HasColumnName("IDROL")
+                        .HasColumnType("INT");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("IdRol", "IdPermiso")
+                        .HasName("AK_ROL_PERMISO");
+
+                    b.HasIndex("IdPermiso");
+
+                    b.ToTable("ROL_PERMISO","SEGURIDAD");
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rRolPuesto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdRol")
+                        .HasColumnName("IDROL")
+                        .HasColumnType("INT");
+
+                    b.Property<int>("idPuesto")
+                        .HasColumnName("IDPUESTO")
+                        .HasColumnType("INT");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("IdRol", "idPuesto")
+                        .HasName("AK_ROL_PUESTO");
+
+                    b.HasIndex("idPuesto");
+
+                    b.ToTable("ROL_PUESTO","SEGURIDAD");
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.RegUsuPuesto", b =>
+                {
+                    b.HasOne("Gestor.Elementos.Seguridad.rPuesto", "Puesto")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("idPuesto")
+                        .HasConstraintName("FK_USU_PUESTO_IDPUESTO")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rRolPermiso", b =>
+                {
+                    b.HasOne("Gestor.Elementos.Seguridad.PermisoDtm", "Permiso")
                         .WithMany("Roles")
                         .HasForeignKey("IdPermiso")
                         .HasConstraintName("FK_ROL_PERMISO_IDPERMISO")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gestor.Elementos.Seguridad.RolReg", "Rol")
+                    b.HasOne("Gestor.Elementos.Seguridad.rRol", "Rol")
                         .WithMany("Permisos")
                         .HasForeignKey("IdRol")
                         .HasConstraintName("FK_ROL_PERMISO_IDROL")
@@ -200,29 +212,19 @@ namespace Migraciones.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.RolPuestoReg", b =>
+            modelBuilder.Entity("Gestor.Elementos.Seguridad.rRolPuesto", b =>
                 {
-                    b.HasOne("Gestor.Elementos.Seguridad.RolReg", "Rol")
+                    b.HasOne("Gestor.Elementos.Seguridad.rRol", "Rol")
                         .WithMany("Puestos")
                         .HasForeignKey("IdRol")
                         .HasConstraintName("FK_ROL_PUESTO_IDROL")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gestor.Elementos.Seguridad.PuestoReg", "Puesto")
+                    b.HasOne("Gestor.Elementos.Seguridad.rPuesto", "Puesto")
                         .WithMany("Roles")
                         .HasForeignKey("idPuesto")
                         .HasConstraintName("FK_ROL_PUESTO_IDPUESTO")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Seguridad.UsuPuestoReg", b =>
-                {
-                    b.HasOne("Gestor.Elementos.Seguridad.PuestoReg", "Puesto")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("idPuesto")
-                        .HasConstraintName("FK_USU_PUESTO_IDPUESTO")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

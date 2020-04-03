@@ -89,14 +89,35 @@ namespace Gestor.Elementos.Entorno
             {
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dtm => dtm.Submenus, dto => dto.MapFrom(dtm => dtm.Submenus))
-                .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => dtm.VistaMvc)); // (VistaMvcDto)null));
+                .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => dtm.VistaMvc))
+                .BeforeMap<Before>(); // (VistaMvcDto)null));
+            }
+
+            internal class Before : IMappingAction<MenuDtm, MenuDto>
+            {
+                public void Process(MenuDtm source, MenuDto destination, ResolutionContext context)
+                {
+
+                }
             }
         }
+
 
         public GestorDeMenus(CtoEntorno contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
+        }
+
+        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins)
+        {
+            base.DefinirJoins(filtros, joins);
+            
+            foreach (var filtro in filtros)
+                if (filtro.Propiedad == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
+                    return;
+
+            joins.Add(new ClausulaDeJoin { Dtm = typeof(VistaMvcDtm) });
         }
 
         protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, TipoOperacion tipo)
@@ -127,6 +148,9 @@ namespace Gestor.Elementos.Entorno
             var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.esNulo } };
             var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
             var menusDto = new List<MenuDto>();
+
+            var a =  ProyectarElementos(0, -1, filtros, ordenacion);
+
             List<MenuDtm> menusDtm = LeerRegistros(0, -1, filtros, ordenacion).ToList();
             
             foreach (var menuDtm in menusDtm)
@@ -146,8 +170,8 @@ namespace Gestor.Elementos.Entorno
         {
             var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.igual, Valor = menuDtm.Id.ToString() } };
             var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
-            var joins = new List<ClausulaDeJoin>() { new ClausulaDeJoin { Dtm = typeof(VistaMvcDtm)} };
-            menuDtm.Submenus = LeerRegistros(0, -1, filtros, ordenacion, joins).ToList();
+           
+            menuDtm.Submenus = LeerRegistros(0, -1, filtros, ordenacion).ToList();
 
             foreach (var submenu in menuDtm.Submenus)
             {
@@ -183,53 +207,53 @@ namespace Gestor.Elementos.Entorno
         #region Codigo a borrar
         public void InicializarMenu()
         {
-            var m = new MenuDto() { Id = 1, Padre = null, Nombre = "Configuración", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //var m = new MenuDto() { Id = 1, Padre = null, Nombre = "Configuración", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            CrearMenuDeConfiguracion(m);
+            //CrearMenuDeConfiguracion(m);
 
-            m = new MenuDto() { Id = 6, Padre = null, Nombre = "Maestros", Descripcion = "", Icono = "home-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 6, Padre = null, Nombre = "Maestros", Descripcion = "", Icono = "home-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 7, Padre = null, Nombre = "Gestión documental", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 7, Padre = null, Nombre = "Gestión documental", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 8, Padre = null, Nombre = "Gestión administrativa", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 8, Padre = null, Nombre = "Gestión administrativa", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 9, Padre = null, Nombre = "Gestión jurídica", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 9, Padre = null, Nombre = "Gestión jurídica", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 10, Padre = null, Nombre = "Gestión logística", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 10, Padre = null, Nombre = "Gestión logística", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 11, Padre = null, Nombre = "Gestión técnica", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 11, Padre = null, Nombre = "Gestión técnica", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 12, Padre = null, Nombre = "Gestión financiera", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 12, Padre = null, Nombre = "Gestión financiera", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
         }
 
         private void CrearMenuDeConfiguracion(MenuDto padre)
         {
-            MenuDto m = new MenuDto() { Id = 2, Padre = padre, Nombre = "Funcionalidad", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
+            //MenuDto m = new MenuDto() { Id = 2, Padre = padre, Nombre = "Funcionalidad", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 3, Padre = padre, Nombre = "Accesos", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
-            InsertarElemento(m);
-            MenuDeAccesos(m);
+            //m = new MenuDto() { Id = 3, Padre = padre, Nombre = "Accesos", Descripcion = "", Icono = "cog-solid.svg", Submenus = new List<MenuDto>(), Activo = true };
+            //InsertarElemento(m);
+            //MenuDeAccesos(m);
         }
 
         private void MenuDeAccesos(MenuDto padre)
         {
-            MenuDto m = new MenuDto() { Id = 4, Padre = padre, Nombre = "Usuarios", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
-            //var gestorDeVistasMvc = new GestorDeVistasMvc(Contexto, Mapeador);
-            //gestorDeVistasMvc.Leer(0,1,)
+            //MenuDto m = new MenuDto() { Id = 4, Padre = padre, Nombre = "Usuarios", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
+            ////var gestorDeVistasMvc = new GestorDeVistasMvc(Contexto, Mapeador);
+            ////gestorDeVistasMvc.Leer(0,1,)
 
-            InsertarElemento(m);
+            //InsertarElemento(m);
 
-            m = new MenuDto() { Id = 5, Padre = padre, Nombre = "Permisos", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
-            InsertarElemento(m);
+            //m = new MenuDto() { Id = 5, Padre = padre, Nombre = "Permisos", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
+            //InsertarElemento(m);
         }
 
         public void InicializarMenuDeGolpe()

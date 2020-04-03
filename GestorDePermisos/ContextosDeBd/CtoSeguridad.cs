@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 namespace Gestor.Elementos.Seguridad
 {
 
-    public class CtoPermisos : ContextoDeElementos
+    public class CtoSeguridad : ContextoDeElementos
     {
-        public DbSet<rPermiso> Permisos { get; set; }
+        public DbSet<PermisoDtm> Permisos { get; set; }
         public DbSet<rRol> Roles { get; set; }
         public DbSet<rPuesto> Puestos { get; set; }
         public DbSet<vUsuario> Usuarios { get; set; }
@@ -14,7 +14,7 @@ namespace Gestor.Elementos.Seguridad
         public DbSet<rRolPuesto> PuestosDeUnRol { get; set; }
         public DbSet<RegUsuPuesto> PuestosDeUnUsuario { get; set; }
 
-        public CtoPermisos(DbContextOptions<CtoPermisos> options, IConfiguration configuracion) :
+        public CtoSeguridad(DbContextOptions<CtoSeguridad> options, IConfiguration configuracion) :
         base(options, configuracion)
         {
 

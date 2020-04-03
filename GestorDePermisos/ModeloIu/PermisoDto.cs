@@ -11,8 +11,8 @@ namespace Gestor.Elementos.Seguridad
     public class PermisoDto : Elemento
     {
         public string Nombre { get; set; }
-        public int Clase { get; set; }
-        public int Permiso { get; set; }
+        public string Clase { get; set; }
+        public string Permiso { get; set; }
 
     }
 }
