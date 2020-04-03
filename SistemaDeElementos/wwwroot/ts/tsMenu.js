@@ -21,9 +21,9 @@ var Menu;
         }
     }
     Menu.MostrarMenu = MostrarMenu;
-    function OpcionSeleccionada(opcion) {
+    function OpcionSeleccionada(idVistaMvc, controlador, accion) {
         var urlBase = window.location.origin;
-        window.location.href = urlBase + "/" + opcion;
+        window.location.href = urlBase + "/" + controlador + "/" + accion;
     }
     Menu.OpcionSeleccionada = OpcionSeleccionada;
     function MenuPulsado(id_menu_pulsado) {

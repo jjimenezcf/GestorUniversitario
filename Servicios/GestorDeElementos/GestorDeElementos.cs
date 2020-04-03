@@ -309,15 +309,20 @@ namespace Gestor.Elementos
             if (parametros == null)
                 parametros = new ParametrosDeNegocio(TipoOperacion.Leer);
 
+            if (joins == null)
+                joins = new List<ClausulaDeJoin>();
+
+            if (filtros == null)
+                filtros = new List<ClausulaDeFiltrado>();
+
+            DefinirJoins(filtros, joins, parametros);
+
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
-            if (joins != null && joins.Count > 0)
-            {
-                DefinirJoins(filtros, joins, parametros);
+            if (joins.Count > 0)
                 registros = AplicarJoins(registros, joins, parametros);
-            }
 
-            if (filtros != null && filtros.Count > 0)
+            if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
 
             if (orden != null && orden.Count > 0)
@@ -438,7 +443,7 @@ namespace Gestor.Elementos
         public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, ParametrosDeMapeo parametros = null)
         {
             if (parametros == null)
-               parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
+                parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
 
             var lista = new List<TElemento>();
             foreach (var registro in registros)
@@ -452,7 +457,7 @@ namespace Gestor.Elementos
 
         protected virtual void AntesDeMapearElemento(TRegistro registro, ParametrosDeMapeo parametros)
         {
-            
+
         }
 
         protected TElemento MapearElemento(TRegistro registro, ParametrosDeMapeo parametros = null)

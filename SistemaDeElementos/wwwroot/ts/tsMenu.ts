@@ -22,9 +22,9 @@
         }
     }
 
-    export function OpcionSeleccionada(opcion: string) {
+    export function OpcionSeleccionada(idVistaMvc: string, controlador: string, accion) {
         let urlBase: string = window.location.origin;
-        window.location.href = `${urlBase}/${opcion}`;
+        window.location.href = `${urlBase}/${controlador}/${accion}`;
     }
 
     export function MenuPulsado(id_menu_pulsado: string) {

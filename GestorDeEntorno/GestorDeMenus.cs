@@ -93,7 +93,6 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-
         public GestorDeMenus(CtoEntorno contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
