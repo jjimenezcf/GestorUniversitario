@@ -89,16 +89,7 @@ namespace Gestor.Elementos.Entorno
             {
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dtm => dtm.Submenus, dto => dto.MapFrom(dtm => dtm.Submenus))
-                .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => dtm.VistaMvc))
-                .BeforeMap<Before>(); // (VistaMvcDto)null));
-            }
-
-            internal class Before : IMappingAction<MenuDtm, MenuDto>
-            {
-                public void Process(MenuDtm source, MenuDto destination, ResolutionContext context)
-                {
-                   
-                }
+                .ForMember(dtm => dtm.VistaMvc, dto => dto.MapFrom(dtm => dtm.VistaMvc));
             }
         }
 
@@ -135,12 +126,9 @@ namespace Gestor.Elementos.Entorno
             throw new System.NotImplementedException();
         }
 
-        protected override bool AntesDeMapearElemento(MenuDtm registro, Dictionary<string, object> parametros)
+        protected override void AntesDeMapearElemento(MenuDtm registro, ParametrosDeMapeo parametros)
         {
-            if (base.AntesDeMapearElemento(registro, parametros))
-                return registro.IdPadre == null;
-
-            return false;
+            parametros.AnularMapeo = registro.IdPadre != null;
         }
 
         public List<MenuDto> LeerMenuSe()
@@ -149,15 +137,14 @@ namespace Gestor.Elementos.Entorno
             var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
             var menusDto = new List<MenuDto>();
 
-            var a =  ProyectarElementos(0, -1, filtros, ordenacion);
-
             List<MenuDtm> menusDtm = LeerRegistros(0, -1, filtros, ordenacion).ToList();
             
             foreach (var menuDtm in menusDtm)
             {
                 LeerSubMenus(menuDtm);
-                var resultado = MapearElemento(menuDtm, new Dictionary<string, object>());
-                menusDto.Add(resultado);
+                var resultado = MapearElemento(menuDtm);
+                if (resultado != null)
+                   menusDto.Add(resultado);
             }
 
             return menusDto;

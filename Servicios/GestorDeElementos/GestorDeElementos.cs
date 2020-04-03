@@ -104,6 +104,21 @@ namespace Gestor.Elementos
         }
     }
 
+    public enum OrigenDeMapeo { elemento, registro }
+
+    public class ParametrosDeMapeo
+    {
+        public OrigenDeMapeo origen;
+        public bool AnularMapeo = false;
+        public Dictionary<string, object> parametros = new Dictionary<string, object>();
+        private OrigenDeMapeo Origen;
+
+        public ParametrosDeMapeo(OrigenDeMapeo origen)
+        {
+            Origen = origen;
+        }
+    }
+
     #endregion
 
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
@@ -277,7 +292,7 @@ namespace Gestor.Elementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaOrdenacion> orden = null, List<ClausulaDeJoin> joins =null, ParametrosDeNegocio parametros = null)
+        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
 
             List<TRegistro> elementosDeBd;
@@ -294,19 +309,19 @@ namespace Gestor.Elementos
             if (parametros == null)
                 parametros = new ParametrosDeNegocio(TipoOperacion.Leer);
 
-            IQueryable<TRegistro> registros = null;
-            
+            IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
+
             if (joins != null && joins.Count > 0)
             {
                 DefinirJoins(filtros, joins, parametros);
-                registros = AplicarJoins(Contexto.Set<TRegistro>(), joins, parametros);
+                registros = AplicarJoins(registros, joins, parametros);
             }
 
             if (filtros != null && filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
-            
+
             if (orden != null && orden.Count > 0)
-               registros = AplicarOrden(registros, orden);
+                registros = AplicarOrden(registros, orden);
 
             registros = registros.Skip(posicion);
 
@@ -346,7 +361,7 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
-        public int Contar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        public int Contar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
             var registros = DefinirConsulta(0, -1, filtros, null, joins, parametros);
             var total = registros.Count();
@@ -420,10 +435,10 @@ namespace Gestor.Elementos
         {
         }
 
-        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, Dictionary<string, object> parametros = null)
+        public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, ParametrosDeMapeo parametros = null)
         {
             if (parametros == null)
-                parametros = new Dictionary<string, object>();
+               parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
 
             var lista = new List<TElemento>();
             foreach (var registro in registros)
@@ -435,24 +450,34 @@ namespace Gestor.Elementos
             return lista.AsEnumerable();
         }
 
-        protected virtual bool AntesDeMapearElemento(TRegistro registro, Dictionary<string, object> parametros)
+        protected virtual void AntesDeMapearElemento(TRegistro registro, ParametrosDeMapeo parametros)
         {
-            return true;
+            
         }
 
-        protected TElemento MapearElemento(TRegistro registro, Dictionary<string, object> parametros)
+        protected TElemento MapearElemento(TRegistro registro, ParametrosDeMapeo parametros = null)
         {
+            if (parametros == null)
+                parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
+
             TElemento elemento = null;
-            if (AntesDeMapearElemento(registro, parametros))
-            {
-                elemento = (TElemento)Mapeador.Map(registro, typeof(TRegistro), typeof(TElemento));
-                DespuesDeMapearElemento(registro, elemento, parametros);
-            }
+            elemento = Mapeador.Map<TRegistro, TElemento>(registro,
+                opt =>
+                {
+                    opt.BeforeMap((registro, elemento) => AntesDeMapearElemento(registro, parametros));
+                    opt.AfterMap((registro, elemento) => DespuesDeMapearElemento(registro, elemento, parametros));
+                }
+                );
+
+            if (parametros.AnularMapeo)
+                elemento = null;
+
             return elemento;
         }
 
-        protected virtual void DespuesDeMapearElemento(TRegistro registro, TElemento elemento, Dictionary<string, object> parametros)
+        protected virtual void DespuesDeMapearElemento(TRegistro registro, TElemento elemento, ParametrosDeMapeo parametros)
         {
+
         }
 
         #endregion
@@ -463,7 +488,7 @@ namespace Gestor.Elementos
         public TElemento LeerElementoPorId(int id)
         {
             var elementoDeBd = LeerRegistroPorId(id);
-            return MapearElemento(elementoDeBd, new Dictionary<string, object>());
+            return MapearElemento(elementoDeBd);
         }
 
         public TRegistro LeerRegistroPorId(int? id)
@@ -478,7 +503,7 @@ namespace Gestor.Elementos
         public TElemento LeerElementoConDetalle(int id)
         {
             var elementoLeido = LeerConDetalle(id);
-            return MapearElemento(elementoLeido, new Dictionary<string, object>());
+            return MapearElemento(elementoLeido);
         }
 
         public void BorrarPorId(int id)
@@ -491,4 +516,5 @@ namespace Gestor.Elementos
         #endregion
 
     }
+
 }

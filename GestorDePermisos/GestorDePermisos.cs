@@ -58,11 +58,11 @@ namespace Gestor.Elementos.Seguridad
             return null;
         }
 
-        protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros)
+        protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
-                  return base.AplicarFiltros(registros, filtros);
+                  return base.AplicarFiltros(registros, filtros, parametros);
 
             return registros
                 .FiltroPorNombre(filtros)
