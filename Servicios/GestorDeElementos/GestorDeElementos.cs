@@ -3,6 +3,7 @@ using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Gestor.Elementos
 
     public static partial class Joins
     {
-        public static IQueryable<TRegistro> JoinBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins) where TRegistro : Registro
+        public static IQueryable<TRegistro> JoinBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros = null) where TRegistro : Registro
         {
             return registros;
         }
@@ -45,7 +46,7 @@ namespace Gestor.Elementos
 
     public static partial class Filtros
     {
-        public static IQueryable<TRegistro> FiltroBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
+        public static IQueryable<TRegistro> FiltroBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros = null) where TRegistro : Registro
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 return registros.FiltrarPorId(filtro);
@@ -88,6 +89,23 @@ namespace Gestor.Elementos
     }
     #endregion
 
+    #region Extensiones a pasar a las operaciones a realizar
+
+    public class ParametrosDeNegocio
+    {
+        public TipoOperacion Tipo { get; private set; }
+        public IDbContextTransaction Transaccion { get; internal set; }
+
+        public Dictionary<string, object> Parametros = new Dictionary<string, object>();
+
+        public ParametrosDeNegocio(TipoOperacion tipo)
+        {
+            Tipo = tipo;
+        }
+    }
+
+    #endregion
+
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
         where TRegistro : Registro
         where TElemento : Elemento
@@ -103,6 +121,7 @@ namespace Gestor.Elementos
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
+
             IniciarClase(contexto);
         }
 
@@ -118,87 +137,126 @@ namespace Gestor.Elementos
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
         }
 
-        #region Métodos de inserción
-        public async Task InsertarElementoAsync(TElemento elemento)
+        #region ASYNC
+
+        #region Métodos de inserción ASYN
+
+        public async Task InsertarElementoAsync(TElemento elemento, ParametrosDeNegocio parametros = null)
         {
-            TRegistro elementoBD = MapearRegistro(elemento, TipoOperacion.Insertar);
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+
+            TRegistro elementoBD = MapearRegistro(elemento, parametros);
             Contexto.Add(elementoBD);
             await Contexto.SaveChangesAsync();
-        }
-
-        public void InsertarElementos(List<TElemento> elementos)
-        {
-            foreach (var e in elementos)
-                InsertarElemento(e);
-        }
-
-        public void InsertarElemento(TElemento elemento)
-        {
-            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Insertar);
-            InsertarRegistro(registro);
-            elemento.Id = registro.Id;
-        }
-        protected void InsertarRegistros(List<TRegistro> registros)
-        {
-            using (var transaction = Contexto.Database.BeginTransaction())
-                try
-                {
-
-                    foreach (var registro in registros)
-                        Contexto.Add(registro);
-
-                    Contexto.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception exc)
-                {
-                    transaction.Rollback();
-                    throw exc;
-                }
-        }
-        protected void InsertarRegistro(TRegistro registro)
-        {
-            using (var transaction = Contexto.Database.BeginTransaction())
-                try
-                {
-                    Contexto.Add(registro);
-                    Contexto.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception exc)
-                {
-                    transaction.Rollback();
-                    throw exc;
-                }
         }
 
         #endregion
 
         #region Métodos de modificación
 
-        public async Task ModificarElementoAsync(TElemento elemento)
+        public async Task ModificarElementoAsync(TElemento elemento, ParametrosDeNegocio parametros = null)
         {
-            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Modificar);
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+
+            TRegistro registro = MapearRegistro(elemento, parametros);
             await ModificarRegistroAsync(registro);
         }
 
-        public void ModificarElemento(TElemento elemento)
+        protected async Task ModificarRegistroAsync(TRegistro registro, ParametrosDeNegocio parametros = null)
         {
-            TRegistro registro = MapearRegistro(elemento, TipoOperacion.Modificar);
-            ModificarRegistro(registro);
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
 
-        }
-
-        protected void ModificarRegistro(TRegistro registro)
-        {
-            Contexto.Update(registro);
-            Contexto.SaveChanges();
-        }
-        protected async Task ModificarRegistroAsync(TRegistro registro)
-        {
             Contexto.Update(registro);
             await Contexto.SaveChangesAsync();
         }
+
+        #endregion
+
+        #endregion
+
+        #region Métodos de inserción
+
+        public void InsertarElementos(List<TElemento> elementos, ParametrosDeNegocio parametros = null)
+        {
+            foreach (var e in elementos)
+                InsertarElemento(e, parametros);
+        }
+
+        public void InsertarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
+        {
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+
+            TRegistro registro = MapearRegistro(elemento, parametros);
+            InsertarRegistro(registro, parametros);
+            elemento.Id = registro.Id;
+        }
+
+        protected void InsertarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => InsertarRegistros(new List<TRegistro> { registro }, parametros);
+
+        protected void InsertarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
+        {
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+
+            var transaccionAbierta = IniciarTransaccion(parametros);
+            try
+            {
+                foreach (var registro in registros)
+                    Contexto.Add(registro);
+
+                Contexto.SaveChanges();
+                Commit(parametros, transaccionAbierta);
+            }
+            catch (Exception exc)
+            {
+                RollBack(parametros, transaccionAbierta);
+                throw exc;
+            }
+        }
+
+
+
+        #endregion
+
+        #region Métodos de modificación
+
+        public void ModificarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
+        {
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+
+            TRegistro registro = MapearRegistro(elemento, parametros);
+            ModificarRegistro(registro, parametros);
+
+        }
+
+        protected void ModificarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => ModificarRegistros(new List<TRegistro> { registro }, parametros);
+
+        protected void ModificarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
+        {
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+
+            var transaccionAbierta = IniciarTransaccion(parametros);
+            try
+            {
+                foreach (var registro in registros)
+                    Contexto.Update(registro);
+
+                Contexto.SaveChanges();
+                Commit(parametros, transaccionAbierta);
+            }
+            catch (Exception exc)
+            {
+                RollBack(parametros, transaccionAbierta);
+                throw exc;
+            }
+        }
+
 
 
         #endregion
@@ -212,47 +270,43 @@ namespace Gestor.Elementos
             return (IEnumerable<TElemento>)Mapeador.Map(elementosDeBd, typeof(IEnumerable<TRegistro>), typeof(IEnumerable<TElemento>));
         }
 
-        public List<TElemento> ProyectarElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden)
-        {   
-            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, new List<ClausulaDeJoin>());
+        public List<TElemento> ProyectarElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, ParametrosDeNegocio parametros = null)
+        {
+            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, null, parametros);
 
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public List<TRegistro> LeerRegistros(int posicion, int cantidad)
+        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaOrdenacion> orden = null, List<ClausulaDeJoin> joins =null, ParametrosDeNegocio parametros = null)
         {
-            return LeerRegistros(posicion, cantidad, new List<ClausulaDeFiltrado>());
-        }
 
-        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
-        {
-            return LeerRegistros(posicion, cantidad, filtros, new List<ClausulaOrdenacion>());
-        }
-
-        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden)
-        {
-            return LeerRegistros(posicion, cantidad, filtros, orden, new List<ClausulaDeJoin>());
-        }
-
-        public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, List<ClausulaDeJoin> joins)
-        {
             List<TRegistro> elementosDeBd;
 
-            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins);
+            IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins, parametros);
 
             elementosDeBd = registros.AsNoTracking().ToList();
+
             return elementosDeBd;
         }
 
-        private IQueryable<TRegistro> DefinirConsulta(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, List<ClausulaDeJoin> joins)
+        private IQueryable<TRegistro> DefinirConsulta(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaOrdenacion> orden, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            DefinirJoins(filtros, joins);
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Leer);
 
-            IQueryable<TRegistro> registros = AplicarJoins(Contexto.Set<TRegistro>(), joins);
+            IQueryable<TRegistro> registros = null;
+            
+            if (joins != null && joins.Count > 0)
+            {
+                DefinirJoins(filtros, joins, parametros);
+                registros = AplicarJoins(Contexto.Set<TRegistro>(), joins, parametros);
+            }
 
-            registros = AplicarFiltros(registros, filtros);
-
-            registros = AplicarOrden(registros, orden);
+            if (filtros != null && filtros.Count > 0)
+                registros = AplicarFiltros(registros, filtros, parametros);
+            
+            if (orden != null && orden.Count > 0)
+               registros = AplicarOrden(registros, orden);
 
             registros = registros.Skip(posicion);
 
@@ -264,9 +318,9 @@ namespace Gestor.Elementos
             return registros;
         }
 
-        protected virtual void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins)
+        protected virtual void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-           
+
         }
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaOrdenacion> ordenacion)
@@ -274,14 +328,14 @@ namespace Gestor.Elementos
             return registros.OrdenBase(ordenacion);
         }
 
-        protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
+        protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            return registros.FiltroBase(filtros);
+            return registros.FiltroBase(filtros, parametros);
         }
 
-        protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins)
+        protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            return registros.JoinBase(joins);
+            return registros.JoinBase(joins, parametros);
         }
 
         #endregion
@@ -292,46 +346,77 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().Any(e => e.Id == id);
         }
 
-        public int Contar(List<ClausulaDeFiltrado> filtros)
+        public int Contar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-
-            IQueryable<TRegistro> registros = AplicarFiltros(Contexto.Set<TRegistro>(), filtros);
-
+            var registros = DefinirConsulta(0, -1, filtros, null, joins, parametros);
             var total = registros.Count();
 
             return total;
+        }
+
+        private bool IniciarTransaccion(ParametrosDeNegocio parametros)
+        {
+            if (Contexto.Database.CurrentTransaction == null)
+            {
+                parametros.Transaccion = Contexto.Database.BeginTransaction();
+                return true;
+            }
+            return false;
+        }
+
+        private void Commit(ParametrosDeNegocio parametros, bool transaccionAbierta)
+        {
+            if (transaccionAbierta)
+            {
+                parametros.Transaccion.Commit();
+                parametros.Transaccion.Dispose();
+            }
+        }
+
+        private void RollBack(ParametrosDeNegocio parametros, bool transaccionAbierta)
+        {
+            if (transaccionAbierta)
+            {
+                parametros.Transaccion.Rollback();
+                parametros.Transaccion.Dispose();
+            }
         }
 
         #endregion
 
         #region Métodos de mapeo
 
-        public List<TRegistro> MapearRegistros(List<TElemento> elementos, TipoOperacion tipoOperacion)
+        public List<TRegistro> MapearRegistros(List<TElemento> elementos, ParametrosDeNegocio opciones)
         {
             var registros = new List<TRegistro>();
             foreach (var elemento in elementos)
             {
-                var registro = MapearRegistro(elemento, tipoOperacion);
+                var registro = MapearRegistro(elemento, opciones);
                 registros.Add(registro);
             }
             return registros;
         }
 
-        protected TRegistro MapearRegistro(TElemento elemento, TipoOperacion tipoOperacion)
+        protected TRegistro MapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
         {
-            AntesMapearRegistro(elemento, tipoOperacion);
-            var registro = (TRegistro)Mapeador.Map(elemento, typeof(TElemento), typeof(TRegistro));
-            DespuesDeMapearRegistro(elemento, registro, tipoOperacion);
+            var registro = Mapeador.Map<TElemento, TRegistro>(elemento,
+                   opt =>
+                   {
+                       opt.BeforeMap((src, dest) => AntesMapearRegistro(elemento, opciones));
+                       opt.AfterMap((src, dest) => DespuesDeMapearRegistro(elemento, dest, opciones));
+                   }
+                );
+
             return registro;
         }
 
-        protected virtual void DespuesDeMapearRegistro(TElemento elemento, TRegistro registro, TipoOperacion tipo)
+        protected virtual void DespuesDeMapearRegistro(TElemento elemento, TRegistro registro, ParametrosDeNegocio opciones)
         {
-            if (TipoOperacion.Insertar == tipo)
+            if (TipoOperacion.Insertar == opciones.Tipo)
                 registro.Id = 0;
         }
 
-        protected virtual void AntesMapearRegistro(TElemento elemento, TipoOperacion tipo)
+        protected virtual void AntesMapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
         {
         }
 

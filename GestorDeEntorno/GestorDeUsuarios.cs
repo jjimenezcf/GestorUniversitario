@@ -81,11 +81,11 @@ namespace Gestor.Elementos.Entorno
 
                
 
-        protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros) 
+        protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) 
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
-                    return base.AplicarFiltros(registros, filtros);
+                    return base.AplicarFiltros(registros, filtros, parametros);
 
             return registros
                    .FiltrarPorNombre(filtros)

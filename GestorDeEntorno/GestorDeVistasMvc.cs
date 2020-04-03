@@ -47,7 +47,7 @@ namespace Gestor.Elementos.Entorno
         public void InicializarVistasMvc()
         {
             var e_vistasMvc = VistasMvc();
-            var r_vistasMvc = MapearRegistros(e_vistasMvc, TipoOperacion.Insertar);
+            var r_vistasMvc = MapearRegistros(e_vistasMvc, new ParametrosDeNegocio(TipoOperacion.Insertar));
             InsertarRegistros(r_vistasMvc);
         }
 

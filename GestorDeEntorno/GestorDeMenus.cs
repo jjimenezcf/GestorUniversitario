@@ -11,7 +11,7 @@ namespace Gestor.Elementos.Entorno
 {
     public static partial class Joins
     {
-        public static IQueryable<T> JoinConMenus<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins) where T : MenuDtm
+        public static IQueryable<T> JoinConMenus<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : MenuDtm
         {
             foreach (ClausulaDeJoin join in joins)
             {
@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Entorno
 
     public static partial class Filtros
     {
-        public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
+        public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
@@ -97,7 +97,7 @@ namespace Gestor.Elementos.Entorno
             {
                 public void Process(MenuDtm source, MenuDto destination, ResolutionContext context)
                 {
-
+                   
                 }
             }
         }
@@ -109,9 +109,9 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins)
+        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins);
+            base.DefinirJoins(filtros, joins, parametros);
             
             foreach (var filtro in filtros)
                 if (filtro.Propiedad == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
@@ -120,10 +120,10 @@ namespace Gestor.Elementos.Entorno
             joins.Add(new ClausulaDeJoin { Dtm = typeof(VistaMvcDtm) });
         }
 
-        protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, TipoOperacion tipo)
+        protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, ParametrosDeNegocio opciones)
         {
-            base.DespuesDeMapearRegistro(elemento, registro, tipo);
-            if (TipoOperacion.Insertar == tipo)
+            base.DespuesDeMapearRegistro(elemento, registro, opciones);
+            if (TipoOperacion.Insertar == opciones.Tipo)
             {
                 registro.Padre = null;
                 registro.VistaMvc = null;
@@ -189,9 +189,9 @@ namespace Gestor.Elementos.Entorno
             return new GestorDeVistasMvc(contexto, mapeador);
         }
 
-        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros)
+        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            return registros.FiltrarMenus(filtros);
+            return registros.FiltrarMenus(filtros, parametros);
         }
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaOrdenacion> ordenacion)
@@ -199,9 +199,9 @@ namespace Gestor.Elementos.Entorno
             return registros.OrdenarMenus(ordenacion);
         }
 
-        protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins)
+        protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            return registros.JoinConMenus(joins);
+            return registros.JoinConMenus(joins, parametros);
         }
 
         #region Codigo a borrar
