@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Utilidades;
-using Gestor.Elementos.ModeloIu;
-using System;
-using System.Threading.Tasks;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -16,7 +13,7 @@ namespace Gestor.Elementos.Entorno
             foreach (ClausulaDeJoin join in joins)
             {
                 if (join.Dtm == typeof(VistaMvcDtm))
-                  registros = registros.Include(p => p.VistaMvc);
+                    registros = registros.Include(p => p.VistaMvc);
             }
 
             return registros;
@@ -102,7 +99,7 @@ namespace Gestor.Elementos.Entorno
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             base.DefinirJoins(filtros, joins, parametros);
-            
+
             foreach (var filtro in filtros)
                 if (filtro.Propiedad == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
                     return;
@@ -137,13 +134,13 @@ namespace Gestor.Elementos.Entorno
             var menusDto = new List<MenuDto>();
 
             List<MenuDtm> menusDtm = LeerRegistros(0, -1, filtros, ordenacion).ToList();
-            
+
             foreach (var menuDtm in menusDtm)
             {
                 LeerSubMenus(menuDtm);
                 var resultado = MapearElemento(menuDtm);
                 if (resultado != null)
-                   menusDto.Add(resultado);
+                    menusDto.Add(resultado);
             }
 
             return menusDto;
@@ -156,15 +153,11 @@ namespace Gestor.Elementos.Entorno
         {
             var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.igual, Valor = menuDtm.Id.ToString() } };
             var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
-           
+
             menuDtm.Submenus = LeerRegistros(0, -1, filtros, ordenacion).ToList();
 
             foreach (var submenu in menuDtm.Submenus)
-            {
                 LeerSubMenus(submenu);
-                //if (submenu.IdVistaMvc != null)
-                //    submenu.VistaMvc = CrearGestorDeVista(Contexto).LeerRegistroPorId(submenu.IdVistaMvc);
-            }
         }
 
         private GestorDeVistasMvc CrearGestorDeVista(CtoEntorno contexto)

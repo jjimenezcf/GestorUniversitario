@@ -121,7 +121,6 @@ namespace Gestor.Elementos
             }
         }
 
-
         private string ObtenerVersion()
         {
             var a = new VersionSql(this);
@@ -255,6 +254,7 @@ namespace Gestor.Elementos
             }
         }
     }
+
 }
 
 

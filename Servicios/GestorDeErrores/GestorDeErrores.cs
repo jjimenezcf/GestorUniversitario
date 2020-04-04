@@ -25,6 +25,10 @@ namespace Gestor.Errores
             retorno = retorno + Environment.NewLine + s;
             return retorno;
         }
+        public static void Emitir(string error)
+        {
+            new GestorDeErrores().LanzarExcepcion(error);
+        }
 
         public void Enviar(string asunto, Exception e)
         {
@@ -43,6 +47,7 @@ namespace Gestor.Errores
         {
             Gestor.Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
         }
+
 
         public void LanzarExcepcion(string error)
         {

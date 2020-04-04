@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace Gestor.Elementos.Entorno
@@ -18,6 +21,30 @@ namespace Gestor.Elementos.Entorno
        
     public class CtoEntorno : ContextoDeElementos
     {
+
+        public class ConstructorDelContexto : IDesignTimeDbContextFactory<CtoEntorno>
+        {
+            public CtoEntorno CreateDbContext(string[] arg)
+            {
+                var generador = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appsettings.json");
+                var configuaracion = generador.Build();
+                var cadenaDeConexion = configuaracion.GetConnectionString(Gestor.Elementos.Literal.CadenaDeConexion);
+
+                var opciones = new DbContextOptionsBuilder<CtoEntorno>();
+                opciones.UseSqlServer(cadenaDeConexion);
+                object[] parametros = { opciones.Options, configuaracion };
+
+                return (CtoEntorno)Activator.CreateInstance(typeof(CtoEntorno), parametros);
+            }
+        }
+
+        public static CtoEntorno Crear()
+        {
+
+            return new ConstructorDelContexto().CreateDbContext(new string[] { });
+        }
 
         public DbSet<MenuDtm> Menus { get; set; }
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
