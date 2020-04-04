@@ -1,5 +1,4 @@
-﻿
-const newLine = "\n";
+﻿const newLine = "\n";
 
 const TipoMensaje = { Info: "informativo" };
 

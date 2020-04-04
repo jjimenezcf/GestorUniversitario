@@ -63,7 +63,8 @@
                 funcionDeRespuesta(idContenedorMenu, req.responseText);
             }
             else {
-                console.log(req.status + ' ' + req.statusText);
+                console.log(req.status + ' ' + req.statusText + req.responseText);
+                Mensaje(TipoMensaje.Info, req.responseText)
             }
         }
 
