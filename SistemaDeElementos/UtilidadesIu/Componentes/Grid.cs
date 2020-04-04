@@ -123,7 +123,7 @@ namespace UtilidadesParaIu
 
 
             var idDelTd = $"{idFila}.{numCol}";
-            var nombreTd = $"td.chksel.{idGrid}";
+            var nombreTd = $"td.{celda.Propiedad}.{idGrid}";
 
             var idDelInput = $"{idFila}.{celda.Propiedad}";
             var nombreInput = $"{celda.Propiedad}.{idGrid}";
@@ -155,7 +155,7 @@ namespace UtilidadesParaIu
                 filaHtml.AppendLine(RenderCeldaInput(idGrid, idFila, numCol, celda));
                 numCol++;
             }
-            return $@"{filaHtml.ToString()}";
+            return $@"{filaHtml}";
         }
 
         private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid fila)
@@ -181,7 +181,7 @@ namespace UtilidadesParaIu
             cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
             return $@"<thead id='{idGrid}_cabecera'>{Environment.NewLine}
                          <tr id=¨{idCabecera}¨>
-                            {cabeceraHtml.ToString()}{Environment.NewLine}
+                            {cabeceraHtml}{Environment.NewLine}
                          </tr>{Environment.NewLine}
                       </thead>";
         }
@@ -197,7 +197,7 @@ namespace UtilidadesParaIu
                 i = i + 1;
             }
             return $@"<tbody id='{idGrid}_detalle'>
-                         {htmlDetalleGrid.ToString()}
+                         {htmlDetalleGrid}
                       </tbody>";
         }
 

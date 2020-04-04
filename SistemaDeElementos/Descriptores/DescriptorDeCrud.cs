@@ -572,9 +572,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                       seleccionables =2
                                       seleccionados =¨¨
                                       zonaDeFiltro = ¨{idFiltro}¨
-                                    >     
-                                     tabla_Navegador 
-                                    </div>";
+                                     >     
+                                       tabla_Navegador 
+                                     </div>";
             var htmlContenedor = htmlDiv.Replace("{idGrid}", $"{IdHtml}")
                                         .Replace("{idFiltro}", idHtmlZonaFiltro)
                                         .Replace("tabla_Navegador", RenderDelGrid());
