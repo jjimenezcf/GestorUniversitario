@@ -35,39 +35,40 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class DescriptorDeCrud<TElemento> : ControlHtml
     {
+        public string NombreElemento => Etiqueta.ToLower();
+
         public VistaCsHtml VistaMnt { get; private set; }
         public VistaCsHtml VistaCreacion { get; private set; }
 
         public DescriptorMantenimiento<TElemento> Mnt { get; private set; }
-        public DescriptorDeCreacion Creacion { get; private set; }
+        public DescriptorDeCreacion<TElemento> Creacion { get; private set; }
         public DescriptorDeEdicion Edicion { get; private set; }
         public DescriptorDeBorrado Borrado { get; private set; }
         public DescriptorDeDetalle Detalle { get; private set; }
 
-        public MenuMantenimiento<TElemento> Menu { get; set; }
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
 
-        public DescriptorDeCrud(string controlador, string vista, string titulo, ModoDescriptor modo)
+        public DescriptorDeCrud(string controlador, string vista, string elemento, ModoDescriptor modo)
         : base(
           padre: null,
-          id: typeof(TElemento).Name.Replace("Elemento", ""),
-          etiqueta: null,
+          id: $"Crud_{elemento}",
+          etiqueta: elemento,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
-            Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: titulo);
-            VistaMnt = new VistaCsHtml(this, "VistaMnt", controlador, vista, titulo);
+            Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: elemento);
+            VistaMnt = new VistaCsHtml(this, "VistaMnt", controlador, vista, elemento);
             Controlador = controlador;
             Modo = modo;
 
             if (Modo == ModoDescriptor.Mantenimiento)
             {
-                VistaCreacion = new VistaCsHtml(this, "VistaCrt", controlador, $"Creacion{nameof(TElemento)}", $"Creacion de {nameof(TElemento)}");
-                Mnt.Menu.AnadirOpcioDeCreacion();
+                Creacion =  new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
+                Mnt.ZonaMenu.AnadirOpcionDeCreacion();
             }
         }
 

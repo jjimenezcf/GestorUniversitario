@@ -1,34 +1,50 @@
 ﻿using System;
+using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class ZonaDeMenuMnt<TElemento>: ControlHtml
     {
-        public MenuMantenimiento<TElemento> MenuMnt { get; set; }
+        public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
+
+        public Menu<TElemento> MenuMnt { get; set; }
 
         public ZonaDeMenuMnt(DescriptorMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
-          id: $"{mnt.Id}_Menu",
+          id: $"{mnt.Id}_{TipoControl.ZonaMenu}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-
+            MenuMnt = new Menu<TElemento>(this);
+            Tipo = TipoControl.ZonaMenu;
         }
 
         public override string RenderControl()
         {
-            return MenuMnt.RenderControl();
+            var htmContenedorMnt =
+                $@"
+                   <Div id=¨{IdHtml}¨>
+                     {MenuMnt.RenderControl()}
+                   </Div>
+                ";
+
+            return htmContenedorMnt.Render();
         }
 
-        internal void AnadirOpcioDeCreacion()
+        internal void AnadirOpcionDeCreacion()
         {
-            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
-            var vistaCreacion = ((DescriptorDeCrud<TElemento>)mnt.Padre).VistaCreacion;
-            MenuMnt = new MenuMantenimiento<TElemento>(this, vistaCreacion);
+            var mostrarCreacion = new MostrarDiv(idDivMostrar: Mnt.Crud.Creacion.Id, idDivOcultar: Mnt.Id);
+            var opcion = new OpcionDeMenu<TElemento>(MenuMnt, mostrarCreacion, $"Crear {Mnt.Crud.NombreElemento}");
+            MenuMnt.Add(opcion);
+        }
+
+        internal void AnadirOpcionDeEdicion()
+        {
+            throw new NotImplementedException();
         }
     }
 }

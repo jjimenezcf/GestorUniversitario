@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CrudPermiso : DescriptorDeCrud<PermisoDto>
     {
         public CrudPermiso(ModoDescriptor modo)
-        : base(controlador: "Permisos", vista: "MantenimientoPermiso", titulo: "Mantenimiento de permisos", modo: modo)
+        : base(controlador: "Permisos", vista: "MantenimientoPermiso", elemento: "Permiso", modo: modo)
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {

@@ -4,39 +4,49 @@ using UtilidadesParaIu;
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorMantenimiento<TElemento>: ControlHtml
-    {     
-        public ZonaDeMenuMnt<TElemento> Menu { get; private set; }
+    {
+        public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
+        public ZonaDeMenuMnt<TElemento> ZonaMenu { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
 
         public DescriptorMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
           padre: crud,
-          id: $"{crud.Id}_Mnt",
+          id: $"{crud.Id}_{TipoControl.Mantenimiento}",
           etiqueta: etiqueta,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-            Menu = new ZonaDeMenuMnt<TElemento>(mnt: this);
+            Tipo = TipoControl.Mantenimiento;
+            ZonaMenu = new ZonaDeMenuMnt<TElemento>(mnt: this);
             Filtro = new ZonaDeFiltro<TElemento>(mnt: this);
-            Grid = new ZonaDeGrid<TElemento>(mnt: this);
+            Grid = new ZonaDeGrid<TElemento>(mnt: this);  
         }
 
         public override string RenderControl()
         {
-            var htmlCrud = ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo
+
+            var htmlMnt = ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo
                    ?
                    RenderTitulo() + Environment.NewLine +
-                   Menu.RenderControl() + Environment.NewLine +
+                   ZonaMenu.RenderControl() + Environment.NewLine +
                    Filtro.RenderControl() + Environment.NewLine +
                    Grid.RenderControl() + Environment.NewLine
                    :
                    Filtro.RenderControl() + Environment.NewLine +
                    Grid.RenderControl() + Environment.NewLine;
 
-            return htmlCrud.Render();
+            var htmContenedorMnt =
+                $@"
+                   <Div id=¨{IdHtml}¨>
+                     {htmlMnt}
+                   </Div>
+                ";
+
+            return htmContenedorMnt.Render();
         }
 
         public string RenderTitulo()

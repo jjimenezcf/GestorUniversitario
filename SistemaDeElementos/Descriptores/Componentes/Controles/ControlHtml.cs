@@ -18,7 +18,11 @@
         Referencia,
         Lista,
         Fecha,
-        Plantilla
+        Plantilla,
+        Mantenimiento,
+        Creacion,
+        ZonaMenu,
+        Menu
     }
 
     public class Posicion

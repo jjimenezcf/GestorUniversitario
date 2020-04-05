@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CrudUsuario : DescriptorDeCrud<UsuarioDto>
     {
         public CrudUsuario(ModoDescriptor modo)
-        : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
+        : base(controlador: "Usuarios", vista: "MantenimientoUsuario", elemento: "Usuario", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new SelectorDeFiltro<UsuarioDto, PermisoDto>(padre: new BloqueDeFitro<UsuarioDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
