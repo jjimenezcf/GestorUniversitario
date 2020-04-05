@@ -71,14 +71,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var jsAbrirModal = _alAbrirLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
+                .Replace("{IdGrid}", Descriptor.Mnt.Grid.IdHtml)
                 .Replace("{idSelector}", s.IdHtml)
                 .Replace("{columnaId}", s.propiedadParaFiltrar)
                 .Replace("{columnaMostrar}", s.propiedadParaMostrar);
 
             var jsCerrarModal = _alCerrarLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
+                .Replace("{IdGrid}", Descriptor.Mnt.Grid.IdHtml)
                 .Replace("{nameSelCheck}", nombreCheckDeSeleccion);
 
 
@@ -86,7 +86,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     .Replace("idModal", IdHtml)
                     .Replace("titulo", Titulo)
                     .Replace("{idSelector}", s.IdHtml)
-                    .Replace("{idGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
+                    .Replace("{idGrid}", Descriptor.Mnt.Grid.IdHtml)
                     .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)

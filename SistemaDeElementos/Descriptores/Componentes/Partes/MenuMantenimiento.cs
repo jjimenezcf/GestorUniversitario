@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class OpcionMantenimiento<Telemento> : ControlHtml
+    public class OpcionMantenimiento<TElemento> : ControlHtml
     {
         public string Ruta { get; private set; }
         public string Accion { get; private set; }
 
-        public OpcionMantenimiento(MenuMantenimiento<Telemento> padre, string ruta, string accion, string titulo)
+        public OpcionMantenimiento(MenuMantenimiento<TElemento> padre, string ruta, string accion, string titulo)
         : base(
           padre: padre,
           id: $"{padre.Id}_{padre.Opciones.Count}_opc",
@@ -22,7 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.Opcion;
             Ruta = ruta;
             Accion = accion;
-            ((MenuMantenimiento<Telemento>)Padre).Opciones.Add(this);
+            ((MenuMantenimiento<TElemento>)Padre).Opciones.Add(this);
         }
 
         public override string RenderControl()
@@ -33,11 +33,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
 
 
-    public class MenuMantenimiento<Telemento> : ControlHtml
+    public class MenuMantenimiento<TElemento> : ControlHtml
     {
-        public ICollection<OpcionMantenimiento<Telemento>> Opciones { get; private set; } = new List<OpcionMantenimiento<Telemento>>();
+        public ICollection<OpcionMantenimiento<TElemento>> Opciones { get; private set; } = new List<OpcionMantenimiento<TElemento>>();
 
-        public MenuMantenimiento(DescriptorDeCrud<Telemento> padre, VistaCsHtml vista)
+        public MenuMantenimiento(ZonaDeMenuMnt<TElemento> padre, VistaCsHtml vista)
         : base(
           padre: padre,
           id: $"{padre.Id}_Menu",
@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.ZonaDeOpciones;
-            new OpcionMantenimiento<Telemento>(this, vista.Ruta, vista.Vista, vista.Etiqueta);
+            new OpcionMantenimiento<TElemento>(this, vista.Ruta, vista.Vista, vista.Etiqueta);
         }
 
         private string RenderOpcionesMenu()
@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlRef = "<div id=¨{idOpc}¨>{newLine}<a href =¨/{ruta}/{accion}¨>{titulo}</a>{newLine}</div>";
             var htmlMenu = "<div id=¨{idMenu}¨>{hmlOpciones}</div>";
             var htmlOpciones = "";
-            foreach (OpcionMantenimiento<Telemento> o in Opciones)
+            foreach (OpcionMantenimiento<TElemento> o in Opciones)
             {
                 htmlOpciones = htmlOpciones + htmlRef
                                              .Replace("{idOpc}", o.IdHtml)

@@ -4,9 +4,9 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum ModoDescriptor { Mantenimiento, Seleccion }
+    public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion }
 
-    public class VistaCsHtml : ControlHtml
+    public class VistaCsHtml: ControlHtml
     {
         public string Ruta { get; private set; }
         public string Vista { get; private set; }
@@ -38,11 +38,11 @@ namespace MVCSistemaDeElementos.Descriptores
         public VistaCsHtml VistaMnt { get; private set; }
         public VistaCsHtml VistaCreacion { get; private set; }
 
-        public DescriptorMantenimiento<TElemento> DescriptorDeMantenimiento { get; private set; }
-        public DescriptorDeCreacion DescriptorDeCreacion { get; private set; }
-        public DescriptorDeEdicion DescriptorDeEdicion { get; private set; }
-        public DescriptorDeBorrado DescriptorDeBorrado { get; private set; }
-        public DescriptorDeDetalle DescriptorDeDetalle { get; private set; }
+        public DescriptorMantenimiento<TElemento> Mnt { get; private set; }
+        public DescriptorDeCreacion Creacion { get; private set; }
+        public DescriptorDeEdicion Edicion { get; private set; }
+        public DescriptorDeBorrado Borrado { get; private set; }
+        public DescriptorDeDetalle Detalle { get; private set; }
 
         public MenuMantenimiento<TElemento> Menu { get; set; }
         public string Controlador { get; private set; }
@@ -52,49 +52,28 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(
           padre: null,
           id: typeof(TElemento).Name.Replace("Elemento", ""),
-          etiqueta: titulo,
+          etiqueta: null,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
-            DescriptorDeMantenimiento = new DescriptorMantenimiento<TElemento>(this);
-            VistaMnt = new VistaCsHtml(this, "Mnt", controlador, vista, titulo);
+            Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: titulo);
+            VistaMnt = new VistaCsHtml(this, "VistaMnt", controlador, vista, titulo);
             Controlador = controlador;
             Modo = modo;
+
+            if (Modo == ModoDescriptor.Mantenimiento)
+            {
+                VistaCreacion = new VistaCsHtml(this, "VistaCrt", controlador, $"Creacion{nameof(TElemento)}", $"Creacion de {nameof(TElemento)}");
+                Mnt.Menu.AnadirOpcioDeCreacion();
+            }
         }
 
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
-            return DescriptorDeMantenimiento.Filtro.BuscarControl(propiedad);
-        }
-
-        protected void DefinirVistaDeCreacion(string accion, string textoMenu)
-        {
-            VistaCreacion = new VistaCsHtml(this, "Crear", Controlador, accion, textoMenu);
-            Menu = new MenuMantenimiento<TElemento>(this, VistaCreacion);
-        }
-
-        private string RenderDescriptor()
-        {
-            var htmlCrud = ModoDescriptor.Mantenimiento == Modo
-                   ?
-                   RenderTitulo() + Environment.NewLine +
-                   Menu.RenderControl() + Environment.NewLine +
-                   DescriptorDeMantenimiento.Filtro.RenderControl() + Environment.NewLine +
-                   DescriptorDeMantenimiento.Grid.RenderControl() + Environment.NewLine
-                   :
-                   DescriptorDeMantenimiento.Filtro.RenderControl() + Environment.NewLine +
-                   DescriptorDeMantenimiento.Grid.RenderControl() + Environment.NewLine;
-
-            return htmlCrud.Render();
-        }
-
-        private string RenderTitulo()
-        {
-            var htmlCabecera = $"<h2>{this.Etiqueta}</h2>";
-            return htmlCabecera;
+            return Mnt.Filtro.BuscarControl(propiedad);
         }
 
         protected virtual void DefinirColumnasDelGrid()
@@ -108,12 +87,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public void TotalEnBd(int totalEnBd)
         {
-            DescriptorDeMantenimiento.Grid.TotalEnBd = totalEnBd;
+            Mnt.Grid.TotalEnBd = totalEnBd;
         }
 
         public override string RenderControl()
         {
-            return RenderDescriptor();
+            return Mnt.RenderControl();
         }
     }
 

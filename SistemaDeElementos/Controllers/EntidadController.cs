@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Controllers
         public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
         {
             GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
-            return GestorDelCrud.Descriptor.DescriptorDeMantenimiento.Grid.RenderDelGrid();
+            return GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid();
         }
 
         //Lamada desde Selector.js
@@ -130,8 +130,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
-            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.DescriptorDeMantenimiento.Grid.PosicionInicial
-                                                          , GestorDelCrud.Descriptor.DescriptorDeMantenimiento.Grid.CantidadPorLeer
+            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.Mnt.Grid.PosicionInicial
+                                                          , GestorDelCrud.Descriptor.Mnt.Grid.CantidadPorLeer
                                                           , new List<ClausulaDeFiltrado>()
                                                           , orden.ParsearOrdenacion());
 
@@ -149,8 +149,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
-            GestorDelCrud.Descriptor.DescriptorDeMantenimiento.Grid.CantidadPorLeer = cantidad;
-            GestorDelCrud.Descriptor.DescriptorDeMantenimiento.Grid.PosicionInicial = posicion;
+            GestorDelCrud.Descriptor.Mnt.Grid.CantidadPorLeer = cantidad;
+            GestorDelCrud.Descriptor.Mnt.Grid.PosicionInicial = posicion;
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 

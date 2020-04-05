@@ -38,7 +38,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderSelector()
         {
-            ControlHtml edt = Descriptor.DescriptorDeMantenimiento.Filtro.BuscarControl(PropiedadDondeMapear);
+            ControlHtml edt = Descriptor.Mnt.Filtro.BuscarControl(PropiedadDondeMapear);
 
             return $@"<div class=¨input-group mb-3¨>
                        <input id=¨{IdHtml}¨ 
@@ -50,10 +50,10 @@ namespace MVCSistemaDeElementos.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
-                              idGridModal=¨{Descriptor.DescriptorDeMantenimiento.Grid.IdHtml}¨
+                              idGridModal=¨{Descriptor.Mnt.Grid.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
                               idEditorMostrar=¨{edt.IdHtml}¨
-                              refCheckDeSeleccion=¨chksel.{Descriptor.DescriptorDeMantenimiento.Grid.IdHtml}¨
+                              refCheckDeSeleccion=¨chksel.{Descriptor.Mnt.Grid.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button id=¨{idBtnSelectorHtml}¨ 

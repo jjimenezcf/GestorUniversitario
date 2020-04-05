@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var modalUsuario = new CrudUsuario(ModoDescriptor.Seleccion);
-                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: new BloqueDeFitro<PermisoDto>(filtro: DescriptorDeMantenimiento.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                               etiqueta: "Usuario",
                                               propiedad: PermisoPor.PermisoDeUnRol,
                                               ayuda: "Seleccionar usuario",
@@ -24,19 +24,16 @@ namespace MVCSistemaDeElementos.Descriptores
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
             }
 
-            DefinirVistaDeCreacion(accion: "IraCrearPermiso", textoMenu: "Crear permiso");
-
             DefinirColumnasDelGrid();
-
         }
 
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            DescriptorDeMantenimiento.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Id), Visible = false, Tipo = typeof(int) });
-            DescriptorDeMantenimiento.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
-            DescriptorDeMantenimiento.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
-            DescriptorDeMantenimiento.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
+            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Id), Visible = false, Tipo = typeof(int) });
+            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
+            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
+            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
         }
 
         public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos)
@@ -45,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
             foreach (var permiso in elementos)
             {
                 var fila = new FilaDelGrid();
-                foreach (ColumnaDelGrid columna in DescriptorDeMantenimiento.Grid.Columnas)
+                foreach (ColumnaDelGrid columna in Mnt.Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
                     if (columna.Nombre == nameof(PermisoDto.Id))
@@ -62,7 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     fila.Celdas.Add(celda);
                 }
-                DescriptorDeMantenimiento.Grid.Filas.Add(fila);
+                Mnt.Grid.Filas.Add(fila);
             }
         }
 
