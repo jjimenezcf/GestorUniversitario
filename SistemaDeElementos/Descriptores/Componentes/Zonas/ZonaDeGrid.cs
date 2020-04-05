@@ -14,10 +14,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public int PosicionInicial { get; set; } = 0;
 
         public int TotalEnBd { get; set; }
-        public ZonaDeGrid(DescriptorDeCrud<TElemento> padre)
+        public ZonaDeGrid(DescriptorMantenimiento<TElemento> mnt)
         : base(
-          padre: padre,
-          id: $"{padre.Id}_Grid",
+          padre: mnt,
+          id: $"{mnt.Id}_Grid",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderGrid()
         {
 
-            var idHtmlZonaFiltro = ((DescriptorDeCrud<TElemento>)Padre).Filtro.IdHtml;
+            var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             const string htmlDiv = @"<div id = ¨{idGrid}¨
                                       seleccionables =2
                                       seleccionados =¨¨
@@ -46,11 +46,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderDelGrid()
         {
+            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
+            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
+
             var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
-            {
-                Controlador = ((DescriptorDeCrud<TElemento>)Padre).Controlador,
+            {               
+                Controlador = crud.Controlador,
                 TotalEnBd = TotalEnBd
             };
+
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }

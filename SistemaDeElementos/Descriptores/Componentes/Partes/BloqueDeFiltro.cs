@@ -5,17 +5,17 @@ using Utilidades;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class BloqueDeFitro : ControlFiltroHtml
+    public class BloqueDeFitro<TElemento>: ControlFiltroHtml
     {
         public TablaBloqueDeFiltro Tabla { get; set; }
 
         public ICollection<ControlFiltroHtml> Controles => Tabla.Controles;
 
 
-        public BloqueDeFitro(ZonaDeFiltro padre, string titulo, Dimension dimension)
+        public BloqueDeFitro(ZonaDeFiltro<TElemento> filtro, string titulo, Dimension dimension)
         : base(
-          padre: padre,
-          id: $"{padre.Id}_{padre.Bloques.Count}_bloque",
+          padre: filtro,
+          id: $"{filtro.Id}_{filtro.Bloques.Count}_bloque",
           etiqueta: titulo,
           propiedad: null,
           ayuda: null,
@@ -24,7 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = TipoControl.Bloque;
             Tabla = new TablaBloqueDeFiltro(this, dimension, new List<ControlFiltroHtml>());
-            padre.Bloques.Add(this);
+            filtro.Bloques.Add(this);
         }
 
 
@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Controles.Add(c);
         }
 
-        public void AnadirSelector<T>(SelectorDeFiltro<T> s)
+        public void AnadirSelector<Telemento,TSeleccionado>(SelectorDeFiltro<Telemento, TSeleccionado> s)
         {
             Controles.Add(s);
             Controles.Add(s.Modal);

@@ -3,14 +3,14 @@
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ModalDeSeleccionDeFiltro<Tseleccionado> : ControlFiltroHtml
+    public class ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> : ControlFiltroHtml
     {
-        public SelectorDeFiltro<Tseleccionado> Selector { get; set; }
-        public DescriptorDeCrud<Tseleccionado> Descriptor { get; set; }
+        public SelectorDeFiltro<TElemento, TSeleccionado> Selector { get; set; }
+        public DescriptorDeCrud<TSeleccionado> Descriptor { get; set; }
 
         public string Titulo => Ayuda;
 
-        public ModalDeSeleccionDeFiltro(ControlHtml padre, SelectorDeFiltro<Tseleccionado> selectorAsociado, DescriptorDeCrud<Tseleccionado> descriptor)
+        public ModalDeSeleccionDeFiltro(ControlHtml padre, SelectorDeFiltro<TElemento, TSeleccionado> selectorAsociado, DescriptorDeCrud<TSeleccionado> descriptor)
         : base(
           padre: padre,
           id: $"Modal_{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
@@ -71,14 +71,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var jsAbrirModal = _alAbrirLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.Grid.IdHtml)
+                .Replace("{IdGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
                 .Replace("{idSelector}", s.IdHtml)
                 .Replace("{columnaId}", s.propiedadParaFiltrar)
                 .Replace("{columnaMostrar}", s.propiedadParaMostrar);
 
             var jsCerrarModal = _alCerrarLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.Grid.IdHtml)
+                .Replace("{IdGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
                 .Replace("{nameSelCheck}", nombreCheckDeSeleccion);
 
 
@@ -86,7 +86,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     .Replace("idModal", IdHtml)
                     .Replace("titulo", Titulo)
                     .Replace("{idSelector}", s.IdHtml)
-                    .Replace("{idGrid}", Descriptor.Grid.IdHtml)
+                    .Replace("{idGrid}", Descriptor.DescriptorDeMantenimiento.Grid.IdHtml)
                     .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)

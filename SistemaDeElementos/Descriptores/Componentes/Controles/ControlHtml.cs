@@ -69,7 +69,7 @@
 
         public void CambiarAtributos(string propiedad, string ayuda)
         {
-            Id = $"{Padre.Id}_{propiedad}";
+            Id = $"{Padre.Id}_{Tipo}_{propiedad}";
             Propiedad = propiedad;
             Ayuda = ayuda;
         }

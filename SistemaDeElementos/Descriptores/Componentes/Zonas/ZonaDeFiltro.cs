@@ -6,14 +6,12 @@ using Utilidades;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ZonaDeFiltro : ControlFiltroHtml
+    public class ZonaDeFiltro<TElemento> : ControlFiltroHtml
     {
-        public ICollection<BloqueDeFitro> Bloques { get; private set; } = new List<BloqueDeFitro>();
-
-        public ZonaDeFiltro(ControlHtml padre)
+        public ZonaDeFiltro(ControlHtml mnt)
         : base(
-          padre: padre,
-          id: $"{padre.Id}_Filtro",
+          padre: mnt,
+          id: $"{mnt.Id}_Filtro",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -21,11 +19,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.ZonaDeFiltro;
-            var b1 = new BloqueDeFitro(this, "General", new Dimension(1, 2));
-            new BloqueDeFitro(this, "Común", new Dimension(1, 2));
+            var b1 = new BloqueDeFitro<TElemento>(this, "General", new Dimension(1, 2));
+            new BloqueDeFitro<TElemento>(this, "Común", new Dimension(1, 2));
 
-            new EditorFiltro(padre: b1, etiqueta: "Nombre", propiedad: FiltroPor.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: FiltroPor.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
+
+        public ICollection<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
 
         public ControlFiltroHtml BuscarControl(string propiedad)
         {
@@ -39,14 +39,14 @@ namespace MVCSistemaDeElementos.Descriptores
             return c;
         }
 
-        public void AnadirBloque(BloqueDeFitro bloque)
+        public void AnadirBloque(BloqueDeFitro<TElemento> bloque)
         {
             Bloques.Add(bloque);
         }
 
-        public BloqueDeFitro ObtenerBloque(string identificador)
+        public BloqueDeFitro<TElemento> ObtenerBloque(string identificador)
         {
-            foreach (BloqueDeFitro b in Bloques)
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
             {
                 if (b.Id == identificador)
                     return b;
@@ -62,17 +62,16 @@ namespace MVCSistemaDeElementos.Descriptores
                                 </div>";
 
             var htmlBloques = "";
-            foreach (BloqueDeFitro b in Bloques)
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
                 htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderControl()}";
 
             return htmlFiltro.Replace("bloques", htmlBloques);
         }
 
-
         private string RenderModalesFiltro()
         {
             var htmlModalesEnFiltro = "";
-            foreach (BloqueDeFitro b in Bloques)
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
                 htmlModalesEnFiltro = $"{htmlModalesEnFiltro}{(htmlModalesEnFiltro.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderModalesBloque()}";
 
             return htmlModalesEnFiltro;

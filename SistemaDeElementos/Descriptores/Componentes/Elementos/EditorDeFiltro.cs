@@ -1,10 +1,10 @@
 ﻿namespace MVCSistemaDeElementos.Descriptores
 {
-    public class EditorFiltro : ControlFiltroHtml
+    public class EditorFiltro<TElemento> : ControlFiltroHtml
     {
-        public EditorFiltro(BloqueDeFitro padre, string etiqueta, string propiedad, string ayuda, Posicion posicion)
-        : base(padre: padre
-              , id: $"{padre.Id}_{TipoControl.Editor}_{propiedad}"
+        public EditorFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string propiedad, string ayuda, Posicion posicion)
+        : base(padre: bloque
+              , id: $"{bloque.Id}_{TipoControl.Editor}_{propiedad}"
               , etiqueta
               , propiedad
               , ayuda
@@ -13,7 +13,7 @@
         {
             Tipo = TipoControl.Editor;
             Criterio = TipoCriterio.contiene.ToString();
-            padre.AnadirControl(this);
+            bloque.AnadirControl(this);
         }
 
         public override string RenderControl()

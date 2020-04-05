@@ -3,19 +3,19 @@
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class SelectorDeFiltro<Tseleccionado> : ControlFiltroHtml
+    public class SelectorDeFiltro<TElemento,TSeleccionado> : ControlFiltroHtml
     {
         public string propiedadParaFiltrar { get; private set; }
         public string propiedadParaMostrar { get; private set; }
-        public ModalDeSeleccionDeFiltro<Tseleccionado> Modal { get; set; }
+        public ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> Modal { get; set; }
 
         public string idBtnSelectorHtml => $"{IdHtml}_btnSel";
 
         public string PropiedadDondeMapear { get; private set; }
 
-        public DescriptorDeCrud<Tseleccionado> Descriptor { get; private set; }
+        public DescriptorDeCrud<TSeleccionado> Descriptor { get; private set; }
 
-        public SelectorDeFiltro(BloqueDeFitro padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<Tseleccionado> descriptor, string propiedadDondeMapear)
+        public SelectorDeFiltro(BloqueDeFitro<TElemento> padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<TSeleccionado> descriptor, string propiedadDondeMapear)
         : base(
           padre: padre
           , id: $"{padre.Id}_{TipoControl.Selector}_{propiedad}" //  $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
-            Modal = new ModalDeSeleccionDeFiltro<Tseleccionado>(padre, this, descriptor);
+            Modal = new ModalDeSeleccionDeFiltro<TElemento, TSeleccionado>(padre, this, descriptor);
             padre.AnadirSelector(this);
             Criterio = TipoCriterio.igual.ToString();
             Descriptor = descriptor;
@@ -38,7 +38,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderSelector()
         {
-            ControlHtml edt = Descriptor.Filtro.BuscarControl(PropiedadDondeMapear);
+            ControlHtml edt = Descriptor.DescriptorDeMantenimiento.Filtro.BuscarControl(PropiedadDondeMapear);
 
             return $@"<div class=¨input-group mb-3¨>
                        <input id=¨{IdHtml}¨ 
@@ -50,10 +50,10 @@ namespace MVCSistemaDeElementos.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
-                              idGridModal=¨{Descriptor.Grid.IdHtml}¨
+                              idGridModal=¨{Descriptor.DescriptorDeMantenimiento.Grid.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
                               idEditorMostrar=¨{edt.IdHtml}¨
-                              refCheckDeSeleccion=¨chksel.{Descriptor.Grid.IdHtml}¨
+                              refCheckDeSeleccion=¨chksel.{Descriptor.DescriptorDeMantenimiento.Grid.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{Descriptor.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button id=¨{idBtnSelectorHtml}¨ 

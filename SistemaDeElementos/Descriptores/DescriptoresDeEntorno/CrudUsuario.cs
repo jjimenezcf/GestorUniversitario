@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
-                new SelectorDeFiltro<PermisoDto>(padre: new BloqueDeFitro(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                new SelectorDeFiltro<UsuarioDto, PermisoDto>(padre: new BloqueDeFitro<UsuarioDto>(filtro: DescriptorDeMantenimiento.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Permiso",
                                         propiedad: UsuariosPor.Permisos,
                                         ayuda: "Seleccionar Permiso",
@@ -36,16 +36,16 @@ namespace MVCSistemaDeElementos.Descriptores
             base.DefinirColumnasDelGrid();
 
             var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Id), Tipo = typeof(int), Visible = false };
-            Grid.Columnas.Add(columnaDelGrid);
+            DescriptorDeMantenimiento.Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Login) };
-            Grid.Columnas.Add(columnaDelGrid);
+            DescriptorDeMantenimiento.Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Apellido), Ordenar = true, Ruta = "Usuarios", Accion = "IraMantenimientoUsuario" };
-            Grid.Columnas.Add(columnaDelGrid);
+            DescriptorDeMantenimiento.Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Nombre) };
-            Grid.Columnas.Add(columnaDelGrid);
+            DescriptorDeMantenimiento.Grid.Columnas.Add(columnaDelGrid);
 
             columnaDelGrid = new ColumnaDelGrid
             {
@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 Ruta = "Usuarios",
                 Accion = "IraMantenimientoUsuario"
             };
-            Grid.Columnas.Add(columnaDelGrid);
+            DescriptorDeMantenimiento.Grid.Columnas.Add(columnaDelGrid);
         }
 
         public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos)
@@ -65,7 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
             foreach (var usuario in elementos)
             {
                 var fila = new FilaDelGrid();
-                foreach (ColumnaDelGrid columna in Grid.Columnas)
+                foreach (ColumnaDelGrid columna in DescriptorDeMantenimiento.Grid.Columnas)
                 {
                     CeldaDelGrid celda = new CeldaDelGrid(columna);
                     if (columna.Nombre == nameof(UsuarioDtm.Id))
@@ -85,7 +85,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     fila.Celdas.Add(celda);
                 }
-                Grid.Filas.Add(fila);
+                DescriptorDeMantenimiento.Grid.Filas.Add(fila);
             }
         }
 

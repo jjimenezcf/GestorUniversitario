@@ -38,9 +38,13 @@ namespace MVCSistemaDeElementos.Descriptores
         public VistaCsHtml VistaMnt { get; private set; }
         public VistaCsHtml VistaCreacion { get; private set; }
 
+        public DescriptorMantenimiento<TElemento> DescriptorDeMantenimiento { get; private set; }
+        public DescriptorDeCreacion DescriptorDeCreacion { get; private set; }
+        public DescriptorDeEdicion DescriptorDeEdicion { get; private set; }
+        public DescriptorDeBorrado DescriptorDeBorrado { get; private set; }
+        public DescriptorDeDetalle DescriptorDeDetalle { get; private set; }
+
         public MenuMantenimiento<TElemento> Menu { get; set; }
-        public ZonaDeFiltro Filtro { get; private set; }
-        public ZonaDeGrid<TElemento> Grid { get; set; }
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
 
@@ -55,16 +59,15 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.DescriptorDeCrud;
+            DescriptorDeMantenimiento = new DescriptorMantenimiento<TElemento>(this);
             VistaMnt = new VistaCsHtml(this, "Mnt", controlador, vista, titulo);
-            Filtro = new ZonaDeFiltro(this);
-            Grid = new ZonaDeGrid<TElemento>(this);
             Controlador = controlador;
             Modo = modo;
         }
 
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
-            return Filtro.BuscarControl(propiedad);
+            return DescriptorDeMantenimiento.Filtro.BuscarControl(propiedad);
         }
 
         protected void DefinirVistaDeCreacion(string accion, string textoMenu)
@@ -79,11 +82,11 @@ namespace MVCSistemaDeElementos.Descriptores
                    ?
                    RenderTitulo() + Environment.NewLine +
                    Menu.RenderControl() + Environment.NewLine +
-                   Filtro.RenderControl() + Environment.NewLine +
-                   Grid.RenderControl() + Environment.NewLine
+                   DescriptorDeMantenimiento.Filtro.RenderControl() + Environment.NewLine +
+                   DescriptorDeMantenimiento.Grid.RenderControl() + Environment.NewLine
                    :
-                   Filtro.RenderControl() + Environment.NewLine +
-                   Grid.RenderControl() + Environment.NewLine;
+                   DescriptorDeMantenimiento.Filtro.RenderControl() + Environment.NewLine +
+                   DescriptorDeMantenimiento.Grid.RenderControl() + Environment.NewLine;
 
             return htmlCrud.Render();
         }
@@ -105,7 +108,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public void TotalEnBd(int totalEnBd)
         {
-            Grid.TotalEnBd = totalEnBd;
+            DescriptorDeMantenimiento.Grid.TotalEnBd = totalEnBd;
         }
 
         public override string RenderControl()
