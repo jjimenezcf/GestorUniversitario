@@ -12,6 +12,14 @@ body {
     line-height: 18px;
 }
 
+.div-visible{
+    display: block;
+}
+
+.div-no-visible {
+    display: none;
+}
+
 a {
     text-decoration:none;
     color: #000;

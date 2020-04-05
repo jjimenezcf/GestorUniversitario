@@ -22,11 +22,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
+            var htmlOpcionMenu = $"<input id=¨idAceptar¨ type=¨button¨ value=¨Aceptar¨ onClick=¨Menu.EjecutarAccionMenu('{Crud.Mnt.IdHtml}','{IdHtml}')¨ />";
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-no-visible¨>
                      <h2>Div de creación</h2>
+                     {htmlOpcionMenu}
                    </Div>
                 ";
 

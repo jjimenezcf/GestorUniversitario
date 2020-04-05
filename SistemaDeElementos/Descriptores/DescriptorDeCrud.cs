@@ -93,7 +93,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return Mnt.RenderControl();
+            return Mnt.RenderControl() +
+                   (
+                    ModoDescriptor.Mantenimiento == Modo 
+                    ? $"{Environment.NewLine}{Creacion.RenderControl()}" 
+                    : ""
+                   );
         }
     }
 

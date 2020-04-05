@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨>
                      {htmlMnt}
                    </Div>
                 ";

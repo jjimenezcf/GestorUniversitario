@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public virtual string RenderAccion()
         {
-            return "EjecutarAccionMenu({parametros})";
+            return "Menu.EjecutarAccionMenu({parametros})";
         }
 
     }
@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨>";
+            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ />";
             return htmlOpcionMenu;
         }
     }

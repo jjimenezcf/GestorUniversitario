@@ -51,12 +51,24 @@
 
     }
 
-    export function SolicitarMenu(idContenedorMenu, usuario) {
+    export function SolicitarMenu(idContenedorMenu: string, usuario: string) {
         var url: string = urlPeticion(usuario);
         LeeMenu(url, idContenedorMenu, SustituirMenu);
     }
 
-    function LeeMenu(url, idContenedorMenu, funcionDeRespuesta) {
+    export function EjecutarAccionMenu(idDivMostrarHtml: string, idDivOcultarHtml: string) {
+        var htmlDivMostrar = document.getElementById(`${idDivMostrarHtml}`);
+        var htmlDivOcultar = document.getElementById(`${idDivOcultarHtml}`);
+
+        htmlDivMostrar.classList.add("div-visible");
+        htmlDivMostrar.classList.remove("div-no-visible");
+
+        htmlDivOcultar.classList.add("div-no-visible");
+        htmlDivOcultar.classList.remove("div-visible");
+
+    }
+
+    function LeeMenu(url: string, idContenedorMenu: string, funcionDeRespuesta: Function) {
 
         function respuestaCorrecta() {
             if (req.status >= 200 && req.status < 400) {
@@ -79,7 +91,7 @@
         req.send();
     }
 
-    function SustituirMenu(idContenedorMenu, htmlMenu) {
+    function SustituirMenu(idContenedorMenu: string, htmlMenu: string) {
         var htmlContenedorMenu = document.getElementById(`${idContenedorMenu}`);
         if (!htmlContenedorMenu) {
             console.log(`No se ha localizado el contenedor ${idContenedorMenu}`);
