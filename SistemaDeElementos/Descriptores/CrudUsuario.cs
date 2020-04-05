@@ -13,9 +13,9 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", titulo: "Mantenimiento de usuarios", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
-                new Selector<PermisoDto>(padre: new Bloque(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                new SelectorDeFiltro<PermisoDto>(padre: new BloqueDeFitro(Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                         etiqueta: "Permiso",
-                                        propiedad: UsuariosPor.CursosInscrito,
+                                        propiedad: UsuariosPor.Permisos,
                                         ayuda: "Seleccionar Permiso",
                                         posicion: new Posicion() { fila = 0, columna = 0 },
                                         paraFiltrar: nameof(PermisoDto.Id),

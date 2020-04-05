@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
-using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Seguridad;
-using UtilidadesParaIu;
+﻿using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {

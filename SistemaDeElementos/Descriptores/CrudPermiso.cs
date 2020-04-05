@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var descEstu = new CrudUsuario(ModoDescriptor.Seleccion);
-                new Selector<UsuarioDto>(padre: new Bloque(Filtro, "Específico", new Dimension(1, 2)),
+                new SelectorDeFiltro<UsuarioDto>(padre: new BloqueDeFitro(Filtro, "Específico", new Dimension(1, 2)),
                                               etiqueta: "Usuario",
                                               propiedad: PermisoPor.PermisoDeUnRol,
                                               ayuda: "Seleccionar usuario",

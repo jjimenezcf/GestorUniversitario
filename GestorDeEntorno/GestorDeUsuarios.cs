@@ -21,12 +21,12 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == UsuariosPor.CursosInscrito)
+                if (filtro.Propiedad.ToLower() == UsuariosPor.Permisos)
                 {
                     var listaIds = filtro.Valor.ListaEnteros(); 
                     foreach(int id in listaIds)
                     {
-                        //registros = registros.Where(x => x.Inscripciones.Any(i => i.CursoId == id));
+                        registros = registros.Where(x => x.Id == 2 || x.Id == 3);
                     }
                 }
 

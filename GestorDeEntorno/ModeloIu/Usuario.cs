@@ -7,7 +7,7 @@ namespace Gestor.Elementos.Entorno
     public static class UsuariosPor
     {
        public static string NombreCompleto = nameof(NombreCompleto).ToLower();
-       public static string CursosInscrito = nameof(CursosInscrito).ToLower();
+       public static string Permisos = nameof(Permisos).ToLower();
     }
 
     public class UsuarioDto: Elemento
