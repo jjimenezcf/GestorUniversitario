@@ -1,5 +1,6 @@
 ﻿using Gestor.Elementos.ModeloIu;
 using System;
+using System.Linq;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -41,8 +42,8 @@ namespace Gestor.Elementos.Entorno
             Tipo = typeof(string),
             Visible = true,
             Fila = 1,
-            Columna = 0,
-            Posicion = 1
+            Columna = 1,
+            Posicion = 0
             )
         ]
         public string Nombre { get; set; }
@@ -53,10 +54,15 @@ namespace Gestor.Elementos.Entorno
             Tipo = typeof(DateTime),
             Visible = true,
             Editable = false,
+            ValorPorDefecto="AlMostrar(GetDate())",
             Fila = 2,
-            Columna = 0
+            Columna = 1
             )
         ]
         public DateTime Alta { get; set; }
+
     }
+
+
+
 }

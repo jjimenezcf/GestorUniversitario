@@ -10,17 +10,21 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     internal class DescriptorControl
     {
-       internal PropertyInfo Descriptor { get; set; }
+        internal PropertyInfo Descriptor { get; set; }
+
+        internal IUCreacionAttribute atributos => ObtenerAtributos(Descriptor);
 
         public static IUCreacionAttribute ObtenerAtributos(PropertyInfo propiedad)
         {
             var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUCreacionAttribute));
             if (iEnumerableAtrb == null)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {""} por no tener definidas las etiquetas de {typeof(IUCreacionAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por no tener definidas las etiquetas de {typeof(IUCreacionAttribute)}");
 
             var listaAtrb = iEnumerableAtrb.ToList();
+            if (listaAtrb.Count == 0)
+                return null;
             if (listaAtrb.Count != 1)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {""} por tener mal definidas las etiquetas de {typeof(IUCreacionAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUCreacionAttribute)}");
 
             var atributos = (IUCreacionAttribute)propiedad.GetCustomAttributes(typeof(IUCreacionAttribute)).ToList()[0];
             return atributos;
@@ -31,22 +35,19 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         private Dictionary<short, DescriptorControl> Controles = new Dictionary<short, DescriptorControl>();
 
+        public short Count { get; private set; } = 0;
 
-        private short numeroControles = 0;
-
-        public short Count => numeroControles;
-
-        public string Etiqueta { 
+        public string Etiqueta
+        {
             get
             {
-                for (short i=0; i<Count; i++)
+                for (short i = 0; i < Count; i++)
                 {
                     var control = ObtenerControl(i);
-                    if (control != null)
+                    if (control != null && control.atributos.Visible)
                     {
                         var atributos = DescriptorControl.ObtenerAtributos(control.Descriptor);
-                        if (!atributos.Etiqueta.IsNullOrEmpty())
-                           return atributos.Etiqueta;
+                        return atributos.Etiqueta;
                     }
                 }
 
@@ -58,9 +59,11 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (!Controles.ContainsKey(pos))
                 Controles[pos] = new DescriptorControl { Descriptor = descriptor };
+            else
+                AnadirControl((short)(pos + 1), descriptor);
 
-            if (numeroControles <= pos)
-                numeroControles = (short)(numeroControles + 1);
+            if (Count <= pos)
+                Count = (short)(Count + 1);
 
         }
 
@@ -80,7 +83,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string IdHtml => $"{_DescriptorDeTabla.IdHtml}_tr".ToLower();
 
-        private short numeroColumnas = 0;
         private DescriptorDeTabla _DescriptorDeTabla;
 
         public DescriptorDeFila(DescriptorDeTabla descriptorDeTabla)
@@ -88,7 +90,7 @@ namespace MVCSistemaDeElementos.Descriptores
             this._DescriptorDeTabla = descriptorDeTabla;
         }
 
-        public short Count => numeroColumnas;
+        public short NumeroDeColumnas { get; private set; } = 0;
 
         private bool ColumnaDefinida(short indice)
         {
@@ -99,8 +101,10 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var celda = new DescriptorDeColumna();
             Columnas[indice] = celda;
-            if (numeroColumnas <= indice)
-                numeroColumnas = (short)(numeroColumnas + 1);
+            if (NumeroDeColumnas <= indice)
+            {
+                NumeroDeColumnas = (short)(indice + 1);
+            }
         }
 
         internal DescriptorDeColumna ObtenerColumna(short columna)
@@ -114,10 +118,24 @@ namespace MVCSistemaDeElementos.Descriptores
 
     class DescriptorDeTabla
     {
-        public Dictionary<short, DescriptorDeFila> Filas = new Dictionary<short, DescriptorDeFila>();
-        private short _NumeroFilas = 0;
+        private Dictionary<short, DescriptorDeFila> Filas = new Dictionary<short, DescriptorDeFila>();
         private Type _Tipo;
-        public short Count => _NumeroFilas;
+        public short NumeroDeFilas { get; private set; } = 0;
+
+        private short _numeroDeColumnas = 0;
+        public short NumeroDeColumnas
+        {
+            get
+            {
+                if (_numeroDeColumnas == 0)
+                    for (short i = 0; i < NumeroDeFilas; i++)
+                    {
+                        if (_numeroDeColumnas < ObtenerFila(i).NumeroDeColumnas)
+                            _numeroDeColumnas = ObtenerFila(i).NumeroDeColumnas;
+                    }
+                return _numeroDeColumnas;
+            }
+        }
 
         public string IdHtml => $"id_table_{_Tipo.Name}".ToLower();
 
@@ -132,16 +150,21 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var fila = new DescriptorDeFila(this);
             Filas[indice] = fila;
+            _numeroDeColumnas = 0;
 
-            if (_NumeroFilas <= indice)
-                _NumeroFilas = (short)(_NumeroFilas + 1);
+            if (NumeroDeFilas <= indice)
+            {
+                NumeroDeFilas = (short)(indice + 1);
+            }
 
         }
+
+
         private bool FilaDefinida(short indice)
         {
             return Filas.ContainsKey(indice);
         }
-        private DescriptorDeFila ObtenerFila(short fila)
+        public DescriptorDeFila ObtenerFila(short fila)
         {
             if (!FilaDefinida(fila))
                 DefinirFila(fila);
@@ -152,12 +175,12 @@ namespace MVCSistemaDeElementos.Descriptores
         private void AnadirPropiedad(PropertyInfo propiedad)
         {
             IUCreacionAttribute atributos = DescriptorControl.ObtenerAtributos(propiedad);
-
-            var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);
-            descriptorColumna.AnadirControl(atributos.Posicion, propiedad);
+            if (atributos != null)
+            {
+                var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);
+                descriptorColumna.AnadirControl(atributos.Posicion, propiedad);
+            }
         }
-
-       
 
         private DescriptorDeColumna ObtenerColumna(short fila, short columna)
         {

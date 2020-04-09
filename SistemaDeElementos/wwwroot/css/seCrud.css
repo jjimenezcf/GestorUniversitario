@@ -74,6 +74,31 @@ a {
     background: #00b9ff;
 }
 
+.controlNoVisible {
+    display:none;
+}
+
+.controlDeCreacion {
+    display: block;
+    text-align: left;
+    border: hidden;
+    background: #ffd800;
+}
+
+    .controlDeCreacion:read-only {
+        background: #808080
+    }
+
+.tabla-creacion {
+    width: 100%;
+}
+
+.td-creacion{
+    border: 0px;
+}
+
+
+
 
 
 

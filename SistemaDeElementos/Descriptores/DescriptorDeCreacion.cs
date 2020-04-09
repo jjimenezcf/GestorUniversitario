@@ -45,13 +45,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var tabla = new DescriptorDeTabla(typeof(TElemento));
 
-            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-propiedad¨>
+            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-creacion¨>
                                   htmlFilas
                                 </table>
                                ";
 
             var htmlFilas = "";
-            for (short i = 0; i < tabla.Count; i++)
+            for (short i = 0; i < tabla.NumeroDeFilas; i++)
             {
                 htmlFilas = htmlFilas + Environment.NewLine + RenderFila(tabla, i);
             }
@@ -61,7 +61,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderFila(DescriptorDeTabla tabla, short i)
         {
-            var fila = tabla.Filas[i];
+            var fila = tabla.ObtenerFila(i);
             var htmlColumnas = "";
             var htmlFila =
                     $@"<tr id=¨{fila.IdHtml}_{i}¨ name=¨tr_lbl_propiedad¨ class=¨tr-propiedad¨>
@@ -69,7 +69,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        </tr>
                       ";
             
-            for (short j = 0; j < fila.Count; j++)
+            for (short j = 0; j < tabla.NumeroDeColumnas; j++)
             {
                 htmlColumnas = htmlColumnas + RenderColumna(tabla, i, j);
             }
@@ -78,15 +78,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderColumna(DescriptorDeTabla tabla, short i, short j)
         {
-            var columna = tabla.Filas[i].ObtenerColumna(j);
+            var columna = tabla.ObtenerFila(i).ObtenerColumna(j);
             var htmlControles = "";
             var htmlEtiqueta =
-                    $@"<td id=¨{tabla.Filas[i].IdHtml}_{i}_{j}_lbl¨ name=¨td_lbl_propiedad¨ class=¨td-propiedad¨>
+                    $@"<td id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨td_lbl_propiedad¨ class=¨td-creacion¨>
                          {columna.Etiqueta}
                        </td>
                       ";
             var htmlTdControles =
-                    $@"<td id=¨{tabla.Filas[i].IdHtml}_{i}_{j}_ctrl¨ name=¨td_ctrl_propiedad¨ class=¨td-propiedad¨>
+                    $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_ctrl_propiedad¨ class=¨td-creacion¨>
                          htmlControles
                        </td>
                       ";
@@ -94,7 +94,8 @@ namespace MVCSistemaDeElementos.Descriptores
             for (short z = 0; z < columna.Count; z++)
             {
                 var descriptorControl = columna.ObtenerControl(z);
-                htmlControles = htmlControles + RenderDescriptorControl(descriptorControl);
+                if (descriptorControl.atributos.Visible)
+                   htmlControles = htmlControles + RenderDescriptorControl(descriptorControl);
             }
 
             return htmlEtiqueta + htmlTdControles.Replace("htmlControles", htmlControles);
@@ -102,7 +103,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderDescriptorControl(DescriptorControl descriptorControl)
         {
-            var htmdDescriptorControl = $"<input id=¨idAceptar¨ type=¨text¨ value=¨¨ />";
+            var htmdDescriptorControl = $"<input id=¨{descriptorControl.Descriptor.Name}¨ " +
+                                        $"       class=¨{descriptorControl.atributos.ClaseCss}¨ " +
+                                        $"       type=¨text¨ "+
+                                        $"       {(!descriptorControl.atributos.Editable ? "readonly" : "")} " +
+                                        $"       value=¨¨" +
+                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨/>";
             return htmdDescriptorControl;
         }
     }
