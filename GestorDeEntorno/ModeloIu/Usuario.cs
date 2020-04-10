@@ -26,8 +26,8 @@ namespace Gestor.Elementos.Entorno
 
 
         [IUCreacion(
-            Etiqueta = "Nombre de usuario",
-            Ayuda = "Introducir el nombre de usuario (Apellidos y Nombre)",
+            Etiqueta = "Apellido y nombre",
+            Ayuda = "Apellidos",
             Tipo = typeof(string),
             Visible = true,
             Fila = 1,
@@ -42,8 +42,8 @@ namespace Gestor.Elementos.Entorno
             Tipo = typeof(string),
             Visible = true,
             Fila = 1,
-            Columna = 1,
-            Posicion = 0
+            Columna = 0,
+            Posicion = 1
             )
         ]
         public string Nombre { get; set; }
@@ -55,8 +55,8 @@ namespace Gestor.Elementos.Entorno
             Visible = true,
             Editable = false,
             ValorPorDefecto="AlMostrar(GetDate())",
-            Fila = 2,
-            Columna = 1
+            Fila = 3,
+            Columna = 0
             )
         ]
         public DateTime Alta { get; set; }

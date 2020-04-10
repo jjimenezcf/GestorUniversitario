@@ -2,6 +2,8 @@
 
 namespace Gestor.Elementos.ModeloIu
 {
+    public enum LadoDeRenderizacion {izquierdo, derecho}
+
     public class IUCreacionAttribute : Attribute
     {
         public string Etiqueta { get; set; } = "";
@@ -15,6 +17,7 @@ namespace Gestor.Elementos.ModeloIu
         public string ClaseCss { get; set; } = "controlDeCreacion";
         public string ConcatenarClaseCss { set { ClaseCss = $"{ClaseCss} {value}"; } }
         public string ValorPorDefecto { get; set; }
+
     }
 
 

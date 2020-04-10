@@ -83,6 +83,7 @@ a {
     text-align: left;
     border: hidden;
     background: #ffd800;
+    width:100%
 }
 
     .controlDeCreacion:read-only {
@@ -95,6 +96,14 @@ a {
 
 .td-creacion{
     border: 0px;
+}
+
+.div-propiedad{
+    display:flex;
+}
+.lbl-propiedad {
+}
+.crtl-propiedad {
 }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UtilidadesParaIu;
 using Gestor.Elementos.ModeloIu;
+using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -59,7 +60,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlObjeto.Replace("htmlFilas", $"{htmlFilas}");
         }
 
-        private string RenderFila(DescriptorDeTabla tabla, short i)
+        private static string RenderFila(DescriptorDeTabla tabla, short i)
         {
             var fila = tabla.ObtenerFila(i);
             var htmlColumnas = "";
@@ -68,7 +69,7 @@ namespace MVCSistemaDeElementos.Descriptores
                          htmlColumnas
                        </tr>
                       ";
-            
+
             for (short j = 0; j < tabla.NumeroDeColumnas; j++)
             {
                 htmlColumnas = htmlColumnas + RenderColumna(tabla, i, j);
@@ -76,39 +77,75 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlFila.Replace("htmlColumnas", $"{htmlColumnas}");
         }
 
-        private string RenderColumna(DescriptorDeTabla tabla, short i, short j)
+        private static string RenderColumna(DescriptorDeTabla tabla, short i, short j)
+        {
+            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_propiedad¨ class=¨td-propiedad¨>
+                         <div id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨div_propiedad¨ class=¨div-propiedad¨>
+                              {RenderControles(tabla, i, j)}
+                         </div>
+                      </td>
+                     ";
+        }
+
+        private static string RenderControles(DescriptorDeTabla tabla, short i, short j)
         {
             var columna = tabla.ObtenerFila(i).ObtenerColumna(j);
             var htmlControles = "";
-            var htmlEtiqueta =
-                    $@"<td id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨td_lbl_propiedad¨ class=¨td-creacion¨>
-                         {columna.Etiqueta}
-                       </td>
-                      ";
-            var htmlTdControles =
-                    $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_ctrl_propiedad¨ class=¨td-creacion¨>
-                         htmlControles
-                       </td>
-                      ";
+            double anchoEtiqueta = columna.NumeroDeEtiquetas == 0 ? 0 : 15 / columna.NumeroDeEtiquetas;
+            double anchoControl = columna.NumeroControlesVisibles == 0 ? 0 : (85 - (2 * (columna.NumeroControlesVisibles - 1))) / columna.NumeroControlesVisibles;
+            var anadirSeparador = false;
 
-            for (short z = 0; z < columna.Count; z++)
+            double anchoTotal = 0;
+            for (short z = 0; z < columna.NumeroControlesVisibles; z++)
             {
                 var descriptorControl = columna.ObtenerControl(z);
-                if (descriptorControl.atributos.Visible)
-                   htmlControles = htmlControles + RenderDescriptorControl(descriptorControl);
+
+                if (anadirSeparador)
+                {
+                    htmlControles = htmlControles
+                        + "<div id=¨{tabla.IdHtml}_{i}_{j}_separador¨ name=¨separardor_propiedad¨ class=¨separardor-propiedad¨ style=¨width:2%¨></div>";
+                    anchoTotal += 2;
+                }
+
+                if (!descriptorControl.atributos.Etiqueta.IsNullOrEmpty())
+                {
+                    htmlControles = htmlControles + RenderEtiqueta(tabla, descriptorControl.atributos.Etiqueta, i, j, anchoEtiqueta);
+                    anchoTotal = anchoTotal + anchoEtiqueta;
+                }
+
+                if (z == columna.NumeroDeControles - 1)
+                    anchoControl = 100 - anchoTotal;
+
+                htmlControles = htmlControles + RenderDescriptorControl(tabla, descriptorControl, i, j, anchoControl);
+                anchoTotal = anchoTotal + anchoControl;
+
+                anadirSeparador = true;
+
             }
 
-            return htmlEtiqueta + htmlTdControles.Replace("htmlControles", htmlControles);
+            return htmlControles;
         }
 
-        private string RenderDescriptorControl(DescriptorControl descriptorControl)
+        private static string RenderEtiqueta(DescriptorDeTabla tabla, string etiqueta, short i, short j, double ancho)
         {
-            var htmdDescriptorControl = $"<input id=¨{descriptorControl.Descriptor.Name}¨ " +
+            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨lbl_propiedad¨ class=¨lbl-propiedad¨ style=¨width: {ancho}%¨>
+                         {etiqueta}: 
+                       </div>
+                      ";
+        }
+
+        private static string RenderDescriptorControl(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        {
+            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨crtl-propiedad¨ style=¨width: {ancho}%¨ >" +
+                                        $"   <input id=¨{descriptorControl.Descriptor.Name}¨ " +
                                         $"       class=¨{descriptorControl.atributos.ClaseCss}¨ " +
-                                        $"       type=¨text¨ "+
+                                        $"       type=¨text¨ " +
                                         $"       {(!descriptorControl.atributos.Editable ? "readonly" : "")} " +
                                         $"       value=¨¨" +
-                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨/>";
+                                        $"       placeholder =¨{descriptorControl.atributos.Ayuda}¨" +
+                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨>" +
+                                        $"   </input>" +
+                                        $"</div>";
             return htmdDescriptorControl;
         }
     }

@@ -35,19 +35,47 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         private Dictionary<short, DescriptorControl> Controles = new Dictionary<short, DescriptorControl>();
 
-        public short Count { get; private set; } = 0;
+        public short NumeroDeControles { get; private set; } = 0;
+
+        public short NumeroDeEtiquetas
+        {
+            get
+            {
+                short numero = 0;
+                for (short i = 0; i < NumeroDeControles; i++)
+                {
+                    var control = ObtenerControl(i);
+                    if (control != null && control.atributos.Visible && !control.atributos.Etiqueta.IsNullOrEmpty())
+                        numero = (short)(numero + 1);
+                }
+                return numero;
+            }
+        }
+        public short NumeroControlesVisibles
+        {
+            get
+            {
+                short numero = 0;
+                for (short i = 0; i < NumeroDeControles; i++)
+                {
+                    var control = ObtenerControl(i);
+                    if (control != null && control.atributos.Visible)
+                        numero = (short)(numero + 1);
+                }
+                return numero;
+            }
+        }
 
         public string Etiqueta
         {
             get
             {
-                for (short i = 0; i < Count; i++)
+                for (short i = 0; i < NumeroDeControles; i++)
                 {
                     var control = ObtenerControl(i);
                     if (control != null && control.atributos.Visible)
                     {
-                        var atributos = DescriptorControl.ObtenerAtributos(control.Descriptor);
-                        return atributos.Etiqueta;
+                        return control.atributos.Etiqueta;
                     }
                 }
 
@@ -62,8 +90,8 @@ namespace MVCSistemaDeElementos.Descriptores
             else
                 AnadirControl((short)(pos + 1), descriptor);
 
-            if (Count <= pos)
-                Count = (short)(Count + 1);
+            if (NumeroDeControles <= pos)
+                NumeroDeControles = (short)(NumeroDeControles + 1);
 
         }
 
