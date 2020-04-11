@@ -26,7 +26,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var htmlOpcionMenu = $"<input id=¨idAceptar¨ type=¨button¨ value=¨Aceptar¨ onClick=¨Menu.EjecutarAccionMenu('{Crud.Mnt.IdHtml}','{IdHtml}')¨ />";
+            var htmlOpcionMenu = $"<input id=¨idAceptar¨ type=¨button¨ value=¨Aceptar¨ onClick=¨Crud.Crear.Aceptar()¨ />" +
+                                 $"<input id=¨idCerrar¨ type=¨button¨ value=¨Cerrar¨ onClick=¨Crud.Crear.Cerrar()¨ />";
 
 
             var htmContenedorMnt =
@@ -110,7 +111,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (anadirSeparador)
                 {
                     htmlControles = htmlControles
-                        + "<div id=¨{tabla.IdHtml}_{i}_{j}_separador¨ name=¨separardor_propiedad¨ class=¨separardor-propiedad¨ style=¨width:2%¨></div>";
+                        + "<div id=¨{tabla.IdHtml}_{i}_{j}_separador¨ name=¨div_separardor_propiedad¨ class=¨div-separardor-propiedad¨ style=¨width:2%¨></div>";
                     anchoTotal += 2;
                 }
 
@@ -135,7 +136,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderEtiqueta(DescriptorDeTabla tabla, string etiqueta, short i, short j, double ancho)
         {
-            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨lbl_propiedad¨ class=¨lbl-propiedad¨ style=¨width: {ancho}%¨>
+            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨lbl_propiedad¨ class=¨div-lbl-propiedad¨ style=¨width: {ancho}%¨>
                          {etiqueta}: 
                        </div>
                       ";
@@ -143,7 +144,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderDescriptorControl(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
-            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨crtl-propiedad¨ style=¨width: {ancho}%¨ >" +
+            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" +
                                         $"   <input id=¨{descriptorControl.Descriptor.Name}¨ " +
                                         $"       class=¨{descriptorControl.atributos.ClaseCss}¨ " +
                                         $"       type=¨text¨ " +

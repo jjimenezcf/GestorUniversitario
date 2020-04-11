@@ -1,14 +1,16 @@
-﻿{
+﻿
+/*Clase de un crud*/
+
+/*{
     margin: 0;
     padding: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-}
+}*/
 
 body {
     background: #ffffff;
-    /*font-family: scans-serif;*/
     line-height: 18px;
 }
 
@@ -74,8 +76,35 @@ a {
     background: #00b9ff;
 }
 
+/*Clases de creación*/
+
 .controlNoVisible {
     display:none;
+}
+
+
+.tabla-creacion {
+    width: 100%;
+}
+
+.tr-propiedad {
+
+}
+
+.td-creacion {
+    border: 0px;
+}
+
+.div-propiedad {
+    display: flex;
+}
+.div-lbl-propiedad {
+}
+
+.div-separardor-propiedad {
+}
+
+.div-crtl-propiedad {
 }
 
 .controlDeCreacion {
@@ -83,28 +112,14 @@ a {
     text-align: left;
     border: hidden;
     background: #ffd800;
-    width:100%
+    width: 100%
 }
 
     .controlDeCreacion:read-only {
         background: #808080
     }
 
-.tabla-creacion {
-    width: 100%;
-}
 
-.td-creacion{
-    border: 0px;
-}
-
-.div-propiedad{
-    display:flex;
-}
-.lbl-propiedad {
-}
-.crtl-propiedad {
-}
 
 
 

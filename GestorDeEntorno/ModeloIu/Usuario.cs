@@ -13,7 +13,7 @@ namespace Gestor.Elementos.Entorno
 
     public class UsuarioDto : Elemento
     {
-        [IUCreacion(
+        [IUPropiedad(
             Etiqueta = "Usuario",
             Ayuda = "Usuario de conexión", 
             Tipo = typeof(string), 
@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Entorno
         public string Login { get; set; }
 
 
-        [IUCreacion(
+        [IUPropiedad(
             Etiqueta = "Apellido y nombre",
             Ayuda = "Apellidos",
             Tipo = typeof(string),
@@ -37,25 +37,25 @@ namespace Gestor.Elementos.Entorno
         public string Apellido { get; set; }
 
 
-        [IUCreacion(
+        [IUPropiedad(
             Ayuda = "Nombre",
             Tipo = typeof(string),
             Visible = true,
             Fila = 1,
-            Columna = 0,
+            Columna = 1,
             Posicion = 1
             )
         ]
         public string Nombre { get; set; }
 
 
-        [IUCreacion(
+        [IUPropiedad(
             Etiqueta = "Fecha de alta",
             Tipo = typeof(DateTime),
             Visible = true,
             Editable = false,
             ValorPorDefecto="AlMostrar(GetDate())",
-            Fila = 3,
+            Fila = 2,
             Columna = 0
             )
         ]

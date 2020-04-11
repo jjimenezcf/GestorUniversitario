@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Gestor.Elementos.ModeloIu
 {
     public enum LadoDeRenderizacion {izquierdo, derecho}
 
-    public class IUCreacionAttribute : Attribute
+    public class IUPropiedadAttribute : Attribute
     {
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
@@ -20,6 +21,18 @@ namespace Gestor.Elementos.ModeloIu
 
     }
 
+    public class IUDtoAttribute : Attribute
+    {
+        public short AnchoEtiqueta { get; set; }
+        public short AnchoSeparador { get; set; }
+        public string AlMostrar { get; set; } = "Crud.Crear.Mostrar()";
+
+        public string AlCerrar { get; set; } = "Crud.Crear.Cerrar()";
+
+        public string AlAceptar { get; set; } = "Crud.Crear.Aceptar()";
+
+    }
+
 
     public static class FiltroPor
     {
@@ -30,7 +43,7 @@ namespace Gestor.Elementos.ModeloIu
 
     public class Elemento
     {
-        [IUCreacion(
+        [IUPropiedad(
             Etiqueta = "Id",
             Ayuda = "id del elemento",
             Tipo = typeof(int),

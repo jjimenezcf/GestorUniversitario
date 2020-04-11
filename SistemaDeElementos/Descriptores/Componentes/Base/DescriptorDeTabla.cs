@@ -12,21 +12,21 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         internal PropertyInfo Descriptor { get; set; }
 
-        internal IUCreacionAttribute atributos => ObtenerAtributos(Descriptor);
+        internal IUPropiedadAttribute atributos => ObtenerAtributos(Descriptor);
 
-        public static IUCreacionAttribute ObtenerAtributos(PropertyInfo propiedad)
+        public static IUPropiedadAttribute ObtenerAtributos(PropertyInfo propiedad)
         {
-            var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUCreacionAttribute));
+            var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute));
             if (iEnumerableAtrb == null)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por no tener definidas las etiquetas de {typeof(IUCreacionAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por no tener definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
 
             var listaAtrb = iEnumerableAtrb.ToList();
             if (listaAtrb.Count == 0)
                 return null;
             if (listaAtrb.Count != 1)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUCreacionAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
 
-            var atributos = (IUCreacionAttribute)propiedad.GetCustomAttributes(typeof(IUCreacionAttribute)).ToList()[0];
+            var atributos = (IUPropiedadAttribute)propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute)).ToList()[0];
             return atributos;
         }
     }
@@ -139,20 +139,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private Type _Tipo;
         public short NumeroDeFilas { get; private set; } = 0;
 
-        //private short _numeroDeColumnas = 0;
         public short NumeroDeColumnas { get; private set; } = 0;
-        //{
-        //    get
-        //    {
-        //        if (_numeroDeColumnas == 0)
-        //            for (short i = 0; i < NumeroDeFilas; i++)
-        //            {
-        //                if (_numeroDeColumnas < ObtenerFila(i).NumeroDeColumnas)
-        //                    _numeroDeColumnas = ObtenerFila(i).NumeroDeColumnas;
-        //            }
-        //        return _numeroDeColumnas;
-        //    }
-        //}
 
         public string IdHtml => $"id_table_{_Tipo.Name}".ToLower();
 
@@ -190,7 +177,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private void AnadirPropiedad(PropertyInfo propiedad)
         {
-            IUCreacionAttribute atributos = DescriptorControl.ObtenerAtributos(propiedad);
+            IUPropiedadAttribute atributos = DescriptorControl.ObtenerAtributos(propiedad);
             if (atributos != null)
             {
                 var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);
