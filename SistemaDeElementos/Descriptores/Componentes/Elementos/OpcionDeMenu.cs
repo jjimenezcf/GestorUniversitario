@@ -3,56 +3,72 @@ using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoAccion { MostrarDiv, OcultarDiv }
+    public enum TipoAccion { IraCrear, IraMnt }
+
     public class AccionDeMenu
     {
-        public TipoAccion tipoAccion { get; protected set; }
+        public TipoAccion TipoAccion { get; protected set; }
 
         public virtual string RenderAccion()
         {
-            return "Menu.EjecutarAccionMenu({parametros})";
+            return "";
         }
-
     }
 
-    public class MostrarDiv : AccionDeMenu
+    public class AccionDeMenuMnt: AccionDeMenu
     {
+        public override string RenderAccion()
+        {
+            return "Crud.MenuMnt.EjecutarAccionMenu({parametros})";
+        }
+    }
 
+    public class AccionDeMenuCreacion: AccionDeMenu
+    {
+        public override string RenderAccion()
+        {
+            return "Crud.MenuCrt.EjecutarAccionMenu({parametros})";
+        }
+    }
+
+    public class IrACrear : AccionDeMenuMnt
+    {
         public string IdDivMostrar { get; set; }
-        public string idDivMostrarHtml => IdDivMostrar.ToLower();
+        public string IdDivMostrarHtml => IdDivMostrar.ToLower();
+
+        public string TrasEjecutarIraCrear { get; private set; }
 
         public string IdDivOcultar { get; set; }
-        public string idDivOcultarHtml => IdDivOcultar.ToLower();
+        public string IdDivOcultarHtml => IdDivOcultar.ToLower();
 
-        public MostrarDiv(string idDivMostrar, string idDivOcultar)
+        public IrACrear(string idDivMostrar, string idDivOcultar, string trasEjecutarIraCrear)
         {
-            tipoAccion = TipoAccion.MostrarDiv;
-            this.IdDivMostrar = idDivMostrar;
-            this.IdDivOcultar = idDivOcultar;
+            TipoAccion = TipoAccion.IraCrear;
+            IdDivMostrar = idDivMostrar;
+            IdDivOcultar = idDivOcultar;
+            TrasEjecutarIraCrear = trasEjecutarIraCrear;
         }
 
         public override string RenderAccion()
         {
             var htmlAccion = base.RenderAccion();
-            return htmlAccion.Replace("{parametros}", $"'{idDivMostrarHtml}','{idDivOcultarHtml}'");
+            return htmlAccion.Replace("{parametros}", $"'{nameof(IrACrear).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', '{TrasEjecutarIraCrear}'");
         }
-
-
     }
 
-    public class OcultarDiv : AccionDeMenu
+    public class IrAMnt : AccionDeMenuCreacion
     {
 
         public string IdDivOcultar { get; set; }
         public string IdDivOcultarHtml => IdDivOcultar.ToLower();
 
-        public OcultarDiv(string idDivOcultar)
+        public IrAMnt(string idDivOcultar)
         {
-            tipoAccion = TipoAccion.OcultarDiv;
-            this.IdDivOcultar = idDivOcultar;
+            TipoAccion = TipoAccion.IraMnt;
+            IdDivOcultar = idDivOcultar;
         }
-
     }
+
     public class OpcionDeMenu<TElemento> : ControlHtml
     {
         public Menu<TElemento> Menu => (Menu<TElemento>)Padre;

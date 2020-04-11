@@ -56,18 +56,6 @@
         LeeMenu(url, idContenedorMenu, SustituirMenu);
     }
 
-    export function EjecutarAccionMenu(idDivMostrarHtml: string, idDivOcultarHtml: string) {
-        var htmlDivMostrar = document.getElementById(`${idDivMostrarHtml}`);
-        var htmlDivOcultar = document.getElementById(`${idDivOcultarHtml}`);
-
-        htmlDivMostrar.classList.add("div-visible");
-        htmlDivMostrar.classList.remove("div-no-visible");
-
-        htmlDivOcultar.classList.add("div-no-visible");
-        htmlDivOcultar.classList.remove("div-visible");
-
-    }
-
     function LeeMenu(url: string, idContenedorMenu: string, funcionDeRespuesta: Function) {
 
         function respuestaCorrecta() {

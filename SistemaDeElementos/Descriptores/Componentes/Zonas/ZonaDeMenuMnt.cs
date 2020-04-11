@@ -1,9 +1,10 @@
 ﻿using System;
+using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class ZonaDeMenuMnt<TElemento>: ControlHtml
+    public class ZonaDeMenuMnt<TElemento> : ControlHtml
     {
         public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
 
@@ -37,8 +38,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal void AnadirOpcionDeCreacion()
         {
-            var mostrarCreacion = new MostrarDiv(idDivMostrar: Mnt.Crud.Creacion.Id, idDivOcultar: Mnt.Id);
-            var opcion = new OpcionDeMenu<TElemento>(MenuMnt, mostrarCreacion, $"Crear {Mnt.Crud.NombreElemento}");
+
+            var a = (string)Elemento.ValorDelAtributo(typeof(TElemento), "AlMostrar");
+            var iraCrear = new IrACrear(idDivMostrar: Mnt.Crud.Creacion.Id, idDivOcultar: Mnt.Id, trasEjecutarIraCrear: a);
+            var opcion = new OpcionDeMenu<TElemento>(MenuMnt, iraCrear, $"Crear {Mnt.Crud.NombreElemento}");
             MenuMnt.Add(opcion);
         }
 

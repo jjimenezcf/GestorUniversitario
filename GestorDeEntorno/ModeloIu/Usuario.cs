@@ -11,6 +11,7 @@ namespace Gestor.Elementos.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
+    [IUDto(AlMostrar = "Crud.Crear.Usuario.AlMostrar()")]
     public class UsuarioDto : Elemento
     {
         [IUPropiedad(

@@ -12,23 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         internal PropertyInfo Descriptor { get; set; }
 
-        internal IUPropiedadAttribute atributos => ObtenerAtributos(Descriptor);
-
-        public static IUPropiedadAttribute ObtenerAtributos(PropertyInfo propiedad)
-        {
-            var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute));
-            if (iEnumerableAtrb == null)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por no tener definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
-
-            var listaAtrb = iEnumerableAtrb.ToList();
-            if (listaAtrb.Count == 0)
-                return null;
-            if (listaAtrb.Count != 1)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
-
-            var atributos = (IUPropiedadAttribute)propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute)).ToList()[0];
-            return atributos;
-        }
+        internal IUPropiedadAttribute atributos => Elemento.ObtenerAtributos(Descriptor);
     }
 
     internal class DescriptorDeColumna
@@ -177,7 +161,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private void AnadirPropiedad(PropertyInfo propiedad)
         {
-            IUPropiedadAttribute atributos = DescriptorControl.ObtenerAtributos(propiedad);
+            IUPropiedadAttribute atributos = Elemento.ObtenerAtributos(propiedad);
             if (atributos != null)
             {
                 var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);

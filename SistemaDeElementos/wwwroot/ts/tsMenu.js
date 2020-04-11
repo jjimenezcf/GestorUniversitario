@@ -49,15 +49,6 @@ var Menu;
         LeeMenu(url, idContenedorMenu, SustituirMenu);
     }
     Menu.SolicitarMenu = SolicitarMenu;
-    function EjecutarAccionMenu(idDivMostrarHtml, idDivOcultarHtml) {
-        var htmlDivMostrar = document.getElementById("" + idDivMostrarHtml);
-        var htmlDivOcultar = document.getElementById("" + idDivOcultarHtml);
-        htmlDivMostrar.classList.add("div-visible");
-        htmlDivMostrar.classList.remove("div-no-visible");
-        htmlDivOcultar.classList.add("div-no-visible");
-        htmlDivOcultar.classList.remove("div-visible");
-    }
-    Menu.EjecutarAccionMenu = EjecutarAccionMenu;
     function LeeMenu(url, idContenedorMenu, funcionDeRespuesta) {
         function respuestaCorrecta() {
             if (req.status >= 200 && req.status < 400) {
