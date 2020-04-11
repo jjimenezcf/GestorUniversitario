@@ -10,7 +10,11 @@
 *.sln.docstates
 
 # Ficheros de configuración en MVC Core
-GestorUniversitario/appsettings.json
+SistemaDeElementos/appsettings.json
+
+#compilados de TS
+SistemaDeElementos/wwwroot/ts/**/*.js
+SistemaDeElementos/wwwroot/ts/**/*.map
 
 
 
@@ -75,6 +79,8 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+**/ts/*.js
+**/ts/*.map
 
 # Chutzpah Test files
 _Chutzpah*
