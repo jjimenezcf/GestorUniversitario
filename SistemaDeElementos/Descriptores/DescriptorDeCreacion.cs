@@ -70,16 +70,18 @@ namespace MVCSistemaDeElementos.Descriptores
                        </tr>
                       ";
 
+            double anchoColumna = tabla.NumeroDeColumnas == 0 ? 0 : (double)(100 / tabla.NumeroDeColumnas);
             for (short j = 0; j < tabla.NumeroDeColumnas; j++)
             {
-                htmlColumnas = htmlColumnas + RenderColumna(tabla, i, j);
+                htmlColumnas = htmlColumnas + RenderColumna(tabla, i, j, anchoColumna);
             }
             return htmlFila.Replace("htmlColumnas", $"{htmlColumnas}");
         }
 
-        private static string RenderColumna(DescriptorDeTabla tabla, short i, short j)
+        private static string RenderColumna(DescriptorDeTabla tabla, short i, short j, double anchoColumna)
         {
-            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_propiedad¨ class=¨td-propiedad¨>
+
+            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
                          <div id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨div_propiedad¨ class=¨div-propiedad¨>
                               {RenderControles(tabla, i, j)}
                          </div>
@@ -89,16 +91,21 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderControles(DescriptorDeTabla tabla, short i, short j)
         {
+            var porcentajeDeEtiqueta = 20;
+            var pocentajeDeControl = 100 - porcentajeDeEtiqueta;
+            var porcentajeDelSeparador = 2;
             var columna = tabla.ObtenerFila(i).ObtenerColumna(j);
             var htmlControles = "";
-            double anchoEtiqueta = columna.NumeroDeEtiquetas == 0 ? 0 : 15 / columna.NumeroDeEtiquetas;
-            double anchoControl = columna.NumeroControlesVisibles == 0 ? 0 : (85 - (2 * (columna.NumeroControlesVisibles - 1))) / columna.NumeroControlesVisibles;
+            double anchoEtiqueta = columna.NumeroDeEtiquetasVisibles == 0 ? 0 : porcentajeDeEtiqueta / columna.NumeroDeEtiquetasVisibles;
+            double anchoControl = columna.NumeroControlesVisibles == 0 ? 0 : (pocentajeDeControl - (porcentajeDelSeparador * (columna.NumeroControlesVisibles - 1))) / columna.NumeroControlesVisibles;
             var anadirSeparador = false;
 
             double anchoTotal = 0;
-            for (short z = 0; z < columna.NumeroControlesVisibles; z++)
+            for (short z = 0; z <= columna.PosicionMaxima; z++)
             {
-                var descriptorControl = columna.ObtenerControl(z);
+                var descriptorControl = columna.ObtenerControlEnLaPosicion(z);
+                if (descriptorControl == null || !descriptorControl.atributos.Visible)
+                    continue;
 
                 if (anadirSeparador)
                 {
@@ -113,7 +120,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     anchoTotal = anchoTotal + anchoEtiqueta;
                 }
 
-                if (z == columna.NumeroDeControles - 1)
+                if (z == columna.PosicionMaxima)
                     anchoControl = 100 - anchoTotal;
 
                 htmlControles = htmlControles + RenderDescriptorControl(tabla, descriptorControl, i, j, anchoControl);

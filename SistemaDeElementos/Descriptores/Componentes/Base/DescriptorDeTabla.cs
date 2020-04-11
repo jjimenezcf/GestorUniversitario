@@ -36,15 +36,16 @@ namespace MVCSistemaDeElementos.Descriptores
         private Dictionary<short, DescriptorControl> Controles = new Dictionary<short, DescriptorControl>();
 
         public short NumeroDeControles { get; private set; } = 0;
+        public short PosicionMaxima { get; private set; } = 0;
 
-        public short NumeroDeEtiquetas
+        public short NumeroDeEtiquetasVisibles
         {
             get
             {
                 short numero = 0;
-                for (short i = 0; i < NumeroDeControles; i++)
+                for (short i = 0; i <= PosicionMaxima; i++)
                 {
-                    var control = ObtenerControl(i);
+                    var control = ObtenerControlEnLaPosicion(i);
                     if (control != null && control.atributos.Visible && !control.atributos.Etiqueta.IsNullOrEmpty())
                         numero = (short)(numero + 1);
                 }
@@ -56,9 +57,9 @@ namespace MVCSistemaDeElementos.Descriptores
             get
             {
                 short numero = 0;
-                for (short i = 0; i < NumeroDeControles; i++)
+                for (short i = 0; i <= PosicionMaxima; i++)
                 {
-                    var control = ObtenerControl(i);
+                    var control = ObtenerControlEnLaPosicion(i);
                     if (control != null && control.atributos.Visible)
                         numero = (short)(numero + 1);
                 }
@@ -66,36 +67,24 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
-        public string Etiqueta
-        {
-            get
-            {
-                for (short i = 0; i < NumeroDeControles; i++)
-                {
-                    var control = ObtenerControl(i);
-                    if (control != null && control.atributos.Visible)
-                    {
-                        return control.atributos.Etiqueta;
-                    }
-                }
-
-                return "";
-            }
-        }
 
         public void AnadirControl(short pos, PropertyInfo descriptor)
         {
             if (!Controles.ContainsKey(pos))
+            {
                 Controles[pos] = new DescriptorControl { Descriptor = descriptor };
-            else
-                AnadirControl((short)(pos + 1), descriptor);
+                
+                if (PosicionMaxima < pos)
+                    PosicionMaxima = pos;
 
-            if (NumeroDeControles <= pos)
                 NumeroDeControles = (short)(NumeroDeControles + 1);
+            }
+            else
+                AnadirControl((short)(pos+1), descriptor);
 
         }
 
-        public DescriptorControl ObtenerControl(short pos)
+        public DescriptorControl ObtenerControlEnLaPosicion(short pos)
         {
             if (Controles.ContainsKey(pos))
                 return Controles[pos];
@@ -150,20 +139,20 @@ namespace MVCSistemaDeElementos.Descriptores
         private Type _Tipo;
         public short NumeroDeFilas { get; private set; } = 0;
 
-        private short _numeroDeColumnas = 0;
-        public short NumeroDeColumnas
-        {
-            get
-            {
-                if (_numeroDeColumnas == 0)
-                    for (short i = 0; i < NumeroDeFilas; i++)
-                    {
-                        if (_numeroDeColumnas < ObtenerFila(i).NumeroDeColumnas)
-                            _numeroDeColumnas = ObtenerFila(i).NumeroDeColumnas;
-                    }
-                return _numeroDeColumnas;
-            }
-        }
+        //private short _numeroDeColumnas = 0;
+        public short NumeroDeColumnas { get; private set; } = 0;
+        //{
+        //    get
+        //    {
+        //        if (_numeroDeColumnas == 0)
+        //            for (short i = 0; i < NumeroDeFilas; i++)
+        //            {
+        //                if (_numeroDeColumnas < ObtenerFila(i).NumeroDeColumnas)
+        //                    _numeroDeColumnas = ObtenerFila(i).NumeroDeColumnas;
+        //            }
+        //        return _numeroDeColumnas;
+        //    }
+        //}
 
         public string IdHtml => $"id_table_{_Tipo.Name}".ToLower();
 
@@ -178,7 +167,6 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var fila = new DescriptorDeFila(this);
             Filas[indice] = fila;
-            _numeroDeColumnas = 0;
 
             if (NumeroDeFilas <= indice)
             {
@@ -206,6 +194,10 @@ namespace MVCSistemaDeElementos.Descriptores
             if (atributos != null)
             {
                 var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);
+
+                if (NumeroDeColumnas <= atributos.Columna)
+                    NumeroDeColumnas = (short)(atributos.Columna + 1);
+
                 descriptorColumna.AnadirControl(atributos.Posicion, propiedad);
             }
         }
