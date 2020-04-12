@@ -72,30 +72,39 @@ namespace Gestor.Elementos.ModeloIu
             return atributos;
         }
 
-        public static object ValorDelAtributo(Type clase, string atributo)
+        public static object ValorDelAtributo(Type clase, string nombreAtributo)
         {
-            System.Attribute[] attrs = System.Attribute.GetCustomAttributes(clase);
+            Attribute[] atributosDeDto = System.Attribute.GetCustomAttributes(clase);
 
-            //if (iEnumerableAtrb == null)
-            //    Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {clase.DeclaringType} por no tener definidas las etiquetas de {typeof(IUDtoAttribute)}");
+            if (atributosDeDto == null || atributosDeDto.Length == 0)
+                Errores.GestorDeErrores.Emitir($"No hay definido descriptores para el dto {clase.Name}");
 
-            //var listaAtrb = iEnumerableAtrb.ToList();
-            //if (listaAtrb.Count == 0)
-            //    return null;
-            //if (listaAtrb.Count != 1)
-            //    Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {clase.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUDtoAttribute)}");
-
-            foreach (System.Attribute attr in attrs)
+            foreach (Attribute atributoDto in atributosDeDto)
             {
-                if (attr is IUDtoAttribute)
+                if (atributoDto is IUDtoAttribute)
                 {
-                    IUDtoAttribute a = (IUDtoAttribute)attr;
-                    if (nameof(a.AlMostrar)== atributo)
-                        return a.AlMostrar;
+                    IUDtoAttribute a = (IUDtoAttribute)atributoDto;
+                    switch (nombreAtributo)
+                    {
+                        case nameof(IUDtoAttribute.AlMostrar):
+                            return a.AlMostrar;
+
+                        case nameof(IUDtoAttribute.AlAceptar):
+                            return a.AlAceptar;
+
+                        case nameof(IUDtoAttribute.AlCerrar):
+                            return a.AlCerrar;
+
+                        case nameof(IUDtoAttribute.AnchoEtiqueta):
+                            return a.AnchoEtiqueta;
+
+                        case nameof(IUDtoAttribute.AnchoSeparador):
+                            return a.AnchoSeparador;
+                    }
                 }
             }
 
-            return "";
+            return null;
 
         }
     }
