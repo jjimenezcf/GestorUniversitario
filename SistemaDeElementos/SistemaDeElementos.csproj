@@ -9,7 +9,8 @@
     <Content Remove="wwwroot\Extensiones\Selectores.cs" />
     <Content Remove="wwwroot\js\selectores.js" />
     <Content Remove="wwwroot\tsSelectores.ts" />
-    <Content Remove="wwwroot\ts\tsCrud.ts" />
+    <Content Remove="wwwroot\ts\_Crud\CrudCreacion.ts" />
+    <Content Remove="wwwroot\ts\_Crud\CrudMantenimiento.ts" />
     <Content Remove="wwwroot\ts\tsGrid.ts" />
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />
@@ -62,7 +63,6 @@
 
   <ItemGroup>
     <Folder Include="Descriptores\Componentes\Plantillas\" />
-    <Folder Include="wwwroot\ts\_Crud\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
