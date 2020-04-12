@@ -39,8 +39,8 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeCreacion()
         {
 
-            var alMostrar = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.AlMostrar));
-            var iraCrear = new IrACrear(idDivMostrar: Mnt.Crud.Creacion.Id, idDivOcultar: Mnt.Id, trasEjecutarIraCrear: alMostrar ==null ? "" : alMostrar);
+            var claseParaCreacion = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseParaCreacion));
+            var iraCrear = new IrACrear(idDivMostrar: Mnt.Crud.Creacion.Id, idDivOcultar: Mnt.Id, claseParaCreacion: claseParaCreacion == null ? "" : claseParaCreacion);
             var opcion = new OpcionDeMenu<TElemento>(MenuMnt, iraCrear, $"Crear {Mnt.Crud.NombreElemento}");
             MenuMnt.Add(opcion);
         }

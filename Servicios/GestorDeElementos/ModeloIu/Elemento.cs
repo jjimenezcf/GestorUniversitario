@@ -27,7 +27,7 @@ namespace Gestor.Elementos.ModeloIu
     {
         public short AnchoEtiqueta { get; set; }
         public short AnchoSeparador { get; set; }
-        public string AlMostrar { get; set; } = "Crud.Crear.AlMostrar()";
+        public string ClaseParaCreacion { get; set; } = "ApiCrudCreacion";
 
         public string AlCerrar { get; set; } = "Crud.Crear.AlCerrar()";
 
@@ -86,8 +86,8 @@ namespace Gestor.Elementos.ModeloIu
                     IUDtoAttribute a = (IUDtoAttribute)atributoDto;
                     switch (nombreAtributo)
                     {
-                        case nameof(IUDtoAttribute.AlMostrar):
-                            return a.AlMostrar;
+                        case nameof(IUDtoAttribute.ClaseParaCreacion):
+                            return a.ClaseParaCreacion;
 
                         case nameof(IUDtoAttribute.AlAceptar):
                             return a.AlAceptar;

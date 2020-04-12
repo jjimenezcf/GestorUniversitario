@@ -36,23 +36,23 @@ namespace MVCSistemaDeElementos.Descriptores
         public string IdDivMostrar { get; set; }
         public string IdDivMostrarHtml => IdDivMostrar.ToLower();
 
-        public string TrasEjecutarIraCrear { get; private set; }
+        public string ClaseParaCreacion { get; private set; }
 
         public string IdDivOcultar { get; set; }
         public string IdDivOcultarHtml => IdDivOcultar.ToLower();
 
-        public IrACrear(string idDivMostrar, string idDivOcultar, string trasEjecutarIraCrear)
+        public IrACrear(string idDivMostrar, string idDivOcultar, string claseParaCreacion)
         {
             TipoAccion = TipoAccion.IraCrear;
             IdDivMostrar = idDivMostrar;
             IdDivOcultar = idDivOcultar;
-            TrasEjecutarIraCrear = trasEjecutarIraCrear;
+            ClaseParaCreacion = claseParaCreacion;
         }
 
         public override string RenderAccion()
         {
             var htmlAccion = base.RenderAccion();
-            return htmlAccion.Replace("{parametros}", $"'{nameof(IrACrear).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', '{TrasEjecutarIraCrear}'");
+            return htmlAccion.Replace("{parametros}", $"'{nameof(IrACrear).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {ClaseParaCreacion}()");
         }
     }
 
