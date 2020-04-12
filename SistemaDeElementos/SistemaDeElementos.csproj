@@ -13,6 +13,7 @@
     <Content Remove="wwwroot\ts\tsGrid.ts" />
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />
+    <Content Remove="wwwroot\ts\Usuarios\Usuarios.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +62,7 @@
 
   <ItemGroup>
     <Folder Include="Descriptores\Componentes\Plantillas\" />
+    <Folder Include="wwwroot\ts\_Crud\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
