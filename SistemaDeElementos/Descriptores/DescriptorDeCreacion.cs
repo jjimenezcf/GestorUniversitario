@@ -10,6 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeCreacion<TElemento> : ControlHtml
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
+        public ZonaDeMenuMnt<TElemento> ZonaMenu { get; private set; }
 
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
@@ -22,19 +23,20 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Creacion;
+            ZonaMenu = new ZonaDeMenuMnt<TElemento>(creador: this);
+            ZonaMenu.AnadirOpcionDeNuevoElemento();
+            ZonaMenu.AnadirOpcionDeCancelarNuevo();
         }
+
+
 
         public override string RenderControl()
         {
-            var htmlOpcionMenu = $"<input id=¨idAceptar¨ type=¨button¨ value=¨Aceptar¨ onClick=¨Crud.Crear.Aceptar()¨ />" +
-                                 $"<input id=¨idCerrar¨ type=¨button¨ value=¨Cerrar¨ onClick=¨Crud.Crear.Cerrar()¨ />";
-
-
             var htmContenedorMnt =
                 $@"
                    <Div id=¨{IdHtml}¨ class=¨div-no-visible¨>
                      <h2>Div de creación</h2>
-                     {htmlOpcionMenu}
+                     {ZonaMenu.RenderControl()}
                      {htmlRenderObjetoVacio()}
                    </Div>
                 ";

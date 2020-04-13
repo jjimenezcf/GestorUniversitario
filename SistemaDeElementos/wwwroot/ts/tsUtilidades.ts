@@ -1,10 +1,15 @@
 ﻿const newLine = "\n";
 
-const TipoMensaje = { Info: "informativo" };
+const TipoMensaje = { Info: "informativo", Error: "Error" };
 
-function Mensaje(tipo, mensaje) {
+function Mensaje(tipo: string, mensaje: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
-    control.value = mensaje;
+    control.value = `(${tipo}) ${mensaje}`;
+}
+
+function BlanquearMensaje() {
+    var control = <HTMLInputElement>document.getElementById("Mensaje");
+    control.value = "";
 }
 
 function StringBuilder(value) {

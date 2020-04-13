@@ -1,8 +1,12 @@
 var newLine = "\n";
-var TipoMensaje = { Info: "informativo" };
+var TipoMensaje = { Info: "informativo", Error: "Error" };
 function Mensaje(tipo, mensaje) {
     var control = document.getElementById("Mensaje");
-    control.value = mensaje;
+    control.value = "(" + tipo + ") " + mensaje;
+}
+function BlanquearMensaje() {
+    var control = document.getElementById("Mensaje");
+    control.value = "";
 }
 function StringBuilder(value) {
     this.strings = new Array();
