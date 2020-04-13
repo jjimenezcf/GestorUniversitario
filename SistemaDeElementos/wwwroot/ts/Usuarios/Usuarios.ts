@@ -7,6 +7,7 @@
 
     public InicializarValores() {        
         let inputFechaAlta: HTMLInputElement = this.divDeCreacionHtml.querySelector<HTMLInputElement>("#Alta");
-        inputFechaAlta.value = "hola";
+        let fecha: Date = new Date();
+        inputFechaAlta.value = fecha.toDateString();
     }
 }

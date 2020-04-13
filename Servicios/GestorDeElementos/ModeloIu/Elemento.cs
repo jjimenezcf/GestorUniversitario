@@ -25,9 +25,9 @@ namespace Gestor.Elementos.ModeloIu
 
     public class IUDtoAttribute : Attribute
     {
-        public short AnchoEtiqueta { get; set; }
-        public short AnchoSeparador { get; set; }
-        public string ClaseParaCreacion { get; set; } = "ApiCrudCreacion";
+        public short AnchoEtiqueta { get; set; } = 15;
+        public short AnchoSeparador { get; set; } = 2;
+        public string ClaseParaCreacion { get; set; } = "CrudCreacion";
 
         public string AlCerrar { get; set; } = "Crud.Crear.AlCerrar()";
 
