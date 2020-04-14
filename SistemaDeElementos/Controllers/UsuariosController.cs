@@ -27,32 +27,10 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        
-        public IActionResult IraCrearUsuario()
-        {
-            return View(GestorDelCrud.Creador.Vista, new UsuarioDtm());
-        }
-
-        public IActionResult IraDetalleUsuario(int? id)
-        {
-            GestorDelCrud.Detalle.AsignarTituloDetalle("Inscripciones");
-            return View(GestorDelCrud.Detalle.Vista, LeerDetalle(id));
-        }
-
-        public IActionResult IraBorrarUsuario(int? id)
-        {
-            return View(GestorDelCrud.Supresor.Vista, LeerUsuario(id));
-        }
-
-        public IActionResult IraEditarUsuario(int? id)
-        {
-            return View(GestorDelCrud.Editor.Vista, LeerUsuario(id));
-        }
-
 
         [HttpPost, ActionName(nameof(CrearUsuario))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearUsuario([Bind("ID,Apellido,Nombre,Alta")] UsuarioDto usuario)
+        public async Task<IActionResult> CrearUsuario([Bind("id,apellido,nombre,alta")] UsuarioDto usuario)
         {
             return await CrearObjeto(usuario);
         }
@@ -67,16 +45,6 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-
-        [HttpPost, ActionName(nameof(BorrarUsuario))]
-        [ValidateAntiForgeryToken]
-        public IActionResult BorrarUsuario(int id)
-        {
-
-            GestorDeElementos.BorrarPorId(id);
-            return IraMantenimientoUsuario("");
-        }
-
         private UsuarioDto LeerUsuario(int? id)
         {
             if (id == null)
@@ -85,22 +53,6 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             var usuario = (UsuarioDto)GestorDeElementos.LeerElementoPorId((int)id);
-            if (usuario == null)
-            {
-                GestorDeErrores.LanzarExcepcion($"El id {id} del usuario no se pudo localizar");
-            }
-
-            return usuario;
-        }
-
-        private UsuarioDto LeerDetalle(int? id)
-        {
-            if (id == null)
-            {
-                GestorDeErrores.LanzarExcepcion("El id del usuario no puede ser nulo");
-            }
-
-            var usuario = (UsuarioDto)GestorDeElementos.LeerElementoConDetalle((int)id);
             if (usuario == null)
             {
                 GestorDeErrores.LanzarExcepcion($"El id {id} del usuario no se pudo localizar");

@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-no-visible¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
                      <h2>Div de creación</h2>
                      {ZonaMenu.RenderControl()}
                      {htmlRenderObjetoVacio()}
@@ -146,15 +146,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderDescriptorControl(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
-            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" +
-                                        $"   <input id=¨{descriptorControl.Descriptor.Name}¨ " +
-                                        $"       class=¨{descriptorControl.atributos.ClaseCss}¨ " +
-                                        $"       type=¨text¨ " +
-                                        $"       {(!descriptorControl.atributos.Editable ? "readonly" : "")} " +
-                                        $"       value=¨¨" +
-                                        $"       placeholder =¨{descriptorControl.atributos.Ayuda}¨" +
-                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨>" +
-                                        $"   </input>" +
+            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" + Environment.NewLine +
+                                        $"   <input id=¨{descriptorControl.Descriptor.Name}¨ "+ Environment.NewLine +
+                                        $"       propiedad-dto=¨{descriptorControl.Descriptor.Name}¨ " + Environment.NewLine +
+                                        $"       class=¨propiedad {descriptorControl.atributos.ClaseCss}¨ " + Environment.NewLine +
+                                        $"       type=¨text¨ " + Environment.NewLine +
+                                        $"       {(!descriptorControl.atributos.Editable ? "readonly" : "")} " + Environment.NewLine +
+                                        $"       value=¨¨" + Environment.NewLine +
+                                        $"       placeholder =¨{descriptorControl.atributos.Ayuda}¨" + Environment.NewLine +
+                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨>" + Environment.NewLine +
+                                        $"   </input>" + Environment.NewLine +
                                         $"</div>";
             return htmdDescriptorControl;
         }

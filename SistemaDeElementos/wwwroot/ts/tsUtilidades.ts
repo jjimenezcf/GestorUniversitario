@@ -5,6 +5,7 @@ const TipoMensaje = { Info: "informativo", Error: "Error" };
 function Mensaje(tipo: string, mensaje: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
     control.value = `(${tipo}) ${mensaje}`;
+    console.log(control.value);
 }
 
 function BlanquearMensaje() {

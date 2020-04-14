@@ -3,6 +3,7 @@ var TipoMensaje = { Info: "informativo", Error: "Error" };
 function Mensaje(tipo, mensaje) {
     var control = document.getElementById("Mensaje");
     control.value = "(" + tipo + ") " + mensaje;
+    console.log(control.value);
 }
 function BlanquearMensaje() {
     var control = document.getElementById("Mensaje");

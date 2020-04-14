@@ -13,6 +13,11 @@
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`)
     }
 
+
+    function sleep(ms: number) {
+        return setTimeout(() => { }, ms);
+    }
+
     function IraCrear(idDivMostrarHtml: string, idDivOcultarHtml: string, gestorDeCreacion: CrudCreacion) {
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
@@ -31,9 +36,20 @@
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
         let creado: boolean = true;
-        let mensaje: string = "Registro creado";
+        let mensaje: string = "";
         try {
             gestorDeCreacion.Aceptar(htmlDivMostrar, htmlDivOcultar);
+
+            do
+            {
+                sleep(1000000);
+            }
+            while (!gestorDeCreacion.PeticionRealizada);
+
+            if (gestorDeCreacion.MensajeDeError.IsNullOrEmpty())
+                throw Error(gestorDeCreacion.MensajeDeError);
+
+            mensaje = gestorDeCreacion.ResultadoPeticion;
         }
         catch (error) {
             creado = false;

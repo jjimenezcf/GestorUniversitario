@@ -51,8 +51,18 @@ namespace MVCSistemaDeElementos.Controllers
             return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
         }
 
+        
+        //END-POINT: Desde Grid.ts
+        public void CrearElemento(string elementoJson)
+        {
+            var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
+            throw new Exception("Error de piti mini");
+            GestorDeElementos.InsertarElemento(elemento);
+        }
 
-        //Lamada desde Grid.js
+
+
+        //END-POINT: Desde Grid.ts
         public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
         {
             GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
