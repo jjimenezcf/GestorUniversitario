@@ -4,10 +4,9 @@
 
     public divDeCreacionHtml: HTMLDivElement;
 
-    public PeticionRealizada: boolean = false;
-
     public ResultadoPeticion: string;
-    public MensajeDeError: string;    
+    public PeticionRealizada: boolean;
+    public Creado: boolean;
 
     constructor() {
     }
@@ -16,16 +15,12 @@
 
     }
 
-    public Aceptar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement): void {
+    public Aceptar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
 
         let json: JSON = this.MapearDatosDeIu();
-        try {
-            this.Persistir(json, htmlDivMostrar, htmlDivOcultar);
-        }
-        finally {
-            Mensaje(TipoMensaje.Info, "petición de creación realizada");
-        }
-
+        let id = this.CrearElemento(json, htmlDivMostrar, htmlDivOcultar);
+        if (this.Creado)
+            Mensaje(TipoMensaje.Info, this.ResultadoPeticion);
     }
 
     private urlPeticionCrear(json: JSON): string {
@@ -34,9 +29,23 @@
         return url;
     }
 
-    private Persistir(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement): void {
-        var url: string = this.urlPeticionCrear(json);
-        this.PeticionCrear(url, () => this.Cerrar(htmlDivMostrar, htmlDivOcultar));
+    private CrearElemento(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
+        let url: string = this.urlPeticionCrear(json);
+        let req: XMLHttpRequest = new XMLHttpRequest();
+        req.open('GET', url, false);
+        this.PeticionCrear(req, () => this.DespuesDeCrear(req), () => this.ErrorAlCrear(req));
+    }
+
+    protected DespuesDeCrear(req: XMLHttpRequest): void {
+        let resultado = JSON.parse(req.response);
+        this.ResultadoPeticion = resultado.mensaje;
+        this.Creado = true;
+    }
+
+    protected ErrorAlCrear(req: XMLHttpRequest): void {
+        let resultado = JSON.parse(req.response);
+        this.ResultadoPeticion = resultado.mensaje;
+        this.Creado = false;
     }
 
     private MapearDatosDeIu(): JSON {
@@ -88,26 +97,23 @@
     }
 
 
-    private PeticionCrear(url: string, funcionDeRespuesta: Function) {
+    private PeticionCrear(req: XMLHttpRequest, despuesDeCrear: Function, errorAlCrear: Function) {
 
         function respuestaCorrecta() {
-            if (req.status >= 200 && req.status < 400) {
-                funcionDeRespuesta();
+            let resultado = JSON.parse(req.response);
+            if (resultado.estado === "Error") {
+                errorAlCrear();
             }
             else {
-                Mensaje(TipoMensaje.Error, req.responseText);
+                despuesDeCrear();
             }
-            this.PeticionRealizada = true;
-            this.ResultadoPeticion = "Elemento creado";
         }
 
         function respuestaErronea() {
-            this.PeticionRealizada = true;
-            this.MensajeDeError = req.responseText;
+            this.ResultadoPeticion = "Peticion no realizada";
+            this.PeticionRealizada = false;
         }
 
-        var req = new XMLHttpRequest();
-        req.open('GET', url, true);
         req.addEventListener("load", respuestaCorrecta);
         req.addEventListener("error", respuestaErronea);
         req.send();

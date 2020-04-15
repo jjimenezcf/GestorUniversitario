@@ -1,24 +1,6 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var ListaDeSeleccionados = 'idsSeleccionados';
-var HTMLSelector = /** @class */ (function (_super) {
-    __extends(HTMLSelector, _super);
-    function HTMLSelector() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return HTMLSelector;
-}(HTMLInputElement));
+const ListaDeSeleccionados = 'idsSeleccionados';
+class HTMLSelector extends HTMLInputElement {
+}
 HTMLInputElement.prototype.InicializarSelector = function () {
     var htmlSelector = this;
     var idGridModal = htmlSelector.getAttribute('idGridModal');
@@ -30,10 +12,10 @@ HTMLInputElement.prototype.InicializarSelector = function () {
             htmlSelector.InicializarAtributos();
         }
         else
-            console.log("El atributo refCheckDeSeleccion del selector " + htmlSelector.id + " no est\u00E1 bien definido ");
+            console.log(`El atributo refCheckDeSeleccion del selector ${htmlSelector.id} no está bien definido `);
     }
     else
-        console.log("El atributo idGridModal del selector " + htmlSelector.id + " no est\u00E1 bien definido ");
+        console.log(`El atributo idGridModal del selector ${htmlSelector.id} no está bien definido `);
 };
 HTMLInputElement.prototype.MapearTextoAlEditorDelGrid = function () {
     var htmlSelector = this;
@@ -108,7 +90,7 @@ function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
     infSel.SincronizarCheck();
 }
 function AlCerrar(idModal, idGrid, referenciaChecks) {
-    console.log("se ha cerrado la modal " + idModal + ", hay que desmarcar los checks de la modal");
+    console.log(`se ha cerrado la modal ${idModal}, hay que desmarcar los checks de la modal`);
     InicializarModal(idGrid, referenciaChecks);
 }
 function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
@@ -120,7 +102,7 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
         if (!elemento.EsVacio())
             mapearElementoAlHtmlSelector(htmlSelector, elemento);
         else
-            console.log("Se ha leido mal el elemento del selector " + idGrid + " de la posici\u00F3n " + x);
+            console.log(`Se ha leido mal el elemento del selector ${idGrid} de la posición ${x}`);
     }
     InicializarModal(idGrid, referenciaChecks);
 }
@@ -128,7 +110,7 @@ function AlCambiarTextoSelector(idSelector, controlador) {
     var htmlSelector = document.getElementById(idSelector);
     if (!htmlSelector.value.IsNullOrEmpty()) {
         var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
-        LeerParaSelector("/" + controlador + "/Leer?filtro=" + JSON.stringify(clausulas), htmlSelector, ProcesarRegistrosLeidos);
+        LeerParaSelector(`/${controlador}/Leer?filtro=${JSON.stringify(clausulas)}`, htmlSelector, ProcesarRegistrosLeidos);
     }
     else {
         htmlSelector.InicializarSelector();
@@ -139,9 +121,9 @@ function AlCambiarTextoSelector(idSelector, controlador) {
     }
 }
 function recargarGrid(idGrid) {
-    var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log("El elemento " + idGrid + "_nav_2_reg  no est\u00E1 definido");
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute("posicion").Numero();
@@ -199,13 +181,13 @@ function InicializarModal(idGrid, referenciaChecks) {
 function marcarElementos(idGrid, columnaId, infSel) {
     if (infSel.Cantidad === 0)
         return;
-    var celdasId = document.getElementsByName(columnaId + "." + idGrid);
+    var celdasId = document.getElementsByName(`${columnaId}.${idGrid}`);
     var len = celdasId.length;
     for (var i = 0; i < infSel.Cantidad; i++) {
         for (var j = 0; j < len; j++) {
             var id = infSel.LeerId(i);
             if (celdasId[j].value === id) {
-                var idCheck = celdasId[j].id.replace("." + columnaId, ".chksel");
+                var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
                 var check = document.getElementById(idCheck);
                 check.checked = true;
                 break;
@@ -214,8 +196,8 @@ function marcarElementos(idGrid, columnaId, infSel) {
     }
 }
 function blanquearCheck(refCheckDeSeleccion) {
-    document.getElementsByName("" + refCheckDeSeleccion).forEach(function (c) {
-        var check = c;
+    document.getElementsByName(`${refCheckDeSeleccion}`).forEach(c => {
+        let check = c;
         check.checked = false;
     });
 }
@@ -249,7 +231,7 @@ function ProcesarRegistrosLeidos(htmlSelector, registros) {
         var registrosJson = JSON.parse(registros);
         if (registrosJson.length === 1) {
             var registroJson = registrosJson[0];
-            for (var key in registroJson) {
+            for (let key in registroJson) {
                 if (key === propiedadmostrar) {
                     htmlSelector.value = '';
                     mapearElementoAlHtmlSelector(htmlSelector, new Elemento(registroJson['id'], registroJson[key]));
@@ -264,6 +246,6 @@ function ProcesarRegistrosLeidos(htmlSelector, registros) {
         }
     }
     else
-        console.log("No se ha definido la propiedad propiedadMostrar en el selector " + htmlSelector.id);
+        console.log(`No se ha definido la propiedad propiedadMostrar en el selector ${htmlSelector.id}`);
 }
 //# sourceMappingURL=tsSelectores.js.map

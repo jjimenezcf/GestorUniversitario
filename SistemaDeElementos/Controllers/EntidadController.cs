@@ -28,6 +28,13 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
 
+        public class Resultado
+        {
+            public string Estado { get; set; }
+            public string Mensaje { get; set; }
+        }
+
+
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : base(gestorErrores)
         {
@@ -53,11 +60,27 @@ namespace MVCSistemaDeElementos.Controllers
 
         
         //END-POINT: Desde Grid.ts
-        public void CrearElemento(string elementoJson)
+        public JsonResult CrearElemento(string elementoJson)
         {
+            var r = new Resultado();
+
             var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
-            throw new Exception("Error de piti mini");
-            GestorDeElementos.InsertarElemento(elemento);
+            try
+            {
+                GestorDeElementos.InsertarElemento(elemento);
+            }
+            catch(Exception e)
+            {
+                r.Estado = "Error";
+                r.Mensaje = e.Message;
+                var error = new JsonResult(r);
+                return error;
+            }
+
+            r.Estado = "ok";
+            r.Mensaje = "Registro creado";
+            return new JsonResult(r);
+
         }
 
 

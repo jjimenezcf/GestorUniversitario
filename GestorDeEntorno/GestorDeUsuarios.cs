@@ -55,7 +55,7 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno,UsuarioDtm, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, UsuarioDtm, UsuarioDto>
     {
 
         public class MapearUsuario : Profile
@@ -100,6 +100,20 @@ namespace Gestor.Elementos.Entorno
                             //.ThenInclude(e => e.Curso)
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
+        }
+
+        protected override void AntesMapearRegistro(UsuarioDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesMapearRegistro(elemento, opciones);
+            if (opciones.Tipo == TipoOperacion.Insertar)
+            {
+                if (elemento.Login.IsNullOrEmpty())
+                    Errores.GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
+                if (elemento.Apellido.IsNullOrEmpty())
+                    Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
+                if (elemento.Nombre.IsNullOrEmpty())
+                    Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");
+            }
         }
 
     }

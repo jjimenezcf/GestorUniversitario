@@ -29,14 +29,9 @@
     }
 
 
-    //public static Aceptar(): void {
-    //    this.Crud = new CrudCreacionUsuario();
-    //    super.Aceptar();
+    //protected DespuesDeCrear(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement): void {
+    //    super.DespuesDeCrear(json, htmlDivMostrar, htmlDivOcultar);
+    //    /* codigo específico tras persistir*/
     //}
 
-
-    //public static Cerrar(): void {
-    //    let Crud = new CrudCreacionUsuario();
-    //    super.Cerrar();
-    //}
 }

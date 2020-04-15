@@ -8,8 +8,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class AccionDeMenu
     {
-        private string gestor1;
-
         public TipoAccion TipoAccion { get; private set; }
         public string Gestor { get; private set; }
 

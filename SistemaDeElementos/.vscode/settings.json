@@ -1,7 +1,0 @@
-{
-    "files.exclude": {
-        "**/ts/**/*.js": true,
-        "**/ts/**/*.map": true
-    },
-    "bracketPairColorizer.excludedLanguages": []
-}

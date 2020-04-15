@@ -1,65 +1,36 @@
 //************************************************************************************************************************************************************************************/
 /// Gestión de los info selectores
 //************************************************************************************************************************************************************************************/
-var Elemento = /** @class */ (function () {
-    function Elemento(id, texto) {
+class Elemento {
+    constructor(id, texto) {
         this.Id = id;
         this.Texto = texto;
     }
-    Object.defineProperty(Elemento, "ElementoVacio", {
-        get: function () { return new Elemento(0, ''); },
-        enumerable: true,
-        configurable: true
-    });
-    Elemento.prototype.EsVacio = function () {
+    static get ElementoVacio() { return new Elemento(0, ''); }
+    EsVacio() {
         if (this.Id === 0 || this.Texto === '')
             return true;
-    };
-    return Elemento;
-}());
-var InfoSelector = /** @class */ (function () {
-    function InfoSelector(idGrid) {
+    }
+}
+class InfoSelector {
+    constructor(idGrid) {
         this.iniciarClase(idGrid);
     }
-    Object.defineProperty(InfoSelector.prototype, "Id", {
-        get: function () { return this.idGrid; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InfoSelector.prototype, "Cantidad", {
-        get: function () { return this.seleccionados.length; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InfoSelector.prototype, "Seleccionables", {
-        get: function () { return this.Seleccionables == NaN ? 0 : this.seleccionables; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InfoSelector.prototype, "Seleccionados", {
-        get: function () { return this.seleccionados; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InfoSelector.prototype, "ColumnaMostrar", {
-        get: function () { return this.columnaMostrar; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InfoSelector.prototype, "EsModalDeSeleccion", {
-        get: function () { return this.esModal; },
-        enumerable: true,
-        configurable: true
-    });
-    InfoSelector.prototype.iniciarClase = function (idGrid) {
+    get Id() { return this.idGrid; }
+    get Cantidad() { return this.seleccionados.length; }
+    get Seleccionables() { return this.Seleccionables == NaN ? 0 : this.seleccionables; }
+    get Seleccionados() { return this.seleccionados; }
+    get ColumnaMostrar() { return this.columnaMostrar; }
+    get EsModalDeSeleccion() { return this.esModal; }
+    iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
         this.seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
         this.esModal = false;
-    };
-    InfoSelector.prototype.deshabilitarCheck = function (deshabilitar) {
+    }
+    deshabilitarCheck(deshabilitar) {
         var ejecutar = false;
         //si has desmarcado checks y los seleccionados son menos que los seleccionables --> ok a habilitar
         if (deshabilitar === false && this.Cantidad < this.seleccionables)
@@ -68,8 +39,8 @@ var InfoSelector = /** @class */ (function () {
         if (deshabilitar === true && this.Cantidad >= this.seleccionables)
             ejecutar = true;
         if (ejecutar) {
-            document.getElementsByName("chksel." + this.idGrid).forEach(function (c) {
-                var check = c;
+            document.getElementsByName(`chksel.${this.idGrid}`).forEach(c => {
+                let check = c;
                 if (!check.checked) {
                     check.disabled = deshabilitar;
                 }
@@ -78,19 +49,19 @@ var InfoSelector = /** @class */ (function () {
                 }
             });
         }
-    };
-    InfoSelector.prototype.Modal = function (columnaMostar) {
+    }
+    Modal(columnaMostar) {
         this.esModal = true;
         this.columnaMostrar = columnaMostar;
-    };
-    InfoSelector.prototype.LeerId = function (pos) {
+    }
+    LeerId(pos) {
         if (pos >= 0 && pos < this.Cantidad) {
             return this.seleccionados[pos];
         }
-        console.log("Ha intentado leer la posici\u00F3n " + pos + " en una lista de longitud " + this.Cantidad);
+        console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return 0;
-    };
-    InfoSelector.prototype.LeerElemento = function (pos) {
+    }
+    LeerElemento(pos) {
         if (this.esModal) {
             var id = this.LeerId(pos);
             if (id > 0) {
@@ -99,12 +70,12 @@ var InfoSelector = /** @class */ (function () {
             }
         }
         else
-            console.log("Ha intentado leer un elemento en un infoSelector no v\u00E1lido por no estar declarado como Modal");
+            console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
         return Elemento.ElementoVacio;
-    };
-    InfoSelector.prototype.InsertarId = function (id) {
+    }
+    InsertarId(id) {
         if (!id || isNaN(parseInt(id))) {
-            console.log("Ha intentado insertar en la lista un id no v\u00E1lido " + id);
+            console.log(`Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
         }
         if (this.seleccionados.length < this.seleccionables) {
@@ -112,8 +83,8 @@ var InfoSelector = /** @class */ (function () {
         }
         this.deshabilitarCheck(true);
         return this.Cantidad;
-    };
-    InfoSelector.prototype.InsertarElemento = function (id, textoMostrar) {
+    }
+    InsertarElemento(id, textoMostrar) {
         if (this.esModal) {
             var pos = this.InsertarId(id);
             if (pos === this.seleccionados.length) {
@@ -121,12 +92,12 @@ var InfoSelector = /** @class */ (function () {
             }
         }
         else {
-            console.log("Ha intentado insertar un elemento en un infoSelector no v\u00E1lido por no estar declarado como Modal");
+            console.log(`Ha intentado insertar un elemento en un infoSelector no válido por no estar declarado como Modal`);
             return -1;
         }
         return pos;
-    };
-    InfoSelector.prototype.InsertarElementos = function (elementos) {
+    }
+    InsertarElementos(elementos) {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 var e = elementos[i];
@@ -134,13 +105,13 @@ var InfoSelector = /** @class */ (function () {
             }
         }
         else {
-            console.log("Ha intentado insertar en la lista un array de elementos vac\u00EDo");
+            console.log(`Ha intentado insertar en la lista un array de elementos vacío`);
         }
         return this.Cantidad;
-    };
-    InfoSelector.prototype.InsertarIds = function (ids) {
+    }
+    InsertarIds(ids) {
         if (!ids || ids.length === 1 && isNaN(parseInt(ids))) {
-            console.log("Ha intentado insertar en la lista un array de ids no v\u00E1lidos " + ids);
+            console.log(`Ha intentado insertar en la lista un array de ids no válidos ${ids}`);
             return -2;
         }
         for (var i = 0; i < ids.length; i++) {
@@ -148,8 +119,8 @@ var InfoSelector = /** @class */ (function () {
             this.InsertarId(idSeleccionado);
         }
         return this.Cantidad;
-    };
-    InfoSelector.prototype.Quitar = function (idSeleccionado) {
+    }
+    Quitar(idSeleccionado) {
         var pos = this.seleccionados.indexOf(idSeleccionado);
         if (pos >= 0) {
             this.seleccionados.splice(pos, 1);
@@ -157,9 +128,9 @@ var InfoSelector = /** @class */ (function () {
             this.deshabilitarCheck(false);
         }
         else
-            console.log("No se ha localizado el elemento con id  " + idSeleccionado);
-    };
-    InfoSelector.prototype.ToString = function () {
+            console.log(`No se ha localizado el elemento con id  ${idSeleccionado}`);
+    }
+    ToString() {
         var ids = "";
         for (var i = 0; i < this.seleccionados.length; i++) {
             ids = ids + this.seleccionados[i];
@@ -167,27 +138,22 @@ var InfoSelector = /** @class */ (function () {
                 ids = ids + ';';
         }
         return ids;
-    };
-    InfoSelector.prototype.SincronizarCheck = function () {
+    }
+    SincronizarCheck() {
         this.deshabilitarCheck(true);
-    };
-    return InfoSelector;
-}());
-var InfoSelectores = /** @class */ (function () {
-    function InfoSelectores() {
+    }
+}
+class InfoSelectores {
+    constructor() {
         this._infoSelectores = new Array();
     }
-    Object.defineProperty(InfoSelectores.prototype, "Cantidad", {
-        get: function () {
-            if (!this._infoSelectores)
-                return 0;
-            else
-                return this._infoSelectores.length;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    InfoSelectores.prototype.Obtener = function (id) {
+    get Cantidad() {
+        if (!this._infoSelectores)
+            return 0;
+        else
+            return this._infoSelectores.length;
+    }
+    Obtener(id) {
         if (!this._infoSelectores || this._infoSelectores.length === 0)
             return null;
         for (var i = 0; i < this.Cantidad; i++) {
@@ -195,21 +161,20 @@ var InfoSelectores = /** @class */ (function () {
                 return this._infoSelectores[i];
         }
         return undefined;
-    };
-    InfoSelectores.prototype.Insertar = function (infoSelector) {
+    }
+    Insertar(infoSelector) {
         var infSel = this.Obtener(infoSelector.Id);
         if (!infSel)
             this._infoSelectores.push(infoSelector);
         return this._infoSelectores.length;
-    };
-    InfoSelectores.prototype.Borrar = function (id) {
+    }
+    Borrar(id) {
         for (var i = 0; i < this.Cantidad; i++) {
             if (this._infoSelectores[i].Id === id)
                 this._infoSelectores.splice(i, 1);
         }
         return this._infoSelectores.length;
-    };
-    return InfoSelectores;
-}());
+    }
+}
 var infoSelectores = new InfoSelectores();
 //# sourceMappingURL=tsInfoSelector.js.map

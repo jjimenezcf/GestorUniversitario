@@ -4,9 +4,8 @@
 function ObtenerFiltros(idGrid) {
     var arrayIds = ObtenerControlesDeFiltro(idGrid);
     var clausulas = new Array();
-    for (var _i = 0, arrayIds_1 = arrayIds; _i < arrayIds_1.length; _i++) {
-        var id = arrayIds_1[_i];
-        var htmlImput = document.getElementById("" + id);
+    for (let id of arrayIds) {
+        var htmlImput = document.getElementById(`${id}`);
         var tipo = htmlImput.getAttribute('tipo');
         var clausula = null;
         if (tipo === "editor") {
@@ -26,22 +25,22 @@ function ObtenerClausulaEditor(htmlEditor) {
     var valor = htmlEditor.value;
     var clausula = null;
     if (!valor.IsNullOrEmpty())
-        clausula = { propiedad: "" + propiedad, criterio: "" + criterio, valor: "" + valor };
+        clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
     return clausula;
 }
 function ObtenerControlesDeFiltro(idGrid) {
     var arrayIds = new Array();
-    var htmlGrid = document.getElementById("" + idGrid);
+    var htmlGrid = document.getElementById(`${idGrid}`);
     var idHtmlFiltro = htmlGrid.getAttribute("zonaDeFiltro");
-    var htmlFiltro = document.getElementById("" + idHtmlFiltro);
+    var htmlFiltro = document.getElementById(`${idHtmlFiltro}`);
     var arrayHtmlImput = htmlFiltro.getElementsByTagName('input');
-    for (var i = 0; i < arrayHtmlImput.length; i++) {
+    for (let i = 0; i < arrayHtmlImput.length; i++) {
         var htmlImput = arrayHtmlImput[i];
         var esFiltro = htmlImput.getAttribute('filtro');
         if (esFiltro === 'S') {
             var id = htmlImput.getAttribute('Id');
             if (id === null)
-                console.log("Falta el atributo id del componente de filtro " + htmlImput);
+                console.log(`Falta el atributo id del componente de filtro ${htmlImput}`);
             arrayIds.push(htmlImput.getAttribute('Id'));
         }
     }
@@ -52,22 +51,22 @@ function urlPeticion(htmlInputCantidad, idGrid, posicion) {
     var controlador = htmlInputCantidad.getAttribute("controlador");
     var filtroJson = ObtenerFiltros(idGrid);
     var ordenJson = '[]';
-    var url = "/" + controlador + "/LeerDatosDelGrid?idGrid=" + idGrid + "&posicion=" + posicion + "&cantidad=" + cantidad + "&filtro=" + filtroJson + "&orden=" + ordenJson;
+    var url = `/${controlador}/LeerDatosDelGrid?idGrid=${idGrid}&posicion=${posicion}&cantidad=${cantidad}&filtro=${filtroJson}&orden=${ordenJson}`;
     return url;
 }
 function Leer(idGrid) {
-    var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log("El elemento " + idGrid + "_nav_2_reg  no est\u00E1 definido");
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var url = urlPeticion(htmlImputCantidad, idGrid, 0);
         LeerDatosDelGrid(url, idGrid, SustituirGrid);
     }
 }
 function LeerAnteriores(idGrid) {
-    var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log("El elemento " + idGrid + "_nav_2_reg  no est\u00E1 definido");
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value;
         var posicion = Number(htmlImputCantidad.getAttribute("posicion")) - 2 * cantidad.Numero();
@@ -80,9 +79,9 @@ function LeerAnteriores(idGrid) {
     }
 }
 function LeerSiguientes(idGrid) {
-    var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log("El elemento " + idGrid + "_nav_2_reg  no est\u00E1 definido");
+        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute("posicion").Numero();
@@ -96,9 +95,9 @@ function LeerSiguientes(idGrid) {
     }
 }
 function LeerUltimos(idGrid) {
-    var htmlImputCantidad = document.getElementById(idGrid + "_nav_2_reg");
+    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
-        console.log("El elemento" + idGrid + "_nav_2_reg  no est\u00E1 definido");
+        console.log(`El elemento${idGrid}_nav_2_reg  no está definido`);
     else {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute("totalEnBd").Numero() - cantidad;
@@ -129,9 +128,9 @@ function LeerDatosDelGrid(url, idGrid, funcionDeRespuesta) {
     req.send();
 }
 function SustituirGrid(idGrid, htmlGrid) {
-    var htmlContenedorGrid = document.getElementById("" + idGrid);
+    var htmlContenedorGrid = document.getElementById(`${idGrid}`);
     if (!htmlContenedorGrid) {
-        console.log("No se ha localizado el contenedor " + idGrid);
+        console.log(`No se ha localizado el contenedor ${idGrid}`);
         return;
     }
     htmlContenedorGrid.innerHTML = htmlGrid;
@@ -172,6 +171,6 @@ function QuitarDelSelector(idGrid, idCheck) {
         infSel.Quitar(id);
     }
     else
-        console.log("El selector " + idGrid + " no est\u00E1 definido");
+        console.log(`El selector ${idGrid} no está definido`);
 }
 //# sourceMappingURL=tsGrid.js.map

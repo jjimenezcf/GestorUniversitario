@@ -1,8 +1,8 @@
-var newLine = "\n";
-var TipoMensaje = { Info: "informativo", Error: "Error" };
+const newLine = "\n";
+const TipoMensaje = { Info: "informativo", Error: "Error" };
 function Mensaje(tipo, mensaje) {
     var control = document.getElementById("Mensaje");
-    control.value = "(" + tipo + ") " + mensaje;
+    control.value = `(${tipo}) ${mensaje}`;
     console.log(control.value);
 }
 function BlanquearMensaje() {
@@ -33,7 +33,7 @@ function ObtenerIdDeLaFilaChequeada(idCheck) {
     return obtenerValorDeLaColumnaChequeada(idCheck, "id");
 }
 function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
-    var inputId = document.getElementById(idCheck.replace(".chksel", "." + columna));
+    var inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
     return inputId.value;
 }
 String.prototype.IsNullOrEmpty = function () {
@@ -54,15 +54,14 @@ String.prototype.Numero = function () {
 function isNullOrEmpty(str) {
     return str.length === 0 || str.trim() === '';
 }
-var ClausulaDeFiltrado = /** @class */ (function () {
-    function ClausulaDeFiltrado(propiedad, criterio, valor) {
+class ClausulaDeFiltrado {
+    constructor(propiedad, criterio, valor) {
         this.Propiedad = propiedad;
         this.Criterio = criterio;
         this.Valor = valor;
     }
-    ClausulaDeFiltrado.prototype.EsVacia = function () {
+    EsVacia() {
         return this.Propiedad.IsNullOrEmpty() || this.Valor.IsNullOrEmpty() || this.Criterio.IsNullOrEmpty();
-    };
-    return ClausulaDeFiltrado;
-}());
+    }
+}
 //# sourceMappingURL=tsUtilidades.js.map

@@ -1,18 +1,18 @@
 var Menu;
 (function (Menu) {
     function MostrarMenu() {
-        var idProductoHtml = document.getElementById('id_menu');
-        var idModalMenu = idProductoHtml.getAttribute('modal-menu');
-        var idModalHtml = document.getElementById(idModalMenu);
+        let idProductoHtml = document.getElementById('id_menu');
+        let idModalMenu = idProductoHtml.getAttribute('modal-menu');
+        let idModalHtml = document.getElementById(idModalMenu);
         if (idModalHtml === undefined) {
-            console.log("No se ha definido el contenedor del men\u00FA " + idModalMenu);
+            console.log(`No se ha definido el contenedor del menú ${idModalMenu}`);
         }
         else {
             var menuAbierto = idProductoHtml.getAttribute("menu-abierto");
             if (menuAbierto === undefined || menuAbierto === "false") {
                 idProductoHtml.setAttribute("menu-abierto", "true");
                 idModalHtml.style.display = "block";
-                idModalHtml.style.height = document.documentElement.clientHeight - 60 + "px";
+                idModalHtml.style.height = `${document.documentElement.clientHeight - 60}px`;
             }
             else {
                 idProductoHtml.setAttribute("menu-abierto", "false");
@@ -22,21 +22,21 @@ var Menu;
     }
     Menu.MostrarMenu = MostrarMenu;
     function OpcionSeleccionada(idVistaMvc, controlador, accion) {
-        var urlBase = window.location.origin;
-        window.location.href = urlBase + "/" + controlador + "/" + accion;
+        let urlBase = window.location.origin;
+        window.location.href = `${urlBase}/${controlador}/${accion}`;
     }
     Menu.OpcionSeleccionada = OpcionSeleccionada;
     function MenuPulsado(id_menu_pulsado) {
-        var elementosHtml = document.getElementsByName("menu");
-        var menuHtmlPulsado = document.getElementById(id_menu_pulsado);
+        let elementosHtml = document.getElementsByName("menu");
+        let menuHtmlPulsado = document.getElementById(id_menu_pulsado);
         if (menuHtmlPulsado.getAttribute("menu-plegado") == "false") {
             plegarMenu(menuHtmlPulsado);
             return;
         }
-        for (var i = 0; i < elementosHtml.length; i++)
+        for (let i = 0; i < elementosHtml.length; i++)
             plegarMenu(elementosHtml[i]);
         desplegarMenu(menuHtmlPulsado);
-        var padreHtml = menuHtmlPulsado.parentElement;
+        let padreHtml = menuHtmlPulsado.parentElement;
         while (padreHtml !== null) {
             if (padreHtml.constructor.toString().indexOf("HTMLUListElement") > 0)
                 desplegarMenu(padreHtml);
@@ -69,15 +69,15 @@ var Menu;
         req.send();
     }
     function SustituirMenu(idContenedorMenu, htmlMenu) {
-        var htmlContenedorMenu = document.getElementById("" + idContenedorMenu);
+        var htmlContenedorMenu = document.getElementById(`${idContenedorMenu}`);
         if (!htmlContenedorMenu) {
-            console.log("No se ha localizado el contenedor " + idContenedorMenu);
+            console.log(`No se ha localizado el contenedor ${idContenedorMenu}`);
             return;
         }
         htmlContenedorMenu.innerHTML = htmlMenu;
     }
     function urlPeticion(usuario) {
-        var url = "/Menus/RenderMenu?usuario=" + usuario;
+        var url = `/Menus/RenderMenu?usuario=${usuario}`;
         return url;
     }
     function desplegarMenu(menuHtml) {
