@@ -28,10 +28,4 @@
         return json;
     }
 
-
-    //protected DespuesDeCrear(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement): void {
-    //    super.DespuesDeCrear(json, htmlDivMostrar, htmlDivOcultar);
-    //    /* codigo específico tras persistir*/
-    //}
-
 }

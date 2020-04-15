@@ -1,7 +1,5 @@
 ﻿class CrudCreacion {
 
-    //protected static Crud: CrudCreacion;
-
     public divDeCreacionHtml: HTMLDivElement;
 
     public ResultadoPeticion: string;
@@ -16,11 +14,8 @@
     }
 
     public Aceptar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
-
         let json: JSON = this.MapearDatosDeIu();
-        let id = this.CrearElemento(json, htmlDivMostrar, htmlDivOcultar);
-        if (this.Creado)
-            Mensaje(TipoMensaje.Info, this.ResultadoPeticion);
+        this.CrearElemento(json, htmlDivMostrar, htmlDivOcultar);
     }
 
     private urlPeticionCrear(json: JSON): string {

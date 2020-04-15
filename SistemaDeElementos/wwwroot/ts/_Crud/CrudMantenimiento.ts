@@ -47,9 +47,7 @@
             gestorDeCreacion.Cerrar(htmlDivMostrar, htmlDivOcultar);
         }
         catch (error) {
-            console.error(error.message);
-            Mensaje(TipoMensaje.Info, error.menssage);
-            return;
+            Mensaje(TipoMensaje.Error, error.menssage);
         }
     }
 }
