@@ -109,6 +109,8 @@
         for (var i = 0; i < propiedades.length; i++) {
             var propiedad = propiedades[i] as HTMLElement;
             if (propiedad instanceof HTMLInputElement) {
+                let cssValida: string = propiedad.getAttribute(Atributo.classValido);
+                propiedad.className = `${ClaseCss.classPropiedad} ${cssValida}`;
                 (propiedad as HTMLInputElement).value = "";
             }
         }
