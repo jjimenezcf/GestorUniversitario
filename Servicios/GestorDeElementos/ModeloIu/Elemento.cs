@@ -13,6 +13,8 @@ namespace Gestor.Elementos.ModeloIu
         public string Ayuda { get; set; } = "";
         public bool Visible { get; set; } = true;
         public bool Editable { get; set; } = true;
+        public bool Obligatorio { get; set; } = true;
+        public string ClaseCssNoValido { get; set; } = "controlNoValido";
         public Type Tipo { get; set; }
         public short Fila { get; set; } 
         public short Columna { get; set; }

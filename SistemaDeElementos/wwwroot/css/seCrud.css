@@ -111,13 +111,22 @@ a {
     display: block;
     text-align: left;
     border: hidden;
-    background: #ffd800;
+    background: #e9d4d4;
     width: 100%
 }
 
     .controlDeCreacion:read-only {
-        background: #808080
+        background: #a5a1a1
     }
+
+
+.controlNoValido {
+    display: block;
+    text-align: left;
+    border: hidden;
+    background: #f58eb1;
+    width: 100%
+}
 
 
 

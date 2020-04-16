@@ -3,8 +3,8 @@
     public divDeCreacionHtml: HTMLDivElement;
 
     public ResultadoPeticion: string;
-    public PeticionRealizada: boolean;
-    public Creado: boolean;
+    public PeticionRealizada: boolean = false;
+    public Creado: boolean = false;
 
     constructor() {
     }
@@ -14,7 +14,14 @@
     }
 
     public Aceptar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
-        let json: JSON = this.MapearDatosDeIu();
+        let json: JSON = null;
+        try {
+            json = this.MapearDatosDeIu();
+        }
+        catch (error) {
+            this.ResultadoPeticion = error.message;
+            return;
+        }
         this.CrearElemento(json, htmlDivMostrar, htmlDivOcultar);
     }
 
@@ -51,7 +58,18 @@
             var propiedad = propiedades[i] as HTMLElement;
             if (propiedad instanceof HTMLInputElement) {
                 var propiedadDto = propiedad.getAttribute("propiedad-dto");
-                json[propiedadDto] = (propiedad as HTMLInputElement).value;
+                let valor: string = (propiedad as HTMLInputElement).value;
+                let obligatorio: string = propiedad.getAttribute("obligatorio");
+                if (obligatorio === "S" && valor.IsNullOrEmpty()) {
+                    let cssNoValida: string = propiedad.getAttribute('classNoValido');
+                    propiedad.className = `propiedad ${cssNoValida}`;
+                    throw new Error(`El campo ${propiedadDto} es obligatorio`);
+                }
+
+                let cssValida: string = propiedad.getAttribute('classValido');
+                propiedad.className = `propiedad ${cssValida}`;
+                json[propiedadDto] = valor;
+
             }
         }
 

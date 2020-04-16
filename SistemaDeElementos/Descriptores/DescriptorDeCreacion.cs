@@ -146,15 +146,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderDescriptorControl(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
+            var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" + Environment.NewLine +
                                         $"   <input id=¨{descriptorControl.Descriptor.Name}¨ "+ Environment.NewLine +
                                         $"       propiedad-dto=¨{descriptorControl.Descriptor.Name}¨ " + Environment.NewLine +
-                                        $"       class=¨propiedad {descriptorControl.atributos.ClaseCss}¨ " + Environment.NewLine +
+                                        $"       class=¨propiedad {atributos.ClaseCss}¨ " + Environment.NewLine +
+                                        $"       classNoValido=¨{atributos.ClaseCssNoValido}¨ " + Environment.NewLine +
+                                        $"       classValido=¨{atributos.ClaseCss}¨ " + Environment.NewLine +
+                                        $"       obligatorio=¨{(atributos.Visible && atributos.Obligatorio? "S" : "N")}¨ " + Environment.NewLine +
                                         $"       type=¨text¨ " + Environment.NewLine +
-                                        $"       {(!descriptorControl.atributos.Editable ? "readonly" : "")} " + Environment.NewLine +
+                                        $"       {(!atributos.Editable ? "readonly" : "")} " + Environment.NewLine +
                                         $"       value=¨¨" + Environment.NewLine +
-                                        $"       placeholder =¨{descriptorControl.atributos.Ayuda}¨" + Environment.NewLine +
-                                        $"       ValorPorDefecto=¨{descriptorControl.atributos.ValorPorDefecto}¨>" + Environment.NewLine +
+                                        $"       placeholder =¨{atributos.Ayuda}¨" + Environment.NewLine +
+                                        $"       ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>" + Environment.NewLine +
                                         $"   </input>" + Environment.NewLine +
                                         $"</div>";
             return htmdDescriptorControl;
