@@ -58,8 +58,8 @@ namespace MVCSistemaDeElementos.Controllers
             return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
         }
 
-        
-        //END-POINT: Desde Grid.ts
+
+        //END-POINT: Desde CrudCreacion.ts
         public JsonResult CrearElemento(string elementoJson)
         {
             var r = new Resultado();
@@ -77,7 +77,7 @@ namespace MVCSistemaDeElementos.Controllers
                 return error;
             }
 
-            r.Estado = "ok";
+            r.Estado = "Ok";
             r.Mensaje = "Registro creado";
             return new JsonResult(r);
 

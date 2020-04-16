@@ -1,13 +1,13 @@
 ﻿module Crud.Menu {
     export function EjecutarAccionMenu(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestorDeCreacion: CrudCreacion): void {
 
-        if (accion === "iracrear")
+        if (accion === LiteralMnt.iracrear)
             IraCrear(gestorDeCreacion, idDivMostrarHtml, idDivOcultarHtml);
         else
-        if (accion === "nuevoelemento")
+            if (accion === LiteralMnt.nuevoelemento)
             NuevoElemento(gestorDeCreacion, idDivMostrarHtml, idDivOcultarHtml);
         else
-        if (accion === "cancelarnuevo")
+                if (accion === LiteralMnt.cancelarnuevo)
            CancelarNuevo(idDivMostrarHtml, idDivOcultarHtml, gestorDeCreacion);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`)
@@ -18,18 +18,17 @@
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
 
-        htmlDivMostrar.classList.add("div-visible");
-        htmlDivMostrar.classList.remove("div-no-visible");
+        htmlDivMostrar.classList.add(Literal.divVisible);
+        htmlDivMostrar.classList.remove(Literal.divNoVisible);
 
-        htmlDivOcultar.classList.add("div-no-visible");
-        htmlDivOcultar.classList.remove("div-visible");
+        htmlDivOcultar.classList.add(Literal.divNoVisible);
+        htmlDivOcultar.classList.remove(Literal.divVisible);
 
         gestorDeCreacion.InicializarValores();
     }
 
 
     async function NuevoElemento(gestorDeCreacion: CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
-        Mensaje(TipoMensaje.Info, "Lamando");
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
         gestorDeCreacion.Aceptar(htmlDivMostrar, htmlDivOcultar);

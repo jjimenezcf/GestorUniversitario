@@ -26,8 +26,8 @@
     }
 
     private urlPeticionCrear(json: JSON): string {
-        let controlador = this.divDeCreacionHtml.getAttribute("controlador");
-        let url: string = `/${controlador}/CrearElemento?elementoJson=${JSON.stringify(json)}`;
+        let controlador = this.divDeCreacionHtml.getAttribute(Literal.controlador);
+        let url: string = `/${controlador}/${LiteralCrt.accionCrear}?${Literal.elementoJson}=${JSON.stringify(json)}`;
         return url;
     }
 
@@ -57,17 +57,17 @@
         for (var i = 0; i < propiedades.length; i++) {
             var propiedad = propiedades[i] as HTMLElement;
             if (propiedad instanceof HTMLInputElement) {
-                var propiedadDto = propiedad.getAttribute("propiedad-dto");
+                var propiedadDto = propiedad.getAttribute(Literal.propiedadDto);
                 let valor: string = (propiedad as HTMLInputElement).value;
-                let obligatorio: string = propiedad.getAttribute("obligatorio");
+                let obligatorio: string = propiedad.getAttribute(LiteralCrt.obligatorio);
                 if (obligatorio === "S" && valor.IsNullOrEmpty()) {
-                    let cssNoValida: string = propiedad.getAttribute('classNoValido');
-                    propiedad.className = `propiedad ${cssNoValida}`;
+                    let cssNoValida: string = propiedad.getAttribute(LiteralCrt.classNoValido);
+                    propiedad.className = `${LiteralCrt.classPropiedad} ${cssNoValida}`;
                     throw new Error(`El campo ${propiedadDto} es obligatorio`);
                 }
 
-                let cssValida: string = propiedad.getAttribute('classValido');
-                propiedad.className = `propiedad ${cssValida}`;
+                let cssValida: string = propiedad.getAttribute(LiteralCrt.classValido);
+                propiedad.className = `${LiteralCrt.classPropiedad} ${cssValida}`;
                 json[propiedadDto] = valor;
 
             }
@@ -81,18 +81,18 @@
     }
 
     protected AntesDeMapearDatosDeIU(): JSON {
-        return JSON.parse('{"id":"0"}');
+        return JSON.parse(`{"${Literal.id}":"0"}`);
     }
 
     public Cerrar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
 
         this.BlanquearDatosDeCreacion();
 
-        htmlDivMostrar.classList.add("div-visible");
-        htmlDivMostrar.classList.remove("div-no-visible");
+        htmlDivMostrar.classList.add(Literal.divVisible);
+        htmlDivMostrar.classList.remove(Literal.divNoVisible);
 
-        htmlDivOcultar.classList.add("div-no-visible");
-        htmlDivOcultar.classList.remove("div-visible");
+        htmlDivOcultar.classList.add(Literal.divNoVisible);
+        htmlDivOcultar.classList.remove(Literal.divVisible);
 
         BlanquearMensaje();
 
@@ -114,7 +114,7 @@
 
         function respuestaCorrecta() {
             let resultado = JSON.parse(req.response);
-            if (resultado.estado === "Error") {
+            if (resultado.estado === Literal.jsonResultError) {
                 errorAlCrear();
             }
             else {
@@ -127,8 +127,8 @@
             this.PeticionRealizada = false;
         }
 
-        req.addEventListener("load", respuestaCorrecta);
-        req.addEventListener("error", respuestaErronea);
+        req.addEventListener(Literal.eventoLoad, respuestaCorrecta);
+        req.addEventListener(Literal.eventoError, respuestaErronea);
         req.send();
     }
 
