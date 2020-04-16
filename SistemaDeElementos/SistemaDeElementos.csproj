@@ -11,7 +11,9 @@
     <Content Remove="wwwroot\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
+    <Content Remove="wwwroot\ts\_Crud\CrudBase.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudCreacion.ts" />
+    <Content Remove="wwwroot\ts\_Crud\CrudEdicion.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudMantenimiento.ts" />
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />

@@ -20,7 +20,8 @@
         Fecha,
         Plantilla,
         Mantenimiento,
-        Creacion,
+        pnlCreador,
+        pnlEditor,
         ZonaMenu,
         Menu
     }

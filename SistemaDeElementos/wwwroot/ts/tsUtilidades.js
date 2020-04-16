@@ -34,7 +34,12 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     var inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
     return inputId.value;
 }
-String.prototype.IsNullOrEmpty = function () {
+function EsNula(valor) {
+    if (valor == null || valor == undefined)
+        return true;
+    return valor.NoDefinida();
+}
+String.prototype.NoDefinida = function () {
     var str = this;
     if (str !== undefined)
         return str.length === 0 || str.trim() === '';
@@ -49,9 +54,6 @@ String.prototype.Numero = function () {
         return 0;
     return Number(this);
 };
-function isNullOrEmpty(str) {
-    return str.length === 0 || str.trim() === '';
-}
 class ClausulaDeFiltrado {
     constructor(propiedad, criterio, valor) {
         this.Propiedad = propiedad;
@@ -59,7 +61,7 @@ class ClausulaDeFiltrado {
         this.Valor = valor;
     }
     EsVacia() {
-        return this.Propiedad.IsNullOrEmpty() || this.Valor.IsNullOrEmpty() || this.Criterio.IsNullOrEmpty();
+        return this.Propiedad.NoDefinida() || this.Valor.NoDefinida() || this.Criterio.NoDefinida();
     }
 }
 function ParsearRespuesta(req) {

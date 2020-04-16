@@ -47,12 +47,18 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
 }
 
 interface String {
-    IsNullOrEmpty(): boolean;
+    NoDefinida(): boolean;
     Numero(): number;
 }
 
+function EsNula(valor: string): boolean {
+    if (valor == null || valor == undefined)
+        return true;
 
-String.prototype.IsNullOrEmpty = function () {
+    return valor.NoDefinida();
+}
+
+String.prototype.NoDefinida = function () {
     var str: String = this;
     if (str !== undefined)
         return str.length === 0 || str.trim() === '';
@@ -72,9 +78,6 @@ String.prototype.Numero = function () {
     return Number(this);
 };
 
-function isNullOrEmpty(str) {
-    return str.length === 0 || str.trim() === '';
-}
 
 class ClausulaDeFiltrado {
     Propiedad: string;
@@ -88,7 +91,7 @@ class ClausulaDeFiltrado {
     }
 
     EsVacia(): boolean {
-        return this.Propiedad.IsNullOrEmpty() || this.Valor.IsNullOrEmpty() || this.Criterio.IsNullOrEmpty();
+        return this.Propiedad.NoDefinida() || this.Valor.NoDefinida() || this.Criterio.NoDefinida();
     }
 }
 

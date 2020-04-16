@@ -61,7 +61,7 @@
     function PeticionSolicitarMenu(req: XMLHttpRequest, despuesDeSolitarMenu: Function, errorAlSolicitarMenu: Function) {
 
         function respuestaCorrecta() {
-            if (req.response.IsNullOrEmpty()) {
+            if (EsNula(req.response)) {
                 errorAlSolicitarMenu();
             }
             else {
@@ -97,7 +97,7 @@
     }
 
     function ErrorAlSolicitarMenu(req: XMLHttpRequest): void {
-        if (req.response.IsNullOrEmpty()) {
+        if (EsNula(req.response)) {
             Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenu} no está definida`);
         }
         else {

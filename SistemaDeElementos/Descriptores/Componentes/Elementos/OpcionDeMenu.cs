@@ -4,7 +4,7 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoAccion { IraCrear, IraMnt, NuevoElemento, CancelarNuevo }
+    public enum TipoAccion { CrearElemento, IraMnt, NuevoElemento, CancelarNuevo, ModificarElemento, EditarElemento, CancelarEdicion }
 
     public class AccionDeMenu
     {
@@ -34,16 +34,20 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (!IdDivMostrar.IsNullOrEmpty() && !IdDivOcultar.IsNullOrEmpty())
             {
-                return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}())";
+                return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}('{IdDivMostrarHtml}'))";
             }
             return "";
         }
     }
 
-    public class AccionDeMenuMnt: AccionDeMenu
+    public class AccionDeMenuMnt : AccionDeMenu
     {
+
+        protected string IdPanelMnt => IdDivOcultarHtml;
+        protected string IdPanelEdicionCreacion => IdDivMostrarHtml;
+
         public AccionDeMenuMnt(TipoAccion tipoAccion, string gestor)
-        :base(tipoAccion, gestor)
+        : base(tipoAccion, gestor)
         {
 
         }
@@ -53,23 +57,17 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
         }
-
         public override string RenderAccion()
         {
-            var renderAccion = base.RenderAccion();
-
-
-            if (renderAccion.IsNullOrEmpty())
-            {
-                renderAccion = "Crud.Menu.EjecutarAccionMenu({parametros})";
-            }
-
-            return renderAccion;
+            return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelEdicionCreacion}','{IdPanelMnt}', new {Gestor}('{IdPanelMnt}','{IdPanelEdicionCreacion}'))";
         }
     }
 
-    public class AccionDeMenuCreacion: AccionDeMenu
+    public class AccionDeMenuCreacion : AccionDeMenu
     {
+        protected string IdPanelMnt => IdDivMostrarHtml;
+        protected string IdPanelCreacion => IdDivOcultarHtml;
+
         public AccionDeMenuCreacion(TipoAccion tipoAccion, string gestor)
             : base(tipoAccion, gestor)
         {
@@ -84,45 +82,54 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            var renderAccion = base.RenderAccion();
-
-
-            if (renderAccion.IsNullOrEmpty())
-            {
-                renderAccion = "Crud.Menu.EjecutarAccionMenu({parametros})";
-            }
-
-            return renderAccion;
+           return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelCreacion}', new {Gestor}('{IdPanelMnt}', '{IdPanelCreacion}'))";
         }
     }
 
-    public class IrACrear : AccionDeMenuMnt
+
+    public class AccionDeMenuEdicion : AccionDeMenu
     {
-        public IrACrear(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.IraCrear, gestor,idDivMostrar,idDivOcultar)
+        protected string IdPanelMnt => IdDivMostrarHtml;
+        protected string IdPanelEdicion => IdDivOcultarHtml;
+        public AccionDeMenuEdicion(TipoAccion tipoAccion, string gestor)
+            : base(tipoAccion, gestor)
+        {
+
+        }
+
+        public AccionDeMenuEdicion(TipoAccion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
+        : base(tipoAccion, gestor, idDivMostrar, idDivOcultar)
+        {
+
+        }
+
+        public override string RenderAccion()
+        {
+            return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelEdicion}', new {Gestor}('{IdPanelMnt}', '{IdPanelEdicion}'))";
+        }
+    }
+
+    public class CrearElemento : AccionDeMenuMnt
+    {
+        public CrearElemento(string idDivMostrar, string idDivOcultar, string gestor)
+        : base(TipoAccion.CrearElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
-
-        //public override string RenderAccion()
-        //{
-        //    var htmlAccion = base.RenderAccion();
-        //    return htmlAccion.Replace("{parametros}", $"'{nameof(IrACrear).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}()");
-        //}
+    }
+    public class EditarElemento : AccionDeMenuMnt
+    {
+        public EditarElemento(string idDivMostrar, string idDivOcultar, string gestor)
+        : base(TipoAccion.EditarElemento, gestor, idDivMostrar, idDivOcultar)
+        {
+        }
     }
 
-    public class NuevoElemento: AccionDeMenuCreacion
+    public class NuevoElemento : AccionDeMenuCreacion
     {
         public NuevoElemento(string idDivMostrar, string idDivOcultar, string gestor)
         : base(TipoAccion.NuevoElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
-
-        //public override string RenderAccion()
-        //{
-        //    var htmlAccion = base.RenderAccion();
-        //    return htmlAccion.Replace("{parametros}", $"'{nameof(NuevoElemento).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}()");
-        //}
-
     }
 
     public class CancelarNuevo : AccionDeMenuCreacion
@@ -131,12 +138,21 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(TipoAccion.CancelarNuevo, gestor, idDivMostrar, idDivOcultar)
         {
         }
+    }
 
-        //public override string RenderAccion()
-        //{
-        //    var htmlAccion = base.RenderAccion();
-        //    return htmlAccion.Replace("{parametros}", $"'{nameof(CancelarNuevo).ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}()");
-        //}
+    public class ModificarElemento : AccionDeMenuEdicion
+    {
+        public ModificarElemento(string idDivMostrar, string idDivOcultar, string gestor)
+        : base(TipoAccion.ModificarElemento, gestor, idDivMostrar, idDivOcultar)
+        {
+        }
+    }
+    public class CancelarEdicion : AccionDeMenuEdicion
+    {
+        public CancelarEdicion(string idDivMostrar, string idDivOcultar, string gestor)
+        : base(TipoAccion.CancelarEdicion, gestor, idDivMostrar, idDivOcultar)
+        {
+        }
     }
 
     public class OpcionDeMenu<TElemento> : ControlHtml

@@ -1,8 +1,7 @@
 ﻿class CrudCreacionUsuario extends CrudCreacion {
 
-    constructor() {
-        super();
-        this.divDeCreacionHtml = document.getElementById("crud_usuario_creacion") as HTMLDivElement;
+    constructor(idPanelMnt: string, idPanelCreacion: string) {
+        super(idPanelMnt, idPanelCreacion);
     }
 
     public InicializarValores() {
@@ -27,5 +26,14 @@
 
         return json;
     }
+
+}
+
+class CrudEdicionUsuario extends CrudEdicion {
+
+    constructor(idPanelMnt: string, idPanelCreacion: string) {
+        super(idPanelMnt, idPanelCreacion);
+    }
+
 
 }

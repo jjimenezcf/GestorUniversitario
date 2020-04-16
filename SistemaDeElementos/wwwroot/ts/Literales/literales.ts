@@ -59,9 +59,11 @@ const Ajax = {
 };
 
 const LiteralMnt = {
-    iracrear: "iracrear",
+    crearelemento: "crearelemento",
+    editarelemento: "editarelemento",
     nuevoelemento: "nuevoelemento",
     cancelarnuevo: "cancelarnuevo",
+    cancelaredicion: "cancelaredicion",
     idCtrlCantidad: "nav_2_reg"
 };
 

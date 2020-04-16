@@ -29,7 +29,8 @@ namespace Gestor.Elementos.ModeloIu
     {
         public short AnchoEtiqueta { get; set; } = 15;
         public short AnchoSeparador { get; set; } = 2;
-        public string ClaseParaCreacion { get; set; } = "CrudCreacion";
+        public string ClaseTypeScriptDeCreacion { get; set; } = "CrudCreacion";
+        public string ClaseTypeScriptDeEdicion { get; set; } = "CrudEdicion";
 
         public string AlCerrar { get; set; } = "Crud.Crear.AlCerrar()";
 
@@ -74,7 +75,7 @@ namespace Gestor.Elementos.ModeloIu
             return atributos;
         }
 
-        public static object ValorDelAtributo(Type clase, string nombreAtributo)
+        public static object ValorDelAtributo(Type clase, string nombreAtributo, bool obligatorio = true)
         {
             Attribute[] atributosDeDto = System.Attribute.GetCustomAttributes(clase);
 
@@ -88,8 +89,11 @@ namespace Gestor.Elementos.ModeloIu
                     IUDtoAttribute a = (IUDtoAttribute)atributoDto;
                     switch (nombreAtributo)
                     {
-                        case nameof(IUDtoAttribute.ClaseParaCreacion):
-                            return a.ClaseParaCreacion;
+                        case nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion):
+                            return a.ClaseTypeScriptDeCreacion;
+
+                        case nameof(IUDtoAttribute.ClaseTypeScriptDeEdicion):
+                            return a.ClaseTypeScriptDeEdicion;
 
                         case nameof(IUDtoAttribute.AlAceptar):
                             return a.AlAceptar;
@@ -105,6 +109,9 @@ namespace Gestor.Elementos.ModeloIu
                     }
                 }
             }
+
+            if (obligatorio)
+                throw new Exception($"Se ha solicitado el atributo {nombreAtributo} de la clase {clase} y no está definido");
 
             return null;
 

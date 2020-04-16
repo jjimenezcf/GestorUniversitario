@@ -30,7 +30,7 @@ function ObtenerClausulaEditor(htmlEditor) {
     var criterio: string = htmlEditor.getAttribute(Atributo.criterio);
     var valor = htmlEditor.value;
     var clausula = null;
-    if (!valor.IsNullOrEmpty())
+    if (!EsNula(valor))
         clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
 
     return clausula;
@@ -144,7 +144,7 @@ function LeerUltimos(idGrid) {
 function LeerDatosDelGrid(req: XMLHttpRequest, idGrid: string, sustituirGrid: Function, errorEnLaPeticion: Function) {
 
     function respuestaCorrecta() {
-        if (req.response.IsNullOrEmpty()) {
+        if (EsNula(req.response)) {
             errorEnLaPeticion();
         }
         else {
@@ -168,7 +168,7 @@ function LeerDatosDelGrid(req: XMLHttpRequest, idGrid: string, sustituirGrid: Fu
 }
 
 function ErrorEnLaPeticion(req: XMLHttpRequest) {
-    if (req.response.IsNullOrEmpty()) {
+    if (EsNula(req.response)) {
         Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.LeerDatos} no está definida`);
     }
     else {

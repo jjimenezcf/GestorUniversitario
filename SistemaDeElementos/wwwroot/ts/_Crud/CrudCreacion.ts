@@ -1,12 +1,8 @@
-﻿class CrudCreacion {
-
-    public divDeCreacionHtml: HTMLDivElement;
-
-    public ResultadoPeticion: string;
-    public PeticionRealizada: boolean = false;
+﻿class CrudCreacion extends CrudBase{
     public Creado: boolean = false;
 
-    constructor() {
+    constructor(idPanelMnt: string, idPanelCreacion: string) {
+        super(idPanelMnt, idPanelCreacion, null);
     }
 
     public InicializarValores(): void {
@@ -48,7 +44,7 @@
         let valor: string = (propiedad as HTMLInputElement).value;
         let obligatorio: string = propiedad.getAttribute(Atributo.obligatorio);
 
-        if (obligatorio === "S" && valor.IsNullOrEmpty()) {
+        if (obligatorio === "S" && valor.NoDefinida()) {
             let cssNoValida: string = propiedad.getAttribute(Atributo.classNoValido);
             propiedad.className = `${ClaseCss.classPropiedad} ${cssNoValida}`;
             throw new Error(`El campo ${propiedadDto} es obligatorio`);
@@ -79,7 +75,7 @@
     private PeticionCrear(req: XMLHttpRequest, despuesDeCrear: Function, errorAlCrear: Function) {
 
         function respuestaCorrecta() {
-            if (req.response.IsNullOrEmpty()) {
+            if (EsNula(req.response)) {
                 errorAlCrear();
             }
             else {
@@ -111,7 +107,7 @@
     }
 
     protected ErrorAlCrear(req: XMLHttpRequest): void {
-        if (req.response.IsNullOrEmpty()) {
+        if (EsNula(req.response)) {
             this.ResultadoPeticion = `La peticion ${Ajax.EndPoint.Crear} no está definida`;
         }
         else {
@@ -122,31 +118,7 @@
         }
     }
 
-    public Cerrar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
 
-        this.BlanquearControlesDeIU();
-
-        htmlDivMostrar.classList.add(ClaseCss.divVisible);
-        htmlDivMostrar.classList.remove(ClaseCss.divNoVisible);
-
-        htmlDivOcultar.classList.add(ClaseCss.divNoVisible);
-        htmlDivOcultar.classList.remove(ClaseCss.divVisible);
-
-        BlanquearMensaje();
-
-    }
-
-    private BlanquearControlesDeIU() {
-        let propiedades: HTMLCollectionOf<Element> = this.divDeCreacionHtml.getElementsByClassName("propiedad");
-        for (var i = 0; i < propiedades.length; i++) {
-            var propiedad = propiedades[i] as HTMLElement;
-            if (propiedad instanceof HTMLInputElement) {
-                let cssValida: string = propiedad.getAttribute(Atributo.classValido);
-                propiedad.className = `${ClaseCss.classPropiedad} ${cssValida}`;
-                (propiedad as HTMLInputElement).value = "";
-            }
-        }
-    }
 
 
 }

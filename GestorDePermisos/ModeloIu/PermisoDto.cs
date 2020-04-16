@@ -8,7 +8,7 @@ namespace Gestor.Elementos.Seguridad
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
     }
 
-    [IUDto(ClaseParaCreacion = "CrudCreacionPermiso"
+    [IUDto(ClaseTypeScriptDeCreacion = "CrudCreacionPermiso"
      , AnchoEtiqueta = 20
      , AnchoSeparador = 5)]
     public class PermisoDto : Elemento

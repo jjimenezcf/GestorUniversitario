@@ -6,7 +6,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorMantenimiento<TElemento>: ControlHtml
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
-        public ZonaDeMenuMnt<TElemento> ZonaMenu { get; private set; }
+        public BarraDeMenu<TElemento> MenuDeMnt { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeGrid<TElemento> Grid { get; set; }
 
@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Mantenimiento;
-            ZonaMenu = new ZonaDeMenuMnt<TElemento>(mnt: this);
+            MenuDeMnt = new BarraDeMenu<TElemento>(mnt: this);
             Filtro = new ZonaDeFiltro<TElemento>(mnt: this);
             Grid = new ZonaDeGrid<TElemento>(mnt: this);  
         }
@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlMnt = ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo
                    ?
                    RenderTitulo() + Environment.NewLine +
-                   ZonaMenu.RenderControl() + Environment.NewLine +
+                   MenuDeMnt.RenderControl() + Environment.NewLine +
                    Filtro.RenderControl() + Environment.NewLine +
                    Grid.RenderControl() + Environment.NewLine
                    :

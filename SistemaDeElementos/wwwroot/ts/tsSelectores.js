@@ -4,9 +4,9 @@ class HTMLSelector extends HTMLInputElement {
 HTMLInputElement.prototype.InicializarSelector = function () {
     var htmlSelector = this;
     var idGridModal = htmlSelector.getAttribute('idGridModal');
-    if (!idGridModal.IsNullOrEmpty()) {
+    if (!idGridModal.NoDefinida()) {
         var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
-        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
+        if (!refCheckDeSeleccion.NoDefinida()) {
             InicializarModal(idGridModal, refCheckDeSeleccion);
             htmlSelector.BanquearEditorDelGrid();
             htmlSelector.InicializarAtributos();
@@ -20,9 +20,9 @@ HTMLInputElement.prototype.InicializarSelector = function () {
 HTMLInputElement.prototype.MapearTextoAlEditorDelGrid = function () {
     var htmlSelector = this;
     var htmlEditor = htmlSelector.EditorDelGrid();
-    if (!htmlSelector.value.IsNullOrEmpty()) {
+    if (!htmlSelector.value.NoDefinida()) {
         var listaDeIds = htmlSelector.getAttribute(ListaDeSeleccionados);
-        if (listaDeIds === null || listaDeIds.IsNullOrEmpty())
+        if (listaDeIds === null || listaDeIds.NoDefinida())
             htmlEditor.value = htmlSelector.value;
         else
             htmlEditor.value = '';
@@ -46,7 +46,7 @@ HTMLInputElement.prototype.ClausulaDeFiltrado = function () {
     var clausula = null;
     if (htmlSelector.hasAttribute(ListaDeSeleccionados)) {
         var ids = htmlSelector.getAttribute(ListaDeSeleccionados);
-        if (!ids.IsNullOrEmpty()) {
+        if (!ids.NoDefinida()) {
             valor = ids;
             clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
         }
@@ -109,14 +109,14 @@ function AlSeleccionar(idSelector, idGrid, referenciaChecks) {
 }
 function AlCambiarTextoSelector(idSelector, controlador) {
     var htmlSelector = document.getElementById(idSelector);
-    if (!htmlSelector.value.IsNullOrEmpty()) {
+    if (!htmlSelector.value.NoDefinida()) {
         var clausulas = ObtenerClausulaParaBuscarRegistro(htmlSelector);
         LeerParaSelector(`/${controlador}/Leer?filtro=${JSON.stringify(clausulas)}`, htmlSelector, ProcesarRegistrosLeidos);
     }
     else {
         htmlSelector.InicializarSelector();
         var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
-        if (!refCheckDeSeleccion.IsNullOrEmpty()) {
+        if (!refCheckDeSeleccion.NoDefinida()) {
             blanquearCheck(refCheckDeSeleccion);
         }
     }
@@ -146,7 +146,7 @@ function elementosMarcados(idSelector) {
     var htmlSelector = document.getElementById(idSelector);
     if (htmlSelector.hasAttribute(ListaDeSeleccionados)) {
         ids = htmlSelector.getAttribute(ListaDeSeleccionados);
-        if (!ids.IsNullOrEmpty()) {
+        if (!ids.NoDefinida()) {
             var listaNombres = htmlSelector.value.split('|');
             var listaIds = ids.split(';');
             for (var i = 0; i < listaIds.length; i++) {
@@ -159,7 +159,7 @@ function elementosMarcados(idSelector) {
 }
 function mapearElementoAlHtmlSelector(htmlSelector, elemento) {
     var valorDelSelector = htmlSelector.value;
-    if (!valorDelSelector.IsNullOrEmpty())
+    if (!valorDelSelector.NoDefinida())
         valorDelSelector = valorDelSelector + " | ";
     htmlSelector.value = valorDelSelector + elemento.Texto;
     mapearIdAlHtmlSelector(htmlSelector, elemento.Id);
@@ -171,7 +171,7 @@ function mapearIdAlHtmlSelector(htmlSelector, id) {
         htmlSelector.setAttributeNode(atributo);
         listaDeIds = "";
     }
-    if (!listaDeIds.IsNullOrEmpty())
+    if (!listaDeIds.NoDefinida())
         listaDeIds = listaDeIds + ';';
     listaDeIds = listaDeIds + id;
     htmlSelector.setAttribute(ListaDeSeleccionados, listaDeIds);
@@ -230,7 +230,7 @@ function LeerParaSelector(url, htmlSelector, funcionDeRespuesta) {
 }
 function ProcesarRegistrosLeidos(htmlSelector, registros) {
     var propiedadmostrar = htmlSelector.getAttribute('propiedadmostrar');
-    if (!propiedadmostrar.IsNullOrEmpty()) {
+    if (!propiedadmostrar.NoDefinida()) {
         var registrosJson = JSON.parse(registros);
         if (registrosJson.length === 1) {
             var registroJson = registrosJson[0];

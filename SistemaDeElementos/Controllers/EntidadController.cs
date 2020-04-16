@@ -66,7 +66,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch(Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
-                r.consola = e.Message;
+                r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = "No se ha podido crear el usuario";
             }
 
@@ -87,7 +87,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
-                r.consola = e.Message;
+                r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = "No se ha podido recuperar datos para el grid";
             }
 

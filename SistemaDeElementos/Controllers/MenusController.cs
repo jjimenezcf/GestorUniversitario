@@ -40,7 +40,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
-                r.consola = e.Message;
+                r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = "No se ha podido leer el menú";
             }
             return new JsonResult(r);
