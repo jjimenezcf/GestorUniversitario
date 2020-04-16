@@ -18,11 +18,11 @@
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
 
-        htmlDivMostrar.classList.add(Literal.divVisible);
-        htmlDivMostrar.classList.remove(Literal.divNoVisible);
+        htmlDivMostrar.classList.add(ClaseCss.divVisible);
+        htmlDivMostrar.classList.remove(ClaseCss.divNoVisible);
 
-        htmlDivOcultar.classList.add(Literal.divNoVisible);
-        htmlDivOcultar.classList.remove(Literal.divVisible);
+        htmlDivOcultar.classList.add(ClaseCss.divNoVisible);
+        htmlDivOcultar.classList.remove(ClaseCss.divVisible);
 
         gestorDeCreacion.InicializarValores();
     }

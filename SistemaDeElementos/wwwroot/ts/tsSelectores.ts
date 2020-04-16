@@ -103,6 +103,7 @@ Eventos en el selector y en la ventana modal
  ***************************************************************************************************************/
 
 function AlAbrir(idGrid: string, idSelector: string, columnaId: string, columnaMostrar: string) {
+    BlanquearMensaje();
     var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
     htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
@@ -159,6 +160,7 @@ function AlCambiarTextoSelector(idSelector: string, controlador: string) {
 }
 
 function recargarGrid(idGrid) {
+    BlanquearMensaje();
     var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
@@ -228,6 +230,7 @@ function mapearIdAlHtmlSelector(htmlSelector: HTMLSelector, id: number) {
 
 
 function InicializarModal(idGrid, referenciaChecks) {
+    BlanquearMensaje();
     blanquearCheck(referenciaChecks);
     infoSelectores.Borrar(idGrid);
 }

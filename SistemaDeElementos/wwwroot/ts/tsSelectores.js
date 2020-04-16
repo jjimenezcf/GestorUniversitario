@@ -77,6 +77,7 @@ HTMLInputElement.prototype.EditorDelGrid = function () {
 Eventos en el selector y en la ventana modal
  ***************************************************************************************************************/
 function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
+    BlanquearMensaje();
     var htmlSelector = document.getElementById(idSelector);
     htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
@@ -121,6 +122,7 @@ function AlCambiarTextoSelector(idSelector, controlador) {
     }
 }
 function recargarGrid(idGrid) {
+    BlanquearMensaje();
     var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
     if (htmlImputCantidad === null)
         console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
@@ -175,6 +177,7 @@ function mapearIdAlHtmlSelector(htmlSelector, id) {
     htmlSelector.setAttribute(ListaDeSeleccionados, listaDeIds);
 }
 function InicializarModal(idGrid, referenciaChecks) {
+    BlanquearMensaje();
     blanquearCheck(referenciaChecks);
     infoSelectores.Borrar(idGrid);
 }

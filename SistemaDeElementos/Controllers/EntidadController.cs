@@ -27,11 +27,17 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
+        public enum EstadoPeticion {Ok, Error}
 
         public class Resultado
         {
-            public string Estado { get; set; }
+            public EstadoPeticion Estado { get; set; }
             public string Mensaje { get; set; }
+        }
+
+        public class ResultadoHtml: Resultado
+        {
+            public string Html { get; set; }
         }
 
 
@@ -60,7 +66,7 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde CrudCreacion.ts
-        public JsonResult CrearElemento(string elementoJson)
+        public JsonResult epCrearElemento(string elementoJson)
         {
             var r = new Resultado();
 
@@ -68,28 +74,36 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 GestorDeElementos.InsertarElemento(elemento);
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = "Registro creado";
             }
             catch(Exception e)
             {
-                r.Estado = "Error";
+                r.Estado = EstadoPeticion.Error;
                 r.Mensaje = e.Message;
-                var error = new JsonResult(r);
-                return error;
             }
 
-            r.Estado = "Ok";
-            r.Mensaje = "Registro creado";
             return new JsonResult(r);
 
         }
 
-
-
         //END-POINT: Desde Grid.ts
-        public string LeerDatosDelGrid(string idGrid, string posicion, string cantidad, string filtro, string orden)
+        public JsonResult epLeerGridHtml(string posicion, string cantidad, string filtro, string orden)
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
-            return GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid();
+            var r = new ResultadoHtml();
+            try
+            {
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
+                r.Html = GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid();
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.Mensaje = e.Message;
+            }
+
+            return new JsonResult(r);
         }
 
         //Lamada desde Selector.js
