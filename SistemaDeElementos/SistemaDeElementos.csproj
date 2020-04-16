@@ -9,6 +9,7 @@
     <Content Remove="wwwroot\Extensiones\Selectores.cs" />
     <Content Remove="wwwroot\js\selectores.js" />
     <Content Remove="wwwroot\tsSelectores.ts" />
+    <Content Remove="wwwroot\ts\Literales\literales.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudCreacion.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudMantenimiento.ts" />
     <Content Remove="wwwroot\ts\tsGrid.ts" />

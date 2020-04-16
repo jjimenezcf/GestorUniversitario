@@ -15,7 +15,7 @@ namespace Gestor.Elementos.ModeloIu
         public bool Editable { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
         public string ClaseCssNoValido { get; set; } = "controlNoValido";
-        public Type Tipo { get; set; }
+        public Type Tipo { get; set; } = typeof(string);
         public short Fila { get; set; } 
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
