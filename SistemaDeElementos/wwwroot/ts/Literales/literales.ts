@@ -40,6 +40,7 @@ const Ajax = {
     EndPoint: {
         Crear: "epCrearElemento",
         LeerDatos: "epLeerGridHtml",
+        SolicitarMenu: "epSolicitarMenuHtml"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -47,7 +48,8 @@ const Ajax = {
         posicion: "posicion",
         cantidad: "cantidad",
         filtro: "filtro",
-        orden: "orden"
+        orden: "orden",
+        usuario: "usuario"
     },
     jsonResultError: 1,
     jsonResultOk: 0,

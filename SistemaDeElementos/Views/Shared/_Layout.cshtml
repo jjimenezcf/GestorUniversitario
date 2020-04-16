@@ -16,8 +16,8 @@
     <script src="~/ts/tsUtilidades.js"></script>
     <script src="~/ts/tsInfoSelector.js"></script>
     <script src="~/ts/tsSelectores.js"></script>
-    <script src="~/ts/tsGrid.js"></script>
-    <script src="~/ts/tsMenu.js"></script>
+    <script src="~/ts/Menu.js"></script>
+    <script src="~/ts/_Crud/Grid.js"></script>
     <script src="~/ts/_Crud/CrudCreacion.js"></script>
     <script src="~/ts/_Crud/CrudMantenimiento.js"></script>
 </head>
@@ -100,7 +100,7 @@
         @RenderSection("Scripts", required: false)
 
         <script>
-        window.onload = Menu.SolicitarMenu('id_contenedormenu','@datosDeConexion.Usuario');
+            window.onload = Menu.ReqSolicitarMenu('@datosDeConexion.Usuario', 'id_contenedormenu');
         </script>
 
         <partial name="_CookieConsentPartial" />

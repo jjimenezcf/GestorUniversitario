@@ -27,20 +27,6 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
-        public enum EstadoPeticion {Ok, Error}
-
-        public class Resultado
-        {
-            public EstadoPeticion Estado { get; set; }
-            public string Mensaje { get; set; }
-        }
-
-        public class ResultadoHtml: Resultado
-        {
-            public string Html { get; set; }
-        }
-
-
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : base(gestorErrores)
         {
@@ -80,7 +66,8 @@ namespace MVCSistemaDeElementos.Controllers
             catch(Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
-                r.Mensaje = e.Message;
+                r.consola = e.Message;
+                r.Mensaje = "No se ha podido crear el usuario";
             }
 
             return new JsonResult(r);
@@ -100,7 +87,8 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
-                r.Mensaje = e.Message;
+                r.consola = e.Message;
+                r.Mensaje = "No se ha podido recuperar datos para el grid";
             }
 
             return new JsonResult(r);

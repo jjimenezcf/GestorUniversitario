@@ -51,49 +51,61 @@
 
     }
 
-    export function SolicitarMenu(idContenedorMenu: string, usuario: string) {
-        var url: string = urlPeticion(usuario);
-        LeeMenu(url, idContenedorMenu, SustituirMenu);
+    export function ReqSolicitarMenu(usuario: string, idContenedorMenu: string): void {
+        let url: string = `/Menus/${Ajax.EndPoint.SolicitarMenu}?${Ajax.Param.usuario}=${usuario}`;
+        let req: XMLHttpRequest = new XMLHttpRequest();
+        req.open('GET', url, false);
+        PeticionSolicitarMenu(req, () => DespuesDeSolitarMenu(req, idContenedorMenu), () => ErrorAlSolicitarMenu(req));
     }
 
-    function LeeMenu(url: string, idContenedorMenu: string, funcionDeRespuesta: Function) {
+    function PeticionSolicitarMenu(req: XMLHttpRequest, despuesDeSolitarMenu: Function, errorAlSolicitarMenu: Function) {
 
         function respuestaCorrecta() {
-            if (req.status >= 200 && req.status < 400) {
-                funcionDeRespuesta(idContenedorMenu, req.responseText);
+            if (req.response.IsNullOrEmpty()) {
+                errorAlSolicitarMenu();
             }
             else {
-                console.log(req.status + ' ' + req.statusText + req.responseText);
-                Mensaje(TipoMensaje.Info, req.responseText)
+                var resultado: any = ParsearRespuesta(req);
+                if (resultado !== undefined) {
+                    if (resultado.estado === Ajax.jsonResultError) {
+                        errorAlSolicitarMenu();
+                    }
+                    else {
+                        despuesDeSolitarMenu();
+                    }
+                }
             }
         }
 
         function respuestaErronea() {
-            console.log('Error de conexión');
+            errorAlSolicitarMenu();
         }
 
-        var req = new XMLHttpRequest();
-        req.open('GET', url, true);
-        req.addEventListener("load", respuestaCorrecta);
-        req.addEventListener("error", respuestaErronea);
+        req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
+        req.addEventListener(Ajax.eventoError, respuestaErronea);
         req.send();
     }
 
-    function SustituirMenu(idContenedorMenu: string, htmlMenu: string) {
+    function DespuesDeSolitarMenu(req: XMLHttpRequest, idContenedorMenu: string): void {
+        let resultado = JSON.parse(req.response);
         var htmlContenedorMenu = document.getElementById(`${idContenedorMenu}`);
         if (!htmlContenedorMenu) {
-            console.log(`No se ha localizado el contenedor ${idContenedorMenu}`);
+            Mensaje(TipoMensaje.Error, `No se ha localizado el contenedor ${idContenedorMenu}`);
             return;
         }
-        htmlContenedorMenu.innerHTML = htmlMenu;
+        htmlContenedorMenu.innerHTML = resultado.html;
     }
 
-
-    function urlPeticion(usuario: string): string {
-        var url: string = `/Menus/RenderMenu?usuario=${usuario}`;
-        return url;
+    function ErrorAlSolicitarMenu(req: XMLHttpRequest): void {
+        if (req.response.IsNullOrEmpty()) {
+            Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenu} no está definida`);
+        }
+        else {
+            let resultado = JSON.parse(req.response);
+            Mensaje(TipoMensaje.Error, resultado.mensaje);
+            console.error(resultado.consola);
+        }
     }
-
 
     function desplegarMenu(menuHtml: HTMLMenuElement) {
         menuHtml.style.display = "block";

@@ -62,4 +62,15 @@ class ClausulaDeFiltrado {
         return this.Propiedad.IsNullOrEmpty() || this.Valor.IsNullOrEmpty() || this.Criterio.IsNullOrEmpty();
     }
 }
+function ParsearRespuesta(req) {
+    var resultado;
+    try {
+        resultado = JSON.parse(req.response);
+    }
+    catch {
+        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenu}`);
+        undefined;
+    }
+    return resultado;
+}
 //# sourceMappingURL=tsUtilidades.js.map

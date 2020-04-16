@@ -93,4 +93,18 @@ class ClausulaDeFiltrado {
 }
 
 
+function ParsearRespuesta(req: XMLHttpRequest): any {
+    var resultado: any;
+    try {
+        resultado = JSON.parse(req.response);
+    }
+    catch
+    {
+        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenu}`);
+        undefined;
+    }
+    return resultado;
+}
+
+
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Gestor.Elementos.Entorno;
 using Gestor.Errores;
+using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using Utilidades;
 
@@ -22,14 +23,27 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDeMenus = gestorDeMenus;
         }
 
-        public string RenderMenu(string usuario)
-        {
-            List<MenuDto> menu = GestorDeMenus.LeerMenuSe();
 
-            var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
-                           @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
-                           @$"</ul>{Environment.NewLine}";
-            return menuHtml.Replace("¨", "\"");
+        //END-POINT: Desde Menu.ts
+        public JsonResult epSolicitarMenuHtml(string usuario)
+        {
+            var r = new ResultadoHtml();
+            try
+            {
+                List<MenuDto> menu = GestorDeMenus.LeerMenuSe();
+                var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
+                               @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
+                               @$"</ul>{Environment.NewLine}";
+                r.Html = menuHtml.Replace("¨", "\"");
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = e.Message;
+                r.Mensaje = "No se ha podido leer el menú";
+            }
+            return new JsonResult(r);
         }
 
 
@@ -83,7 +97,7 @@ namespace MVCSistemaDeElementos.Controllers
         {
             var opcionHtml = "";
 
-            if (!icono.IsNullOrEmpty() ) //&& File.Exists(@$"wwwroot\images\menu\{icono}"))
+            if (!icono.IsNullOrEmpty()) //&& File.Exists(@$"wwwroot\images\menu\{icono}"))
                 opcionHtml = @$"<img src=¨/images/menu/{icono}¨ class=¨icono izquierdo¨ />{Environment.NewLine}";
 
             opcionHtml = $@"{opcionHtml}{literalOpcion}{Environment.NewLine}";
