@@ -69,7 +69,7 @@ String.prototype.Numero = function () {
     if (this === undefined || this === null)
         return 0;
 
-    if (this.IsNullOrEmpty())
+    if (this.NoDefinida())
         return 0;
 
     if (isNaN(this))
