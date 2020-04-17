@@ -1,4 +1,4 @@
-﻿namespace Crud.Edicion {
+﻿namespace Crud {
 
     export class CrudEdicion extends Crud.Base.CrudBase {
 
@@ -12,9 +12,9 @@
 
     }
 
-    export function EjecutarAccionMenu(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export function EjecutarMenuEdt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
 
-        if (accion === LiteralMnt.cancelaredicion)
+        if (accion === LiteralEdt.cancelaredicion)
             CancelarEdicion(idDivMostrarHtml, idDivOcultarHtml, gestor as CrudEdicion);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);

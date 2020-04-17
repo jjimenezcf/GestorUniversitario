@@ -58,12 +58,20 @@ const Ajax = {
     eventoError: "error"
 };
 
+const LiteralCrt = {
+    nuevoelemento: "nuevoelemento",
+    cancelarnuevo: "cancelarnuevo",
+};
+
+const LiteralEdt = {
+    modificarelemento: "modificarelemento",
+    cancelaredicion: "cancelaredicion",
+    idCtrlCantidad: "nav_2_reg"
+};
+
 const LiteralMnt = {
     crearelemento: "crearelemento",
     editarelemento: "editarelemento",
-    nuevoelemento: "nuevoelemento",
-    cancelarnuevo: "cancelarnuevo",
-    cancelaredicion: "cancelaredicion",
     idCtrlCantidad: "nav_2_reg"
 };
 

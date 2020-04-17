@@ -1,15 +1,16 @@
-﻿namespace  Crud.Mnt {
+﻿namespace Crud {
 
-    export function EjecutarAccionMenu(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export function EjecutarMenuMnt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
 
         if (accion === LiteralMnt.crearelemento)
-            IraCrear(gestor as Crud.Creacion.CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);
+            IraCrear(gestor as Crud.CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);
         else if (accion === LiteralMnt.editarelemento)
-            IraEditar(gestor as Crud.Edicion.CrudEdicion, idDivMostrarHtml, idDivOcultarHtml);
-            Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`)
+            IraEditar(gestor as Crud.CrudEdicion, idDivMostrarHtml, idDivOcultarHtml);
+        else
+            Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
-    function IraEditar(gestorDeEdicion: Crud.Edicion.CrudEdicion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
+    function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
 
         //obtener los elementos del grid seleccionado
         // si no los hay indicarlo y salir
@@ -27,7 +28,7 @@
         gestorDeEdicion.InicializarValores();
     }
 
-    function IraCrear(gestorDeCreacion: Crud.Creacion.CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
+    function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
 

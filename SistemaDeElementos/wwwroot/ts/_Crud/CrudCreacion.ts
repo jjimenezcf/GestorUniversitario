@@ -1,4 +1,4 @@
-﻿namespace Crud.Creacion {
+﻿namespace Crud {
 
     export class CrudCreacion extends Crud.Base.CrudBase {
         public Creado: boolean = false;
@@ -122,14 +122,14 @@
 
     }
 
-    export function EjecutarAccionMenu(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export function EjecutarMenuCrt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
 
-       if (accion === LiteralMnt.nuevoelemento)
+        if (accion === LiteralCrt.nuevoelemento)
             NuevoElemento(gestor as CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);
-        else if (accion === LiteralMnt.cancelarnuevo)
+        else if (accion === LiteralCrt.cancelarnuevo)
             CancelarNuevo(idDivMostrarHtml, idDivOcultarHtml, gestor as CrudCreacion);
-
-        Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
+        else
+            Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
     function NuevoElemento(gestorDeCreacion: CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {

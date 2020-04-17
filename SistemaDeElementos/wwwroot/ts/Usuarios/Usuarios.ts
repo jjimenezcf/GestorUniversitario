@@ -1,6 +1,6 @@
 ﻿namespace Crud.Usuarios {
 
-    export class CrudCreacionUsuario extends Crud.Creacion.CrudCreacion {
+    export class CrudCreacionUsuario extends Crud.CrudCreacion {
 
         constructor(idPanelMnt: string, idPanelCreacion: string) {
             super(idPanelMnt, idPanelCreacion);
@@ -31,7 +31,7 @@
 
     }
 
-    export class CrudEdicionUsuario extends Crud.Edicion.CrudEdicion {
+    export class CrudEdicionUsuario extends Crud.CrudEdicion {
 
         constructor(idPanelMnt: string, idPanelCreacion: string) {
             super(idPanelMnt, idPanelCreacion);
