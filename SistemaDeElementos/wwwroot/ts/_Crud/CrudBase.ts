@@ -1,4 +1,4 @@
-﻿namespace Crud.Base {
+﻿namespace Crud {
 
     export class CrudBase {
 

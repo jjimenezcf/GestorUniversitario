@@ -104,7 +104,7 @@ namespace UtilidadesParaIu
                                   name=¨{nombreCheck}¨ 
                                   class=¨text-center¨ 
                                   aria-label=¨Marcar para seleccionar¨
-                                  onclick=¨AlPulsarUnCheckDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
+                                  onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
 
 
 

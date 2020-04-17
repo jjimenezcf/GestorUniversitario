@@ -1,6 +1,6 @@
 ﻿namespace Crud {
 
-    export class CrudCreacion extends Crud.Base.CrudBase {
+    export class CrudCreacion extends CrudBase {
         public Creado: boolean = false;
 
         constructor(idPanelMnt: string, idPanelCreacion: string) {
@@ -122,7 +122,7 @@
 
     }
 
-    export function EjecutarMenuCrt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export function EjecutarMenuCrt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
 
         if (accion === LiteralCrt.nuevoelemento)
             NuevoElemento(gestor as CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);

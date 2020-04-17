@@ -1,6 +1,18 @@
 ﻿namespace Crud {
 
-    export function EjecutarMenuMnt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export class CrudMnt extends CrudBase {
+
+        constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string) {
+            super(idPanelMnt, null, idPanelCreacion);
+        }
+
+        InicializarValores() {
+            
+        }
+
+    }
+
+    export function EjecutarMenuMnt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
 
         if (accion === LiteralMnt.crearelemento)
             IraCrear(gestor as Crud.CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);
@@ -8,6 +20,15 @@
             IraEditar(gestor as Crud.CrudEdicion, idDivMostrarHtml, idDivOcultarHtml);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
+    }
+
+    export function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
+        BlanquearMensaje();
+        var check = <HTMLInputElement>document.getElementById(idCheck);
+        if (check.checked)
+            AnadirAlInfoSelector(idGrid, idCheck);
+        else
+            QuitarDelSelector(idGrid, idCheck);
     }
 
     function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMostrarHtml: string, idDivOcultarHtml: string) {

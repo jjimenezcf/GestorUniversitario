@@ -1,6 +1,6 @@
 ﻿namespace Crud {
 
-    export class CrudEdicion extends Crud.Base.CrudBase {
+    export class CrudEdicion extends CrudBase {
 
         constructor(idPanelMnt: string, idPanelCreacion: string) {
             super(idPanelMnt, null, idPanelCreacion);
@@ -12,7 +12,7 @@
 
     }
 
-    export function EjecutarMenuEdt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.Base.CrudBase): void {
+    export function EjecutarMenuEdt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
 
         if (accion === LiteralEdt.cancelaredicion)
             CancelarEdicion(idDivMostrarHtml, idDivOcultarHtml, gestor as CrudEdicion);
