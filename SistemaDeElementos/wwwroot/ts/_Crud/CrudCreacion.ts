@@ -30,7 +30,7 @@
         private MapearControlesDeIU(): JSON {
             let json: JSON = this.AntesDeMapearDatosDeIU();
 
-            let propiedades: HTMLCollectionOf<Element> = this.divDeCreacionHtml.getElementsByClassName("propiedad");
+            let propiedades: HTMLCollectionOf<Element> = this.PanelCreacion.getElementsByClassName("propiedad");
             for (var i = 0; i < propiedades.length; i++) {
                 var propiedad = propiedades[i] as HTMLElement;
                 if (propiedad instanceof HTMLInputElement) {
@@ -62,63 +62,19 @@
         }
 
         private CrearElemento(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
-            let url: string = this.urlPeticionCrear(json);
+            let controlador = this.PanelCreacion.getAttribute(Literal.controlador);
+            let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
             req.open('GET', url, false);
-            this.PeticionCrear(req, () => this.DespuesDeCrear(req), () => this.ErrorAlCrear(req));
+            this.PeticionSincrona(req, Ajax.EndPoint.Crear);
         }
 
-        private urlPeticionCrear(json: JSON): string {
-            let controlador = this.divDeCreacionHtml.getAttribute(Literal.controlador);
-            let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
-            return url;
-        }
-
-        private PeticionCrear(req: XMLHttpRequest, despuesDeCrear: Function, errorAlCrear: Function) {
-
-            function respuestaCorrecta() {
-                if (EsNula(req.response)) {
-                    errorAlCrear();
-                }
-                else {
-                    var resultado: any = ParsearRespuesta(req);
-                    if (resultado.estado === Ajax.jsonResultError) {
-                        errorAlCrear();
-                    }
-                    else {
-                        despuesDeCrear();
-                    }
-                }
-            }
-
-            function respuestaErronea() {
-                this.ResultadoPeticion = "Peticion no realizada";
-                this.PeticionRealizada = false;
-            }
-
-            req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
-            req.addEventListener(Ajax.eventoError, respuestaErronea);
-            req.send();
-        }
-
-        protected DespuesDeCrear(req: XMLHttpRequest): void {
-            let resultado = JSON.parse(req.response);
-            this.ResultadoPeticion = resultado.mensaje;
-            this.PeticionRealizada = true;
+        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {            
+            let resultado = super.DespuesDeLaPeticion(req);
             this.Creado = true;
+            return resultado;
         }
 
-        protected ErrorAlCrear(req: XMLHttpRequest): void {
-            if (EsNula(req.response)) {
-                this.ResultadoPeticion = `La peticion ${Ajax.EndPoint.Crear} no está definida`;
-            }
-            else {
-                let resultado = JSON.parse(req.response);
-                this.ResultadoPeticion = resultado.mensaje;
-                this.PeticionRealizada = true;
-                console.error(resultado.consola);
-            }
-        }
 
     }
 

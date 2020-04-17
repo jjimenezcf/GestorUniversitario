@@ -52,7 +52,7 @@
     }
 
     export function ReqSolicitarMenu(usuario: string, idContenedorMenu: string): void {
-        let url: string = `/Menus/${Ajax.EndPoint.SolicitarMenu}?${Ajax.Param.usuario}=${usuario}`;
+        let url: string = `/Menus/${Ajax.EndPoint.SolicitarMenuEnHtml}?${Ajax.Param.usuario}=${usuario}`;
         let req: XMLHttpRequest = new XMLHttpRequest();
         req.open('GET', url, false);
         PeticionSolicitarMenu(req, () => DespuesDeSolitarMenu(req, idContenedorMenu), () => ErrorAlSolicitarMenu(req));
@@ -98,7 +98,7 @@
 
     function ErrorAlSolicitarMenu(req: XMLHttpRequest): void {
         if (EsNula(req.response)) {
-            Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenu} no está definida`);
+            Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenuEnHtml} no está definida`);
         }
         else {
             let resultado = JSON.parse(req.response);

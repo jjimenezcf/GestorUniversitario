@@ -125,7 +125,8 @@ a {
     }
 
 .propiedad-id {
-    border:groove;
+    border: groove;
+    text-align: right;
 }
 
 .propiedad-valida {

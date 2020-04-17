@@ -39,8 +39,9 @@ const ClaseCss = {
 const Ajax = {
     EndPoint: {
         Crear: "epCrearElemento",
-        LeerDatos: "epLeerGridHtml",
-        SolicitarMenu: "epSolicitarMenuHtml"
+        LeerGridEnHtml: "epLeerGridHtml",
+        SolicitarMenuEnHtml: "epSolicitarMenuHtml",
+        LeerPorId: "epLeerPorId"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -49,7 +50,8 @@ const Ajax = {
         cantidad: "cantidad",
         filtro: "filtro",
         orden: "orden",
-        usuario: "usuario"
+        usuario: "usuario",
+        id: "id"
     },
     jsonResultError: 1,
     jsonResultOk: 0,

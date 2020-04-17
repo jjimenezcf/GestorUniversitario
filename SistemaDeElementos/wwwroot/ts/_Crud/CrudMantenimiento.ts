@@ -34,8 +34,12 @@
     function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
 
         //obtener los elementos del grid seleccionado
-        // si no los hay indicarlo y salir
-        // Si los hay pasar el selector al inicializador
+        let idInfSel: string = `${idDivOcultarHtml}_grid`;
+        let infSel = infoSelectores.Obtener(idInfSel);
+        if (!infSel || infSel.Cantidad == 0) {
+            Mensaje(TipoMensaje.Info, "Debe marcar el elemento a editar");
+            return;
+        }
 
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
@@ -46,7 +50,7 @@
         htmlDivOcultar.classList.add(ClaseCss.divNoVisible);
         htmlDivOcultar.classList.remove(ClaseCss.divVisible);
 
-        gestorDeEdicion.InicializarValores();
+        gestorDeEdicion.InicializarValores(infSel);
     }
 
     function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
@@ -60,6 +64,35 @@
         htmlDivOcultar.classList.remove(ClaseCss.divVisible);
 
         gestorDeCreacion.InicializarValores();
+    }
+
+    function AnadirAlInfoSelector(idGrid, idCheck) {
+
+        var infSel = infoSelectores.Obtener(idGrid);
+        if (infSel === undefined) {
+            infSel = infoSelectores.Crear(idGrid);
+        }
+
+        var id = ObtenerIdDeLaFilaChequeada(idCheck);
+        if (infSel.EsModalDeSeleccion) {
+            var textoMostrar = obtenerValorDeLaColumnaChequeada(idCheck, infSel.ColumnaMostrar);
+            infSel.InsertarElemento(id, textoMostrar);
+        }
+        else {
+            infSel.InsertarId(id);
+        }
+
+    }
+
+    function QuitarDelSelector(idGrid, idCheck) {
+
+        var infSel = infoSelectores.Obtener(idGrid);
+        if (infSel !== undefined) {
+            var id = ObtenerIdDeLaFilaChequeada(idCheck);
+            infSel.Quitar(id);
+        }
+        else
+            Mensaje(TipoMensaje.Error, `El selector ${idGrid} no está definido`);
     }
 
 }

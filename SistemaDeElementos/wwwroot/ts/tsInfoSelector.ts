@@ -49,6 +49,7 @@ class InfoSelector {
 
     constructor(idGrid) {
         this.iniciarClase(idGrid);
+        console.log(`Ha creado el infoselector ${idGrid}`);
     }
 
     deshabilitarCheck(deshabilitar) {
@@ -106,12 +107,13 @@ class InfoSelector {
 
     InsertarId(id) {
         if (!id || isNaN(parseInt(id))) {
-            console.log(`Ha intentado insertar en la lista un id no válido ${id}`);
+            console.error(`Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
         }
 
         if (this.seleccionados.length < this.seleccionables) {
             this.seleccionados.push(id);
+            console.log(`Ha insertar en la lista el id ${id}`);
         }
 
         this.deshabilitarCheck(true);
@@ -169,10 +171,11 @@ class InfoSelector {
         if (pos >= 0) {
             this.seleccionados.splice(pos, 1);
             this.paraMostrarEnSelector.splice(pos, 1);
+            console.log(`Ha quitado de la lista el ${idSeleccionado}`);
             this.deshabilitarCheck(false);
         }
         else
-            console.log(`No se ha localizado el elemento con id  ${idSeleccionado}`);
+            console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
 
     ToString() {
@@ -191,9 +194,14 @@ class InfoSelector {
 
 }
 
+
 class InfoSelectores {
 
     _infoSelectores = new Array <InfoSelector>()
+
+    constructor() {
+        console.log("Aray de Infoselectores construido");
+    }
 
     get Cantidad(): number {
         if (!this._infoSelectores)
@@ -204,7 +212,7 @@ class InfoSelectores {
 
     Obtener(id: string): InfoSelector {
         if (!this._infoSelectores || this._infoSelectores.length === 0)
-            return null;
+            return undefined;
 
         for (var i = 0; i < this.Cantidad; i++) {
             if (this._infoSelectores[i].Id === id)
@@ -228,6 +236,13 @@ class InfoSelectores {
                 this._infoSelectores.splice(i, 1);
         }
         return this._infoSelectores.length;
+    }
+
+    Crear(id: string): InfoSelector {
+        this.Borrar(id);
+        let infSel: InfoSelector = new InfoSelector(id);
+        infoSelectores.Insertar(infSel);
+        return infSel;
     }
 }
 

@@ -81,12 +81,10 @@ function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
     var htmlSelector = document.getElementById(idSelector);
     htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
-    infoSelectores.Borrar(idGrid);
-    var infSel = new InfoSelector(idGrid);
+    var infSel = infoSelectores.Crear(idGrid);
     infSel.Modal(columnaMostrar);
     var arrayMarcados = elementosMarcados(idSelector);
     infSel.InsertarElementos(arrayMarcados);
-    infoSelectores.Insertar(infSel);
     marcarElementos(idGrid, columnaId, infSel);
     infSel.SincronizarCheck();
 }

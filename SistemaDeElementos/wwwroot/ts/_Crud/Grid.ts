@@ -62,7 +62,7 @@ function PeticionSincrona(htmlInputCantidad: HTMLInputElement, idGrid: string, p
     var filtroJson = ObtenerFiltros(idGrid);
     var ordenJson = '[]';
 
-    let url: string = `/${controlador}/${Ajax.EndPoint.LeerDatos}`;
+    let url: string = `/${controlador}/${Ajax.EndPoint.LeerGridEnHtml}`;
     let parametros: string = `${Ajax.Param.posicion}=${posicion}` +
         `&${Ajax.Param.cantidad}=${cantidad}` +
         `&${Ajax.Param.filtro}=${filtroJson}` +
@@ -168,7 +168,7 @@ function LeerDatosDelGrid(req: XMLHttpRequest, idGrid: string, sustituirGrid: Fu
 
 function ErrorEnLaPeticion(req: XMLHttpRequest) {
     if (EsNula(req.response)) {
-        Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.LeerDatos} no está definida`);
+        Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.LeerGridEnHtml} no está definida`);
     }
     else {
         let resultado = JSON.parse(req.response);
@@ -196,42 +196,5 @@ function SustituirGrid(req: XMLHttpRequest, idGrid: string) {
     }
 }
 
-function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
-    BlanquearMensaje();
-    var check = <HTMLInputElement>document.getElementById(idCheck);
-    if (check.checked)
-        AnadirAlInfoSelector(idGrid, idCheck);
-    else
-        QuitarDelSelector(idGrid, idCheck);
-}
 
-function AnadirAlInfoSelector(idGrid, idCheck) {
-
-    var infSel = infoSelectores.Obtener(idGrid);
-    if (infSel === undefined) {
-        infSel = new InfoSelector(idGrid);
-        infoSelectores.Insertar(infSel);
-    }
-
-    var id = ObtenerIdDeLaFilaChequeada(idCheck);
-    if (infSel.EsModalDeSeleccion) {
-        var textoMostrar = obtenerValorDeLaColumnaChequeada(idCheck, infSel.ColumnaMostrar);
-        infSel.InsertarElemento(id, textoMostrar);
-    }
-    else {
-        infSel.InsertarId(id);
-    }
-
-}
-
-function QuitarDelSelector(idGrid, idCheck) {
-
-    var infSel = infoSelectores.Obtener(idGrid);
-    if (infSel !== undefined) {
-        var id = ObtenerIdDeLaFilaChequeada(idCheck);
-        infSel.Quitar(id);
-    }
-    else
-        Mensaje(TipoMensaje.Error, `El selector ${idGrid} no está definido`);
-}
 

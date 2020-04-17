@@ -6,13 +6,6 @@
             super(idPanelMnt, idPanelCreacion);
         }
 
-        public InicializarValores() {
-            super.InicializarValores();
-            let inputFechaAlta: HTMLInputElement = this.divDeCreacionHtml.querySelector<HTMLInputElement>("#Alta");
-            let fecha: Date = new Date();
-            inputFechaAlta.value = fecha.toDateString();
-        }
-
         protected DespuesDeMapearDatosDeIU(json: JSON): JSON {
             json = super.DespuesDeMapearDatosDeIU(json);
 

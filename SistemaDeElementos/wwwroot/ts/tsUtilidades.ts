@@ -103,7 +103,7 @@ function ParsearRespuesta(req: XMLHttpRequest): any {
     }
     catch
     {
-        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenu}`);
+        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenuEnHtml}`);
         undefined;
     }
     return resultado;

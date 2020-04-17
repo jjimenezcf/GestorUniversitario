@@ -108,12 +108,10 @@ function AlAbrir(idGrid: string, idSelector: string, columnaId: string, columnaM
     htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
 
-    infoSelectores.Borrar(idGrid);
-    var infSel = new InfoSelector(idGrid);
+    var infSel = infoSelectores.Crear(idGrid);
     infSel.Modal(columnaMostrar);
     var arrayMarcados = elementosMarcados(idSelector);
     infSel.InsertarElementos(arrayMarcados);
-    infoSelectores.Insertar(infSel);
 
     marcarElementos(idGrid, columnaId, infSel);
     infSel.SincronizarCheck();
