@@ -67,7 +67,34 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido crear el usuario";
+                r.Mensaje = "No se ha podido crear";
+            }
+
+            return new JsonResult(r);
+        }
+        class idJoson
+        {
+            public int id;
+        }
+
+        //END-POINT: Desde CrudEdicion.ts
+        public JsonResult epLeerPorIds(string idsJson)
+        {
+            var r = new Resultado();
+
+
+            List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
+            try
+            {
+                r.Datos = GestorDeElementos.LeerElementoPorId(listaIds[0]);
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = $"se han leido 1 {(1>1? "registros" : "registro")}";
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "Error al leer";
             }
 
             return new JsonResult(r);

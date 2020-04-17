@@ -1,7 +1,6 @@
 ﻿namespace Crud {
 
     export class CrudCreacion extends CrudBase {
-        public Creado: boolean = false;
 
         constructor(idPanelMnt: string, idPanelCreacion: string) {
             super(idPanelMnt, idPanelCreacion, null);
@@ -68,14 +67,6 @@
             req.open('GET', url, false);
             this.PeticionSincrona(req, Ajax.EndPoint.Crear);
         }
-
-        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {            
-            let resultado = super.DespuesDeLaPeticion(req);
-            this.Creado = true;
-            return resultado;
-        }
-
-
     }
 
     export function EjecutarMenuCrt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
@@ -92,10 +83,10 @@
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
         gestorDeCreacion.Aceptar(htmlDivMostrar, htmlDivOcultar);
-        if (gestorDeCreacion.Creado) {
+        if (gestorDeCreacion.PeticioCorrecta) {
             gestorDeCreacion.Cerrar(htmlDivMostrar, htmlDivOcultar);
         }
-        Mensaje(gestorDeCreacion.Creado ? TipoMensaje.Info : TipoMensaje.Error, gestorDeCreacion.ResultadoPeticion);
+        Mensaje(gestorDeCreacion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeCreacion.ResultadoPeticion);
     }
 
     function CancelarNuevo(idDivMostrarHtml: string, idDivOcultarHtml: string, gestorDeCreacion: CrudCreacion) {

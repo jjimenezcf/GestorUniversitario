@@ -17,23 +17,20 @@
             (control as HTMLInputElement).value = id.toString();
 
             this.LeerElemento(id);
-            if (!EsNula(this.ResultadoPeticion)) {
-                Mensaje(TipoMensaje.Error, this.ResultadoPeticion);
-            }
         }
 
 
         private LeerElemento(id: number) {
-            let json: JSON = JSON.parse(`{"${Literal.id}":${id}}`);
+            let json: JSON = JSON.parse(`[${id}]`);
             let url: string = this.urlPeticionLeer(json);
             let req: XMLHttpRequest = new XMLHttpRequest();
             req.open('GET', url, false);
-            this.PeticionSincrona(req, Ajax.EndPoint.LeerPorId);
+            this.PeticionSincrona(req, Ajax.EndPoint.LeerPorIds);
         }
 
         private urlPeticionLeer(json: JSON): string {
             let controlador = this.PanelEdicion.getAttribute(Literal.controlador);
-            let url: string = `/${controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${JSON.stringify(json)}`;
+            let url: string = `/${controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(json)}`;
             return url;
         }
 

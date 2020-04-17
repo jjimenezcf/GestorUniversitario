@@ -41,7 +41,7 @@ const Ajax = {
         Crear: "epCrearElemento",
         LeerGridEnHtml: "epLeerGridHtml",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
-        LeerPorId: "epLeerPorId"
+        LeerPorIds: "epLeerPorIds"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -51,7 +51,7 @@ const Ajax = {
         filtro: "filtro",
         orden: "orden",
         usuario: "usuario",
-        id: "id"
+        idsJson: "idsJson"
     },
     jsonResultError: 1,
     jsonResultOk: 0,

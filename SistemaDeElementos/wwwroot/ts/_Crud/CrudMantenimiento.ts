@@ -51,6 +51,10 @@
         htmlDivOcultar.classList.remove(ClaseCss.divVisible);
 
         gestorDeEdicion.InicializarValores(infSel);
+
+        if (!EsNula(gestorDeEdicion.ResultadoPeticion)) {
+            Mensaje(gestorDeEdicion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeEdicion.ResultadoPeticion);
+        }
     }
 
     function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {

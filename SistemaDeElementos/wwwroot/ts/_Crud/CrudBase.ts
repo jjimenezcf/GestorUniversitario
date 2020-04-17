@@ -13,6 +13,7 @@
         protected PanelMnt: HTMLDivElement;
 
         public ResultadoPeticion: string;
+        public PeticioCorrecta: boolean = false;
         public PeticionRealizada: boolean = false;
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string) {
@@ -112,6 +113,7 @@
             let resultado: ResultadoJson = JSON.parse(req.response);
             this.ResultadoPeticion = resultado.mensaje;
             this.PeticionRealizada = true;
+            this.PeticioCorrecta = true;
             return resultado;
         }
     }
