@@ -17,7 +17,6 @@ namespace Gestor.Elementos.Seguridad
             Etiqueta = "Nombre permiso",
             Ayuda = "De un nombre al permiso",
             Tipo = typeof(string),
-            Visible = true,
             Fila = 0,
             Columna = 0
             )
@@ -27,7 +26,6 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Clase",
             Ayuda = "Indique clase de permso",
-            Visible = true,
             Fila = 1,
             Columna = 0
             )
@@ -37,7 +35,6 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Permiso",
             Ayuda = "Indique permiso a aplicar (gestor, consultor o administrador)",
-            Visible = true,
             Fila = 1,
             Columna = 0
             )

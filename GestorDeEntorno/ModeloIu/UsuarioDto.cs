@@ -21,7 +21,6 @@ namespace Gestor.Elementos.Entorno
             Etiqueta = "Usuario",
             Ayuda = "Usuario de conexión", 
             Tipo = typeof(string), 
-            Visible = true, 
             Fila = 0, 
             Columna = 0
             )
@@ -30,11 +29,10 @@ namespace Gestor.Elementos.Entorno
 
 
         [IUPropiedad(
-            Etiqueta = "Apellido y nombre",
+            Etiqueta = "Apellidos",
             Ayuda = "Apellidos",
             Tipo = typeof(string),
-            Visible = true,
-            Fila = 1,
+            Fila = 2,
             Columna = 0
             )
         ]
@@ -42,12 +40,12 @@ namespace Gestor.Elementos.Entorno
 
 
         [IUPropiedad(
+            Etiqueta = "Nombre",
             Ayuda = "Nombre",
             Tipo = typeof(string),
-            Visible = true,
             Fila = 1,
-            Columna = 1,
-            Posicion = 1
+            Columna = 0,
+            Posicion = 0
             )
         ]
         public string Nombre { get; set; }
@@ -55,11 +53,10 @@ namespace Gestor.Elementos.Entorno
 
         [IUPropiedad(
             Etiqueta = "Fecha de alta",
+            VisibleAlCrear = false,
             Tipo = typeof(DateTime),
-            Visible = true,
-            Editable = false,
-            ValorPorDefecto="AlMostrar(GetDate())",
-            Fila = 2,
+            EditableAlEditar = false,
+            Fila = 3,
             Columna = 0
             )
         ]

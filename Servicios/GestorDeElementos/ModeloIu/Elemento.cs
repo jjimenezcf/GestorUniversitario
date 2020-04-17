@@ -6,22 +6,52 @@ using System.Reflection;
 namespace Gestor.Elementos.ModeloIu
 {
     public enum LadoDeRenderizacion {izquierdo, derecho}
+    public enum ModoDeTrabajo { Nuevo, Consulta, Edicion }
 
     public class IUPropiedadAttribute : Attribute
     {
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
-        public bool Visible { get; set; } = true;
-        public bool Editable { get; set; } = true;
+        public bool VisibleAlCrear { get; set; } = true;
+        public bool VisibleAlEditar { get; set; } = true;
+        public bool VisibleAlConsultar { get; set; } = true;
+        public bool EditableAlCrear { get; set; } = true;
+        public bool EditableAlEditar { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
-        public string ClaseCssNoValido { get; set; } = "controlNoValido";
+        public string cssNoValido { get; set; } = "propiedad-no-valida";
+        public string cssValido { get; set; } = "propiedad-valida";
         public Type Tipo { get; set; } = typeof(string);
         public short Fila { get; set; } 
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
-        public string ClaseCss { get; set; } = "controlDeCreacion";
-        public string ConcatenarClaseCss { set { ClaseCss = $"{ClaseCss} {value}"; } }
+        public string ConcatenarClaseCss { set { cssValido = $"{cssValido} {value}"; } }
         public string ValorPorDefecto { get; set; }
+
+        public bool Visible(ModoDeTrabajo modo)
+        {
+            if (modo == ModoDeTrabajo.Edicion)
+                return VisibleAlEditar;
+            else
+            if (modo == ModoDeTrabajo.Nuevo)
+                return VisibleAlCrear;
+            if (modo == ModoDeTrabajo.Consulta)
+                return VisibleAlConsultar;
+
+            return false;
+        }
+        public bool Editable(ModoDeTrabajo modo)
+        {
+            if (Visible(modo))
+            {
+                if (modo == ModoDeTrabajo.Edicion)
+                    return EditableAlEditar;
+                else
+                if (modo == ModoDeTrabajo.Nuevo)
+                    return EditableAlCrear;
+            }
+
+            return false;
+        }
 
     }
 
@@ -52,8 +82,10 @@ namespace Gestor.Elementos.ModeloIu
             Etiqueta = "Id",
             Ayuda = "id del elemento",
             Tipo = typeof(int),
-            Visible = false,
-            ClaseCss = "controlNoVisible"
+            VisibleAlCrear = false,
+            VisibleAlEditar = false,
+            VisibleAlConsultar = false,
+            cssValido = "controlNoVisible"
             )
         ]
         public int Id { get; set; }

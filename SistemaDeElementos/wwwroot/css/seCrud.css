@@ -107,26 +107,36 @@ a {
 .div-crtl-propiedad {
 }
 
-.controlDeCreacion {
+.div-pie-propiedad {
+    display: block;
+    float: right;
+    margin-right:10px;
+    width: 100px;
+}
+
+.propiedad {
     display: block;
     text-align: left;
     border: hidden;
-    background: #e9d4d4;
     width: 100%
 }
-
-    .controlDeCreacion:read-only {
+    .propiedad:read-only {
         background: #a5a1a1
     }
 
-
-.controlNoValido {
-    display: block;
-    text-align: left;
-    border: hidden;
-    background: #f58eb1;
-    width: 100%
+.propiedad-id {
+    border:groove;
 }
+
+.propiedad-valida {
+    background: #e9d4d4;
+}
+
+.propiedad-no-valida {
+    background: #f58eb1;
+}
+
+
 
 
 
