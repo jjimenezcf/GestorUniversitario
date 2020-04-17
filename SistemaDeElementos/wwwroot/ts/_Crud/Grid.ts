@@ -24,7 +24,6 @@ function ObtenerFiltros(idGrid) {
     return JSON.stringify(clausulas);
 }
 
-
 function ObtenerClausulaEditor(htmlEditor) {
     var propiedad: string = htmlEditor.getAttribute(Atributo.propiedad);
     var criterio: string = htmlEditor.getAttribute(Atributo.criterio);
@@ -197,7 +196,6 @@ function SustituirGrid(req: XMLHttpRequest, idGrid: string) {
     }
 }
 
-
 function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
     BlanquearMensaje();
     var check = <HTMLInputElement>document.getElementById(idCheck);
@@ -206,7 +204,6 @@ function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
     else
         QuitarDelSelector(idGrid, idCheck);
 }
-
 
 function AnadirAlInfoSelector(idGrid, idCheck) {
 
@@ -226,7 +223,6 @@ function AnadirAlInfoSelector(idGrid, idCheck) {
     }
 
 }
-
 
 function QuitarDelSelector(idGrid, idCheck) {
 

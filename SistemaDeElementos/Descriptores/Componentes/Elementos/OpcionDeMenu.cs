@@ -4,11 +4,14 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoAccion { CrearElemento, IraMnt, NuevoElemento, CancelarNuevo, ModificarElemento, EditarElemento, CancelarEdicion }
+    public enum TipoAccion { IraMnt }
+
+    public enum TipoAccionMnt {CrearElemento, EditarElemento }
+    public enum TipoAccionCreacion {NuevoElemento, CancelarNuevo }
+    public enum TipoAccionEdicion {ModificarElemento,CancelarEdicion }
 
     public class AccionDeMenu
     {
-        public TipoAccion TipoAccion { get; private set; }
         public string Gestor { get; private set; }
 
         public string IdDivMostrar { get; set; }
@@ -17,14 +20,13 @@ namespace MVCSistemaDeElementos.Descriptores
         public string IdDivOcultar { get; set; }
         public string IdDivOcultarHtml => IdDivOcultar.ToLower();
 
-        public AccionDeMenu(TipoAccion tipoAccion, string gestor)
+        public AccionDeMenu(string gestor)
         {
-            TipoAccion = tipoAccion;
             Gestor = gestor;
         }
 
-        public AccionDeMenu(TipoAccion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
-        : this(tipoAccion, gestor)
+        public AccionDeMenu(string gestor, string idDivMostrar, string idDivOcultar)
+        : this(gestor)
         {
             IdDivOcultar = idDivOcultar;
             IdDivMostrar = idDivMostrar;
@@ -32,94 +34,93 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public virtual string RenderAccion()
         {
-            if (!IdDivMostrar.IsNullOrEmpty() && !IdDivOcultar.IsNullOrEmpty())
-            {
-                return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdDivMostrarHtml}','{IdDivOcultarHtml}', new {Gestor}('{IdDivMostrarHtml}'))";
-            }
             return "";
         }
     }
 
     public class AccionDeMenuMnt : AccionDeMenu
     {
+        TipoAccionMnt TipoAccion;
 
         protected string IdPanelMnt => IdDivOcultarHtml;
         protected string IdPanelEdicionCreacion => IdDivMostrarHtml;
 
-        public AccionDeMenuMnt(TipoAccion tipoAccion, string gestor)
-        : base(tipoAccion, gestor)
+        public AccionDeMenuMnt(TipoAccionMnt tipoAccion, string gestor)
+        : base(gestor)
         {
-
+            TipoAccion = tipoAccion;
         }
 
-        public AccionDeMenuMnt(TipoAccion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
-        : base(tipoAccion, gestor, idDivMostrar, idDivOcultar)
+        public AccionDeMenuMnt(TipoAccionMnt tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
+        : base(gestor, idDivMostrar, idDivOcultar)
         {
-
+            TipoAccion = tipoAccion;
         }
         public override string RenderAccion()
         {
-            return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelEdicionCreacion}','{IdPanelMnt}', new {Gestor}('{IdPanelMnt}','{IdPanelEdicionCreacion}'))";
+            return $"Crud.Mnt.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelEdicionCreacion}','{IdPanelMnt}', new {Gestor}('{IdPanelMnt}','{IdPanelEdicionCreacion}'))";
         }
     }
 
     public class AccionDeMenuCreacion : AccionDeMenu
     {
+        TipoAccionCreacion TipoAccion;
         protected string IdPanelMnt => IdDivMostrarHtml;
         protected string IdPanelCreacion => IdDivOcultarHtml;
 
-        public AccionDeMenuCreacion(TipoAccion tipoAccion, string gestor)
-            : base(tipoAccion, gestor)
+        public AccionDeMenuCreacion(TipoAccionCreacion tipoAccion, string gestor)
+            : base(gestor)
         {
-
+            TipoAccion = tipoAccion;
         }
 
-        public AccionDeMenuCreacion(TipoAccion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
-        : base(tipoAccion, gestor, idDivMostrar, idDivOcultar)
+        public AccionDeMenuCreacion(TipoAccionCreacion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
+        : base(gestor, idDivMostrar, idDivOcultar)
         {
-
+            TipoAccion = tipoAccion;
         }
 
         public override string RenderAccion()
         {
-           return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelCreacion}', new {Gestor}('{IdPanelMnt}', '{IdPanelCreacion}'))";
+           return $"Crud.Creacion.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelCreacion}', new {Gestor}('{IdPanelMnt}', '{IdPanelCreacion}'))";
         }
     }
 
 
     public class AccionDeMenuEdicion : AccionDeMenu
     {
+        TipoAccionEdicion TipoAccion;
         protected string IdPanelMnt => IdDivMostrarHtml;
         protected string IdPanelEdicion => IdDivOcultarHtml;
-        public AccionDeMenuEdicion(TipoAccion tipoAccion, string gestor)
-            : base(tipoAccion, gestor)
+        public AccionDeMenuEdicion(TipoAccionEdicion tipoAccion, string gestor)
+            : base(gestor)
         {
-
+            TipoAccion = tipoAccion;
         }
 
-        public AccionDeMenuEdicion(TipoAccion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
-        : base(tipoAccion, gestor, idDivMostrar, idDivOcultar)
+        public AccionDeMenuEdicion(TipoAccionEdicion tipoAccion, string gestor, string idDivMostrar, string idDivOcultar)
+        : base(gestor, idDivMostrar, idDivOcultar)
         {
-
+            TipoAccion = tipoAccion;
         }
 
         public override string RenderAccion()
         {
-            return $"Crud.Menu.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelEdicion}', new {Gestor}('{IdPanelMnt}', '{IdPanelEdicion}'))";
+            return $"Crud.Edicion.EjecutarAccionMenu('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}','{IdPanelEdicion}', new {Gestor}('{IdPanelMnt}', '{IdPanelEdicion}'))";
         }
     }
 
     public class CrearElemento : AccionDeMenuMnt
     {
         public CrearElemento(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.CrearElemento, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionMnt.CrearElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }
     public class EditarElemento : AccionDeMenuMnt
     {
         public EditarElemento(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.EditarElemento, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionMnt.EditarElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }
@@ -127,7 +128,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class NuevoElemento : AccionDeMenuCreacion
     {
         public NuevoElemento(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.NuevoElemento, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionCreacion.NuevoElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }
@@ -135,7 +136,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CancelarNuevo : AccionDeMenuCreacion
     {
         public CancelarNuevo(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.CancelarNuevo, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionCreacion.CancelarNuevo, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }
@@ -143,14 +144,14 @@ namespace MVCSistemaDeElementos.Descriptores
     public class ModificarElemento : AccionDeMenuEdicion
     {
         public ModificarElemento(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.ModificarElemento, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionEdicion.ModificarElemento, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }
     public class CancelarEdicion : AccionDeMenuEdicion
     {
         public CancelarEdicion(string idDivMostrar, string idDivOcultar, string gestor)
-        : base(TipoAccion.CancelarEdicion, gestor, idDivMostrar, idDivOcultar)
+        : base(TipoAccionEdicion.CancelarEdicion, gestor, idDivMostrar, idDivOcultar)
         {
         }
     }

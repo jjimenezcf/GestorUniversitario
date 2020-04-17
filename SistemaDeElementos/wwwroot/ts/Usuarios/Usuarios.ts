@@ -1,39 +1,40 @@
-﻿class CrudCreacionUsuario extends CrudCreacion {
+﻿namespace Crud.Usuarios {
 
-    constructor(idPanelMnt: string, idPanelCreacion: string) {
-        super(idPanelMnt, idPanelCreacion);
+    export class CrudCreacionUsuario extends Crud.Creacion.CrudCreacion {
+
+        constructor(idPanelMnt: string, idPanelCreacion: string) {
+            super(idPanelMnt, idPanelCreacion);
+        }
+
+        public InicializarValores() {
+            super.InicializarValores();
+            let inputFechaAlta: HTMLInputElement = this.divDeCreacionHtml.querySelector<HTMLInputElement>("#Alta");
+            let fecha: Date = new Date();
+            inputFechaAlta.value = fecha.toDateString();
+        }
+
+        protected DespuesDeMapearDatosDeIU(json: JSON): JSON {
+            json = super.DespuesDeMapearDatosDeIU(json);
+
+            /*código específico para usuariosDto*/
+
+            return json;
+        }
+
+        protected AntesDeMapearDatosDeIU(): JSON {
+            let json: JSON = super.AntesDeMapearDatosDeIU();
+
+            /*código específico para usuariosDto*/
+
+            return json;
+        }
+
     }
 
-    public InicializarValores() {
-        super.InicializarValores();
-        let inputFechaAlta: HTMLInputElement = this.divDeCreacionHtml.querySelector<HTMLInputElement>("#Alta");
-        let fecha: Date = new Date();
-        inputFechaAlta.value = fecha.toDateString();
+    export class CrudEdicionUsuario extends Crud.Edicion.CrudEdicion {
+
+        constructor(idPanelMnt: string, idPanelCreacion: string) {
+            super(idPanelMnt, idPanelCreacion);
+        }
     }
-
-    protected DespuesDeMapearDatosDeIU(json: JSON): JSON {
-        json = super.DespuesDeMapearDatosDeIU(json);
-
-        /*código específico para usuariosDto*/
-
-        return json;
-    }
-
-    protected AntesDeMapearDatosDeIU(): JSON {
-        let json: JSON = super.AntesDeMapearDatosDeIU();
-
-        /*código específico para usuariosDto*/
-
-        return json;
-    }
-
-}
-
-class CrudEdicionUsuario extends CrudEdicion {
-
-    constructor(idPanelMnt: string, idPanelCreacion: string) {
-        super(idPanelMnt, idPanelCreacion);
-    }
-
-
 }
