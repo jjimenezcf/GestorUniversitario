@@ -2,8 +2,18 @@
 
     export class CrudMnt extends CrudBase {
 
-        constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string) {
-            super(idPanelMnt, null, idPanelCreacion);
+        protected crudDeCreacion: CrudCreacion;
+        protected crudDeEdicion: CrudEdicion;
+
+        protected PanelDeMnt: HTMLDivElement;
+
+        constructor(idPanelMnt: string) {
+            super(ModoTrabajo.consultando);
+
+            if (EsNula(idPanelMnt))
+                throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
+
+            this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
         }
 
         InicializarValores() {
@@ -12,12 +22,12 @@
 
     }
 
-    export function EjecutarMenuMnt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
+    export function EjecutarMenuMnt(accion: string, idDivMnt: string, gestor: Crud.CrudBase): void {
 
         if (accion === LiteralMnt.crearelemento)
-            IraCrear(gestor as Crud.CrudCreacion, idDivMostrarHtml, idDivOcultarHtml);
+            IraCrear(gestor as Crud.CrudCreacion, idDivMnt);
         else if (accion === LiteralMnt.editarelemento)
-            IraEditar(gestor as Crud.CrudEdicion, idDivMostrarHtml, idDivOcultarHtml);
+            IraEditar(gestor as Crud.CrudEdicion, idDivMnt);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
@@ -31,43 +41,29 @@
             QuitarDelSelector(idGrid, idCheck);
     }
 
-    function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
+    function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMnt: string) {
 
         //obtener los elementos del grid seleccionado
-        let idInfSel: string = `${idDivOcultarHtml}_grid`;
+        let idInfSel: string = `${idDivMnt}_grid`;
         let infSel = infoSelectores.Obtener(idInfSel);
         if (!infSel || infSel.Cantidad == 0) {
             Mensaje(TipoMensaje.Info, "Debe marcar el elemento a editar");
             return;
         }
 
-        let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
-        let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
+        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
 
-        htmlDivMostrar.classList.add(ClaseCss.divVisible);
-        htmlDivMostrar.classList.remove(ClaseCss.divNoVisible);
-
-        htmlDivOcultar.classList.add(ClaseCss.divNoVisible);
-        htmlDivOcultar.classList.remove(ClaseCss.divVisible);
-
-        gestorDeEdicion.InicializarValores(infSel);
+        gestorDeEdicion.ComenzarEdicion(panelMnt, infSel);
 
         if (!EsNula(gestorDeEdicion.ResultadoPeticion)) {
             Mensaje(gestorDeEdicion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeEdicion.ResultadoPeticion);
         }
     }
 
-    function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
-        let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
-        let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
+    function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMnt: string) {
 
-        htmlDivMostrar.classList.add(ClaseCss.divVisible);
-        htmlDivMostrar.classList.remove(ClaseCss.divNoVisible);
-
-        htmlDivOcultar.classList.add(ClaseCss.divNoVisible);
-        htmlDivOcultar.classList.remove(ClaseCss.divVisible);
-
-        gestorDeCreacion.InicializarValores();
+        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
+        gestorDeCreacion.ComenzarCreacion(panelMnt);
     }
 
     function AnadirAlInfoSelector(idGrid, idCheck) {

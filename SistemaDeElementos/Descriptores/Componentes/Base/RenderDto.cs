@@ -98,9 +98,9 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" + Environment.NewLine +
                                         $"   <input id=¨{tabla.IdHtml}_{descriptorControl.propiedadDto}¨ " + Environment.NewLine +
                                         $"       propiedad-dto=¨{descriptorControl.propiedadDto}¨ " + Environment.NewLine +
-                                        $"       class=¨propiedad propiedad-valida¨ " + Environment.NewLine + // {atributos.cssValido}
-                                      //$"       cssCrtlNoValido=¨{atributos.cssNoValido}¨ " + Environment.NewLine +
-                                      //$"       cssCrtlValido=¨{atributos.cssValido}¨ " + Environment.NewLine +
+                                        $"       class=¨propiedad propiedad-valida¨ " + Environment.NewLine + // 
+                                        //$"       cssCrtlNoValido=¨{atributos.cssNoValido}¨ " + Environment.NewLine +
+                                        //$"       cssCrtlValido=¨{atributos.cssValido}¨ " + Environment.NewLine +
                                         $"       obligatorio=¨{(atributos.Visible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ " + Environment.NewLine +
                                         $"       type=¨text¨ " + Environment.NewLine +
                                         $"       {(!atributos.Editable(tabla.ModoDeTrabajo) ? "readonly" : "")} " + Environment.NewLine +

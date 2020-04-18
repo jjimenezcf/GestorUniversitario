@@ -15,7 +15,7 @@ namespace Gestor.Elementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
     public enum ModoDeOrdenancion { ascendente, descendente }
-    public enum TipoOperacion { Insertar, Modificar, Leer };
+    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida};
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -192,38 +192,41 @@ namespace Gestor.Elementos
 
         #endregion
 
-        #region Métodos de inserción
+        #region Métodos de persistencia
 
-        public void InsertarElementos(List<TElemento> elementos, ParametrosDeNegocio parametros = null)
+        public void PersistirElementos(List<TElemento> elementos, ParametrosDeNegocio parametros)
         {
             foreach (var e in elementos)
-                InsertarElemento(e, parametros);
+                PersistirElemento(e, parametros);
         }
 
-        public void InsertarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
+        public void PersistirElemento(TElemento elemento, ParametrosDeNegocio parametros)
         {
-            if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
-
             TRegistro registro = MapearRegistro(elemento, parametros);
-            InsertarRegistro(registro, parametros);
+            PersistirRegistro(registro, parametros);
             elemento.Id = registro.Id;
         }
 
-        protected void InsertarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => InsertarRegistros(new List<TRegistro> { registro }, parametros);
+        protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros) => PersistirRegistros(new List<TRegistro> { registro }, parametros);
 
-        protected void InsertarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
+        protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
         {
-            if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
-
             var transaccionAbierta = IniciarTransaccion(parametros);
             try
             {
                 foreach (var registro in registros)
-                    Contexto.Add(registro);
+                {
+                    if (parametros.Tipo == TipoOperacion.Insertar)
+                        Contexto.Add(registro);
+                    else
+                    if (parametros.Tipo == TipoOperacion.Modificar)
+                        Contexto.Update(registro);
+                    else
+                        throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar}");
+                }
 
                 Contexto.SaveChanges();
+
                 Commit(parametros, transaccionAbierta);
             }
             catch (Exception exc)
@@ -239,40 +242,38 @@ namespace Gestor.Elementos
 
         #region Métodos de modificación
 
-        public void ModificarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
-        {
-            if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+        //public void ModificarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
+        //{
+        //    if (parametros == null)
+        //        parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
 
-            TRegistro registro = MapearRegistro(elemento, parametros);
-            ModificarRegistro(registro, parametros);
+        //    TRegistro registro = MapearRegistro(elemento, parametros);
+        //    ModificarRegistro(registro, parametros);
 
-        }
+        //}
 
-        protected void ModificarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => ModificarRegistros(new List<TRegistro> { registro }, parametros);
+        //protected void ModificarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => ModificarRegistros(new List<TRegistro> { registro }, parametros);
 
-        protected void ModificarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
-        {
-            if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+        //protected void ModificarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
+        //{
+        //    if (parametros == null)
+        //        parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
 
-            var transaccionAbierta = IniciarTransaccion(parametros);
-            try
-            {
-                foreach (var registro in registros)
-                    Contexto.Update(registro);
+        //    var transaccionAbierta = IniciarTransaccion(parametros);
+        //    try
+        //    {
+        //        foreach (var registro in registros)
+        //            Contexto.Update(registro);
 
-                Contexto.SaveChanges();
-                Commit(parametros, transaccionAbierta);
-            }
-            catch (Exception exc)
-            {
-                RollBack(parametros, transaccionAbierta);
-                throw exc;
-            }
-        }
-
-
+        //        Contexto.SaveChanges();
+        //        Commit(parametros, transaccionAbierta);
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        RollBack(parametros, transaccionAbierta);
+        //        throw exc;
+        //    }
+        //}
 
         #endregion
 

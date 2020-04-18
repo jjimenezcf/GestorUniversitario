@@ -8,36 +8,22 @@
 
     export class CrudBase {
 
-        protected PanelDeCrear: HTMLDivElement;
-        protected PanelDeEditar: HTMLDivElement;
-        protected PanelDeMnt: HTMLDivElement;
-        protected ModoTrabajo: string = ModoTrabajo.creando;
+        protected ModoTrabajo;
 
         public ResultadoPeticion: string;
         public PeticioCorrecta: boolean = false;
         public PeticionRealizada: boolean = false;
 
-        constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string) {
-            if (!EsNula(idPanelCreacion))
-                this.PanelDeCrear = document.getElementById(idPanelCreacion) as HTMLDivElement;
-
-            if (!EsNula(idPanelEdicion))
-                this.PanelDeEditar = document.getElementById(idPanelEdicion) as HTMLDivElement;
-
-            if (!EsNula(idPanelMnt))
-                this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
+        constructor(modo) {
+            this.ModoTrabajo = modo
         }
 
+        protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
 
-        public Cerrar(panelDeMnt: HTMLDivElement, PanelParaOcultar: HTMLDivElement) {
+            this.BlanquearControlesDeIU(panelCerrar);
 
-            this.BlanquearControlesDeIU(PanelParaOcultar);
-
-            panelDeMnt.classList.add(ClaseCss.divVisible);
-            panelDeMnt.classList.remove(ClaseCss.divNoVisible);
-
-            PanelParaOcultar.classList.add(ClaseCss.divNoVisible);
-            PanelParaOcultar.classList.remove(ClaseCss.divVisible);
+            this.OcultarPanel(panelCerrar);
+            this.MostrarPanel(panelMostrar);
 
             BlanquearMensaje();
 
@@ -60,29 +46,39 @@
             input.value = "";
         }
 
+        protected MostrarPanel(panel: HTMLDivElement) {
+            panel.classList.add(ClaseCss.divVisible);
+            panel.classList.remove(ClaseCss.divNoVisible);
+        }
+
+        protected OcultarPanel(panel: HTMLDivElement) {
+            panel.classList.add(ClaseCss.divNoVisible);
+            panel.classList.remove(ClaseCss.divVisible);
+        }
+
         // funciones para mapear un elemento Json a los controles de un panel
 
-        protected MapearElemento(elementoJson: JSON) {
+        protected MapearElemento(panel: HTMLDivElement,elementoJson: JSON) {
 
-            this.MapearPropiedadesDelElemento("elementoJson", elementoJson);
+            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
 
         }
 
-        private MapearPropiedadesDelElemento(propiedad: string, valorPropiedadJson: any) {
+        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto == "object") {
                 for (var propiedad in valorPropiedadJson) {
                     console.log("clave: ", propiedad);
-                    this.MapearPropiedadesDelElemento(propiedad, valorPropiedadJson[propiedad]);
+                    this.MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson[propiedad]);
                 }
             } else {
-                this.MapearPropiedad(propiedad, valorPropiedadJson);
+                this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
             }
 
         }
 
-        private MapearPropiedad(propiedad: string, valor: any) {
-            var control = this.BuscarControl(this.PanelDeEditar, propiedad);
+        private MapearPropiedad(panel: HTMLDivElement,propiedad: string, valor: any) {
+            var control = this.BuscarControl(panel, propiedad);
             if (control instanceof HTMLInputElement)
                 control.value = valor;
 
@@ -103,11 +99,8 @@
             return null;
         }
 
-        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {
-            if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando)
+        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {           
                 return JSON.parse(`{"${Literal.id}":"0"}`);
-
-            return JSON.parse('[]');
         }
 
         protected MapearControlesDeIU(panel: HTMLDivElement): JSON {
@@ -152,11 +145,11 @@
 
         // funciones para las peticiones al servidor  ***********************************************************************************************
 
-        protected PeticionSincrona(req: XMLHttpRequest, peticion: string) {
-            this.PeticionAjax(req, () => this.DespuesDeLaPeticion(req), () => this.ErrorEnPeticion(req, peticion));
+        protected PeticionSincrona(req: XMLHttpRequest, url: string,  peticion: string) {
+            this.PeticionAjax(req, url,  () => this.DespuesDeLaPeticion(req), () => this.ErrorEnPeticion(req, peticion));
         }
 
-        private PeticionAjax(req: XMLHttpRequest, despuesDePeticion: Function, errorEnPeticion: Function) {
+        private PeticionAjax(req: XMLHttpRequest, url: string,  despuesDePeticion: Function, errorEnPeticion: Function) {
 
             function respuestaCorrecta() {
                 if (EsNula(req.response)) {
@@ -180,6 +173,8 @@
 
             req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
             req.addEventListener(Ajax.eventoError, respuestaErronea);
+
+            req.open('GET', url, false);
             req.send();
         }
 

@@ -17,8 +17,6 @@ const Atributo = {
     Id: "Id",
     controlador: "controlador",
     posicion: "posicion",
-    cssCrtlValido: "cssCrtlValido",
-    cssCrtlNoValido: "cssCrtlNoValido",
     obligatorio: "obligatorio",
     totalEnBd: "totalEnBd"
 }
@@ -42,7 +40,8 @@ const Ajax = {
         Crear: "epCrearElemento",
         LeerGridEnHtml: "epLeerGridHtml",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
-        LeerPorIds: "epLeerPorIds"
+        LeerPorIds: "epLeerPorIds",
+        Modificar: "epModificarPorId"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -89,6 +88,7 @@ const ModoTrabajo = {
     editando: "editando",
     consultando: "consultando",
     copiando: "copiando",
-    borrando: "borrando"
+    borrando: "borrando",
+    mantenimiento: "mantenimiento"
 }
 

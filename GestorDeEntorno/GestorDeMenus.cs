@@ -239,23 +239,25 @@ namespace Gestor.Elementos.Entorno
         {
             var menus = new List<MenuDtm>();
 
+            var pNeg = new ParametrosDeNegocio(TipoOperacion.Insertar);
+
             var m = new MenuDtm() { Id = 0, Padre = null, Nombre = "Configuración", Descripcion = "", Icono = "cog-solid.svg", Activo = true };
 
             var p = m;
             m = new MenuDtm() { Id = 0, Padre = p, Nombre = "Funcionalidad", Descripcion = "", Icono = "cog-solid.svg", Activo = true };
-            InsertarRegistro(m);
+            PersistirRegistro(m, pNeg);
 
             m = new MenuDtm() { Id = 0, Padre = p, Nombre = "Accesos", Descripcion = "", Icono = "cog-solid.svg", Activo = true };
 
             p = m;
             m = new MenuDtm() { Id = 0, Padre = p, Nombre = "Usuarios", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
-            InsertarRegistro(m);
+            PersistirRegistro(m, pNeg);
 
             m = new MenuDtm() { Id = 0, Padre = p, Nombre = "Permisos", Descripcion = "", Icono = "cog-solid.svg", VistaMvc = null, Activo = true };
-            InsertarRegistro(m);
+            PersistirRegistro(m, pNeg);
 
             m = new MenuDtm() { Id = 0, Padre = null, Nombre = "Maestros", Descripcion = "", Icono = "home-solid.svg", Activo = true };
-            InsertarRegistro(m);
+            PersistirRegistro(m, pNeg);
 
 
         }

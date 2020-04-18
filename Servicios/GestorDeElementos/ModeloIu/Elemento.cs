@@ -18,13 +18,10 @@ namespace Gestor.Elementos.ModeloIu
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
-        public string cssNoValido { get; set; } = "propiedad-no-valida";
-        public string cssValido { get; set; } = "propiedad-valida";
         public Type Tipo { get; set; } = typeof(string);
         public short Fila { get; set; } 
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
-        public string ConcatenarClaseCss { set { cssValido = $"{cssValido} {value}"; } }
         public string ValorPorDefecto { get; set; }
 
         public bool Visible(ModoDeTrabajo modo)
@@ -84,8 +81,7 @@ namespace Gestor.Elementos.ModeloIu
             Tipo = typeof(int),
             VisibleAlCrear = false,
             VisibleAlEditar = false,
-            VisibleAlConsultar = false,
-            cssValido = "controlNoVisible"
+            VisibleAlConsultar = false
             )
         ]
         public int Id { get; set; }

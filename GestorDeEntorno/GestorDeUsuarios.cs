@@ -105,16 +105,18 @@ namespace Gestor.Elementos.Entorno
         protected override void AntesMapearRegistro(UsuarioDto elemento, ParametrosDeNegocio opciones)
         {
             base.AntesMapearRegistro(elemento, opciones);
+
             if (opciones.Tipo == TipoOperacion.Insertar)
+                elemento.Alta = System.DateTime.Now;
+
+            if (opciones.Tipo == TipoOperacion.Insertar || opciones.Tipo == TipoOperacion.Modificar)
             {
                 if (elemento.Login.IsNullOrEmpty())
                     Errores.GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
                 if (elemento.Apellido.IsNullOrEmpty())
                     Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
                 if (elemento.Nombre.IsNullOrEmpty())
-                    Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");
-
-                elemento.Alta = System.DateTime.Now;
+                    Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");                
             }
         }
 

@@ -2,11 +2,28 @@
 
     export class CrudEdicion extends CrudBase {
 
-        constructor(idPanelMnt: string, idPaneEdicion: string) {
-            super(idPanelMnt, null, idPaneEdicion);
+        protected PanelDeEditar: HTMLDivElement;
+
+        constructor(idPanelEdicion: string) {
+            super(ModoTrabajo.editando);
+
+            if (EsNula(idPanelEdicion))
+                throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición")
+
+            this.PanelDeEditar = document.getElementById(idPanelEdicion) as HTMLDivElement;
         }
 
-        InicializarValores(infSel: InfoSelector) {
+        public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
+            this.OcultarPanel(panelAnterior);
+            this.MostrarPanel(this.PanelDeEditar);
+            this.InicializarValores(infSel);
+        }
+
+        public CerrarEdicion(panelMostrar: HTMLDivElement) {
+                this.Cerrar(panelMostrar, this.PanelDeEditar);
+        }
+
+        protected InicializarValores(infSel: InfoSelector) {
             let id: number = infSel.Seleccionados[0] as number;
 
             let control: HTMLElement = this.BuscarControl(this.PanelDeEditar, Literal.id);
@@ -26,31 +43,62 @@
             let url: string = `/${controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
 
             let req: XMLHttpRequest = new XMLHttpRequest();
-            req.open('GET', url, false);
-            this.PeticionSincrona(req, Ajax.EndPoint.LeerPorIds);
+            this.PeticionSincrona(req, url, Ajax.EndPoint.LeerPorIds);
+        }
+
+        public Modificar(panelMnt: HTMLDivElement) {
+            let json: JSON = null;
+            try {
+                json = this.MapearControlesDeIU(this.PanelDeEditar);
+            }
+            catch (error) {
+                this.ResultadoPeticion = error.message;
+                return;
+            }
+            this.ModificarElemento(json);
+
+            if (this.PeticioCorrecta) {
+                this.CerrarEdicion(panelMnt);
+            }
+        }
+
+        private ModificarElemento(json: JSON) {
+            let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
+            let url: string = `/${controlador}/${Ajax.EndPoint.Modificar}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
+            let req: XMLHttpRequest = new XMLHttpRequest();
+            this.PeticionSincrona(req, url, Ajax.EndPoint.Modificar);
         }
 
         protected DespuesDeLaPeticion(req): ResultadoJson {
             let resultado = super.DespuesDeLaPeticion(req);
-            this.MapearElemento(resultado.datos);
+            this.MapearElemento(this.PanelDeEditar, resultado.datos);
             return resultado;
         }
 
     }
 
-    export function EjecutarMenuEdt(accion: string, idDivMostrarHtml: string, idDivOcultarHtml: string, gestor: Crud.CrudBase): void {
+    export function EjecutarMenuEdt(accion: string, idDivDeMnt: string, gestor: Crud.CrudEdicion): void {
 
+        if (accion === LiteralEdt.modificarelemento)
+            ModificarElemento(gestor, idDivDeMnt);
+        else
         if (accion === LiteralEdt.cancelaredicion)
-            CancelarEdicion(idDivMostrarHtml, idDivOcultarHtml, gestor as CrudEdicion);
+            CancelarEdicion(gestor, idDivDeMnt);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
-    function CancelarEdicion(idDivMnt: string, idDivEdt: string, gestorDeEdicion: CrudEdicion) {
+    function ModificarElemento(gestor: CrudEdicion, idDivMnt: string) {
         let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
-        let panelEdt: HTMLDivElement = document.getElementById(`${idDivEdt}`) as HTMLDivElement;
+        gestor.Modificar(panelMnt);
+
+        Mensaje(gestor.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestor.ResultadoPeticion);
+    }
+
+    function CancelarEdicion(gestorDeEdicion: CrudEdicion, idDivMnt: string) {
+        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
         try {
-            gestorDeEdicion.Cerrar(panelMnt, panelEdt);
+            gestorDeEdicion.CerrarEdicion(panelMnt);
         }
         catch (error) {
             Mensaje(TipoMensaje.Error, error.menssage);

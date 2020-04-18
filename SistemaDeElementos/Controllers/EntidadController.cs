@@ -56,10 +56,10 @@ namespace MVCSistemaDeElementos.Controllers
         {
             var r = new Resultado();
 
-            var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
             try
             {
-                GestorDeElementos.InsertarElemento(elemento);
+                var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
+                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
             }
@@ -72,20 +72,38 @@ namespace MVCSistemaDeElementos.Controllers
 
             return new JsonResult(r);
         }
-        class idJoson
+
+        //END-POINT: Desde CrudEdicion.ts
+        public JsonResult epModificarPorId(string elementoJson)
         {
-            public int id;
+            var r = new Resultado();
+
+            try
+            {
+                var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
+                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = "Registro modificado";
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido modificar";
+            }
+
+            return new JsonResult(r);
         }
+
 
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epLeerPorIds(string idsJson)
         {
             var r = new Resultado();
 
-
-            List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
             try
             {
+                List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 r.Datos = GestorDeElementos.LeerElementoPorId(listaIds[0]);
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = $"se han leido 1 {(1>1? "registros" : "registro")}";
