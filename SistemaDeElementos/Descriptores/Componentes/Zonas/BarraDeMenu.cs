@@ -70,15 +70,13 @@ namespace MVCSistemaDeElementos.Descriptores
         #region Opciones de mantenimiento
         internal void AnadirOpcionDeCreacion()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion));
-            var crearElemento = new CrearElemento(idDivMostrar: Mnt.Crud.Creador.Id, idDivOcultar: Mnt.Id, gestor: gestor == null ? "" : gestor);
+            var crearElemento = new CrearElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo {Mnt.Crud.NombreElemento}");
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeEditarElemento()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeEdicion));
-            var editarElemento = new EditarElemento(idDivMostrar: Mnt.Crud.Editor.Id, idDivOcultar: Mnt.Id, gestor: gestor == null ? "" : gestor);
+            var editarElemento = new EditarElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar {Mnt.Crud.NombreElemento}");
             Menu.Add(opcion);
         }
@@ -88,16 +86,14 @@ namespace MVCSistemaDeElementos.Descriptores
         #region Opciones de creacion
         internal void AnadirOpcionDeNuevoElemento()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion));
-            var nuevoElemento = new NuevoElemento(idDivMostrar: Creador.Crud.Mnt.Id, idDivOcultar: Creador.Id, gestor: gestor == null ? "" : gestor);
+            var nuevoElemento = new NuevoElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, nuevoElemento, $"Crear");
             Menu.Add(opcion);
         }
 
         internal void AnadirOpcionDeCancelarNuevo()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion));
-            var cancelarNuevo = new CancelarNuevo(idDivMostrar: Creador.Crud.Mnt.Id, idDivOcultar: Creador.Id, gestor: gestor == null ? "" : gestor);
+            var cancelarNuevo = new CancelarNuevo();
             var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarNuevo, $"Cancelar");
             Menu.Add(opcion);
         }
@@ -106,15 +102,13 @@ namespace MVCSistemaDeElementos.Descriptores
         #region opciones de edición
         internal void AnadirOpcionDeModificarElemento()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeEdicion));
-            var modificarElemento = new ModificarElemento(idDivMostrar: Editor.Crud.Mnt.Id, idDivOcultar: Editor.Id, gestor: gestor == null ? "" : gestor);
+            var modificarElemento = new ModificarElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, modificarElemento, $"Modificar");
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeCancelarEdicion()
         {
-            var gestor = (string)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ClaseTypeScriptDeEdicion));
-            var cancelarEdicion = new CancelarEdicion(idDivMostrar: Editor.Crud.Mnt.Id, idDivOcultar: Editor.Id, gestor: gestor == null ? "" : gestor);
+            var cancelarEdicion = new CancelarEdicion();
             var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar");
             Menu.Add(opcion);
         }
