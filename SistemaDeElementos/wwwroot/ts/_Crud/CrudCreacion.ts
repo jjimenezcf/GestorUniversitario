@@ -10,58 +10,20 @@
 
         }
 
-        public Aceptar(htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
+        public Aceptar() {
             let json: JSON = null;
             try {
-                json = this.MapearControlesDeIU();
+                json = this.MapearControlesDeIU(this.PanelDeCrear);
             }
             catch (error) {
                 this.ResultadoPeticion = error.message;
                 return;
             }
-            this.CrearElemento(json, htmlDivMostrar, htmlDivOcultar);
+            this.CrearElemento(json);
         }
 
-        protected AntesDeMapearDatosDeIU(): JSON {
-            return JSON.parse(`{"${Literal.id}":"0"}`);
-        }
-
-        private MapearControlesDeIU(): JSON {
-            let json: JSON = this.AntesDeMapearDatosDeIU();
-
-            let propiedades: HTMLCollectionOf<Element> = this.PanelCreacion.getElementsByClassName("propiedad");
-            for (var i = 0; i < propiedades.length; i++) {
-                var propiedad = propiedades[i] as HTMLElement;
-                if (propiedad instanceof HTMLInputElement) {
-                    var propiedadDto = propiedad.getAttribute(Atributo.propiedadDto);
-                    json[propiedadDto] = this.MapearInput(propiedad, propiedadDto);
-                }
-            }
-
-            return this.DespuesDeMapearDatosDeIU(json);
-        }
-
-        private MapearInput(propiedad: HTMLInputElement, propiedadDto: string): string {
-            let valor: string = (propiedad as HTMLInputElement).value;
-            let obligatorio: string = propiedad.getAttribute(Atributo.obligatorio);
-
-            if (obligatorio === "S" && valor.NoDefinida()) {
-                let cssNoValida: string = propiedad.getAttribute(Atributo.classNoValido);
-                propiedad.className = `${ClaseCss.classPropiedad} ${cssNoValida}`;
-                throw new Error(`El campo ${propiedadDto} es obligatorio`);
-            }
-
-            let cssValida: string = propiedad.getAttribute(Atributo.classValido);
-            propiedad.className = `${ClaseCss.classPropiedad} ${cssValida}`;
-            return valor;
-        }
-
-        protected DespuesDeMapearDatosDeIU(json: JSON): JSON {
-            return json;
-        }
-
-        private CrearElemento(json: JSON, htmlDivMostrar: HTMLDivElement, htmlDivOcultar: HTMLDivElement) {
-            let controlador = this.PanelCreacion.getAttribute(Literal.controlador);
+        private CrearElemento(json: JSON) {
+            let controlador = this.PanelDeCrear.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
             req.open('GET', url, false);
@@ -82,18 +44,18 @@
     function NuevoElemento(gestorDeCreacion: CrudCreacion, idDivMostrarHtml: string, idDivOcultarHtml: string) {
         let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
         let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
-        gestorDeCreacion.Aceptar(htmlDivMostrar, htmlDivOcultar);
+        gestorDeCreacion.Aceptar();
         if (gestorDeCreacion.PeticioCorrecta) {
             gestorDeCreacion.Cerrar(htmlDivMostrar, htmlDivOcultar);
         }
         Mensaje(gestorDeCreacion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeCreacion.ResultadoPeticion);
     }
 
-    function CancelarNuevo(idDivMostrarHtml: string, idDivOcultarHtml: string, gestorDeCreacion: CrudCreacion) {
-        let htmlDivMostrar: HTMLDivElement = document.getElementById(`${idDivMostrarHtml}`) as HTMLDivElement;
-        let htmlDivOcultar: HTMLDivElement = document.getElementById(`${idDivOcultarHtml}`) as HTMLDivElement;
+    function CancelarNuevo(idDivMnt: string, idDivNuevo: string, gestorDeCreacion: CrudCreacion) {
+        let panelDeMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
+        let panelDeCrear: HTMLDivElement = document.getElementById(`${idDivNuevo}`) as HTMLDivElement;
         try {
-            gestorDeCreacion.Cerrar(htmlDivMostrar, htmlDivOcultar);
+            gestorDeCreacion.Cerrar(panelDeMnt, panelDeCrear);
         }
         catch (error) {
             Mensaje(TipoMensaje.Error, error.menssage);

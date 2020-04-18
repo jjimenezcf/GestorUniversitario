@@ -6,20 +6,20 @@
             super(idPanelMnt, idPanelCreacion);
         }
 
-        protected DespuesDeMapearDatosDeIU(json: JSON): JSON {
-            json = super.DespuesDeMapearDatosDeIU(json);
+        protected DespuesDeMapearDatosDeIU(panel: HTMLDivElement, elementoJson: JSON): JSON {
+            elementoJson = super.DespuesDeMapearDatosDeIU(panel, elementoJson);
 
             /*código específico para usuariosDto*/
 
-            return json;
+            return elementoJson;
         }
 
-        protected AntesDeMapearDatosDeIU(): JSON {
-            let json: JSON = super.AntesDeMapearDatosDeIU();
+        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {
+            let elementoJson: JSON = super.AntesDeMapearDatosDeIU(panel);
 
             /*código específico para usuariosDto*/
 
-            return json;
+            return elementoJson;
         }
 
     }

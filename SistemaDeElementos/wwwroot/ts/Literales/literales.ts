@@ -17,8 +17,8 @@ const Atributo = {
     Id: "Id",
     controlador: "controlador",
     posicion: "posicion",
-    classValido: "classValido",
-    classNoValido: "classNoValido",
+    cssCrtlValido: "cssCrtlValido",
+    cssCrtlNoValido: "cssCrtlNoValido",
     obligatorio: "obligatorio",
     totalEnBd: "totalEnBd"
 }
@@ -28,9 +28,10 @@ const TagName = {
 }
 
 const ClaseCss = {
-    classValido: Atributo.classValido,
-    classNoValido: Atributo.classNoValido,
-    classPropiedad: "propiedad",
+    crtlValido: "propiedad-valida",
+    crtlNoValido: "propiedad-no-valida",
+    propiedad: "propiedad",
+    propiedadId: "propiedad-id",
     divVisible: "div-visible",
     divNoVisible: "div-no-visible",
     obligatorio: "obligatorio"
@@ -82,4 +83,12 @@ const TipoControl = {
     Editor : "editor",
     Selector: "selector"
 };
+
+const ModoTrabajo = {
+    creando: "creando",
+    editando: "editando",
+    consultando: "consultando",
+    copiando: "copiando",
+    borrando: "borrando"
+}
 

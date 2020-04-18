@@ -96,11 +96,11 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" + Environment.NewLine +
-                                        $"   <input id=¨{tabla.IdHtml}_{descriptorControl.Descriptor.Name}¨ " + Environment.NewLine +
-                                        $"       propiedad-dto=¨{descriptorControl.Descriptor.Name}¨ " + Environment.NewLine +
-                                        $"       class=¨propiedad {atributos.cssValido}¨ " + Environment.NewLine +
-                                        $"       classNoValido=¨{atributos.cssNoValido}¨ " + Environment.NewLine +
-                                        $"       classValido=¨{atributos.cssValido}¨ " + Environment.NewLine +
+                                        $"   <input id=¨{tabla.IdHtml}_{descriptorControl.propiedadDto}¨ " + Environment.NewLine +
+                                        $"       propiedad-dto=¨{descriptorControl.propiedadDto}¨ " + Environment.NewLine +
+                                        $"       class=¨propiedad propiedad-valida¨ " + Environment.NewLine + // {atributos.cssValido}
+                                      //$"       cssCrtlNoValido=¨{atributos.cssNoValido}¨ " + Environment.NewLine +
+                                      //$"       cssCrtlValido=¨{atributos.cssValido}¨ " + Environment.NewLine +
                                         $"       obligatorio=¨{(atributos.Visible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ " + Environment.NewLine +
                                         $"       type=¨text¨ " + Environment.NewLine +
                                         $"       {(!atributos.Editable(tabla.ModoDeTrabajo) ? "readonly" : "")} " + Environment.NewLine +

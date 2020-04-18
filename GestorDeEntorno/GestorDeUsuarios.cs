@@ -113,6 +113,8 @@ namespace Gestor.Elementos.Entorno
                     Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
                 if (elemento.Nombre.IsNullOrEmpty())
                     Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");
+
+                elemento.Alta = System.DateTime.Now;
             }
         }
 

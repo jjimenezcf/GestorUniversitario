@@ -12,6 +12,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         internal PropertyInfo Descriptor { get; set; }
 
+        internal string propiedadDto => Descriptor.Name.ToLower();
+
         internal IUPropiedadAttribute atributos => Elemento.ObtenerAtributos(Descriptor);
     }
 
