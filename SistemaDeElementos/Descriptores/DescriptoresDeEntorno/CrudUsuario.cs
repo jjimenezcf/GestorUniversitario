@@ -4,6 +4,7 @@ using Gestor.Elementos.ModeloIu;
 using Gestor.Elementos.Entorno;
 using Gestor.Elementos.Seguridad;
 using UtilidadesParaIu;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -85,6 +86,19 @@ namespace MVCSistemaDeElementos.Descriptores
                 }
                 Mnt.Grid.Filas.Add(fila);
             }
+        }
+
+        public override string RenderControl()
+        {
+            var render = base.RenderControl();
+
+            render = render +
+                   $@"<script src=¨../../ts/usuarios/Usuarios.js¨></script>
+                      <script>
+                         Crud.crudMnt = new Usuarios.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}') 
+                      </script>
+                    ";
+            return render.Render();
         }
 
     }

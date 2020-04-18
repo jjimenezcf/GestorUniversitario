@@ -17,11 +17,13 @@
     <Content Remove="wwwroot\ts\_Crud\CrudMantenimiento.ts" />
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />
-    <Content Remove="wwwroot\ts\Usuarios\Usuarios.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Views\Shared\_Layout.ts" />
+    <None Remove="Views\Usuarios\Usuarios.js" />
+    <None Remove="Views\Usuarios\Usuarios.js.map" />
+    <None Remove="Views\Usuarios\Usuarios.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,6 +68,12 @@
 
   <ItemGroup>
     <Folder Include="Descriptores\Componentes\Plantillas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="wwwroot\ts\Usuarios\Usuarios.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

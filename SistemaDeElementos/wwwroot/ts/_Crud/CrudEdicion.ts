@@ -77,28 +77,25 @@
 
     }
 
-    export function EjecutarMenuEdt(accion: string, idDivDeMnt: string, gestor: Crud.CrudEdicion): void {
+    export function EjecutarMenuEdt(accion: string): void {
 
         if (accion === LiteralEdt.modificarelemento)
-            ModificarElemento(gestor, idDivDeMnt);
+            ModificarElemento();
         else
         if (accion === LiteralEdt.cancelaredicion)
-            CancelarEdicion(gestor, idDivDeMnt);
+            CancelarEdicion();
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
-    function ModificarElemento(gestor: CrudEdicion, idDivMnt: string) {
-        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
-        gestor.Modificar(panelMnt);
+    function ModificarElemento() {
+        crudMnt.crudDeEdicion.Modificar(crudMnt.PanelDeMnt);
 
-        Mensaje(gestor.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestor.ResultadoPeticion);
     }
 
-    function CancelarEdicion(gestorDeEdicion: CrudEdicion, idDivMnt: string) {
-        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
+    function CancelarEdicion() {
         try {
-            gestorDeEdicion.CerrarEdicion(panelMnt);
+            crudMnt.crudDeEdicion.CerrarEdicion(crudMnt.PanelDeMnt);
         }
         catch (error) {
             Mensaje(TipoMensaje.Error, error.menssage);

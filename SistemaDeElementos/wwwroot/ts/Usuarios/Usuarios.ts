@@ -1,4 +1,4 @@
-﻿namespace Crud.Usuarios {
+﻿namespace Usuarios {
 
     export class CrudMntUsuario extends Crud.CrudMnt {
 

@@ -11,8 +11,8 @@ namespace Gestor.Elementos.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
-    [IUDto(ClaseTypeScriptDeCreacion = "Crud.Usuarios.CrudCreacionUsuario"
-         , ClaseTypeScriptDeEdicion = "Crud.Usuarios.CrudEdicionUsuario"
+    [IUDto(ClaseTypeScriptDeCreacion = "Usuarios.CrudCreacionUsuario"
+         , ClaseTypeScriptDeEdicion = "Usuarios.CrudEdicionUsuario"
          , AnchoEtiqueta =20
          , AnchoSeparador =5)]
     public class UsuarioDto : Elemento

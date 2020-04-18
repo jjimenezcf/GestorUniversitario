@@ -187,6 +187,7 @@
                 this.ResultadoPeticion = resultado.mensaje;
                 this.PeticionRealizada = true;
                 console.error(resultado.consola);
+                if (!EsNula(this.ResultadoPeticion)) Mensaje(TipoMensaje.Error, this.ResultadoPeticion);
             }
         }
 
@@ -195,6 +196,7 @@
             this.ResultadoPeticion = resultado.mensaje;
             this.PeticionRealizada = true;
             this.PeticioCorrecta = true;
+            if (!EsNula(this.ResultadoPeticion)) Mensaje(TipoMensaje.Info, this.ResultadoPeticion);
             return resultado;
         }
     }

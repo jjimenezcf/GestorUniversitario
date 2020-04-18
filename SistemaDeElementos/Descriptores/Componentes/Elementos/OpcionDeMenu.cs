@@ -58,7 +58,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         public override string RenderAccion()
         {
-            return $"Crud.EjecutarMenuMnt('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}', new {Gestor}('{IdPanelEdicionCreacion}'))";
+            return $"Crud.EjecutarMenuMnt('{TipoAccion.ToString().ToLower()}')";
         }
     }
 
@@ -82,7 +82,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-           return $"Crud.EjecutarMenuCrt('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}', new {Gestor}('{IdPanelCreacion}'))";
+           return $"Crud.EjecutarMenuCrt('{TipoAccion.ToString().ToLower()}')";
         }
     }
 
@@ -106,7 +106,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            return $"Crud.EjecutarMenuEdt('{TipoAccion.ToString().ToLower()}','{IdPanelMnt}', new {Gestor}('{IdPanelEdicion}'))";
+            return $"Crud.EjecutarMenuEdt('{TipoAccion.ToString().ToLower()}')";
         }
     }
 

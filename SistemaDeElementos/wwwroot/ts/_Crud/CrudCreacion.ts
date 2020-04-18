@@ -52,28 +52,24 @@
         }
     }
 
-    export function EjecutarMenuCrt(accion: string, IdPanelMnt: string, gestor: Crud.CrudCreacion): void {
+    export function EjecutarMenuCrt(accion: string): void {
 
         if (accion === LiteralCrt.nuevoelemento)
-            NuevoElemento(gestor, IdPanelMnt);
+            NuevoElemento();
         else
         if (accion === LiteralCrt.cancelarnuevo)
-            CancelarNuevo(gestor, IdPanelMnt);
+            CancelarNuevo();
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
-    function NuevoElemento(gestorDeCreacion: CrudCreacion, IdPanelMnt: string) {
-        let panelMnt: HTMLDivElement = document.getElementById(`${IdPanelMnt}`) as HTMLDivElement;
-        gestorDeCreacion.Aceptar(panelMnt);
-        Mensaje(gestorDeCreacion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeCreacion.ResultadoPeticion);
+    function NuevoElemento() {
+        crudMnt.crudDeCreacion.Aceptar(crudMnt.PanelDeMnt);
     }
 
-    function CancelarNuevo(gestorDeCreacion: CrudCreacion, IdPanelMnt: string) {
-        let panelDeMnt: HTMLDivElement = document.getElementById(`${IdPanelMnt}`) as HTMLDivElement;
-
+    function CancelarNuevo() {
         try {
-            gestorDeCreacion.CerrarCreacion(panelDeMnt);
+            crudMnt.crudDeCreacion.CerrarCreacion(crudMnt.PanelDeMnt);
         }
         catch (error) {
             Mensaje(TipoMensaje.Error, error.menssage);

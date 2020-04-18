@@ -1,18 +1,21 @@
 ﻿namespace Crud {
 
+    export let crudMnt: CrudMnt = null;
+
     export class CrudMnt extends CrudBase {
 
-        protected crudDeCreacion: CrudCreacion;
-        protected crudDeEdicion: CrudEdicion;
+        public crudDeCreacion: CrudCreacion;
+        public crudDeEdicion: CrudEdicion;
 
-        protected PanelDeMnt: HTMLDivElement;
+        public PanelDeMnt: HTMLDivElement;
+        public IdGrid: string;
 
         constructor(idPanelMnt: string) {
-            super(ModoTrabajo.consultando);
+            super(ModoTrabajo.mantenimiento);
 
             if (EsNula(idPanelMnt))
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
-
+            this.IdGrid = `${idPanelMnt}_grid`;
             this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
         }
 
@@ -22,12 +25,12 @@
 
     }
 
-    export function EjecutarMenuMnt(accion: string, idDivMnt: string, gestor: Crud.CrudBase): void {
+    export function EjecutarMenuMnt(accion: string): void {
 
         if (accion === LiteralMnt.crearelemento)
-            IraCrear(gestor as Crud.CrudCreacion, idDivMnt);
+            IraCrear();
         else if (accion === LiteralMnt.editarelemento)
-            IraEditar(gestor as Crud.CrudEdicion, idDivMnt);
+            IraEditar();
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
@@ -41,29 +44,22 @@
             QuitarDelSelector(idGrid, idCheck);
     }
 
-    function IraEditar(gestorDeEdicion: Crud.CrudEdicion, idDivMnt: string) {
+    function IraEditar() {
 
         //obtener los elementos del grid seleccionado
-        let idInfSel: string = `${idDivMnt}_grid`;
+        let idInfSel: string = crudMnt.IdGrid;
         let infSel = infoSelectores.Obtener(idInfSel);
         if (!infSel || infSel.Cantidad == 0) {
             Mensaje(TipoMensaje.Info, "Debe marcar el elemento a editar");
             return;
         }
 
-        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
+        crudMnt.crudDeEdicion.ComenzarEdicion(crudMnt.PanelDeMnt, infSel);
 
-        gestorDeEdicion.ComenzarEdicion(panelMnt, infSel);
-
-        if (!EsNula(gestorDeEdicion.ResultadoPeticion)) {
-            Mensaje(gestorDeEdicion.PeticioCorrecta ? TipoMensaje.Info : TipoMensaje.Error, gestorDeEdicion.ResultadoPeticion);
-        }
     }
 
-    function IraCrear(gestorDeCreacion: Crud.CrudCreacion, idDivMnt: string) {
-
-        let panelMnt: HTMLDivElement = document.getElementById(`${idDivMnt}`) as HTMLDivElement;
-        gestorDeCreacion.ComenzarCreacion(panelMnt);
+    function IraCrear() {
+        crudMnt.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
     }
 
     function AnadirAlInfoSelector(idGrid, idCheck) {
