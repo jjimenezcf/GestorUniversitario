@@ -6,6 +6,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class ZonaDeGrid<TElemento> : ControlHtml
     {
+        public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
+
         public List<ColumnaDelGrid> Columnas { get; private set; } = new List<ColumnaDelGrid>();
 
         public List<FilaDelGrid> Filas { get; private set; } = new List<FilaDelGrid>();

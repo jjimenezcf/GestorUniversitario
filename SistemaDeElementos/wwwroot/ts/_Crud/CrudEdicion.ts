@@ -4,15 +4,17 @@
 
         protected PanelDeEditar: HTMLDivElement;
         protected PanelDeMnt: HTMLDivElement;
+        protected CrudDeMnt: CrudMnt;
 
-        constructor(panelMnt: HTMLDivElement, idPanelEdicion: string) {
+        constructor(crud: CrudMnt, idPanelEdicion: string) {
             super();
 
             if (EsNula(idPanelEdicion))
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
             this.PanelDeEditar = document.getElementById(idPanelEdicion) as HTMLDivElement;
-            this.PanelDeMnt = panelMnt;
+            this.PanelDeMnt = crud.PanelDeMnt;
+            this.CrudDeMnt = crud;
         }
 
         public EjecutarAcciones(accion: string) {
@@ -22,13 +24,13 @@
                     this.Modificar();
                 else
                     if (accion === LiteralEdt.cancelaredicion)
-                        this.CerrarEdicion();
+                        hayError = false;
                     else
-                        Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
+                        throw `la opción ${accion} no está definida`;
             }
             catch (error) {
                 hayError = true;
-                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                Mensaje(TipoMensaje.Error, error);
             }
 
             if (!hayError) this.CerrarEdicion();
@@ -42,6 +44,7 @@
 
         protected CerrarEdicion() {
             this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
+            this.CrudDeMnt.Buscar();
         }
 
         protected InicializarValores(infSel: InfoSelector) {

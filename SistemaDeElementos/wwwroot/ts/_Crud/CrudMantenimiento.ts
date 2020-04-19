@@ -10,6 +10,10 @@
         public PanelDeMnt: HTMLDivElement;
         public IdGrid: string;
         private infSel: InfoSelector;
+        private InputCantidad: HTMLInputElement;
+        private ZonaDeGrid: HTMLDivElement;
+        private ZonaDeFiltro: HTMLDivElement;
+
 
         constructor(idPanelMnt: string) {
             super();
@@ -18,8 +22,13 @@
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
 
             this.IdGrid = `${idPanelMnt}_grid`;
+            this.ZonaDeGrid = document.getElementById(`${this.IdGrid}`) as HTMLDivElement;
             this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
             this.infSel = new InfoSelector(this.IdGrid);
+            let idCrtlCantidad: string = `${this.IdGrid}_${LiteralMnt.idCtrlCantidad}`;
+            this.InputCantidad = document.getElementById(`${idCrtlCantidad}`) as HTMLInputElement;
+            var idHtmlFiltro = this.ZonaDeGrid.getAttribute(Atributo.zonaDeFiltro);
+            this.ZonaDeFiltro = document.getElementById(`${idHtmlFiltro}`) as HTMLDivElement;
         }
 
         public IraEditar() {
@@ -53,6 +62,130 @@
             var id = ObtenerIdDeLaFilaChequeada(idCheck);
             this.infSel.Quitar(id);
         }
+
+        private marcarElementos() {
+
+            if (this.infSel.Cantidad === 0)
+                return;
+
+            var celdasId = document.getElementsByName(`${Literal.id}.${this.IdGrid}`);
+            var len = celdasId.length;
+            for (var i = 0; i < this.infSel.Cantidad; i++) {
+                for (var j = 0; j < len; j++) {
+                    let id: number = this.infSel.LeerId(i);
+                    if ((<HTMLInputElement>celdasId[j]).value.Numero() == id) {
+                        var idCheck = celdasId[j].id.replace(`.${Literal.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                        var check = document.getElementById(idCheck);
+                        (<HTMLInputElement>check).checked = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public Buscar() {
+            if (this.InputCantidad === null)
+                Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
+            else {
+                let url: string = this.DefinirPeticionDeBusqueda(this.InputCantidad, 0);
+                let req: XMLHttpRequest = new XMLHttpRequest();
+                this.PeticionSincrona(req, url, Ajax.EndPoint.LeerGridEnHtml);
+            }
+        }
+
+        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
+            let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req) as ResultadoHtml;
+            this.ZonaDeGrid.innerHTML = resultado.html;
+            if (this.infSel !== undefined && this.infSel.Cantidad > 0) {
+                this.marcarElementos();
+                this.infSel.SincronizarCheck();
+            }
+            return resultado;
+        }
+
+        private DefinirPeticionDeBusqueda(htmlInputCantidad: HTMLInputElement, posicion: number): string {
+            var cantidad = htmlInputCantidad.value.Numero();
+            var controlador = htmlInputCantidad.getAttribute(Atributo.controlador);
+            var filtroJson = this.ObtenerFiltros();
+            var ordenJson = '[]';
+
+            let url: string = `/${controlador}/${Ajax.EndPoint.LeerGridEnHtml}`;
+            let parametros: string = `${Ajax.Param.posicion}=${posicion}` +
+                `&${Ajax.Param.cantidad}=${cantidad}` +
+                `&${Ajax.Param.filtro}=${filtroJson}` +
+                `&${Ajax.Param.orden}=${ordenJson}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
+        }
+
+        private ObtenerFiltros() {
+            var arrayIds = this.ObtenerControlesDeFiltro();
+            var clausulas = new Array<ClausulaDeFiltrado>();
+            for (let id of arrayIds) {
+                var input: HTMLInputElement = <HTMLInputElement>document.getElementById(`${id}`);
+                var tipo: string = input.getAttribute(TipoControl.Tipo);
+                var clausula: ClausulaDeFiltrado = null;
+                if (tipo === TipoControl.Editor) {
+                    clausula = this.ObtenerClausulaEditor(input);
+                }
+                else
+                    if (tipo === TipoControl.Selector) {
+                        clausula = this.ObtenerClausulaSelector(input);
+                    }
+                    else
+                        console.log(`No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`);
+
+                if (clausula !== null)
+                    clausulas.push(clausula);
+            }
+            return JSON.stringify(clausulas);;
+        }
+
+        private ObtenerControlesDeFiltro() {
+
+            var arrayIds = new Array();
+            var arrayHtmlImput = this.ZonaDeFiltro.getElementsByTagName(TagName.input);
+
+            for (let i = 0; i < arrayHtmlImput.length; i++) {
+                var htmlImput = arrayHtmlImput[i];
+                var esFiltro = htmlImput.getAttribute(Atributo.filtro);
+                if (esFiltro === 'S') {
+                    var id = htmlImput.getAttribute(Atributo.Id);
+                    if (id === null)
+                        console.log(`Falta el atributo id del componente de filtro ${htmlImput}`);
+                    else
+                        arrayIds.push(htmlImput.getAttribute(Atributo.Id));
+                }
+            }
+            return arrayIds;
+        }
+
+        private ObtenerClausulaEditor(editor: HTMLInputElement) {
+            var propiedad: string = editor.getAttribute(Atributo.propiedad);
+            var criterio: string = editor.getAttribute(Atributo.criterio);
+            var valor = editor.value;
+            var clausula = null;
+            if (!EsNula(valor))
+                clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+
+            return clausula;
+        }
+
+        private ObtenerClausulaSelector(selector: HTMLInputElement) {
+            var propiedad = selector.getAttribute(Atributo.propiedad);
+            var criterio = selector.getAttribute(Atributo.criterio);
+            var valor = null;
+            var clausula = null;
+            if (selector.hasAttribute(ListaDeSeleccionados)) {
+                var ids = selector.getAttribute(ListaDeSeleccionados);
+                if (!ids.NoDefinida()) {
+                    valor = ids;
+                    clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+                }
+            }
+            return clausula;
+        }
+
     }
 
     export function EjecutarMenuMnt(accion: string): void {

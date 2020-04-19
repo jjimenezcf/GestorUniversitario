@@ -66,6 +66,8 @@ class ClausulaDeFiltrado {
 }
 class ResultadoJson {
 }
+class ResultadoHtml extends ResultadoJson {
+}
 function ParsearRespuesta(req, peticion) {
     var resultado;
     try {

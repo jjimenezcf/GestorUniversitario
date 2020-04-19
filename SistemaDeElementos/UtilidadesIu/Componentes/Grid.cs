@@ -52,7 +52,6 @@ namespace UtilidadesParaIu
             return RenderizarGrid(this);
         }
 
-
         private static string RenderColumnaCabecera(string idCabecera, ColumnaDelGrid columna)
         {
             var visible = columna.Visible ? "" : "hidden";

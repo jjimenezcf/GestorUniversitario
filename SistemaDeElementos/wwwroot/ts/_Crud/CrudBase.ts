@@ -129,6 +129,7 @@
         // funciones para las peticiones al servidor  ***********************************************************************************************
 
         public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: string) {
+            BlanquearMensaje();
             let error: string;
             this.PeticionAjax(req, url, peticion, () => this.DespuesDeLaPeticion(req), () => error = this.ErrorEnPeticion(req, peticion));
             if (!EsNula(error))

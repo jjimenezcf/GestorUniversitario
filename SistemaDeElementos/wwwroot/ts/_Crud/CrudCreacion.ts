@@ -4,15 +4,37 @@
 
         protected PanelDeCrear: HTMLDivElement;
         protected PanelDeMnt: HTMLDivElement;
+        protected CrudDeMnt: CrudMnt;
 
-        constructor(panelMnt: HTMLDivElement, idPanelCreacion: string) {
+        constructor(crud: CrudMnt, idPanelCreacion: string) {
             super();
 
             if (EsNula(idPanelCreacion))
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this.PanelDeCrear = document.getElementById(idPanelCreacion) as HTMLDivElement;
-            this.PanelDeMnt = panelMnt;
+            this.PanelDeMnt = crud.PanelDeMnt;
+            this.CrudDeMnt = crud;
+        }
+
+
+        public EjecutarAcciones(accion: string) {
+            let hayError: boolean = false;
+            try {
+                if (accion === LiteralCrt.nuevoelemento)
+                    this.Crear();
+                else
+                    if (accion === LiteralCrt.cancelarnuevo)
+                        hayError = false;
+                    else
+                        throw `la opción ${accion} no está definida`;
+            }
+            catch (error) {
+                hayError = true;
+                Mensaje(TipoMensaje.Error, error);
+            }
+
+            if (!hayError) this.CerrarCreacion();
         }
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {
@@ -25,23 +47,14 @@
 
         }
 
-        public Aceptar(panelMostrar: HTMLDivElement) {
-            let json: JSON = null;
-            try {
-                json = this.MapearControlesDeIU(this.PanelDeCrear);
-                this.CrearElemento(json);
-            }
-            catch (error){
-                Mensaje(TipoMensaje.Error,error);
-                return;
-            }
-
-            this.CerrarCreacion(panelMostrar);
-
+        public Crear() {
+            let json: JSON = this.MapearControlesDeIU(this.PanelDeCrear);
+            this.CrearElemento(json);
         }
 
-        public CerrarCreacion(panelMostrar: HTMLDivElement) {
-                this.Cerrar(panelMostrar, this.PanelDeCrear);
+        public CerrarCreacion() {
+            this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
+            this.CrudDeMnt.Buscar();
         }
 
         private CrearElemento(json: JSON) {
@@ -53,27 +66,7 @@
     }
 
     export function EjecutarMenuCrt(accion: string): void {
-
-        if (accion === LiteralCrt.nuevoelemento)
-            NuevoElemento();
-        else
-        if (accion === LiteralCrt.cancelarnuevo)
-            CancelarNuevo();
-        else
-            Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
-    }
-
-    function NuevoElemento() {
-        crudMnt.crudDeCreacion.Aceptar(crudMnt.PanelDeMnt);
-    }
-
-    function CancelarNuevo() {
-        try {
-            crudMnt.crudDeCreacion.CerrarCreacion(crudMnt.PanelDeMnt);
-        }
-        catch (error) {
-            Mensaje(TipoMensaje.Error, error.menssage);
-        }
+        crudMnt.crudDeCreacion.EjecutarAcciones(accion);
     }
 
 }

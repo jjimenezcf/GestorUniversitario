@@ -102,6 +102,10 @@ class ResultadoJson {
     datos: any;
 }
 
+class ResultadoHtml extends ResultadoJson {
+    html: string;
+}
+
 function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ResultadoJson {
     var resultado: any;
     try {

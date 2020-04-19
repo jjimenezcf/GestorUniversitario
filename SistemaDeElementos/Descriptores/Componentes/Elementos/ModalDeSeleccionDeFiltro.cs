@@ -10,18 +10,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Titulo => Ayuda;
 
-        public ModalDeSeleccionDeFiltro(ControlHtml padre, SelectorDeFiltro<TElemento, TSeleccionado> selectorAsociado, DescriptorDeCrud<TSeleccionado> descriptor)
+        public ModalDeSeleccionDeFiltro(SelectorDeFiltro<TElemento, TSeleccionado> selector, DescriptorDeCrud<TSeleccionado> descriptor)
         : base(
-          padre: padre,
-          id: $"Modal_{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
-          etiqueta: $"Seleccionar {selectorAsociado.propiedadParaMostrar}",
-          propiedad: selectorAsociado.propiedadParaMostrar,
-          ayuda: selectorAsociado.Ayuda,
+          padre: selector.Bloque,
+          id: $"Modal_{selector.IdHtml}",    //{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
+          etiqueta: $"Seleccionar {selector.propiedadParaMostrar}",
+          propiedad: selector.propiedadParaMostrar,
+          ayuda: selector.Ayuda,
           posicion: null
         )
         {
             Tipo = TipoControl.GridModal;
-            Selector = selectorAsociado;
+            Selector = selector;
             Selector.Modal = this;
             Descriptor = descriptor;
         }

@@ -14,15 +14,16 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(controlador: "Usuarios", vista: "MantenimientoUsuario", elemento: "Usuario", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
-                new SelectorDeFiltro<UsuarioDto, PermisoDto>(padre: new BloqueDeFitro<UsuarioDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
-                                        etiqueta: "Permiso",
-                                        propiedad: UsuariosPor.Permisos,
-                                        ayuda: "Seleccionar Permiso",
-                                        posicion: new Posicion() { fila = 0, columna = 0 },
-                                        paraFiltrar: nameof(PermisoDto.Id),
-                                        paraMostrar: nameof(PermisoDto.Nombre),
-                                        descriptor: new CrudPermiso(ModoDescriptor.Seleccion),
-                                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
+                new SelectorDeFiltro<UsuarioDto, PermisoDto>(
+                       padre: new BloqueDeFitro<UsuarioDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                       etiqueta: "Permiso",
+                       filtrarPor: UsuariosPor.Permisos,
+                       ayuda: "Seleccionar Permiso",
+                       posicion: new Posicion() { fila = 0, columna = 0 },
+                       paraFiltrar: nameof(PermisoDto.Id),
+                       paraMostrar: nameof(PermisoDto.Nombre),
+                       crudModal: new CrudPermiso(ModoDescriptor.Seleccion),
+                       propiedadDondeMapear: FiltroPor.Nombre.ToString());
             
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 

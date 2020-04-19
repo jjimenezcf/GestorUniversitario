@@ -11,14 +11,24 @@ const Literal = {
 const Atributo = {
     propiedadDto: "propiedad-dto",
     propiedad: "propiedad",
-    criterio: "criterio",
+    criterio: "criterio-de-filtro",
     zonaDeFiltro: "zonaDeFiltro",
-    filtro: "filtro",
+    filtro: "control-de-filtro",
     Id: "Id",
     controlador: "controlador",
     posicion: "posicion",
     obligatorio: "obligatorio",
     totalEnBd: "totalEnBd"
+}
+
+const AtributoSelector = {
+    popiedadBuscar : "propiedadBuscar",
+    criterioBuscar: "criterioBuscar",
+    idEditorMostrar: "idEditorMostrar",
+    idGridModal: "idGridModal",
+    propiedadmostrar: "propiedadmostrar",
+    refCheckDeSeleccion: "refCheckDeSeleccion",
+    idBtnSelector: "idBtnSelector"
 }
 
 const TagName = {
@@ -74,7 +84,9 @@ const LiteralEdt = {
 const LiteralMnt = {
     crearelemento: "crearelemento",
     editarelemento: "editarelemento",
-    idCtrlCantidad: "nav_2_reg"
+    idCtrlCantidad: "nav_2_reg",
+    posicion: "posicion",
+    postfijoDeCheckDeSeleccion: ".chksel"
 };
 
 const TipoControl = {

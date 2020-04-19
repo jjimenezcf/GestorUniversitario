@@ -16,10 +16,10 @@ interface HTMLInputElement {
 
 HTMLInputElement.prototype.InicializarSelector = function (): void {
     var htmlSelector: HTMLInputElement = this;
-    var idGridModal: string = htmlSelector.getAttribute('idGridModal');
+    var idGridModal: string = htmlSelector.getAttribute(AtributoSelector.idGridModal);
     if (!idGridModal.NoDefinida()) {
 
-        var refCheckDeSeleccion: string = htmlSelector.getAttribute('refCheckDeSeleccion');
+        var refCheckDeSeleccion: string = htmlSelector.getAttribute(AtributoSelector.refCheckDeSeleccion);
         if (!refCheckDeSeleccion.NoDefinida()) {
             InicializarModal(idGridModal, refCheckDeSeleccion);
             htmlSelector.BanquearEditorDelGrid();
@@ -59,8 +59,8 @@ HTMLInputElement.prototype.InicializarAtributos = function (): void {
 
 HTMLInputElement.prototype.ClausulaDeFiltrado = function (): ClausulaDeFiltrado {
     var htmlSelector: HTMLInputElement = this;
-    var propiedad = htmlSelector.getAttribute('propiedad');
-    var criterio = htmlSelector.getAttribute('criterio');
+    var propiedad = htmlSelector.getAttribute(Atributo.propiedad);
+    var criterio = htmlSelector.getAttribute(Atributo.criterio);
     var valor = null;
     var clausula = null;
     if (htmlSelector.hasAttribute(ListaDeSeleccionados)) {
@@ -74,8 +74,8 @@ HTMLInputElement.prototype.ClausulaDeFiltrado = function (): ClausulaDeFiltrado 
 };
 
 HTMLInputElement.prototype.ClausulaDeBuscarValorEditado = function (): ClausulaDeFiltrado {
-    var propiedad = this.getAttribute('propiedadBuscar');
-    var criterio = this.getAttribute('criterioBuscar');
+    var propiedad = this.getAttribute(AtributoSelector.popiedadBuscar);
+    var criterio = this.getAttribute(AtributoSelector.criterioBuscar);
     var valor = this.value.trim();
 
     this.InicializarSelector();
@@ -92,7 +92,7 @@ HTMLInputElement.prototype.BanquearEditorDelGrid = function (): void {
 
 HTMLInputElement.prototype.EditorDelGrid = function (): HTMLInputElement {
     var htmlSelector: HTMLInputElement = this;
-    var idEditorMostrar: string = htmlSelector.getAttribute('idEditorMostrar');
+    var idEditorMostrar: string = htmlSelector.getAttribute(idEditorMostrar);
     var htmlEditor: HTMLInputElement = <HTMLInputElement>document.getElementById(idEditorMostrar);
     return htmlEditor;
 };
@@ -149,7 +149,7 @@ function AlCambiarTextoSelector(idSelector: string, controlador: string) {
     }
     else {
         htmlSelector.InicializarSelector();
-        var refCheckDeSeleccion: string = htmlSelector.getAttribute('refCheckDeSeleccion');
+        var refCheckDeSeleccion: string = htmlSelector.getAttribute(AtributoSelector.refCheckDeSeleccion);
         if (!refCheckDeSeleccion.NoDefinida()) {
             blanquearCheck(refCheckDeSeleccion);
         }
@@ -159,12 +159,12 @@ function AlCambiarTextoSelector(idSelector: string, controlador: string) {
 
 function recargarGrid(idGrid) {
     BlanquearMensaje();
-    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idGrid}_${LiteralMnt.idCtrlCantidad}`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
+        console.log(`El elemento ${idGrid}_${LiteralMnt.idCtrlCantidad} no está definido`);
     else {
         var cantidad: number = htmlImputCantidad.value.Numero();
-        var posicion: number = htmlImputCantidad.getAttribute("posicion").Numero();
+        var posicion: number = htmlImputCantidad.getAttribute(LiteralMnt.posicion).Numero();
         if (posicion - cantidad !== 0)
             Leer(idGrid);
     }
@@ -244,7 +244,7 @@ function marcarElementos(idGrid, columnaId, infSel) {
         for (var j = 0; j < len; j++) {
             var id = infSel.LeerId(i);
             if ((<HTMLInputElement>celdasId[j]).value === id) {
-                var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
+                var idCheck = celdasId[j].id.replace(`.${columnaId}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                 var check = document.getElementById(idCheck);
                 (<HTMLInputElement>check).checked = true;
                 break;
@@ -293,7 +293,7 @@ function LeerParaSelector(url: string, htmlSelector: HTMLSelector, funcionDeResp
 }
 
 function ProcesarRegistrosLeidos(htmlSelector: HTMLSelector, registros: string) {
-    var propiedadmostrar = htmlSelector.getAttribute('propiedadmostrar');
+    var propiedadmostrar = htmlSelector.getAttribute(AtributoSelector.propiedadmostrar);
     if (!propiedadmostrar.NoDefinida()) {
         var registrosJson = JSON.parse(registros);
         if (registrosJson.length === 1) {
@@ -307,7 +307,7 @@ function ProcesarRegistrosLeidos(htmlSelector: HTMLSelector, registros: string) 
             }
         }
         else {
-            var idBtnSelector = htmlSelector.getAttribute('idBtnSelector');
+            var idBtnSelector = htmlSelector.getAttribute(AtributoSelector.idBtnSelector);
             var btnSelector: HTMLInputElement = <HTMLInputElement>document.getElementById(idBtnSelector);
             btnSelector.click();
         }

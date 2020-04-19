@@ -15,12 +15,12 @@ namespace MVCSistemaDeElementos.Descriptores
                 var modalUsuario = new CrudUsuario(ModoDescriptor.Seleccion);
                 new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
                                               etiqueta: "Usuario",
-                                              propiedad: PermisoPor.PermisoDeUnRol,
+                                              filtrarPor: PermisoPor.PermisoDeUnRol,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 0 },
                                               paraFiltrar: nameof(UsuarioDtm.Id),
                                               paraMostrar: nameof(UsuarioDtm.Apellido),
-                                              descriptor: modalUsuario,
+                                              crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
             }
 

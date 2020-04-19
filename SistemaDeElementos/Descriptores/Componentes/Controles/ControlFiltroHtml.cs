@@ -18,7 +18,7 @@
         public override string RenderAtributos(string atributos = "")
         {
             atributos = base.RenderAtributos(atributos);
-            atributos += $"filtro=¨S¨ criterio=¨{Criterio}¨ ";
+            atributos += $"control-de-filtro=¨S¨ criterio-de-filtro=¨{Criterio}¨ ";
             return atributos;
         }
     }

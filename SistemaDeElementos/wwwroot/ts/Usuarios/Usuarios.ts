@@ -4,23 +4,23 @@
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string) {
             super(idPanelMnt);
-            this.crudDeCreacion = new CrudCreacionUsuario(this.PanelDeMnt,idPanelCreacion);
-            this.crudDeEdicion = new CrudEdicionUsuario(this.PanelDeMnt,idPanelEdicion);
+            this.crudDeCreacion = new CrudCreacionUsuario(this, idPanelCreacion);
+            this.crudDeEdicion = new CrudEdicionUsuario(this, idPanelEdicion);
         }
     }
 
     export class CrudCreacionUsuario extends Crud.CrudCreacion {
 
-        constructor(panelMnt: HTMLDivElement, idPanelCreacion: string) {
-            super(panelMnt, idPanelCreacion);
+        constructor(crud: Crud.CrudMnt, idPanelCreacion: string) {
+            super(crud, idPanelCreacion);
         }
 
     }
 
     export class CrudEdicionUsuario extends Crud.CrudEdicion {
 
-        constructor(panelMnt: HTMLDivElement, idPanelEdicion: string) {
-            super(panelMnt, idPanelEdicion);
+        constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
+            super(crud, idPanelEdicion);
         }
     }
 }

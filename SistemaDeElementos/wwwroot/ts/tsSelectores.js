@@ -3,9 +3,9 @@ class HTMLSelector extends HTMLInputElement {
 }
 HTMLInputElement.prototype.InicializarSelector = function () {
     var htmlSelector = this;
-    var idGridModal = htmlSelector.getAttribute('idGridModal');
+    var idGridModal = htmlSelector.getAttribute(AtributoSelector.idGridModal);
     if (!idGridModal.NoDefinida()) {
-        var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
+        var refCheckDeSeleccion = htmlSelector.getAttribute(AtributoSelector.refCheckDeSeleccion);
         if (!refCheckDeSeleccion.NoDefinida()) {
             InicializarModal(idGridModal, refCheckDeSeleccion);
             htmlSelector.BanquearEditorDelGrid();
@@ -40,8 +40,8 @@ HTMLInputElement.prototype.InicializarAtributos = function () {
 };
 HTMLInputElement.prototype.ClausulaDeFiltrado = function () {
     var htmlSelector = this;
-    var propiedad = htmlSelector.getAttribute('propiedad');
-    var criterio = htmlSelector.getAttribute('criterio');
+    var propiedad = htmlSelector.getAttribute(Atributo.propiedad);
+    var criterio = htmlSelector.getAttribute(Atributo.criterio);
     var valor = null;
     var clausula = null;
     if (htmlSelector.hasAttribute(ListaDeSeleccionados)) {
@@ -54,8 +54,8 @@ HTMLInputElement.prototype.ClausulaDeFiltrado = function () {
     return clausula;
 };
 HTMLInputElement.prototype.ClausulaDeBuscarValorEditado = function () {
-    var propiedad = this.getAttribute('propiedadBuscar');
-    var criterio = this.getAttribute('criterioBuscar');
+    var propiedad = this.getAttribute(AtributoSelector.popiedadBuscar);
+    var criterio = this.getAttribute(AtributoSelector.criterioBuscar);
     var valor = this.value.trim();
     this.InicializarSelector();
     var clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
@@ -69,7 +69,7 @@ HTMLInputElement.prototype.BanquearEditorDelGrid = function () {
 };
 HTMLInputElement.prototype.EditorDelGrid = function () {
     var htmlSelector = this;
-    var idEditorMostrar = htmlSelector.getAttribute('idEditorMostrar');
+    var idEditorMostrar = htmlSelector.getAttribute(idEditorMostrar);
     var htmlEditor = document.getElementById(idEditorMostrar);
     return htmlEditor;
 };
@@ -113,7 +113,7 @@ function AlCambiarTextoSelector(idSelector, controlador) {
     }
     else {
         htmlSelector.InicializarSelector();
-        var refCheckDeSeleccion = htmlSelector.getAttribute('refCheckDeSeleccion');
+        var refCheckDeSeleccion = htmlSelector.getAttribute(AtributoSelector.refCheckDeSeleccion);
         if (!refCheckDeSeleccion.NoDefinida()) {
             blanquearCheck(refCheckDeSeleccion);
         }
@@ -121,12 +121,12 @@ function AlCambiarTextoSelector(idSelector, controlador) {
 }
 function recargarGrid(idGrid) {
     BlanquearMensaje();
-    var htmlImputCantidad = document.getElementById(`${idGrid}_nav_2_reg`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_${LiteralMnt.idCtrlCantidad}`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}_nav_2_reg  no está definido`);
+        console.log(`El elemento ${idGrid}_${LiteralMnt.idCtrlCantidad} no está definido`);
     else {
         var cantidad = htmlImputCantidad.value.Numero();
-        var posicion = htmlImputCantidad.getAttribute("posicion").Numero();
+        var posicion = htmlImputCantidad.getAttribute(LiteralMnt.posicion).Numero();
         if (posicion - cantidad !== 0)
             Leer(idGrid);
     }
@@ -188,7 +188,7 @@ function marcarElementos(idGrid, columnaId, infSel) {
         for (var j = 0; j < len; j++) {
             var id = infSel.LeerId(i);
             if (celdasId[j].value === id) {
-                var idCheck = celdasId[j].id.replace(`.${columnaId}`, ".chksel");
+                var idCheck = celdasId[j].id.replace(`.${columnaId}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                 var check = document.getElementById(idCheck);
                 check.checked = true;
                 break;
@@ -227,7 +227,7 @@ function LeerParaSelector(url, htmlSelector, funcionDeRespuesta) {
     req.send();
 }
 function ProcesarRegistrosLeidos(htmlSelector, registros) {
-    var propiedadmostrar = htmlSelector.getAttribute('propiedadmostrar');
+    var propiedadmostrar = htmlSelector.getAttribute(AtributoSelector.propiedadmostrar);
     if (!propiedadmostrar.NoDefinida()) {
         var registrosJson = JSON.parse(registros);
         if (registrosJson.length === 1) {
@@ -241,7 +241,7 @@ function ProcesarRegistrosLeidos(htmlSelector, registros) {
             }
         }
         else {
-            var idBtnSelector = htmlSelector.getAttribute('idBtnSelector');
+            var idBtnSelector = htmlSelector.getAttribute(AtributoSelector.idBtnSelector);
             var btnSelector = document.getElementById(idBtnSelector);
             btnSelector.click();
         }
