@@ -55,17 +55,17 @@
         let url: string = `/Menus/${Ajax.EndPoint.SolicitarMenuEnHtml}?${Ajax.Param.usuario}=${usuario}`;
         let req: XMLHttpRequest = new XMLHttpRequest();
         req.open('GET', url, false);
-        PeticionSolicitarMenu(req, () => DespuesDeSolitarMenu(req, idContenedorMenu), () => ErrorAlSolicitarMenu(req));
+        PeticionSolicitarMenu(req, Ajax.EndPoint.SolicitarMenuEnHtml, () => DespuesDeSolitarMenu(req, idContenedorMenu), () => ErrorAlSolicitarMenu(req));
     }
 
-    function PeticionSolicitarMenu(req: XMLHttpRequest, despuesDeSolitarMenu: Function, errorAlSolicitarMenu: Function) {
+    function PeticionSolicitarMenu(req: XMLHttpRequest, peticion: string, despuesDeSolitarMenu: Function, errorAlSolicitarMenu: Function) {
 
         function respuestaCorrecta() {
             if (EsNula(req.response)) {
                 errorAlSolicitarMenu();
             }
             else {
-                var resultado: any = ParsearRespuesta(req);
+                var resultado: any = ParsearRespuesta(req, peticion);
                 if (resultado !== undefined) {
                     if (resultado.estado === Ajax.jsonResultError) {
                         errorAlSolicitarMenu();

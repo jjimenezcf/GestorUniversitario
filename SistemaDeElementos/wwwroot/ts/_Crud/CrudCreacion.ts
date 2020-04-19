@@ -6,7 +6,7 @@
         protected PanelDeMnt: HTMLDivElement;
 
         constructor(idPanelCreacion: string) {
-            super(ModoTrabajo.creando);
+            super();
 
             if (EsNula(idPanelCreacion))
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
@@ -28,16 +28,15 @@
             let json: JSON = null;
             try {
                 json = this.MapearControlesDeIU(this.PanelDeCrear);
+                this.CrearElemento(json);
             }
-            catch (error) {
-                this.ResultadoPeticion = error.message;
+            catch (error){
+                Mensaje(TipoMensaje.Error,error);
                 return;
             }
-            this.CrearElemento(json);
 
-            if (this.PeticioCorrecta) {
-                this.CerrarCreacion(panelMostrar);
-            }
+            this.CerrarCreacion(panelMostrar);
+
         }
 
         public CerrarCreacion(panelMostrar: HTMLDivElement) {
@@ -48,7 +47,7 @@
             let controlador = this.PanelDeCrear.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url,  Ajax.EndPoint.Crear);
+            this.PeticionSincrona(req, url, Ajax.EndPoint.Crear);
         }
     }
 

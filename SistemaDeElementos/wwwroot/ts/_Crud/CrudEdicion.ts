@@ -5,7 +5,7 @@
         protected PanelDeEditar: HTMLDivElement;
 
         constructor(idPanelEdicion: string) {
-            super(ModoTrabajo.editando);
+            super();
 
             if (EsNula(idPanelEdicion))
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición")
@@ -50,16 +50,13 @@
             let json: JSON = null;
             try {
                 json = this.MapearControlesDeIU(this.PanelDeEditar);
+                this.ModificarElemento(json);
             }
             catch (error) {
-                this.ResultadoPeticion = error.message;
-                return;
+                throw error;
             }
-            this.ModificarElemento(json);
 
-            if (this.PeticioCorrecta) {
-                this.CerrarEdicion(panelMnt);
-            }
+            this.CerrarEdicion(panelMnt);
         }
 
         private ModificarElemento(json: JSON) {
@@ -69,7 +66,7 @@
             this.PeticionSincrona(req, url, Ajax.EndPoint.Modificar);
         }
 
-        protected DespuesDeLaPeticion(req): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
             let resultado = super.DespuesDeLaPeticion(req);
             this.MapearElemento(this.PanelDeEditar, resultado.datos);
             return resultado;

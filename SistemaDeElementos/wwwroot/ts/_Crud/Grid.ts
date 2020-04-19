@@ -82,7 +82,7 @@ function Leer(idGrid) {
         Mensaje(TipoMensaje.Error, `El elemento ${idCrtlCantidad} no está definido`);
     else {
         let req: XMLHttpRequest = PeticionSincrona(htmlImputCantidad, idGrid, 0);
-        LeerDatosDelGrid(req, idGrid, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
+        LeerDatosDelGrid(req, idGrid, Ajax.EndPoint.LeerGridEnHtml, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
     }
 }
 
@@ -99,7 +99,7 @@ function LeerAnteriores(idGrid) {
             Leer(idGrid);
         else {
             let req: XMLHttpRequest = PeticionSincrona(htmlImputCantidad, idGrid, posicion);
-            LeerDatosDelGrid(req, idGrid, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
+            LeerDatosDelGrid(req, idGrid, Ajax.EndPoint.LeerGridEnHtml, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
         }
     }
 }
@@ -117,7 +117,7 @@ function LeerSiguientes(idGrid: string) {
             LeerUltimos(idGrid);
         else {
             let req: XMLHttpRequest = PeticionSincrona(htmlImputCantidad, idGrid, posicion);
-            LeerDatosDelGrid(req, idGrid, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
+            LeerDatosDelGrid(req, idGrid, Ajax.EndPoint.LeerGridEnHtml, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
         }
     }
 }
@@ -135,19 +135,19 @@ function LeerUltimos(idGrid) {
         else {
             let posicion: number = totalEnBd - cantidad;
             let req: XMLHttpRequest = PeticionSincrona(htmlImputCantidad, idGrid, posicion);
-            LeerDatosDelGrid(req, idGrid, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
+            LeerDatosDelGrid(req, idGrid, Ajax.EndPoint.LeerGridEnHtml, () => SustituirGrid(req, idGrid), () => ErrorEnLaPeticion(req));
         }
     }
 }
 
-function LeerDatosDelGrid(req: XMLHttpRequest, idGrid: string, sustituirGrid: Function, errorEnLaPeticion: Function) {
+function LeerDatosDelGrid(req: XMLHttpRequest, idGrid: string, peticion: string,  sustituirGrid: Function, errorEnLaPeticion: Function) {
 
     function respuestaCorrecta() {
         if (EsNula(req.response)) {
             errorEnLaPeticion();
         }
         else {
-            var resultado: any = ParsearRespuesta(req);
+            var resultado: any = ParsearRespuesta(req, peticion);
             if (resultado.estado === Ajax.jsonResultError) {
                 errorEnLaPeticion();
             }

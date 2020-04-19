@@ -64,14 +64,16 @@ class ClausulaDeFiltrado {
         return this.Propiedad.NoDefinida() || this.Valor.NoDefinida() || this.Criterio.NoDefinida();
     }
 }
-function ParsearRespuesta(req) {
+class ResultadoJson {
+}
+function ParsearRespuesta(req, peticion) {
     var resultado;
     try {
         resultado = JSON.parse(req.response);
     }
     catch {
-        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenuEnHtml}`);
-        undefined;
+        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
+        return undefined;
     }
     return resultado;
 }

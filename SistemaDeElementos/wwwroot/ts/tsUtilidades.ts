@@ -95,16 +95,22 @@ class ClausulaDeFiltrado {
     }
 }
 
+class ResultadoJson {
+    estado: number;
+    mensaje: string;
+    consola: string;
+    datos: any;
+}
 
-function ParsearRespuesta(req: XMLHttpRequest): any {
+function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ResultadoJson {
     var resultado: any;
     try {
         resultado = JSON.parse(req.response);
     }
     catch
     {
-        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${Ajax.EndPoint.SolicitarMenuEnHtml}`);
-        undefined;
+        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
+        return undefined;
     }
     return resultado;
 }
