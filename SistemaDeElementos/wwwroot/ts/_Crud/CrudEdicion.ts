@@ -3,14 +3,35 @@
     export class CrudEdicion extends CrudBase {
 
         protected PanelDeEditar: HTMLDivElement;
+        protected PanelDeMnt: HTMLDivElement;
 
-        constructor(idPanelEdicion: string) {
+        constructor(panelMnt: HTMLDivElement, idPanelEdicion: string) {
             super();
 
             if (EsNula(idPanelEdicion))
-                throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición")
+                throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
             this.PanelDeEditar = document.getElementById(idPanelEdicion) as HTMLDivElement;
+            this.PanelDeMnt = panelMnt;
+        }
+
+        public EjecutarAcciones(accion: string) {
+            let hayError: boolean = false;
+            try {
+                if (accion === LiteralEdt.modificarelemento)
+                    this.Modificar();
+                else
+                    if (accion === LiteralEdt.cancelaredicion)
+                        this.CerrarEdicion();
+                    else
+                        Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
+            }
+            catch (error) {
+                hayError = true;
+                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+            }
+
+            if (!hayError) this.CerrarEdicion();
         }
 
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
@@ -19,8 +40,8 @@
             this.InicializarValores(infSel);
         }
 
-        public CerrarEdicion(panelMostrar: HTMLDivElement) {
-                this.Cerrar(panelMostrar, this.PanelDeEditar);
+        protected CerrarEdicion() {
+            this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
         }
 
         protected InicializarValores(infSel: InfoSelector) {
@@ -46,17 +67,9 @@
             this.PeticionSincrona(req, url, Ajax.EndPoint.LeerPorIds);
         }
 
-        public Modificar(panelMnt: HTMLDivElement) {
-            let json: JSON = null;
-            try {
-                json = this.MapearControlesDeIU(this.PanelDeEditar);
-                this.ModificarElemento(json);
-            }
-            catch (error) {
-                throw error;
-            }
-
-            this.CerrarEdicion(panelMnt);
+        protected Modificar() {
+            let json: JSON = this.MapearControlesDeIU(this.PanelDeEditar);
+            this.ModificarElemento(json);
         }
 
         private ModificarElemento(json: JSON) {
@@ -75,27 +88,7 @@
     }
 
     export function EjecutarMenuEdt(accion: string): void {
-
-        if (accion === LiteralEdt.modificarelemento)
-            ModificarElemento();
-        else
-        if (accion === LiteralEdt.cancelaredicion)
-            CancelarEdicion();
-        else
-            Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
+        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
     }
 
-    function ModificarElemento() {
-        crudMnt.crudDeEdicion.Modificar(crudMnt.PanelDeMnt);
-
-    }
-
-    function CancelarEdicion() {
-        try {
-            crudMnt.crudDeEdicion.CerrarEdicion(crudMnt.PanelDeMnt);
-        }
-        catch (error) {
-            Mensaje(TipoMensaje.Error, error.menssage);
-        }
-    }
 }

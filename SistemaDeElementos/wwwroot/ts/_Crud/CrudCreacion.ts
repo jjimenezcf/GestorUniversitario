@@ -5,13 +5,14 @@
         protected PanelDeCrear: HTMLDivElement;
         protected PanelDeMnt: HTMLDivElement;
 
-        constructor(idPanelCreacion: string) {
+        constructor(panelMnt: HTMLDivElement, idPanelCreacion: string) {
             super();
 
             if (EsNula(idPanelCreacion))
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this.PanelDeCrear = document.getElementById(idPanelCreacion) as HTMLDivElement;
+            this.PanelDeMnt = panelMnt;
         }
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {

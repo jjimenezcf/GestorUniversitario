@@ -73,13 +73,10 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaOrdenacion> ordenacion)
-        {
+        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaOrdenacion> ordenacion)        {
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
-        }
-
-               
+        }               
 
         protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) 
         {
@@ -90,8 +87,7 @@ namespace Gestor.Elementos.Entorno
             return registros
                    .FiltrarPorNombre(filtros)
                    .FiltrarPorRelacion(filtros);
-        }
-                
+        }                
 
         protected override UsuarioDtm LeerConDetalle(int Id)
         {
@@ -102,22 +98,28 @@ namespace Gestor.Elementos.Entorno
                             .FirstOrDefault(m => m.Id == Id);
         }
 
-        protected override void AntesMapearRegistro(UsuarioDto elemento, ParametrosDeNegocio opciones)
+        protected override void AntesEliminarFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
-            base.AntesMapearRegistro(elemento, opciones);
+            base.AntesNuevaFila(usuarioDto, opciones);
+            usuarioDto.Alta = System.DateTime.Now;
+            validarDatos(usuarioDto);
+        }
 
-            if (opciones.Tipo == TipoOperacion.Insertar)
-                elemento.Alta = System.DateTime.Now;
+        protected override void AntesModificarFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
+        {
+            base.AntesModificarFila(usuarioDto, opciones);
+            validarDatos(usuarioDto);
+        }
 
-            if (opciones.Tipo == TipoOperacion.Insertar || opciones.Tipo == TipoOperacion.Modificar)
-            {
-                if (elemento.Login.IsNullOrEmpty())
-                    Errores.GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
-                if (elemento.Apellido.IsNullOrEmpty())
-                    Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
-                if (elemento.Nombre.IsNullOrEmpty())
-                    Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");                
-            }
+   
+        private void validarDatos(UsuarioDto usuarioDto)
+        {
+            if (usuarioDto.Login.IsNullOrEmpty())
+                Errores.GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
+            if (usuarioDto.Apellido.IsNullOrEmpty())
+                Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
+            if (usuarioDto.Nombre.IsNullOrEmpty())
+                Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");
         }
 
     }

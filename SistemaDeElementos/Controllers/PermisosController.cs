@@ -65,16 +65,6 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-
-        [HttpPost, ActionName(nameof(BorrarPermiso))]
-        [ValidateAntiForgeryToken]
-        public IActionResult BorrarPermiso(int id)
-        {
-
-            GestorDeElementos.BorrarPorId(id);
-            return IraMantenimientoPermiso("");
-        }
-
         private PermisoDto LeerPermiso(int? id)
         {
             if (id == null)

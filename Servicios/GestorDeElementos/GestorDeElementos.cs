@@ -15,7 +15,7 @@ namespace Gestor.Elementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
     public enum ModoDeOrdenancion { ascendente, descendente }
-    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida};
+    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar};
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -222,6 +222,9 @@ namespace Gestor.Elementos
                     if (parametros.Tipo == TipoOperacion.Modificar)
                         Contexto.Update(registro);
                     else
+                    if (parametros.Tipo == TipoOperacion.Eliminar)
+                        Contexto.Remove(registro);
+                    else
                         throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar}");
                 }
 
@@ -236,11 +239,9 @@ namespace Gestor.Elementos
             }
         }
 
-
-
         #endregion
 
-        #region Métodos de modificación
+        #region Métodos de modificación (son los de persistencia)
 
         //public void ModificarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
         //{
@@ -437,7 +438,28 @@ namespace Gestor.Elementos
                 registro.Id = 0;
         }
 
-        protected virtual void AntesMapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
+        private void AntesMapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
+        {
+
+            if (opciones.Tipo == TipoOperacion.Insertar)
+                AntesNuevaFila(elemento, opciones);
+            else
+            if (opciones.Tipo == TipoOperacion.Modificar)
+                AntesModificarFila(elemento, opciones);
+            else
+            if (opciones.Tipo == TipoOperacion.Eliminar)
+                AntesEliminarFila(elemento, opciones);
+        }
+
+        protected virtual void AntesEliminarFila(TElemento elemento, ParametrosDeNegocio opciones)
+        {
+        }
+
+        protected virtual void AntesModificarFila(TElemento elemento, ParametrosDeNegocio opciones)
+        {
+        }
+
+        protected virtual void AntesNuevaFila(TElemento elemento, ParametrosDeNegocio opciones)
         {
         }
 
@@ -489,6 +511,7 @@ namespace Gestor.Elementos
         #endregion
 
 
+
         #region codigo creo que obsoleto
 
         public TElemento LeerElementoPorId(int id)
@@ -505,18 +528,10 @@ namespace Gestor.Elementos
             return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
         }
 
-
         public TElemento LeerElementoConDetalle(int id)
         {
             var elementoLeido = LeerConDetalle(id);
             return MapearElemento(elementoLeido);
-        }
-
-        public void BorrarPorId(int id)
-        {
-            var registro = LeerRegistroPorId(id);
-            Contexto.Remove(registro);
-            Contexto.SaveChangesAsync();
         }
 
         #endregion
