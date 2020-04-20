@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -46,17 +47,25 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor;
         }
 
-        public string RenderDelGrid()
+        public string RenderDelGrid(ModoDescriptor modo)
+        {
+            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
+            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
+            crud.CambiarModo(modo);
+            return RenderDelGrid();
+
+        }
+
+        private string RenderDelGrid()
         {
             var mnt = (DescriptorMantenimiento<TElemento>)Padre;
             var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
 
-            var grid = new Grid(IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
-            {               
+            var grid = new Grid<TElemento>(crud, IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
+            {
                 Controlador = crud.Controlador,
                 TotalEnBd = TotalEnBd
             };
-
             var htmlGrid = grid.ToHtml();
             return htmlGrid.Render();
         }

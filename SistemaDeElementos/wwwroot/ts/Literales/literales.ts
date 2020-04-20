@@ -24,7 +24,7 @@ const Atributo = {
 const AtributoSelector = {
     popiedadBuscar : "propiedadBuscar",
     criterioBuscar: "criterioBuscar",
-    idEditorMostrar: "idEditorMostrar",
+    idEditorMostrar: "ideditormostrar",
     idGridModal: "idGridModal",
     propiedadmostrar: "propiedadmostrar",
     refCheckDeSeleccion: "refCheckDeSeleccion",
@@ -56,6 +56,7 @@ const Ajax = {
     Param: {
         elementoJson: "elementoJson",
         idGrid: "idGrid",
+        modo: "modo",
         posicion: "posicion",
         cantidad: "cantidad",
         filtro: "filtro",
@@ -82,11 +83,15 @@ const LiteralEdt = {
 };
 
 const LiteralMnt = {
-    crearelemento: "crearelemento",
-    editarelemento: "editarelemento",
+    CrearElemento: "crearelemento",
+    EditarElemento: "editarelemento",
     idCtrlCantidad: "nav_2_reg",
     posicion: "posicion",
-    postfijoDeCheckDeSeleccion: ".chksel"
+    postfijoDeCheckDeSeleccion: ".chksel",
+    Buscar: "buscar",
+    ObtenerAnteriores: "obteneranteriores",
+    ObtenerSiguientes: "obtenersiguientes",
+    ObtenerUltimos: "obtenerultimos"
 };
 
 const TipoControl = {

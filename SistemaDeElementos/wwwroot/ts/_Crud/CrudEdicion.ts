@@ -44,7 +44,7 @@
 
         protected CerrarEdicion() {
             this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
-            this.CrudDeMnt.Buscar();
+            this.CrudDeMnt.Buscar(0);
         }
 
         protected InicializarValores(infSel: InfoSelector) {

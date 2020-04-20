@@ -6,7 +6,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion }
 
-    public class VistaCsHtml: ControlHtml
+    public class VistaCsHtml : ControlHtml
     {
         public string Ruta { get; private set; }
         public string Vista { get; private set; }
@@ -67,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             if (Modo == ModoDescriptor.Mantenimiento)
             {
-                Creador =  new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
+                Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
                 Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
 
                 Mnt.MenuDeMnt.AnadirOpcionDeCreacion();
@@ -78,6 +78,11 @@ namespace MVCSistemaDeElementos.Descriptores
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
             return Mnt.Filtro.BuscarControl(propiedad);
+        }
+
+        public void CambiarModo(ModoDescriptor modo)
+        {
+            Modo = modo;
         }
 
         protected virtual void DefinirColumnasDelGrid()
@@ -98,10 +103,24 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             return Mnt.RenderControl() +
                    (
-                    ModoDescriptor.Mantenimiento == Modo 
-                    ? $"{Environment.NewLine}{Creador.RenderControl()}{Environment.NewLine}{Editor.RenderControl()}" 
+                    ModoDescriptor.Mantenimiento == Modo
+                    ? $"{Environment.NewLine}{Creador.RenderControl()}{Environment.NewLine}{Editor.RenderControl()}"
                     : ""
                    );
+        }
+
+        public static ModoDescriptor ParsearModo(string modo)
+        {
+            switch (modo)
+            {
+                case nameof(ModoDescriptor.Seleccion):
+                    return ModoDescriptor.Seleccion;
+                case nameof(ModoDescriptor.Mantenimiento):
+                    return ModoDescriptor.Mantenimiento;
+                case nameof(ModoDescriptor.Consulta):
+                    return ModoDescriptor.Consulta;
+            }
+            throw new Exception($"El modo {modo} no está definido");
         }
     }
 

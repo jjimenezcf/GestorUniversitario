@@ -2,12 +2,16 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Text.Json;
+using MVCSistemaDeElementos.Descriptores;
+using Gestor.Elementos.ModeloIu;
 
 namespace UtilidadesParaIu
 {
-    public class Grid
+    public class Grid<TElemento>
     {
         public string Id { get; private set; }
+
+        private DescriptorDeCrud<TElemento> Crud {get; set;}
 
         public string IdHtml => Id.ToLower();
 
@@ -32,8 +36,9 @@ namespace UtilidadesParaIu
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
-        public Grid(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
+        public Grid(DescriptorDeCrud<TElemento> crud, string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
         {
+            Crud = crud;
             IniciarClase(idGrid, columnasGrid, filasDelGrid, posicionInicial, cantidadPorLeer);
         }
 
@@ -200,30 +205,50 @@ namespace UtilidadesParaIu
                       </tbody>";
         }
 
-        private static string RenderNavegadorGrid(Grid grid)
+        private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
+
+            var accionSiguiente = grid.Crud.Modo == ModoDescriptor.Seleccion 
+                ? $"LeerSiguientes('{grid.IdHtml}')" 
+                : $"Crud.EjecutarMenuMnt('obtenersiguientes')";
+
+            var accionBuscar = grid.Crud.Modo == ModoDescriptor.Seleccion
+                ? $"Leer('{grid.IdHtml}')"
+                : $"Crud.EjecutarMenuMnt('buscar')";
+
+            var accionAnterior = grid.Crud.Modo == ModoDescriptor.Seleccion
+                ? $"LeerAnteriores('{grid.IdHtml}')"
+                : $"Crud.EjecutarMenuMnt('obteneranteriores')";
+
+            var accionUltimos = grid.Crud.Modo == ModoDescriptor.Seleccion
+                ? $"LeerUltimos('{grid.IdHtml}')"
+                : $"Crud.EjecutarMenuMnt('obtenerultimos')";
+
             var htmlNavegadorGrid = $@"
-            <div class=¨text-center¨>
-                <div id=¨{grid.IdHtmlNavegador}¨ style=¨float: left¨>
-                    <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ width=¨22¨ height=¨22¨ onclick=¨Leer('{grid.IdHtml}')¨>
+            <div id= ¨{grid.IdHtml}_pie¨ class=¨pie-grid¨>
+                <div id=¨{grid.IdHtmlNavegador}¨ class = ¨navegador-grid¨>
+                    <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨{accionBuscar}¨>
                     </div>
-                    <div id=¨{grid.IdHtmlNavegador_2}¨ class=¨mx-sm-3¨ style=¨display:inline-block¨>
-                        <input type=¨number¨ id=¨{grid.IdHtmlPorLeer}¨ value=¨{grid._CantidadPorLeer}¨ 
-                                             min=¨1¨ step=¨1¨ max=¨999¨ 
-                                             posicion=¨{grid.Ultimo_Leido}¨  
-                                             controlador=¨{grid.Controlador}¨  
-                                             totalEnBd=¨{grid.TotalEnBd}¨ title=¨leidos {grid.filas.Count} de {grid.TotalEnBd} desde la posición {grid._PosicionInicial}¨ 
-                                             style=¨width: 50px;margin-top: 5px;align-content:center; border-radius: 10px¨>
+                    <div id=¨{grid.IdHtmlNavegador_2}¨>
+                        <input type=¨number¨ 
+                               id=¨{grid.IdHtmlPorLeer}¨ 
+                               class = ¨cantidad-grid¨
+                               value=¨{grid._CantidadPorLeer}¨ 
+                               min=¨1¨ step=¨1¨ max=¨999¨ 
+                               posicion=¨{grid.Ultimo_Leido}¨  
+                               controlador=¨{grid.Controlador}¨  
+                               totalEnBd=¨{grid.TotalEnBd}¨ 
+                               title=¨leidos {grid.filas.Count} desde la posición {grid._PosicionInicial}¨ />
                     </div>
-                    <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ style=¨display:inline-block¨>
-                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ width=¨22¨ height=¨22¨ onclick=¨LeerAnteriores('{grid.IdHtml}')¨>
-                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ width=¨22¨ height=¨22¨ onclick=¨LeerSiguientes('{grid.IdHtml}')¨>
-                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ width=¨22¨ height=¨22¨ onclick=¨LeerUltimos('{grid.IdHtml}')¨>
+                    <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨{accionAnterior}¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ onclick=¨{accionSiguiente}¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨{accionUltimos}¨>
                     </div>
                 </div>
-                <div  style=¨float: right¨>
-                   {grid.filas.Count} de {grid.TotalEnBd}
+                <div id= ¨{grid.IdHtml}_info¨ class=¨info-grid¨>
+                   {grid.filas.Count} desde la posición {grid._PosicionInicial}
                 </div>
             </div>
             ";
@@ -236,7 +261,7 @@ namespace UtilidadesParaIu
             return htmlOpcionesGrid;
         }
 
-        private static string RenderizarGrid(Grid grid)
+        private static string RenderizarGrid(Grid<TElemento> grid)
         {
             var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ 
                                       class=¨table table-hover¨ 

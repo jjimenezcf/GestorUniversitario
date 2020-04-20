@@ -54,7 +54,7 @@
 
         public CerrarCreacion() {
             this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
-            this.CrudDeMnt.Buscar();
+            this.CrudDeMnt.Buscar(0);
         }
 
         private CrearElemento(json: JSON) {

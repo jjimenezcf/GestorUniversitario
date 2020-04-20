@@ -12,6 +12,7 @@ using Utilidades;
 using MVCSistemaDeElementos.UtilidadesIu;
 using Newtonsoft.Json;
 using MVCSistemaDeElementos.Descriptores;
+using System.Linq;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -120,13 +121,34 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         //END-POINT: Desde Grid.ts
-        public JsonResult epLeerGridHtml(string posicion, string cantidad, string filtro, string orden)
+        public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
         {
             var r = new ResultadoHtml();
+            int pos = posicion.Entero();
+            int can = cantidad.Entero();
             try
             {
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(Leer(posicion.Entero(), cantidad.Entero(), filtro, orden));
-                r.Html = GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid();
+                //si me pide leer los últimos registros
+                if (pos == -1)
+                {
+                    var total = Contar();
+                    pos = total - can;
+                    if (pos < 0) pos = 0;
+                    posicion = pos.ToString();
+                }
+                
+                var elementos = Leer(pos, can, filtro, orden);
+                //si no he leido nada por estar al final, vuelvo a leer los últimos
+                if (pos > 0 && elementos.ToList().Count() == 0)
+                {
+                    pos = pos - can;
+                    if (pos < 0) pos = 0;
+                    elementos = Leer(pos, can, filtro, orden);
+                    r.Mensaje = "No hay más elementos";
+                }
+
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos);
+                r.Html = GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
                 r.Estado = EstadoPeticion.Ok;
             }
             catch (Exception e)

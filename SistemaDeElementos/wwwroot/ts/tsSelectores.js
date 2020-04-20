@@ -69,7 +69,7 @@ HTMLInputElement.prototype.BanquearEditorDelGrid = function () {
 };
 HTMLInputElement.prototype.EditorDelGrid = function () {
     var htmlSelector = this;
-    var idEditorMostrar = htmlSelector.getAttribute(idEditorMostrar);
+    var idEditorMostrar = htmlSelector.getAttribute(AtributoSelector.idEditorMostrar);
     var htmlEditor = document.getElementById(idEditorMostrar);
     return htmlEditor;
 };

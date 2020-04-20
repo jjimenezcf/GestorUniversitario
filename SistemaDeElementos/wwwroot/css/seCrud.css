@@ -127,6 +127,7 @@ a {
 .propiedad-id {
     border: groove;
     text-align: right;
+    border-radius: 10px
 }
 
 .propiedad-valida {
@@ -137,6 +138,30 @@ a {
     background: #f58eb1;
 }
 
+.pie-grid {
+    align-content:center;
+}
+.info-grid {
+    float: right;
+}
+.cantidad-grid {
+    width: 50px;
+    margin-top: 5px;
+    align-content: center;
+    border-radius: 10px
+}
+
+.navegador-grid {
+    float:left;
+}
+    .navegador-grid > div {
+        display: inline-block;
+    }
+        .navegador-grid > div > img {
+                width: 22px;
+                height: 22px;
+            }
+        
 
 
 

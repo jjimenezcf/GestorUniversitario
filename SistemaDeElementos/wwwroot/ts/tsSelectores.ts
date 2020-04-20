@@ -92,7 +92,7 @@ HTMLInputElement.prototype.BanquearEditorDelGrid = function (): void {
 
 HTMLInputElement.prototype.EditorDelGrid = function (): HTMLInputElement {
     var htmlSelector: HTMLInputElement = this;
-    var idEditorMostrar: string = htmlSelector.getAttribute(idEditorMostrar);
+    var idEditorMostrar: string = htmlSelector.getAttribute(AtributoSelector.idEditorMostrar);
     var htmlEditor: HTMLInputElement = <HTMLInputElement>document.getElementById(idEditorMostrar);
     return htmlEditor;
 };

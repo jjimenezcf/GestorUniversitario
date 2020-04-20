@@ -6,11 +6,11 @@ namespace MVCSistemaDeElementos.Descriptores
     public class ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> : ControlFiltroHtml
     {
         public SelectorDeFiltro<TElemento, TSeleccionado> Selector { get; set; }
-        public DescriptorDeCrud<TSeleccionado> Descriptor { get; set; }
+        public DescriptorDeCrud<TSeleccionado> CrudModal { get; set; }
 
         public string Titulo => Ayuda;
 
-        public ModalDeSeleccionDeFiltro(SelectorDeFiltro<TElemento, TSeleccionado> selector, DescriptorDeCrud<TSeleccionado> descriptor)
+        public ModalDeSeleccionDeFiltro(SelectorDeFiltro<TElemento, TSeleccionado> selector, DescriptorDeCrud<TSeleccionado> crudModal)
         : base(
           padre: selector.Bloque,
           id: $"Modal_{selector.IdHtml}",    //{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.GridModal;
             Selector = selector;
             Selector.Modal = this;
-            Descriptor = descriptor;
+            CrudModal = crudModal;
         }
 
 
@@ -71,14 +71,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var jsAbrirModal = _alAbrirLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.Mnt.Grid.IdHtml)
+                .Replace("{IdGrid}", CrudModal.Mnt.Grid.IdHtml)
                 .Replace("{idSelector}", s.IdHtml)
                 .Replace("{columnaId}", s.propiedadParaFiltrar)
                 .Replace("{columnaMostrar}", s.propiedadParaMostrar);
 
             var jsCerrarModal = _alCerrarLaModal
                 .Replace("idModal", IdHtml)
-                .Replace("{IdGrid}", Descriptor.Mnt.Grid.IdHtml)
+                .Replace("{IdGrid}", CrudModal.Mnt.Grid.IdHtml)
                 .Replace("{nameSelCheck}", nombreCheckDeSeleccion);
 
 
@@ -86,12 +86,12 @@ namespace MVCSistemaDeElementos.Descriptores
                     .Replace("idModal", IdHtml)
                     .Replace("titulo", Titulo)
                     .Replace("{idSelector}", s.IdHtml)
-                    .Replace("{idGrid}", Descriptor.Mnt.Grid.IdHtml)
+                    .Replace("{idGrid}", CrudModal.Mnt.Grid.IdHtml)
                     .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
                     .Replace("{columnaId}", s.propiedadParaFiltrar)
                     .Replace("{columnaMostrar}", s.propiedadParaMostrar)
                     .Replace("{idContenedor}", $"{s.Modal.IdHtml}_contenedor")
-                    .Replace("{gridDeElementos}", Descriptor.RenderControl())
+                    .Replace("{gridDeElementos}", CrudModal.RenderControl())
                     .Replace("AlAbrirLaModal", jsAbrirModal)
                     .Replace("AlCerrarLaModal", jsCerrarModal)
                     .Render();

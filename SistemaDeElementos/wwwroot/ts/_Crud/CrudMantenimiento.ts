@@ -14,7 +14,6 @@
         private ZonaDeGrid: HTMLDivElement;
         private ZonaDeFiltro: HTMLDivElement;
 
-
         constructor(idPanelMnt: string) {
             super();
 
@@ -25,10 +24,15 @@
             this.ZonaDeGrid = document.getElementById(`${this.IdGrid}`) as HTMLDivElement;
             this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
             this.infSel = new InfoSelector(this.IdGrid);
-            let idCrtlCantidad: string = `${this.IdGrid}_${LiteralMnt.idCtrlCantidad}`;
-            this.InputCantidad = document.getElementById(`${idCrtlCantidad}`) as HTMLInputElement;
             var idHtmlFiltro = this.ZonaDeGrid.getAttribute(Atributo.zonaDeFiltro);
             this.ZonaDeFiltro = document.getElementById(`${idHtmlFiltro}`) as HTMLDivElement;
+            this.InicializarNavegador();
+        }
+
+        private InicializarNavegador() {
+            let idCrtlCantidad: string = `${this.IdGrid}_${LiteralMnt.idCtrlCantidad}`;
+            this.InputCantidad = document.getElementById(`${idCrtlCantidad}`) as HTMLInputElement;
+
         }
 
         public IraEditar() {
@@ -83,11 +87,29 @@
             }
         }
 
-        public Buscar() {
+        public ObtenerUltimos() {
+            this.Buscar(-1);
+        }
+
+        public ObtenerAnteriores() {
+            let cantidad: number = this.InputCantidad.value.Numero();
+            let posicion: number = this.InputCantidad.getAttribute(Atributo.posicion).Numero();
+            posicion = posicion - (cantidad * 2);
+            if (posicion < 0)
+                posicion = 0;
+            this.Buscar(posicion);
+        }
+
+        public ObtenerSiguientes() {
+            let posicion: number = this.InputCantidad.getAttribute(Atributo.posicion).Numero();
+            this.Buscar(posicion);
+        }
+
+        public Buscar(posicion: number) {
             if (this.InputCantidad === null)
                 Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
             else {
-                let url: string = this.DefinirPeticionDeBusqueda(this.InputCantidad, 0);
+                let url: string = this.DefinirPeticionDeBusqueda(this.InputCantidad, posicion);
                 let req: XMLHttpRequest = new XMLHttpRequest();
                 this.PeticionSincrona(req, url, Ajax.EndPoint.LeerGridEnHtml);
             }
@@ -96,6 +118,7 @@
         protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
             let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req) as ResultadoHtml;
             this.ZonaDeGrid.innerHTML = resultado.html;
+            this.InicializarNavegador();
             if (this.infSel !== undefined && this.infSel.Cantidad > 0) {
                 this.marcarElementos();
                 this.infSel.SincronizarCheck();
@@ -110,7 +133,8 @@
             var ordenJson = '[]';
 
             let url: string = `/${controlador}/${Ajax.EndPoint.LeerGridEnHtml}`;
-            let parametros: string = `${Ajax.Param.posicion}=${posicion}` +
+            let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
+                `&${Ajax.Param.posicion}=${posicion}` +
                 `&${Ajax.Param.cantidad}=${cantidad}` +
                 `&${Ajax.Param.filtro}=${filtroJson}` +
                 `&${Ajax.Param.orden}=${ordenJson}`;
@@ -190,10 +214,18 @@
 
     export function EjecutarMenuMnt(accion: string): void {
 
-        if (accion === LiteralMnt.crearelemento)
+        if (accion === LiteralMnt.CrearElemento)
             crudMnt.IraCrear();
-        else if (accion === LiteralMnt.editarelemento)
+        else if (accion === LiteralMnt.EditarElemento)
             crudMnt.IraEditar();
+        else if (accion === LiteralMnt.Buscar)
+            crudMnt.Buscar(0)
+        else if (accion === LiteralMnt.ObtenerSiguientes)
+            crudMnt.ObtenerSiguientes();
+        else if (accion === LiteralMnt.ObtenerAnteriores)
+            crudMnt.ObtenerAnteriores();
+        else if (accion === LiteralMnt.ObtenerUltimos)
+            crudMnt.ObtenerUltimos()
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }

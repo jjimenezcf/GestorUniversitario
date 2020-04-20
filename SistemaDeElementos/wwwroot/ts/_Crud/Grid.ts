@@ -63,7 +63,8 @@ function PeticionSincrona(htmlInputCantidad: HTMLInputElement, idGrid: string, p
     var ordenJson = '[]';
 
     let url: string = `/${controlador}/${Ajax.EndPoint.LeerGridEnHtml}`;
-    let parametros: string = `${Ajax.Param.posicion}=${posicion}` +
+    let parametros: string = `${Ajax.Param.modo}=Seleccion` +
+        `&${Ajax.Param.posicion}=${posicion}` +
         `&${Ajax.Param.cantidad}=${cantidad}` +
         `&${Ajax.Param.filtro}=${filtroJson}` +
         `&${Ajax.Param.orden}=${ordenJson}`;
