@@ -30,21 +30,20 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Id), Visible = false, Tipo = typeof(int) });
-            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
-            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
-            Mnt.Grid.Columnas.Add(new ColumnaDelGrid() { Nombre = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos)
+        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos, int posicion)
         {
-            base.MapearElementosAlGrid(elementos);
+            base.MapearElementosAlGrid(elementos, posicion);
             foreach (var permiso in elementos)
             {
-                var fila = new FilaDelGrid();
-                foreach (ColumnaDelGrid columna in Mnt.Grid.Columnas)
+                var fila = new FilaDelGrid<PermisoDto>();
+                foreach (ColumnaDelGrid<PermisoDto> columna in Mnt.Datos.Columnas)
                 {
-                    CeldaDelGrid celda = new CeldaDelGrid(columna);
+                    CeldaDelGrid<PermisoDto> celda = new CeldaDelGrid<PermisoDto>(columna);
                     if (columna.Nombre == nameof(PermisoDto.Id))
                         celda.Valor = permiso.Id.ToString();
                     else
@@ -59,7 +58,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     fila.Celdas.Add(celda);
                 }
-                Mnt.Grid.Filas.Add(fila);
+                Mnt.Datos.Filas.Add(fila);
             }
         }
 

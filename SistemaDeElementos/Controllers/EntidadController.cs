@@ -147,8 +147,9 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Mensaje = "No hay más elementos";
                 }
 
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos);
-                r.Html = GestorDelCrud.Descriptor.Mnt.Grid.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, pos);                
+                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo)); 
+                r.Datos = elementos.Count();
                 r.Estado = EstadoPeticion.Ok;
             }
             catch (Exception e)
@@ -232,8 +233,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
-            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.Mnt.Grid.PosicionInicial
-                                                          , GestorDelCrud.Descriptor.Mnt.Grid.CantidadPorLeer
+            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial
+                                                          , GestorDelCrud.Descriptor.Mnt.Datos.CantidadPorLeer
                                                           , new List<ClausulaDeFiltrado>()
                                                           , orden.ParsearOrdenacion());
 
@@ -251,8 +252,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
-            GestorDelCrud.Descriptor.Mnt.Grid.CantidadPorLeer = cantidad;
-            GestorDelCrud.Descriptor.Mnt.Grid.PosicionInicial = posicion;
+            GestorDelCrud.Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
+            GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 

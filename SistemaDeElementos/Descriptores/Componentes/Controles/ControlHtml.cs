@@ -9,7 +9,7 @@
         TablaBloque,
         Bloque,
         ZonaDeOpciones,
-        ZonaDeGrid,
+        ZonaDeDatos,
         ZonaDeFiltro,
         VistaCrud,
         DescriptorDeCrud,

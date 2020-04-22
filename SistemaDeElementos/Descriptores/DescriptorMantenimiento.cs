@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeMnt { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
-        public ZonaDeGrid<TElemento> Grid { get; set; }
+        public ZonaDeDatos<TElemento> Datos { get; set; }
 
         public DescriptorMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.Mantenimiento;
             MenuDeMnt = new BarraDeMenu<TElemento>(mnt: this);
             Filtro = new ZonaDeFiltro<TElemento>(mnt: this);
-            Grid = new ZonaDeGrid<TElemento>(mnt: this);  
+            Datos = new ZonaDeDatos<TElemento>(mnt: this);  
         }
 
         public override string RenderControl()
@@ -34,10 +34,10 @@ namespace MVCSistemaDeElementos.Descriptores
                    RenderTitulo() + Environment.NewLine +
                    MenuDeMnt.RenderControl() + Environment.NewLine +
                    Filtro.RenderControl() + Environment.NewLine +
-                   Grid.RenderControl() + Environment.NewLine
+                   Datos.RenderControl() + Environment.NewLine
                    :
                    Filtro.RenderControl() + Environment.NewLine +
-                   Grid.RenderControl() + Environment.NewLine;
+                   Datos.RenderControl() + Environment.NewLine;
 
             var htmContenedorMnt =
                 $@"

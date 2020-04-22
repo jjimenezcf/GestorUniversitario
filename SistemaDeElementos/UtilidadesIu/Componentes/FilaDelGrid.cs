@@ -2,8 +2,8 @@
 
 namespace UtilidadesParaIu
 {
-    public class FilaDelGrid
+    public class FilaDelGrid<TElemento>
     {
-        public List<CeldaDelGrid> Celdas = new List<CeldaDelGrid>();
+        public List<CeldaDelGrid<TElemento>> Celdas = new List<CeldaDelGrid<TElemento>>();
     }
 }

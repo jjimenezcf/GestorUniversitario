@@ -1,23 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ZonaDeGrid<TElemento> : ControlHtml
+    public class ZonaDeDatos<TElemento> : ControlHtml
     {
         public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
 
-        public List<ColumnaDelGrid> Columnas { get; private set; } = new List<ColumnaDelGrid>();
+        public Grid<TElemento> Grid { get; private set; }
 
-        public List<FilaDelGrid> Filas { get; private set; } = new List<FilaDelGrid>();
+        public List<ColumnaDelGrid<TElemento>> Columnas => Grid.columnas;
+
+        public List<FilaDelGrid<TElemento>> Filas => Grid.filas;
 
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; } = 0;
 
         public int TotalEnBd { get; set; }
-        public ZonaDeGrid(DescriptorMantenimiento<TElemento> mnt)
+        public ZonaDeDatos(DescriptorMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
           id: $"{mnt.Id}_Grid",
@@ -27,24 +30,31 @@ namespace MVCSistemaDeElementos.Descriptores
           posicion: null
         )
         {
-            Tipo = TipoControl.ZonaDeGrid;
+            Tipo = TipoControl.ZonaDeDatos;
+            Grid = new Grid<TElemento>(this);
         }
 
-        private string RenderGrid()
+        private string RenderZonaDeDatos()
         {
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idGrid}¨
+            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨
                                       seleccionables =2
                                       seleccionados =¨¨
                                       zonaDeFiltro = ¨{idFiltro}¨
                                      >     
                                        tabla_Navegador 
                                      </div>";
-            var htmlContenedor = htmlDiv.Replace("{idGrid}", $"{IdHtml}")
+            var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")
                                         .Replace("{idFiltro}", idHtmlZonaFiltro)
-                                        .Replace("tabla_Navegador", RenderDelGrid());
+                                        .Replace("tabla_Navegador", Grid.ToHtml());
             return htmlContenedor;
+        }
+
+        internal void AnadirColumna(ColumnaDelGrid<TElemento> columnaDelGrid)
+        {
+            Mnt.Datos.Columnas.Add(columnaDelGrid);
+            columnaDelGrid.ZonaDeDatos = this;
         }
 
         public string RenderDelGrid(ModoDescriptor modo)
@@ -52,27 +62,12 @@ namespace MVCSistemaDeElementos.Descriptores
             var mnt = (DescriptorMantenimiento<TElemento>)Padre;
             var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
             crud.CambiarModo(modo);
-            return RenderDelGrid();
-
-        }
-
-        private string RenderDelGrid()
-        {
-            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
-            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
-
-            var grid = new Grid<TElemento>(crud, IdHtml, Columnas, Filas, PosicionInicial, CantidadPorLeer)
-            {
-                Controlador = crud.Controlador,
-                TotalEnBd = TotalEnBd
-            };
-            var htmlGrid = grid.ToHtml();
-            return htmlGrid.Render();
+            return Grid.ToHtml();
         }
 
         public override string RenderControl()
         {
-            return RenderGrid();
+            return RenderZonaDeDatos();
         }
     }
 

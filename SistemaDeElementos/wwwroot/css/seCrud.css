@@ -161,6 +161,17 @@ a {
                 width: 22px;
                 height: 22px;
             }
+
+.ordenable {
+    color: aqua
+}
+.ordenada-asc {
+    color:aquamarine
+}
+.ordenada-des {
+    color: aquamarine
+}
+
         
 
 

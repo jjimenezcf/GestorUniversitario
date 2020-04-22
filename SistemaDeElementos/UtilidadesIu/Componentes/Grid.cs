@@ -11,9 +11,11 @@ namespace UtilidadesParaIu
     {
         public string Id { get; private set; }
 
-        private DescriptorDeCrud<TElemento> Crud {get; set;}
+        public ZonaDeDatos<TElemento> ZonaDeDatos {get; set;}
 
         public string IdHtml => Id.ToLower();
+
+        public string IdHtmlCabecera => $"{IdHtml}_c_tr_0";
 
         public string IdHtmlTabla => $"{IdHtml}_table";
         public string IdHtmlNavegador => $"{IdHtml}_nav";
@@ -22,42 +24,35 @@ namespace UtilidadesParaIu
         public string IdHtmlNavegador_3 => $"{IdHtmlNavegador}_3";
         public string IdHtmlPorLeer => $"{IdHtmlNavegador_2}_reg";
 
-        public string Controlador { get; set; }
-        public List<ColumnaDelGrid> columnas { get; private set; }
-        public List<FilaDelGrid> filas { get; private set; }
+        public string Controlador => ZonaDeDatos.Mnt.Crud.Controlador;
+        public List<ColumnaDelGrid<TElemento>> columnas  { get; private set; } = new List<ColumnaDelGrid<TElemento>>();
+        public List<FilaDelGrid<TElemento>> filas { get; private set; } = new List<FilaDelGrid<TElemento>>();
 
-        public int TotalEnBd { get; set; }
-        private int _PosicionInicial { get; set; }
-        private int _CantidadPorLeer { get; set; }
+        public int TotalEnBd => ZonaDeDatos.TotalEnBd;
+        private int PosicionInicial => ZonaDeDatos.PosicionInicial;
+        private int CantidadPorLeer => ZonaDeDatos.CantidadPorLeer;
         public int Seleccionables { get; set; }
-        public int Ultimo_Leido => _PosicionInicial + filas.Count;
+        public int Ultimo_Leido => PosicionInicial + filas.Count;
         
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
-        public Grid(DescriptorDeCrud<TElemento> crud, string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
+        public Grid(ZonaDeDatos<TElemento> zonaDeDatos)
         {
-            Crud = crud;
-            IniciarClase(idGrid, columnasGrid, filasDelGrid, posicionInicial, cantidadPorLeer);
-        }
-
-        private void IniciarClase(string idGrid, List<ColumnaDelGrid> columnasGrid, List<FilaDelGrid> filasDelGrid, int posicionInicial, int cantidadPorLeer)
-        {
-            Id = idGrid;
-            columnas = columnasGrid;
-            filas = filasDelGrid;
-            _PosicionInicial = posicionInicial;
-            _CantidadPorLeer = cantidadPorLeer;
+            ZonaDeDatos = zonaDeDatos;
+            Id = ZonaDeDatos.Id;
             Seleccionables = 2;
         }
 
+
+
         public string ToHtml()
         {
-            return RenderizarGrid(this);
+            return RenderizarGrid(this).Render();
         }
 
-        private static string RenderColumnaCabecera(string idCabecera, ColumnaDelGrid columna)
+        private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
             var visible = columna.Visible ? "" : "hidden";
             var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
@@ -67,13 +62,29 @@ namespace UtilidadesParaIu
             columna.descriptor.alineada = columna.AlineacionCss;
 
             var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
+            //var parametros = JsonSerializer.Serialize(columna.idGrid, idCabecera);
+
+        /*
+         * <th scope="col" id="crud_usuario_mantenimiento_grid_c_tr_0.apellido" class="text-left" 
+         *    descriptor="{id:null,propiedad:apellido,visible:,alineada:text-left,valor:null}">
+         *    <a href="javascript:OrdenarPor({columna});">Apellido</a>
+           </th>
+         * 
+         * <a href="javascript:OrdenarPor({columna});">{columna.Titulo}</a>
+         */
+
+        var htmlRef = columna.Ordenar? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.idHtml}')¨  
+                                                 class=¨ordenable¨>{columna.Titulo} 
+                                                </a>" 
+                : $"{columna.Titulo}";
 
             return $@"{Environment.NewLine}<th scope=¨col¨ 
-                                               id= ¨{idCabecera}.{columna.Propiedad}¨ 
+                                               id= ¨{columna.ZonaDeDatos.Grid.IdHtmlCabecera}.{columna.Propiedad}¨ 
                                                class=¨{columna.AlineacionCss}¨ 
+                                               orden-aplicado=¨ninguno¨ 
                                                {estilo} 
                                                {descriptor}>
-                                             {columna.Titulo}
+                                               {htmlRef}
                                            </th>";
         }
 
@@ -82,7 +93,7 @@ namespace UtilidadesParaIu
             var visible = "";
             var ancho = "";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
-            var columna = new ColumnaDelGrid();
+            var columna = new ColumnaDelGrid<TElemento>();
             columna.Nombre = idGrid + "_chk_sel";
             columna.Titulo = " ";
             columna.descriptor.visible = visible;
@@ -121,7 +132,7 @@ namespace UtilidadesParaIu
             return tdDelCheck;
         }
 
-        private static string RenderCeldaInput(string idGrid, string idFila, int numCol, CeldaDelGrid celda)
+        private static string RenderCeldaInput(string idGrid, string idFila, int numCol, CeldaDelGrid<TElemento> celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
 
@@ -150,7 +161,7 @@ namespace UtilidadesParaIu
                    $" </td>";
         }
 
-        private static string RenderFila(string idGrid, string idFila, FilaDelGrid fila)
+        private static string RenderFila(string idGrid, string idFila, FilaDelGrid<TElemento> fila)
         {
             var filaHtml = new StringBuilder();
             var numCol = 0;
@@ -162,7 +173,7 @@ namespace UtilidadesParaIu
             return $@"{filaHtml}";
         }
 
-        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid fila)
+        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid<TElemento> fila)
         {
             var idFila = $"{idGrid}.d.tr.{numFil}";
 
@@ -174,24 +185,22 @@ namespace UtilidadesParaIu
                    $"</tr>{Environment.NewLine}";
         }
 
-        private static string RenderCabecera(string idGrid, IEnumerable<ColumnaDelGrid> columnasGrid)
+        private static string RenderCabecera(Grid<TElemento> grid)
         {
             var cabeceraHtml = new StringBuilder();
-            var idCabecera = $"{idGrid}_c_tr_0";
-            foreach (var columna in columnasGrid)
+            foreach (var columna in grid.columnas)
             {
-                cabeceraHtml.Append(RenderColumnaCabecera(idCabecera,columna));
+                cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
-            cabeceraHtml.Append(RenderColumnaDeSeleccion(idGrid)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
-            return $@"<thead id='{idGrid}_cabecera'>{Environment.NewLine}
-                         <tr id=¨{idCabecera}¨>
+            cabeceraHtml.Append(RenderColumnaDeSeleccion(grid.IdHtml)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
+            return $@"<thead id='{grid.IdHtml}_cabecera'>{Environment.NewLine}
+                         <tr id=¨{grid.IdHtmlCabecera}¨>
                             {cabeceraHtml}{Environment.NewLine}
                          </tr>{Environment.NewLine}
                       </thead>";
         }
 
-
-        private static string RenderDetalleGrid(string idGrid, IEnumerable<FilaDelGrid> filas)
+        private static string RenderDetalleGrid(string idGrid, IEnumerable<FilaDelGrid<TElemento>> filas)
         {
             var htmlDetalleGrid = new StringBuilder();
             int i = 0;
@@ -208,19 +217,19 @@ namespace UtilidadesParaIu
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
 
-            var accionSiguiente = grid.Crud.Modo == ModoDescriptor.Seleccion 
+            var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion 
                 ? $"LeerSiguientes('{grid.IdHtml}')" 
                 : $"Crud.EjecutarMenuMnt('obtenersiguientes')";
 
-            var accionBuscar = grid.Crud.Modo == ModoDescriptor.Seleccion
+            var accionBuscar = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
                 ? $"Leer('{grid.IdHtml}')"
                 : $"Crud.EjecutarMenuMnt('buscar')";
 
-            var accionAnterior = grid.Crud.Modo == ModoDescriptor.Seleccion
+            var accionAnterior = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
                 ? $"LeerAnteriores('{grid.IdHtml}')"
                 : $"Crud.EjecutarMenuMnt('obteneranteriores')";
 
-            var accionUltimos = grid.Crud.Modo == ModoDescriptor.Seleccion
+            var accionUltimos = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
                 ? $"LeerUltimos('{grid.IdHtml}')"
                 : $"Crud.EjecutarMenuMnt('obtenerultimos')";
 
@@ -234,12 +243,12 @@ namespace UtilidadesParaIu
                         <input type=¨number¨ 
                                id=¨{grid.IdHtmlPorLeer}¨ 
                                class = ¨cantidad-grid¨
-                               value=¨{grid._CantidadPorLeer}¨ 
+                               value=¨{grid.CantidadPorLeer}¨ 
                                min=¨1¨ step=¨1¨ max=¨999¨ 
                                posicion=¨{grid.Ultimo_Leido}¨  
                                controlador=¨{grid.Controlador}¨  
                                totalEnBd=¨{grid.TotalEnBd}¨ 
-                               title=¨leidos {grid.filas.Count} desde la posición {grid._PosicionInicial}¨ />
+                               title=¨leidos {grid.filas.Count} desde la posición {grid.PosicionInicial}¨ />
                     </div>
                     <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨{accionAnterior}¨>
@@ -248,7 +257,7 @@ namespace UtilidadesParaIu
                     </div>
                 </div>
                 <div id= ¨{grid.IdHtml}_info¨ class=¨info-grid¨>
-                   {grid.filas.Count} desde la posición {grid._PosicionInicial}
+                   {grid.filas.Count} desde la posición {grid.PosicionInicial}
                 </div>
             </div>
             ";
@@ -266,7 +275,7 @@ namespace UtilidadesParaIu
             var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ 
                                       class=¨table table-hover¨ 
                                       width=¨100%¨>{Environment.NewLine}" +
-                            $"   {RenderCabecera(grid.IdHtml, grid.columnas)}{Environment.NewLine}" +
+                            $"   {RenderCabecera(grid)}{Environment.NewLine}" +
                             $"   {RenderDetalleGrid(grid.IdHtml, grid.filas)}" +
                             $"</table>";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";

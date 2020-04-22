@@ -87,6 +87,16 @@
             }
         }
 
+        public OrdenarPor(columna: string) {
+            this.ParamentrosDeOrdenacion(columna);
+            this.Buscar(0);
+        }
+
+        ParamentrosDeOrdenacion(columna: string) {
+           //indicamos en la columna como se va a ordenar (asc, des, suprimir ordenación)
+           //indicamos en el grid las propiedades de ordenación y su modo
+        }
+
         public ObtenerUltimos() {
             this.Buscar(-1);
         }
@@ -212,8 +222,7 @@
 
     }
 
-    export function EjecutarMenuMnt(accion: string): void {
-
+    export function EjecutarMenuMnt(accion: string, parametros: string): void {
         if (accion === LiteralMnt.CrearElemento)
             crudMnt.IraCrear();
         else if (accion === LiteralMnt.EditarElemento)
@@ -225,7 +234,9 @@
         else if (accion === LiteralMnt.ObtenerAnteriores)
             crudMnt.ObtenerAnteriores();
         else if (accion === LiteralMnt.ObtenerUltimos)
-            crudMnt.ObtenerUltimos()
+            crudMnt.ObtenerUltimos();
+        else if (accion === LiteralMnt.OrdenarPor)
+            crudMnt.OrdenarPor(parametros)
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }

@@ -2,9 +2,9 @@
 
 namespace UtilidadesParaIu
 {
-    public class CeldaDelGrid
+    public class CeldaDelGrid<TElemento>
     {
-        private ColumnaDelGrid _columna;
+        private ColumnaDelGrid<TElemento> _columna;
 
         public string Propiedad => _columna.Propiedad;
         public object Valor { get; set; }
@@ -16,7 +16,7 @@ namespace UtilidadesParaIu
         public string AlSalir { get; set; }
         public string AlCambiar { get; set; }
 
-        public CeldaDelGrid(ColumnaDelGrid columna)
+        public CeldaDelGrid(ColumnaDelGrid<TElemento> columna)
         {
             _columna = columna;
         }

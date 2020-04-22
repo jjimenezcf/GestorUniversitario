@@ -1,4 +1,5 @@
 ﻿using System;
+using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
 {
@@ -11,8 +12,13 @@ namespace UtilidadesParaIu
         public string valor { get; set; }
     }
 
-    public class ColumnaDelGrid
+    public class ColumnaDelGrid<TElemento>
     {
+        public string id {get; set;}
+        public string idHtml { get; set;}
+        public ZonaDeDatos<TElemento> ZonaDeDatos { get; set; }
+        public string idGridHtml => ZonaDeDatos.IdHtml;
+
         private Aliniacion _alineada;
         private string _titulo;
         private string _nombre;

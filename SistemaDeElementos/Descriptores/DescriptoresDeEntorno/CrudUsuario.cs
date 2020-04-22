@@ -34,40 +34,26 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-
-            var columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Id), Tipo = typeof(int), Visible = false };
-            Mnt.Grid.Columnas.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Login) };
-            Mnt.Grid.Columnas.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Apellido), Ordenar = true, Ruta = "Usuarios", Accion = "IraMantenimientoUsuario" };
-            Mnt.Grid.Columnas.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid { Nombre = nameof(UsuarioDtm.Nombre) };
-            Mnt.Grid.Columnas.Add(columnaDelGrid);
-
-            columnaDelGrid = new ColumnaDelGrid
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Nombre = nameof(UsuarioDtm.Apellido), Ordenar = true});
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Nombre = nameof(UsuarioDtm.Nombre) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto>
             {
                 Nombre = nameof(UsuarioDtm.Alta),
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
-                Ordenar = true,
-                Ruta = "Usuarios",
-                Accion = "IraMantenimientoUsuario"
-            };
-            Mnt.Grid.Columnas.Add(columnaDelGrid);
+                Ordenar = true
+            });
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos)
+        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos, int posicion)
         {
-            base.MapearElementosAlGrid(elementos);
+            base.MapearElementosAlGrid(elementos, posicion);
             foreach (var usuario in elementos)
             {
-                var fila = new FilaDelGrid();
-                foreach (ColumnaDelGrid columna in Mnt.Grid.Columnas)
+                var fila = new FilaDelGrid<UsuarioDto>();
+                foreach (ColumnaDelGrid<UsuarioDto> columna in Mnt.Datos.Columnas)
                 {
-                    CeldaDelGrid celda = new CeldaDelGrid(columna);
+                    CeldaDelGrid<UsuarioDto> celda = new CeldaDelGrid<UsuarioDto>(columna);
                     if (columna.Nombre == nameof(UsuarioDtm.Id))
                         celda.Valor = usuario.Id.ToString();
                     else
@@ -85,7 +71,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     fila.Celdas.Add(celda);
                 }
-                Mnt.Grid.Filas.Add(fila);
+                Mnt.Datos.Filas.Add(fila);
             }
         }
 

@@ -87,16 +87,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual void DefinirColumnasDelGrid()
         {
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Nombre = nameof(Id), Tipo = typeof(int), Visible = false });
         }
 
-        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos)
+        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int pos = 0)
         {
-
+            Mnt.Datos.PosicionInicial = pos;
         }
 
         public void TotalEnBd(int totalEnBd)
         {
-            Mnt.Grid.TotalEnBd = totalEnBd;
+            Mnt.Datos.TotalEnBd = totalEnBd;
         }
 
         public override string RenderControl()

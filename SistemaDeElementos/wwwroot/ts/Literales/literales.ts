@@ -91,7 +91,8 @@ const LiteralMnt = {
     Buscar: "buscar",
     ObtenerAnteriores: "obteneranteriores",
     ObtenerSiguientes: "obtenersiguientes",
-    ObtenerUltimos: "obtenerultimos"
+    ObtenerUltimos: "obtenerultimos",
+    OrdenarPor: "ordenarpor"
 };
 
 const TipoControl = {

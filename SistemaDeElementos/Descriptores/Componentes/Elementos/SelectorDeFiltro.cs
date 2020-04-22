@@ -51,10 +51,10 @@ namespace MVCSistemaDeElementos.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
-                              idGridModal=¨{CrudModal.Mnt.Grid.IdHtml}¨
+                              idGridModal=¨{CrudModal.Mnt.Datos.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
                               idEditorMostrar=¨{edt.IdHtml}¨
-                              refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Grid.IdHtml}¨
+                              refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Datos.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{CrudModal.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button id=¨{idBtnSelectorHtml}¨ 
