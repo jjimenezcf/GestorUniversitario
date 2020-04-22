@@ -45,7 +45,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderTabla()
         {
 
-            var htmlTabla = $@"<table id=¨{IdHtml}¨ width=¨100%¨>
+            var htmlTabla = $@"<table id=¨{IdHtml}¨ class=¨tabla-filtro¨ width=¨100%¨>
                                   filas
                                </table>";
             var htmlFilas = "";

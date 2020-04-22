@@ -52,7 +52,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderBloque()
         {
-            string htmlBloque = $@"<div id = ¨{IdHtml}¨>     
+            string cssClaseBloque = Tabla.Controles.Count == 0 ? "bloque-filtro-vacio" : "";
+            string htmlBloque = $@"<div id = ¨{IdHtml}¨ class = {cssClaseBloque}>     
                                      tabla 
                                     </div>";
             string htmlTabla = Tabla.RenderControl();

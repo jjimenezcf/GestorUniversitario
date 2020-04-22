@@ -162,6 +162,45 @@ a {
                 height: 22px;
             }
 
+.bloque-filtro-vacio {
+    height: 0px;
+}
+.tabla-filtro {
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0px;
+    border-top-width: 1px;
+}
+
+.tabla-grid {
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+    .tabla-grid th {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 2px solid #ddd;
+        border-top: 2px solid #ddd;
+    }
+
+    .tabla-grid tr:hover td {
+        background-color: gainsboro;
+    }
+
+    .tabla-grid td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+    }
+
+.columna-cabecera > a {
+    font-weight: bold;
+}
+
 .ordenable {
     color: aqua
 }

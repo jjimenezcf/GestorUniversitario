@@ -78,14 +78,13 @@ namespace UtilidadesParaIu
                                                 </a>" 
                 : $"{columna.Titulo}";
 
-            return $@"{Environment.NewLine}<th scope=¨col¨ 
-                                               id= ¨{columna.ZonaDeDatos.Grid.IdHtmlCabecera}.{columna.Propiedad}¨ 
-                                               class=¨{columna.AlineacionCss}¨ 
+            return $@"{Environment.NewLine}<th id = ¨{columna.ZonaDeDatos.Grid.IdHtmlCabecera}.{columna.Propiedad}¨ 
+                                               class=¨columna-cabecera {columna.AlineacionCss}¨ 
                                                orden-aplicado=¨ninguno¨ 
                                                {estilo} 
                                                {descriptor}>
                                                {htmlRef}
-                                           </th>";
+                                           </td>";
         }
 
         private static string RenderColumnaDeSeleccion(string idGrid)
@@ -273,7 +272,7 @@ namespace UtilidadesParaIu
         private static string RenderizarGrid(Grid<TElemento> grid)
         {
             var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ 
-                                      class=¨table table-hover¨ 
+                                      class=¨tabla-grid¨ 
                                       width=¨100%¨>{Environment.NewLine}" +
                             $"   {RenderCabecera(grid)}{Environment.NewLine}" +
                             $"   {RenderDetalleGrid(grid.IdHtml, grid.filas)}" +
