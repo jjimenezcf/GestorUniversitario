@@ -38,7 +38,7 @@ namespace Gestor.Elementos.Entorno
     {
         public const string OrdenPorApellido = "PorApellido";
 
-        public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaOrdenacion> ordenacion)
+        public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {
             if (ordenacion.Count == 0)
                 return set.OrderBy(x => x.Apellido);
@@ -46,7 +46,7 @@ namespace Gestor.Elementos.Entorno
             foreach (var orden in ordenacion)
             {
                 if (orden.Propiedad == nameof(UsuarioDtm.Apellido))
-                    return orden.modo == ModoDeOrdenancion.ascendente
+                    return orden.Modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Apellido)
                         : set.OrderByDescending(x => x.Apellido);
             }
@@ -73,7 +73,7 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaOrdenacion> ordenacion)        {
+        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)        {
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
         }               

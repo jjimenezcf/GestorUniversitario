@@ -256,8 +256,9 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+            List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
-            return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden.ParsearOrdenacion());
+            return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes);
         }
 
     }

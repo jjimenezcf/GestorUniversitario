@@ -2,11 +2,20 @@
 
     export let crudMnt: CrudMnt = null;
 
+    class ClausulaDeOrdenacion {
+        propiedad: string;
+        modo: string;
+
+        constructor(propiedad: string, modo: string) {
+            this.propiedad = propiedad;
+            this.modo = modo;
+        }
+    }
+
     class Orden {
         public IdColumna: string;
         public Propiedad: string;
         public Modo: string;
-
         private _cssClase: string;
 
         get ccsClase(): string {
@@ -114,8 +123,6 @@
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
-
-
         }
 
         public IraEditar() {
@@ -237,7 +244,7 @@
             var cantidad = htmlInputCantidad.value.Numero();
             var controlador = htmlInputCantidad.getAttribute(Atributo.controlador);
             var filtroJson = this.ObtenerFiltros();
-            var ordenJson = '[]';
+            var ordenJson = this.ObtenerOrdenacion();
 
             let url: string = `/${controlador}/${Ajax.EndPoint.LeerGridEnHtml}`;
             let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
@@ -249,6 +256,14 @@
             return peticion;
         }
 
+        private ObtenerOrdenacion() {
+            var clausulas = new Array<ClausulaDeOrdenacion>();
+            for (var i = 0; i < this.Ordenacion.Count(); i++) {
+                let orden = this.Ordenacion.Leer(i);
+                clausulas.push(new ClausulaDeOrdenacion(orden.Propiedad, orden.Modo));
+            }
+            return JSON.stringify(clausulas);
+        }
         private ObtenerFiltros() {
             var arrayIds = this.ObtenerControlesDeFiltro();
             var clausulas = new Array<ClausulaDeFiltrado>();
@@ -269,7 +284,7 @@
                 if (clausula !== null)
                     clausulas.push(clausula);
             }
-            return JSON.stringify(clausulas);;
+            return JSON.stringify(clausulas);
         }
 
         private ObtenerControlesDeFiltro() {

@@ -46,11 +46,11 @@ namespace Gestor.Elementos.Entorno
 
     public static partial class Ordenaciones
     {
-        public static IQueryable<T> OrdenarMenus<T>(this IQueryable<T> registros, List<ClausulaOrdenacion> ordenacion) where T : MenuDtm
+        public static IQueryable<T> OrdenarMenus<T>(this IQueryable<T> registros, List<ClausulaDeOrdenacion> ordenacion) where T : MenuDtm
         {
-            foreach (ClausulaOrdenacion orden in ordenacion)
+            foreach (ClausulaDeOrdenacion orden in ordenacion)
                 if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
-                    registros = orden.modo == ModoDeOrdenancion.ascendente
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Orden)
                     : registros.OrderByDescending(x => x.Orden);
                 else
@@ -130,7 +130,7 @@ namespace Gestor.Elementos.Entorno
         public List<MenuDto> LeerMenuSe()
         {
             var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.esNulo } };
-            var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
+            var ordenacion = new List<ClausulaDeOrdenacion>() { new ClausulaDeOrdenacion { Propiedad = nameof(MenuDtm.Orden), Modo = ModoDeOrdenancion.ascendente } };
             var menusDto = new List<MenuDto>();
 
             List<MenuDtm> menusDtm = LeerRegistros(0, -1, filtros, ordenacion).ToList();
@@ -152,7 +152,7 @@ namespace Gestor.Elementos.Entorno
         private void LeerSubMenus(MenuDtm menuDtm)
         {
             var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.igual, Valor = menuDtm.Id.ToString() } };
-            var ordenacion = new List<ClausulaOrdenacion>() { new ClausulaOrdenacion { Propiedad = nameof(MenuDtm.Orden), modo = ModoDeOrdenancion.ascendente } };
+            var ordenacion = new List<ClausulaDeOrdenacion>() { new ClausulaDeOrdenacion { Propiedad = nameof(MenuDtm.Orden), Modo = ModoDeOrdenancion.ascendente } };
 
             menuDtm.Submenus = LeerRegistros(0, -1, filtros, ordenacion).ToList();
 
@@ -173,7 +173,7 @@ namespace Gestor.Elementos.Entorno
             return registros.FiltrarMenus(filtros, parametros);
         }
 
-        protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaOrdenacion> ordenacion)
+        protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             return registros.OrdenarMenus(ordenacion);
         }

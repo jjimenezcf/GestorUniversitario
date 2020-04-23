@@ -6,9 +6,9 @@ namespace MVCSistemaDeElementos.UtilidadesIu
 {
     public static class parametrosMvc
     {
-        public static List<ClausulaOrdenacion> ParsearOrdenacion(this string orden)
+        public static List<ClausulaDeOrdenacion> ParsearOrdenacion(this string orden)
         {
-            var ordenParseado = new List<ClausulaOrdenacion>();
+            var ordenParseado = new List<ClausulaDeOrdenacion>();
 
             if (!orden.IsNullOrEmpty())
             {
@@ -20,12 +20,12 @@ namespace MVCSistemaDeElementos.UtilidadesIu
                         break;
                     else
                     {
-                        var clausula = new ClausulaOrdenacion();
+                        var clausula = new ClausulaDeOrdenacion();
                         clausula.Propiedad = ordenes[i];
-                        clausula.modo = ModoDeOrdenancion.ascendente;
+                        clausula.Modo = ModoDeOrdenancion.ascendente;
 
                         if (i + 1 < ordenes.Length && ordenes[i + 1] == ModoDeOrdenancion.descendente.ToString())
-                            clausula.modo = ModoDeOrdenancion.descendente;
+                            clausula.Modo = ModoDeOrdenancion.descendente;
 
                         ordenParseado.Add(clausula);
                         i = i + 2;
