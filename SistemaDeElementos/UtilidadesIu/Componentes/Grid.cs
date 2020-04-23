@@ -55,7 +55,7 @@ namespace UtilidadesParaIu
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
             var visible = columna.Visible ? "" : "hidden";
-            var ancho = columna.Ancho == 0 ? "" : $"width: {columna.Ancho}%;";
+            var ancho = columna.PorAncho == 0 ? "" : $"width: {columna.PorAncho}%;";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
 
             columna.descriptor.visible = visible;
@@ -73,14 +73,15 @@ namespace UtilidadesParaIu
          * <a href="javascript:OrdenarPor({columna});">{columna.Titulo}</a>
          */
 
-        var htmlRef = columna.Ordenar? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.idHtml}')¨  
-                                                 class=¨ordenable¨>{columna.Titulo} 
+        var htmlRef = columna.Ordenar? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
+                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
                                                 </a>" 
                 : $"{columna.Titulo}";
 
-            return $@"{Environment.NewLine}<th id = ¨{columna.ZonaDeDatos.Grid.IdHtmlCabecera}.{columna.Propiedad}¨ 
+            return $@"{Environment.NewLine}<th id = ¨{columna.IdHtml}¨ 
                                                class=¨columna-cabecera {columna.AlineacionCss}¨ 
-                                               orden-aplicado=¨ninguno¨ 
+                                               propiedad = ¨{columna.Propiedad}¨
+                                               modo-ordenacion=¨sin-orden¨ 
                                                {estilo} 
                                                {descriptor}>
                                                {htmlRef}
@@ -93,7 +94,7 @@ namespace UtilidadesParaIu
             var ancho = "";
             var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
             var columna = new ColumnaDelGrid<TElemento>();
-            columna.Nombre = idGrid + "_chk_sel";
+            columna.Propiedad = idGrid + "_chk_sel";
             columna.Titulo = " ";
             columna.descriptor.visible = visible;
             columna.descriptor.alineada = HtmlRender.AlineacionCss(Aliniacion.centrada);

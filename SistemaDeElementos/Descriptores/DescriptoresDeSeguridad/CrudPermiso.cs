@@ -30,9 +30,9 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Nombre = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
         }
 
         public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos, int posicion)
@@ -44,16 +44,16 @@ namespace MVCSistemaDeElementos.Descriptores
                 foreach (ColumnaDelGrid<PermisoDto> columna in Mnt.Datos.Columnas)
                 {
                     CeldaDelGrid<PermisoDto> celda = new CeldaDelGrid<PermisoDto>(columna);
-                    if (columna.Nombre == nameof(PermisoDto.Id))
+                    if (columna.Propiedad == nameof(PermisoDto.Id))
                         celda.Valor = permiso.Id.ToString();
                     else
-                    if (columna.Nombre == nameof(PermisoDto.Nombre))
+                    if (columna.Propiedad == nameof(PermisoDto.Nombre))
                         celda.Valor = permiso.Nombre;
                     else
-                    if (columna.Nombre == nameof(PermisoDto.Clase))
+                    if (columna.Propiedad == nameof(PermisoDto.Clase))
                         celda.Valor = permiso.Clase;
                     else
-                    if (columna.Nombre == nameof(PermisoDto.Permiso))
+                    if (columna.Propiedad == nameof(PermisoDto.Permiso))
                         celda.Valor = permiso.Permiso;
 
                     fila.Celdas.Add(celda);

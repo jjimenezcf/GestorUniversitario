@@ -6,7 +6,7 @@ namespace UtilidadesParaIu
     public class HtmlDescriptorCabecera
     {
         public string id { get; set; }
-        public string propiedad { get; set; }
+        public string idHtml { get; set; }
         public string visible { get; set; }
         public string alineada { get; set; }
         public string valor { get; set; }
@@ -14,22 +14,19 @@ namespace UtilidadesParaIu
 
     public class ColumnaDelGrid<TElemento>
     {
-        public string id {get; set;}
-        public string idHtml { get; set;}
         public ZonaDeDatos<TElemento> ZonaDeDatos { get; set; }
         public string idGridHtml => ZonaDeDatos.IdHtml;
 
         private Aliniacion _alineada;
         private string _titulo;
-        private string _nombre;
-
-        public string Nombre { get { return _nombre; } set { _nombre = value; descriptor.propiedad = _nombre.ToLower(); } }
-        public string Propiedad => Nombre.ToLower();
-        public string Titulo { get { return _titulo == null ? _nombre : _titulo; } set { _titulo = value; } }
+        public string Propiedad { get; set; } //crud_usuario_mantenimiento_grid_c_tr_0.login
+        public string Id => $"{idGridHtml}_c_tr_0.{Propiedad}";
+        public string IdHtml => Id.ToLower();
+        public string Titulo { get { return _titulo == null ? Propiedad : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
-        public int Ancho { get; set; } = 0;
+        public int PorAncho { get; set; } = 0;
         public bool Ordenar { get; set; } = false;
-        public string OrdenPor => $"ordenoPor{Nombre}";
+        public string OrdenPor => $"ordenoPor{Propiedad}";
         public string Sentido = "Asc";
         public bool Visible { get; set; } = true;
         public bool Editable { get; set; } = false;

@@ -34,11 +34,12 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Nombre = nameof(UsuarioDtm.Apellido), Ordenar = true});
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Nombre = nameof(UsuarioDtm.Nombre) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Login), Ordenar = true, PorAncho = 33 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Apellido), Ordenar = true, PorAncho = 50});
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Nombre) }); 
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto>
             {
-                Nombre = nameof(UsuarioDtm.Alta),
+                Propiedad = nameof(UsuarioDtm.Alta),
                 Tipo = typeof(DateTime),
                 Alineada = Aliniacion.centrada,
                 Ordenar = true
@@ -54,19 +55,19 @@ namespace MVCSistemaDeElementos.Descriptores
                 foreach (ColumnaDelGrid<UsuarioDto> columna in Mnt.Datos.Columnas)
                 {
                     CeldaDelGrid<UsuarioDto> celda = new CeldaDelGrid<UsuarioDto>(columna);
-                    if (columna.Nombre == nameof(UsuarioDtm.Id))
+                    if (columna.Propiedad == nameof(UsuarioDtm.Id))
                         celda.Valor = usuario.Id.ToString();
                     else
-                    if (columna.Nombre == nameof(UsuarioDtm.Login))
+                    if (columna.Propiedad == nameof(UsuarioDtm.Login))
                         celda.Valor = usuario.Login.ToString();
                     else
-                    if (columna.Nombre == nameof(UsuarioDtm.Apellido))
+                    if (columna.Propiedad == nameof(UsuarioDtm.Apellido))
                         celda.Valor = usuario.Apellido;
                     else
-                    if (columna.Nombre == nameof(UsuarioDtm.Nombre))
+                    if (columna.Propiedad == nameof(UsuarioDtm.Nombre))
                         celda.Valor = usuario.Nombre.ToString();
                     else
-                    if (columna.Nombre == nameof(UsuarioDtm.Alta))
+                    if (columna.Propiedad == nameof(UsuarioDtm.Alta))
                         celda.Valor = usuario.Alta.ToString();
 
                     fila.Celdas.Add(celda);

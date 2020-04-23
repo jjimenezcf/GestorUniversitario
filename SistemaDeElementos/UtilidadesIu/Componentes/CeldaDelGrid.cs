@@ -6,7 +6,7 @@ namespace UtilidadesParaIu
     {
         private ColumnaDelGrid<TElemento> _columna;
 
-        public string Propiedad => _columna.Propiedad;
+        public string Propiedad => _columna.IdHtml;
         public object Valor { get; set; }
         public Type Tipo => _columna.Tipo;
         public bool Visible => _columna.Visible;

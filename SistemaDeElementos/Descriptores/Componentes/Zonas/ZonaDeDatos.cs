@@ -55,6 +55,45 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Mnt.Datos.Columnas.Add(columnaDelGrid);
             columnaDelGrid.ZonaDeDatos = this;
+            CalcularAnchosColumnas();
+        }
+
+        private void CalcularAnchosColumnas()
+        {
+            var totalPorcentaje = 0;
+            var colDefinidas = 0;
+            var colSinDefinir = 0;
+            foreach (var col in Columnas)
+            {
+                if (!col.Visible) continue;
+
+                if (col.PorAncho == 0) colSinDefinir++;
+                else
+                {
+                    totalPorcentaje += col.PorAncho;
+                    colDefinidas++;
+                }
+            }
+
+            if (totalPorcentaje > 100)
+                Gestor.Errores.GestorDeErrores.Emitir($"Las columnas definidas para el tipo {typeof(TElemento)} sobrepasan el 100%");
+
+            var porcDeReparto = 100 - totalPorcentaje;
+            
+            if (colSinDefinir == 0)
+                return;
+
+            var porcPorColNoDefinida = porcDeReparto / colSinDefinir;
+            foreach (var col in Columnas)
+            {
+                if (col.PorAncho > 0 || !col.Visible) continue;
+
+                    col.PorAncho = porcPorColNoDefinida;
+                    porcDeReparto = porcDeReparto - porcPorColNoDefinida;
+                
+                if (porcPorColNoDefinida > porcDeReparto)
+                    porcPorColNoDefinida = porcDeReparto;
+            }
         }
 
         public string RenderDelGrid(ModoDescriptor modo)

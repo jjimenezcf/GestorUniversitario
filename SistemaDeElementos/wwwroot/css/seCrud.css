@@ -201,14 +201,14 @@ a {
     font-weight: bold;
 }
 
-.ordenable {
+.ordenada-sin-orden {
     color: aqua
 }
-.ordenada-asc {
-    color:aquamarine
+.ordenada-ascendente {
+    color:#00b9ff
 }
-.ordenada-des {
-    color: aquamarine
+.ordenada-descendente {
+    color: #f58eb1
 }
 
         

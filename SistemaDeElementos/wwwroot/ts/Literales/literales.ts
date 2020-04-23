@@ -18,9 +18,15 @@ const Atributo = {
     controlador: "controlador",
     posicion: "posicion",
     obligatorio: "obligatorio",
-    totalEnBd: "totalEnBd"
+    totalEnBd: "totalEnBd",
+    modoOrdenacion: "modo-ordenacion"
 }
 
+const ModoOrdenacion = {
+    ascedente: "ascendente",
+    descendente: "descendente",
+    sinOrden: "sin-orden"
+}
 const AtributoSelector = {
     popiedadBuscar : "propiedadBuscar",
     criterioBuscar: "criterioBuscar",
@@ -42,7 +48,10 @@ const ClaseCss = {
     propiedadId: "propiedad-id",
     divVisible: "div-visible",
     divNoVisible: "div-no-visible",
-    obligatorio: "obligatorio"
+    obligatorio: "obligatorio",
+    ordenAscendente: "ordenada-ascendente",
+    ordenDescendente: "ordenada-descendente",
+    sinOrden: "ordenada-sin-orden"
 }
 
 const Ajax = {

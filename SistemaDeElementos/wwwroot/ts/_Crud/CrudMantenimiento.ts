@@ -2,6 +2,78 @@
 
     export let crudMnt: CrudMnt = null;
 
+    class Orden {
+        public IdColumna: string;
+        public Propiedad: string;
+        public Modo: string;
+
+        private _cssClase: string;
+
+        get ccsClase(): string {
+            return this._cssClase;
+        }
+
+        set ccsClase(modo: string) {
+            if (modo === ModoOrdenacion.ascedente)
+                this._cssClase = ClaseCss.ordenAscendente;
+            else if (modo === ModoOrdenacion.descendente)
+                this._cssClase = ClaseCss.ordenDescendente;
+            else if (modo === ModoOrdenacion.sinOrden)
+                this._cssClase = ClaseCss.sinOrden;
+        }
+
+        constructor(idcolumna: string, propiedad: string, modo: string) {
+            this.Modo = modo;
+            this.Propiedad = propiedad;
+            this.IdColumna = idcolumna;
+            this.ccsClase = modo;
+        }
+    }
+
+    class Ordenacion {
+        private lista: Array<Orden>;
+
+        public Count(): number {
+            return this.lista.length;
+        }
+
+        constructor() {
+            this.lista = new Array<Orden>()
+        }
+
+        private Anadir(idcolumna: string, propiedad:string, modo: string) {
+            for (let i = 0; i < this.lista.length; i++) {
+                if (this.lista[i].Propiedad === propiedad) {
+                    this.lista[i].Modo = modo;
+                    this.lista[i].ccsClase = modo;
+                    return;
+                }
+            }
+            let orden: Orden = new Orden(idcolumna, propiedad, modo);
+            this.lista.push(orden);
+        }
+
+        private Quitar(propiedad: string) {
+            for (let i = 0; i < this.lista.length; i++) {
+                if (this.lista[i].Propiedad == propiedad) {
+                    this.lista.splice(i);
+                    return;
+                }
+            }
+        }
+
+        public Actualizar(idcolumna: string, propiedad: string, modo: string) {
+            if (modo === ModoOrdenacion.sinOrden)
+                this.Quitar(propiedad);
+            else
+                this.Anadir(idcolumna, propiedad, modo);
+        }
+
+        public Leer(i: number): Orden{
+            return this.lista[i];
+        }
+    }
+
     export class CrudMnt extends CrudBase {
 
         public crudDeCreacion: CrudCreacion;
@@ -13,6 +85,7 @@
         private InputCantidad: HTMLInputElement;
         private ZonaDeGrid: HTMLDivElement;
         private ZonaDeFiltro: HTMLDivElement;
+        private Ordenacion: Ordenacion;
 
         constructor(idPanelMnt: string) {
             super();
@@ -26,12 +99,22 @@
             this.infSel = new InfoSelector(this.IdGrid);
             var idHtmlFiltro = this.ZonaDeGrid.getAttribute(Atributo.zonaDeFiltro);
             this.ZonaDeFiltro = document.getElementById(`${idHtmlFiltro}`) as HTMLDivElement;
+            this.Ordenacion = new Ordenacion();
             this.InicializarNavegador();
         }
 
         private InicializarNavegador() {
             let idCrtlCantidad: string = `${this.IdGrid}_${LiteralMnt.idCtrlCantidad}`;
             this.InputCantidad = document.getElementById(`${idCrtlCantidad}`) as HTMLInputElement;
+
+            for (var i = 0; i < this.Ordenacion.Count(); i++) {
+                let orden: Orden = this.Ordenacion.Leer(i);
+                let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
+                columna.setAttribute(Atributo.modoOrdenacion, orden.Modo);
+                let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
+                a.setAttribute("class", orden.ccsClase);
+            }
+
 
         }
 
@@ -92,9 +175,23 @@
             this.Buscar(0);
         }
 
-        ParamentrosDeOrdenacion(columna: string) {
-           //indicamos en la columna como se va a ordenar (asc, des, suprimir ordenación)
-           //indicamos en el grid las propiedades de ordenación y su modo
+        ParamentrosDeOrdenacion(idcolumna: string) {
+            let htmlColumna: HTMLTableHeaderCellElement = document.getElementById(idcolumna) as HTMLTableHeaderCellElement;
+            let modo: string = htmlColumna.getAttribute(Atributo.modoOrdenacion);
+            if (EsNula(modo))
+                modo = ModoOrdenacion.ascedente;
+            else if (modo === ModoOrdenacion.ascedente)
+                modo = ModoOrdenacion.descendente;
+            else if (modo === ModoOrdenacion.descendente)
+                modo = ModoOrdenacion.sinOrden;
+            else if (modo === ModoOrdenacion.sinOrden)
+                modo = ModoOrdenacion.ascedente;
+
+            let propiedad: string = htmlColumna.getAttribute(Atributo.propiedad);
+            this.Ordenacion.Actualizar(idcolumna, propiedad, modo);
+
+            htmlColumna.setAttribute(Atributo.modoOrdenacion, modo);
+
         }
 
         public ObtenerUltimos() {
