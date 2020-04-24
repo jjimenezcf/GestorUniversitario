@@ -19,7 +19,7 @@ namespace UtilidadesParaIu
 
         private Aliniacion _alineada;
         private string _titulo;
-        public string Propiedad { get; set; } //crud_usuario_mantenimiento_grid_c_tr_0.login
+        public string Propiedad { get; set; } 
         public string Id => $"{idGridHtml}_c_tr_0.{Propiedad}";
         public string IdHtml => Id.ToLower();
         public string Titulo { get { return _titulo == null ? Propiedad : _titulo; } set { _titulo = value; } }

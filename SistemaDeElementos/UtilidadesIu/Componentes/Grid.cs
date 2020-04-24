@@ -11,7 +11,7 @@ namespace UtilidadesParaIu
     {
         public string Id { get; private set; }
 
-        public ZonaDeDatos<TElemento> ZonaDeDatos {get; set;}
+        public ZonaDeDatos<TElemento> ZonaDeDatos { get; set; }
 
         public string IdHtml => Id.ToLower();
 
@@ -25,7 +25,7 @@ namespace UtilidadesParaIu
         public string IdHtmlPorLeer => $"{IdHtmlNavegador_2}_reg";
 
         public string Controlador => ZonaDeDatos.Mnt.Crud.Controlador;
-        public List<ColumnaDelGrid<TElemento>> columnas  { get; private set; } = new List<ColumnaDelGrid<TElemento>>();
+        public List<ColumnaDelGrid<TElemento>> columnas { get; private set; } = new List<ColumnaDelGrid<TElemento>>();
         public List<FilaDelGrid<TElemento>> filas { get; private set; } = new List<FilaDelGrid<TElemento>>();
 
         public int TotalEnBd => ZonaDeDatos.TotalEnBd;
@@ -33,7 +33,7 @@ namespace UtilidadesParaIu
         private int CantidadPorLeer => ZonaDeDatos.CantidadPorLeer;
         public int Seleccionables { get; set; }
         public int Ultimo_Leido => PosicionInicial + filas.Count;
-        
+
         public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
         public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
@@ -49,14 +49,15 @@ namespace UtilidadesParaIu
 
         public string ToHtml()
         {
+            ZonaDeDatos.CalcularAnchosColumnas();
             return RenderizarGrid(this).Render();
         }
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
-            var visible = columna.Visible ? "" : "hidden";
-            var ancho = columna.PorAncho == 0 ? "" : $"width: {columna.PorAncho}%;";
-            var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
+            var visible = columna.Visible ? "visibility: visible;" : "visibility: hidden";
+            var ancho = columna.PorAncho == 0 ? "" : $"width:{columna.PorAncho}%";
+            var estilo =  $"style=¨{ancho}¨;"; 
 
             columna.descriptor.visible = visible;
             columna.descriptor.alineada = columna.AlineacionCss;
@@ -64,28 +65,30 @@ namespace UtilidadesParaIu
             var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
             //var parametros = JsonSerializer.Serialize(columna.idGrid, idCabecera);
 
-        /*
-         * <th scope="col" id="crud_usuario_mantenimiento_grid_c_tr_0.apellido" class="text-left" 
-         *    descriptor="{id:null,propiedad:apellido,visible:,alineada:text-left,valor:null}">
-         *    <a href="javascript:OrdenarPor({columna});">Apellido</a>
-           </th>
-         * 
-         * <a href="javascript:OrdenarPor({columna});">{columna.Titulo}</a>
-         */
+            /*
+             * <th scope="col" id="crud_usuario_mantenimiento_grid_c_tr_0.apellido" class="text-left" 
+             *    descriptor="{id:null,propiedad:apellido,visible:,alineada:text-left,valor:null}">
+             *    <a href="javascript:OrdenarPor({columna});">Apellido</a>
+               </th>
+             * 
+             * <a href="javascript:OrdenarPor({columna});">{columna.Titulo}</a>
+             */
 
-        var htmlRef = columna.Ordenar? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
+            var htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
                                                  class=¨ordenada-sin-orden¨>{columna.Titulo} 
-                                                </a>" 
-                : $"{columna.Titulo}";
+                                                </a>"
+                    : $"<a>{columna.Titulo}</a>";
 
-            return $@"{Environment.NewLine}<th id = ¨{columna.IdHtml}¨ 
+            var htmlTh = $@"{Environment.NewLine}<th id = ¨{columna.IdHtml}¨ 
                                                class=¨columna-cabecera {columna.AlineacionCss}¨ 
-                                               propiedad = ¨{columna.Propiedad}¨
+                                               propiedad = ¨{columna.Propiedad.ToLower()}¨
                                                modo-ordenacion=¨sin-orden¨ 
                                                {estilo} 
+                                               {visible}
                                                {descriptor}>
                                                {htmlRef}
                                            </td>";
+            return htmlTh;
         }
 
         private static string RenderColumnaDeSeleccion(string idGrid)
@@ -113,7 +116,7 @@ namespace UtilidadesParaIu
 
             var idDelCheck = $"{idFila}.chksel";
             var nombreCheck = $"chksel.{idGrid}";
-            
+
             var check = $@"<input type=¨checkbox¨ 
                                   id=¨{idDelCheck}¨ 
                                   name=¨{nombreCheck}¨ 
@@ -217,8 +220,8 @@ namespace UtilidadesParaIu
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
 
-            var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion 
-                ? $"LeerSiguientes('{grid.IdHtml}')" 
+            var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
+                ? $"LeerSiguientes('{grid.IdHtml}')"
                 : $"Crud.EjecutarMenuMnt('obtenersiguientes')";
 
             var accionBuscar = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion

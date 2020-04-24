@@ -45,10 +45,20 @@ namespace Gestor.Elementos.Entorno
 
             foreach (var orden in ordenacion)
             {
-                if (orden.Propiedad == nameof(UsuarioDtm.Apellido))
+                if (orden.Propiedad == nameof(UsuarioDtm.Apellido).ToLower())
                     return orden.Modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Apellido)
                         : set.OrderByDescending(x => x.Apellido);
+
+                if (orden.Propiedad == nameof(UsuarioDtm.Login).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Login)
+                        : set.OrderByDescending(x => x.Login);
+
+                if (orden.Propiedad == nameof(UsuarioDtm.Alta).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Alta)
+                        : set.OrderByDescending(x => x.Alta);
             }
 
             return set;

@@ -55,10 +55,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Mnt.Datos.Columnas.Add(columnaDelGrid);
             columnaDelGrid.ZonaDeDatos = this;
-            CalcularAnchosColumnas();
         }
 
-        private void CalcularAnchosColumnas()
+        public void CalcularAnchosColumnas()
         {
             var totalPorcentaje = 0;
             var colDefinidas = 0;

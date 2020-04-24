@@ -65,7 +65,7 @@
         private Quitar(propiedad: string) {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad == propiedad) {
-                    this.lista.splice(i);
+                    this.lista.splice(i,1);
                     return;
                 }
             }
