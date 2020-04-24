@@ -140,6 +140,7 @@ a {
 
 .pie-grid {
     align-content:center;
+    margin-top: 10px;
 }
 .info-grid {
     float: right;

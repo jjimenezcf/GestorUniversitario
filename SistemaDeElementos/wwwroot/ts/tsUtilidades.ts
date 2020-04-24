@@ -42,7 +42,7 @@ function ObtenerIdDeLaFilaChequeada(idCheck) {
 
 
 function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
-    var inputId = <HTMLInputElement>document.getElementById(idCheck.replace(".chksel", `.${columna}`));
+    let inputId: HTMLInputElement = document.getElementById(idCheck.replace(".chksel", `.${columna}`)) as HTMLInputElement;
     return inputId.value;
 }
 

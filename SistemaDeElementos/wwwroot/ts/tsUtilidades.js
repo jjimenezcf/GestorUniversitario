@@ -31,7 +31,7 @@ function ObtenerIdDeLaFilaChequeada(idCheck) {
     return obtenerValorDeLaColumnaChequeada(idCheck, "id");
 }
 function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
-    var inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
+    let inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
     return inputId.value;
 }
 function EsNula(valor) {

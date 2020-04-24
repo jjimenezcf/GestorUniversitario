@@ -28,6 +28,8 @@ namespace UtilidadesParaIu
         public List<ColumnaDelGrid<TElemento>> columnas { get; private set; } = new List<ColumnaDelGrid<TElemento>>();
         public List<FilaDelGrid<TElemento>> filas { get; private set; } = new List<FilaDelGrid<TElemento>>();
 
+        public int NumeroDeFilas => filas.Count;
+
         public int TotalEnBd => ZonaDeDatos.TotalEnBd;
         private int PosicionInicial => ZonaDeDatos.PosicionInicial;
         private int CantidadPorLeer => ZonaDeDatos.CantidadPorLeer;
@@ -45,6 +47,10 @@ namespace UtilidadesParaIu
             Seleccionables = 2;
         }
 
+        public FilaDelGrid<TElemento> ObtenerFila(int i)
+        {
+            return filas[i];
+        }
 
 
         public string ToHtml()
@@ -63,16 +69,6 @@ namespace UtilidadesParaIu
             columna.descriptor.alineada = columna.AlineacionCss;
 
             var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
-            //var parametros = JsonSerializer.Serialize(columna.idGrid, idCabecera);
-
-            /*
-             * <th scope="col" id="crud_usuario_mantenimiento_grid_c_tr_0.apellido" class="text-left" 
-             *    descriptor="{id:null,propiedad:apellido,visible:,alineada:text-left,valor:null}">
-             *    <a href="javascript:OrdenarPor({columna});">Apellido</a>
-               </th>
-             * 
-             * <a href="javascript:OrdenarPor({columna});">{columna.Titulo}</a>
-             */
 
             var htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
                                                  class=¨ordenada-sin-orden¨>{columna.Titulo} 
@@ -135,16 +131,16 @@ namespace UtilidadesParaIu
             return tdDelCheck;
         }
 
-        private static string RenderCeldaInput(string idGrid, string idFila, int numCol, CeldaDelGrid<TElemento> celda)
+        private static string RenderCeldaInput(CeldaDelGrid<TElemento> celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
 
 
-            var idDelTd = $"{idFila}.{numCol}";
-            var nombreTd = $"td.{celda.Propiedad}.{idGrid}";
+            var idDelTd = $"{celda.idTdHtml}";
+            var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
 
-            var idDelInput = $"{idFila}.{celda.Propiedad}";
-            var nombreInput = $"{celda.Propiedad}.{idGrid}";
+            var idDelInput = $"{celda.idHtml}";
+            var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
 
 
             var input = $" <input id=¨{idDelInput}¨ " +
@@ -164,26 +160,25 @@ namespace UtilidadesParaIu
                    $" </td>";
         }
 
-        private static string RenderFila(string idGrid, string idFila, FilaDelGrid<TElemento> fila)
+        private static string RenderFila(FilaDelGrid<TElemento> fila)
         {
             var filaHtml = new StringBuilder();
             var numCol = 0;
-            foreach (var celda in fila.Celdas)
+            for(var j= 0; j < fila.NumeroDeCeldas; j++)
             {
-                filaHtml.AppendLine(RenderCeldaInput(idGrid, idFila, numCol, celda));
+                var celda = fila.ObtenerCelda(j);
+                filaHtml.AppendLine(RenderCeldaInput(celda));
                 numCol++;
             }
             return $@"{filaHtml}";
         }
 
-        private static string RenderFilaSeleccionable(string idGrid, int numFil, FilaDelGrid<TElemento> fila)
+        private static string RenderFilaSeleccionable(FilaDelGrid<TElemento> fila)
         {
-            var idFila = $"{idGrid}.d.tr.{numFil}";
+            string filaHtml = RenderFila(fila);
+            string celdaDelCheck = RenderCeldaCheck(fila.Datos.IdHtml, fila.IdHtml, fila.NumeroDeCeldas);
 
-            string filaHtml = RenderFila(idGrid, idFila, fila);
-            string celdaDelCheck = RenderCeldaCheck(idGrid, idFila, fila.Celdas.Count);
-
-            return $"<tr id='{idFila}'>{Environment.NewLine}" +
+            return $"<tr id='{fila.IdHtml}'>{Environment.NewLine}" +
                    $"   {filaHtml}{celdaDelCheck}{Environment.NewLine}" +
                    $"</tr>{Environment.NewLine}";
         }
@@ -203,16 +198,15 @@ namespace UtilidadesParaIu
                       </thead>";
         }
 
-        private static string RenderDetalleGrid(string idGrid, IEnumerable<FilaDelGrid<TElemento>> filas)
+        private static string RenderDetalleGrid(Grid<TElemento> grid)
         {
             var htmlDetalleGrid = new StringBuilder();
-            int i = 0;
-            foreach (var fila in filas)
+            for(var i= 0; i< grid.NumeroDeFilas; i++)
             {
-                htmlDetalleGrid.Append(RenderFilaSeleccionable(idGrid, i, fila));
-                i = i + 1;
+                var fila = grid.ObtenerFila(i);
+                htmlDetalleGrid.Append(RenderFilaSeleccionable(fila));
             }
-            return $@"<tbody id='{idGrid}_detalle'>
+            return $@"<tbody id='{grid.IdHtml}_detalle'>
                          {htmlDetalleGrid}
                       </tbody>";
         }
@@ -279,7 +273,7 @@ namespace UtilidadesParaIu
                                       class=¨tabla-grid¨ 
                                       width=¨100%¨>{Environment.NewLine}" +
                             $"   {RenderCabecera(grid)}{Environment.NewLine}" +
-                            $"   {RenderDetalleGrid(grid.IdHtml, grid.filas)}" +
+                            $"   {RenderDetalleGrid(grid)}" +
                             $"</table>";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());

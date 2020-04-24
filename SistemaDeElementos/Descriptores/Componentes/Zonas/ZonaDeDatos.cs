@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public List<ColumnaDelGrid<TElemento>> Columnas => Grid.columnas;
 
-        public List<FilaDelGrid<TElemento>> Filas => Grid.filas;
+        private List<FilaDelGrid<TElemento>> Filas => Grid.filas;
 
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; } = 0;
@@ -32,6 +32,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = TipoControl.ZonaDeDatos;
             Grid = new Grid<TElemento>(this);
+        }
+
+        public void AnadirFila(FilaDelGrid<TElemento> fila)
+        {
+            fila.Datos = this;
+            fila.NumeroDeFila = Filas.Count;
+            Filas.Add(fila);
         }
 
         private string RenderZonaDeDatos()

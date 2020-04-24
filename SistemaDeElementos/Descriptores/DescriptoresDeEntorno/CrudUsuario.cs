@@ -70,9 +70,9 @@ namespace MVCSistemaDeElementos.Descriptores
                     if (columna.Propiedad == nameof(UsuarioDtm.Alta))
                         celda.Valor = usuario.Alta.ToString();
 
-                    fila.Celdas.Add(celda);
+                    fila.AnadirCelda(celda);
                 }
-                Mnt.Datos.Filas.Add(fila);
+                Mnt.Datos.AnadirFila(fila);
             }
         }
 

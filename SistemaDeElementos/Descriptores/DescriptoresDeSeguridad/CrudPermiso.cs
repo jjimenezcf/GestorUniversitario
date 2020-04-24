@@ -56,9 +56,9 @@ namespace MVCSistemaDeElementos.Descriptores
                     if (columna.Propiedad == nameof(PermisoDto.Permiso))
                         celda.Valor = permiso.Permiso;
 
-                    fila.Celdas.Add(celda);
+                    fila.AnadirCelda(celda);
                 }
-                Mnt.Datos.Filas.Add(fila);
+                Mnt.Datos.AnadirFila(fila);
             }
         }
 
