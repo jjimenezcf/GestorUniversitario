@@ -79,47 +79,11 @@ namespace UtilidadesParaIu
             return htmlTh;
         }
 
-        private static string RenderColumnaDeSeleccion(Grid<TElemento> grid)
-        {
-            var columna = new ColumnaDelGrid<TElemento> { Propiedad = $"{grid.IdHtml}_chk_sel", Titulo = " " };
-            grid.ZonaDeDatos.AnadirColumna(columna);
-
-            return $"{Environment.NewLine}<th id= ¨{columna.IdHtml}¨ class=¨{columna.AlineacionCss}¨ ><a>{columna.Titulo}</a></th>";
-        }
-
-        private static string RenderCeldaCheck(string idGrid, string idFila, int numCol)
-        {
-
-            var idDelTd = $"{idFila}.{numCol}";
-            var nombreTd = $"td.chksel.{idGrid}";
-
-            var idDelCheck = $"{idFila}.chksel";
-            var nombreCheck = $"chksel.{idGrid}";
-
-            var check = $@"<input type=¨checkbox¨ 
-                                  id=¨{idDelCheck}¨ 
-                                  name=¨{nombreCheck}¨ 
-                                  class=¨text-center¨ 
-                                  aria-label=¨Marcar para seleccionar¨
-                                  onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{idGrid}','{idDelCheck}');¨ /> ";
-
-
-
-            var tdDelCheck = $@"<td id=¨{idDelTd}¨ 
-                                       name=¨{nombreTd}¨ 
-                                       class=¨{HtmlRender.AlineacionCss(Aliniacion.centrada)}¨>{Environment.NewLine}" +
-                             $@"  {check}{Environment.NewLine}" +
-                             $@"</td>";
-
-            return tdDelCheck;
-        }
 
         private static string RenderCeldaInput(CeldaDelGrid<TElemento> celda)
         {
             var editable = !celda.Editable ? "readonly" : "";
-
-   
-            var idDelTdcheck = $"{celda.Fila.IdHtml}.{celda.Fila.NumeroDeCeldas}";
+               
             var idDelCheck = $"{celda.Fila.IdHtml}.chksel";
 
             var idDelTd = $"{celda.idTdHtml}";
@@ -127,7 +91,7 @@ namespace UtilidadesParaIu
 
             var idDelInput = $"{celda.idHtml}";
             var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
-            var onclick = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{idDelCheck}');¨";
+            var onclick = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{idDelCheck}','{idDelInput}');¨";
             var tipoHtml = "type =¨text¨";
             if (celda.Tipo == typeof(bool)) tipoHtml = "type =¨checkbox¨";
 
@@ -182,7 +146,7 @@ namespace UtilidadesParaIu
             {
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
-            //cabeceraHtml.Append(RenderColumnaDeSeleccion(grid)); 
+
             return $@"<thead id='{grid.IdHtml}_cabecera'>{Environment.NewLine}
                          <tr id=¨{grid.IdHtmlCabecera}¨>
                             {cabeceraHtml}{Environment.NewLine}

@@ -138,9 +138,13 @@
             this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
         }
 
-        public AlPulsarUnCheckDeSeleccion(idCheck) {
+        public AlPulsarUnCheckDeSeleccion(idCheck: string, idDelInput: string) {
             BlanquearMensaje();
-            var check = <HTMLInputElement>document.getElementById(idCheck);
+
+            let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+            if (idCheck !== idDelInput)
+                check.checked = !check.checked;
+
             if (check.checked)
                 this.AnadirAlInfoSelector(idCheck);
             else
@@ -353,7 +357,7 @@
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }
 
-    export function AlPulsarUnCheckDeSeleccion(idGrid, idCheck) {
+    export function AlPulsarUnCheckDeSeleccion(idGrid, idCheck, idDelInput) {
         if (crudMnt.IdGrid != idGrid) {
             BlanquearMensaje();
             var check = <HTMLInputElement>document.getElementById(idCheck);
@@ -363,7 +367,7 @@
                 QuitarDelSelector(idGrid, idCheck);
         }
         else
-            crudMnt.AlPulsarUnCheckDeSeleccion(idCheck);
+            crudMnt.AlPulsarUnCheckDeSeleccion(idCheck, idDelInput);
     }
 
     function AnadirAlInfoSelector(idGrid, idCheck) {
