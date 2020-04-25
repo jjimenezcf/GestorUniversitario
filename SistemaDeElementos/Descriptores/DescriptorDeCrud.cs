@@ -87,6 +87,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual void DefinirColumnasDelGrid()
         {
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Propiedad = "chksel", Titulo = " ", PorAncho = 6, Tipo = typeof(bool) });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Propiedad = nameof(Id), Tipo = typeof(int), Visible = false });
         }
 

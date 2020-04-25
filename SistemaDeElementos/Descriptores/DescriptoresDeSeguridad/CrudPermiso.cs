@@ -30,8 +30,8 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false, PorAncho = 50 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int), PorAncho = 10 });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
         }
 
@@ -40,13 +40,10 @@ namespace MVCSistemaDeElementos.Descriptores
             base.MapearElementosAlGrid(elementos, posicion);
             foreach (var permiso in elementos)
             {
-                var fila = new FilaDelGrid<PermisoDto>();
+                var fila = new FilaDelGrid<PermisoDto>(Mnt.Datos, permiso);
                 foreach (ColumnaDelGrid<PermisoDto> columna in Mnt.Datos.Columnas)
                 {
                     CeldaDelGrid<PermisoDto> celda = new CeldaDelGrid<PermisoDto>(columna);
-                    if (columna.Propiedad == nameof(PermisoDto.Id))
-                        celda.Valor = permiso.Id.ToString();
-                    else
                     if (columna.Propiedad == nameof(PermisoDto.Nombre))
                         celda.Valor = permiso.Nombre;
                     else

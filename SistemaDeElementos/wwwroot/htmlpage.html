@@ -1,150 +1,412 @@
-﻿
-<!DOCTYPE html>
-<html lang="es-es">
-<head>
-    <title>P&#xE1;gina inicial</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/sistemaDeElementos.css" type="text/css">
-    <link rel="stylesheet" href="/css/seMenu.css" type="text/css">
+﻿<table id="crud_usuario_mantenimiento_grid_table" class="tabla-grid" width="100%">
+    <thead id="crud_usuario_mantenimiento_grid_cabecera">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <tr id="crud_usuario_mantenimiento_grid_c_tr_0">
 
-    <script src="/ts/tsUtilidades.js"></script>
-    <script src="/ts/tsInfoSelector.js"></script>
-    <script src="/ts/tsSelectores.js"></script>
-    <script src="/ts/tsGrid.js"></script>
-    <script src="/ts/tsMenu.js"></script>
-</head>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.crud_usuario_mantenimiento_grid_chk_sel" class="columna-cabecera text-left" propiedad="crud_usuario_mantenimiento_grid_chk_sel" modo-ordenacion="sin-orden" style="width:2%" ;="" visibility:="" visible;="">
+                <a> </a>
 
+            </th>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.id" class="columna-cabecera text-right" propiedad="id" modo-ordenacion="sin-orden" style="" ;="" visibility:="" hidden="">
+                <a>Id</a>
 
-<body>
+            </th>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.login" class="columna-cabecera text-left" propiedad="login" modo-ordenacion="sin-orden" style="width:25%" ;="" visibility:="" visible;="">
+                <a href="javascript:Crud.EjecutarMenuMnt('ordenarpor','crud_usuario_mantenimiento_grid_c_tr_0.login')" class="ordenada-sin-orden">
+                    Login
+                </a>
 
-    <div class="container-fluid">
-        <header>
-            <table id="tablaCabecera" class="table">
-                <tr>
-                    <td class="celdaCabeceraIzquierda">
-                        <input id="idproducto" type="button" class="etiquetaIzquierda" value="Sitema de elementos" menu="idmenu" onclick="Menu.Mostrar()" menuAbierto="false" />
-                    </td>
-                    <td class="celdaSeparador">
-                    </td>
-                    <td class="celdaCabecera">
-                        <input id="idConsultas" type="text" class="estiloCeldaCabecera" value="Consultas" readonly />
-                    </td>
-                    <td class="celdaCabecera">
-                        <input id="idFavoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
-                    </td>
-                    <td class="celdaCabeceraDerecha">
-                        <input id="idusuario" type="text" class="estiloCeldaDerecha" value="jjimenezcf@gmail.com" readonly />
-                    </td>
-                </tr>
-            </table>
+            </th>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.apellido" class="columna-cabecera text-left" propiedad="apellido" modo-ordenacion="sin-orden" style="width:45%" ;="" visibility:="" visible;="">
+                <a href="javascript:Crud.EjecutarMenuMnt('ordenarpor','crud_usuario_mantenimiento_grid_c_tr_0.apellido')" class="ordenada-sin-orden">
+                    Apellido
+                </a>
 
-            <div id="idmenu" class="modal">
+            </th>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.nombre" class="columna-cabecera text-left" propiedad="nombre" modo-ordenacion="sin-orden" style="width:14%" ;="" visibility:="" visible;="">
+                <a>Nombre</a>
 
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div id="idcontenedormenu">
-                        <ul id='idmenuraiz'>
-                            <li><a><img src='images/paginaAnterior.png'/>Configuración</a>
-                                <ul>
-                                    <li>Funcionalidad</li>
-                                    <li>
-                                        Accesos
-                                        <a class="nav-link text-dark" href="/Permisos">Permisos</a>
-                                        <a class="nav-link text-dark" href="/Usuarios">Usuarios</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>PHP</li>
-                            <li>MySQL</li>
-                            <li>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
+            </th>
+            <th id="crud_usuario_mantenimiento_grid_c_tr_0.alta" class="columna-cabecera text-center" propiedad="alta" modo-ordenacion="sin-orden" style="width:14%" ;="" visibility:="" visible;="">
+                <a href="javascript:Crud.EjecutarMenuMnt('ordenarpor','crud_usuario_mantenimiento_grid_c_tr_0.alta')" class="ordenada-sin-orden">
+                    Alta
+                </a>
 
 
-        </header>
+            </th>
+        </tr>
 
-        <div class="table">
-            <div class="row">
-                <div class="col">
-                    <div id="contenido" style="width: 100%" ;>
-                        <main role="main" class="pb-3">
+    </thead>
+    <tbody id="crud_usuario_mantenimiento_grid_detalle">
+        <tr id="crud_usuario_mantenimiento_grid_d_tr_0">
+            <td id="crud_usuario_mantenimiento_grid_d_tr_0.0" name="td.crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left">
+                <input type="checkbox" id="crud_usuario_mantenimiento_grid_d_tr_0.crud_usuario_mantenimiento_grid_chk_sel" name="crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="False" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.0.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_0.1" ="" hidden="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_0.id" name="id.crud_usuario_mantenimiento_grid" class="text-right" style="width:100%; border:0" readonly="" value="1" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.1.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_0.2" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_0.login" name="login.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="acarrascosa@gmail.es" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.2.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_0.3" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_0.apellido" name="apellido.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Carrascosa Llorente" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.3.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_0.4" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_0.nombre" name="nombre.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Alejandro" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.4.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_0.5" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_0.alta" name="alta.crud_usuario_mantenimiento_grid" class="text-center" style="width:100%; border:0" readonly="" value="01/09/2005 0:00:00" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_0.5.chksel')  />
+            </td>
 
-                            <div class="jumbotron">
-                            </div>
-                            <div class="row">
-                            </div>
-                            <br />
-                            <br />
-                        </main>
-                    </div>
-                </div>
+        </tr>
+        <tr id='crud_usuario_mantenimiento_grid_d_tr_1'>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.0" ="">
+                <input type="checkbox" id="crud_usuario_mantenimiento_grid_d_tr_1.crud_usuario_mantenimiento_grid_chk_sel" name="crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="False" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.0.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.1" ="" hidden="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_1.id" name="id.crud_usuario_mantenimiento_grid" class="text-right" style="width:100%; border:0" readonly="" value="2" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.1.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.2" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_1.login" name="login.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="alfonso.martinez@se.es" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.2.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.3" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_1.apellido" name="apellido.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Martínez-Quijano" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.3.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.4" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_1.nombre" name="nombre.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Alonso" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.4.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_1.5" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_1.alta" name="alta.crud_usuario_mantenimiento_grid" class="text-center" style="width:100%; border:0" readonly="" value="01/09/2002 0:00:00" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_1.5.chksel')  />
+            </td>
+
+        </tr>
+        <tr id='crud_usuario_mantenimiento_grid_d_tr_2'>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.0" ="">
+                <input type="checkbox" id="crud_usuario_mantenimiento_grid_d_tr_2.crud_usuario_mantenimiento_grid_chk_sel" name="crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="False" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.0.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.1" ="" hidden="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_2.id" name="id.crud_usuario_mantenimiento_grid" class="text-right" style="width:100%; border:0" readonly="" value="3" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.1.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.2" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_2.login" name="login.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="arturo.brugger@se.es" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.2.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.3" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_2.apellido" name="apellido.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Brugger Frigols" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.3.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.4" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_2.nombre" name="nombre.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Arturo" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.4.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_2.5" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_2.alta" name="alta.crud_usuario_mantenimiento_grid" class="text-center" style="width:100%; border:0" readonly="" value="01/09/2003 0:00:00" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_2.5.chksel')  />
+            </td>
+
+        </tr>
+        <tr id='crud_usuario_mantenimiento_grid_d_tr_3'>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.0" ="">
+                <input type="checkbox" id="crud_usuario_mantenimiento_grid_d_tr_3.crud_usuario_mantenimiento_grid_chk_sel" name="crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="False" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.0.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.1" ="" hidden="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_3.id" name="id.crud_usuario_mantenimiento_grid" class="text-right" style="width:100%; border:0" readonly="" value="4" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.1.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.2" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_3.login" name="login.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="luis.sanchez@se.es" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.2.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.3" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_3.apellido" name="apellido.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Sánchez" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.3.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.4" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_3.nombre" name="nombre.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Luis" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.4.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_3.5" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_3.alta" name="alta.crud_usuario_mantenimiento_grid" class="text-center" style="width:100%; border:0" readonly="" value="01/09/2002 0:00:00" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_3.5.chksel')  />
+            </td>
+
+        </tr>
+        <tr id='crud_usuario_mantenimiento_grid_d_tr_4'>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.0" ="">
+                <input type="checkbox" id="crud_usuario_mantenimiento_grid_d_tr_4.crud_usuario_mantenimiento_grid_chk_sel" name="crud_usuario_mantenimiento_grid_chk_sel.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="False" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.0.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.1" ="" hidden="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_4.id" name="id.crud_usuario_mantenimiento_grid" class="text-right" style="width:100%; border:0" readonly="" value="5" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.1.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.2" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_4.login" name="login.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="antonio.carrillo@se.es" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.2.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.3" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_4.apellido" name="apellido.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Carrillo" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.3.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.4" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_4.nombre" name="nombre.crud_usuario_mantenimiento_grid" class="text-left" style="width:100%; border:0" readonly="" value="Antonio" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.4.chksel')  />
+            </td>
+            <td id=" crud_usuario_mantenimiento_grid_d_tr_4.5" ="">
+                <input type="text" id="crud_usuario_mantenimiento_grid_d_tr_4.alta" name="alta.crud_usuario_mantenimiento_grid" class="text-center" style="width:100%; border:0" readonly="" value="01/09/2002 0:00:00" onclick="Crud.AlPulsarUnCheckDeSeleccion('crud_usuario_mantenimiento_grid','crud_usuario_mantenimiento_grid_d_tr_4.5.chksel')  />
+            </td>
+
+        </tr>
+
+    </tbody>
+</table>
+<div id=" crud_usuario_mantenimiento_grid_pie" ="">
+    <div id="crud_usuario_mantenimiento_grid_nav" class="navegador-grid">
+        <div id="crud_usuario_mantenimiento_grid_nav_1" data-type="img">
+            <img src="/images/paginaInicial.png" alt="Primera página" title="Ir al primer registro" onclick="Crud.EjecutarMenuMnt('buscar')">
+        </div>
+        <div id="crud_usuario_mantenimiento_grid_nav_2">
+            <input type="number" id="crud_usuario_mantenimiento_grid_nav_2_reg" class="cantidad-grid" value="5" min="1" step="1" max="999" posicion="5" controlador="Usuarios" totalenbd="20" title="leidos 5 desde la posición 0">
+        </div>
+        <div id="id=" crud_usuario_mantenimiento_grid_nav_3"="" data-type="img">
+            <img src="/images/paginaAnterior.png" alt="Primera página" title="Página anterior" onclick="Crud.EjecutarMenuMnt('obteneranteriores')">
+            <img src="/images/paginaSiguiente.png" alt="Siguiente página" title="Página siguiente" onclick="Crud.EjecutarMenuMnt('obtenersiguientes')">
+            <img src="/images/paginaUltima.png" alt="Última página" title="Última página" onclick="Crud.EjecutarMenuMnt('obtenerultimos')">
+        </div>
+    </div>
+    <div id="crud_usuario_mantenimiento_grid_info" class="info-grid">
+        5 desde la posición 0
+    </div>
+
+
+
+
+
+
+
+    <div id="crud_usuario_pnlcreador" class="div-no-visible" controlador="Usuarios">
+        <h2>Div de creación</h2>
+
+        <div id="crud_usuario_pnlcreador_zonamenu">
+            <div id="crud_usuario_pnlcreador_zonamenu_menu">
+                <input id="crud_usuario_pnlcreador_zonamenu_menu_opcion_0" type="button" value="Crear" onclick="Crud.EjecutarMenuCrt('nuevoelemento')"><input id="crud_usuario_pnlcreador_zonamenu_menu_opcion_1" type="button" value="Cancelar" onclick="Crud.EjecutarMenuCrt('cancelarnuevo')">
             </div>
         </div>
 
-        <footer class="border-top footer text-muted">
-            <div class="text-info" width="100%">
-                <input id="Mensaje" style="width:100%" readonly value="" />
-            </div>
-            <div class="text-center">
-                <div style="float: left">
-                    &copy;PORTDESA1 - (localdb)\MSSQLLocalDB:SistemaDeElementos
-                </div>
-                <div style="float: right">
-                    Version: 0.0.2 - Usuario: jjimenezcf@gmail.com
-                    <a href="/Home/Privacy">Privacy</a>
-                </div>
-            </div>
-        </footer>
+        <table id="id_table_usuariodto_nuevo" name="table_propiedad" class="tabla-creacion">
 
+            <tbody>
+                <tr id="id_table_usuariodto_nuevo_tr_0" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_nuevo_0_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_nuevo_0_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_nuevo_0_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Usuario:
+                            </div>
+                            <div id="id_table_usuariodto_nuevo_0_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_nuevo_login" propiedad-dto="login" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Usuario de conexión" valorpordefecto="">
 
+                            </div>
+                        </div>
+                    </td>
 
+                </tr>
 
+                <tr id="id_table_usuariodto_nuevo_tr_1" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_nuevo_1_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_nuevo_1_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_nuevo_1_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Nombre:
+                            </div>
+                            <div id="id_table_usuariodto_nuevo_1_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_nuevo_nombre" propiedad-dto="nombre" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Nombre" valorpordefecto="">
 
-        <nav id="cookieConsent" class="navbar navbar-default navbar-fixed-top" role="alert">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
-                        <span class="sr-only">Toggle cookie consent banner</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <span class="navbar-brand"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></span>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <p class="navbar-text">
-                        Use this space to summarize your privacy and cookie use policy.
-                    </p>
-                    <div class="navbar-right">
-                        <a class="btn btn-info navbar-btn" href="/Home/Privacy">Learn More</a>
-                        <button type="button" class="btn btn-default navbar-btn" data-cookie-string=".AspNet.Consent=yes; expires=Mon, 15 Mar 2021 16:32:23 GMT; path=/; secure; samesite=none">Accept</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <script>
-            (function () {
-                document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
-                    document.cookie = el.target.dataset.cookieString;
-                    document.querySelector("#cookieConsent").classList.add("hidden");
-                }, false);
-            })();
-        </script>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr id="id_table_usuariodto_nuevo_tr_2" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_nuevo_2_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_nuevo_2_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_nuevo_2_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Apellidos:
+                            </div>
+                            <div id="id_table_usuariodto_nuevo_2_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_nuevo_apellido" propiedad-dto="apellido" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Apellidos" valorpordefecto="">
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr id="id_table_usuariodto_nuevo_tr_3" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_nuevo_3_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_nuevo_3_0" name="div_propiedad" class="div-propiedad">
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
 
     </div>
-</body>
-</html>
+
+
+    <div id="crud_usuario_pnleditor" class="div-no-visible" controlador="Usuarios">
+        <h2>Div de Edicion</h2>
+
+        <div id="crud_usuario_pnleditor_zonamenu">
+            <div id="crud_usuario_pnleditor_zonamenu_menu">
+                <input id="crud_usuario_pnleditor_zonamenu_menu_opcion_0" type="button" value="Modificar" onclick="Crud.EjecutarMenuEdt('modificarelemento')"><input id="crud_usuario_pnleditor_zonamenu_menu_opcion_1" type="button" value="Cancelar" onclick="Crud.EjecutarMenuEdt('cancelaredicion')">
+            </div>
+        </div>
+
+        <table id="id_table_usuariodto_edicion" name="table_propiedad" class="tabla-creacion">
+
+            <tbody>
+                <tr id="id_table_usuariodto_edicion_tr_0" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_edicion_0_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_edicion_0_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_edicion_0_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Usuario:
+                            </div>
+                            <div id="id_table_usuariodto_edicion_0_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_edicion_login" propiedad-dto="login" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Usuario de conexión" valorpordefecto="">
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr id="id_table_usuariodto_edicion_tr_1" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_edicion_1_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_edicion_1_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_edicion_1_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Nombre:
+                            </div>
+                            <div id="id_table_usuariodto_edicion_1_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_edicion_nombre" propiedad-dto="nombre" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Nombre" valorpordefecto="">
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr id="id_table_usuariodto_edicion_tr_2" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_edicion_2_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_edicion_2_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_edicion_2_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Apellidos:
+                            </div>
+                            <div id="id_table_usuariodto_edicion_2_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_edicion_apellido" propiedad-dto="apellido" class="propiedad propiedad-valida" obligatorio="S" type="text" value="" placeholder="Apellidos" valorpordefecto="">
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr id="id_table_usuariodto_edicion_tr_3" name="tr_lbl_propiedad" class="tr-propiedad">
+                    <td id="id_table_usuariodto_edicion_3_0_ctrl" name="td_propiedad" class="td-propiedad" style="width:100%">
+                        <div id="id_table_usuariodto_edicion_3_0" name="div_propiedad" class="div-propiedad">
+                            <div id="id_table_usuariodto_edicion_3_0_lbl" name="lbl_propiedad" class="div-lbl-propiedad" style="width: 20%">
+                                Fecha de alta:
+                            </div>
+                            <div id="id_table_usuariodto_edicion_3_0_crtl" name="crtl_propiedad" class="div-crtl-propiedad" style="width: 80%">
+                                <input id="id_table_usuariodto_edicion_alta" propiedad-dto="alta" class="propiedad propiedad-valida" obligatorio="S" type="text" readonly="" value="" placeholder="" valorpordefecto="">
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+
+        <div id="crud_usuario_pnleditor" class="div-pie-propiedad">
+            <input id="id_table_usuariodto_edicion_idElemento" propiedad-dto="id" class="propiedad propiedad-id" type="text" readonly="" value="" <="" input="">
+
+        </div>
+
+    </div>
+    <script src="../../ts/usuarios/Usuarios.js"></script>
+    <script>
+        Crud.crudMnt = new Usuarios.CrudMntUsuario('crud_usuario_mantenimiento', 'crud_usuario_pnlcreador', 'crud_usuario_pnleditor');
+    </script>
 
 
 
 
+
+
+
+
+
+
+
+    <br>
+    <br>
+
+
+
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="text-info" width="100%">
+            <input id="Mensaje" style="width:100%" readonly="" value="">
+        </div>
+        <div class="text-center">
+            <div style="float: left">
+                ©PORTDESA1 - (localdb)\MSSQLLocalDB:SistemaDeElementos
+            </div>
+            <div style="float: right">
+                Version: 0.0.2 - Usuario: jjimenezcf@gmail.com
+                <a href="/Home/Privacy">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <script>
+        window.onload = Menu.ReqSolicitarMenu('jjimenezcf@gmail.com', 'id_contenedormenu');
+    </script>
+
+
+
+    <nav id="cookieConsent" class="navbar navbar-default navbar-fixed-top" role="alert">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
+                    <span class="sr-only">Toggle cookie consent banner</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="navbar-brand"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></span>
+            </div>
+            <div class="collapse navbar-collapse">
+                <p class="navbar-text">
+                    Use this space to summarize your privacy and cookie use policy.
+                </p>
+                <div class="navbar-right">
+                    <a class="btn btn-info navbar-btn" href="/Home/Privacy">Learn More</a>
+                    <button type="button" class="btn btn-default navbar-btn" data-cookie-string=".AspNet.Consent=yes; expires=Sun, 25 Apr 2021 11:02:42 GMT; path=/; secure; samesite=none">Accept</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <script>
+        (function () {
+            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+                document.cookie = el.target.dataset.cookieString;
+                document.querySelector("#cookieConsent").classList.add("hidden");
+            }, false);
+        })();
+    </script>
+
+
+
+
+
+
+
+
+    </td></tr></tbody></table>

@@ -51,13 +51,10 @@ namespace MVCSistemaDeElementos.Descriptores
             base.MapearElementosAlGrid(elementos, posicion);
             foreach (var usuario in elementos)
             {
-                var fila = new FilaDelGrid<UsuarioDto>();
+                var fila = new FilaDelGrid<UsuarioDto>(Mnt.Datos, usuario);
                 foreach (ColumnaDelGrid<UsuarioDto> columna in Mnt.Datos.Columnas)
                 {
                     CeldaDelGrid<UsuarioDto> celda = new CeldaDelGrid<UsuarioDto>(columna);
-                    if (columna.Propiedad == nameof(UsuarioDtm.Id))
-                        celda.Valor = usuario.Id.ToString();
-                    else
                     if (columna.Propiedad == nameof(UsuarioDtm.Login))
                         celda.Valor = usuario.Login.ToString();
                     else

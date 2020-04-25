@@ -41,28 +41,21 @@ namespace MVCSistemaDeElementos.Descriptores
             Filas.Add(fila);
         }
 
-        private string RenderZonaDeDatos()
-        {
-
-            var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨
-                                      seleccionables =2
-                                      seleccionados =¨¨
-                                      zonaDeFiltro = ¨{idFiltro}¨
-                                     >     
-                                       tabla_Navegador 
-                                     </div>";
-            var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")
-                                        .Replace("{idFiltro}", idHtmlZonaFiltro)
-                                        .Replace("tabla_Navegador", Grid.ToHtml());
-            return htmlContenedor;
-        }
-
         internal void AnadirColumna(ColumnaDelGrid<TElemento> columnaDelGrid)
         {
             Mnt.Datos.Columnas.Add(columnaDelGrid);
             columnaDelGrid.ZonaDeDatos = this;
         }
+
+        internal ColumnaDelGrid<TElemento> ObtenerColumna(string nombreColumna)
+        {
+            for (var i = 0; i < Columnas.Count; i++)
+                if (Columnas[i].Propiedad == nombreColumna)
+                    return Columnas[i];
+
+            return null;
+        }
+
 
         public void CalcularAnchosColumnas()
         {
@@ -101,7 +94,22 @@ namespace MVCSistemaDeElementos.Descriptores
                     porcPorColNoDefinida = porcDeReparto;
             }
         }
+        private string RenderZonaDeDatos()
+        {
 
+            var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
+            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨
+                                      seleccionables =2
+                                      seleccionados =¨¨
+                                      zonaDeFiltro = ¨{idFiltro}¨
+                                     >     
+                                       tabla_Navegador 
+                                     </div>";
+            var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")
+                                        .Replace("{idFiltro}", idHtmlZonaFiltro)
+                                        .Replace("tabla_Navegador", Grid.ToHtml());
+            return htmlContenedor;
+        }
         public string RenderDelGrid(ModoDescriptor modo)
         {
             var mnt = (DescriptorMantenimiento<TElemento>)Padre;

@@ -36,9 +36,7 @@ namespace UtilidadesParaIu
         public int Seleccionables { get; set; }
         public int Ultimo_Leido => PosicionInicial + filas.Count;
 
-        public bool ConSeleccion { get; set; } = true;
         public bool ConNavegador { get; set; } = true;
-        public ModeloGrid Modelo { get; private set; } = ModeloGrid.Propio;
 
         public Grid(ZonaDeDatos<TElemento> zonaDeDatos)
         {
@@ -65,11 +63,6 @@ namespace UtilidadesParaIu
             var ancho = columna.PorAncho == 0 ? "" : $"width:{columna.PorAncho}%";
             var estilo =  $"style=¨{ancho}¨;"; 
 
-            columna.descriptor.visible = visible;
-            columna.descriptor.alineada = columna.AlineacionCss;
-
-            var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
-
             var htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
                                                  class=¨ordenada-sin-orden¨>{columna.Titulo} 
                                                 </a>"
@@ -80,28 +73,18 @@ namespace UtilidadesParaIu
                                                propiedad = ¨{columna.Propiedad.ToLower()}¨
                                                modo-ordenacion=¨sin-orden¨ 
                                                {estilo} 
-                                               {visible}
-                                               {descriptor}>
+                                               {visible}>
                                                {htmlRef}
                                            </td>";
             return htmlTh;
         }
 
-        private static string RenderColumnaDeSeleccion(string idGrid)
+        private static string RenderColumnaDeSeleccion(Grid<TElemento> grid)
         {
-            var visible = "";
-            var ancho = "";
-            var estilo = visible + ancho == "" ? "" : $"{ancho} {visible}";
-            var columna = new ColumnaDelGrid<TElemento>();
-            columna.Propiedad = idGrid + "_chk_sel";
-            columna.Titulo = " ";
-            columna.descriptor.visible = visible;
-            columna.descriptor.alineada = HtmlRender.AlineacionCss(Aliniacion.centrada);
-            columna.descriptor.valor = "CrearCheck";
+            var columna = new ColumnaDelGrid<TElemento> { Propiedad = $"{grid.IdHtml}_chk_sel", Titulo = " " };
+            grid.ZonaDeDatos.AnadirColumna(columna);
 
-            var descriptor = $"descriptor={JsonSerializer.Serialize(columna.descriptor)}";
-
-            return $"{Environment.NewLine}<th scope=¨col¨ id= ¨{columna.descriptor.id}¨ class=¨{columna.AlineacionCss}¨ {estilo} {descriptor}>{columna.Titulo}</th>";
+            return $"{Environment.NewLine}<th id= ¨{columna.IdHtml}¨ class=¨{columna.AlineacionCss}¨ ><a>{columna.Titulo}</a></th>";
         }
 
         private static string RenderCeldaCheck(string idGrid, string idFila, int numCol)
@@ -135,29 +118,38 @@ namespace UtilidadesParaIu
         {
             var editable = !celda.Editable ? "readonly" : "";
 
+   
+            var idDelTdcheck = $"{celda.Fila.IdHtml}.{celda.Fila.NumeroDeCeldas}";
+            var idDelCheck = $"{celda.Fila.IdHtml}.chksel";
 
             var idDelTd = $"{celda.idTdHtml}";
             var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
 
             var idDelInput = $"{celda.idHtml}";
             var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
+            var onclick = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{idDelCheck}');¨";
+            var tipoHtml = "type =¨text¨";
+            if (celda.Tipo == typeof(bool)) tipoHtml = "type =¨checkbox¨";
 
 
-            var input = $" <input id=¨{idDelInput}¨ " +
+            var input = $" <input {tipoHtml} id=¨{idDelInput}¨ " +
                         $"        name=¨{nombreInput}¨ " +
                         $"        class=¨{celda.AlineacionCss()}¨ " +
                         $"        style=¨width:100%; border:0¨ " +
                         $"        {editable} " +
-                        $"        value=¨{celda.Valor}¨/>";
+                        $"        value=¨{celda.Valor}¨" +
+                        $"        {onclick} />";
 
 
             var ocultar = celda.Visible ? "" : "hidden";
 
-            return $@"<td id=¨{idDelTd}¨ 
-                          name=¨{nombreTd}¨ 
-                          class=¨{celda.AlineacionCss()}¨ {ocultar}>" +
-                   $"   {input}" +
-                   $" </td>";
+            var tdHtml = $@"<td id=¨{idDelTd}¨ 
+                                name=¨{nombreTd}¨ 
+                                class=¨{celda.AlineacionCss()}¨ 
+                                {ocultar} >
+                                {input}
+                           </td>";
+            return tdHtml;
         }
 
         private static string RenderFila(FilaDelGrid<TElemento> fila)
@@ -175,11 +167,11 @@ namespace UtilidadesParaIu
 
         private static string RenderFilaSeleccionable(FilaDelGrid<TElemento> fila)
         {
+            string celdaDelCheck = ""; // RenderCeldaCheck(fila.Datos.IdHtml, fila.IdHtml, fila.NumeroDeCeldas);
             string filaHtml = RenderFila(fila);
-            string celdaDelCheck = RenderCeldaCheck(fila.Datos.IdHtml, fila.IdHtml, fila.NumeroDeCeldas);
 
             return $"<tr id='{fila.IdHtml}'>{Environment.NewLine}" +
-                   $"   {filaHtml}{celdaDelCheck}{Environment.NewLine}" +
+                   $"   {celdaDelCheck}{filaHtml}{Environment.NewLine}" +
                    $"</tr>{Environment.NewLine}";
         }
 
@@ -190,7 +182,7 @@ namespace UtilidadesParaIu
             {
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
-            cabeceraHtml.Append(RenderColumnaDeSeleccion(grid.IdHtml)); ; //RenderCeldaCheck($"{idGrid}", $"chk");
+            //cabeceraHtml.Append(RenderColumnaDeSeleccion(grid)); 
             return $@"<thead id='{grid.IdHtml}_cabecera'>{Environment.NewLine}
                          <tr id=¨{grid.IdHtmlCabecera}¨>
                             {cabeceraHtml}{Environment.NewLine}
