@@ -43,7 +43,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorMantenimiento<TElemento> Mnt { get; private set; }
         public DescriptorDeCreacion<TElemento> Creador { get; private set; }
         public DescriptorDeEdicion<TElemento> Editor { get; private set; }
-        public DescriptorDeBorrado Borrado { get; private set; }
+        public DescriptorDeBorrado<TElemento> Borrado { get; private set; }
         public DescriptorDeDetalle Detalle { get; private set; }
 
         public string Controlador { get; private set; }
@@ -69,9 +69,11 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
                 Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
+                Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
 
                 Mnt.MenuDeMnt.AnadirOpcionDeCreacion();
                 Mnt.MenuDeMnt.AnadirOpcionDeEditarElemento();
+                Mnt.MenuDeMnt.AnadirOpcionDeBorrarElemento();
             }
         }
 
@@ -106,7 +108,9 @@ namespace MVCSistemaDeElementos.Descriptores
             return Mnt.RenderControl() +
                    (
                     ModoDescriptor.Mantenimiento == Modo
-                    ? $"{Environment.NewLine}{Creador.RenderControl()}{Environment.NewLine}{Editor.RenderControl()}"
+                    ? $@"{Environment.NewLine}{Creador.RenderControl()}
+                         {Environment.NewLine}{Editor.RenderControl()}
+                         {Environment.NewLine}{Borrado.RenderControl()}"
                     : ""
                    );
         }

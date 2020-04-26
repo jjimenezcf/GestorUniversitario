@@ -2,6 +2,15 @@
 
     export let crudMnt: CrudMnt = null;
 
+    window.onclick = function (event) {
+        if (event.target == `${crudMnt.idModalBorrar}.contenedor-modal`) {
+            let modalBorrar: HTMLDivElement = document.getElementById(this.idModalBorrar) as HTMLDivElement;
+            crudMnt.cerrarModalDeBorrar(modalBorrar);
+        }
+    };
+
+
+
     class ClausulaDeOrdenacion {
         propiedad: string;
         modo: string;
@@ -47,10 +56,10 @@
         }
 
         constructor() {
-            this.lista = new Array<Orden>()
+            this.lista = new Array<Orden>();
         }
 
-        private Anadir(idcolumna: string, propiedad:string, modo: string) {
+        private Anadir(idcolumna: string, propiedad: string, modo: string) {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad === propiedad) {
                     this.lista[i].Modo = modo;
@@ -65,7 +74,7 @@
         private Quitar(propiedad: string) {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad == propiedad) {
-                    this.lista.splice(i,1);
+                    this.lista.splice(i, 1);
                     return;
                 }
             }
@@ -78,7 +87,7 @@
                 this.Anadir(idcolumna, propiedad, modo);
         }
 
-        public Leer(i: number): Orden{
+        public Leer(i: number): Orden {
             return this.lista[i];
         }
     }
@@ -87,6 +96,7 @@
 
         public crudDeCreacion: CrudCreacion;
         public crudDeEdicion: CrudEdicion;
+        public idModalBorrar: string;
 
         public PanelDeMnt: HTMLDivElement;
         public IdGrid: string;
@@ -125,6 +135,31 @@
             }
         }
 
+        public AbrirModalBorrarElemento() {
+            if (this.infSel.Cantidad == 0) {
+                Mensaje(TipoMensaje.Info, "Debe marcar el elemento a borrar");
+                return;
+            }
+            this.AbrirModalDeBorrar();
+        }
+
+        AbrirModalDeBorrar() {
+            var ventana = document.getElementById(this.idModalBorrar);
+            var btn = document.getElementById("btnModal");
+            var span = document.getElementsByClassName("span-cerrar")[0];
+            var body = document.getElementsByTagName("body")[0];
+            ventana.style.display = 'block';
+        }
+
+        cerrarModalDeBorrar(modalBorrar: HTMLDivElement) {
+            modalBorrar.style.display = "none";
+            var body = document.getElementsByTagName("body")[0];
+            body.style.position = "inherit";
+            body.style.height = "auto";
+            body.style.overflow = "visible";
+
+        }
+
         public IraEditar() {
             if (this.infSel.Cantidad == 0) {
                 Mensaje(TipoMensaje.Info, "Debe marcar el elemento a editar");
@@ -139,11 +174,16 @@
         }
 
         public AlPulsarUnCheckDeSeleccion(idCheck: string, idDelInput: string) {
-            BlanquearMensaje();
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
-            if (idCheck !== idDelInput)
+            //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
+            if (idCheck === idDelInput) {
                 check.checked = !check.checked;
+                return;
+            }
+
+            BlanquearMensaje();
+            check.checked = !check.checked;
 
             if (check.checked)
                 this.AnadirAlInfoSelector(idCheck);
@@ -343,8 +383,10 @@
             crudMnt.IraCrear();
         else if (accion === LiteralMnt.EditarElemento)
             crudMnt.IraEditar();
+        else if (accion === LiteralMnt.BorrarElemento)
+            crudMnt.AbrirModalBorrarElemento();
         else if (accion === LiteralMnt.Buscar)
-            crudMnt.Buscar(0)
+            crudMnt.Buscar(0);
         else if (accion === LiteralMnt.ObtenerSiguientes)
             crudMnt.ObtenerSiguientes();
         else if (accion === LiteralMnt.ObtenerAnteriores)
@@ -352,7 +394,7 @@
         else if (accion === LiteralMnt.ObtenerUltimos)
             crudMnt.ObtenerUltimos();
         else if (accion === LiteralMnt.OrdenarPor)
-            crudMnt.OrdenarPor(parametros)
+            crudMnt.OrdenarPor(parametros);
         else
             Mensaje(TipoMensaje.Info, `la opción ${accion} no está definida`);
     }

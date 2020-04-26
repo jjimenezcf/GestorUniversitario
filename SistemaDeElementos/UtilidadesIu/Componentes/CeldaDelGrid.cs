@@ -10,7 +10,7 @@ namespace UtilidadesParaIu
 
         public string Id => $"{Fila.IdHtml}.{Propiedad}";
 
-        public string idTdHtml => $"{Fila.IdHtml}.{NumeroCelda}".ToLower();
+        public string idHtmlTd => $"{Fila.IdHtml}.{NumeroCelda}".ToLower();
         
         public string idHtml => Id.ToLower();
 

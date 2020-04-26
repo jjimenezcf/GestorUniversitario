@@ -58,7 +58,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{CrudModal.Controlador}')¨>
                        <div class=¨input-group-append¨>
                             <button id=¨{idBtnSelectorHtml}¨ 
-                                    class=¨btn btn-outline-secondary¨ 
+                                    class=¨btnSeleccionar¨ 
                                     type=¨button¨ 
                                     data-toggle=¨modal¨ 
                                     data-target=¨#{Modal.IdHtml}¨>Seleccionar</button>

@@ -10,6 +10,7 @@ namespace UtilidadesParaIu
         public string Id => $"{Datos.Id}_d_tr_{NumeroDeFila}";
         public string IdHtml => Id.ToLower();
 
+        public string idHtmlCheckDeSeleccion => $"{IdHtml}.chksel";
         public int NumeroDeCeldas => Celdas.Count;
 
         public ZonaDeDatos<TElemento> Datos { get; set; }

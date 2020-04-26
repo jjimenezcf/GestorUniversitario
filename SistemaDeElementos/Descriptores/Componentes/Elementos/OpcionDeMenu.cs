@@ -6,7 +6,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum TipoAccion { IraMnt }
 
-    public enum TipoAccionMnt {CrearElemento, EditarElemento }
+    public enum TipoAccionMnt {CrearElemento, EditarElemento, BorrarElemento }
     public enum TipoAccionCreacion {NuevoElemento, CancelarNuevo }
     public enum TipoAccionEdicion {ModificarElemento,CancelarEdicion }
 
@@ -78,6 +78,15 @@ namespace MVCSistemaDeElementos.Descriptores
         {
         }
     }
+
+    public class BorrarElemento : AccionDeMenuMnt
+    {
+        public BorrarElemento()
+        : base(TipoAccionMnt.BorrarElemento)
+        {
+        }
+    }
+
     public class EditarElemento : AccionDeMenuMnt
     {
         public EditarElemento()

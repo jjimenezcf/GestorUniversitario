@@ -22,6 +22,7 @@
         Mantenimiento,
         pnlCreador,
         pnlEditor,
+        pnlBorrado,
         ZonaMenu,
         Menu
     }

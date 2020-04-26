@@ -94,6 +94,7 @@ const LiteralEdt = {
 const LiteralMnt = {
     CrearElemento: "crearelemento",
     EditarElemento: "editarelemento",
+    BorrarElemento: "borrarelemento",
     idCtrlCantidad: "nav_2_reg",
     posicion: "posicion",
     postfijoDeCheckDeSeleccion: ".chksel",

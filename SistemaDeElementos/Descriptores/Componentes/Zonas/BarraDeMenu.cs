@@ -91,6 +91,13 @@ namespace MVCSistemaDeElementos.Descriptores
             Menu.Add(opcion);
         }
 
+        internal void AnadirOpcionDeBorrarElemento()
+        {
+            var BorrarElemento = new BorrarElemento();
+            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar {Mnt.Crud.NombreElemento}");
+            Menu.Add(opcion);
+        }
+
         internal void AnadirOpcionDeCancelarNuevo()
         {
             var cancelarNuevo = new CancelarNuevo();

@@ -80,50 +80,57 @@ namespace UtilidadesParaIu
         }
 
 
-        private static string RenderCeldaInput(CeldaDelGrid<TElemento> celda)
+        private static string RenderTd(CeldaDelGrid<TElemento> celda)
         {
-            var editable = !celda.Editable ? "readonly" : "";
-               
-            var idDelCheck = $"{celda.Fila.IdHtml}.chksel";
 
-            var idDelTd = $"{celda.idTdHtml}";
-            var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
-
-            var idDelInput = $"{celda.idHtml}";
-            var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); // idGrid}"
-            var onclick = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{idDelCheck}','{idDelInput}');¨";
-            var tipoHtml = "type =¨text¨";
-            if (celda.Tipo == typeof(bool)) tipoHtml = "type =¨checkbox¨";
-
-
-            var input = $" <input {tipoHtml} id=¨{idDelInput}¨ " +
-                        $"        name=¨{nombreInput}¨ " +
-                        $"        class=¨{celda.AlineacionCss()}¨ " +
-                        $"        style=¨width:100%; border:0¨ " +
-                        $"        {editable} " +
-                        $"        value=¨{celda.Valor}¨" +
-                        $"        {onclick} />";
-
-
+            var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); 
+            var onclickTd = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{celda.Fila.idHtmlCheckDeSeleccion}','{celda.idHtmlTd}');¨";
             var ocultar = celda.Visible ? "" : "hidden";
 
-            var tdHtml = $@"<td id=¨{idDelTd}¨ 
+            var tdHtml = $@"<td id=¨{celda.idHtmlTd}¨ 
                                 name=¨{nombreTd}¨ 
                                 class=¨{celda.AlineacionCss()}¨ 
+                                {onclickTd} 
                                 {ocultar} >
-                                {input}
+                                {RenderCeldaDelTd(celda)}
                            </td>";
             return tdHtml;
         }
 
-        private static string RenderFila(FilaDelGrid<TElemento> fila)
+        private static string RenderCeldaDelTd(CeldaDelGrid<TElemento> celda)
+        {
+
+            var idDelInput = $"{celda.idHtml}";
+            var tipoHtml = celda.Tipo == typeof(bool) ? "type =¨checkbox¨" : "type =¨text¨";
+            var onclick = celda.Tipo == typeof(bool)
+                  ? $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{celda.Fila.idHtmlCheckDeSeleccion}','{idDelInput}');¨"
+                  : "";
+
+
+            var editable = !celda.Editable ? "readonly" : "";
+
+            var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); 
+
+            var input = $" <input {tipoHtml} id=¨{idDelInput}¨ " +
+            $"        name=¨{nombreInput}¨ " +
+            $"        class=¨{celda.AlineacionCss()}¨ " +
+            $"        style=¨width:100%; border:0¨ " +
+            $"        {editable} " +
+            $"        {onclick} "  +
+            $"        value=¨{celda.Valor}¨ />";
+
+            return input;
+        }
+
+
+            private static string RenderFila(FilaDelGrid<TElemento> fila)
         {
             var filaHtml = new StringBuilder();
             var numCol = 0;
             for(var j= 0; j < fila.NumeroDeCeldas; j++)
             {
                 var celda = fila.ObtenerCelda(j);
-                filaHtml.AppendLine(RenderCeldaInput(celda));
+                filaHtml.AppendLine(RenderTd(celda));
                 numCol++;
             }
             return $@"{filaHtml}";

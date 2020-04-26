@@ -80,7 +80,7 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/usuarios/Usuarios.js¨></script>
                       <script>
-                         Crud.crudMnt = new Usuarios.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}') 
+                         Crud.crudMnt = new Usuarios.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                       </script>
                     ";
             return render.Render();

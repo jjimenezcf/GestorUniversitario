@@ -1,20 +1,10 @@
 ﻿
-/*Clase de un crud*/
-
-/*{
-    margin: 0;
-    padding: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}*/
-
 body {
     background: #ffffff;
     line-height: 18px;
 }
 
-.div-visible{
+.div-visible {
     display: block;
 }
 
@@ -23,47 +13,78 @@ body {
 }
 
 a {
-    text-decoration:none;
+    text-decoration: none;
     color: #000;
 }
 
 .fa-icono {
-    width:15px;
-    height:15px;
-
+    width: 15px;
+    height: 15px;
 }
 
 .btn-menu .fa-icono {
     float: left;
 }
 
+.btnSeleccionar {
+    display: inline-block;
+    margin-left: 2px;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid #cad2da;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+    .btnSeleccionar:hover {
+        cursor: pointer;
+        color: #212529;
+        text-decoration: none;
+    }
+
 #tablaCabecera {
     width: 100%;
 }
+
 .celdaCabeceraIzquierda {
     background: #00b9ff;
     text-align: left;
     width: 30%;
     min-width: 300px;
 }
+
 .celdaSeparador {
     background: #00b9ff;
 }
+
 .celdaCabecera {
     background: #00b9ff;
-    width:10%;
+    width: 10%;
 }
+
 .estiloCeldaCabecera {
     text-align: center;
     border: hidden;
     background: #00b9ff;
     width: 100%;
 }
+
 .celdaCabeceraDerecha {
     background: #00b9ff;
-    text-align:right;
-    width:30%
+    text-align: right;
+    width: 30%
 }
+
 .estiloCeldaDerecha {
     text-align: right;
     border: hidden;
@@ -79,7 +100,7 @@ a {
 /*Clases de creación*/
 
 .controlNoVisible {
-    display:none;
+    display: none;
 }
 
 
@@ -88,7 +109,6 @@ a {
 }
 
 .tr-propiedad {
-
 }
 
 .td-creacion {
@@ -98,6 +118,7 @@ a {
 .div-propiedad {
     display: flex;
 }
+
 .div-lbl-propiedad {
 }
 
@@ -110,7 +131,7 @@ a {
 .div-pie-propiedad {
     display: block;
     float: right;
-    margin-right:10px;
+    margin-right: 10px;
     width: 100px;
 }
 
@@ -120,6 +141,7 @@ a {
     border: hidden;
     width: 100%
 }
+
     .propiedad:read-only {
         background: #a5a1a1
     }
@@ -139,12 +161,14 @@ a {
 }
 
 .pie-grid {
-    align-content:center;
+    align-content: center;
     margin-top: 10px;
 }
+
 .info-grid {
     float: right;
 }
+
 .cantidad-grid {
     width: 50px;
     margin-top: 5px;
@@ -153,19 +177,22 @@ a {
 }
 
 .navegador-grid {
-    float:left;
+    float: left;
 }
+
     .navegador-grid > div {
         display: inline-block;
     }
+
         .navegador-grid > div > img {
-                width: 22px;
-                height: 22px;
-            }
+            width: 22px;
+            height: 22px;
+        }
 
 .bloque-filtro-vacio {
     height: 0px;
 }
+
 .tabla-filtro {
     border-collapse: collapse;
     width: 100%;
@@ -205,20 +232,51 @@ a {
 .ordenada-sin-orden {
     color: #a5a1a1
 }
+
 .ordenada-ascendente {
-    color:#00b9ff
+    color: #00b9ff
 }
+
 .ordenada-descendente {
     color: #f58eb1
 }
 
-        
+.contenedor-modal {
+    display: none;
+    position: fixed;
+    z-index: 0;
+    padding-top: 100px;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border: 10px solid #f58eb1;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
 
+    .contenedor-modal > div {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 10px solid #888;
+        /*border-top: 10px solid #58abb7;*/
+        width: 60%;
+    }
 
+    .contenedor-modal .contenido-modal .span-cerrar {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-
-
-
-
+        .contenedor-modal .contenido-modal .span-cerrar:hover,
+        .contenedor-modal .contenido-modal .span-cerrar:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
 
