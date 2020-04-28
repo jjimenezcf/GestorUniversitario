@@ -131,7 +131,7 @@
         public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: string) {
             BlanquearMensaje();
             let error: string;
-            this.PeticionAjax(req, url, peticion, () => this.DespuesDeLaPeticion(req), () => error = this.ErrorEnPeticion(req, peticion));
+            this.PeticionAjax(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
             if (!EsNula(error))
                 throw error;
         }
@@ -177,7 +177,7 @@
 
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
             let resultado: ResultadoJson = JSON.parse(req.response);
             if (!EsNula(resultado.mensaje))
                 Mensaje(TipoMensaje.Info, resultado.mensaje);

@@ -18,10 +18,17 @@
         {
             var htmlModal =$@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
-                              			<span class=¨span-cerrar¨>×</span>
-                              			<h2>Modal</h2>
-                              			<p>Se ha desplegado el modal y bloqueado el scroll del body!</p>
-                              		</div>
+                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		    	<h2>Confirmación de borrado</h2>
+                                        </div>
+                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                              			    <input type=¨text¨ id=¨{IdHtml}_mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>
+                                        </div>
+                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EjecutarMenuMnt('borrarelemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EjecutarMenuMnt('cerrarmodaldeborrado')¨ />
+                                        </div>
+                                      </div>
                               </div>";
             return htmlModal;
         }

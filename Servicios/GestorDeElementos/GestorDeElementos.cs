@@ -240,42 +240,6 @@ namespace Gestor.Elementos
 
         #endregion
 
-        #region Métodos de modificación (son los de persistencia)
-
-        //public void ModificarElemento(TElemento elemento, ParametrosDeNegocio parametros = null)
-        //{
-        //    if (parametros == null)
-        //        parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
-
-        //    TRegistro registro = MapearRegistro(elemento, parametros);
-        //    ModificarRegistro(registro, parametros);
-
-        //}
-
-        //protected void ModificarRegistro(TRegistro registro, ParametrosDeNegocio parametros = null) => ModificarRegistros(new List<TRegistro> { registro }, parametros);
-
-        //protected void ModificarRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros = null)
-        //{
-        //    if (parametros == null)
-        //        parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
-
-        //    var transaccionAbierta = IniciarTransaccion(parametros);
-        //    try
-        //    {
-        //        foreach (var registro in registros)
-        //            Contexto.Update(registro);
-
-        //        Contexto.SaveChanges();
-        //        Commit(parametros, transaccionAbierta);
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        RollBack(parametros, transaccionAbierta);
-        //        throw exc;
-        //    }
-        //}
-
-        #endregion
 
         #region Métodos de lectura
 

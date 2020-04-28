@@ -60,7 +60,8 @@ const Ajax = {
         LeerGridEnHtml: "epLeerGridHtml",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
         LeerPorIds: "epLeerPorIds",
-        Modificar: "epModificarPorId"
+        Modificar: "epModificarPorId",
+        Borrar: "epBorrarPorId"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -94,7 +95,9 @@ const LiteralEdt = {
 const LiteralMnt = {
     CrearElemento: "crearelemento",
     EditarElemento: "editarelemento",
+    AbrirBorrarElemento: "abrirmodalborrarelemento",
     BorrarElemento: "borrarelemento",
+    CerrarModalDeBorrado: "cerrarmodaldeborrado",
     idCtrlCantidad: "nav_2_reg",
     posicion: "posicion",
     postfijoDeCheckDeSeleccion: ".chksel",

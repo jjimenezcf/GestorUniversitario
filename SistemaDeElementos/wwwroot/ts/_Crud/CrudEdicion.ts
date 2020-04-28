@@ -82,8 +82,8 @@
             this.PeticionSincrona(req, url, Ajax.EndPoint.Modificar);
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
-            let resultado = super.DespuesDeLaPeticion(req);
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+            let resultado = super.DespuesDeLaPeticion(req, peticion);
             this.MapearElemento(this.PanelDeEditar, resultado.datos);
             return resultado;
         }

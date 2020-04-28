@@ -108,7 +108,7 @@ namespace Gestor.Elementos.Entorno
                             .FirstOrDefault(m => m.Id == Id);
         }
 
-        protected override void AntesEliminarFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
+        protected override void AntesNuevaFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
             base.AntesNuevaFila(usuarioDto, opciones);
             usuarioDto.Alta = System.DateTime.Now;

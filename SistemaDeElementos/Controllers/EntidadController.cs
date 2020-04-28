@@ -120,6 +120,30 @@ namespace MVCSistemaDeElementos.Controllers
 
         }
 
+
+        //END-POINT: Desde Grid.ts
+        public JsonResult epBorrarPorId(string idsJson)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
+                var elemento = GestorDeElementos.LeerElementoPorId(listaIds[0]);
+                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = "Registro eliminado";
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido eliminar";
+            }
+
+            return new JsonResult(r);
+        }
+
         //END-POINT: Desde Grid.ts
         public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
         {

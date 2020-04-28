@@ -2,15 +2,6 @@
 
     export let crudMnt: CrudMnt = null;
 
-    window.onclick = function (event) {
-        if (event.target == `${crudMnt.idModalBorrar}.contenedor-modal`) {
-            let modalBorrar: HTMLDivElement = document.getElementById(this.idModalBorrar) as HTMLDivElement;
-            crudMnt.cerrarModalDeBorrar(modalBorrar);
-        }
-    };
-
-
-
     class ClausulaDeOrdenacion {
         propiedad: string;
         modo: string;
@@ -143,6 +134,15 @@
             this.AbrirModalDeBorrar();
         }
 
+        public CerrarModalDeBorrado() {
+            let modalBorrar: HTMLDivElement = document.getElementById(this.idModalBorrar) as HTMLDivElement;
+            modalBorrar.style.display = "none";
+            var body = document.getElementsByTagName("body")[0];
+            body.style.position = "inherit";
+            body.style.height = "auto";
+            body.style.overflow = "visible";
+        }
+
         AbrirModalDeBorrar() {
             var ventana = document.getElementById(this.idModalBorrar);
             var btn = document.getElementById("btnModal");
@@ -151,14 +151,6 @@
             ventana.style.display = 'block';
         }
 
-        cerrarModalDeBorrar(modalBorrar: HTMLDivElement) {
-            modalBorrar.style.display = "none";
-            var body = document.getElementsByTagName("body")[0];
-            body.style.position = "inherit";
-            body.style.height = "auto";
-            body.style.overflow = "visible";
-
-        }
 
         public IraEditar() {
             if (this.infSel.Cantidad == 0) {
@@ -263,30 +255,57 @@
             this.Buscar(posicion);
         }
 
+        BorrarElemento() {
+            this.CerrarModalDeBorrado();
+            let id: number = this.infSel.Seleccionados[0] as number;
+            let url: string = this.DefinirPeticionDeBorrado(id);
+            let req: XMLHttpRequest = new XMLHttpRequest();
+            try {
+                this.PeticionSincrona(req, url, Ajax.EndPoint.Borrar);
+            }
+            catch (error) {
+                Mensaje(TipoMensaje.Error, error);
+                return;
+            }
+            this.Buscar(0);
+        }
+
+        DefinirPeticionDeBorrado(id: number): string {
+            let idJson: JSON = JSON.parse(`[${id}]`);
+            var controlador = this.InputCantidad.getAttribute(Atributo.controlador);
+            let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
+            let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
+        }
+
         public Buscar(posicion: number) {
             if (this.InputCantidad === null)
                 Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
             else {
-                let url: string = this.DefinirPeticionDeBusqueda(this.InputCantidad, posicion);
+                let url: string = this.DefinirPeticionDeBusqueda(posicion);
                 let req: XMLHttpRequest = new XMLHttpRequest();
                 this.PeticionSincrona(req, url, Ajax.EndPoint.LeerGridEnHtml);
             }
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest): ResultadoJson {
-            let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req) as ResultadoHtml;
-            this.ZonaDeGrid.innerHTML = resultado.html;
-            this.InicializarNavegador();
-            if (this.infSel !== undefined && this.infSel.Cantidad > 0) {
-                this.marcarElementos();
-                this.infSel.SincronizarCheck();
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+            let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
+
+            if (peticion === Ajax.EndPoint.LeerGridEnHtml) {
+                this.ZonaDeGrid.innerHTML = resultado.html;
+                this.InicializarNavegador();
+                if (this.infSel !== undefined && this.infSel.Cantidad > 0) {
+                    this.marcarElementos();
+                    this.infSel.SincronizarCheck();
+                }
             }
             return resultado;
         }
 
-        private DefinirPeticionDeBusqueda(htmlInputCantidad: HTMLInputElement, posicion: number): string {
-            var cantidad = htmlInputCantidad.value.Numero();
-            var controlador = htmlInputCantidad.getAttribute(Atributo.controlador);
+        private DefinirPeticionDeBusqueda(posicion: number): string {
+            var cantidad = this.InputCantidad.value.Numero();
+            var controlador = this.InputCantidad.getAttribute(Atributo.controlador);
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
@@ -383,8 +402,12 @@
             crudMnt.IraCrear();
         else if (accion === LiteralMnt.EditarElemento)
             crudMnt.IraEditar();
-        else if (accion === LiteralMnt.BorrarElemento)
+        else if (accion === LiteralMnt.AbrirBorrarElemento)
             crudMnt.AbrirModalBorrarElemento();
+        else if (accion === LiteralMnt.CerrarModalDeBorrado)
+            crudMnt.CerrarModalDeBorrado();
+        else if (accion === LiteralMnt.BorrarElemento)
+            crudMnt.BorrarElemento();
         else if (accion === LiteralMnt.Buscar)
             crudMnt.Buscar(0);
         else if (accion === LiteralMnt.ObtenerSiguientes)
