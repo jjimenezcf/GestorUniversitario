@@ -67,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
              </script>
              ";
 
-            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨>
+            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ grid=¨idGrid¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal modal-seleccion¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
                               		    	titulo
@@ -114,7 +114,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return _htmlMiModal
                 .Replace("titulo", Titulo)
-                .Replace("crudDeSeleccion", CrudModal.RenderControl());
+                .Replace("crudDeSeleccion", CrudModal.RenderControl())
+                .Replace("idGrid", CrudModal.Mnt.Datos.IdHtml)
+                .Replace("idSelector", Selector.IdHtml);
 
         }
 

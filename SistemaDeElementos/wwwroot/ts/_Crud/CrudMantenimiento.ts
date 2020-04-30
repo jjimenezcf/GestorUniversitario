@@ -171,8 +171,26 @@
         }
 
         public AbrirModalDeSeleccion(idModal) {
-            var ventana = document.getElementById(idModal);
-            ventana.style.display = 'block';
+            BlanquearMensaje();
+            let modalDeSeleccion: HTMLDivElement = document.getElementById(idModal) as HTMLDivElement;
+            let idSelector: string = modalDeSeleccion.getAttribute("selector");
+            let idGrid: string = modalDeSeleccion.getAttribute("grid");
+            let selector: HTMLInputElement = document.getElementById(idSelector) as HTMLInputElement;
+            let columnaMostrar: string = selector.getAttribute("propiedadMostrar");
+            let columnaId: string = selector.getAttribute("propiedadFiltrar")
+            var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
+            htmlSelector.MapearTextoAlEditorDelGrid();
+            recargarGrid(idGrid);
+
+            var infSel = infoSelectores.Crear(idGrid);
+            infSel.Modal(columnaMostrar);
+            var arrayMarcados = elementosMarcados(idSelector);
+            infSel.InsertarElementos(arrayMarcados);
+
+            marcarElementos(idGrid, columnaId, infSel);
+            infSel.SincronizarCheck();
+            modalDeSeleccion.style.display = 'block';
+
         }
 
 
@@ -215,8 +233,8 @@
             let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
             infoselector.InsertarId(id);
         }
-        
-        private QuitarDelSelector(infoselector: InfoSelector,idCheck: string) {
+
+        private QuitarDelSelector(infoselector: InfoSelector, idCheck: string) {
             let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
             infoselector.Quitar(id);
         }
@@ -469,7 +487,7 @@
         //        QuitarDelSelector(idGrid, idCheck);
         //}
         //else
-            crudMnt.AlPulsarUnCheckDeSeleccion(idGrid, idCheck, idDelInput);
+        crudMnt.AlPulsarUnCheckDeSeleccion(idGrid, idCheck, idDelInput);
     }
 
     function AnadirAlInfoSelector(idGrid, idCheck) {
