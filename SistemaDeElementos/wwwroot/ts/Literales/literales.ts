@@ -96,6 +96,7 @@ const LiteralMnt = {
     CrearElemento: "crearelemento",
     EditarElemento: "editarelemento",
     AbrirBorrarElemento: "abrirmodalborrarelemento",
+    AbrirModalDeSeleccion: "abrirmodaldeseleccion",
     BorrarElemento: "borrarelemento",
     CerrarModalDeBorrado: "cerrarmodaldeborrado",
     idCtrlCantidad: "nav_2_reg",

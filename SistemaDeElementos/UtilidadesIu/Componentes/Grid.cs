@@ -59,9 +59,14 @@ namespace UtilidadesParaIu
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
+            var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
+                ? columna.PorAnchoSel
+                : columna.PorAnchoMnt;
+
             var visible = columna.Visible ? "visibility: visible;" : "visibility: hidden";
-            var ancho = columna.PorAncho == 0 ? "" : $"width:{columna.PorAncho}%";
+            var ancho = columna.PorAnchoMnt == 0 ? "" : $"width:{porcentaje}%";
             var estilo =  $"style=¨{ancho}¨;"; 
+
 
             var htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
                                                  class=¨ordenada-sin-orden¨>{columna.Titulo} 
@@ -232,12 +237,12 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid<TElemento> grid)
         {
-            var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ 
-                                      class=¨tabla-grid¨ 
-                                      width=¨100%¨>{Environment.NewLine}" +
-                            $"   {RenderCabecera(grid)}{Environment.NewLine}" +
-                            $"   {RenderDetalleGrid(grid)}" +
-                            $"</table>";
+            var htmlTabla = $@"<div class=¨div-grid¨> 
+                                  <table id=¨{grid.IdHtmlTabla}¨ class=¨tabla-grid¨ >
+                                    {RenderCabecera(grid)}
+                                    {RenderDetalleGrid(grid)}
+                                  </table>
+                               </div> ";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());
         }

@@ -66,10 +66,10 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 if (!col.Visible) continue;
 
-                if (col.PorAncho == 0) colSinDefinir++;
+                if (col.PorAnchoMnt == 0) colSinDefinir++;
                 else
                 {
-                    totalPorcentaje += col.PorAncho;
+                    totalPorcentaje += col.PorAnchoMnt;
                     colDefinidas++;
                 }
             }
@@ -85,9 +85,9 @@ namespace MVCSistemaDeElementos.Descriptores
             var porcPorColNoDefinida = porcDeReparto / colSinDefinir;
             foreach (var col in Columnas)
             {
-                if (col.PorAncho > 0 || !col.Visible) continue;
+                if (col.PorAnchoMnt > 0 || !col.Visible) continue;
 
-                    col.PorAncho = porcPorColNoDefinida;
+                    col.PorAnchoMnt = porcPorColNoDefinida;
                     porcDeReparto = porcDeReparto - porcPorColNoDefinida;
                 
                 if (porcPorColNoDefinida > porcDeReparto)
@@ -98,11 +98,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨
-                                      seleccionables =2
-                                      seleccionados =¨¨
-                                      zonaDeFiltro = ¨{idFiltro}¨
-                                     >     
+            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = 2 seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨>     
                                        tabla_Navegador 
                                      </div>";
             var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")

@@ -23,7 +23,10 @@ namespace UtilidadesParaIu
         public string IdHtml => Id.ToLower();
         public string Titulo { get { return _titulo == null ? Propiedad : _titulo; } set { _titulo = value; } }
         public Type Tipo { get; set; } = typeof(string);
-        public int PorAncho { get; set; } = 0;
+        public int PorAnchoMnt { get; set; } = 0;
+
+        private int _PorAnchoSel;
+        public int PorAnchoSel { get { return _PorAnchoSel == 0 ? PorAnchoMnt : _PorAnchoSel; } set { _PorAnchoSel = value; } }
         public bool Ordenar { get; set; } = false;
 
         public string Sentido = "Asc";

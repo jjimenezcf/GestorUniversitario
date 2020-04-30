@@ -56,15 +56,21 @@ namespace MVCSistemaDeElementos.Descriptores
                               idEditorMostrar=¨{edt.IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Datos.IdHtml}¨
                               onchange =¨AlCambiarTextoSelector('{IdHtml}', '{CrudModal.Controlador}')¨>
-                       <div class=¨input-group-append¨>
+                       <input type=¨text¨ id=¨{IdHtml}_boton¨ class=¨boton-modal¨ value=¨Seleccionar¨ onclick=¨Crud.EjecutarMenuMnt('abrirmodaldeseleccion', '{Modal.IdHtml}')¨       />
+                    </div>
+                  ";
+
+            /*
+             *          <div class=¨input-group-append¨>
                             <button id=¨{idBtnSelectorHtml}¨ 
                                     class=¨btnSeleccionar¨ 
                                     type=¨button¨ 
                                     data-toggle=¨modal¨ 
                                     data-target=¨#{Modal.IdHtml}¨>Seleccionar</button>
                        </div>
-                    </div>
-                  ";
+             * 
+             */
+
         }
 
         public override string RenderControl()

@@ -91,7 +91,12 @@
 
         public PanelDeMnt: HTMLDivElement;
         public IdGrid: string;
+
         private infSel: InfoSelector;
+
+        private infoSelectores: InfoSelectores;
+
+
         private InputCantidad: HTMLInputElement;
         private ZonaDeGrid: HTMLDivElement;
         private ZonaDeFiltro: HTMLDivElement;
@@ -103,14 +108,19 @@
             if (EsNula(idPanelMnt))
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
 
+            this.Ordenacion = new Ordenacion();
+
+            this.InicializarInformacionPaneles(idPanelMnt);
+            this.InicializarNavegador();
+            this.InicializarSelectores();
+        }
+
+        private InicializarInformacionPaneles(idPanelMnt: string) {
             this.IdGrid = `${idPanelMnt}_grid`;
             this.ZonaDeGrid = document.getElementById(`${this.IdGrid}`) as HTMLDivElement;
             this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
-            this.infSel = new InfoSelector(this.IdGrid);
             var idHtmlFiltro = this.ZonaDeGrid.getAttribute(Atributo.zonaDeFiltro);
             this.ZonaDeFiltro = document.getElementById(`${idHtmlFiltro}`) as HTMLDivElement;
-            this.Ordenacion = new Ordenacion();
-            this.InicializarNavegador();
         }
 
         private InicializarNavegador() {
@@ -124,6 +134,18 @@
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
+        }
+
+        InicializarSelectores() {
+            this.infSel = new InfoSelector(this.IdGrid);
+            this.infoSelectores = new InfoSelectores();
+            var selectores = this.ZonaDeFiltro.querySelectorAll('input[tipo="selector"]');
+            selectores.forEach((selector) => {
+                let idGridModal: string = selector.getAttribute('idgridmodal');
+                let infsel: InfoSelector = new InfoSelector(idGridModal);
+                this.infoSelectores.Insertar(infsel);
+            });
+
         }
 
         public AbrirModalBorrarElemento() {
@@ -143,11 +165,13 @@
             body.style.overflow = "visible";
         }
 
-        AbrirModalDeBorrar() {
+        private AbrirModalDeBorrar() {
             var ventana = document.getElementById(this.idModalBorrar);
-            var btn = document.getElementById("btnModal");
-            var span = document.getElementsByClassName("span-cerrar")[0];
-            var body = document.getElementsByTagName("body")[0];
+            ventana.style.display = 'block';
+        }
+
+        public AbrirModalDeSeleccion(idModal) {
+            var ventana = document.getElementById(idModal);
             ventana.style.display = 'block';
         }
 
@@ -165,7 +189,11 @@
             this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
         }
 
-        public AlPulsarUnCheckDeSeleccion(idCheck: string, idDelInput: string) {
+        public AlPulsarUnCheckDeSeleccion(idGrid: string, idCheck: string, idDelInput: string) {
+            let infoselector: InfoSelector = this.infSel;
+            if (crudMnt.IdGrid != idGrid) {
+                infoselector = this.infoSelectores.Obtener(idGrid);
+            }
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
@@ -178,19 +206,26 @@
             check.checked = !check.checked;
 
             if (check.checked)
-                this.AnadirAlInfoSelector(idCheck);
+                this.AnadirAlInfoSelector(infoselector, idCheck);
             else
-                this.QuitarDelSelector(idCheck);
+                this.QuitarDelSelector(infoselector, idCheck);
         }
 
-        private AnadirAlInfoSelector(idCheck) {
-            var id = ObtenerIdDeLaFilaChequeada(idCheck);
-            this.infSel.InsertarId(id);
+        private AnadirAlInfoSelector(infoselector: InfoSelector, idCheck: string) {
+            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            infoselector.InsertarId(id);
+        }
+        
+        private QuitarDelSelector(infoselector: InfoSelector,idCheck: string) {
+            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            infoselector.Quitar(id);
         }
 
-        private QuitarDelSelector(idCheck) {
-            var id = ObtenerIdDeLaFilaChequeada(idCheck);
-            this.infSel.Quitar(id);
+        private ObtenerElIdDelElementoDelaFila(idCheck: string) {
+            let columnaId: string = idCheck.replace(".chksel", `.${Literal.id}`);
+            let inputId: HTMLInputElement = document.getElementById(columnaId) as HTMLInputElement;
+            let id: string = inputId.value;
+            return id;
         }
 
         private marcarElementos() {
@@ -408,6 +443,8 @@
             crudMnt.CerrarModalDeBorrado();
         else if (accion === LiteralMnt.BorrarElemento)
             crudMnt.BorrarElemento();
+        else if (accion === LiteralMnt.AbrirModalDeSeleccion)
+            crudMnt.AbrirModalDeSeleccion(parametros);
         else if (accion === LiteralMnt.Buscar)
             crudMnt.Buscar(0);
         else if (accion === LiteralMnt.ObtenerSiguientes)
@@ -423,16 +460,16 @@
     }
 
     export function AlPulsarUnCheckDeSeleccion(idGrid, idCheck, idDelInput) {
-        if (crudMnt.IdGrid != idGrid) {
-            BlanquearMensaje();
-            var check = <HTMLInputElement>document.getElementById(idCheck);
-            if (check.checked)
-                AnadirAlInfoSelector(idGrid, idCheck);
-            else
-                QuitarDelSelector(idGrid, idCheck);
-        }
-        else
-            crudMnt.AlPulsarUnCheckDeSeleccion(idCheck, idDelInput);
+        //if (crudMnt.IdGrid != idGrid) {
+        //    BlanquearMensaje();
+        //    var check = <HTMLInputElement>document.getElementById(idCheck);
+        //    if (check.checked)
+        //        AnadirAlInfoSelector(idGrid, idCheck);
+        //    else
+        //        QuitarDelSelector(idGrid, idCheck);
+        //}
+        //else
+            crudMnt.AlPulsarUnCheckDeSeleccion(idGrid, idCheck, idDelInput);
     }
 
     function AnadirAlInfoSelector(idGrid, idCheck) {

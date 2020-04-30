@@ -42,6 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                           })
                                       ";
 
+            //
             const string _htmlModalSelector =
             @"
              <div class=¨modal fade¨ id=¨idModal¨ tabindex=¨-1¨ role=¨dialog¨ aria-labelledby=¨exampleModalLabel¨ aria-hidden=¨true¨>
@@ -66,6 +67,21 @@ namespace MVCSistemaDeElementos.Descriptores
              </script>
              ";
 
+            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨>
+                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal modal-seleccion¨ >
+                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		    	titulo
+                                        </div>
+                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                              			    crudDeSeleccion
+                                        </div>
+                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EjecutarMenuMnt('borrarelemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EjecutarMenuMnt('cerrarmodaldeborrado')¨ />
+                                        </div>
+                                      </div>
+                              </div>";
+
 
             var nombreCheckDeSeleccion = $"chksel.{s.IdHtml}";
 
@@ -82,19 +98,24 @@ namespace MVCSistemaDeElementos.Descriptores
                 .Replace("{nameSelCheck}", nombreCheckDeSeleccion);
 
 
-            return _htmlModalSelector
-                    .Replace("idModal", IdHtml)
-                    .Replace("titulo", Titulo)
-                    .Replace("{idSelector}", s.IdHtml)
-                    .Replace("{idGrid}", CrudModal.Mnt.Datos.IdHtml)
-                    .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
-                    .Replace("{columnaId}", s.propiedadParaFiltrar)
-                    .Replace("{columnaMostrar}", s.propiedadParaMostrar)
-                    .Replace("{idContenedor}", $"{s.Modal.IdHtml}_contenedor")
-                    .Replace("{gridDeElementos}", CrudModal.RenderControl())
-                    .Replace("AlAbrirLaModal", jsAbrirModal)
-                    .Replace("AlCerrarLaModal", jsCerrarModal)
-                    .Render();
+            //return _htmlModalSelector
+            //        .Replace("idModal", IdHtml)
+            //        .Replace("titulo", Titulo)
+            //        .Replace("{idSelector}", s.IdHtml)
+            //        .Replace("{idGrid}", CrudModal.Mnt.Datos.IdHtml)
+            //        .Replace("{nameSelCheck}", $"{nombreCheckDeSeleccion}")
+            //        .Replace("{columnaId}", s.propiedadParaFiltrar)
+            //        .Replace("{columnaMostrar}", s.propiedadParaMostrar)
+            //        .Replace("{idContenedor}", $"{s.Modal.IdHtml}_contenedor")
+            //        .Replace("{gridDeElementos}", CrudModal.RenderControl())
+            //        .Replace("AlAbrirLaModal", jsAbrirModal)
+            //        .Replace("AlCerrarLaModal", jsCerrarModal)
+            //        .Render();
+
+            return _htmlMiModal
+                .Replace("titulo", Titulo)
+                .Replace("crudDeSeleccion", CrudModal.RenderControl());
+
         }
 
         public override string RenderControl()

@@ -30,8 +30,8 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false, PorAncho = 50 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int), PorAncho = 10 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false, PorAnchoMnt = 50 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int), PorAnchoMnt = 10 });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
         }
 
