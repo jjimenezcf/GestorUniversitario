@@ -76,7 +76,7 @@ function PeticionSincrona(htmlInputCantidad: HTMLInputElement, idGrid: string, p
 }
 
 function Leer(idGrid) {
-    let idCrtlCantidad: string = `${idGrid}_${LiteralMnt.idCtrlCantidad}`;
+    let idCrtlCantidad: string = `${idGrid}_${LiteralGrid.idCtrlCantidad}`;
     let htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idCrtlCantidad}`);
 
     if (htmlImputCantidad === null)
@@ -88,7 +88,7 @@ function Leer(idGrid) {
 }
 
 function LeerAnteriores(idGrid) {
-    let idCrtlCantidad: string = `${idGrid}_${LiteralMnt.idCtrlCantidad}`;
+    let idCrtlCantidad: string = `${idGrid}_${LiteralGrid.idCtrlCantidad}`;
     let htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idCrtlCantidad}`);
 
     if (htmlImputCantidad === null)
@@ -106,7 +106,7 @@ function LeerAnteriores(idGrid) {
 }
 
 function LeerSiguientes(idGrid: string) {
-    let idCrtlCantidad: string = `${idGrid}_${LiteralMnt.idCtrlCantidad}`;
+    let idCrtlCantidad: string = `${idGrid}_${LiteralGrid.idCtrlCantidad}`;
     var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idCrtlCantidad}`);
     if (htmlImputCantidad === null)
         Mensaje(TipoMensaje.Error, `El elemento ${idCrtlCantidad} no está definido`);
@@ -124,7 +124,7 @@ function LeerSiguientes(idGrid: string) {
 }
 
 function LeerUltimos(idGrid) {
-    let idCrtlCantidad: string = `${idGrid}_${LiteralMnt.idCtrlCantidad}`;
+    let idCrtlCantidad: string = `${idGrid}_${LiteralGrid.idCtrlCantidad}`;
     var htmlImputCantidad: HTMLInputElement = <HTMLInputElement>document.getElementById(`${idCrtlCantidad}`);
     if (htmlImputCantidad === null)
         Mensaje(TipoMensaje.Error, `El elemento${idCrtlCantidad} no está definido`);

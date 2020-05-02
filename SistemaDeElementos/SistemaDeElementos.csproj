@@ -17,6 +17,9 @@
     <Content Remove="wwwroot\ts\_Crud\CrudMantenimiento.ts" />
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />
+    <Content Remove="wwwroot\ts\_Crud\GestorDeEventos.ts" />
+    <Content Remove="wwwroot\ts\_Crud\GridMnt.ts" />
+    <Content Remove="wwwroot\ts\_Crud\ModalDeSeleccion.ts" />
   </ItemGroup>
 
   <ItemGroup>

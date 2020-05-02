@@ -27,16 +27,12 @@ class InfoSelector {
     private seleccionados: Array<number>;
     private paraMostrarEnSelector: Array<string>;
     private seleccionables: number;
-    private columnaMostrar: string;
-    private esModal: boolean;
     private htmlGrid: HTMLElement;
 
     public get Id() { return this.idGrid; }
     public get Cantidad() { return this.seleccionados.length; }
     public get Seleccionables() { return this.Seleccionables == NaN ? 0 : this.seleccionables; }
     public get Seleccionados() { return this.seleccionados; }
-    public get ColumnaMostrar() { return this.columnaMostrar; }
-    public get EsModalDeSeleccion() { return this.esModal; }
 
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
@@ -44,7 +40,6 @@ class InfoSelector {
         this.seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
-        this.esModal = false;
     }
 
     constructor(idGrid) {
@@ -64,8 +59,7 @@ class InfoSelector {
             ejecutar = true;
 
         if (ejecutar) {
-            document.getElementsByName(`chksel.${this.idGrid}`).forEach(c =>
-              {
+            document.getElementsByName(`chksel.${this.idGrid}`).forEach(c => {
                 let check = <HTMLInputElement>c;
                 if (!check.checked) {
                     check.disabled = deshabilitar;
@@ -73,17 +67,12 @@ class InfoSelector {
                 else {
                     check.disabled = false;
                 }
-              }
+            }
             );
         }
     }
 
-    Modal(columnaMostar) {
-        this.esModal = true;
-        this.columnaMostrar = columnaMostar;
-    }
-
-    LeerId(pos) {
+    LeerId(pos): number {
         if (pos >= 0 && pos < this.Cantidad) {
             return this.seleccionados[pos];
         }
@@ -91,17 +80,12 @@ class InfoSelector {
         return 0;
     }
 
-    LeerElemento(pos: number):Elemento {
-        if (this.esModal) {
+    LeerElemento(pos: number): Elemento {
             var id = this.LeerId(pos);
             if (id > 0) {
                 var texto = this.paraMostrarEnSelector[pos];
                 return new Elemento(id, texto);
             }
-        }
-        else
-            console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
-
         return Elemento.ElementoVacio;
     }
 
@@ -121,18 +105,10 @@ class InfoSelector {
     }
 
     InsertarElemento(id, textoMostrar) {
-
-        if (this.esModal) {
-            var pos = this.InsertarId(id);
-            if (pos === this.seleccionados.length) {
-                this.paraMostrarEnSelector.push(textoMostrar);
-            }
+        var pos = this.InsertarId(id);
+        if (pos === this.seleccionados.length) {
+            this.paraMostrarEnSelector.push(textoMostrar);
         }
-        else {
-            console.log(`Ha intentado insertar un elemento en un infoSelector no válido por no estar declarado como Modal`);
-            return -1;
-        }
-
         return pos;
     }
 
@@ -141,7 +117,8 @@ class InfoSelector {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 var e = elementos[i];
-                this.InsertarElemento(e.id, e.valor);
+                if (this.seleccionados.indexOf(e.id) < 0)
+                    this.InsertarElemento(e.id, e.valor);
             }
         }
         else {
@@ -166,6 +143,10 @@ class InfoSelector {
         return this.Cantidad;
     }
 
+    Buscar(id): number {
+        return this.seleccionados.indexOf(id);
+    }
+
     Quitar(idSeleccionado) {
         var pos = this.seleccionados.indexOf(idSeleccionado);
         if (pos >= 0) {
@@ -176,6 +157,12 @@ class InfoSelector {
         }
         else
             console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
+    }
+
+    QuitarTodos() {
+        this.seleccionados.splice(0, this.seleccionados.length);
+        this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
+
     }
 
     ToString() {
@@ -197,7 +184,7 @@ class InfoSelector {
 
 class InfoSelectores {
 
-    _infoSelectores = new Array <InfoSelector>()
+    _infoSelectores = new Array<InfoSelector>();
 
     constructor() {
         console.log("Aray de Infoselectores construido");

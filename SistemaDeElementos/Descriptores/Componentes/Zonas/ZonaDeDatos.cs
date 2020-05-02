@@ -16,8 +16,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private List<FilaDelGrid<TElemento>> Filas => Grid.filas;
 
+        public string ExpresionElemento { get; set; } 
+
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; } = 0;
+
+        public string IdHtmlModal { get; set; }
 
         public int TotalEnBd { get; set; }
         public ZonaDeDatos(DescriptorMantenimiento<TElemento> mnt)
@@ -98,11 +102,12 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = 2 seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨>     
+            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = 2 seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨ expresion-elemento = ¨{expresion}¨>     
                                        tabla_Navegador 
                                      </div>";
             var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")
                                         .Replace("{idFiltro}", idHtmlZonaFiltro)
+                                        .Replace("{expresion}", ExpresionElemento)
                                         .Replace("tabla_Navegador", Grid.ToHtml());
             return htmlContenedor;
         }
@@ -111,6 +116,15 @@ namespace MVCSistemaDeElementos.Descriptores
             var mnt = (DescriptorMantenimiento<TElemento>)Padre;
             var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
             crud.CambiarModo(modo);
+            return Grid.ToHtml();
+        }
+
+        public string RenderDelGridModal (string idModal)
+        {
+            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
+            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
+            crud.CambiarModo(ModoDescriptor.Seleccion);
+            crud.Mnt.Datos.IdHtmlModal = idModal;
             return Grid.ToHtml();
         }
 

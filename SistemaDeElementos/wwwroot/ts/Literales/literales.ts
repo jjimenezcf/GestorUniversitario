@@ -19,7 +19,8 @@ const Atributo = {
     posicion: "posicion",
     obligatorio: "obligatorio",
     totalEnBd: "totalEnBd",
-    modoOrdenacion: "modo-ordenacion"
+    modoOrdenacion: "modo-ordenacion",
+    expresionElemento: "expresion-elemento"
 }
 
 const ModoOrdenacion = {
@@ -34,6 +35,7 @@ const AtributoSelector = {
     idGridModal: "idGridModal",
     propiedadmostrar: "propiedadmostrar",
     refCheckDeSeleccion: "refCheckDeSeleccion",
+    idModal: "idModal",
     idBtnSelector: "idBtnSelector"
 }
 
@@ -61,10 +63,13 @@ const Ajax = {
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
         LeerPorIds: "epLeerPorIds",
         Modificar: "epModificarPorId",
-        Borrar: "epBorrarPorId"
+        Borrar: "epBorrarPorId",
+        RecargarModalEnHtml: "epRecargarModalEnHtml",
+        Leer: "epLeer"
     },
     Param: {
         elementoJson: "elementoJson",
+        idModal: "idModal",
         idGrid: "idGrid",
         modo: "modo",
         posicion: "posicion",
@@ -82,32 +87,62 @@ const Ajax = {
 };
 
 const LiteralCrt = {
-    nuevoelemento: "nuevoelemento",
-    cancelarnuevo: "cancelarnuevo",
+    Accion: {
+        NuevoElemento: "nuevo-elemento",
+        CancelarNuevo: "cancelar-nuevo",
+    }
 };
 
 const LiteralEdt = {
-    modificarelemento: "modificarelemento",
-    cancelaredicion: "cancelaredicion",
+    Accion: {
+        ModificarElemento: "modificar-elemento",
+        CancelarEdicion: "cancelar-edicion",
+    },
     idCtrlCantidad: "nav_2_reg"
 };
 
 const LiteralMnt = {
-    CrearElemento: "crearelemento",
-    EditarElemento: "editarelemento",
-    AbrirBorrarElemento: "abrirmodalborrarelemento",
-    AbrirModalDeSeleccion: "abrirmodaldeseleccion",
-    BorrarElemento: "borrarelemento",
-    CerrarModalDeBorrado: "cerrarmodaldeborrado",
-    idCtrlCantidad: "nav_2_reg",
+    Accion: {
+        CrearElemento: "crear-elemento",
+        EditarElemento: "editar-elemento",
+        EliminarElemento: "eliminar-elemento",
+        BuscarElementos: "buscar-elementos",
+        ObtenerAnteriores: "obtener-anteriores",
+        ObtenerSiguientes: "obtener-siguientes",
+        ObtenerUltimos: "obtener-ultimos",
+        OrdenarPor: "ordenar-por",
+        FilaPulsada: "fila-pulsada",
+        CambiarSelector:"cambiar-selector"
+    },
     posicion: "posicion",
-    postfijoDeCheckDeSeleccion: ".chksel",
-    Buscar: "buscar",
-    ObtenerAnteriores: "obteneranteriores",
-    ObtenerSiguientes: "obtenersiguientes",
-    ObtenerUltimos: "obtenerultimos",
-    OrdenarPor: "ordenarpor"
+    postfijoDeCheckDeSeleccion: ".chksel"
 };
+
+const LiteralGrid = {
+    idCtrlCantidad: "nav_2_reg"
+}
+
+const LiteralModalBorrar = {
+    Accion: {
+        BorrarElemento: "borrar-elemento",
+        CerrarModalDeBorrado: "cerrar-modal-de-borrado",
+    }
+}
+
+
+const LiteralModalSeleccion = {
+    Accion: {
+        AbrirModalDeSeleccion: "abrir-modal-seleccion",
+        SeleccionarElementos: "seleccionar-elementos",
+        CerrarModalDeSeleccion: "cerrar-modal-seleccion",
+        BuscarElementos: "buscar-elementos",
+        FilaPulsada: "fila-pulsada",
+        ObtenerAnteriores: "obtener-anteriores",
+        ObtenerSiguientes: "obtener-siguientes",
+        ObtenerUltimos: "obtener-ultimos",
+        OrdenarPor: "ordenar-por"
+    }
+}
 
 const TipoControl = {
     Tipo : "tipo",

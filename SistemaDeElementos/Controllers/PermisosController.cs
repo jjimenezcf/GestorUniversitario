@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult IraMantenimientoPermiso(string orden)
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(orden));
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(orden), cantidadPorLeer: 5, posicionInicial: 0);
             GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }

@@ -77,6 +77,7 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
+
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
             return Mnt.Filtro.BuscarControl(propiedad);
@@ -93,9 +94,10 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Propiedad = nameof(Id), Tipo = typeof(int), Visible = false });
         }
 
-        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int pos = 0)
+        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int cantidadPorLeer, int posicionInicial)
         {
-            Mnt.Datos.PosicionInicial = pos;
+            Mnt.Datos.PosicionInicial = posicionInicial;
+            Mnt.Datos.CantidadPorLeer = cantidadPorLeer;
         }
 
         public void TotalEnBd(int totalEnBd)
@@ -113,6 +115,12 @@ namespace MVCSistemaDeElementos.Descriptores
                          {Environment.NewLine}{Borrado.RenderControl()}"
                     : ""
                    );
+        }
+
+
+        internal string RenderCrudModal(string idModal)
+        {
+            return Mnt.RenderMntModal(idModal);
         }
 
         public static ModoDescriptor ParsearModo(string modo)

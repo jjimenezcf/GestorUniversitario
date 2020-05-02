@@ -30,14 +30,15 @@ namespace MVCSistemaDeElementos.Descriptores
         protected override void DefinirColumnasDelGrid()
         {
             base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = false, PorAnchoMnt = 50 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = true, PorAnchoMnt = 50 });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int), PorAnchoMnt = 10 });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
+            Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos, int posicion)
+        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos, int cantidadPorLeer, int posicionInicial)
         {
-            base.MapearElementosAlGrid(elementos, posicion);
+            base.MapearElementosAlGrid(elementos, cantidadPorLeer, posicionInicial);
             foreach (var permiso in elementos)
             {
                 var fila = new FilaDelGrid<PermisoDto>(Mnt.Datos, permiso);

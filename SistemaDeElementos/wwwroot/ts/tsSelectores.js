@@ -82,7 +82,6 @@ function AlAbrir(idGrid, idSelector, columnaId, columnaMostrar) {
     htmlSelector.MapearTextoAlEditorDelGrid();
     recargarGrid(idGrid);
     var infSel = infoSelectores.Crear(idGrid);
-    infSel.Modal(columnaMostrar);
     var arrayMarcados = elementosMarcados(idSelector);
     infSel.InsertarElementos(arrayMarcados);
     marcarElementos(idGrid, columnaId, infSel);
@@ -121,9 +120,9 @@ function AlCambiarTextoSelector(idSelector, controlador) {
 }
 function recargarGrid(idGrid) {
     BlanquearMensaje();
-    var htmlImputCantidad = document.getElementById(`${idGrid}_${LiteralMnt.idCtrlCantidad}`);
+    var htmlImputCantidad = document.getElementById(`${idGrid}_${LiteralGrid.idCtrlCantidad}`);
     if (htmlImputCantidad === null)
-        console.log(`El elemento ${idGrid}_${LiteralMnt.idCtrlCantidad} no está definido`);
+        console.log(`El elemento ${idGrid}_${LiteralGrid.idCtrlCantidad} no está definido`);
     else {
         var cantidad = htmlImputCantidad.value.Numero();
         var posicion = htmlImputCantidad.getAttribute(LiteralMnt.posicion).Numero();
@@ -187,7 +186,7 @@ function marcarElementos(idGrid, columnaId, infSel) {
     for (var i = 0; i < infSel.Cantidad; i++) {
         for (var j = 0; j < len; j++) {
             var id = infSel.LeerId(i);
-            if (celdasId[j].value === id) {
+            if (Number(celdasId[j].value) === id) {
                 var idCheck = celdasId[j].id.replace(`.${columnaId}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                 var check = document.getElementById(idCheck);
                 check.checked = true;

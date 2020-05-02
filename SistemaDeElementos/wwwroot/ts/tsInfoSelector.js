@@ -21,15 +21,12 @@ class InfoSelector {
     get Cantidad() { return this.seleccionados.length; }
     get Seleccionables() { return this.Seleccionables == NaN ? 0 : this.seleccionables; }
     get Seleccionados() { return this.seleccionados; }
-    get ColumnaMostrar() { return this.columnaMostrar; }
-    get EsModalDeSeleccion() { return this.esModal; }
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
         this.seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
-        this.esModal = false;
     }
     deshabilitarCheck(deshabilitar) {
         var ejecutar = false;
@@ -51,10 +48,6 @@ class InfoSelector {
             });
         }
     }
-    Modal(columnaMostar) {
-        this.esModal = true;
-        this.columnaMostrar = columnaMostar;
-    }
     LeerId(pos) {
         if (pos >= 0 && pos < this.Cantidad) {
             return this.seleccionados[pos];
@@ -63,15 +56,11 @@ class InfoSelector {
         return 0;
     }
     LeerElemento(pos) {
-        if (this.esModal) {
-            var id = this.LeerId(pos);
-            if (id > 0) {
-                var texto = this.paraMostrarEnSelector[pos];
-                return new Elemento(id, texto);
-            }
+        var id = this.LeerId(pos);
+        if (id > 0) {
+            var texto = this.paraMostrarEnSelector[pos];
+            return new Elemento(id, texto);
         }
-        else
-            console.log(`Ha intentado leer un elemento en un infoSelector no válido por no estar declarado como Modal`);
         return Elemento.ElementoVacio;
     }
     InsertarId(id) {
@@ -87,15 +76,9 @@ class InfoSelector {
         return this.Cantidad;
     }
     InsertarElemento(id, textoMostrar) {
-        if (this.esModal) {
-            var pos = this.InsertarId(id);
-            if (pos === this.seleccionados.length) {
-                this.paraMostrarEnSelector.push(textoMostrar);
-            }
-        }
-        else {
-            console.log(`Ha intentado insertar un elemento en un infoSelector no válido por no estar declarado como Modal`);
-            return -1;
+        var pos = this.InsertarId(id);
+        if (pos === this.seleccionados.length) {
+            this.paraMostrarEnSelector.push(textoMostrar);
         }
         return pos;
     }
@@ -103,7 +86,8 @@ class InfoSelector {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 var e = elementos[i];
-                this.InsertarElemento(e.id, e.valor);
+                if (this.seleccionados.indexOf(e.id) < 0)
+                    this.InsertarElemento(e.id, e.valor);
             }
         }
         else {
@@ -122,6 +106,9 @@ class InfoSelector {
         }
         return this.Cantidad;
     }
+    Buscar(id) {
+        return this.seleccionados.indexOf(id);
+    }
     Quitar(idSeleccionado) {
         var pos = this.seleccionados.indexOf(idSeleccionado);
         if (pos >= 0) {
@@ -132,6 +119,10 @@ class InfoSelector {
         }
         else
             console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
+    }
+    QuitarTodos() {
+        this.seleccionados.splice(0, this.seleccionados.length);
+        this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
     }
     ToString() {
         var ids = "";

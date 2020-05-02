@@ -49,6 +49,24 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmContenedorMnt.Render();
         }
 
+        public string RenderMntModal(string idModal)
+        {
+            Datos.IdHtmlModal = idModal.ToLower();
+
+            var htmlMnt = 
+                   Filtro.RenderControl() + Environment.NewLine +
+                   Datos.RenderControl() + Environment.NewLine;
+
+            var htmContenedorMnt =
+                $@"
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨>
+                     {htmlMnt}
+                   </Div>
+                ";
+
+            return htmContenedorMnt.Render();
+        }
+
         public string RenderTitulo()
         {
             var htmlCabecera = $"<h2>{this.Etiqueta}</h2>";

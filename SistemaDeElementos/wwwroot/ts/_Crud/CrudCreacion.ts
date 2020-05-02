@@ -21,10 +21,10 @@
         public EjecutarAcciones(accion: string) {
             let hayError: boolean = false;
             try {
-                if (accion === LiteralCrt.nuevoelemento)
+                if (accion === LiteralCrt.Accion.NuevoElemento)
                     this.Crear();
                 else
-                    if (accion === LiteralCrt.cancelarnuevo)
+                    if (accion === LiteralCrt.Accion.CancelarNuevo)
                         hayError = false;
                     else
                         throw `la opción ${accion} no está definida`;

@@ -5,6 +5,8 @@
         constructor() {
         }
 
+        //funciones de ayuda para la herencia
+
         protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
 
             this.BlanquearControlesDeIU(panelCerrar);
@@ -41,6 +43,16 @@
         protected OcultarPanel(panel: HTMLDivElement) {
             panel.classList.add(ClaseCss.divNoVisible);
             panel.classList.remove(ClaseCss.divVisible);
+        }
+
+        protected CerrarModal(idModal: string) {
+            let modalBorrar: HTMLDivElement = document.getElementById(idModal) as HTMLDivElement;
+            modalBorrar.style.display = "none";
+            var body = document.getElementsByTagName("body")[0];
+            body.style.position = "inherit";
+            body.style.height = "auto";
+            body.style.overflow = "visible";
+
         }
 
         // funciones para mapear un elemento Json a los controles de un panel

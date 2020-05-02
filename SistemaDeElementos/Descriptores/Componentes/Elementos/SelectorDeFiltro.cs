@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string propiedadParaMostrar { get; private set; }
         public ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> Modal { get; set; }
 
-        public string idBtnSelectorHtml => $"{IdHtml}_btnSel";
+        public string idBtnSelectorHtml => $"{IdHtml}_btnsel";
 
         public string PropiedadDondeMapear { get; private set; }
 
@@ -51,12 +51,13 @@ namespace MVCSistemaDeElementos.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
+                              idModal=¨{Modal.IdHtml}¨
                               idGridModal=¨{CrudModal.Mnt.Datos.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
                               idEditorMostrar=¨{edt.IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Datos.IdHtml}¨
-                              onchange =¨AlCambiarTextoSelector('{IdHtml}', '{CrudModal.Controlador}')¨>
-                       <input type=¨text¨ id=¨{IdHtml}_boton¨ class=¨boton-modal¨ value=¨Seleccionar¨ onclick=¨Crud.EjecutarMenuMnt('abrirmodaldeseleccion', '{Modal.IdHtml}')¨       />
+                              onchange =¨Crud.EventosDelMantenimiento('cambiar-selector','{IdHtml}')¨>
+                       <input type=¨text¨ id=¨{idBtnSelectorHtml}¨ class=¨boton-modal¨ value=¨Seleccionar¨ onclick=¨Crud.EventosModalDeSeleccion('abrir-modal-seleccion', '{Modal.IdHtml}')¨       />
                     </div>
                   ";
 

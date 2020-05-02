@@ -44,11 +44,12 @@ namespace MVCSistemaDeElementos.Descriptores
                 Alineada = Aliniacion.centrada,
                 Ordenar = true
             });
+            Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos, int posicion)
+        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos, int cantidadPorLeer, int posicionInicial)
         {
-            base.MapearElementosAlGrid(elementos, posicion);
+            base.MapearElementosAlGrid(elementos, cantidadPorLeer, posicionInicial);
             foreach (var usuario in elementos)
             {
                 var fila = new FilaDelGrid<UsuarioDto>(Mnt.Datos, usuario);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using MVCSistemaDeElementos.Descriptores;
 using Gestor.Elementos.ModeloIu;
+using Utilidades;
 
 namespace UtilidadesParaIu
 {
@@ -63,15 +64,13 @@ namespace UtilidadesParaIu
                 ? columna.PorAnchoSel
                 : columna.PorAnchoMnt;
 
+
+
             var visible = columna.Visible ? "visibility: visible;" : "visibility: hidden";
             var ancho = columna.PorAnchoMnt == 0 ? "" : $"width:{porcentaje}%";
-            var estilo =  $"style=¨{ancho}¨;"; 
+            var estilo = $"style=¨{ancho}¨;";
 
-
-            var htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EjecutarMenuMnt('ordenarpor','{columna.IdHtml}')¨  
-                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
-                                                </a>"
-                    : $"<a>{columna.Titulo}</a>";
+            string htmlRef = RenderAccionOrdenar(columna);
 
             var htmlTh = $@"{Environment.NewLine}<th id = ¨{columna.IdHtml}¨ 
                                                class=¨columna-cabecera {columna.AlineacionCss}¨ 
@@ -84,12 +83,43 @@ namespace UtilidadesParaIu
             return htmlTh;
         }
 
+        private static string RenderAccionOrdenar(ColumnaDelGrid<TElemento> columna)
+        {
+            string htmlRef;
+            if (columna.ZonaDeDatos.IdHtmlModal.IsNullOrEmpty())
+            {
+
+                htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EventosDelMantenimiento('ordenar-por','{columna.IdHtml}')¨  
+                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
+                                                </a>"
+                        : $"<a>{columna.Titulo}</a>";
+            }
+            else
+            {
+                htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EventosModalDeSeleccion('ordenar-por','{columna.ZonaDeDatos.IdHtmlModal}#{columna.IdHtml}')¨  
+                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
+                                                </a>"
+                        : $"<a>{columna.Titulo}</a>";
+            }
+
+            return htmlRef;
+        }
+
+        private static string RenderEventoPuslsa(CeldaDelGrid<TElemento> celda, string idControlHtml)
+        {
+            return celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
+               ? $"Crud.EventosModalDeSeleccion('fila-pulsada', '{celda.Fila.Datos.IdHtmlModal}#{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}');"
+               : $"Crud.EventosDelMantenimiento('fila-pulsada', '{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}');";
+        }
+
 
         private static string RenderTd(CeldaDelGrid<TElemento> celda)
         {
 
-            var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); 
-            var onclickTd = $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{celda.Fila.idHtmlCheckDeSeleccion}','{celda.idHtmlTd}');¨";
+            var nombreTd = $"td.{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower();
+            string pulsarCheck = RenderEventoPuslsa(celda, celda.idHtmlTd);
+
+            var onclickTd = $"onclick=¨{pulsarCheck}¨";
             var ocultar = celda.Visible ? "" : "hidden";
 
             var tdHtml = $@"<td id=¨{celda.idHtmlTd}¨ 
@@ -104,35 +134,37 @@ namespace UtilidadesParaIu
 
         private static string RenderCeldaDelTd(CeldaDelGrid<TElemento> celda)
         {
-
             var idDelInput = $"{celda.idHtml}";
+            string pulsarCheck = RenderEventoPuslsa(celda, idDelInput);
+
             var tipoHtml = celda.Tipo == typeof(bool) ? "type =¨checkbox¨" : "type =¨text¨";
             var onclick = celda.Tipo == typeof(bool)
-                  ? $"onclick=¨Crud.AlPulsarUnCheckDeSeleccion('{celda.Fila.Datos.IdHtml}','{celda.Fila.idHtmlCheckDeSeleccion}','{idDelInput}');¨"
+                  ? $"onclick=¨{pulsarCheck}¨"
                   : "";
 
 
             var editable = !celda.Editable ? "readonly" : "";
 
-            var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower(); 
+            var nombreInput = $"{celda.Propiedad}.{celda.Fila.Datos.IdHtml}".ToLower();
 
             var input = $" <input {tipoHtml} id=¨{idDelInput}¨ " +
             $"        name=¨{nombreInput}¨ " +
-            $"        class=¨{celda.AlineacionCss()}¨ " +
+            $"        class=¨{celda.AlineacionCss()}¨  " +
+            $"        propiedad=¨{celda.Propiedad}¨ " +
             $"        style=¨width:100%; border:0¨ " +
             $"        {editable} " +
-            $"        {onclick} "  +
+            $"        {onclick} " +
             $"        value=¨{celda.Valor}¨ />";
 
             return input;
         }
 
 
-            private static string RenderFila(FilaDelGrid<TElemento> fila)
+        private static string RenderFila(FilaDelGrid<TElemento> fila)
         {
             var filaHtml = new StringBuilder();
             var numCol = 0;
-            for(var j= 0; j < fila.NumeroDeCeldas; j++)
+            for (var j = 0; j < fila.NumeroDeCeldas; j++)
             {
                 var celda = fila.ObtenerCelda(j);
                 filaHtml.AppendLine(RenderTd(celda));
@@ -169,7 +201,7 @@ namespace UtilidadesParaIu
         private static string RenderDetalleGrid(Grid<TElemento> grid)
         {
             var htmlDetalleGrid = new StringBuilder();
-            for(var i= 0; i< grid.NumeroDeFilas; i++)
+            for (var i = 0; i < grid.NumeroDeFilas; i++)
             {
                 var fila = grid.ObtenerFila(i);
                 htmlDetalleGrid.Append(RenderFilaSeleccionable(fila));
@@ -181,22 +213,21 @@ namespace UtilidadesParaIu
 
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
-
             var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"LeerSiguientes('{grid.IdHtml}')"
-                : $"Crud.EjecutarMenuMnt('obtenersiguientes')";
+                ? $"Crud.EventosModalDeSeleccion('obtener-siguientes','{grid.ZonaDeDatos.IdHtmlModal}')"
+                : $"Crud.EventosDelMantenimiento('obtener-siguientes')";
 
             var accionBuscar = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"Leer('{grid.IdHtml}')"
-                : $"Crud.EjecutarMenuMnt('buscar')";
+                ? $"Crud.EventosModalDeSeleccion('buscar-elementos','{grid.ZonaDeDatos.IdHtmlModal}')"
+                : $"Crud.EventosDelMantenimiento('buscar-elementos')";
 
             var accionAnterior = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"LeerAnteriores('{grid.IdHtml}')"
-                : $"Crud.EjecutarMenuMnt('obteneranteriores')";
+                ? $"Crud.EventosModalDeSeleccion('obtener-anteriores','{grid.ZonaDeDatos.IdHtmlModal}')"
+                : $"Crud.EventosDelMantenimiento('obtener-anteriores')";
 
             var accionUltimos = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"LeerUltimos('{grid.IdHtml}')"
-                : $"Crud.EjecutarMenuMnt('obtenerultimos')";
+                ? $"Crud.EventosModalDeSeleccion('obtener-ultimos','{grid.ZonaDeDatos.IdHtmlModal}')"
+                : $"Crud.EventosDelMantenimiento('obtener-ultimos')";
 
             var htmlNavegadorGrid = $@"
             <div id= ¨{grid.IdHtml}_pie¨ class=¨pie-grid¨>

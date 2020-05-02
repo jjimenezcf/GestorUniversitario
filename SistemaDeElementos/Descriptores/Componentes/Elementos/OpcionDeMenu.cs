@@ -6,9 +6,23 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum TipoAccion { IraMnt }
 
-    public enum TipoAccionMnt {CrearElemento, EditarElemento, AbrirModalBorrarElemento }
-    public enum TipoAccionCreacion {NuevoElemento, CancelarNuevo }
-    public enum TipoAccionEdicion {ModificarElemento,CancelarEdicion }
+    public static class TipoAccionMnt
+    {
+        public const string CrearElemento = "crear-elemento";
+        public const string EditarElemento = "editar-elemento";
+        public const string EliminarElemento = "eliminar-elemento";
+    }
+
+    public static class TipoAccionCreacion
+    {
+        public const string NuevoElemento = "nuevo-elemento";
+        public const string CancelarNuevo = "cancelar-nuevo";
+    }
+    public static class TipoAccionEdicion
+    {
+        public const string ModificarElemento = "modificar-elemento";
+        public const string CancelarEdicion = "cancelar-edicion";
+    }
 
     public class AccionDeMenu
     {
@@ -24,10 +38,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class AccionDeMenuMnt : AccionDeMenu
     {
-        TipoAccionMnt TipoAccion;
+        string TipoAccion;
 
 
-        public AccionDeMenuMnt(TipoAccionMnt tipoAccion)
+        public AccionDeMenuMnt(string tipoAccion)
         : base()
         {
             TipoAccion = tipoAccion;
@@ -35,15 +49,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            return $"Crud.EjecutarMenuMnt('{TipoAccion.ToString().ToLower()}')";
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
         }
     }
 
     public class AccionDeMenuCreacion : AccionDeMenu
     {
-        TipoAccionCreacion TipoAccion;
+        string TipoAccion;
 
-        public AccionDeMenuCreacion(TipoAccionCreacion tipoAccion)
+        public AccionDeMenuCreacion(string tipoAccion)
             : base()
         {
             TipoAccion = tipoAccion;
@@ -51,15 +65,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-           return $"Crud.EjecutarMenuCrt('{TipoAccion.ToString().ToLower()}')";
+            return $"Crud.EjecutarMenuCrt('{TipoAccion}')";
         }
     }
 
 
     public class AccionDeMenuEdicion : AccionDeMenu
     {
-        TipoAccionEdicion TipoAccion;
-        public AccionDeMenuEdicion(TipoAccionEdicion tipoAccion)
+        string TipoAccion;
+        public AccionDeMenuEdicion(string tipoAccion)
         : base()
         {
             TipoAccion = tipoAccion;
@@ -67,7 +81,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            return $"Crud.EjecutarMenuEdt('{TipoAccion.ToString().ToLower()}')";
+            return $"Crud.EjecutarMenuEdt('{TipoAccion}')";
         }
     }
 
@@ -82,7 +96,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class BorrarElemento : AccionDeMenuMnt
     {
         public BorrarElemento()
-        : base(TipoAccionMnt.AbrirModalBorrarElemento)
+        : base(TipoAccionMnt.EliminarElemento)
         {
         }
     }

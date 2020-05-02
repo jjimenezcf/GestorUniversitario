@@ -20,10 +20,10 @@
         public EjecutarAcciones(accion: string) {
             let hayError: boolean = false;
             try {
-                if (accion === LiteralEdt.modificarelemento)
+                if (accion === LiteralEdt.Accion.ModificarElemento)
                     this.Modificar();
                 else
-                    if (accion === LiteralEdt.cancelaredicion)
+                    if (accion === LiteralEdt.Accion.CancelarEdicion)
                         hayError = false;
                     else
                         throw `la opción ${accion} no está definida`;

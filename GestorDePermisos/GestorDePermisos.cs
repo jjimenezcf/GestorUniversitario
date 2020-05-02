@@ -34,7 +34,24 @@ namespace Gestor.Elementos.Seguridad
 
         }
     }
+    static class PermisosRegOrd
+    {
+        public static IQueryable<PermisoDtm> Orden(this IQueryable<PermisoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            if (ordenacion.Count == 0)
+                return set.OrderBy(x => x.Nombre);
 
+            foreach (var orden in ordenacion)
+            {
+                if (orden.Propiedad == nameof(PermisoDtm.Nombre).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Nombre)
+                        : set.OrderByDescending(x => x.Nombre);
+            }
+
+            return set;
+        }
+    }
 
     public class GestorDePermisos : GestorDeElementos<CtoSeguridad, PermisoDtm, PermisoDto>
     {
@@ -67,6 +84,13 @@ namespace Gestor.Elementos.Seguridad
             return registros
                 .FiltroPorNombre(filtros)
                 .FiltroPorRol(filtros);
+        }
+
+
+        protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            registros = base.AplicarOrden(registros, ordenacion);
+            return registros.Orden(ordenacion);
         }
 
     }

@@ -144,7 +144,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde Grid.ts
+        //END-POINT: Desde CrudMantenimiento.ts
         public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
         {
             var r = new ResultadoHtml();
@@ -171,7 +171,7 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Mensaje = "No hay más elementos";
                 }
 
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, pos);                
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);                
                 r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo)); 
                 r.Datos = elementos.Count();
                 r.Estado = EstadoPeticion.Ok;
@@ -186,11 +186,67 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //Lamada desde Selector.js
-        public JsonResult Leer(string filtro)
+        //END-POINT: Desde ModalSeleccion.ts
+        public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
         {
-           IEnumerable<TElemento> elementos = Leer(0, -1, filtro, null);
-           return new JsonResult(elementos);
+            var r = new ResultadoHtml();
+            int pos = posicion.Entero();
+            int can = cantidad.Entero();
+            try
+            {
+                //si me pide leer los últimos registros
+                if (pos == -1)
+                {
+                    var total = Contar();
+                    pos = total - can;
+                    if (pos < 0) pos = 0;
+                    posicion = pos.ToString();
+                }
+
+                var elementos = Leer(pos, can, filtro, orden);
+                //si no he leido nada por estar al final, vuelvo a leer los últimos
+                if (pos > 0 && elementos.ToList().Count() == 0)
+                {
+                    pos = pos - can;
+                    if (pos < 0) pos = 0;
+                    elementos = Leer(pos, can, filtro, orden);
+                    r.Mensaje = "No hay más elementos";
+                }
+
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
+                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
+                r.Datos = elementos.Count();
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido recuperar datos para el grid";
+            }
+
+            return new JsonResult(r);
+        }
+
+        //END-POINT: Desde ModalSeleccion.ts
+        public JsonResult epLeer(string filtro)
+        {
+            var r = new Resultado();
+            List<TElemento> elementos;
+            try
+            {
+                elementos = Leer(0, -1, filtro, null).ToList();
+                r.Datos = elementos;
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido leer los datos";
+            }
+
+           return new JsonResult(r);
         }
 
         public ViewResult ViewCrud()

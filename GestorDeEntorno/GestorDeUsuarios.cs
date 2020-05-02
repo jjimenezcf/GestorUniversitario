@@ -36,8 +36,6 @@ namespace Gestor.Elementos.Entorno
 
     static class UsuarioRegOrd
     {
-        public const string OrdenPorApellido = "PorApellido";
-
         public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {
             if (ordenacion.Count == 0)
