@@ -4,14 +4,16 @@ using Gestor.Elementos.Entorno;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(CtoEntorno))]
-    partial class ContextoEntornoModelSnapshot : ModelSnapshot
+    [Migration("20200503184025_AnadirVistaUsuPermiso")]
+    partial class AnadirVistaUsuPermiso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,29 +68,6 @@ namespace GestorDeEntorno.Migrations
                     b.HasIndex("IdVistaMvc");
 
                     b.ToTable("MENU","ENTORNO");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Entorno.UsuPermisoDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IdPermiso")
-                        .HasColumnName("IDPERMISO")
-                        .HasColumnType("INT");
-
-                    b.Property<int>("IdUsua")
-                        .HasColumnName("IDUSUA")
-                        .HasColumnType("INT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdUsua");
-
-                    b.ToTable("USU_PERMISO","ENTORNO");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Entorno.UsuarioDtm", b =>
@@ -206,15 +185,6 @@ namespace GestorDeEntorno.Migrations
                         .WithMany("Menus")
                         .HasForeignKey("IdVistaMvc")
                         .HasConstraintName("FK_MENU_IDVISTA_MVC");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Entorno.UsuPermisoDtm", b =>
-                {
-                    b.HasOne("Gestor.Elementos.Entorno.UsuarioDtm", "Usuario")
-                        .WithMany("Permisos")
-                        .HasForeignKey("IdUsua")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

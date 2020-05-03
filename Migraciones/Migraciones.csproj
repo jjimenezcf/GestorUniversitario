@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20200329090620_anadirSubmenu.Designer.cs" />
     <Compile Remove="Migrations\20200329091111_anadirSubmenu.cs" />
     <Compile Remove="Migrations\20200329091111_anadirSubmenu.Designer.cs" />
+    <Compile Remove="Migrations\20200503190148_anadirPropiedadAUsuarios.cs" />
+    <Compile Remove="Migrations\20200503190148_anadirPropiedadAUsuarios.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

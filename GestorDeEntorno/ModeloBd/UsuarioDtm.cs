@@ -27,6 +27,9 @@ namespace Gestor.Elementos.Entorno
         [Column("F_ALTA", Order = 4, TypeName = "DATE")]
         public DateTime Alta { get; set; }
 
+
+        public virtual ICollection<UsuPermisoDtm> Permisos { get; private set; }
+
     }
     public static class TablaUsuario
     {

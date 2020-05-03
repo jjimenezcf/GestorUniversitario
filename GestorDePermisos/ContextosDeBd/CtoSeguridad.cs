@@ -59,6 +59,8 @@ namespace Gestor.Elementos.Seguridad
             TablaRolPuesto.Definir(modelBuilder);
 
             TablaUsuPuesto.Definir(modelBuilder);
+
+            VistaUsuarioPermiso.Definir(modelBuilder);
         }
 
 

@@ -27,6 +27,7 @@ namespace Gestor.Elementos.Seguridad
         public int Permiso { get; set; }
 
         public ICollection<rRolPermiso> Roles { get; set; }
+        public ICollection<PerUsuarioDtm> Usuarios { get; set; }
     }
 
     public static class TablaPermiso

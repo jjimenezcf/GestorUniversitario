@@ -50,6 +50,7 @@ namespace Gestor.Elementos.Entorno
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
+        public DbSet<UsuPermisoDtm> UsuPermisos { get; set; }
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -64,6 +65,7 @@ namespace Gestor.Elementos.Entorno
             TablaVariable.Definir(modelBuilder);
             TablaVistaMvc.Definir(modelBuilder);
             TablaMenu.Definir(modelBuilder);
+            VistaUsuarioPermiso.Definir(modelBuilder);
         }
 
         private bool HayQueDebuggar()
