@@ -1,5 +1,8 @@
 ﻿namespace Crud {
 
+    export class HTMLSelector extends HTMLInputElement {
+    }
+
     export class CrudBase {
 
         constructor() {

@@ -236,8 +236,8 @@
             var criterio = selector.getAttribute(Atributo.criterio);
             var valor = null;
             var clausula = null;
-            if (selector.hasAttribute(ListaDeSeleccionados)) {
-                var ids = selector.getAttribute(ListaDeSeleccionados);
+            if (selector.hasAttribute(AtributoSelector.ListaDeSeleccionados)) {
+                var ids = selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
                 if (!ids.NoDefinida()) {
                     valor = ids;
                     clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);

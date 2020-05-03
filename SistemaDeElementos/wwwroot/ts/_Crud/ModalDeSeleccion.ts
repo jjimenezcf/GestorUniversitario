@@ -5,12 +5,16 @@
         private ExpresionNombre: string;
         private ColumnaId: string;
         private ColumnaCheck: string;
-        private idSelector
+        private idSelector;
 
-        private get Selector(): HTMLSelector{
+        private get Selector(): HTMLSelector {
             return <HTMLSelector>document.getElementById(this.idSelector);
         }
 
+        private get EditorDelGrid(): HTMLInputElement {
+            var idEditorMostrar: string = this.Selector.getAttribute(AtributoSelector.idEditorMostrar);
+            return <HTMLInputElement>document.getElementById(idEditorMostrar);
+        }
 
         private Modal: HTMLDivElement;
 
@@ -26,21 +30,32 @@
 
             this.ExpresionNombre = this.Grid.getAttribute(Atributo.expresionElemento);
 
-            this.idSelector = this.Modal.getAttribute("selector");
-            this.ColumnaId = this.Selector.getAttribute("propiedadFiltrar");
+            this.idSelector = this.Modal.getAttribute(AtributoSelector.selector);
+            this.ColumnaId = this.Selector.getAttribute(AtributoSelector.propiedadParaFiltrar);
         }
 
         public InicializarModal() {
             let referenciaCheck: string = `chksel.${this.IdGrid}`;
             this.blanquearCheck(referenciaCheck);
             this.InfoSelector.QuitarTodos();
-            if (this.Selector.hasAttribute(ListaDeSeleccionados))
-                this.Selector.setAttribute(ListaDeSeleccionados, '');
+            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados))
+                this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, '');
         };
+
+        private InicializarSelector() {
+            this.InicializarModal();
+            this.EditorDelGrid.value = '';
+            this.InicializarListaDeSeleccionados();
+        }
+
+        private InicializarListaDeSeleccionados() {
+            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados))
+                this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, '');
+        }
 
         public AbrirModalDeSeleccion() {
             BlanquearMensaje();
-            this.Selector.MapearTextoAlEditorDelGrid();
+            this.EditorDelGrid.value = this.Selector.value;
             this.RecargarGrid();
 
             var arrayMarcados = this.elementosMarcados();
@@ -68,12 +83,12 @@
 
         public SeleccionarElementos() {
             this.Selector.value = "";
-            this.Selector.InicializarAtributos();
+            this.InicializarListaDeSeleccionados();
 
             for (var x = 0; x < this.InfoSelector.Cantidad; x++) {
                 var elemento: Elemento = this.InfoSelector.LeerElemento(x);
                 if (!elemento.EsVacio())
-                    mapearElementoAlHtmlSelector(this.Selector, elemento);
+                    this.mapearElementoAlHtmlSelector(elemento);
                 else
                     Mensaje(TipoMensaje.Error, `Se ha leido mal el elemento del selector ${this.IdGrid} de la posición ${x}`);
             }
@@ -105,8 +120,8 @@
         private elementosMarcados() {
             var ids = "";
             var elementos = new Array();
-            if (this.Selector.hasAttribute(ListaDeSeleccionados)) {
-                ids = this.Selector.getAttribute(ListaDeSeleccionados);
+            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados)) {
+                ids = this.Selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
                 if (!ids.NoDefinida()) {
                     var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
                     var listaIds = ids.split(';');
@@ -191,18 +206,10 @@
         }
 
         public TextoSelectorCambiado(valor: string) {
-
-            if (!EsNula(valor)) {
-                let url: string = this.DefinirPeticionLeerParaSelector();
-                let req: XMLHttpRequest = new XMLHttpRequest();
-                this.PeticionSincrona(req, url, Ajax.EndPoint.Leer);
-            }
-            else {
-                this.Selector.InicializarSelector();
-                var refCheckDeSeleccion: string = this.Selector.getAttribute(AtributoSelector.refCheckDeSeleccion);
-                if (!EsNula(refCheckDeSeleccion))
-                    this.blanquearCheck(refCheckDeSeleccion);
-            }
+            this.EditorDelGrid.value = this.Selector.value;
+            let url: string = this.DefinirPeticionLeerParaSelector();
+            let req: XMLHttpRequest = new XMLHttpRequest();
+            this.PeticionSincrona(req, url, Ajax.EndPoint.Leer);
         }
 
         private DefinirPeticionLeerParaSelector(): string {
@@ -249,7 +256,7 @@
         }
 
         private mapearElementoAlHtmlSelector(elemento: Elemento) {
-            this.Selector.BanquearEditorDelGrid();
+            this.EditorDelGrid.value = '';
             var valorDelSelector = this.Selector.value;
             if (!EsNula(valorDelSelector))
                 valorDelSelector = valorDelSelector + " | ";
@@ -259,9 +266,9 @@
         }
 
         private mapearIdAlHtmlSelector(id: number) {
-            var listaDeIds = this.Selector.getAttribute(ListaDeSeleccionados);
+            var listaDeIds = this.Selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
             if (listaDeIds === null) {
-                var atributo = document.createAttribute(ListaDeSeleccionados);
+                var atributo = document.createAttribute(AtributoSelector.ListaDeSeleccionados);
                 this.Selector.setAttributeNode(atributo);
                 listaDeIds = "";
             }
@@ -269,7 +276,9 @@
             if (!EsNula(listaDeIds))
                 listaDeIds = listaDeIds + ';';
             listaDeIds = listaDeIds + id;
-            this.Selector.setAttribute(ListaDeSeleccionados, listaDeIds);
+            this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, listaDeIds);
         }
+
+
     }
 }

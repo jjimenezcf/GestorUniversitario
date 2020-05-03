@@ -12,6 +12,9 @@
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Permisos.ts" />
+    <Content Remove="wwwroot\ts\tsSelectores.js" />
+    <Content Remove="wwwroot\ts\tsSelectores.js.map" />
+    <Content Remove="wwwroot\ts\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudBase.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudCreacion.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudEdicion.ts" />
@@ -19,6 +22,9 @@
     <Content Remove="wwwroot\ts\tsInfoSelector.ts" />
     <Content Remove="wwwroot\ts\tsUtilidades.ts" />
     <Content Remove="wwwroot\ts\_Crud\GestorDeEventos.ts" />
+    <Content Remove="wwwroot\ts\_Crud\Grid.js" />
+    <Content Remove="wwwroot\ts\_Crud\Grid.js.map" />
+    <Content Remove="wwwroot\ts\_Crud\Grid.ts" />
     <Content Remove="wwwroot\ts\_Crud\GridMnt.ts" />
     <Content Remove="wwwroot\ts\_Crud\ModalDeSeleccion.ts" />
   </ItemGroup>
@@ -28,6 +34,11 @@
     <None Remove="Views\Usuarios\Usuarios.js" />
     <None Remove="Views\Usuarios\Usuarios.js.map" />
     <None Remove="Views\Usuarios\Usuarios.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\ts\tsSelectores.ts" />
+    <TypeScriptCompile Remove="wwwroot\ts\_Crud\Grid.ts" />
   </ItemGroup>
 
   <ItemGroup>

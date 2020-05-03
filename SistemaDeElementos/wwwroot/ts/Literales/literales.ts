@@ -36,7 +36,10 @@ const AtributoSelector = {
     propiedadmostrar: "propiedadmostrar",
     refCheckDeSeleccion: "refCheckDeSeleccion",
     idModal: "idModal",
-    idBtnSelector: "idBtnSelector"
+    idBtnSelector: "idBtnSelector",
+    ListaDeSeleccionados: 'idsSeleccionados',
+    selector: "selector",
+    propiedadParaFiltrar: "propiedadFiltrar"
 }
 
 const TagName = {
