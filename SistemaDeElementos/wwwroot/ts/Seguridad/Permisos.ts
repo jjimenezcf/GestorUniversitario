@@ -1,16 +1,16 @@
-﻿namespace Usuarios {
+﻿namespace Seguridad {
 
-    export class CrudMntUsuario extends Crud.CrudMnt {
+    export class CrudMntPermiso extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);
-            this.crudDeCreacion = new CrudCreacionUsuario(this, idPanelCreacion);
-            this.crudDeEdicion = new CrudEdicionUsuario(this, idPanelEdicion);
+            this.crudDeCreacion = new CrudCreacionPermiso(this, idPanelCreacion);
+            this.crudDeEdicion = new CrudEdicionPermiso(this, idPanelEdicion);
             this.idModalBorrar = idModalBorrar;
         }
     }
 
-    export class CrudCreacionUsuario extends Crud.CrudCreacion {
+    export class CrudCreacionPermiso extends Crud.CrudCreacion {
 
         constructor(crud: Crud.CrudMnt, idPanelCreacion: string) {
             super(crud, idPanelCreacion);
@@ -18,7 +18,7 @@
 
     }
 
-    export class CrudEdicionUsuario extends Crud.CrudEdicion {
+    export class CrudEdicionPermiso extends Crud.CrudEdicion {
 
         constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
             super(crud, idPanelEdicion);

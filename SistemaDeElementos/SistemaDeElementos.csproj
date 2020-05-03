@@ -11,6 +11,7 @@
     <Content Remove="wwwroot\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
+    <Content Remove="wwwroot\ts\Seguridad\Permisos.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudBase.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudCreacion.ts" />
     <Content Remove="wwwroot\ts\_Crud\CrudEdicion.ts" />
@@ -74,7 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Update="wwwroot\ts\Usuarios\Usuarios.ts">
+    <TypeScriptCompile Update="wwwroot\ts\Seguridad\Usuarios.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

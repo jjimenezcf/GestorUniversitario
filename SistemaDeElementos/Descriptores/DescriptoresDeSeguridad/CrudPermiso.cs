@@ -60,5 +60,18 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
+        public override string RenderControl()
+        {
+            var render = base.RenderControl();
+
+            render = render +
+                   $@"<script src=¨../../ts/Seguridad/Permisos.js¨></script>
+                      <script>
+                         Crud.crudMnt = new Seguridad.CrudMntPermiso('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                      </script>
+                    ";
+            return render.Render();
+        }
+
     }
 }
