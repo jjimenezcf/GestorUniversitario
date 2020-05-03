@@ -185,8 +185,8 @@
 
             let resultado: ResultadoJson = JSON.parse(req.response);
             console.error(resultado.consola);
-            if (EsNula(resultado.mensaje))
-                resultado.mensaje = `Error al ejecutar la peticion'${peticion}'`;
+            if (!EsNula(resultado.mensaje))
+                resultado.mensaje = `Error al ejecutar la peticion'${peticion}. ${resultado.mensaje}'`;
 
             return resultado.mensaje;
 

@@ -1,53 +1,58 @@
 ﻿namespace Crud {
 
     export function EventosDelMantenimiento(accion: string, parametros: string): void {
-        switch (accion) {
-            case LiteralMnt.Accion.CrearElemento: {
-                crudMnt.IraCrear();
-                break;
+        try {
+            switch (accion) {
+                case LiteralMnt.Accion.CrearElemento: {
+                    crudMnt.IraCrear();
+                    break;
+                }
+                case LiteralMnt.Accion.EditarElemento: {
+                    crudMnt.IraEditar();
+                    break;
+                }
+                case LiteralMnt.Accion.EliminarElemento: {
+                    crudMnt.AbrirModalBorrarElemento();
+                    break;
+                }
+                case LiteralMnt.Accion.BuscarElementos: {
+                    crudMnt.Buscar(0);
+                    break;
+                }
+                case LiteralMnt.Accion.ObtenerSiguientes: {
+                    crudMnt.ObtenerSiguientes();
+                    break;
+                }
+                case LiteralMnt.Accion.ObtenerAnteriores: {
+                    crudMnt.ObtenerAnteriores();
+                    break;
+                }
+                case LiteralMnt.Accion.ObtenerUltimos: {
+                    crudMnt.ObtenerUltimos();
+                    break;
+                }
+                case LiteralMnt.Accion.FilaPulsada: {
+                    let parIn: Array<string> = parametros.split("#");
+                    crudMnt.FilaPulsada(parIn[0], parIn[1]);
+                    break;
+                }
+                case LiteralMnt.Accion.OrdenarPor: {
+                    crudMnt.OrdenarPor(parametros);
+                    break;
+                }
+                case LiteralMnt.Accion.CambiarSelector: {
+                    crudMnt.CambiarSelector(parametros);
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
             }
-            case LiteralMnt.Accion.EditarElemento: {
-                crudMnt.IraEditar();
-                break;
-            }
-            case LiteralMnt.Accion.EliminarElemento: {
-                crudMnt.AbrirModalBorrarElemento();
-                break;
-            }
-            case LiteralMnt.Accion.BuscarElementos: {
-                crudMnt.Buscar(0);
-                break;
-            }
-            case LiteralMnt.Accion.ObtenerSiguientes: {
-                crudMnt.ObtenerSiguientes();
-                break;
-            }
-            case LiteralMnt.Accion.ObtenerAnteriores: {
-                crudMnt.ObtenerAnteriores();
-                break;
-            }
-            case LiteralMnt.Accion.ObtenerUltimos: {
-                crudMnt.ObtenerUltimos();
-                break;
-            }
-            case LiteralMnt.Accion.FilaPulsada: {
-                let parIn: Array<string> = parametros.split("#");
-                crudMnt.FilaPulsada(parIn[0], parIn[1]);
-                break;
-            }
-            case LiteralMnt.Accion.OrdenarPor: {
-                crudMnt.OrdenarPor(parametros);
-                break;
-            }
-            case LiteralMnt.Accion.CambiarSelector: {
-                crudMnt.CambiarSelector(parametros);
-                break;
-            }
-            default: {
-                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
-                break;
-            }
-        } 
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
     }
 
     export function EventosModalDeSeleccion(accion: string, parametros: string): void {
@@ -120,6 +125,6 @@
                 Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
                 break;
             }
-        } 
+        }
     }
 }
