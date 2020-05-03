@@ -67,7 +67,7 @@ namespace Gestor.Correo
                 throw new Exception($"Sistema de correo {Sistema} no definido");
 
             email.IsBodyHtml = esHtlm;
-            //SmtpCliente.Send(email);
+            SmtpCliente.Send(email);
         }
 
 
