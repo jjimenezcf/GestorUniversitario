@@ -26,7 +26,7 @@ namespace Gestor.Elementos.Entorno
                     var listaIds = filtro.Valor.ListaEnteros(); 
                     foreach(int id in listaIds)
                     {
-                        registros = registros.Where(x => x.Id == 2 || x.Id == 3);
+                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua ==u.Id));
                     }
                 }
 
@@ -100,8 +100,6 @@ namespace Gestor.Elementos.Entorno
         protected override UsuarioDtm LeerConDetalle(int Id)
         {
             return Contexto.Set<UsuarioDtm>()
-                            //.Include(i => i.Inscripciones)
-                            //.ThenInclude(e => e.Curso)
                             .AsNoTracking()
                             .FirstOrDefault(m => m.Id == Id);
         }

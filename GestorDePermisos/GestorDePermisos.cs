@@ -18,6 +18,21 @@ namespace Gestor.Elementos.Seguridad
             return registros;
         }
 
+        public static IQueryable<T> FiltrarPorUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == PermisoPor.PermisosDeUnUsuario)
+                {
+                    var listaIds = filtro.Valor.ListaEnteros();
+                    foreach (int id in listaIds)
+                    {
+                        registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsua == id && up.IdPermiso == p.Id));
+                    }
+                }
+
+            return registros;
+        }
+
         public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -83,6 +98,7 @@ namespace Gestor.Elementos.Seguridad
 
             return registros
                 .FiltroPorNombre(filtros)
+                .FiltrarPorUsuario(filtros)
                 .FiltroPorRol(filtros);
         }
 

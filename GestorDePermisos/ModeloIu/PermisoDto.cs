@@ -6,6 +6,7 @@ namespace Gestor.Elementos.Seguridad
     {
         public static string Nombre = FiltroPor.Nombre;
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
+        public static string PermisosDeUnUsuario = nameof(PermisosDeUnUsuario).ToLower();
     }
 
     [IUDto(ClaseTypeScriptDeCreacion = "CrudCreacionPermiso"
