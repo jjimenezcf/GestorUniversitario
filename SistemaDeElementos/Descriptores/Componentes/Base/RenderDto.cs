@@ -54,7 +54,7 @@ namespace MVCSistemaDeElementos.Descriptores
             for (short z = 0; z <= columna.PosicionMaxima; z++)
             {
                 var descriptorControl = columna.ObtenerControlEnLaPosicion(z);
-                if (descriptorControl == null || !descriptorControl.atributos.Visible(tabla.ModoDeTrabajo))
+                if (descriptorControl == null || !descriptorControl.atributos.EsVisible(tabla.ModoDeTrabajo))
                     continue;
 
                 if (anadirSeparador)
@@ -101,9 +101,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                         $"       class=¨propiedad propiedad-valida¨ " + Environment.NewLine + // 
                                         //$"       cssCrtlNoValido=¨{atributos.cssNoValido}¨ " + Environment.NewLine +
                                         //$"       cssCrtlValido=¨{atributos.cssValido}¨ " + Environment.NewLine +
-                                        $"       obligatorio=¨{(atributos.Visible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ " + Environment.NewLine +
+                                        $"       obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ " + Environment.NewLine +
                                         $"       type=¨text¨ " + Environment.NewLine +
-                                        $"       {(!atributos.Editable(tabla.ModoDeTrabajo) ? "readonly" : "")} " + Environment.NewLine +
+                                        $"       {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} " + Environment.NewLine +
                                         $"       value=¨¨" + Environment.NewLine +
                                         $"       placeholder =¨{atributos.Ayuda}¨" + Environment.NewLine +
                                         $"       ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>" + Environment.NewLine +

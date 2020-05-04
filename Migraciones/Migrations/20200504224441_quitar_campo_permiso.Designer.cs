@@ -3,14 +3,16 @@ using Gestor.Elementos.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoSeguridad))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200504224441_quitar_campo_permiso")]
+    partial class quitar_campo_permiso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,10 +81,6 @@ namespace Migraciones.Migrations
                         .IsRequired()
                         .HasColumnName("NOMBRE")
                         .HasColumnType("VARCHAR(250)");
-
-                    b.Property<string>("Permiso")
-                        .HasColumnName("PERMISO")
-                        .HasColumnType("VARCHAR(30)");
 
                     b.HasKey("Id");
 

@@ -28,6 +28,7 @@ namespace Gestor.Elementos.Seguridad
             }
         }
 
+        public DbSet<ClasePermisoDtm> ClasesDePermisos { get; set; }
         public DbSet<PermisoDtm> Permisos { get; set; }
         public DbSet<rRol> Roles { get; set; }
         public DbSet<rPuesto> Puestos { get; set; }
@@ -45,6 +46,8 @@ namespace Gestor.Elementos.Seguridad
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            TablaClasePermiso.Definir(modelBuilder);
 
             TablaRol.Definir(modelBuilder);
 

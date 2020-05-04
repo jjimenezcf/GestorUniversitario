@@ -12,8 +12,10 @@ namespace Gestor.Elementos.ModeloIu
     {
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
+        public bool Visible { get; set; } = true;
         public bool VisibleAlCrear { get; set; } = true;
         public bool VisibleAlEditar { get; set; } = true;
+
         public bool VisibleAlConsultar { get; set; } = true;
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
@@ -24,21 +26,24 @@ namespace Gestor.Elementos.ModeloIu
         public short Posicion { get; set; } = 0;
         public string ValorPorDefecto { get; set; }
 
-        public bool Visible(ModoDeTrabajo modo)
+        public bool EsVisible(ModoDeTrabajo modo)
         {
-            if (modo == ModoDeTrabajo.Edicion)
-                return VisibleAlEditar;
-            else
-            if (modo == ModoDeTrabajo.Nuevo)
-                return VisibleAlCrear;
-            if (modo == ModoDeTrabajo.Consulta)
-                return VisibleAlConsultar;
+            if (Visible)
+            {
+                if (modo == ModoDeTrabajo.Edicion)
+                    return VisibleAlEditar;
+                else
+                if (modo == ModoDeTrabajo.Nuevo)
+                    return VisibleAlCrear;
+                if (modo == ModoDeTrabajo.Consulta)
+                    return VisibleAlConsultar;
+            }
 
             return false;
         }
-        public bool Editable(ModoDeTrabajo modo)
+        public bool EsEditable(ModoDeTrabajo modo)
         {
-            if (Visible(modo))
+            if (EsVisible(modo))
             {
                 if (modo == ModoDeTrabajo.Edicion)
                     return EditableAlEditar;

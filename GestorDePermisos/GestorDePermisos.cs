@@ -3,9 +3,23 @@ using System.Linq;
 using System.Collections.Generic;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gestor.Elementos.Seguridad
 {
+    public static partial class Joins
+    {
+        public static IQueryable<T> JoinConClaseDePermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : PermisoDtm
+        {
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(ClasePermisoDtm))
+                    registros = registros.Include(p => p.Clase);
+            }
+
+            return registros;
+        }
+    }
 
     static class FiltrosDePermisos
     {
@@ -74,7 +88,9 @@ namespace Gestor.Elementos.Seguridad
         {
             public MapearPermiso()
             {
-                CreateMap<PermisoDtm, PermisoDto>();
+                CreateMap<PermisoDtm, PermisoDto>()
+                .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre));
+
                 CreateMap<PermisoDto,PermisoDtm>();
             }
         }
@@ -107,6 +123,16 @@ namespace Gestor.Elementos.Seguridad
         {
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
+        }
+        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            base.DefinirJoins(filtros, joins, parametros);
+
+            joins.Add(new ClausulaDeJoin { Dtm = typeof(ClasePermisoDtm) });
+        }
+        protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            return registros.JoinConClaseDePermiso(joins, parametros);
         }
 
     }

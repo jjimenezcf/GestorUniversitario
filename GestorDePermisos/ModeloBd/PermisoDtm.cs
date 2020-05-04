@@ -16,15 +16,13 @@ namespace Gestor.Elementos.Seguridad
         public string Nombre { get; set; }
 
         [Required]
-        [Column("CLASE", TypeName = "VARCHAR(30)")]
+        [Column("IDCLASE", TypeName = "INT")]
         [DefaultValue(0)]
-        public int Clase { get; set; }
+        public int IdClase { get; set; }
+        public virtual ClasePermisoDtm Clase { get; set; }
 
-
-        [Required]
         [Column("PERMISO", TypeName = "VARCHAR(30)")]
-        [DefaultValue(0)]
-        public int Permiso { get; set; }
+        public string Permiso { get; set; }
 
         public ICollection<rRolPermiso> Roles { get; set; }
         public ICollection<PerUsuarioDtm> Usuarios { get; set; }
@@ -35,12 +33,20 @@ namespace Gestor.Elementos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PermisoDtm>()
-                        .HasAlternateKey(p => p.Nombre)
-                        .HasName("AK_PERMISO_NOMBRE");
+                        .HasIndex(p => p.Nombre)
+                        .HasName("I_PERMISO_NOMBRE")
+                        .IsUnique();
 
             modelBuilder.Entity<PermisoDtm>()
-                        .HasAlternateKey(p => new { p.Clase, p.Permiso})
-                        .HasName("AK_PERMISO_PERMISO");
+                        .HasIndex(p => new {p.IdClase})
+                        .HasName("I_PERMISO_IDCLASE");
+
+            modelBuilder.Entity<PermisoDtm>()
+                        .HasOne(p => p.Clase)
+                        .WithMany(cp => cp.Permisos)
+                        .HasForeignKey(p => p.IdClase)
+                        .HasConstraintName("FK_PERMISO_IDCLASE")
+                        .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

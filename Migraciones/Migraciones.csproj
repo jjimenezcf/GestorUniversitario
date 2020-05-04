@@ -27,6 +27,12 @@
     <Compile Remove="Migrations\20200329091111_anadirSubmenu.Designer.cs" />
     <Compile Remove="Migrations\20200503190148_anadirPropiedadAUsuarios.cs" />
     <Compile Remove="Migrations\20200503190148_anadirPropiedadAUsuarios.Designer.cs" />
+    <Compile Remove="Migrations\20200504212234_añadir_clase_permisos.cs" />
+    <Compile Remove="Migrations\20200504212234_añadir_clase_permisos.Designer.cs" />
+    <Compile Remove="Migrations\20200504212531_añadir_clase_permisos.cs" />
+    <Compile Remove="Migrations\20200504212531_añadir_clase_permisos.Designer.cs" />
+    <Compile Remove="Migrations\20200504212700_añadir_clase_permisos.cs" />
+    <Compile Remove="Migrations\20200504212700_añadir_clase_permisos.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,7 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 for (short i = 0; i <= PosicionMaxima; i++)
                 {
                     var control = ObtenerControlEnLaPosicion(i);
-                    if (control != null && control.atributos.Visible(Tabla.ModoDeTrabajo) && !control.atributos.Etiqueta.IsNullOrEmpty())
+                    if (control != null && control.atributos.EsVisible(Tabla.ModoDeTrabajo) && !control.atributos.Etiqueta.IsNullOrEmpty())
                         numero = (short)(numero + 1);
                 }
                 return numero;
@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 {
                     var control = ObtenerControlEnLaPosicion(i);
 
-                    if (control != null && control.atributos.Visible(Tabla.ModoDeTrabajo))
+                    if (control != null && control.atributos.EsVisible(Tabla.ModoDeTrabajo))
                         numero = (short)(numero + 1);
                 }
                 return numero;

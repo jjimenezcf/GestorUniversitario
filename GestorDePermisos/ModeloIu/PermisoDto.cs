@@ -23,10 +23,17 @@ namespace Gestor.Elementos.Seguridad
             )
         ]
         public string Nombre { get; set; }
-        
+
+        [IUPropiedad(
+            Etiqueta = "Id de la clase",
+            Visible = false
+            )
+        ]
+        public string IdClase { get; set; }
+
         [IUPropiedad(
             Etiqueta = "Clase",
-            Ayuda = "Indique clase de permso",
+            Ayuda = "Indique clase de permiso",
             Fila = 1,
             Columna = 0
             )
@@ -36,7 +43,7 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Permiso",
             Ayuda = "Indique permiso a aplicar (gestor, consultor o administrador)",
-            Fila = 1,
+            Fila = 2,
             Columna = 0
             )
         ]

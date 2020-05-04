@@ -3,14 +3,16 @@ using Gestor.Elementos.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoSeguridad))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200504213021_añadir_clase_permisos")]
+    partial class añadir_clase_permisos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,17 +83,19 @@ namespace Migraciones.Migrations
                         .HasColumnType("VARCHAR(250)");
 
                     b.Property<string>("Permiso")
+                        .IsRequired()
                         .HasColumnName("PERMISO")
                         .HasColumnType("VARCHAR(30)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdClase")
-                        .HasName("I_PERMISO_IDCLASE");
-
                     b.HasIndex("Nombre")
                         .IsUnique()
                         .HasName("I_PERMISO_NOMBRE");
+
+                    b.HasIndex("IdClase", "Permiso")
+                        .IsUnique()
+                        .HasName("I_PERMISO_IDCLASE_PERMISO");
 
                     b.ToTable("PERMISO","SEGURIDAD");
                 });

@@ -13,7 +13,8 @@ namespace MVCSistemaDeElementos.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var modalUsuario = new CrudUsuario(ModoDescriptor.Seleccion);
-                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                var filtrosEspeificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(2, 2));
+                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: filtrosEspeificos,
                                               etiqueta: "Usuario",
                                               filtrarPor: PermisoPor.PermisosDeUnUsuario,
                                               ayuda: "Seleccionar usuario",
@@ -22,6 +23,14 @@ namespace MVCSistemaDeElementos.Descriptores
                                               paraMostrar: nameof(UsuarioDtm.Apellido),
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+                //new SelectorDeTabla<PermisoDto, ClasePermisoDto>(Padre: filtrosEspeificos,
+                //                              etiqueta: "Clase",
+                //                              filtrarPor: PermisoPor.ClaseDePermisos,
+                //                              ayuda: "Seleccionar una clase",
+                //                              posicion: new Posicion() { fila = 1, columna = 0 },
+                //                              paraFiltrar: nameof(ClasePermisoDto.Id),
+                //                              paraMostrar: nameof(ClasePermisoDto.Nombre),
+                //                              accion: accionBuscarClase);
             }
 
             DefinirColumnasDelGrid();
@@ -31,8 +40,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             base.DefinirColumnasDelGrid();
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = true, PorAnchoMnt = 50 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", Tipo = typeof(int), PorAnchoMnt = 10 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso", Tipo = typeof(int) });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", PorAnchoMnt = 20 });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso" });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.IdClase), Tipo = typeof(int), Visible = false });
             Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
         }
 
@@ -53,6 +63,9 @@ namespace MVCSistemaDeElementos.Descriptores
                     else
                     if (columna.Propiedad == nameof(PermisoDto.Permiso))
                         celda.Valor = permiso.Permiso;
+                    else
+                    if (columna.Propiedad == nameof(PermisoDto.IdClase))
+                        celda.Valor = permiso.IdClase;
 
                     fila.AnadirCelda(celda);
                 }
