@@ -1,6 +1,7 @@
-﻿namespace UtilidadesParaIu
+﻿using Gestor.Elementos.ModeloIu;
+
+namespace UtilidadesParaIu
 {
-    public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
 
     public static class HtmlRender
     {

@@ -15,11 +15,13 @@ namespace Gestor.Elementos.Seguridad
     public class PermisoDto : Elemento
     {
         [IUPropiedad(
-            Etiqueta = "Nombre permiso",
+            Etiqueta = "Permiso",
             Ayuda = "De un nombre al permiso",
             Tipo = typeof(string),
             Fila = 0,
-            Columna = 0
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt =50
             )
         ]
         public string Nombre { get; set; }
@@ -35,7 +37,9 @@ namespace Gestor.Elementos.Seguridad
             Etiqueta = "Clase",
             Ayuda = "Indique clase de permiso",
             Fila = 1,
-            Columna = 0
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 15
             )
         ]
         public string Clase { get; set; }
@@ -51,7 +55,9 @@ namespace Gestor.Elementos.Seguridad
             Etiqueta = "Tipo",
             Ayuda = "Indique el tipo a aplicar",
             Fila = 2,
-            Columna = 0
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 15
             )
         ]
         public string Tipo { get; set; }

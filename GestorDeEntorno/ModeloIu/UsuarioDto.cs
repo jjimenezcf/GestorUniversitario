@@ -22,7 +22,9 @@ namespace Gestor.Elementos.Entorno
             Ayuda = "Usuario de conexión", 
             Tipo = typeof(string), 
             Fila = 0, 
-            Columna = 0
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt=25
             )
         ]
         public string Login { get; set; }
@@ -33,7 +35,9 @@ namespace Gestor.Elementos.Entorno
             Ayuda = "Apellidos",
             Tipo = typeof(string),
             Fila = 2,
-            Columna = 0
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 45
             )
         ]
         public string Apellido { get; set; }
@@ -57,7 +61,8 @@ namespace Gestor.Elementos.Entorno
             Tipo = typeof(DateTime),
             EditableAlEditar = false,
             Fila = 3,
-            Columna = 0
+            Columna = 0,
+            Ordenar = true
             )
         ]
         public DateTime Alta { get; set; }

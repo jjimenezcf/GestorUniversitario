@@ -4,7 +4,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeEdicion<TElemento> : ControlHtml
+    public class DescriptorDeEdicion<TElemento> : ControlHtml where TElemento : Elemento
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }

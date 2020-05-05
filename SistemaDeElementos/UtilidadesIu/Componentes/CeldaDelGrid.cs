@@ -1,8 +1,9 @@
 ﻿using System;
+using Gestor.Elementos.ModeloIu;
 
 namespace UtilidadesParaIu
 {
-    public class CeldaDelGrid<TElemento>
+    public class CeldaDelGrid<TElemento> where TElemento : Elemento
     {
         private ColumnaDelGrid<TElemento> _columna;
 

@@ -23,6 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                               paraMostrar: nameof(UsuarioDtm.Apellido),
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+
                 //new SelectorDeTabla<PermisoDto, ClasePermisoDto>(Padre: filtrosEspeificos,
                 //                              etiqueta: "Clase",
                 //                              filtrarPor: PermisoPor.ClaseDePermisos,
@@ -34,48 +35,9 @@ namespace MVCSistemaDeElementos.Descriptores
             }
 
             DefinirColumnasDelGrid();
-        }
-
-        protected override void DefinirColumnasDelGrid()
-        {
-            base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = true, PorAnchoMnt = 50 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", PorAnchoMnt = 20 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Tipo), Titulo = "Tipo" });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.IdClase), Tipo = typeof(int), Visible = false });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.IdTipo), Tipo = typeof(int), Visible = false });
             Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<PermisoDto> elementos, int cantidadPorLeer, int posicionInicial)
-        {
-            base.MapearElementosAlGrid(elementos, cantidadPorLeer, posicionInicial);
-            foreach (var permiso in elementos)
-            {
-                var fila = new FilaDelGrid<PermisoDto>(Mnt.Datos, permiso);
-                foreach (ColumnaDelGrid<PermisoDto> columna in Mnt.Datos.Columnas)
-                {
-                    CeldaDelGrid<PermisoDto> celda = new CeldaDelGrid<PermisoDto>(columna);
-                    if (columna.Propiedad == nameof(PermisoDto.Nombre))
-                        celda.Valor = permiso.Nombre;
-                    else
-                    if (columna.Propiedad == nameof(PermisoDto.Clase))
-                        celda.Valor = permiso.Clase;
-                    else
-                    if (columna.Propiedad == nameof(PermisoDto.Tipo))
-                        celda.Valor = permiso.Tipo;
-                    else
-                    if (columna.Propiedad == nameof(PermisoDto.IdClase))
-                        celda.Valor = permiso.IdClase;
-                    else
-                    if (columna.Propiedad == nameof(PermisoDto.IdTipo))
-                        celda.Valor = permiso.IdTipo;
-
-                    fila.AnadirCelda(celda);
-                }
-                Mnt.Datos.AnadirFila(fila);
-            }
-        }
 
         public override string RenderControl()
         {

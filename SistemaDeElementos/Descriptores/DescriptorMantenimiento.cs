@@ -1,9 +1,10 @@
 ﻿using System;
+using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorMantenimiento<TElemento>: ControlHtml
+    public class DescriptorMantenimiento<TElemento>: ControlHtml where TElemento : Elemento
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeMnt { get; private set; }

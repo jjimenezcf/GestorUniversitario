@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
 {
-    public class FilaDelGrid<TElemento>
+    public class FilaDelGrid<TElemento> where TElemento : Elemento
     {
         private List<CeldaDelGrid<TElemento>> Celdas = new List<CeldaDelGrid<TElemento>>();
 

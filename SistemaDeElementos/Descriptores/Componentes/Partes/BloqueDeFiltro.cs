@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class BloqueDeFitro<TElemento>: ControlFiltroHtml
+    public class BloqueDeFitro<TElemento> : ControlFiltroHtml where TElemento : Elemento
     {
         public TablaBloqueDeFiltro Tabla { get; set; }
 
@@ -33,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Controles.Add(c);
         }
 
-        public void AnadirSelector<Telemento,TSeleccionado>(SelectorDeFiltro<Telemento, TSeleccionado> s)
+        public void AnadirSelector<t1,t2>(SelectorDeFiltro<t1, t2> s) where t1:Elemento where t2:Elemento
         {
             Controles.Add(s);
             Controles.Add(s.Modal);

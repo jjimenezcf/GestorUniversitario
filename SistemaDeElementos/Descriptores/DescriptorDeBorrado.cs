@@ -1,8 +1,10 @@
-﻿namespace MVCSistemaDeElementos.Descriptores
+﻿using Gestor.Elementos.ModeloIu;
+
+namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeBorrado<TElemento> : ControlHtml
+    public class DescriptorDeBorrado<TElemento> : ControlHtml where TElemento : Elemento
     {
-        public DescriptorDeBorrado(DescriptorDeCrud<TElemento> crud, string etiqueta)
+        public DescriptorDeBorrado(DescriptorDeCrud<TElemento> crud, string etiqueta) 
         : base(
           padre: crud,
           id: $"{crud.Id}_{TipoControl.pnlBorrado}",

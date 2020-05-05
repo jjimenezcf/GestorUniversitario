@@ -6,7 +6,7 @@ using UtilidadesParaIu;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ZonaDeDatos<TElemento> : ControlHtml
+    public class ZonaDeDatos<TElemento> : ControlHtml where TElemento : Elemento
     {
         public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
 
@@ -50,6 +50,18 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.Datos.Columnas.Add(columnaDelGrid);
             columnaDelGrid.ZonaDeDatos = this;
         }
+
+
+        internal void InsertarColumna(ColumnaDelGrid<TElemento> columnaDelGrid, int posicion)
+        {
+            if (posicion>= Mnt.Datos.Columnas.Count || posicion == -1)
+                Mnt.Datos.Columnas.Add(columnaDelGrid);
+            else
+                Mnt.Datos.Columnas.Insert(posicion, columnaDelGrid);
+            
+            columnaDelGrid.ZonaDeDatos = this;
+        }
+        
 
         internal ColumnaDelGrid<TElemento> ObtenerColumna(string nombreColumna)
         {

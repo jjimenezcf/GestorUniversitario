@@ -9,6 +9,8 @@ namespace Gestor.Elementos.ModeloIu
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion }
 
+    public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
+
     public class IUPropiedadAttribute : Attribute
     {
         public string Etiqueta { get; set; } = "";
@@ -26,6 +28,20 @@ namespace Gestor.Elementos.ModeloIu
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
         public string ValorPorDefecto { get; set; }
+        public bool Ordenar { get; set; } = false;
+        public int PosicionEnGrid { get; set; } = -1;
+        public Aliniacion Alineada
+        {
+            get
+            {
+                if (Tipo == typeof(string)) return Aliniacion.izquierda;
+                if (Tipo == typeof(int)) return Aliniacion.derecha;
+                if (Tipo == typeof(DateTime)) return Aliniacion.centrada;
+                return Aliniacion.izquierda;
+            }
+        }
+        public int PorAnchoMnt { get; set; } = 0;
+        public int PorAnchoSel { get; set; } = 0;
 
         public bool EsVisible(ModoDeTrabajo modo)
         {
@@ -56,6 +72,8 @@ namespace Gestor.Elementos.ModeloIu
             return false;
         }
 
+
+
     }
 
     public class IUDtoAttribute : Attribute
@@ -85,9 +103,7 @@ namespace Gestor.Elementos.ModeloIu
             Etiqueta = "Id",
             Ayuda = "id del elemento",
             Tipo = typeof(int),
-            VisibleAlCrear = false,
-            VisibleAlEditar = false,
-            VisibleAlConsultar = false
+            Visible = false
             )
         ]
         public int Id { get; set; }

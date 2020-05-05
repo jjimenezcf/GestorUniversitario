@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class Menu<TElemento> : ControlHtml
+    public class Menu<TElemento> : ControlHtml where TElemento : Elemento
     {
         public BarraDeMenu<TElemento> ZonaMenu => (BarraDeMenu<TElemento>)Padre;
         public ICollection<OpcionDeMenu<TElemento>> OpcioneDeMenu { get; private set; } = new List<OpcionDeMenu<TElemento>>();

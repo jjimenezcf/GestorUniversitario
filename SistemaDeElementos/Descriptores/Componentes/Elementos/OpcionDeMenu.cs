@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -140,7 +141,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public class OpcionDeMenu<TElemento> : ControlHtml
+    public class OpcionDeMenu<TElemento> : ControlHtml where TElemento : Elemento
     {
         public Menu<TElemento> Menu => (Menu<TElemento>)Padre;
         public AccionDeMenu Accion { get; private set; }

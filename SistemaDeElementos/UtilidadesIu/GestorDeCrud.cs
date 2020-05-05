@@ -1,10 +1,11 @@
-﻿using MVCSistemaDeElementos.Descriptores;
+﻿using Gestor.Elementos.ModeloIu;
+using MVCSistemaDeElementos.Descriptores;
 using MVCSistemaDeElementos.UtilidadesIu;
 
 namespace UtilidadesParaIu
 {
 
-    public class GestorCrud<T>
+    public class GestorCrud<T> where T : Elemento
     {
 
         public string NombreDelObjeto => typeof(T).Name;

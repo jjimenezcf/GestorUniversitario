@@ -1,6 +1,8 @@
-﻿namespace MVCSistemaDeElementos.Descriptores
+﻿using Gestor.Elementos.ModeloIu;
+
+namespace MVCSistemaDeElementos.Descriptores
 {
-    public class EditorFiltro<TElemento> : ControlFiltroHtml
+    public class EditorFiltro<TElemento> : ControlFiltroHtml where TElemento : Elemento
     {
         public EditorFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(padre: bloque

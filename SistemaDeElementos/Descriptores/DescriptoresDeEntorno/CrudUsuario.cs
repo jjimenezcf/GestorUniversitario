@@ -28,51 +28,10 @@ namespace MVCSistemaDeElementos.Descriptores
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
             DefinirColumnasDelGrid();
-        }
 
-
-        protected override void DefinirColumnasDelGrid()
-        {
-            base.DefinirColumnasDelGrid();
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Login), Ordenar = true, PorAnchoMnt = 25 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Apellido), Ordenar = true, PorAnchoMnt = 45});
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto> { Propiedad = nameof(UsuarioDtm.Nombre) }); 
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<UsuarioDto>
-            {
-                Propiedad = nameof(UsuarioDtm.Alta),
-                Tipo = typeof(DateTime),
-                Alineada = Aliniacion.centrada,
-                Ordenar = true
-            });
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
         }
 
-        public override void MapearElementosAlGrid(IEnumerable<UsuarioDto> elementos, int cantidadPorLeer, int posicionInicial)
-        {
-            base.MapearElementosAlGrid(elementos, cantidadPorLeer, posicionInicial);
-            foreach (var usuario in elementos)
-            {
-                var fila = new FilaDelGrid<UsuarioDto>(Mnt.Datos, usuario);
-                foreach (ColumnaDelGrid<UsuarioDto> columna in Mnt.Datos.Columnas)
-                {
-                    CeldaDelGrid<UsuarioDto> celda = new CeldaDelGrid<UsuarioDto>(columna);
-                    if (columna.Propiedad == nameof(UsuarioDtm.Login))
-                        celda.Valor = usuario.Login.ToString();
-                    else
-                    if (columna.Propiedad == nameof(UsuarioDtm.Apellido))
-                        celda.Valor = usuario.Apellido;
-                    else
-                    if (columna.Propiedad == nameof(UsuarioDtm.Nombre))
-                        celda.Valor = usuario.Nombre.ToString();
-                    else
-                    if (columna.Propiedad == nameof(UsuarioDtm.Alta))
-                        celda.Valor = usuario.Alta.ToString();
-
-                    fila.AnadirCelda(celda);
-                }
-                Mnt.Datos.AnadirFila(fila);
-            }
-        }
 
         public override string RenderControl()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -33,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public class DescriptorDeCrud<TElemento> : ControlHtml
+    public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : Elemento
     {
         public string NombreElemento => Etiqueta.ToLower();
 
@@ -91,13 +92,49 @@ namespace MVCSistemaDeElementos.Descriptores
         protected virtual void DefinirColumnasDelGrid()
         {
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Propiedad = "chksel", Titulo = " ", PorAnchoMnt = 4, PorAnchoSel = 10, Tipo = typeof(bool) });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<TElemento> { Propiedad = nameof(Id), Tipo = typeof(int), Visible = false });
+            var propiedades = typeof(TElemento).GetProperties();
+            foreach (var p in propiedades)
+            {
+                var columna = new ColumnaDelGrid<TElemento> { Propiedad = p.Name, Tipo = p.PropertyType };
+                IUPropiedadAttribute atributos = Elemento.ObtenerAtributos(p);
+
+                if (atributos != null)
+                {
+                    columna.Visible = atributos.Visible;
+                    columna.Titulo = atributos.Etiqueta;
+                    columna.Ordenar = atributos.Ordenar;
+                    columna.Alineada = atributos.Alineada;
+                    columna.PorAnchoMnt = 0;
+                    columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;
+                    Mnt.Datos.InsertarColumna(columna, atributos.PosicionEnGrid);
+                }
+            }
         }
 
-        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int cantidadPorLeer, int posicionInicial)
+        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int cantidadPorLeer, int posicionInicial) 
         {
             Mnt.Datos.PosicionInicial = posicionInicial;
             Mnt.Datos.CantidadPorLeer = cantidadPorLeer;
+
+            foreach (var elemento in elementos)
+            {
+                var fila = new FilaDelGrid<TElemento>(Mnt.Datos, elemento);
+                foreach (ColumnaDelGrid<TElemento> columna in Mnt.Datos.Columnas)
+                {
+                    CeldaDelGrid<TElemento> celda = new CeldaDelGrid<TElemento>(columna);
+                    var propiedades = typeof(TElemento).GetProperties();
+                    foreach (var p in propiedades)
+                    {
+                        if (columna.Propiedad == p.Name)
+                        {
+                            celda.Valor = p.GetValue(elemento);
+                            break;
+                        }
+                    }
+                    fila.AnadirCelda(celda);
+                }
+                Mnt.Datos.AnadirFila(fila);
+            }
         }
 
         public void TotalEnBd(int totalEnBd)
