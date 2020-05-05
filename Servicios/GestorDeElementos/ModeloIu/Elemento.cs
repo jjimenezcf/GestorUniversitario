@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace Gestor.Elementos.ModeloIu
 {
-    public enum LadoDeRenderizacion {izquierdo, derecho}
+    public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion }
 
     public class IUPropiedadAttribute : Attribute
@@ -21,7 +22,7 @@ namespace Gestor.Elementos.ModeloIu
         public bool EditableAlEditar { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
         public Type Tipo { get; set; } = typeof(string);
-        public short Fila { get; set; } 
+        public short Fila { get; set; }
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
         public string ValorPorDefecto { get; set; }
@@ -115,11 +116,11 @@ namespace Gestor.Elementos.ModeloIu
             if (atributosDeDto == null || atributosDeDto.Length == 0)
                 Errores.GestorDeErrores.Emitir($"No hay definido descriptores para el dto {clase.Name}");
 
-            foreach (Attribute atributoDto in atributosDeDto)
+            foreach (Attribute propiedad in atributosDeDto)
             {
-                if (atributoDto is IUDtoAttribute)
+                if (propiedad is IUDtoAttribute)
                 {
-                    IUDtoAttribute a = (IUDtoAttribute)atributoDto;
+                    IUDtoAttribute a = (IUDtoAttribute)propiedad;
                     switch (nombreAtributo)
                     {
                         case nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion):
@@ -140,11 +141,22 @@ namespace Gestor.Elementos.ModeloIu
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
                     }
+                    if (obligatorio)
+                        throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");
                 }
-            }
+                //if (propiedad is IUPropiedadAttribute)
+                //{
+                //    IUPropiedadAttribute p = (IUPropiedadAttribute)propiedad;
+                //    switch (nombreAtributo)
+                //    {
+                //        case nameof(IUPropiedadAttribute.Visible):
+                //            return p.Visible;
+                //    }
+                //    if (obligatorio)
+                //        throw new Exception($"Se ha solicitado el atributo {nameof(IUPropiedadAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");
+                //}
 
-            if (obligatorio)
-                throw new Exception($"Se ha solicitado el atributo {nombreAtributo} de la clase {clase} y no está definido");
+            }
 
             return null;
 

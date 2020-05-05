@@ -1,4 +1,5 @@
 ﻿using System;
+using Gestor.Elementos.ModeloIu;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
@@ -51,6 +52,7 @@ namespace UtilidadesParaIu
 
         public ColumnaDelGrid()
         {
+            //Visible =(bool)Elemento.ValorDelAtributo(typeof(TElemento), IUPropiedadAttribute.,  nameof(IUPropiedadAttribute.Visible));
             descriptor = new HtmlDescriptorCabecera();
         }
     }

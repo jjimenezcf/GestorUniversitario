@@ -15,6 +15,9 @@ namespace Gestor.Elementos.Seguridad
             {
                 if (join.Dtm == typeof(ClasePermisoDtm))
                     registros = registros.Include(p => p.Clase);
+
+                if (join.Dtm == typeof(TipoPermisoDtm))
+                    registros = registros.Include(p => p.Tipo);
             }
 
             return registros;
@@ -89,7 +92,8 @@ namespace Gestor.Elementos.Seguridad
             public MapearPermiso()
             {
                 CreateMap<PermisoDtm, PermisoDto>()
-                .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre));
+                .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre))
+                .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre));
 
                 CreateMap<PermisoDto,PermisoDtm>();
             }
@@ -129,6 +133,7 @@ namespace Gestor.Elementos.Seguridad
             base.DefinirJoins(filtros, joins, parametros);
 
             joins.Add(new ClausulaDeJoin { Dtm = typeof(ClasePermisoDtm) });
+            joins.Add(new ClausulaDeJoin { Dtm = typeof(TipoPermisoDtm) });
         }
         protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {

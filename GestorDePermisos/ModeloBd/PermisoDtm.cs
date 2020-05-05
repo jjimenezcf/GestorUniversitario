@@ -15,14 +15,15 @@ namespace Gestor.Elementos.Seguridad
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
         public string Nombre { get; set; }
 
-        [Required]
         [Column("IDCLASE", TypeName = "INT")]
-        [DefaultValue(0)]
         public int IdClase { get; set; }
         public virtual ClasePermisoDtm Clase { get; set; }
+        
+        [Required]
+        [Column("IDTIPO", TypeName = "INT")]
+        public int IdTipo { get; set; }
 
-        [Column("PERMISO", TypeName = "VARCHAR(30)")]
-        public string Permiso { get; set; }
+        public virtual TipoPermisoDtm Tipo { get; set; }
 
         public ICollection<rRolPermiso> Roles { get; set; }
         public ICollection<PerUsuarioDtm> Usuarios { get; set; }
@@ -37,15 +38,26 @@ namespace Gestor.Elementos.Seguridad
                         .HasName("I_PERMISO_NOMBRE")
                         .IsUnique();
 
+            modelBuilder.Entity<PermisoDtm>().Property(p => p.IdTipo).IsRequired();
+            modelBuilder.Entity<PermisoDtm>().Property(p => p.IdClase).IsRequired();
+
+
             modelBuilder.Entity<PermisoDtm>()
-                        .HasIndex(p => new {p.IdClase})
-                        .HasName("I_PERMISO_IDCLASE");
+                        .HasIndex(p => new {p.IdClase, p.IdTipo})
+                        .HasName("I_PERMISO_IDCLASE_IDTIPO");
 
             modelBuilder.Entity<PermisoDtm>()
                         .HasOne(p => p.Clase)
                         .WithMany(cp => cp.Permisos)
                         .HasForeignKey(p => p.IdClase)
                         .HasConstraintName("FK_PERMISO_IDCLASE")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PermisoDtm>()
+                        .HasOne(p => p.Tipo)
+                        .WithMany(tp => tp.Permisos)
+                        .HasForeignKey(p => p.IdTipo)
+                        .HasConstraintName("FK_PERMISO_IDTIPO")
                         .OnDelete(DeleteBehavior.Restrict);
         }
     }

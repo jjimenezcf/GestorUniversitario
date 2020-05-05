@@ -41,8 +41,9 @@ namespace MVCSistemaDeElementos.Descriptores
             base.DefinirColumnasDelGrid();
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Nombre), Titulo = "Nombre", Ordenar = true, PorAnchoMnt = 50 });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Clase), Titulo = "Clase", PorAnchoMnt = 20 });
-            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Permiso), Titulo = "Permiso" });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.Tipo), Titulo = "Tipo" });
             Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.IdClase), Tipo = typeof(int), Visible = false });
+            Mnt.Datos.AnadirColumna(new ColumnaDelGrid<PermisoDto> { Propiedad = nameof(PermisoDto.IdTipo), Tipo = typeof(int), Visible = false });
             Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
         }
 
@@ -61,11 +62,14 @@ namespace MVCSistemaDeElementos.Descriptores
                     if (columna.Propiedad == nameof(PermisoDto.Clase))
                         celda.Valor = permiso.Clase;
                     else
-                    if (columna.Propiedad == nameof(PermisoDto.Permiso))
-                        celda.Valor = permiso.Permiso;
+                    if (columna.Propiedad == nameof(PermisoDto.Tipo))
+                        celda.Valor = permiso.Tipo;
                     else
                     if (columna.Propiedad == nameof(PermisoDto.IdClase))
                         celda.Valor = permiso.IdClase;
+                    else
+                    if (columna.Propiedad == nameof(PermisoDto.IdTipo))
+                        celda.Valor = permiso.IdTipo;
 
                     fila.AnadirCelda(celda);
                 }

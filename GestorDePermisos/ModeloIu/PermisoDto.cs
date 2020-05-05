@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Seguridad
         public string Nombre { get; set; }
 
         [IUPropiedad(
-            Etiqueta = "Id de la clase",
+            Etiqueta = "Id de la clase de permiso",
             Visible = false
             )
         ]
@@ -41,13 +41,20 @@ namespace Gestor.Elementos.Seguridad
         public string Clase { get; set; }
 
         [IUPropiedad(
-            Etiqueta = "Permiso",
-            Ayuda = "Indique permiso a aplicar (gestor, consultor o administrador)",
+            Etiqueta = "Id del tipo de permiso",
+            Visible = false
+            )
+        ]
+        public string IdTipo { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Tipo",
+            Ayuda = "Indique el tipo a aplicar",
             Fila = 2,
             Columna = 0
             )
         ]
-        public string Permiso { get; set; }
+        public string Tipo { get; set; }
 
     }
 }

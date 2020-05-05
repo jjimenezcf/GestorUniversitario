@@ -3,14 +3,16 @@ using Gestor.Elementos.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
     [DbContext(typeof(CtoSeguridad))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200505090410_tabla_tipo_permiso")]
+    partial class tabla_tipo_permiso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,25 +77,23 @@ namespace Migraciones.Migrations
                         .HasColumnName("IDCLASE")
                         .HasColumnType("INT");
 
-                    b.Property<int>("IdTipo")
-                        .HasColumnName("IDTIPO")
-                        .HasColumnType("INT");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnName("NOMBRE")
                         .HasColumnType("VARCHAR(250)");
 
+                    b.Property<string>("Permiso")
+                        .HasColumnName("PERMISO")
+                        .HasColumnType("VARCHAR(30)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdTipo");
+                    b.HasIndex("IdClase")
+                        .HasName("I_PERMISO_IDCLASE");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
                         .HasName("I_PERMISO_NOMBRE");
-
-                    b.HasIndex("IdClase", "IdTipo")
-                        .HasName("I_PERMISO_IDCLASE_IDTIPO");
 
                     b.ToTable("PERMISO","SEGURIDAD");
                 });
@@ -266,13 +266,6 @@ namespace Migraciones.Migrations
                         .WithMany("Permisos")
                         .HasForeignKey("IdClase")
                         .HasConstraintName("FK_PERMISO_IDCLASE")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Gestor.Elementos.Seguridad.TipoPermisoDtm", "Tipo")
-                        .WithMany("Permisos")
-                        .HasForeignKey("IdTipo")
-                        .HasConstraintName("FK_PERMISO_IDTIPO")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

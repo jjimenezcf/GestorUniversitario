@@ -33,6 +33,18 @@
     <Compile Remove="Migrations\20200504212531_añadir_clase_permisos.Designer.cs" />
     <Compile Remove="Migrations\20200504212700_añadir_clase_permisos.cs" />
     <Compile Remove="Migrations\20200504212700_añadir_clase_permisos.Designer.cs" />
+    <Compile Remove="Migrations\20200505085410_tabla_tipo_permiso.cs" />
+    <Compile Remove="Migrations\20200505085410_tabla_tipo_permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200505090014_tabla_tipo_permiso.cs" />
+    <Compile Remove="Migrations\20200505090014_tabla_tipo_permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200505091455_modificar_tabla_permiso.cs" />
+    <Compile Remove="Migrations\20200505091455_modificar_tabla_permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200505091654_modificar_tabla_permiso.cs" />
+    <Compile Remove="Migrations\20200505091654_modificar_tabla_permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200505092541_obligatorio_idtipo_en_permiso.cs" />
+    <Compile Remove="Migrations\20200505092541_obligatorio_idtipo_en_permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200505092903_modificar_tabla_permiso_campos_requeridos.cs" />
+    <Compile Remove="Migrations\20200505092903_modificar_tabla_permiso_campos_requeridos.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
