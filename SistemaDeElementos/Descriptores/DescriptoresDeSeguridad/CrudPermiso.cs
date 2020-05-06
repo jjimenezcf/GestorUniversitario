@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Gestor.Elementos.Entorno;
 using Gestor.Elementos.Seguridad;
+using MVCSistemaDeElementos.Controllers;
+using SistemaDeElementos.Descriptores.Componentes.Elementos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -24,14 +26,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
-                //new SelectorDeTabla<PermisoDto, ClasePermisoDto>(Padre: filtrosEspeificos,
-                //                              etiqueta: "Clase",
-                //                              filtrarPor: PermisoPor.ClaseDePermisos,
-                //                              ayuda: "Seleccionar una clase",
-                //                              posicion: new Posicion() { fila = 1, columna = 0 },
-                //                              paraFiltrar: nameof(ClasePermisoDto.Id),
-                //                              paraMostrar: nameof(ClasePermisoDto.Nombre),
-                //                              accion: accionBuscarClase);
+                new SelectorDeElemento<PermisoDto>(padre: filtrosEspeificos,
+                                              etiqueta: "Clase",
+                                              propiedad: nameof(PermisoDto.Clase) ,
+                                              ayuda: "Seleccionar una clase",
+                                              posicion: new Posicion() { fila = 1, columna = 0 },
+                                              paraGuardarEn: nameof(PermisoDto.IdClase),
+                                              accion: nameof(PermisosController.CargarElementos));
             }
 
             DefinirColumnasDelGrid();

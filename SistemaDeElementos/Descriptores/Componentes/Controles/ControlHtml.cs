@@ -3,6 +3,7 @@
     public enum TipoControl
     {
         Selector,
+        SelectorDeElemento,
         Editor,
         Desplegable,
         GridModal,
