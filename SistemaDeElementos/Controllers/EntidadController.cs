@@ -45,10 +45,10 @@ namespace MVCSistemaDeElementos.Controllers
             base.Dispose(disposing);
         }
 
-        //Llamada desde vista MVC
+        //Llamada desde opciones de menu (Menu.Ts)
         public IActionResult Index()
         {
-            return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
+            return RedirectToAction(GestorDelCrud.Descriptor.Vista);
         }
 
 
@@ -252,7 +252,7 @@ namespace MVCSistemaDeElementos.Controllers
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(GestorDelCrud.Descriptor.VistaMnt.Vista, GestorDelCrud.Descriptor);
+            return base.View(GestorDelCrud.Descriptor.Vista, GestorDelCrud.Descriptor);
         }
 
         public override ViewResult View(string viewName, object model)
@@ -270,7 +270,7 @@ namespace MVCSistemaDeElementos.Controllers
                 if (ModelState.IsValid)
                 {
                     await GestorDeElementos.InsertarElementoAsync(iuElemento);
-                    return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
+                    return RedirectToAction(GestorDelCrud.Descriptor.Vista);
                 }
             }
             catch (Exception e)
@@ -305,7 +305,7 @@ namespace MVCSistemaDeElementos.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(GestorDelCrud.Descriptor.VistaMnt.Ir);
+                return RedirectToAction(GestorDelCrud.Descriptor.Vista);
             }
 
             return View(GestorDelCrud.Editor.Vista, elemento);

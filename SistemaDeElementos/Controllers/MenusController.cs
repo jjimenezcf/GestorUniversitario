@@ -23,6 +23,12 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDeMenus = gestorDeMenus;
         }
 
+        public IActionResult CrudMenu(string orden)
+        {
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(orden), cantidadPorLeer: 5, posicionInicial: 0);
+            GestorDelCrud.Descriptor.TotalEnBd(Contar());
+            return ViewCrud();
+        }
 
         //END-POINT: Desde Menu.ts
         public JsonResult epSolicitarMenuHtml(string usuario)

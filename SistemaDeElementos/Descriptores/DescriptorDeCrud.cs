@@ -7,39 +7,11 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion }
 
-    public class VistaCsHtml : ControlHtml
-    {
-        public string Ruta { get; private set; }
-        public string Vista { get; private set; }
-        public string Ir => $"Ira{Vista}";
-
-        public VistaCsHtml(ControlHtml padre, string id, string ruta, string vista, string texto)
-        : base(
-          padre: padre,
-          id: $"{padre.Id}_{id}",
-          etiqueta: texto,
-          propiedad: null,
-          ayuda: null,
-          posicion: null
-        )
-        {
-            Tipo = TipoControl.VistaCrud;
-            Ruta = ruta;
-            Vista = vista;
-        }
-
-        public override string RenderControl()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : Elemento
     {
         public string NombreElemento => Etiqueta.ToLower();
 
-        public VistaCsHtml VistaMnt { get; private set; }
-        public VistaCsHtml VistaCreacion { get; private set; }
+        public string Vista { get; private set; }
 
         public DescriptorMantenimiento<TElemento> Mnt { get; private set; }
         public DescriptorDeCreacion<TElemento> Creador { get; private set; }
@@ -50,20 +22,21 @@ namespace MVCSistemaDeElementos.Descriptores
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
 
-        public DescriptorDeCrud(string controlador, string vista, string elemento, ModoDescriptor modo)
+        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(
           padre: null,
-          id: $"Crud_{elemento}",
-          etiqueta: elemento,
+          id: $"Crud_{typeof(TElemento).Name}",
+          etiqueta: typeof(TElemento).Name.Replace("Dto",""),
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
+            var elemento = typeof(TElemento).Name.Replace("Dto", "");
             Tipo = TipoControl.DescriptorDeCrud;
             Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: elemento);
-            VistaMnt = new VistaCsHtml(this, "VistaMnt", controlador, vista, elemento);
-            Controlador = controlador;
+            Controlador = controlador.Replace("Controller",""); 
+            Vista = vista;
             Modo = modo;
 
             if (Modo == ModoDescriptor.Mantenimiento)

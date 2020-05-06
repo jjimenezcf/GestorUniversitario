@@ -5,13 +5,14 @@ using Gestor.Elementos.Entorno;
 using Gestor.Elementos.Seguridad;
 using UtilidadesParaIu;
 using Microsoft.AspNetCore.Hosting;
+using MVCSistemaDeElementos.Controllers;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class CrudUsuario : DescriptorDeCrud<UsuarioDto>
     {
         public CrudUsuario(ModoDescriptor modo)
-        : base(controlador: "Usuarios", vista: "MantenimientoUsuario", elemento: "Usuario", modo: modo)
+        : base(controlador: nameof(UsuariosController), vista: $"{nameof(UsuariosController.CrudUsuario)}", modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new SelectorDeFiltro<UsuarioDto, PermisoDto>(

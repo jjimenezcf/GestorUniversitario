@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CrudPermiso : DescriptorDeCrud<PermisoDto>
     {
         public CrudPermiso(ModoDescriptor modo)
-        : base(controlador: "Permisos", vista: "MantenimientoPermiso", elemento: "Permiso", modo: modo)
+        : base(controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo)
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {
@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                               ayuda: "Seleccionar una clase",
                                               posicion: new Posicion() { fila = 1, columna = 0 },
                                               paraGuardarEn: nameof(PermisoDto.IdClase),
-                                              accion: nameof(PermisosController.CargarElementos));
+                                              accion: nameof(PermisosController.BadRequest));
             }
 
             DefinirColumnasDelGrid();
