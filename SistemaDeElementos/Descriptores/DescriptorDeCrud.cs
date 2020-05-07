@@ -36,7 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.DescriptorDeCrud;
             Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: elemento);
             Controlador = controlador.Replace("Controller",""); 
-            Vista = vista;
+            Vista = $@"{vista}";
             Modo = modo;
 
             if (Modo == ModoDescriptor.Mantenimiento)
@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (atributos != null)
                 {
                     columna.Visible = atributos.Visible;
-                    columna.Titulo = atributos.Etiqueta;
+                    columna.Titulo = atributos.EtiquetaGrid;
                     columna.Ordenar = atributos.Ordenar;
                     columna.Alineada = atributos.Alineada;
                     columna.PorAnchoMnt = 0;

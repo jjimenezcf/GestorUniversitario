@@ -30,10 +30,10 @@ namespace MVCSistemaDeElementos.Descriptores
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new ModalDeSeleccionDeFiltro<TElemento, TSeleccionado>(this, crudModal);
-            padre.AnadirSelector(this);
             Criterio = TipoCriterio.igual.ToString();
             CrudModal = crudModal;
             PropiedadDondeMapear = propiedadDondeMapear;
+            padre.AnadirSelector(this);
         }
 
 
@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             ControlHtml edt = CrudModal.Mnt.Filtro.BuscarControl(PropiedadDondeMapear);
 
-            return $@"<div class=¨input-group mb-3¨>
+            return $@"<div class=¨input-group¨>
                        <input id=¨{IdHtml}¨ 
                               type = ¨text¨ 
                               class=¨form-control¨ 
@@ -57,7 +57,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               idEditorMostrar=¨{edt.IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Datos.IdHtml}¨
                               onchange =¨Crud.EventosDelMantenimiento('cambiar-selector','{IdHtml}')¨>
-                       <input type=¨text¨ id=¨{idBtnSelectorHtml}¨ class=¨boton-modal¨ value=¨Seleccionar¨ onclick=¨Crud.EventosModalDeSeleccion('abrir-modal-seleccion', '{Modal.IdHtml}')¨       />
+                       <input type=¨text¨ id=¨{idBtnSelectorHtml}¨ class=¨boton-de-seleccion¨ value=¨...¨ onclick=¨Crud.EventosModalDeSeleccion('abrir-modal-seleccion', '{Modal.IdHtml}')¨       />
                     </div>
                   ";
 

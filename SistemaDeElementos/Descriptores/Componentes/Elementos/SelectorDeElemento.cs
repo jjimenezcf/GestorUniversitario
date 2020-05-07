@@ -27,8 +27,21 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
             Tipo = TipoControl.SelectorDeElemento;
             ParaGuardarEnPropiedad = paraGuardarEn.ToLower();
             AccionParaCargar = accion;
+            padre.AnadirSelectorElemento(this);
         }
 
+        public override string RenderControl()
+        {
+            return RenderSelectorDeElemento();
+        }
+
+        private string RenderSelectorDeElemento()
+        {
+            var htmlSelect = $@"<select id=¨{IdHtml}¨ accion=¨'AccionParaCargar'¨ guardar_en¨'{ParaGuardarEnPropiedad}'¨>
+                                     <option value=¨0¨>Seleccionar ...</option> 
+                                </select>";
+            return htmlSelect;
+        }
     }
 }
 

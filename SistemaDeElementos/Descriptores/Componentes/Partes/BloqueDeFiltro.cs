@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
+using SistemaDeElementos.Descriptores.Componentes.Elementos;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -33,11 +34,15 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Controles.Add(c);
         }
+        public void AnadirSelectorElemento<t1>(SelectorDeElemento<t1> s) where t1 : Elemento 
+        {
+            AnadirControl(s);
+        }
 
         public void AnadirSelector<t1,t2>(SelectorDeFiltro<t1, t2> s) where t1:Elemento where t2:Elemento
         {
-            Controles.Add(s);
-            Controles.Add(s.Modal);
+            AnadirControl(s);
+            AnadirControl(s.Modal);
         }
         public ControlHtml ObtenerControl(string id)
         {

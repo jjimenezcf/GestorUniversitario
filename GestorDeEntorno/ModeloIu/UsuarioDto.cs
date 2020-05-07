@@ -57,6 +57,7 @@ namespace Gestor.Elementos.Entorno
 
         [IUPropiedad(
             Etiqueta = "Fecha de alta",
+            EtiquetaGrid = "Alta",
             VisibleAlCrear = false,
             Tipo = typeof(DateTime),
             EditableAlEditar = false,

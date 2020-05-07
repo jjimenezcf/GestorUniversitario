@@ -30,9 +30,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                               etiqueta: "Clase",
                                               propiedad: nameof(PermisoDto.Clase) ,
                                               ayuda: "Seleccionar una clase",
-                                              posicion: new Posicion() { fila = 1, columna = 0 },
+                                              posicion: new Posicion() { fila = 0, columna = 1 },
                                               paraGuardarEn: nameof(PermisoDto.IdClase),
-                                              accion: nameof(PermisosController.BadRequest));
+                                              accion: nameof(PermisosController.epObtenerClases));
             }
 
             DefinirColumnasDelGrid();

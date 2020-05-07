@@ -31,9 +31,6 @@
 
   <ItemGroup>
     <None Remove="Views\Shared\_Layout.ts" />
-    <None Remove="Views\Usuarios\Usuarios.js" />
-    <None Remove="Views\Usuarios\Usuarios.js.map" />
-    <None Remove="Views\Usuarios\Usuarios.ts" />
   </ItemGroup>
 
   <ItemGroup>

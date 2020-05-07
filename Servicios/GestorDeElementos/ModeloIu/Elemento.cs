@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Utilidades;
 
 namespace Gestor.Elementos.ModeloIu
 {
@@ -13,6 +14,19 @@ namespace Gestor.Elementos.ModeloIu
 
     public class IUPropiedadAttribute : Attribute
     {
+        private string etiquetaGrid;
+
+        public string EtiquetaGrid
+        {
+            get
+            {
+                if (etiquetaGrid.IsNullOrEmpty())
+                    return Etiqueta;
+                return etiquetaGrid;
+            }
+            set { etiquetaGrid = value; }
+        }
+
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
         public bool Visible { get; set; } = true;

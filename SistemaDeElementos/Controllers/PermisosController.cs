@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 using Gestor.Elementos.Seguridad;
+using System;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -26,6 +27,9 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-
+        internal static object epObtenerClases()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
