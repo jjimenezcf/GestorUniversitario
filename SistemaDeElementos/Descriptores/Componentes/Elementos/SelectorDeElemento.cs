@@ -12,9 +12,9 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
 
         public string ParaGuardarEnPropiedad { get; private set; }
         public string ParaMostrarEnPropiedad { get; private set; }
-        public string AccionParaCargar { get; private set; }
+        public string SeleccionarDeLaClase { get; private set; }
 
-        public SelectorDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraGuardarEn, string accion)
+        public SelectorDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string propiedad, string ayuda, Posicion posicion, string paraGuardarEn, string claseElemento)
         : base(
             padre: padre
           , id: $"{padre.Id}_{TipoControl.SelectorDeElemento}_{propiedad}" 
@@ -26,7 +26,7 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
         {
             Tipo = TipoControl.SelectorDeElemento;
             ParaGuardarEnPropiedad = paraGuardarEn.ToLower();
-            AccionParaCargar = accion;
+            SeleccionarDeLaClase = claseElemento;
             padre.AnadirSelectorElemento(this);
         }
 
@@ -37,9 +37,15 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
 
         private string RenderSelectorDeElemento()
         {
-            var htmlSelect = $@"<select id=¨{IdHtml}¨ accion=¨'AccionParaCargar'¨ guardar_en¨'{ParaGuardarEnPropiedad}'¨>
-                                     <option value=¨0¨>Seleccionar ...</option> 
-                                </select>";
+            var htmlSelect = $@"<div id=¨div_{IdHtml}¨ class=¨contenedor-selector¨>
+                                    <select id=¨{IdHtml}¨ class=¨selector-elemento¨ propiedad=¨{Propiedad}¨ clase-elemento=¨{SeleccionarDeLaClase}¨ guardar-en¨{ParaGuardarEnPropiedad}¨>
+                                         <option value=¨0¨>Seleccionar ...</option>
+                                         <option value=¨1¨>Audi</option>
+                                         <option value=¨2¨>BMW</option>
+                                         <option value=¨3¨>Seat</option>
+                                         <option value=¨4¨>Pontiac</option>
+                                    </select>
+                                </div>";
             return htmlSelect;
         }
     }

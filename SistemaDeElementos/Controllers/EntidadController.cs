@@ -249,6 +249,32 @@ namespace MVCSistemaDeElementos.Controllers
            return new JsonResult(r);
         }
 
+        //END-POINT: Desde CrudMantenimiento.ts
+        public JsonResult epLeerTodos(string claseElemento)
+        {
+            var r = new Resultado();
+            dynamic elementos;
+            try
+            {
+                elementos = LeerTodos(claseElemento);
+                r.Datos = elementos;
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido leer los datos";
+            }
+
+            return new JsonResult(r);
+        }
+
+        protected virtual dynamic LeerTodos(string claseElemento)
+        {
+            throw new NotImplementedException();
+        }
+
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;

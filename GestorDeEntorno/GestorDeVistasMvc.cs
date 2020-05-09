@@ -28,11 +28,6 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        protected override VistaMvcDtm LeerConDetalle(int Id)
-        {
-            throw new System.NotImplementedException();
-        }
-
 
         public static List<VistaMvcDto> VistasMvc()
         {

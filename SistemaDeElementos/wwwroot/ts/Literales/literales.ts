@@ -42,6 +42,10 @@ const AtributoSelector = {
     propiedadParaFiltrar: "propiedadFiltrar"
 }
 
+const AtributoSelectorElemento = {
+    claseElemento: 'clase-elemento'
+}
+
 const TagName = {
     input : "input"
 }
@@ -68,7 +72,8 @@ const Ajax = {
         Modificar: "epModificarPorId",
         Borrar: "epBorrarPorId",
         RecargarModalEnHtml: "epRecargarModalEnHtml",
-        Leer: "epLeer"
+        Leer: "epLeer",
+        LeerTodos: "epLeerTodos"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -80,7 +85,8 @@ const Ajax = {
         filtro: "filtro",
         orden: "orden",
         usuario: "usuario",
-        idsJson: "idsJson"
+        idsJson: "idsJson",
+        claseElemento:"claseElemento"
     },
     jsonResultError: 1,
     jsonResultOk: 0,

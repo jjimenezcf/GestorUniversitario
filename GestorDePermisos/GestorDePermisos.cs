@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Gestor.Elementos.Seguridad
 {
@@ -95,26 +96,24 @@ namespace Gestor.Elementos.Seguridad
                 .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre))
                 .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre));
 
-                CreateMap<PermisoDto,PermisoDtm>();
+                CreateMap<PermisoDto, PermisoDtm>();
+
+                CreateMap<ClasePermisoDtm, ClasePermisoDto>();
+
             }
         }
 
         public GestorDePermisos(CtoSeguridad contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
-            
-        }
-               
-        protected override PermisoDtm LeerConDetalle(int Id)
-        {
-            return null;
+
         }
 
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
-                  return base.AplicarFiltros(registros, filtros, parametros);
+                    return base.AplicarFiltros(registros, filtros, parametros);
 
             return registros
                 .FiltroPorNombre(filtros)
@@ -140,5 +139,12 @@ namespace Gestor.Elementos.Seguridad
             return registros.JoinConClaseDePermiso(joins, parametros);
         }
 
+        public List<ClasePermisoDto> LeerClases()
+        {
+            var clases = Contexto.ClasesDePermisos.AsNoTracking().ToList();
+            var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
+            return gestor.MapearElementos(clases).ToList();
+        }
     }
+
 }

@@ -130,8 +130,6 @@ namespace Gestor.Elementos
         private GestorDeErrores _gestorDeErrores;
         public IMapper Mapeador;
 
-        protected abstract TRegistro LeerConDetalle(int Id);
-
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -489,12 +487,6 @@ namespace Gestor.Elementos
                 return null;
 
             return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
-        }
-
-        public TElemento LeerElementoConDetalle(int id)
-        {
-            var elementoLeido = LeerConDetalle(id);
-            return MapearElemento(elementoLeido);
         }
 
         #endregion

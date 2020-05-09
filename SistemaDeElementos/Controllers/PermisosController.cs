@@ -4,17 +4,19 @@ using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 using Gestor.Elementos.Seguridad;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MVCSistemaDeElementos.Controllers
 {
 
     public class PermisosController : EntidadController<CtoSeguridad, PermisoDtm, PermisoDto>
     {
-        public PermisosController(GestorDePermisos gestorDePermisos, GestorDeErrores gestorDeErrores) 
+        public PermisosController(GestorDePermisos gestorDePermisos, GestorDeErrores gestorDeErrores)
         : base
         (
-         gestorDePermisos, 
-         gestorDeErrores, 
+         gestorDePermisos,
+         gestorDeErrores,
          new CrudPermiso(ModoDescriptor.Mantenimiento)
         )
         {
@@ -27,9 +29,13 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        internal static object epObtenerClases()
+        protected override dynamic LeerTodos(string claseElemento)
         {
-            throw new NotImplementedException();
+            if (claseElemento == nameof(ClasePermisoDto))
+                return ((GestorDePermisos)GestorDeElementos).LeerClases();
+            
+            return null;
         }
+
     }
 }

@@ -97,13 +97,6 @@ namespace Gestor.Elementos.Entorno
                    .FiltrarPorRelacion(filtros);
         }                
 
-        protected override UsuarioDtm LeerConDetalle(int Id)
-        {
-            return Contexto.Set<UsuarioDtm>()
-                            .AsNoTracking()
-                            .FirstOrDefault(m => m.Id == Id);
-        }
-
         protected override void AntesNuevaFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
             base.AntesNuevaFila(usuarioDto, opciones);

@@ -1,13 +1,20 @@
 ﻿
 function Mensaje(tipo: string, mensaje: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
-    control.value = `(${tipo}) ${mensaje}`;
-    console.log(control.value);
+    var mensaje = `(${tipo}) ${mensaje}`;
+    if (control)
+        control.value = `${mensaje}`;
+
+    if (TipoMensaje.Error == tipo)
+        console.error(mensaje);
+    else
+        console.log(mensaje)
 }
 
 function BlanquearMensaje() {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
-    control.value = "";
+    if (control)
+        control.value = "";
 }
 
 function StringBuilder(value) {

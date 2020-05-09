@@ -19,11 +19,5 @@ namespace Gestor.Elementos.Seguridad
         }
 
         
-        protected override rRolPermiso LeerConDetalle(int Id)
-
-        {
-            return null;
-        }
-        
     }
 }

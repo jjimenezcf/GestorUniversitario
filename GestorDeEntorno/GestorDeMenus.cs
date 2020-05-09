@@ -117,11 +117,6 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        protected override MenuDtm LeerConDetalle(int Id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         protected override void AntesDeMapearElemento(MenuDtm registro, ParametrosDeMapeo parametros)
         {
             parametros.AnularMapeo = registro.IdPadre != null;

@@ -141,17 +141,40 @@
         }
 
 
-        // funciones para las peticiones al servidor  ***********************************************************************************************
+        // funciones de carga de elementos para los selectores   ************************************************************************************
 
+
+        protected CargarSelectorElemento(controlador: string, claseElemento: string) {
+            let url: string = this.DefinirPeticionDeCargar(controlador, claseElemento);
+                let req: XMLHttpRequest = new XMLHttpRequest();
+            this.PeticionSincrona(req, url, Ajax.EndPoint.LeerTodos);
+        }
+
+        private DefinirPeticionDeCargar(controlador: string, claseElemento: string): string {
+            let url: string = `/${controlador}/${Ajax.EndPoint.LeerTodos}?${Ajax.Param.claseElemento}=${claseElemento}`;
+            return url;
+        }
+
+
+
+        // funciones para las peticiones al servidor  ***********************************************************************************************
         public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: string) {
             BlanquearMensaje();
             let error: string;
-            this.PeticionAjax(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
+            this.PeticionAjaxSincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
             if (!EsNula(error))
                 throw error;
         }
 
-        private PeticionAjax(req: XMLHttpRequest, url: string, peticion: string, despuesDePeticion: Function, errorEnPeticion: Function) {
+        public PeticionAsincrona(req: XMLHttpRequest, url: string, peticion: string) {
+            BlanquearMensaje();
+            let error: string;
+            this.PeticionAjaxAsincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
+            if (!EsNula(error))
+                throw error;
+        }
+
+        private PeticionAjaxSincrona(req: XMLHttpRequest, url: string, peticion: string, despuesDePeticion: Function, errorEnPeticion: Function) {
 
             function respuestaCorrecta() {
 
@@ -175,6 +198,33 @@
             req.addEventListener(Ajax.eventoError, respuestaErronea);
 
             req.open('GET', url, false);
+            req.send();
+        }
+
+        private PeticionAjaxAsincrona(req: XMLHttpRequest, url: string, peticion: string, despuesDePeticion: Function, errorEnPeticion: Function) {
+
+            function respuestaCorrecta() {
+
+                if (EsNula(req.response))
+                    errorEnPeticion();
+                else {
+                    var resultado: ResultadoJson = ParsearRespuesta(req, peticion);
+
+                    if (resultado === undefined || resultado.estado === Ajax.jsonResultError)
+                        errorEnPeticion();
+                    else
+                        despuesDePeticion();
+                }
+            }
+
+            function respuestaErronea() {
+                errorEnPeticion();
+            }
+
+            req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
+            req.addEventListener(Ajax.eventoError, respuestaErronea);
+
+            req.open('GET', url, true);
             req.send();
         }
 
