@@ -107,6 +107,20 @@
         }
     }
 
+
+    function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ResultadoJson {
+        var resultado: any;
+        try {
+            resultado = JSON.parse(req.response);
+        }
+        catch
+        {
+            Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
+            return undefined;
+        }
+        return resultado;
+    }
+
     function desplegarMenu(menuHtml: HTMLMenuElement) {
         menuHtml.style.display = "block";
         menuHtml.compact = false;

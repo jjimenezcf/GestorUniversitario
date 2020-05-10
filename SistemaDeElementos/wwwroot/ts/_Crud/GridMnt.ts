@@ -210,11 +210,11 @@
                 var htmlImput = arrayHtmlImput[i];
                 var esFiltro = htmlImput.getAttribute(Atributo.filtro);
                 if (esFiltro === 'S') {
-                    var id = htmlImput.getAttribute(Atributo.Id);
+                    var id = htmlImput.getAttribute(Atributo.id);
                     if (id === null)
                         console.log(`Falta el atributo id del componente de filtro ${htmlImput}`);
                     else
-                        arrayIds.push(htmlImput.getAttribute(Atributo.Id));
+                        arrayIds.push(htmlImput.getAttribute(Atributo.id));
                 }
             }
             return arrayIds;

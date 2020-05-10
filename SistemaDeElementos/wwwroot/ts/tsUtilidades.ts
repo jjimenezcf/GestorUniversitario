@@ -113,18 +113,6 @@ class ResultadoHtml extends ResultadoJson {
     html: string;
 }
 
-function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ResultadoJson {
-    var resultado: any;
-    try {
-        resultado = JSON.parse(req.response);
-    }
-    catch
-    {
-        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
-        return undefined;
-    }
-    return resultado;
-}
 
 
 

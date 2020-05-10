@@ -3,6 +3,60 @@
     export class HTMLSelector extends HTMLInputElement {
     }
 
+    export class SelectorDeElementos {
+        private selector: HTMLSelectElement;
+
+        get Selector(): HTMLSelectElement {
+            return this.selector;
+        }
+
+        constructor(idSelector: string) {
+            this.selector = document.getElementById(idSelector) as HTMLSelectElement;
+        }
+
+        public AgregarOpcion(valor: number, texto: string): void {
+
+            var miOption = document.createElement("option");
+            miOption.setAttribute("value", valor.toString());
+            miOption.setAttribute("label", texto);
+
+            this.Selector.appendChild(miOption);
+        }
+    }
+
+    export class DatosPeticionSelector {
+        ClaseDeElemento: string;
+        IdSelector: string;
+
+        get Selector(): SelectorDeElementos {
+            return new SelectorDeElementos(this.IdSelector);
+        }
+
+    }
+
+    export class PeticionAjax {
+        public nombre: string;
+        public datos: any;
+        public resultado: ResultadoJson;
+
+        constructor(peticion: string, datos: string) {
+            this.nombre = peticion;
+            this.datos = datos;
+            this.resultado = undefined;
+        }
+
+        ParsearRespuesta(req: XMLHttpRequest) {
+            try {
+                this.resultado = JSON.parse(req.response);
+            }
+            catch
+            {
+                Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
+            }
+        }
+
+    }
+
     export class CrudBase {
 
         constructor() {
@@ -144,10 +198,11 @@
         // funciones de carga de elementos para los selectores   ************************************************************************************
 
 
-        protected CargarSelectorElemento(controlador: string, claseElemento: string) {
-            let url: string = this.DefinirPeticionDeCargar(controlador, claseElemento);
-                let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.LeerTodos);
+        protected CargarSelectorElemento(controlador: string, claseDeElementoDto: string, idSelector: string) {
+            let url: string = this.DefinirPeticionDeCargar(controlador, claseDeElementoDto);
+            let req: XMLHttpRequest = new XMLHttpRequest();
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerTodos, `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`);
+            this.PeticionSincrona(req, url, peticion);
         }
 
         private DefinirPeticionDeCargar(controlador: string, claseElemento: string): string {
@@ -158,7 +213,7 @@
 
 
         // funciones para las peticiones al servidor  ***********************************************************************************************
-        public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: string) {
+        public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax) {
             BlanquearMensaje();
             let error: string;
             this.PeticionAjaxSincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
@@ -166,7 +221,7 @@
                 throw error;
         }
 
-        public PeticionAsincrona(req: XMLHttpRequest, url: string, peticion: string) {
+        public PeticionAsincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax) {
             BlanquearMensaje();
             let error: string;
             this.PeticionAjaxAsincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
@@ -174,16 +229,16 @@
                 throw error;
         }
 
-        private PeticionAjaxSincrona(req: XMLHttpRequest, url: string, peticion: string, despuesDePeticion: Function, errorEnPeticion: Function) {
+        private PeticionAjaxSincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax, despuesDePeticion: Function, errorEnPeticion: Function) {
 
             function respuestaCorrecta() {
 
                 if (EsNula(req.response))
                     errorEnPeticion();
                 else {
-                    var resultado: ResultadoJson = ParsearRespuesta(req, peticion);
+                    peticion.ParsearRespuesta(req);
 
-                    if (resultado === undefined || resultado.estado === Ajax.jsonResultError)
+                    if (peticion.resultado === undefined || peticion.resultado.estado === Ajax.jsonResultError)
                         errorEnPeticion();
                     else
                         despuesDePeticion();
@@ -201,16 +256,16 @@
             req.send();
         }
 
-        private PeticionAjaxAsincrona(req: XMLHttpRequest, url: string, peticion: string, despuesDePeticion: Function, errorEnPeticion: Function) {
+        private PeticionAjaxAsincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax, despuesDePeticion: Function, errorEnPeticion: Function) {
 
             function respuestaCorrecta() {
 
                 if (EsNula(req.response))
                     errorEnPeticion();
                 else {
-                    var resultado: ResultadoJson = ParsearRespuesta(req, peticion);
+                    peticion.ParsearRespuesta(req);
 
-                    if (resultado === undefined || resultado.estado === Ajax.jsonResultError)
+                    if (peticion.resultado === undefined || peticion.resultado.estado === Ajax.jsonResultError)
                         errorEnPeticion();
                     else
                         despuesDePeticion();
@@ -228,7 +283,7 @@
             req.send();
         }
 
-        protected ErrorEnPeticion(req: XMLHttpRequest, peticion: string): string {
+        protected ErrorEnPeticion(req: XMLHttpRequest, peticion: PeticionAjax): string {
             if (EsNula(req.response)) {
                 return `La peticion ${peticion} no se ha podido realizar`;
             }
@@ -242,7 +297,7 @@
 
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
             let resultado: ResultadoJson = JSON.parse(req.response);
             if (!EsNula(resultado.mensaje))
                 Mensaje(TipoMensaje.Info, resultado.mensaje);

@@ -40,10 +40,6 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
             var htmlSelect = $@"<div id=¨div_{IdHtml}¨ class=¨contenedor-selector¨>
                                     <select id=¨{IdHtml}¨ class=¨selector-elemento¨ propiedad=¨{Propiedad}¨ clase-elemento=¨{SeleccionarDeLaClase}¨ guardar-en¨{ParaGuardarEnPropiedad}¨>
                                          <option value=¨0¨>Seleccionar ...</option>
-                                         <option value=¨1¨>Audi</option>
-                                         <option value=¨2¨>BMW</option>
-                                         <option value=¨3¨>Seat</option>
-                                         <option value=¨4¨>Pontiac</option>
                                     </select>
                                 </div>";
             return htmlSelect;

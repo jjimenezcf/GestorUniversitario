@@ -166,7 +166,8 @@
         private Buscar(posicion: number) {
             let url: string = this.DefinirPeticionDeCargarGrid(posicion);
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.RecargarModalEnHtml);
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.RecargarModalEnHtml, "{}");
+            this.PeticionSincrona(req, url, peticion);
         }
 
         private DefinirPeticionDeCargarGrid(posicion: number): string {
@@ -185,10 +186,10 @@
             return peticion;
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
             let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
 
-            if (peticion === Ajax.EndPoint.RecargarModalEnHtml) {
+            if (peticion.nombre === Ajax.EndPoint.RecargarModalEnHtml) {
                 if (this.IdGrid === this.Grid.getAttribute(Literal.id)) {
                     this.Grid.innerHTML = resultado.html;
                     this.InicializarNavegador();
@@ -199,7 +200,7 @@
                 }
             }
 
-            if (peticion === Ajax.EndPoint.Leer) {
+            if (peticion.nombre === Ajax.EndPoint.Leer) {
                 this.ProcesarRegistrosLeidos(resultado.datos);
             }
             return resultado;
@@ -209,7 +210,8 @@
             this.EditorDelGrid.value = this.Selector.value;
             let url: string = this.DefinirPeticionLeerParaSelector();
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.Leer);
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Leer, "{}");
+            this.PeticionSincrona(req, url, peticion);
         }
 
         private DefinirPeticionLeerParaSelector(): string {

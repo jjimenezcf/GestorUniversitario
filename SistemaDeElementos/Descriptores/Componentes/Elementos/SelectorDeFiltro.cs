@@ -51,8 +51,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
-                              idModal=¨{Modal.IdHtml}¨
-                              idGridModal=¨{CrudModal.Mnt.Datos.IdHtml}¨
+                              id-modal=¨{Modal.IdHtml}¨
+                              id-grid-modal=¨{CrudModal.Mnt.Datos.IdHtml}¨
                               idBtnSelector=¨{idBtnSelectorHtml}¨
                               idEditorMostrar=¨{edt.IdHtml}¨
                               refCheckDeSeleccion=¨chksel.{CrudModal.Mnt.Datos.IdHtml}¨

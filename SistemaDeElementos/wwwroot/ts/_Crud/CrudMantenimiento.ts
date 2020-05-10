@@ -34,9 +34,9 @@
             var selectores = this.ZonaDeFiltro.querySelectorAll('input[tipo="selector"]');
             selectores.forEach((selector) => {
 
-                let idGridModal: string = selector.getAttribute('idgridmodal');
+                let idGridModal: string = selector.getAttribute(AtributoSelector.idGridModal);
 
-                let idModal: string = selector.getAttribute('idmodal');
+                let idModal: string = selector.getAttribute(AtributoSelector.idModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal, idGridModal);
                 this.Modales.push(modal);
 
@@ -49,7 +49,7 @@
                 let claseElemento: string = selectores[0].getAttribute(AtributoSelectorElemento.claseElemento);
                 var controlador = this.Navegador.getAttribute(Atributo.controlador);
                 try {
-                    this.CargarSelectorElemento(controlador, claseElemento);
+                    this.CargarSelectorElemento(controlador, claseElemento, selectores[0].getAttribute(Atributo.id));
                 }
                 catch (error) {
                     Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
@@ -148,7 +148,8 @@
             let url: string = this.DefinirPeticionDeBorrado(id);
             let req: XMLHttpRequest = new XMLHttpRequest();
             try {
-                this.PeticionSincrona(req, url, Ajax.EndPoint.Borrar);
+                let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Borrar, "{}");
+                this.PeticionSincrona(req, url, peticion);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
@@ -172,14 +173,15 @@
             else {
                 let url: string = this.DefinirPeticionDeBusqueda(posicion);
                 let req: XMLHttpRequest = new XMLHttpRequest();
-                this.PeticionSincrona(req, url, Ajax.EndPoint.LeerGridEnHtml);
+                let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerGridEnHtml, "{}");
+                this.PeticionSincrona(req, url, peticion);
             }
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
             let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
 
-            if (peticion === Ajax.EndPoint.LeerGridEnHtml) {
+            if (peticion.nombre === Ajax.EndPoint.LeerGridEnHtml) {
                 if (this.IdGrid === this.Grid.getAttribute(Literal.id)) {
                     this.Grid.innerHTML = resultado.html;
                     this.InicializarNavegador();
@@ -190,8 +192,13 @@
                 }
             }
 
-            if (peticion === Ajax.EndPoint.LeerTodos) {
-
+            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
+                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
+                let idSelector = datos.IdSelector;
+                let selector = new SelectorDeElementos(idSelector);
+                for (var i = 0; i < resultado.datos.length; i++) {
+                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
+                }
             }
 
             return resultado;

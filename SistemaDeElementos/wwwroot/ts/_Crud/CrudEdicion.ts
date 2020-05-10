@@ -67,7 +67,8 @@
             let url: string = `/${controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
 
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.LeerPorIds);
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerPorIds, "{}")
+            this.PeticionSincrona(req, url, peticion);
         }
 
         protected Modificar() {
@@ -79,10 +80,11 @@
             let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Modificar}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.Modificar);
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Modificar, "{}");
+            this.PeticionSincrona(req, url, peticion);
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: string): ResultadoJson {
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
             let resultado = super.DespuesDeLaPeticion(req, peticion);
             this.MapearElemento(this.PanelDeEditar, resultado.datos);
             return resultado;

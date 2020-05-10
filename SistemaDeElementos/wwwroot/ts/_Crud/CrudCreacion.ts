@@ -61,7 +61,8 @@
             let controlador = this.PanelDeCrear.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
-            this.PeticionSincrona(req, url, Ajax.EndPoint.Crear);
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Crear, "{}")
+            this.PeticionSincrona(req, url, peticion);
         }
     }
 

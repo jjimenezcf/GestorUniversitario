@@ -74,15 +74,4 @@ class ResultadoJson {
 }
 class ResultadoHtml extends ResultadoJson {
 }
-function ParsearRespuesta(req, peticion) {
-    var resultado;
-    try {
-        resultado = JSON.parse(req.response);
-    }
-    catch {
-        Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
-        return undefined;
-    }
-    return resultado;
-}
 //# sourceMappingURL=tsUtilidades.js.map
