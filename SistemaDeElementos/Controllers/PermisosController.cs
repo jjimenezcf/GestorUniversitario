@@ -33,7 +33,10 @@ namespace MVCSistemaDeElementos.Controllers
         {
             if (claseElemento == nameof(ClasePermisoDto))
                 return ((GestorDePermisos)GestorDeElementos).LeerClases();
-            
+
+            if (claseElemento == nameof(TipoPermisoDto))
+                return ((GestorDePermisos)GestorDeElementos).LeerTipos();
+
             return null;
         }
 

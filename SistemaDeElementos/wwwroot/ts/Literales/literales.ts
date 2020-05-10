@@ -47,7 +47,8 @@ const AtributoSelectorElemento = {
 }
 
 const TagName = {
-    input : "input"
+    input: "input",
+    select: "select"
 }
 
 const ClaseCss = {
@@ -156,7 +157,8 @@ const LiteralModalSeleccion = {
 const TipoControl = {
     Tipo : "tipo",
     Editor : "editor",
-    Selector: "selector"
+    Selector: "selector",
+    SelectorDeElemento: "selector-de-elemento"
 };
 
 const ModoTrabajo = {

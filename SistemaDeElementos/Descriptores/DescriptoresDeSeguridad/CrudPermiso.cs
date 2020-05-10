@@ -15,24 +15,35 @@ namespace MVCSistemaDeElementos.Descriptores
             if (modo == ModoDescriptor.Mantenimiento)
             {
                 var modalUsuario = new CrudUsuario(ModoDescriptor.Seleccion);
-                var filtrosEspeificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(2, 2));
-                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: filtrosEspeificos,
+                var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+                var fltEspecificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 4));
+                
+                //var fltRelacionados = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Relacionados", dimension: new Dimension(1, 2));
+                new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
                                               filtrarPor: PermisoPor.PermisosDeUnUsuario,
                                               ayuda: "Seleccionar usuario",
-                                              posicion: new Posicion() { fila = 0, columna = 0 },
+                                              posicion: new Posicion() { fila = 0, columna = 1 },
                                               paraFiltrar: nameof(UsuarioDtm.Id),
                                               paraMostrar: nameof(UsuarioDtm.Apellido),
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
-                new SelectorDeElemento<PermisoDto>(padre: filtrosEspeificos,
+                new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
                                               etiqueta: "Clase",
                                               propiedad: nameof(PermisoDto.Clase) ,
                                               ayuda: "Seleccionar una clase",
-                                              posicion: new Posicion() { fila = 0, columna = 1 },
+                                              posicion: new Posicion() { fila = 0, columna = 0 },
                                               paraGuardarEn: nameof(PermisoDto.IdClase),
                                               claseElemento: nameof(ClasePermisoDto));
+                
+                new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
+                                        etiqueta: "Tipo",
+                                        propiedad: nameof(PermisoDto.Tipo),
+                                        ayuda: "Seleccionar un tipo",
+                                        posicion: new Posicion() { fila = 0, columna = 1 },
+                                        paraGuardarEn: nameof(PermisoDto.IdTipo),
+                                        claseElemento: nameof(TipoPermisoDto));
             }
 
             DefinirColumnasDelGrid();

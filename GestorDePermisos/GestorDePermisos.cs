@@ -66,6 +66,28 @@ namespace Gestor.Elementos.Seguridad
             return registros;
 
         }
+        public static IQueryable<T> FiltroPorClase<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Clase).ToLower())
+            {
+                registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
+            }
+
+            return registros;
+        }
+        public static IQueryable<T> FiltroPorTipo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
+            {
+                registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
+            }
+
+            return registros;
+        }
+
+
     }
     static class PermisosRegOrd
     {
@@ -118,7 +140,9 @@ namespace Gestor.Elementos.Seguridad
             return registros
                 .FiltroPorNombre(filtros)
                 .FiltrarPorUsuario(filtros)
-                .FiltroPorRol(filtros);
+                .FiltroPorRol(filtros)
+                .FiltroPorTipo(filtros)
+                .FiltroPorClase(filtros);
         }
 
 
@@ -144,6 +168,14 @@ namespace Gestor.Elementos.Seguridad
             var clases = Contexto.ClasesDePermisos.AsNoTracking().ToList();
             var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
             return gestor.MapearElementos(clases).ToList();
+        }
+
+
+        public List<TipoPermisoDto> LeerTipos()
+        {
+            var tipos = Contexto.TiposDePermisos.AsNoTracking().ToList();
+            var gestor = new GestorDeTipoPermiso(Contexto, Mapeador);
+            return gestor.MapearElementos(tipos).ToList();
         }
     }
 

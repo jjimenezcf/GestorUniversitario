@@ -29,7 +29,7 @@ namespace Gestor.Elementos.Seguridad
         }
 
 
-        public DbSet<ClasePermisoDtm> TiposDePermisos { get; set; }
+        public DbSet<TipoPermisoDtm> TiposDePermisos { get; set; }
         public DbSet<ClasePermisoDtm> ClasesDePermisos { get; set; }
         public DbSet<PermisoDtm> Permisos { get; set; }
         public DbSet<rRol> Roles { get; set; }

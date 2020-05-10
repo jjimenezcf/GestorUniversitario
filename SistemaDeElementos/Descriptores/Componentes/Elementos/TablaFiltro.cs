@@ -71,11 +71,20 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderColumnasControl(string idFila, int i, int j)
         {
+            //double porColumnas = 100 / Dimension.Columnas;
+            //double porColEtiq = (porColumnas * 30) / (100);
+            //double porColCtrl = (porColumnas * 70) / (100);
+
+            double porColumnas = 100 / Dimension.Columnas;
+            double porColEtiq = (double) 7.5;
+            double porColCtrl = porColumnas - porColEtiq;
+
+
             var idColumna = $"{idFila}_{j}";
-            var htmlColumnaEtiqueta = $@"<td id=¨{idColumna}_e¨ style=¨width:15%¨>
+            var htmlColumnaEtiqueta = $@"<td id=¨{idColumna}_e¨ style=¨width:{porColEtiq.ToString().Replace(',','.')}%¨>
                                             etiqueta
                                          </td>";
-            var htmlColumnaControl = $@"<td id=¨{idColumna}_c¨ style=¨width:35%¨>
+            var htmlColumnaControl = $@"<td id=¨{idColumna}_c¨ style=¨width:{porColCtrl.ToString().Replace(',', '.')}%¨>
                                            control
                                         </td>";
             var htmlControl = "";
@@ -84,6 +93,12 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 if (c.Posicion == null)
                     continue;
+
+                if (c.Posicion.fila >= Dimension.Filas)
+                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la fila indicada {c.Posicion.fila}, solo has {Dimension.Filas} filas");
+
+                if (c.Posicion.columna >= Dimension.Columnas)
+                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la columna indicada {c.Posicion.columna}, solo has {Dimension.Columnas} columnas");
 
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
                     htmlEtiqueta = $"{c.RenderLabel()}";

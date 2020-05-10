@@ -9,7 +9,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class BloqueDeFitro<TElemento> : ControlFiltroHtml where TElemento : Elemento
     {
-        public TablaBloqueDeFiltro Tabla { get; set; }
+        public TablaFiltro Tabla { get; set; }
 
         public ICollection<ControlFiltroHtml> Controles => Tabla.Controles;
 
@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Bloque;
-            Tabla = new TablaBloqueDeFiltro(this, dimension, new List<ControlFiltroHtml>());
+            Tabla = new TablaFiltro(this, dimension, new List<ControlFiltroHtml>());
             filtro.Bloques.Add(this);
         }
 

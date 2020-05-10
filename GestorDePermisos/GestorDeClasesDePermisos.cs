@@ -9,9 +9,9 @@ namespace Gestor.Elementos.Seguridad
 {
     public class GestorDeClaseDePermisos : GestorDeElementos<CtoSeguridad, ClasePermisoDtm, ClasePermisoDto>
     {
-        public class MapearPermiso : Profile
+        public class MapearClasePermiso : Profile
         {
-            public MapearPermiso()
+            public MapearClasePermiso()
             {
                 CreateMap<ClasePermisoDtm, ClasePermisoDto>();
             }

@@ -181,18 +181,27 @@
             var arrayIds = this.ObtenerControlesDeFiltro();
             var clausulas = new Array<ClausulaDeFiltrado>();
             for (let id of arrayIds) {
-                var input: HTMLInputElement = <HTMLInputElement>document.getElementById(`${id}`);
-                var tipo: string = input.getAttribute(TipoControl.Tipo);
                 var clausula: ClausulaDeFiltrado = null;
-                if (tipo === TipoControl.Editor) {
-                    clausula = this.ObtenerClausulaEditor(input);
-                }
-                else
-                    if (tipo === TipoControl.Selector) {
-                        clausula = this.ObtenerClausulaSelector(input);
+                var control: HTMLElement = document.getElementById(`${id}`);
+                var tipo: string = control.getAttribute(TipoControl.Tipo);
+
+                switch (tipo) {
+                    case TipoControl.Editor: {
+                        clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);;
+                        break;
                     }
-                    else
-                        console.log(`No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`);
+                    case TipoControl.Selector: {
+                        clausula = this.ObtenerClausulaSelector(control as HTMLInputElement);;
+                        break;
+                    }
+                    case TipoControl.SelectorDeElemento: {
+                        clausula = this.ObtenerClausulaSelectorElemento(control as HTMLSelectElement);
+                        break;
+                    }
+                    default: {
+                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`)
+                    }
+                }
 
                 if (clausula !== null)
                     clausulas.push(clausula);
@@ -200,27 +209,34 @@
             return JSON.stringify(clausulas);
         }
 
-
         private ObtenerControlesDeFiltro() {
 
             var arrayIds = new Array();
-            var arrayHtmlImput = this.ZonaDeFiltro.getElementsByTagName(TagName.input);
+            var arrayHtmlInput = this.ZonaDeFiltro.getElementsByTagName(TagName.input);
 
-            for (let i = 0; i < arrayHtmlImput.length; i++) {
-                var htmlImput = arrayHtmlImput[i];
-                var esFiltro = htmlImput.getAttribute(Atributo.filtro);
+            for (let i = 0; i < arrayHtmlInput.length; i++) {
+                var htmlInput = arrayHtmlInput[i];
+                var esFiltro = htmlInput.getAttribute(Atributo.filtro);
                 if (esFiltro === 'S') {
-                    var id = htmlImput.getAttribute(Atributo.id);
+                    var id = htmlInput.getAttribute(Atributo.id);
                     if (id === null)
-                        console.log(`Falta el atributo id del componente de filtro ${htmlImput}`);
+                        console.log(`Falta el atributo id del componente de filtro ${htmlInput}`);
                     else
-                        arrayIds.push(htmlImput.getAttribute(Atributo.id));
+                        arrayIds.push(id);
                 }
             }
+
+            var arrayHtmlSelect = this.ZonaDeFiltro.getElementsByTagName(TagName.select);
+            for (let i = 0; i < arrayHtmlSelect.length; i++) {
+                var htmlSelect = arrayHtmlSelect[i];
+                var id = htmlSelect.getAttribute(Atributo.id);
+                arrayIds.push(id);
+            }
+
             return arrayIds;
         }
 
-        private ObtenerClausulaEditor(editor: HTMLInputElement) {
+        private ObtenerClausulaEditor(editor: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad: string = editor.getAttribute(Atributo.propiedad);
             var criterio: string = editor.getAttribute(Atributo.criterio);
             var valor = editor.value;
@@ -231,7 +247,7 @@
             return clausula;
         }
 
-        private ObtenerClausulaSelector(selector: HTMLInputElement) {
+        private ObtenerClausulaSelector(selector: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad = selector.getAttribute(Atributo.propiedad);
             var criterio = selector.getAttribute(Atributo.criterio);
             var valor = null;
@@ -242,6 +258,18 @@
                     valor = ids;
                     clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
                 }
+            }
+            return clausula;
+        }
+
+
+        private ObtenerClausulaSelectorElemento(selet: HTMLSelectElement): ClausulaDeFiltrado {
+            var propiedad = selet.getAttribute(Atributo.propiedad);
+            var criterio = selet.getAttribute(Atributo.criterio);
+            var valor = selet.value;
+            var clausula = null;
+            if (!EsNula(valor) && Number(valor) > 0) {
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             }
             return clausula;
         }

@@ -27,6 +27,7 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
             Tipo = TipoControl.SelectorDeElemento;
             ParaGuardarEnPropiedad = paraGuardarEn.ToLower();
             SeleccionarDeLaClase = claseElemento;
+            Criterio = TipoCriterio.igual.ToString();
             padre.AnadirSelectorElemento(this);
         }
 
@@ -38,7 +39,7 @@ namespace SistemaDeElementos.Descriptores.Componentes.Elementos
         private string RenderSelectorDeElemento()
         {
             var htmlSelect = $@"<div id=¨div_{IdHtml}¨ class=¨contenedor-selector¨>
-                                    <select id=¨{IdHtml}¨ class=¨selector-elemento¨ propiedad=¨{Propiedad}¨ clase-elemento=¨{SeleccionarDeLaClase}¨ guardar-en¨{ParaGuardarEnPropiedad}¨>
+                                    <select id=¨{IdHtml}¨ class=¨selector-elemento¨ {RenderAtributos()} clase-elemento=¨{SeleccionarDeLaClase}¨ guardar-en¨{ParaGuardarEnPropiedad}¨>
                                          <option value=¨0¨>Seleccionar ...</option>
                                     </select>
                                 </div>";

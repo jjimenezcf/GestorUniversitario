@@ -8,6 +8,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : Elemento
     {
+
+        public ICollection<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
+
         public ZonaDeFiltro(ControlHtml mnt)
         : base(
           padre: mnt,
@@ -21,11 +24,9 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.ZonaDeFiltro;
             var b1 = new BloqueDeFitro<TElemento>(this, "General", new Dimension(1, 2));
             new BloqueDeFitro<TElemento>(this, "Común", new Dimension(1, 2));
-
             new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: FiltroPor.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
 
-        public ICollection<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
 
         public ControlFiltroHtml BuscarControl(string propiedad)
         {
@@ -41,7 +42,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public void AnadirBloque(BloqueDeFitro<TElemento> bloque)
         {
-            Bloques.Add(bloque);
+            if (!EstaElBloqueAnadido(bloque.Etiqueta))
+              Bloques.Add(bloque);
         }
 
         public BloqueDeFitro<TElemento> ObtenerBloque(string identificador)
@@ -53,6 +55,28 @@ namespace MVCSistemaDeElementos.Descriptores
             }
 
             throw new Exception($"El bloque {identificador} no está en la zona de filtrado");
+        }
+
+
+        public BloqueDeFitro<TElemento> ObtenerBloquePorEtiqueta(string etiqueta)
+        {
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
+            {
+                if (b.Etiqueta == etiqueta)
+                    return b;
+            }
+
+            throw new Exception($"El bloque con la {etiqueta} no está en la zona de filtrado");
+        }
+
+        private bool EstaElBloqueAnadido(string etiqueta)
+        {
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
+            {
+                if (b.Etiqueta == etiqueta)
+                    return true;
+            }
+            return false;
         }
 
         private string RenderFiltro()

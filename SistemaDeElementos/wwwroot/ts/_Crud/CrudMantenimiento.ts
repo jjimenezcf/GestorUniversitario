@@ -46,10 +46,10 @@
         InicializarSlectoresDeElementos() {
             let selectores: HTMLCollectionOf<HTMLSelectElement> = this.ZonaDeFiltro.getElementsByClassName('selector-elemento') as HTMLCollectionOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
-                let claseElemento: string = selectores[0].getAttribute(AtributoSelectorElemento.claseElemento);
+                let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
                 var controlador = this.Navegador.getAttribute(Atributo.controlador);
                 try {
-                    this.CargarSelectorElemento(controlador, claseElemento, selectores[0].getAttribute(Atributo.id));
+                    this.CargarSelectorElemento(controlador, claseElemento, selectores[i].getAttribute(Atributo.id));
                 }
                 catch (error) {
                     Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
