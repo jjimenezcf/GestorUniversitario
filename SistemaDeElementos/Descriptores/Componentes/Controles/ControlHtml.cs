@@ -17,8 +17,6 @@
         public Posicion Posicion { get; private set; }
         public string Tipo { get; protected set; }
 
-        public string TipoHtml => Tipo.ToString().ToLower();
-
         public ControlHtml Padre { get; set; }
 
         public ControlHtml(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, Posicion posicion)
@@ -43,7 +41,7 @@
 
         public virtual string RenderAtributos(string atributos = "")
         {
-            atributos += $"tipo=¨{TipoHtml}¨ propiedad=¨{Propiedad.ToLower()}¨ ";
+            atributos += $"tipo=¨{Tipo}¨ propiedad=¨{Propiedad.ToLower()}¨ ";
             return atributos;
         }
 

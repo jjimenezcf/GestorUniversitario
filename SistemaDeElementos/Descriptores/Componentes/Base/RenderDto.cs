@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gestor.Elementos.ModeloIu;
+using Gestor.Errores;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -15,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var fila = tabla.ObtenerFila(i);
             var htmlColumnas = "";
             var htmlFila =
-                    $@"<tr id=¨{fila.IdHtml}_{i}¨ name=¨tr_lbl_propiedad¨ class=¨tr-propiedad¨>
+                    $@"<tr id=¨{fila.IdHtml}¨ name=¨tr_lbl_propiedad¨ class=¨tr-propiedad¨>
                          htmlColumnas
                        </tr>
                       ";
@@ -31,8 +32,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderColumnaParaElDto(DescriptorDeTabla tabla, short i, short j, double anchoColumna)
         {
 
-            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}_ctrl¨ name=¨td_propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
-                         <div id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨div_propiedad¨ class=¨div-propiedad¨>
+            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td_propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
+                         <div id=¨{tabla.IdHtml}_{i}_{j}_celda¨ name=¨div_propiedad¨ class=¨div-propiedad¨>
                               {RenderControlesParaMapearElDto(tabla, i, j)}
                          </div>
                       </td>
@@ -95,19 +96,62 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmdDescriptorControl = $"<div id=¨{tabla.IdHtml}_{i}_{j}_crtl¨ name=¨crtl_propiedad¨ class=¨div-crtl-propiedad¨ style=¨width: {ancho}%¨ >" + Environment.NewLine +
-                                        $"   <input id=¨{tabla.IdHtml}_{descriptorControl.propiedad}¨ " + Environment.NewLine +
-                                        $"       propiedad=¨{descriptorControl.propiedad}¨ " + Environment.NewLine +
-                                        $"       class=¨propiedad propiedad-valida¨ " + Environment.NewLine + 
-                                        $"       obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ " + Environment.NewLine +
-                                        $"       type=¨text¨ " + Environment.NewLine +
-                                        $"       {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} " + Environment.NewLine +
-                                        $"       value=¨¨" + Environment.NewLine +
-                                        $"       placeholder =¨{atributos.Ayuda}¨" + Environment.NewLine +
-                                        $"       ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>" + Environment.NewLine +
-                                        $"   </input>" + Environment.NewLine +
-                                        $"</div>";
+            var htmdDescriptorControl = "";
+            switch(atributos.TipoDeControl) {
+                case TipoControl.Editor:
+                    htmdDescriptorControl = RenderEditorDto(tabla, descriptorControl, i, j, ancho);
+                    break;
+                case TipoControl.SelectorDeElemento:
+                    htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, i, j, ancho);
+                    break;
+                default: 
+                    GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
+                    break;
+            }
+
             return htmdDescriptorControl;
+        }
+
+        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
+
+            var htmlSelect = $@"<select id=¨{descriptorControl.IdHtml}¨ 
+                                        class=¨{TipoControl.SelectorDeElemento}¨
+                                        tipo=¨{atributos.TipoDeControl}¨ 
+                                        propiedad=¨{descriptorControl.propiedad}¨ 
+                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 
+                                        guardar-en¨{atributos.GuardarEn}¨>
+                                        <option value=¨0¨>Seleccionar ...</option>
+                                </select>";
+
+            return htmlContenedor.Replace("control", htmlSelect);
+
+        }
+
+        private static string RenderEditorDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "div-crtl-propiedad");
+            var htmlInput = $@"<input id=¨{descriptorControl.IdHtml}¨ 
+                                      propiedad=¨{descriptorControl.propiedad}¨ 
+                                      class=¨propiedad propiedad-valida¨ 
+                                      obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
+                                      type=¨text¨ 
+                                      {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} 
+                                      value=¨¨
+                                      placeholder =¨{atributos.Ayuda}¨
+                                      ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>
+                                </input>";
+            return htmlContenedor.Replace("control", htmlInput);
+        }
+
+        private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)
+        {
+            return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨crtl_propiedad¨ class=¨{cssClaseContenedor}¨ style=¨width: {ancho}%¨ >
+                        control
+                      </div>";
         }
     }
 }

@@ -14,6 +14,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal string propiedad => Descriptor.Name.ToLower();
 
+        public DescriptorDeFila Fila { get; set; }
+        public short NumeroColumna { get; set; }
+
+        internal string IdHtmlContenedor => $"{Fila.Tabla.IdHtml}_{Fila.NumeroFila}_{NumeroColumna}_crtl";
+        internal string IdHtml => $"{Fila.Tabla.IdHtml}_{propiedad}";
+
         internal IUPropiedadAttribute atributos => Elemento.ObtenerAtributos(Descriptor);
     }
 
@@ -23,6 +29,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public DescriptorDeFila Fila { get; private set; }
         public DescriptorDeTabla Tabla => Fila.Tabla;
+
+        public short NumeroColumna { get; private set; }
 
         public short NumeroDeControles { get; private set; } = 0;
         public short PosicionMaxima { get; private set; } = 0;
@@ -57,16 +65,17 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
-        public DescriptorDeColumna(DescriptorDeFila fila)
+        public DescriptorDeColumna(DescriptorDeFila fila, short indice)
         {
             Fila = fila;
+            NumeroColumna = indice;
         }
 
         public void AnadirControl(short pos, PropertyInfo descriptor)
         {
             if (!Controles.ContainsKey(pos))
             {
-                Controles[pos] = new DescriptorControl { Descriptor = descriptor };
+                Controles[pos] = new DescriptorControl { Descriptor = descriptor, Fila = Fila, NumeroColumna  = NumeroColumna };
 
                 if (PosicionMaxima < pos)
                     PosicionMaxima = pos;
@@ -92,13 +101,16 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         private Dictionary<short, DescriptorDeColumna> Columnas = new Dictionary<short, DescriptorDeColumna>();
 
-        public string IdHtml => $"{Tabla.IdHtml}_tr".ToLower();
+        public string IdHtml => $"{Tabla.IdHtml}_{NumeroFila}".ToLower();
+
+        public short NumeroFila { get; set; }
 
         public DescriptorDeTabla Tabla { get; private set; }
 
-        public DescriptorDeFila(DescriptorDeTabla descriptorDeTabla)
+        public DescriptorDeFila(DescriptorDeTabla descriptorDeTabla, short indice)
         {
             Tabla = descriptorDeTabla;
+            NumeroFila = indice;
         }
 
         public short NumeroDeColumnas { get; private set; } = 0;
@@ -107,10 +119,10 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             return Columnas.ContainsKey(indice);
         }
-
+        
         private void DefinirColumna(short indice)
         {
-            var celda = new DescriptorDeColumna(this);
+            var celda = new DescriptorDeColumna(this, indice);
             Columnas[indice] = celda;
             if (NumeroDeColumnas <= indice)
             {
@@ -136,7 +148,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public short NumeroDeColumnas { get; private set; } = 0;
 
-        public string IdHtml => $"id_table_{_Tipo.Name}_{ModoDeTrabajo}".ToLower();
+        public string IdHtml => $"table_{_Tipo.Name}_{ModoDeTrabajo}".ToLower();
 
         public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo)
         {
@@ -148,7 +160,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         private void DefinirFila(short indice)
         {
-            var fila = new DescriptorDeFila(this);
+            var fila = new DescriptorDeFila(this,indice);
             Filas[indice] = fila;
 
             if (NumeroDeFilas <= indice)
