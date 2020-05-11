@@ -281,61 +281,6 @@ namespace MVCSistemaDeElementos.Controllers
             return base.View(GestorDelCrud.Descriptor.Vista, GestorDelCrud.Descriptor);
         }
 
-        public override ViewResult View(string viewName, object model)
-        {
-            ViewBag.Crud = GestorDelCrud;
-            ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(viewName, model);
-        }
-
-
-        protected async Task<IActionResult> CrearObjeto(TElemento iuElemento)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    await GestorDeElementos.InsertarElementoAsync(iuElemento);
-                    return RedirectToAction(GestorDelCrud.Descriptor.Vista);
-                }
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("", $"No es posible crear el registro.");
-                GestorDeErrores.Enviar("Error al crear un usuario", e);
-            }
-            return View((GestorDelCrud.Creador.Vista, iuElemento));
-        }
-
-        protected async Task<IActionResult> ModificarObjeto(int id, TElemento elemento)
-        {
-            if (id != elemento.Id)
-            {
-                ModelState.AddModelError("", $"El registro pedido no se ha localizado."); ;
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await GestorDeElementos.ModificarElementoAsync(elemento);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GestorDeElementos.ExisteObjetoEnBd(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(GestorDelCrud.Descriptor.Vista);
-            }
-
-            return View(GestorDelCrud.Editor.Vista, elemento);
-        }
 
         protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
