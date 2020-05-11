@@ -7,6 +7,34 @@ using Utilidades;
 
 namespace Gestor.Elementos.ModeloIu
 {
+    public static class TipoControl
+    {
+        public const string Selector = "selector";
+        public const string SelectorDeElemento = "selector-de-elemento";
+        public const string Editor = "editor";
+        public const string Desplegable = "desplegable";
+        public const string GridModal = "grid-modal";
+        public const string TablaBloque = "tabla-bloque";
+        public const string Bloque = "bloque";
+        public const string ZonaDeOpciones = "zona-de-opciones";
+        public const string ZonaDeDatos = "zona-de-datos";
+        public const string ZonaDeFiltro = "zona-de-filtro";
+        public const string VistaCrud = "vista-crud";
+        public const string DescriptorDeCrud = "descriptor-crud";
+        public const string Opcion = "opcion";
+        public const string Label = "label";
+        public const string Referencia = "referencia";
+        public const string Lista = "lista";
+        public const string Fecha = "fecha";
+        public const string Plantilla = "plantilla";
+        public const string Mantenimiento = "mantenimiento";
+        public const string pnlCreador = "panel-creador";
+        public const string pnlEditor = "panel-editor";
+        public const string pnlBorrado = "panel-borrado";
+        public const string ZonaMenu = "zona-menu";
+        public const string Menu = "menu";
+    }
+
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion }
 
@@ -56,6 +84,12 @@ namespace Gestor.Elementos.ModeloIu
         }
         public int PorAnchoMnt { get; set; } = 0;
         public int PorAnchoSel { get; set; } = 0;
+
+        public string TipoDeControl { get; set; } = TipoControl.Editor;
+
+        public string SeleccionarDe { get; set; }
+
+        public string GuardarEn { get; set; }
 
         public bool EsVisible(ModoDeTrabajo modo)
         {
@@ -126,14 +160,13 @@ namespace Gestor.Elementos.ModeloIu
         public static IUPropiedadAttribute ObtenerAtributos(PropertyInfo propiedad)
         {
             var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute));
-            if (iEnumerableAtrb == null)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por no tener definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
+            if (iEnumerableAtrb == null || iEnumerableAtrb.ToList().Count == 0)
+                Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por no tener definidas los atributos {typeof(IUPropiedadAttribute)}");
 
-            var listaAtrb = iEnumerableAtrb.ToList();
-            if (listaAtrb.Count == 0)
-                return null;
+            var listaAtrb = iEnumerableAtrb.ToList();            
+
             if (listaAtrb.Count != 1)
-                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor de creación para el tipo {propiedad.DeclaringType} por tener mal definidas las etiquetas de {typeof(IUPropiedadAttribute)}");
+                Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por tener mas de una definición para {typeof(IUPropiedadAttribute)}");
 
             var atributos = (IUPropiedadAttribute)propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute)).ToList()[0];
             return atributos;

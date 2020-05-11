@@ -31,7 +31,7 @@
         }
 
         private InicializarSelectores() {
-            var selectores = this.ZonaDeFiltro.querySelectorAll('input[tipo="selector"]');
+            let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;;
             selectores.forEach((selector) => {
 
                 let idGridModal: string = selector.getAttribute(AtributoSelector.idGridModal);
@@ -44,7 +44,7 @@
         }
 
         InicializarSlectoresDeElementos() {
-            let selectores: HTMLCollectionOf<HTMLSelectElement> = this.ZonaDeFiltro.getElementsByClassName('selector-elemento') as HTMLCollectionOf<HTMLSelectElement>;
+            let selectores: NodeListOf<HTMLSelectElement> = this.ZonaDeFiltro.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
                 let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
                 var controlador = this.Navegador.getAttribute(Atributo.controlador);
@@ -182,7 +182,7 @@
             let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
 
             if (peticion.nombre === Ajax.EndPoint.LeerGridEnHtml) {
-                if (this.IdGrid === this.Grid.getAttribute(Literal.id)) {
+                if (this.IdGrid === this.Grid.getAttribute(Atributo.id)) {
                     this.Grid.innerHTML = resultado.html;
                     this.InicializarNavegador();
                     if (this.InfoSelector !== undefined && this.InfoSelector.Cantidad > 0) {

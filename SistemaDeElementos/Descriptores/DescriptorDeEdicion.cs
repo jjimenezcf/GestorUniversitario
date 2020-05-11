@@ -57,7 +57,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderInputId(DescriptorDeTabla tabla)
         {
             var htmdDescriptorControl = $"   <input id=¨{tabla.IdHtml}_idElemento¨ " + Environment.NewLine +
-                                        $"       propiedad-dto=¨id¨ " + Environment.NewLine +
+                                        $"       propiedad=¨{nameof(Elemento.Id).ToLower()}¨ " + Environment.NewLine +
                                         $"       class=¨propiedad propiedad-id¨ " + Environment.NewLine +
                                         $"       type=¨text¨ " + Environment.NewLine +
                                         $"       readonly" +

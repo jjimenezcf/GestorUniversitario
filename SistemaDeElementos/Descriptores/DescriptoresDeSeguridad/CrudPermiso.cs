@@ -33,17 +33,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                               etiqueta: "Clase",
                                               propiedad: nameof(PermisoDto.Clase) ,
                                               ayuda: "Seleccionar una clase",
-                                              posicion: new Posicion() { fila = 0, columna = 0 },
-                                              paraGuardarEn: nameof(PermisoDto.IdClase),
-                                              claseElemento: nameof(ClasePermisoDto));
+                                              posicion: new Posicion() { fila = 0, columna = 0 });
                 
                 new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
                                         etiqueta: "Tipo",
                                         propiedad: nameof(PermisoDto.Tipo),
                                         ayuda: "Seleccionar un tipo",
-                                        posicion: new Posicion() { fila = 0, columna = 1 },
-                                        paraGuardarEn: nameof(PermisoDto.IdTipo),
-                                        claseElemento: nameof(TipoPermisoDto));
+                                        posicion: new Posicion() { fila = 0, columna = 1 });
             }
 
             DefinirColumnasDelGrid();

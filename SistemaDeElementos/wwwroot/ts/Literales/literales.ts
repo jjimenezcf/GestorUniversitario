@@ -9,7 +9,6 @@ const Literal = {
 };
 
 const Atributo = {
-    propiedadDto: "propiedad-dto",
     propiedad: "propiedad",
     criterio: "criterio-de-filtro",
     zonaDeFiltro: "zonaDeFiltro",
@@ -61,7 +60,8 @@ const ClaseCss = {
     obligatorio: "obligatorio",
     ordenAscendente: "ordenada-ascendente",
     ordenDescendente: "ordenada-descendente",
-    sinOrden: "ordenada-sin-orden"
+    sinOrden: "ordenada-sin-orden",
+    selectorElemento: "selector-de-elemento"
 }
 
 const Ajax = {

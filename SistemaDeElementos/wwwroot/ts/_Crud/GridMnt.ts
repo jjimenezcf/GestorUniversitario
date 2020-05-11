@@ -307,7 +307,7 @@
                 for (var j = 0; j < len; j++) {
                     let id: number = this.InfoSelector.LeerId(i);
                     if ((<HTMLInputElement>celdasId[j]).value.Numero() == id) {
-                        var idCheck = celdasId[j].id.replace(`.${Literal.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                        var idCheck = celdasId[j].id.replace(`.${Atributo.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                         var check = document.getElementById(idCheck);
                         (<HTMLInputElement>check).checked = true;
                         break;

@@ -190,7 +190,7 @@
             let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
 
             if (peticion.nombre === Ajax.EndPoint.RecargarModalEnHtml) {
-                if (this.IdGrid === this.Grid.getAttribute(Literal.id)) {
+                if (this.IdGrid === this.Grid.getAttribute(Atributo.id)) {
                     this.Grid.innerHTML = resultado.html;
                     this.InicializarNavegador();
                     if (this.InfoSelector !== undefined && this.InfoSelector.Cantidad > 0) {

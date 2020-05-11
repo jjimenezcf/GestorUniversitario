@@ -148,7 +148,7 @@
             let controles: HTMLCollectionOf<Element> = controlPadre.getElementsByClassName(ClaseCss.propiedad);
             for (var i = 0; i < controles.length; i++) {
                 var control = controles[i] as HTMLElement;
-                var dto = control.getAttribute(Atributo.propiedadDto);
+                var dto = control.getAttribute(Atributo.propiedad);
                 if (dto === propiedadDto)
                     return control;
             }
@@ -175,7 +175,7 @@
         }
 
         protected MapearInput(input: HTMLInputElement, elementoJson: JSON): void {
-            var propiedadDto = input.getAttribute(Atributo.propiedadDto);
+            var propiedadDto = input.getAttribute(Atributo.propiedad);
             let valor: string = (input as HTMLInputElement).value;
             let obligatorio: string = input.getAttribute(Atributo.obligatorio);
 
