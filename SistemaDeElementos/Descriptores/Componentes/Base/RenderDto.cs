@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (z == columna.PosicionMaxima)
                     anchoControl = 100 - anchoTotal;
 
-                htmlControles = htmlControles + RenderDescriptorControlDto(tabla, descriptorControl, i, j, anchoControl);
+                htmlControles = htmlControles + RenderDescriptorControlDto(tabla, descriptorControl, anchoControl);
                 anchoTotal = anchoTotal + anchoControl;
 
                 anadirSeparador = true;
@@ -93,16 +93,16 @@ namespace MVCSistemaDeElementos.Descriptores
                       ";
         }
 
-        private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = "";
             switch(atributos.TipoDeControl) {
                 case TipoControl.Editor:
-                    htmdDescriptorControl = RenderEditorDto(tabla, descriptorControl, i, j, ancho);
+                    htmdDescriptorControl = RenderEditorDto(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.SelectorDeElemento:
-                    htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, i, j, ancho);
+                    htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
                     break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
@@ -112,7 +112,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmdDescriptorControl;
         }
 
-        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
@@ -130,7 +130,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         }
 
-        private static string RenderEditorDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        private static string RenderEditorDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "div-crtl-propiedad");

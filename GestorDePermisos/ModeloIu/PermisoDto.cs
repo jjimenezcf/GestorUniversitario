@@ -60,8 +60,8 @@ namespace Gestor.Elementos.Seguridad
             TipoDeControl = TipoControl.SelectorDeElemento,
             SeleccionarDe = nameof(TipoPermisoDto),
             GuardarEn = nameof(IdTipo),
-            Fila = 2,
-            Columna = 0,
+            Fila = 1,
+            Columna = 1,
             Ordenar = true,
             PorAnchoMnt = 15
             )
