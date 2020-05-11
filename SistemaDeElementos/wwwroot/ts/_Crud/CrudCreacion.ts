@@ -6,6 +6,9 @@
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
+        private get Controlador(): string {
+            return this.PanelDeCrear.getAttribute(Literal.controlador);
+        }
         constructor(crud: CrudMnt, idPanelCreacion: string) {
             super();
 
@@ -40,11 +43,7 @@
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeCrear);
-            this.InicializarValores();
-        }
-
-        protected InicializarValores(): void {
-
+            this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
         }
 
         public Crear() {
@@ -58,11 +57,26 @@
         }
 
         private CrearElemento(json: JSON) {
-            let controlador = this.PanelDeCrear.getAttribute(Literal.controlador);
-            let url: string = `/${controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
             let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Crear, "{}")
             this.PeticionSincrona(req, url, peticion);
+        }
+
+        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
+
+            let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
+
+            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
+                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
+                let idSelector = datos.IdSelector;
+                let selector = new SelectorDeElementos(idSelector);
+                for (var i = 0; i < resultado.datos.length; i++) {
+                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
+                }
+            }
+
+            return resultado;
         }
     }
 

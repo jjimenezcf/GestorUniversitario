@@ -117,10 +117,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
 
-            var htmlSelect = $@"<select id=¨{descriptorControl.IdHtml}¨ 
-                                        class=¨{TipoControl.SelectorDeElemento}¨
-                                        tipo=¨{atributos.TipoDeControl}¨ 
-                                        propiedad=¨{descriptorControl.propiedad}¨ 
+            var htmlSelect = $@"<select {RenderAtributosComunes(tabla, descriptorControl)}
                                         clase-elemento=¨{atributos.SeleccionarDe}¨ 
                                         guardar-en¨{atributos.GuardarEn}¨>
                                         <option value=¨0¨>Seleccionar ...</option>
@@ -133,13 +130,9 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderEditorDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "div-crtl-propiedad");
-            var htmlInput = $@"<input id=¨{descriptorControl.IdHtml}¨ 
-                                      propiedad=¨{descriptorControl.propiedad}¨ 
-                                      class=¨propiedad propiedad-valida¨ 
-                                      obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
+            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
                                       type=¨text¨ 
-                                      {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} 
                                       value=¨¨
                                       placeholder =¨{atributos.Ayuda}¨
                                       ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>
@@ -152,6 +145,18 @@ namespace MVCSistemaDeElementos.Descriptores
             return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨crtl_propiedad¨ class=¨{cssClaseContenedor}¨ style=¨width: {ancho}%¨ >
                         control
                       </div>";
+        }
+
+        private static string RenderAtributosComunes(DescriptorDeTabla tabla, DescriptorControl descriptorControl)
+        {
+            var atributos = descriptorControl.atributos;
+            var atributosHtml = $@"id=¨{descriptorControl.IdHtml}¨ 
+                                   propiedad=¨{descriptorControl.propiedad}¨ 
+                                   class=¨propiedad propiedad-valida¨ 
+                                   tipo=¨{atributos.TipoDeControl}¨ 
+                                   obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
+                                   {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} ";
+            return atributosHtml;
         }
     }
 }

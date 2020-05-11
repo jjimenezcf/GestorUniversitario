@@ -103,6 +103,10 @@
             return this.ObtenerNavegador();
         }
 
+        protected get Controlador(): string {
+            return this.Navegador.getAttribute(Atributo.controlador);
+        }
+
         constructor(idGrid: string) {
             super();
             this.IdGrid = idGrid;

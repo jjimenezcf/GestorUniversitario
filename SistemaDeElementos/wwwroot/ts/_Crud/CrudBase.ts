@@ -64,6 +64,19 @@
 
         //funciones de ayuda para la herencia
 
+        protected InicializarSlectoresDeElementos(panel: HTMLDivElement, controlador: string) {
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < selectores.length; i++) {
+                let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
+                try {
+                    this.CargarSelectorElemento(controlador, claseElemento, selectores[i].getAttribute(Atributo.id));
+                }
+                catch (error) {
+                    Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
+                }
+            }
+        }
+
         protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
 
             this.BlanquearControlesDeIU(panelCerrar);

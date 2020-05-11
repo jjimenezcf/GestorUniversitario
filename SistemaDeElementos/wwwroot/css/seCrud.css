@@ -125,41 +125,6 @@ a {
 .div-separardor-propiedad {
 }
 
-.div-crtl-propiedad {
-}
-
-.div-pie-propiedad {
-    display: block;
-    float: right;
-    margin-right: 10px;
-    width: 100px;
-}
-
-.propiedad {
-    display: block;
-    text-align: left;
-    border: hidden;
-    width: 100%
-}
-
-    .propiedad:read-only {
-        background: #a5a1a1
-    }
-
-.propiedad-id {
-    border: groove;
-    text-align: right;
-    border-radius: 10px
-}
-
-.propiedad-valida {
-    background: #e9d4d4;
-}
-
-.propiedad-no-valida {
-    background: #f58eb1;
-}
-
 .pie-grid {
     align-content: center;
     margin-top: 10px;
@@ -330,6 +295,38 @@ a {
         background-color: #ffffff;
     }
 
+
+.contenedor-editor {
+    position: relative;
+    border-color: aqua;
+    border-width: 2px;
+    width: 100%;
+}
+
+    .contenedor-editor > input {
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        text-align: left;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+        .contenedor-editor > input.propiedad-no-valida {
+            background: #f58eb1;
+        }
+
+        .contenedor-editor > input.propiedad-valida {
+            background: #dcd6d6;
+        }
+
 .contenedor-selector {
     position: relative;
     border-color: aqua;
@@ -366,4 +363,36 @@ a {
         border-radius: .25rem;
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
+
+    .contenedor-selector > select.propiedad-no-valida {
+        background: #f58eb1;
+    }
+
+    .contenedor-selector > select.propiedad-valida {
+        background: #dcd6d6;
+    }
+
+.contenedor-id {
+    float: right;
+    padding-top: 15px;
+    padding-right: 10px;
+    width: 100px;
+}
+
+    .contenedor-id > .propiedad-id {
+        border: 1px solid #ced4da;
+        text-align: right;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+        .contenedor-id > .propiedad-id.propiedad:read-only {
+            background: #a5a1a1
+        }
+
+/*.propiedad {
+}
+    .propiedad:read-only {
+    }*/
+
 

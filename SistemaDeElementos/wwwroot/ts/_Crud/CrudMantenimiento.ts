@@ -23,7 +23,7 @@
             this.InicializarInformacionPaneles(idPanelMnt);
             this.InicializarNavegador();
             this.InicializarSelectores();
-            this.InicializarSlectoresDeElementos();
+            this.InicializarSlectoresDeElementos(this.ZonaDeFiltro, this.Controlador);
         }
 
         private InicializarInformacionPaneles(idPanelMnt: string) {
@@ -43,21 +43,7 @@
             });
         }
 
-        InicializarSlectoresDeElementos() {
-            let selectores: NodeListOf<HTMLSelectElement> = this.ZonaDeFiltro.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
-            for (let i = 0; i < selectores.length; i++) {
-                let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
-                var controlador = this.Navegador.getAttribute(Atributo.controlador);
-                try {
-                    this.CargarSelectorElemento(controlador, claseElemento, selectores[i].getAttribute(Atributo.id));
-                }
-                catch (error) {
-                    Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
-                }
-            }
-        }
-
-        public ObtenerModal(idModal: string): ModalSeleccion {
+           public ObtenerModal(idModal: string): ModalSeleccion {
             for (let i: number = 0; i < this.Modales.length; i++) {
                 let modal: ModalSeleccion = this.Modales[i];
                 if (modal.IdModal === idModal)
@@ -179,9 +165,11 @@
         }
 
         protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
-            let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
+
+            var resultado = undefined
 
             if (peticion.nombre === Ajax.EndPoint.LeerGridEnHtml) {
+                let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
                 if (this.IdGrid === this.Grid.getAttribute(Atributo.id)) {
                     this.Grid.innerHTML = resultado.html;
                     this.InicializarNavegador();
@@ -193,6 +181,7 @@
             }
 
             if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
+                let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
                 let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
                 let idSelector = datos.IdSelector;
                 let selector = new SelectorDeElementos(idSelector);

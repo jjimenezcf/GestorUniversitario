@@ -47,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmContenedorPie =
                    $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-pie-propiedad¨>
+                   <Div id=¨{IdHtml}¨ class=¨contenedor-id¨>
                      {RenderInputId(tabla)}
                   </Div>
                 ";
@@ -56,13 +56,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderInputId(DescriptorDeTabla tabla)
         {
-            var htmdDescriptorControl = $"   <input id=¨{tabla.IdHtml}_idElemento¨ " + Environment.NewLine +
-                                        $"       propiedad=¨{nameof(Elemento.Id).ToLower()}¨ " + Environment.NewLine +
-                                        $"       class=¨propiedad propiedad-id¨ " + Environment.NewLine +
-                                        $"       type=¨text¨ " + Environment.NewLine +
-                                        $"       readonly" +
-                                        $"       value=¨¨" + Environment.NewLine +
-                                        $"   </input>" + Environment.NewLine;
+            var htmdDescriptorControl = $@"<input id=¨{tabla.IdHtml}_idElemento¨ 
+                                             propiedad=¨{nameof(Elemento.Id).ToLower()}¨ 
+                                             class=¨propiedad propiedad-id¨ 
+                                             type=¨text¨ 
+                                             readonly
+                                             value=¨¨>
+                                           </input >";
             return htmdDescriptorControl;
         }
 

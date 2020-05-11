@@ -6,6 +6,10 @@
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
+        private get Controlador(): string {
+            return this.PanelDeEditar.getAttribute(Literal.controlador);
+        }
+
         constructor(crud: CrudMnt, idPanelEdicion: string) {
             super();
 
@@ -39,6 +43,7 @@
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeEditar);
+            this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
             this.InicializarValores(infSel);
         }
 
@@ -63,11 +68,10 @@
         private LeerElemento(id: number) {
             let idJson: JSON = JSON.parse(`[${id}]`);
 
-            let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
-            let url: string = `/${controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
 
             let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerPorIds, "{}")
+            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerPorIds, "{}");
             this.PeticionSincrona(req, url, peticion);
         }
 
@@ -85,8 +89,22 @@
         }
 
         protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
-            let resultado = super.DespuesDeLaPeticion(req, peticion);
-            this.MapearElemento(this.PanelDeEditar, resultado.datos);
+
+            let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
+
+            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
+                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
+                let idSelector = datos.IdSelector;
+                let selector = new SelectorDeElementos(idSelector);
+                for (var i = 0; i < resultado.datos.length; i++) {
+                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
+                }
+            }
+
+            if (peticion.nombre === Ajax.EndPoint.LeerPorIds) {
+                this.MapearElemento(this.PanelDeEditar, resultado.datos);
+            }
+
             return resultado;
         }
 
