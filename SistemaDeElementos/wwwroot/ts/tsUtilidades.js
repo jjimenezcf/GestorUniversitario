@@ -62,12 +62,12 @@ String.prototype.Numero = function () {
 };
 class ClausulaDeFiltrado {
     constructor(propiedad, criterio, valor) {
-        this.Propiedad = propiedad;
-        this.Criterio = criterio;
-        this.Valor = valor;
+        this.propiedad = propiedad;
+        this.criterio = criterio;
+        this.valor = valor;
     }
     EsVacia() {
-        return this.Propiedad.NoDefinida() || this.Valor.NoDefinida() || this.Criterio.NoDefinida();
+        return this.propiedad.NoDefinida() || this.valor.NoDefinida() || this.criterio.NoDefinida();
     }
 }
 class ResultadoJson {

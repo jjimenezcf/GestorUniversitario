@@ -132,9 +132,7 @@
         // funciones para mapear un elemento Json a los controles de un panel
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
-
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
-
         }
 
         private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
@@ -151,19 +149,51 @@
         }
 
         private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
-            var control = this.BuscarControl(panel, propiedad);
-            if (control instanceof HTMLInputElement)
-                control.value = valor;
+            this.MapearPropiedaAlEditor(panel, propiedad, valor);
+            this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor);
+        }
+
+        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any) {
+            let editor: HTMLInputElement = this.BuscarInput(panel, propiedad);
+
+            if (editor === null)
+                return;
+
+            editor.value = valor;
+        }
+
+        private MapearPropiedadAlSelectorDeElemento(panel: HTMLDivElement, propiedad: string, valor: any) {
+            let select: HTMLSelectElement = this.BuscarSelect(panel, propiedad);
+
+            if (select === null)
+                return;
+
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].label === valor) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
         }
 
 
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
-        protected BuscarControl(controlPadre: HTMLDivElement, propiedadDto: string): HTMLElement {
+        protected BuscarInput(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+            let input: HTMLCollectionOf<HTMLInputElement> = controlPadre.getElementsByTagName("input") as HTMLCollectionOf<HTMLInputElement>;
+            for (var i = 0; i < input.length; i++) {
+                var control = input[i] as HTMLInputElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto)
+                    return control;
+            }
+            return null;
+        }
 
-            let controles: HTMLCollectionOf<Element> = controlPadre.getElementsByClassName(ClaseCss.propiedad);
-            for (var i = 0; i < controles.length; i++) {
-                var control = controles[i] as HTMLElement;
+        protected BuscarSelect(controlPadre: HTMLDivElement, propiedadDto: string): HTMLSelectElement {
+            let select: HTMLCollectionOf<HTMLSelectElement> = controlPadre.getElementsByTagName("select") as HTMLCollectionOf<HTMLSelectElement>;
+            for (var i = 0; i < select.length; i++) {
+                var control = select[i] as HTMLSelectElement;
                 var dto = control.getAttribute(Atributo.propiedad);
                 if (dto === propiedadDto)
                     return control;

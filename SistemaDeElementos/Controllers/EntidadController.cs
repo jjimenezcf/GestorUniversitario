@@ -104,8 +104,15 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
-                r.Datos = GestorDeElementos.LeerElementoPorId(listaIds[0]);
+                var elementos = Leer(0, -1, idsJson, null).ToList();
+                
+                if (elementos.Count == 0)
+                    throw new Exception($"No se ha localizado el registro con el filtro {idsJson}");
+
+                if (elementos.Count > 1)
+                    throw new Exception($"Hay más de un registro para el filtro {idsJson}");
+
+                r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = $"se han leido 1 {(1>1? "registros" : "registro")}";
             }

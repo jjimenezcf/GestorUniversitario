@@ -87,18 +87,18 @@ String.prototype.Numero = function () {
 
 
 class ClausulaDeFiltrado {
-    Propiedad: string;
-    Criterio: string;
-    Valor: string;
+    propiedad: string;
+    criterio: string;
+    valor: string;
 
     constructor(propiedad: string, criterio: string, valor: string) {
-        this.Propiedad = propiedad;
-        this.Criterio = criterio;
-        this.Valor = valor;
+        this.propiedad = propiedad;
+        this.criterio = criterio;
+        this.valor = valor;
     }
 
     EsVacia(): boolean {
-        return this.Propiedad.NoDefinida() || this.Valor.NoDefinida() || this.Criterio.NoDefinida();
+        return this.propiedad.NoDefinida() || this.valor.NoDefinida() || this.criterio.NoDefinida();
     }
 }
 

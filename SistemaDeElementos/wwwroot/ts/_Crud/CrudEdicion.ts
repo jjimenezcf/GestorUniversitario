@@ -55,7 +55,7 @@
         protected InicializarValores(infSel: InfoSelector) {
             let id: number = infSel.Seleccionados[0] as number;
 
-            let control: HTMLElement = this.BuscarControl(this.PanelDeEditar, Literal.id);
+            let control: HTMLElement = this.BuscarInput(this.PanelDeEditar, Literal.id);
             if (control == null) {
                 Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
                 return;
@@ -66,13 +66,18 @@
         }
 
         private LeerElemento(id: number) {
-            let idJson: JSON = JSON.parse(`[${id}]`);
-
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
-
+            let idJson: string = this.DefinirFiltroPorId(id);
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${idJson}`;
             let req: XMLHttpRequest = new XMLHttpRequest();
             let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerPorIds, "{}");
             this.PeticionSincrona(req, url, peticion);
+        }
+
+        private DefinirFiltroPorId(id: number): string {
+            var clausulas = new Array<ClausulaDeFiltrado>();
+            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado('id','igual', `${id}`);
+            clausulas.push(clausula);
+            return JSON.stringify(clausulas);
         }
 
         protected Modificar() {
@@ -102,7 +107,7 @@
             }
 
             if (peticion.nombre === Ajax.EndPoint.LeerPorIds) {
-                this.MapearElementoLeido(this.PanelDeEditar, resultado.datos);
+                    this.MapearElementoLeido(this.PanelDeEditar, resultado.datos[0]);
             }
 
             return resultado;
