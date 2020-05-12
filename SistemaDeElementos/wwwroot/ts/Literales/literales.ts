@@ -42,7 +42,8 @@ const AtributoSelector = {
 }
 
 const AtributoSelectorElemento = {
-    claseElemento: 'clase-elemento'
+    claseElemento: 'clase-elemento',
+    guardarEn:'guardar-en'
 }
 
 const TagName = {

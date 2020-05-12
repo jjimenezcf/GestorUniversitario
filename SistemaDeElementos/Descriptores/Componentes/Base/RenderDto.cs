@@ -119,7 +119,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmlSelect = $@"<select {RenderAtributosComunes(tabla, descriptorControl)}
                                         clase-elemento=¨{atributos.SeleccionarDe}¨ 
-                                        guardar-en¨{atributos.GuardarEn}¨>
+                                        guardar-en=¨{atributos.GuardarEn}¨>
                                         <option value=¨0¨>Seleccionar ...</option>
                                 </select>";
 
@@ -152,7 +152,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             var atributosHtml = $@"id=¨{descriptorControl.IdHtml}¨ 
                                    propiedad=¨{descriptorControl.propiedad}¨ 
-                                   class=¨propiedad propiedad-valida¨ 
+                                   class=¨propiedad-valida¨ 
                                    tipo=¨{atributos.TipoDeControl}¨ 
                                    obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
                                    {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} ";

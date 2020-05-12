@@ -102,7 +102,7 @@
             }
 
             if (peticion.nombre === Ajax.EndPoint.LeerPorIds) {
-                this.MapearElemento(this.PanelDeEditar, resultado.datos);
+                this.MapearElementoLeido(this.PanelDeEditar, resultado.datos);
             }
 
             return resultado;

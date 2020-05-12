@@ -67,9 +67,13 @@
         protected InicializarSlectoresDeElementos(panel: HTMLDivElement, controlador: string) {
             let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
+                if (selectores[i].getAttribute("ya-cargada") === "S")
+                    continue;
+
                 let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
                 try {
                     this.CargarSelectorElemento(controlador, claseElemento, selectores[i].getAttribute(Atributo.id));
+                    selectores[i].setAttribute("ya-cargada", "S");
                 }
                 catch (error) {
                     Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
@@ -127,7 +131,7 @@
 
         // funciones para mapear un elemento Json a los controles de un panel
 
-        protected MapearElemento(panel: HTMLDivElement, elementoJson: JSON) {
+        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
 
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
 
@@ -150,7 +154,6 @@
             var control = this.BuscarControl(panel, propiedad);
             if (control instanceof HTMLInputElement)
                 control.value = valor;
-
         }
 
 
@@ -175,19 +178,43 @@
         protected MapearControlesDeIU(panel: HTMLDivElement): JSON {
             let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel);
 
-            let controles: HTMLCollectionOf<Element> = panel.getElementsByClassName("propiedad");
-            for (var i = 0; i < controles.length; i++) {
-                var control = controles[i] as HTMLElement;
-                if (control instanceof HTMLInputElement) {
-                    this.MapearInput(control, elementoJson);
-                }
-            }
-
+            this.MapearSelectoresDeElementos(panel, elementoJson);
+            this.MapearEditores(panel, elementoJson);
 
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
 
-        protected MapearInput(input: HTMLInputElement, elementoJson: JSON): void {
+        protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < selectores.length; i++) {
+                this.MapearSelectorDeElementos(selectores[i], elementoJson);
+            }
+        }
+
+        protected MapearEditores(panel: HTMLDivElement, elementoJson: JSON): void {
+            let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < editores.length; i++) {
+                this.MapearEditor(editores[i], elementoJson);
+            }
+        }
+
+        private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
+            let propiedadDto = selector.getAttribute(Atributo.propiedad);
+            let guardarEn: string = selector.getAttribute(AtributoSelectorElemento.guardarEn);
+            let obligatorio: string = selector.getAttribute(Atributo.obligatorio);
+
+            if (obligatorio === "S" && Number(selector.value) === 0) {
+                selector.classList.remove(ClaseCss.crtlValido);
+                selector.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
+            }
+
+            selector.classList.remove(ClaseCss.crtlNoValido);
+            selector.classList.add(ClaseCss.crtlValido);
+            elementoJson[guardarEn] = selector.value;
+        }
+
+        private MapearEditor(input: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = input.getAttribute(Atributo.propiedad);
             let valor: string = (input as HTMLInputElement).value;
             let obligatorio: string = input.getAttribute(Atributo.obligatorio);
