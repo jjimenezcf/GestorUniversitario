@@ -14,7 +14,7 @@ namespace Gestor.Elementos.Seguridad
         [Column("IDPUESTO", TypeName = "INT")]
         public int idPuesto { get; set; }
 
-        public rRol Rol { get; set; }
+        public RolDtm Rol { get; set; }
         public rPuesto Puesto { get; set; }
     }
 

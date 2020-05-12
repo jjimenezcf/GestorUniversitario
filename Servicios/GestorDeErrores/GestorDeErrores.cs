@@ -4,6 +4,8 @@ namespace Gestor.Errores
 {
     public class GestorDeErrores
     {
+        public enum Datos {Mostrar}
+
         public GestorDeErrores()
         {
         }
@@ -52,6 +54,23 @@ namespace Gestor.Errores
         public void LanzarExcepcion(string error)
         {
             throw new Exception(error);
+        }
+
+        public static Exception MostrarExcepcion(string excepcioMostrar)
+        {
+            var exc = new Exception(excepcioMostrar);
+            exc.Data[Datos.Mostrar] = true;
+            return exc;
+        }
+
+        public bool Mostrar(Exception excepcion)
+        {
+            if (excepcion.Data.Contains(Datos.Mostrar))
+            {
+                return (bool)excepcion.Data[Datos.Mostrar];
+            }
+
+            return false;
         }
     }
 }

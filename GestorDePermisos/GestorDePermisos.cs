@@ -5,12 +5,13 @@ using Utilidades;
 using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Gestor.Errores;
 
 namespace Gestor.Elementos.Seguridad
 {
     public static partial class Joins
     {
-        public static IQueryable<T> JoinConClaseDePermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : PermisoDtm
+        public static IQueryable<T> AplicarJoinsDePermisos<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : PermisoDtm
         {
             foreach (ClausulaDeJoin join in joins)
             {
@@ -69,20 +70,20 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorClase<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-            if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Clase).ToLower())
-            {
-                registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
-            }
+                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Clase).ToLower())
+                {
+                    registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
+                }
 
             return registros;
         }
         public static IQueryable<T> FiltroPorTipo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-            if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
-            {
-                registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
-            }
+                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
+                {
+                    registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
+                }
 
             return registros;
         }
@@ -144,8 +145,6 @@ namespace Gestor.Elementos.Seguridad
                 .FiltroPorTipo(filtros)
                 .FiltroPorClase(filtros);
         }
-
-
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
@@ -160,22 +159,39 @@ namespace Gestor.Elementos.Seguridad
         }
         protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            return registros.JoinConClaseDePermiso(joins, parametros);
+            return registros.AplicarJoinsDePermisos(joins, parametros);
         }
-
         public List<ClasePermisoDto> LeerClases()
         {
             var clases = Contexto.ClasesDePermisos.AsNoTracking().ToList();
             var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
             return gestor.MapearElementos(clases).ToList();
         }
-
-
         public List<TipoPermisoDto> LeerTipos()
         {
             var tipos = Contexto.TiposDePermisos.AsNoTracking().ToList();
             var gestor = new GestorDeTipoPermiso(Contexto, Mapeador);
             return gestor.MapearElementos(tipos).ToList();
+        }
+
+        protected override void AntesEliminarFila(PermisoDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesEliminarFila(elemento, opciones);
+
+            var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
+            var filtro = new ClausulaDeFiltrado { Propiedad = nameof(RolPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
+            var filtros = new List<ClausulaDeFiltrado>();
+            filtros.Add(filtro);
+            var r = gestor.LeerRegistros(0, 1, filtros);
+            if (r.Count > 0)
+            {
+                var roles = "";
+                foreach (var r1 in r)
+                    roles = $"{(roles == "" ? "" : $"{roles},")} {r1.Rol.Nombre}";
+
+                Exception exc = GestorDeErrores.MostrarExcepcion(excepcioMostrar: $"El permiso está incluido en {(r.Count == 1 ? "el rol" : "los roles") }: '{roles}'");
+                throw exc;
+            }
         }
     }
 

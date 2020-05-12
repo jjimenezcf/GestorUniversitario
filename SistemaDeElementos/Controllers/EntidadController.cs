@@ -145,7 +145,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido eliminar";
+                r.Mensaje = GestorDeErrores.Mostrar(excepcion: e) ? e.Message : "No se ha podido eliminar";
             }
 
             return new JsonResult(r);

@@ -25,7 +25,7 @@ namespace Gestor.Elementos.Seguridad
 
         public virtual TipoPermisoDtm Tipo { get; set; }
 
-        public ICollection<rRolPermiso> Roles { get; set; }
+        public ICollection<RolPermisoDtm> Roles { get; set; }
         public ICollection<PerUsuarioDtm> Usuarios { get; set; }
     }
 
