@@ -54,10 +54,17 @@
                 Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
             }
         }
-
     }
 
     export class CrudBase {
+
+        private modoTrabajo: string;
+        protected get ModoTrabajo(): string {
+            return this.modoTrabajo;
+        }
+        protected set ModoTrabajo(modo: string) {
+            this.modoTrabajo=modo;
+        }
 
         constructor() {
         }
@@ -202,7 +209,15 @@
         }
 
         protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {
-            return JSON.parse(`{"${Literal.id}":"0"}`);
+            if (this.ModoTrabajo === ModoTrabajo.creando)
+                return JSON.parse(`{"${Literal.id}":"0"}`);
+
+            if (this.ModoTrabajo === ModoTrabajo.editando) {
+                let input: HTMLInputElement = this.BuscarInput(panel, Literal.id);
+                if (Number(input.value) <= 0)
+                    throw new Error(`El valor del id ${Number(input.value)} debe ser mayor a 0`);
+                return JSON.parse(`{"${Literal.id}":"${Number(input.value)}"}`);
+            }
         }
 
         protected MapearControlesDeIU(panel: HTMLDivElement): JSON {
@@ -361,7 +376,7 @@
             let resultado: ResultadoJson = JSON.parse(req.response);
             console.error(resultado.consola);
             if (!EsNula(resultado.mensaje))
-                resultado.mensaje = `Error al ejecutar la peticion'${peticion}. ${resultado.mensaje}'`;
+                resultado.mensaje = `Error al ejecutar la peticion'${peticion.nombre}. ${resultado.mensaje}'`;
 
             return resultado.mensaje;
 

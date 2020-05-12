@@ -414,14 +414,20 @@ namespace Gestor.Elementos
 
         protected virtual void AntesEliminarFila(TElemento elemento, ParametrosDeNegocio opciones)
         {
+            if (elemento.Id == 0)
+                GestorDeErrores.Emitir($"No puede eliminar un elemento {typeof(TElemento).Name} con id 0");
         }
 
         protected virtual void AntesModificarFila(TElemento elemento, ParametrosDeNegocio opciones)
         {
+            if (elemento.Id == 0)
+                GestorDeErrores.Emitir($"No puede modificar un elemento {typeof(TElemento).Name} con id 0");
         }
 
         protected virtual void AntesNuevaFila(TElemento elemento, ParametrosDeNegocio opciones)
         {
+            if (elemento.Id > 0)
+                GestorDeErrores.Emitir($"No puede crear un elemento {typeof(TElemento).Name} con id {elemento.Id}");
         }
 
         public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, ParametrosDeMapeo parametros = null)
@@ -478,6 +484,8 @@ namespace Gestor.Elementos
         public TElemento LeerElementoPorId(int id)
         {
             var elementoDeBd = LeerRegistroPorId(id);
+            if (elementoDeBd == null)
+                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}");
             return MapearElemento(elementoDeBd);
         }
 

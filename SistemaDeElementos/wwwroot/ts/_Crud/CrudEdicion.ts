@@ -41,6 +41,7 @@
         }
 
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
+            this.ModoTrabajo = ModoTrabajo.editando;
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeEditar);
             this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
@@ -49,6 +50,7 @@
 
         protected CerrarEdicion() {
             this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CrudDeMnt.Buscar(0);
         }
 

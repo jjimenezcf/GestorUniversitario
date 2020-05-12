@@ -61,11 +61,13 @@
         }
 
         public CerrarModalDeBorrado() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CerrarModal(this.idModalBorrar);
         }
 
 
         private AbrirModalDeBorrar() {
+            this.ModoTrabajo = ModoTrabajo.borrando;
             var ventana = document.getElementById(this.idModalBorrar);
             ventana.style.display = 'block';
         }
@@ -188,6 +190,10 @@
                 for (var i = 0; i < resultado.datos.length; i++) {
                     selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
                 }
+            }
+
+            if (peticion.nombre === Ajax.EndPoint.Borrar) {
+                this.InfoSelector.QuitarTodos();
             }
 
             return resultado;

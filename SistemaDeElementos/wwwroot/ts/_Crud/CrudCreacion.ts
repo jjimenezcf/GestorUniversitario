@@ -41,6 +41,7 @@
         }
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {
+            this.ModoTrabajo = ModoTrabajo.creando;
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeCrear);
             this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
@@ -53,6 +54,7 @@
 
         public CerrarCreacion() {
             this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CrudDeMnt.Buscar(0);
         }
 
