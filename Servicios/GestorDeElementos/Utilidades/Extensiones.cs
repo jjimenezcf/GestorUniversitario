@@ -13,7 +13,7 @@ namespace GestorDeElementos.Utilidades
             var parametros = "";
             foreach (DbParameter dbParametro in dbParametros)
             {
-                parametros = $"{dbParametro.ParameterName}={dbParametro.ParsearValorParametro()}{Environment.NewLine}";
+                parametros = $"{parametros}{dbParametro.ParameterName}={dbParametro.ParsearValorParametro()}{Environment.NewLine}";
             }
 
             return parametros;

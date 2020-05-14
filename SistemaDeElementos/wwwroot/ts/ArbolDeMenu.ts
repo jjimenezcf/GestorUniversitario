@@ -1,4 +1,4 @@
-﻿module Menu {
+﻿module ArbolDeMenu {
 
     export function MostrarMenu() {
         let idProductoHtml: HTMLElement = document.getElementById('id_menu');
@@ -132,6 +132,7 @@
         menuHtml.compact = true;
         menuHtml.setAttribute("menu-plegado", "true");
     }
+
 }
 
 

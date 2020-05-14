@@ -11,6 +11,7 @@
     <Content Remove="wwwroot\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
+    <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Permisos.ts" />
     <Content Remove="wwwroot\ts\tsSelectores.js" />
     <Content Remove="wwwroot\ts\tsSelectores.js.map" />
@@ -83,7 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Update="wwwroot\ts\Seguridad\Usuarios.ts">
+    <TypeScriptCompile Update="wwwroot\ts\Entorno\Usuarios.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

@@ -43,7 +43,7 @@
             });
         }
 
-           public ObtenerModal(idModal: string): ModalSeleccion {
+        public ObtenerModal(idModal: string): ModalSeleccion {
             for (let i: number = 0; i < this.Modales.length; i++) {
                 let modal: ModalSeleccion = this.Modales[i];
                 if (modal.IdModal === idModal)

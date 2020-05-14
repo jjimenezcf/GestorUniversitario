@@ -30,8 +30,6 @@ namespace MVCSistemaDeElementos.Descriptores
             
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
-            DefinirColumnasDelGrid();
-
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
         }
 
@@ -41,9 +39,9 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/Usuarios.js¨></script>
+                   $@"<script src=¨../../ts/Entorno/Usuarios.js¨></script>
                       <script>
-                         Crud.crudMnt = new Seguridad.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         Crud.crudMnt = new Entorno.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                       </script>
                     ";
             return render.Render();

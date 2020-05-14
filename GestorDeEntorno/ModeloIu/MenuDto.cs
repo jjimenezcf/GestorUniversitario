@@ -4,20 +4,76 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
+    [IUDto(ClaseTypeScriptDeCreacion = "Menu.CrudCreacionUMenu"
+         , ClaseTypeScriptDeEdicion = "Menu.CrudEdicionMenu"
+         , AnchoEtiqueta = 20
+         , AnchoSeparador = 5)]
     public class MenuDto : Elemento
     {
-        public  MenuDto Padre { get; set; }
+        [IUPropiedad(
+            Etiqueta = "Id del menú padre",
+            Visible = false
+            )
+        ]
+        public int? idPadre { get; set; }
 
+        [IUPropiedad(
+            Etiqueta = "Padre",
+            Ayuda = "Indique el menú padre",
+            TipoDeControl = TipoControl.SelectorDeElemento,
+            SeleccionarDe = nameof(MenuDto),
+            GuardarEn = nameof(idPadre),
+            Fila = 0,
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 15
+            )
+        ]
+        public  string Padre { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Menu",
+            Ayuda = "Nombre del menú",
+            Tipo = typeof(string),
+            Fila = 1,
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 15
+            )
+        ]
         public string Nombre { get; set; }
 
+
+        [IUPropiedad(
+            Etiqueta = "Icono",
+            Ayuda = "icono de presentación",
+            Tipo = typeof(string),
+            Fila = 2,
+            Columna = 0,
+            Ordenar = true,
+            PorAnchoMnt = 15
+            )
+        ]
         public string Icono { get; set; }
 
         //public string Descripcion { get; set; }
 
+        [IUPropiedad(
+            Visible = false
+            )
+        ]
         public List<MenuDto> Submenus { get; set; }
 
+        [IUPropiedad(
+            Visible = false
+            )
+        ]
         public VistaMvcDto VistaMvc { get; set; }
 
+        [IUPropiedad(
+            Visible = false
+            )
+        ]
         public bool Activo { get; set; }
     }
 

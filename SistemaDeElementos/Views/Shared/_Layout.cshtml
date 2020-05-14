@@ -15,7 +15,7 @@
     <script src="~/ts/Literales/Literales.js"></script>
     <script src="~/ts/tsUtilidades.js"></script>
     <script src="~/ts/tsInfoSelector.js"></script>
-    <script src="~/ts/Menu.js"></script>
+    <script src="~/ts/ArbolDeMenu.js"></script>
     <script src="~/ts/_Crud/CrudBase.js"></script>
     <script src="~/ts/_Crud/GridMnt.js"></script>
     <script src="~/ts/_Crud/CrudCreacion.js"></script>
@@ -41,7 +41,7 @@
                              src="~/images/menu/bars-solid.svg"
                              class="btn-menu fa-icono"
                              modal-menu="id-modal-menu"
-                             onclick="Menu.MostrarMenu()"
+                             onclick="ArbolDeMenu.MostrarMenu()"
                              menu-abierto="false" />
 
                         <input id="id_producto"
@@ -103,7 +103,7 @@
         @RenderSection("Scripts", required: false)
 
         <script>
-            window.onload = Menu.ReqSolicitarMenu('@datosDeConexion.Usuario', 'id_contenedormenu');
+            window.onload = ArbolDeMenu.ReqSolicitarMenu('@datosDeConexion.Usuario', 'id_contenedormenu');
         </script>
 
         <partial name="_CookieConsentPartial" />

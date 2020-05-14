@@ -100,9 +100,19 @@ namespace Gestor.Elementos.Seguridad
             foreach (var orden in ordenacion)
             {
                 if (orden.Propiedad == nameof(PermisoDtm.Nombre).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
+                    set = orden.Modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Nombre)
                         : set.OrderByDescending(x => x.Nombre);
+                
+                if (orden.Propiedad == nameof(PermisoDtm.Clase).ToLower())
+                    set = orden.Modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Clase)
+                        : set.OrderByDescending(x => x.Clase);
+
+                if (orden.Propiedad == nameof(PermisoDtm.Tipo).ToLower())
+                    set = orden.Modo == ModoDeOrdenancion.ascendente
+                        ? set.OrderBy(x => x.Tipo)
+                        : set.OrderByDescending(x => x.Tipo);
             }
 
             return set;

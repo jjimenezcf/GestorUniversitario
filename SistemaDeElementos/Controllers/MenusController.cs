@@ -17,7 +17,7 @@ namespace MVCSistemaDeElementos.Controllers
         (
           gestorDeMenus,
           gestorDeErrores,
-          new CrudMenus(ModoDescriptor.Consulta)
+          new CrudMenu(ModoDescriptor.Mantenimiento)
         )
         {
             GestorDeMenus = gestorDeMenus;
@@ -36,9 +36,10 @@ namespace MVCSistemaDeElementos.Controllers
             var r = new ResultadoHtml();
             try
             {
-                List<MenuDto> menu = GestorDeMenus.LeerMenuSe();
+                var procesadas = new List<int>();
+                List<ArbolDeMenuDto> menu = GestorDeMenus.LeerArbolDeMenu();
                 var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
-                               @$"   {RenderOpcionesMenu(menu, 0)}{Environment.NewLine}" +
+                               @$"   {RenderOpcionesMenu(menu, procesadas, 0)}{Environment.NewLine}" +
                                @$"</ul>{Environment.NewLine}";
                 r.Html = menuHtml.Replace("¨", "\"");
                 r.Estado = EstadoPeticion.Ok;
@@ -53,25 +54,37 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        private static string RenderOpcionesMenu(List<MenuDto> opcionesMenu, int idMenuPadre)
+        private static string RenderOpcionesMenu(List<ArbolDeMenuDto> opcionesMenu, List<int> procesadas, int idMenuPadre)
         {
             var menuHtml = "";
-            foreach (MenuDto fDto in opcionesMenu)
+            foreach (ArbolDeMenuDto fDto in opcionesMenu)
             {
-                menuHtml = menuHtml + RenderMenu(funcion: fDto, idMenuPadre);
+                if (procesadas.Contains(fDto.Id))
+                    continue;
+
+                menuHtml = menuHtml + RenderMenu(funcion: fDto, procesadas, idMenuPadre);
+                procesadas.Add(fDto.Id);
             }
             return menuHtml;
         }
 
-        private static string RenderMenu(MenuDto funcion, int idMenuPadre)
+        private static string RenderMenu(ArbolDeMenuDto funcion, List<int> procesadas, int idMenuPadre)
         {
-            if (funcion.VistaMvc != null)
+            if (funcion.IdVistaMvc != null)
             {
-                var opcionHtml = RenderAccionMenu(accion: funcion.VistaMvc);
+                var accion = new VistaMvcDto
+                {
+                    Id = funcion.IdVistaMvc.GetValueOrDefault(),
+                    Nombre = funcion.Vista,
+                    Controlador = funcion.Controlador,
+                    Accion = funcion.accion,
+                    Parametros = funcion.parametros
+                };
+                var opcionHtml = RenderAccionMenu(accion);
                 return opcionHtml;
             }
 
-            var subMenuHtml = funcion.Submenus != null ? RenderOpcionesMenu(funcion.Submenus, funcion.Id) : "";
+            var subMenuHtml = funcion.Submenus != null ? RenderOpcionesMenu(funcion.Submenus, procesadas, funcion.Id) : "";
 
             var idMenuHtml = $"id_menu_{funcion.Id}";
             var idMenuPadreHtml = $"id_menu_{idMenuPadre}";
@@ -93,7 +106,7 @@ namespace MVCSistemaDeElementos.Controllers
             var idHtml = $"{accion.Id}";
             var opcionHtml =
             $@"<li>{Environment.NewLine}" +
-            $@"  <input id='{idHtml}' type='button' class='menu-opcion' value='{accion.Nombre}' onclick=¨Menu.OpcionSeleccionada('{idHtml}','{accion.Controlador}','{accion.Accion}')¨ />{Environment.NewLine}" +
+            $@"  <input id='{idHtml}' type='button' class='menu-opcion' value='{accion.Nombre}' onclick=¨ArbolDeMenu.OpcionSeleccionada('{idHtml}','{accion.Controlador}','{accion.Accion}')¨ />{Environment.NewLine}" +
             $@"</li>{Environment.NewLine}";
 
             return opcionHtml;
@@ -109,7 +122,7 @@ namespace MVCSistemaDeElementos.Controllers
             opcionHtml = $@"{opcionHtml}{literalOpcion}{Environment.NewLine}";
 
             if (!idMenu.IsNullOrEmpty())
-                opcionHtml = $"{opcionHtml}<img src=¨/images/menu/angle-down-solid.svg¨ class=¨icono derecho¨ onclick=¨Menu.MenuPulsado('{idMenu}')¨/>{Environment.NewLine}";
+                opcionHtml = $"{opcionHtml}<img src=¨/images/menu/angle-down-solid.svg¨ class=¨icono derecho¨ onclick=¨ArbolDeMenu.MenuPulsado('{idMenu}')¨/>{Environment.NewLine}";
 
             return opcionHtml;
         }

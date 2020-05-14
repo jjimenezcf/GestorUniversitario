@@ -47,6 +47,7 @@ namespace Gestor.Elementos.Entorno
         }
 
         public DbSet<MenuDtm> Menus { get; set; }
+        public DbSet<ArbolDeMenuDtm> MenuSe { get; set; }
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
@@ -65,6 +66,7 @@ namespace Gestor.Elementos.Entorno
             TablaVariable.Definir(modelBuilder);
             TablaVistaMvc.Definir(modelBuilder);
             TablaMenu.Definir(modelBuilder);
+            VistaMenuSe.Definir(modelBuilder);
             VistaUsuarioPermiso.Definir(modelBuilder);
         }
 

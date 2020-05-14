@@ -39,6 +39,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Vista = $@"{vista}";
             Modo = modo;
 
+            DefinirColumnasDelGrid();
+
             if (Modo == ModoDescriptor.Mantenimiento)
             {
                 Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);

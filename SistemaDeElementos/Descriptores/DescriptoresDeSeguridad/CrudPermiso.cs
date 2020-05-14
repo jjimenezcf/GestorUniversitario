@@ -42,7 +42,6 @@ namespace MVCSistemaDeElementos.Descriptores
                                         posicion: new Posicion() { fila = 0, columna = 1 });
             }
 
-            DefinirColumnasDelGrid();
             Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
         }
 

@@ -4,14 +4,16 @@ using Gestor.Elementos.Entorno;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(CtoEntorno))]
-    partial class ContextoEntornoModelSnapshot : ModelSnapshot
+    [Migration("20200513211849_arbolDeMenu")]
+    partial class arbolDeMenu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,61 @@ namespace GestorDeEntorno.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gestor.Elementos.Entorno.ArbolDeMenuDtm", b =>
+            modelBuilder.Entity("Gestor.Elementos.Entorno.MenuDtm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Activo")
+                        .HasColumnName("ACTIVO")
+                        .HasColumnType("BIT");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnName("DESCRIPCION")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<string>("Icono")
+                        .IsRequired()
+                        .HasColumnName("ICONO")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.Property<int?>("IdPadre")
+                        .HasColumnName("IDPADRE")
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("IdVistaMvc")
+                        .HasColumnName("IDVISTA_MVC")
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("MenuSeDtmId")
+                        .HasColumnType("INT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnName("NOMBRE")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.Property<int>("Orden")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ORDEN")
+                        .HasColumnType("INT")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPadre");
+
+                    b.HasIndex("IdVistaMvc");
+
+                    b.HasIndex("MenuSeDtmId");
+
+                    b.ToTable("MENU","ENTORNO");
+                });
+
+            modelBuilder.Entity("Gestor.Elementos.Entorno.MenuSeDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,58 +136,6 @@ namespace GestorDeEntorno.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MENU_SE","ENTORNO");
-                });
-
-            modelBuilder.Entity("Gestor.Elementos.Entorno.MenuDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Activo")
-                        .HasColumnName("ACTIVO")
-                        .HasColumnType("BIT");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<string>("Icono")
-                        .IsRequired()
-                        .HasColumnName("ICONO")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.Property<int?>("IdPadre")
-                        .HasColumnName("IDPADRE")
-                        .HasColumnType("INT");
-
-                    b.Property<int?>("IdVistaMvc")
-                        .HasColumnName("IDVISTA_MVC")
-                        .HasColumnType("INT");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.Property<int>("Orden")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ORDEN")
-                        .HasColumnType("INT")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdPadre");
-
-                    b.HasIndex("IdVistaMvc");
-
-                    b.HasIndex("Nombre")
-                        .IsUnique();
-
-                    b.ToTable("MENU","ENTORNO");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Entorno.UsuPermisoDtm", b =>
@@ -272,6 +276,10 @@ namespace GestorDeEntorno.Migrations
                         .WithMany("Menus")
                         .HasForeignKey("IdVistaMvc")
                         .HasConstraintName("FK_MENU_IDVISTA_MVC");
+
+                    b.HasOne("Gestor.Elementos.Entorno.MenuSeDtm", null)
+                        .WithMany("Submenus")
+                        .HasForeignKey("MenuSeDtmId");
                 });
 
             modelBuilder.Entity("Gestor.Elementos.Entorno.UsuPermisoDtm", b =>

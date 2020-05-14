@@ -70,6 +70,8 @@ namespace Gestor.Elementos.Entorno
                 .WithOne(m => m.Padre)
                 .IsRequired(false);
 
+            modelBuilder.Entity<MenuDtm>().HasIndex(x => x.Nombre).IsUnique();
+
             //modelBuilder.Entity<R_Menu>()
             //            .HasMany(menu => menu.Submenus)
             //            .WithOne()

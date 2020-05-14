@@ -450,7 +450,7 @@ namespace Gestor.Elementos
 
         }
 
-        protected TElemento MapearElemento(TRegistro registro, ParametrosDeMapeo parametros = null)
+        public TElemento MapearElemento(TRegistro registro, ParametrosDeMapeo parametros = null)
         {
             if (parametros == null)
                 parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
