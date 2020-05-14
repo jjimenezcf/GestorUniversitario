@@ -43,7 +43,8 @@ const AtributoSelector = {
 
 const AtributoSelectorElemento = {
     claseElemento: 'clase-elemento',
-    guardarEn:'guardar-en'
+    guardarEn: 'guardar-en',
+    mostrarPropiedad: 'mostrar-propiedad'
 }
 
 const TagName = {

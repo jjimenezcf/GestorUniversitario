@@ -23,6 +23,7 @@ namespace Gestor.Elementos.Entorno
             TipoDeControl = TipoControl.SelectorDeElemento,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
+            MostrarPropiedad = nameof(Nombre),
             Fila = 0,
             Columna = 0,
             Ordenar = true,
@@ -56,7 +57,16 @@ namespace Gestor.Elementos.Entorno
         ]
         public string Icono { get; set; }
 
-        //public string Descripcion { get; set; }
+        [IUPropiedad(
+            Etiqueta = "Descripción",
+            Ayuda = "Descripción de la opción de menú",
+            Tipo = typeof(string),
+            Fila = 3,
+            Columna = 0,
+            VisibleEnGrid = false
+            )
+        ]
+        public string Descripcion { get; set; }
 
         [IUPropiedad(
             Visible = false

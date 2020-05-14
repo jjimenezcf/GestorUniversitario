@@ -30,6 +30,16 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
+
+        protected override dynamic LeerTodos(string claseElemento)
+        {
+            if (claseElemento == nameof(MenuDto))
+                return ((GestorDeMenus)GestorDeElementos).LeerPadres();
+
+            return null;
+        }
+
+
         //END-POINT: Desde Menu.ts
         public JsonResult epSolicitarMenuHtml(string usuario)
         {
@@ -52,7 +62,6 @@ namespace MVCSistemaDeElementos.Controllers
             }
             return new JsonResult(r);
         }
-
 
         private static string RenderOpcionesMenu(List<ArbolDeMenuDto> opcionesMenu, List<int> procesadas, int idMenuPadre)
         {

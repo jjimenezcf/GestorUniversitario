@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
-using SistemaDeElementos.Descriptores.Componentes.Elementos;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores

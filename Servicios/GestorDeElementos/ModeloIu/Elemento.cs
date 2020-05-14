@@ -44,6 +44,8 @@ namespace Gestor.Elementos.ModeloIu
     {
         private string etiquetaGrid;
 
+        private bool _visibleEnGrid = true;
+
         public string EtiquetaGrid
         {
             get
@@ -58,9 +60,9 @@ namespace Gestor.Elementos.ModeloIu
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
         public bool Visible { get; set; } = true;
+        public bool VisibleEnGrid { get { return _visibleEnGrid && Visible; } set { _visibleEnGrid = value; } }
         public bool VisibleAlCrear { get; set; } = true;
         public bool VisibleAlEditar { get; set; } = true;
-
         public bool VisibleAlConsultar { get; set; } = true;
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
@@ -91,6 +93,8 @@ namespace Gestor.Elementos.ModeloIu
 
         public string GuardarEn { get; set; }
 
+        public string MostrarPropiedad { get; set; }
+
         public bool EsVisible(ModoDeTrabajo modo)
         {
             if (Visible)
@@ -100,6 +104,7 @@ namespace Gestor.Elementos.ModeloIu
                 else
                 if (modo == ModoDeTrabajo.Nuevo)
                     return VisibleAlCrear;
+                else
                 if (modo == ModoDeTrabajo.Consulta)
                     return VisibleAlConsultar;
             }

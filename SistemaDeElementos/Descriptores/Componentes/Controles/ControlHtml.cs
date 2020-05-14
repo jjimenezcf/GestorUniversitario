@@ -11,9 +11,9 @@
     {
         public string Id { get; private set; }
         public string IdHtml => Id.ToLower();
-        public string Etiqueta { get; private set; }
+        public string Etiqueta { get; set; }
         public string Propiedad { get; private set; }
-        public string Ayuda { get; private set; }
+        public string Ayuda { get; set; }
         public Posicion Posicion { get; private set; }
         public string Tipo { get; protected set; }
 

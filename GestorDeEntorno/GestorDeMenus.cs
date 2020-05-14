@@ -42,6 +42,16 @@ namespace Gestor.Elementos.Entorno
                 else
                     registros = registros.FiltrarPorId(filtro);
 
+            return registros;
+        }
+
+        public static IQueryable<T> FiltrarPorMenuPadre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : MenuDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                {
+                    registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
+                }
 
             return registros;
         }
@@ -71,7 +81,7 @@ namespace Gestor.Elementos.Entorno
             public MapearMenus()
             {
                 CreateMap<MenuDtm, MenuDto>()
-                .ForMember(dto => dto.Padre , dtm  => dtm.MapFrom(dtm => dtm.Padre.Nombre))
+                .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
                 .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc));
             }
         }
@@ -104,15 +114,9 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        protected override void AntesDeMapearElemento(MenuDtm registro, ParametrosDeMapeo parametros)
-        {
-            parametros.AnularMapeo = registro.IdPadre != null;
-        }
-
-        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        {
-            return registros.FiltrarMenus(filtros, parametros);
-        }
+        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) => registros
+                .FiltrarMenus(filtros, parametros)
+                .FiltrarPorMenuPadre(filtros, parametros);
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
@@ -122,6 +126,20 @@ namespace Gestor.Elementos.Entorno
         protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             return registros.JoinConMenus(joins, parametros);
+        }
+
+        public List<MenuDto> LeerPadres()
+        {
+            var registros = Contexto
+                            .Menus
+                            .FromSqlInterpolated($@"select distinct t2.*
+                                                    from entorno.MENU t1
+                                                    inner join entorno.MENU t2 on t2.id =t1.IDPADRE
+                                                    order by t2.IDPADRE, t2.id")
+                            .ToList();
+
+            var elementos = MapearElementos(registros).ToList();
+            return elementos;
         }
 
         public List<ArbolDeMenuDto> LeerArbolDeMenu()
@@ -165,11 +183,11 @@ namespace Gestor.Elementos.Entorno
             if (procesar.Count == 0)
                 return resultado;
 
-            while(procesar.Count > 0)
+            while (procesar.Count > 0)
             {
                 var orden = procesar[0].Orden;
                 var quitar = 0;
-                for (var i = 0; i<procesar.Count; i++)
+                for (var i = 0; i < procesar.Count; i++)
                 {
                     if (procesar[i].Orden <= orden)
                     {
@@ -184,16 +202,7 @@ namespace Gestor.Elementos.Entorno
             return resultado;
         }
 
-        //private void LeerSubMenus(MenuDtm menuDtm)
-        //{
-        //    var filtros = new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado { Propiedad = nameof(MenuDtm.IdPadre), Criterio = CriteriosDeFiltrado.igual, Valor = menuDtm.Id.ToString() } };
-        //    var ordenacion = new List<ClausulaDeOrdenacion>() { new ClausulaDeOrdenacion { Propiedad = nameof(MenuDtm.Orden), Modo = ModoDeOrdenancion.ascendente } };
 
-        //    menuDtm.Submenus = LeerRegistros(0, -1, filtros, ordenacion).ToList();
-
-        //    foreach (var submenu in menuDtm.Submenus)
-        //        LeerSubMenus(submenu);
-        //}
     }
 
 }

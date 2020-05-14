@@ -42,39 +42,5 @@ namespace GestorDeElementos.Utilidades
 
     }
 
-    //public static class IQueryable
-    //{
-    //    //public static IQueryable<TRegistro> LogSql<TRegistro>(this IQueryable<TRegistro> consulta, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-    //    //{
-    //    //    var a = consulta.ToSql();
-    //    //    contexto.Traza.AnotarTrazaSql(a, "--");
-    //    //    return consulta;
-    //    //}
 
-    //    //public static string ToSql<TRegistro>(this IQueryable<TRegistro> query) where TRegistro : class
-    //    //{
-    //    //    var enumerator = query.Provider.Execute<IEnumerable<TRegistro>>(query.Expression).GetEnumerator();
-    //    //    var enumeratorType = enumerator.GetType();
-    //    //    var selectFieldInfo = enumeratorType.GetField("_selectExpression", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _selectExpression on type {enumeratorType.Name}");
-    //    //    var sqlGeneratorFieldInfo = enumeratorType.GetField("_querySqlGeneratorFactory", BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new InvalidOperationException($"cannot find field _querySqlGeneratorFactory on type {enumeratorType.Name}");
-    //    //    var selectExpression = selectFieldInfo.GetValue(enumerator) as SelectExpression ?? throw new InvalidOperationException($"could not get SelectExpression");
-    //    //    var factory = sqlGeneratorFieldInfo.GetValue(enumerator) as IQuerySqlGeneratorFactory ?? throw new InvalidOperationException($"could not get IQuerySqlGeneratorFactory");
-    //    //    var sqlGenerator = factory.Create();
-    //    //    var command = sqlGenerator.GetCommand(selectExpression);
-    //    //    var sql = command.CommandText;
-    //    //    return sql;
-    //    //}
-
-    //    //public static int Count<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-    //    //{
-    //    //    source.LogSql(contexto, filtros);
-    //    //    return source.Count();
-    //    //}
-
-    //    //public static List<TRegistro> ToList<TRegistro>(this IQueryable<TRegistro> source, ContextoDeElementos contexto, Dictionary<string, string> filtros) where TRegistro : class
-    //    //{
-    //    //    source.LogSql(contexto, filtros);
-    //    //    return source.ToList();
-    //    //}
-    //}
 }

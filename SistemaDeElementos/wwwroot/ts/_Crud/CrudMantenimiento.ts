@@ -187,8 +187,9 @@
                 let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
                 let idSelector = datos.IdSelector;
                 let selector = new SelectorDeElementos(idSelector);
+                let mostrarPropiedad = selector.Selector.getAttribute(AtributoSelectorElemento.mostrarPropiedad);
                 for (var i = 0; i < resultado.datos.length; i++) {
-                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
+                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i][mostrarPropiedad]);
                 }
             }
 

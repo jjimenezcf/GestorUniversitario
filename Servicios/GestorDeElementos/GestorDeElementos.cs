@@ -103,19 +103,10 @@ namespace Gestor.Elementos
         }
     }
 
-    public enum OrigenDeMapeo { elemento, registro }
-
     public class ParametrosDeMapeo
     {
-        public OrigenDeMapeo origen;
         public bool AnularMapeo = false;
         public Dictionary<string, object> parametros = new Dictionary<string, object>();
-        private OrigenDeMapeo Origen;
-
-        public ParametrosDeMapeo(OrigenDeMapeo origen)
-        {
-            Origen = origen;
-        }
     }
 
     #endregion
@@ -433,7 +424,7 @@ namespace Gestor.Elementos
         public IEnumerable<TElemento> MapearElementos(List<TRegistro> registros, ParametrosDeMapeo parametros = null)
         {
             if (parametros == null)
-                parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
+                parametros = new ParametrosDeMapeo();
 
             var lista = new List<TElemento>();
             foreach (var registro in registros)
@@ -453,7 +444,7 @@ namespace Gestor.Elementos
         public TElemento MapearElemento(TRegistro registro, ParametrosDeMapeo parametros = null)
         {
             if (parametros == null)
-                parametros = new ParametrosDeMapeo(OrigenDeMapeo.registro);
+                parametros = new ParametrosDeMapeo();
 
             TElemento elemento = null;
             elemento = Mapeador.Map<TRegistro, TElemento>(registro,

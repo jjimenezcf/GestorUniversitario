@@ -12,6 +12,14 @@ namespace MVCSistemaDeElementos.Descriptores
               , modo: modo)
         {
 
+            var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 4));
+
+            new SelectorDeElemento<MenuDto>(padre: fltEspecificos,
+                                          propiedad: nameof(MenuDto.Padre),
+                                          posicion: new Posicion() { fila = 0, columna = 0 });
+
+
+
             Mnt.Datos.ExpresionElemento = $"[{nameof(MenuDto.Nombre)}]";
         }
     public override string RenderControl()

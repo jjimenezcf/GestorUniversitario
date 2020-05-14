@@ -2,7 +2,6 @@
 using Gestor.Elementos.Entorno;
 using Gestor.Elementos.Seguridad;
 using MVCSistemaDeElementos.Controllers;
-using SistemaDeElementos.Descriptores.Componentes.Elementos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -30,15 +29,11 @@ namespace MVCSistemaDeElementos.Descriptores
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
                 new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
-                                              etiqueta: "Clase",
                                               propiedad: nameof(PermisoDto.Clase) ,
-                                              ayuda: "Seleccionar una clase",
                                               posicion: new Posicion() { fila = 0, columna = 0 });
                 
                 new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
-                                        etiqueta: "Tipo",
                                         propiedad: nameof(PermisoDto.Tipo),
-                                        ayuda: "Seleccionar un tipo",
                                         posicion: new Posicion() { fila = 0, columna = 1 });
             }
 
