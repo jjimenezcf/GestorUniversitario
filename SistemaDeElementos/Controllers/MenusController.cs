@@ -72,15 +72,7 @@ namespace MVCSistemaDeElementos.Controllers
         {
             if (funcion.IdVistaMvc != null)
             {
-                var accion = new VistaMvcDto
-                {
-                    Id = funcion.IdVistaMvc.GetValueOrDefault(),
-                    Nombre = funcion.Vista,
-                    Controlador = funcion.Controlador,
-                    Accion = funcion.accion,
-                    Parametros = funcion.parametros
-                };
-                var opcionHtml = RenderAccionMenu(accion);
+                var opcionHtml = RenderAccionMenu(funcion.VistaMvc);
                 return opcionHtml;
             }
 

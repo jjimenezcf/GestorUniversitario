@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Entorno
         {
             public MapearMenus()
             {
-                CreateMap<ArbolDeMenuDtm, ArbolDeMenuDto>();
+                CreateMap<ArbolDeMenuDtm, ArbolDeMenuDto>();                  
             }
         }
 
@@ -20,6 +20,20 @@ namespace Gestor.Elementos.Entorno
             : base(contexto, mapeador)
         {
 
+        }
+
+        protected override void DespuesDeMapearElemento(ArbolDeMenuDtm registro, ArbolDeMenuDto elemento, ParametrosDeMapeo parametros)
+        {
+            base.DespuesDeMapearElemento(registro, elemento, parametros);
+            elemento.Submenus = new List<ArbolDeMenuDto>();
+            elemento.VistaMvc = new VistaMvcDto
+            {
+                Id = registro.IdVistaMvc.GetValueOrDefault(),
+                Nombre = registro.Vista,
+                Controlador = registro.Controlador,
+                Accion = registro.accion,
+                Parametros = registro.parametros
+            };
         }
 
     }

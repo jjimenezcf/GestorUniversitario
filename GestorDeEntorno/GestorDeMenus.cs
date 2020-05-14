@@ -143,11 +143,7 @@ namespace Gestor.Elementos.Entorno
             {
                 var menuDto = gestor.MapearElemento(menuDtm);
                 if (padre != null)
-                {
-                    if (padre.Submenus == null)
-                        padre.Submenus = new List<ArbolDeMenuDto>();
                     padre.Submenus.Add(menuDto);
-                }
 
                 resultadoDto.Add(menuDto);
                 if (menuDtm.IdVistaMvc == null)

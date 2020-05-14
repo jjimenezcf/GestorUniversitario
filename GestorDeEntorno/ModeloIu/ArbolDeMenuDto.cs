@@ -22,14 +22,9 @@ namespace Gestor.Elementos.Entorno
 
         public List<ArbolDeMenuDto> Submenus { get; set; }
 
+        public VistaMvcDto VistaMvc { get; set; }
+
         public int? IdVistaMvc { get; set; }
 
-        public string Vista { get; set; }
-
-        public string Controlador { get; set; }
-
-        public string accion { get; set; }
-
-        public string parametros { get; set; }
     }
 }
