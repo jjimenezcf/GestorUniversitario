@@ -130,23 +130,30 @@
             this.Buscar(posicion);
         }
 
-        BorrarElemento() {
+        public BorrarElemento() {
             this.CerrarModalDeBorrado();
             let id: number = this.InfoSelector.Seleccionados[0] as number;
             let url: string = this.DefinirPeticionDeBorrado(id);
-            let req: XMLHttpRequest = new XMLHttpRequest();
+
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Borrar
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.RecargarGrid
+                , null
+            );
+
             try {
-                let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Borrar, "{}");
-                this.PeticionSincrona(req, url, peticion);
+                a.Ejecutar();
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
                 return;
             }
-            this.Buscar(0);
         }
 
-        DefinirPeticionDeBorrado(id: number): string {
+        private DefinirPeticionDeBorrado(id: number): string {
             let idJson: JSON = JSON.parse(`[${id}]`);
             var controlador = this.Navegador.getAttribute(Atributo.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
@@ -155,49 +162,38 @@
             return peticion;
         }
 
+        private RecargarGrid(peticion: ApiDeAjax.DescriptorAjax) {
+            let mnt: CrudMnt = (peticion.datos as CrudMnt);
+            mnt.InfoSelector.QuitarTodos();
+            mnt.Buscar(0);
+        }
+
         public Buscar(posicion: number) {
             if (this.Navegador === null)
                 Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
             else {
                 let url: string = this.DefinirPeticionDeBusqueda(posicion);
-                let req: XMLHttpRequest = new XMLHttpRequest();
-                let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerGridEnHtml, "{}");
-                this.PeticionSincrona(req, url, peticion);
+
+                let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerGridEnHtml
+                    , this
+                    , url
+                    , ApiDeAjax.TipoPeticion.Sincrona
+                    , ApiDeAjax.ModoPeticion.Get
+                    , this.ActualizarGrid
+                    , null
+                );
+
+                a.Ejecutar();
             }
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
+        private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
+            let mnt: CrudMnt = (peticion.datos as CrudMnt);
+            let resultado = peticion.resultado as ResultadoHtml;
 
-            var resultado = undefined
-
-            if (peticion.nombre === Ajax.EndPoint.LeerGridEnHtml) {
-                let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
-                if (this.IdGrid === this.Grid.getAttribute(Atributo.id)) {
-                    this.Grid.innerHTML = resultado.html;
-                    this.InicializarNavegador();
-                    if (this.InfoSelector !== undefined && this.InfoSelector.Cantidad > 0) {
-                        this.MarcarElementos();
-                        this.InfoSelector.SincronizarCheck();
-                    }
-                }
+            if (mnt.IdGrid === mnt.Grid.getAttribute(Atributo.id)) {
+                mnt.ActualizarGridHtml(mnt, resultado.html);
             }
-
-            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
-                let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
-                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
-                let idSelector = datos.IdSelector;
-                let selector = new SelectorDeElementos(idSelector);
-                let mostrarPropiedad = selector.Selector.getAttribute(AtributoSelectorElemento.mostrarPropiedad);
-                for (var i = 0; i < resultado.datos.length; i++) {
-                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i][mostrarPropiedad]);
-                }
-            }
-
-            if (peticion.nombre === Ajax.EndPoint.Borrar) {
-                this.InfoSelector.QuitarTodos();
-            }
-
-            return resultado;
         }
 
         private DefinirPeticionDeBusqueda(posicion: number): string {

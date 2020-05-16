@@ -63,7 +63,7 @@
             return this.modoTrabajo;
         }
         protected set ModoTrabajo(modo: string) {
-            this.modoTrabajo=modo;
+            this.modoTrabajo = modo;
         }
 
         constructor() {
@@ -285,9 +285,27 @@
 
         protected CargarSelectorElemento(controlador: string, claseDeElementoDto: string, idSelector: string) {
             let url: string = this.DefinirPeticionDeCargar(controlador, claseDeElementoDto);
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerTodos, `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`);
-            this.PeticionSincrona(req, url, peticion);
+
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerTodos
+                , `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.MapearElementosAlSelector
+                , null
+            );
+
+            a.Ejecutar();
+        }
+
+        private MapearElementosAlSelector(peticion: ApiDeAjax.DescriptorAjax) {
+            let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
+            let idSelector = datos.IdSelector;
+            let selector = new SelectorDeElementos(idSelector);
+            for (var i = 0; i < peticion.resultado.datos.length; i++) {
+                selector.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
+
+            }
         }
 
         private DefinirPeticionDeCargar(controlador: string, claseElemento: string): string {
@@ -295,100 +313,6 @@
             return url;
         }
 
-
-
-        // funciones para las peticiones al servidor  ***********************************************************************************************
-        public PeticionSincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax) {
-            BlanquearMensaje();
-            let error: string;
-            this.PeticionAjaxSincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
-            if (!EsNula(error))
-                throw error;
-        }
-
-        public PeticionAsincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax) {
-            BlanquearMensaje();
-            let error: string;
-            this.PeticionAjaxAsincrona(req, url, peticion, () => this.DespuesDeLaPeticion(req, peticion), () => error = this.ErrorEnPeticion(req, peticion));
-            if (!EsNula(error))
-                throw error;
-        }
-
-        private PeticionAjaxSincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax, despuesDePeticion: Function, errorEnPeticion: Function) {
-
-            function respuestaCorrecta() {
-
-                if (EsNula(req.response))
-                    errorEnPeticion();
-                else {
-                    peticion.ParsearRespuesta(req);
-
-                    if (peticion.resultado === undefined || peticion.resultado.estado === Ajax.jsonResultError)
-                        errorEnPeticion();
-                    else
-                        despuesDePeticion();
-                }
-            }
-
-            function respuestaErronea() {
-                errorEnPeticion();
-            }
-
-            req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
-            req.addEventListener(Ajax.eventoError, respuestaErronea);
-
-            req.open('GET', url, false);
-            req.send();
-        }
-
-        private PeticionAjaxAsincrona(req: XMLHttpRequest, url: string, peticion: PeticionAjax, despuesDePeticion: Function, errorEnPeticion: Function) {
-
-            function respuestaCorrecta() {
-
-                if (EsNula(req.response))
-                    errorEnPeticion();
-                else {
-                    peticion.ParsearRespuesta(req);
-
-                    if (peticion.resultado === undefined || peticion.resultado.estado === Ajax.jsonResultError)
-                        errorEnPeticion();
-                    else
-                        despuesDePeticion();
-                }
-            }
-
-            function respuestaErronea() {
-                errorEnPeticion();
-            }
-
-            req.addEventListener(Ajax.eventoLoad, respuestaCorrecta);
-            req.addEventListener(Ajax.eventoError, respuestaErronea);
-
-            req.open('GET', url, true);
-            req.send();
-        }
-
-        protected ErrorEnPeticion(req: XMLHttpRequest, peticion: PeticionAjax): string {
-            if (EsNula(req.response)) {
-                return `La peticion ${peticion} no se ha podido realizar`;
-            }
-
-            let resultado: ResultadoJson = JSON.parse(req.response);
-            console.error(resultado.consola);
-            if (!EsNula(resultado.mensaje))
-                resultado.mensaje = `Error al ejecutar la peticion '${peticion.nombre}'. ${resultado.mensaje}`;
-
-            return resultado.mensaje;
-
-        }
-
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
-            let resultado: ResultadoJson = JSON.parse(req.response);
-            if (!EsNula(resultado.mensaje))
-                Mensaje(TipoMensaje.Info, resultado.mensaje);
-
-            return resultado;
-        }
     }
 
 }

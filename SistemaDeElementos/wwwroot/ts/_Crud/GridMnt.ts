@@ -319,5 +319,14 @@
                 }
             }
         }
+
+        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {
+            contenedorGrid.Grid.innerHTML = resultadoHtml;
+            contenedorGrid.InicializarNavegador();
+            if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
+                contenedorGrid.MarcarElementos();
+                contenedorGrid.InfoSelector.SincronizarCheck();
+            }
+        }
     }
 }

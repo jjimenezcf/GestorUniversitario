@@ -60,25 +60,16 @@
 
         private CrearElemento(json: JSON) {
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Crear, "{}")
-            this.PeticionSincrona(req, url, peticion);
-        }
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Crear
+                , "{}"
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , null
+                , null
+            );
+            a.Ejecutar();
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
-
-            let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
-
-            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
-                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
-                let idSelector = datos.IdSelector;
-                let selector = new SelectorDeElementos(idSelector);
-                for (var i = 0; i < resultado.datos.length; i++) {
-                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
-                }
-            }
-
-            return resultado;
         }
     }
 

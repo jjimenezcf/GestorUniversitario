@@ -31,6 +31,15 @@ namespace MVCSistemaDeElementos.Descriptores
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
 
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
+            if (Creador !=null)
+            Creador.htmlDeCreacionEspecifico = 
+            @$"
+            <Div id=¨ImagenMenu¨ action=¨javascript: enviar(this)¨ enctype=¨ multipart/form-data¨>
+                Icono: <br />
+                <input type=¨file¨ name=¨pic¨ id=¨pic¨ />
+                <input type=¨submit¨ value=¨Enviar¨ />
+            </Div>
+            ";
         }
 
 

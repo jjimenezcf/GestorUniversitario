@@ -165,9 +165,17 @@
 
         private Buscar(posicion: number) {
             let url: string = this.DefinirPeticionDeCargarGrid(posicion);
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.RecargarModalEnHtml, "{}");
-            this.PeticionSincrona(req, url, peticion);
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.RecargarModalEnHtml
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.ActualizarGrid
+                , null
+            );
+
+            a.Ejecutar();
+
         }
 
         private DefinirPeticionDeCargarGrid(posicion: number): string {
@@ -186,32 +194,30 @@
             return peticion;
         }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
-            let resultado: ResultadoHtml = super.DespuesDeLaPeticion(req, peticion) as ResultadoHtml;
+        private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
+            let modal: ModalSeleccion = (peticion.datos as ModalSeleccion);
+            let resultado = peticion.resultado as ResultadoHtml;
 
-            if (peticion.nombre === Ajax.EndPoint.RecargarModalEnHtml) {
-                if (this.IdGrid === this.Grid.getAttribute(Atributo.id)) {
-                    this.Grid.innerHTML = resultado.html;
-                    this.InicializarNavegador();
-                    if (this.InfoSelector !== undefined && this.InfoSelector.Cantidad > 0) {
-                        this.MarcarElementos();
-                        this.InfoSelector.SincronizarCheck();
-                    }
-                }
+            if (modal.IdGrid === modal.Grid.getAttribute(Atributo.id)) {
+                modal.ActualizarGridHtml(modal, resultado.html);
             }
-
-            if (peticion.nombre === Ajax.EndPoint.Leer) {
-                this.ProcesarRegistrosLeidos(resultado.datos);
-            }
-            return resultado;
         }
 
         public TextoSelectorCambiado(valor: string) {
             this.EditorDelGrid.value = this.Selector.value;
             let url: string = this.DefinirPeticionLeerParaSelector();
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Leer, "{}");
-            this.PeticionSincrona(req, url, peticion);
+
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Leer
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TratarValoresDevuelto
+                , null
+            );
+
+            a.Ejecutar();
+
         }
 
         private DefinirPeticionLeerParaSelector(): string {
@@ -222,6 +228,12 @@
             let parametros: string = `${Ajax.Param.filtro}=${filtroJson}`;
             let peticion: string = url + '?' + parametros;
             return peticion;
+        }
+
+
+        private TratarValoresDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
+            let modal: ModalSeleccion = (peticion.datos as ModalSeleccion);
+            modal.ProcesarRegistrosLeidos(peticion.resultado.datos);
         }
 
         private ObtenerClausulaParaSelector(): string {

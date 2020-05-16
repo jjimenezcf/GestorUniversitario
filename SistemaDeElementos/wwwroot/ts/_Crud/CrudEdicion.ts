@@ -6,6 +6,7 @@
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
+        
         private get Controlador(): string {
             return this.PanelDeEditar.getAttribute(Literal.controlador);
         }
@@ -70,9 +71,23 @@
         private LeerElemento(id: number) {
             let idJson: string = this.DefinirFiltroPorId(id);
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${idJson}`;
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.LeerPorIds, "{}");
-            this.PeticionSincrona(req, url, peticion);
+
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerPorIds
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.MapearElementoDevuelto
+                , null
+            );
+
+            a.Ejecutar();
+        }
+
+        private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
+            let edicion: CrudEdicion = (peticion.datos as CrudEdicion);
+            let panel = edicion.PanelDeEditar;
+            edicion.MapearElementoLeido(panel, peticion.resultado.datos[0]);
         }
 
         private DefinirFiltroPorId(id: number): string {
@@ -90,29 +105,17 @@
         private ModificarElemento(json: JSON) {
             let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Modificar}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
-            let req: XMLHttpRequest = new XMLHttpRequest();
-            let peticion: PeticionAjax = new PeticionAjax(Ajax.EndPoint.Modificar, "{}");
-            this.PeticionSincrona(req, url, peticion);
-        }
 
-        protected DespuesDeLaPeticion(req: XMLHttpRequest, peticion: PeticionAjax): ResultadoJson {
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Modificar
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , null
+                , null
+            );
 
-            let resultado: ResultadoJson = super.DespuesDeLaPeticion(req, peticion) as ResultadoJson;
-
-            if (peticion.nombre === Ajax.EndPoint.LeerTodos) {
-                let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
-                let idSelector = datos.IdSelector;
-                let selector = new SelectorDeElementos(idSelector);
-                for (var i = 0; i < resultado.datos.length; i++) {
-                    selector.AgregarOpcion(resultado.datos[i].id, resultado.datos[i].nombre);
-                }
-            }
-
-            if (peticion.nombre === Ajax.EndPoint.LeerPorIds) {
-                    this.MapearElementoLeido(this.PanelDeEditar, resultado.datos[0]);
-            }
-
-            return resultado;
+            a.Ejecutar();
         }
 
     }

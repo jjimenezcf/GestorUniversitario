@@ -11,6 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
+        public string htmlDeCreacionEspecifico { get; set; }
 
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
@@ -38,12 +39,14 @@ namespace MVCSistemaDeElementos.Descriptores
                      <h2>Div de creación</h2>
                      {MenuCreacion.RenderControl()}
                      {htmlRenderObjetoVacio()}
+                     {htmlDeCreacionEspecifico}
                    </Div>
                 ";
 
             return htmContenedorCreacion.Render();
         }
 
+        
 
         protected virtual string htmlRenderObjetoVacio()
         {
