@@ -13,6 +13,9 @@ using MVCSistemaDeElementos.UtilidadesIu;
 using Newtonsoft.Json;
 using MVCSistemaDeElementos.Descriptores;
 using System.Linq;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -52,9 +55,20 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         //END-POIN: desde el ApiDeArchivos
-        public JsonResult epSubirArchivo(string archivo)
+        [HttpPost]
+        public JsonResult epSubirArchivo(IFormFile fichero)
         {
             var r = new Resultado();
+
+            //var filePath = Path.GetTempFileName();
+
+            var filePath = $@".\wwwroot\Archivos\{fichero.FileName}";
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                fichero.CopyTo(stream);
+            }
+
             return new JsonResult(r);
 
         }
@@ -72,7 +86,7 @@ namespace MVCSistemaDeElementos.Controllers
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
@@ -113,7 +127,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var elementos = Leer(0, -1, idsJson, null).ToList();
-                
+
                 if (elementos.Count == 0)
                     throw new Exception($"No se ha localizado el registro con el filtro {idsJson}");
 
@@ -122,7 +136,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
-                r.Mensaje = $"se han leido 1 {(1>1? "registros" : "registro")}";
+                r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
             }
             catch (Exception e)
             {
@@ -175,7 +189,7 @@ namespace MVCSistemaDeElementos.Controllers
                     if (pos < 0) pos = 0;
                     posicion = pos.ToString();
                 }
-                
+
                 var elementos = Leer(pos, can, filtro, orden);
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.ToList().Count() == 0)
@@ -186,8 +200,8 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Mensaje = "No hay más elementos";
                 }
 
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);                
-                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo)); 
+                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
+                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
                 r.Datos = elementos.Count();
                 r.Estado = EstadoPeticion.Ok;
             }
@@ -261,7 +275,7 @@ namespace MVCSistemaDeElementos.Controllers
                 r.Mensaje = "No se ha podido leer los datos";
             }
 
-           return new JsonResult(r);
+            return new JsonResult(r);
         }
 
         //END-POINT: Desde CrudMantenimiento.ts
@@ -306,11 +320,11 @@ namespace MVCSistemaDeElementos.Controllers
 
             return elementos;
         }
-        
+
         public int Contar(string filtro = null)
         {
-            List<ClausulaDeFiltrado> filtros = filtro.IsNullOrEmpty() 
-                                               ? new List<ClausulaDeFiltrado>() 
+            List<ClausulaDeFiltrado> filtros = filtro.IsNullOrEmpty()
+                                               ? new List<ClausulaDeFiltrado>()
                                                : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
             return GestorDeElementos.Contar(filtros);
@@ -321,7 +335,7 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDelCrud.Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
             GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
-            List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>(): JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+            List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes);

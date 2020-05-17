@@ -390,6 +390,43 @@ a {
             background: #a5a1a1
         }
 
+
+.archivo-subir-file {
+    margin: 0 0 5px;
+    padding: 1px 10px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.barra{
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    box-shadow:inset 0px 0px 5px rgba(0,0,0,.2);
+    height : 25px;
+}
+
+.cancel{
+    background: #edif3c !important
+}
+
+.barra-azul {
+    background-color: #247cc0;
+    border-radius: 10px;
+    display: block;
+    height: 25px;
+    line-height: 25px;
+    text-align:center;
+    width: 0%;
+}
+.barra-azul {
+    background-color: #2EA265 !important;
+}
+
+.barra-roja {
+    background-color: #de3152 !important;
+}
+
 /*.propiedad {
 }
     .propiedad:read-only {

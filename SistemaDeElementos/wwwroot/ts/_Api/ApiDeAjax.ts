@@ -13,13 +13,13 @@
 
     export enum ModoPeticion {
         Get,
-        Put
+        Post
     }
 
     function ParsearModo(modo: ModoPeticion) {
         if (modo === ModoPeticion.Get)
-            return 'GET';
-        return 'PUT';
+            return 'get';
+        return 'post';
     }
 
     export class DescriptorAjax {
