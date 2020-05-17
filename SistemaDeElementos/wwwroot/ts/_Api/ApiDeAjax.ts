@@ -1,31 +1,5 @@
 ﻿namespace ApiDeAjax {
 
-    //export function enviar(form: HTMLFormElement) {
-    //    var persona = new FormData(form);
-    //    var req = ajaxRequest("upload.php");
-    //    req.send(persona);
-    //}
-
-    //function ajaxRequest(url) {
-    //    if (window.XMLHttpRequest) {
-    //        var request = new XMLHttpRequest();
-    //    } else if (window.ActiveXObject) {
-    //        var request = new ActiveXObject("Microsoft.XMLHTTP");
-    //    }
-
-    //    request.onload = function (Event) {
-    //        if (request.status == 200) {
-    //            var response = JSON.parse(request.responseText);
-    //            if (response.success) {
-    //                alert("Persona procesada exitosamente");
-    //            } else {
-    //                alert("Hubo un problema al procesar, codigo: " + response.status);
-    //            }
-    //        }
-    //    };
-
-    //}
-
     export enum TipoPeticion {
         Sincrona,
         Asincrona
@@ -122,9 +96,6 @@
 
             this.Request.addEventListener(Ajax.eventoLoad, () => RespuestaCorrecta(this));
             this.Request.addEventListener(Ajax.eventoError, () => RespuestaErronea());
-            let sincrona: boolean = false;
-            if (this.Tipo === TipoPeticion.Sincrona)
-                sincrona = true;
 
             this.Request.open(ParsearModo(this.Modo), this.Url, EsAsincrona(this.Tipo));
             this.Request.send();

@@ -34,11 +34,12 @@ namespace MVCSistemaDeElementos.Descriptores
             if (Creador !=null)
             Creador.htmlDeCreacionEspecifico = 
             @$"
-            <Div id=¨ImagenMenu¨ action=¨javascript: enviar(this)¨ enctype=¨ multipart/form-data¨>
-                Icono: <br />
-                <input type=¨file¨ name=¨pic¨ id=¨pic¨ />
-                <input type=¨submit¨ value=¨Enviar¨ />
-            </Div>
+            <div id=¨imagen-usuario¨ >
+                Foto: <br />
+                <input id=¨fichero-icono¨ type=¨file¨ onChange=¨ApiDeArchivos.MostrarCanvas()¨ />
+                <hr>
+                <canvas id=¨canvas-icono¨></canvas>
+            </div>
             ";
         }
 

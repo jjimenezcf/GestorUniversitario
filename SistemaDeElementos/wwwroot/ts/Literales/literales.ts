@@ -76,7 +76,8 @@ const Ajax = {
         Borrar: "epBorrarPorId",
         RecargarModalEnHtml: "epRecargarModalEnHtml",
         Leer: "epLeer",
-        LeerTodos: "epLeerTodos"
+        LeerTodos: "epLeerTodos",
+        SubirArchivo: "epSubirArchivo"
     },
     Param: {
         elementoJson: "elementoJson",

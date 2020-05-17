@@ -51,6 +51,14 @@ namespace MVCSistemaDeElementos.Controllers
             return RedirectToAction(GestorDelCrud.Descriptor.Vista);
         }
 
+        //END-POIN: desde el ApiDeArchivos
+        public JsonResult epSubirArchivo(string archivo)
+        {
+            var r = new Resultado();
+            return new JsonResult(r);
+
+        }
+
 
         //END-POINT: Desde CrudCreacion.ts
         public JsonResult epCrearElemento(string elementoJson)
