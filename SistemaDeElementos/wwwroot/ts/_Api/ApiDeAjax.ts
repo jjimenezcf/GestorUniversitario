@@ -32,6 +32,7 @@
         public nombre: string;
         public datos: any;
         public resultado: ResultadoJson;
+        public Error: boolean = false;
 
         public get Tipo(): TipoPeticion { return this._tipoPeticion; }
         public get Request(): XMLHttpRequest { return this._req; }
@@ -68,10 +69,8 @@
 
         public Ejecutar() {
             BlanquearMensaje();
-            let error: string;
-            this.PeticionAjax();
-            if (!EsNula(error))
-                throw error;
+            this.PeticionAjax();  
+            if (this.Error) throw `${this.resultado.mensaje}`;
         }
 
         private PeticionAjax() {
@@ -102,16 +101,20 @@
         }
 
         private ErrorEnPeticion() {
-            if (EsNula(this.Request.response)) {
+            this.Error = true;
+
+            if (EsNula(this.Request.response)) 
                 return `La peticion ${this.nombre} no se ha podido realizar`;
-            }
 
             let resultado: ResultadoJson = JSON.parse(this.Request.response);
             console.error(resultado.consola);
             if (!EsNula(resultado.mensaje))
                 resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${resultado.mensaje}`;
 
-            this.SiHayError(this, resultado.mensaje);
+            if (this.SiHayError)
+                this.SiHayError(this, resultado.mensaje);
+
+            
 
         }
 
@@ -121,7 +124,8 @@
             if (!EsNula(this.resultado.mensaje))
                 Mensaje(TipoMensaje.Info, this.resultado.mensaje);
 
-            this.TrasLaPeticion(this);
+            if (this.TrasLaPeticion)
+                this.TrasLaPeticion(this);
         }
     }
 

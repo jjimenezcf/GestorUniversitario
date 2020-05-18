@@ -162,7 +162,7 @@
                 for (let j = 0; j < tds.length; j++) {
                     let input: HTMLInputElement = tds[j].getElementsByTagName('input')[0] as HTMLInputElement;
                     if (input !== undefined) {
-                        let propiedad: string = input.getAttribute("propiedad");
+                        let propiedad: string = input.getAttribute(Atributo.propiedad);
                         if (!EsNula(propiedad) && expresion.includes(`[${propiedad}]`)) {
                             expresion = expresion.replace(`[${propiedad}]`, input.value);
                         }

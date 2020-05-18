@@ -9,9 +9,8 @@ namespace Gestor.Elementos.Seguridad
         public static string PermisosDeUnUsuario = nameof(PermisosDeUnUsuario).ToLower();
     }
 
-    [IUDto(ClaseTypeScriptDeCreacion = "CrudCreacionPermiso"
-     , AnchoEtiqueta = 20
-     , AnchoSeparador = 5)]
+    [IUDto( AnchoEtiqueta = 20
+          , AnchoSeparador = 5)]
     public class PermisoDto : Elemento
     {
         [IUPropiedad(

@@ -6,7 +6,7 @@
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
-        
+
         private get Controlador(): string {
             return this.PanelDeEditar.getAttribute(Literal.controlador);
         }
@@ -92,7 +92,7 @@
 
         private DefinirFiltroPorId(id: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
-            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado('id','igual', `${id}`);
+            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado('id', 'igual', `${id}`);
             clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }
@@ -114,10 +114,8 @@
                 , null
                 , null
             );
-
             a.Ejecutar();
         }
-
     }
 
     export function EjecutarMenuEdt(accion: string): void {

@@ -98,10 +98,7 @@
 
             if (check.checked) {
                 let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
-                if (EsNula(expresionElemento))
-                    Mensaje(TipoMensaje.Error, `No está definida la expresion del elemento del grid ${this.IdGrid}`);
-                else
-                    this.AnadirAlInfoSelector(idCheck, expresionElemento);
+                this.AnadirAlInfoSelector(idCheck, expresionElemento);
             }
             else
                 this.QuitarDelSelector(idCheck);

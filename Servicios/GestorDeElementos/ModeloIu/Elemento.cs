@@ -131,15 +131,14 @@ namespace Gestor.Elementos.ModeloIu
 
     public class IUDtoAttribute : Attribute
     {
+        /// <summary>
+        /// Ancho que se les da a las etiquetas en la iu
+        /// </summary>
         public short AnchoEtiqueta { get; set; } = 15;
+        /// <summary>
+        /// Separación entre la etiqueta y el contro que muestra el dato
+        /// </summary>
         public short AnchoSeparador { get; set; } = 2;
-        public string ClaseTypeScriptDeCreacion { get; set; } = "CrudCreacion";
-        public string ClaseTypeScriptDeEdicion { get; set; } = "CrudEdicion";
-
-        public string AlCerrar { get; set; } = "Crud.Crear.AlCerrar()";
-
-        public string AlAceptar { get; set; } = "Crud.Crear.AlAceptar()";
-
     }
 
 
@@ -191,18 +190,6 @@ namespace Gestor.Elementos.ModeloIu
                     IUDtoAttribute a = (IUDtoAttribute)propiedad;
                     switch (nombreAtributo)
                     {
-                        case nameof(IUDtoAttribute.ClaseTypeScriptDeCreacion):
-                            return a.ClaseTypeScriptDeCreacion;
-
-                        case nameof(IUDtoAttribute.ClaseTypeScriptDeEdicion):
-                            return a.ClaseTypeScriptDeEdicion;
-
-                        case nameof(IUDtoAttribute.AlAceptar):
-                            return a.AlAceptar;
-
-                        case nameof(IUDtoAttribute.AlCerrar):
-                            return a.AlCerrar;
-
                         case nameof(IUDtoAttribute.AnchoEtiqueta):
                             return a.AnchoEtiqueta;
 
@@ -212,18 +199,6 @@ namespace Gestor.Elementos.ModeloIu
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");
                 }
-                //if (propiedad is IUPropiedadAttribute)
-                //{
-                //    IUPropiedadAttribute p = (IUPropiedadAttribute)propiedad;
-                //    switch (nombreAtributo)
-                //    {
-                //        case nameof(IUPropiedadAttribute.Visible):
-                //            return p.Visible;
-                //    }
-                //    if (obligatorio)
-                //        throw new Exception($"Se ha solicitado el atributo {nameof(IUPropiedadAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");
-                //}
-
             }
 
             return null;

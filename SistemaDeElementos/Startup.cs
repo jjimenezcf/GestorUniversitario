@@ -45,6 +45,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePermisos>();
             services.AddScoped<GestorDeVistasMvc>();
             services.AddScoped<GestorDeMenus>();
+            services.AddScoped<GestorDeVariables>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

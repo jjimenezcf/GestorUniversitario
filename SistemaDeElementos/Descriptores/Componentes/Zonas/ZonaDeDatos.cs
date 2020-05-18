@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
+using Gestor.Errores;
+using Utilidades;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -112,6 +114,8 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         private string RenderZonaDeDatos()
         {
+            if (ExpresionElemento.IsNullOrEmpty())
+                GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = 2 seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨ expresion-elemento = ¨{expresion}¨>     

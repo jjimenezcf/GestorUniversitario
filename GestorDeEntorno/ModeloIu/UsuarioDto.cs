@@ -2,6 +2,11 @@
 using System;
 using System.Linq;
 
+/*
+ * ClaseTypeScriptDeCreacion = "Usuarios.CrudCreacionUsuario"
+         , ClaseTypeScriptDeEdicion = "Usuarios.CrudEdicionUsuario"
+ * */
+
 namespace Gestor.Elementos.Entorno
 {
 
@@ -11,9 +16,7 @@ namespace Gestor.Elementos.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
-    [IUDto(ClaseTypeScriptDeCreacion = "Usuarios.CrudCreacionUsuario"
-         , ClaseTypeScriptDeEdicion = "Usuarios.CrudEdicionUsuario"
-         , AnchoEtiqueta =20
+    [IUDto(AnchoEtiqueta =20
          , AnchoSeparador =5)]
     public class UsuarioDto : Elemento
     {

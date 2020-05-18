@@ -107,6 +107,7 @@ class ResultadoJson {
     mensaje: string;
     consola: string;
     datos: any;
+    error: boolean;
 }
 
 class ResultadoHtml extends ResultadoJson {

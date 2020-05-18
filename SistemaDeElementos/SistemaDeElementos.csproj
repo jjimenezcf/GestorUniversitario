@@ -9,6 +9,7 @@
     <Content Remove="wwwroot\Extensiones\Selectores.cs" />
     <Content Remove="wwwroot\js\selectores.js" />
     <Content Remove="wwwroot\tsSelectores.ts" />
+    <Content Remove="wwwroot\ts\Entorno\Variables.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />
@@ -87,6 +88,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Usuarios.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Entorno\Variables.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

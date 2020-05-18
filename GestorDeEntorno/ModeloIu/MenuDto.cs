@@ -4,9 +4,7 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
-    [IUDto(ClaseTypeScriptDeCreacion = "Menu.CrudCreacionUMenu"
-         , ClaseTypeScriptDeEdicion = "Menu.CrudEdicionMenu"
-         , AnchoEtiqueta = 20
+    [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5)]
     public class MenuDto : Elemento
     {
