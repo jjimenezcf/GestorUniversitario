@@ -50,5 +50,17 @@ namespace Gestor.Elementos.Entorno
             return registros
                    .FiltrarPorNombre(filtros);
         }
+
+        protected override void AntesModificarFila(VariableDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesModificarFila(elemento, opciones);
+            new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
+        }
+
+        protected override void AntesEliminarFila(VariableDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesEliminarFila(elemento, opciones);
+            new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
+        }
     }
 }

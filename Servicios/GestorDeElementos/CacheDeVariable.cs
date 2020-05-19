@@ -16,7 +16,7 @@ namespace Gestor.Elementos
     }
 
 
-    class ConsultarVariable 
+    public class CacheDeVariable 
     {
         public ContextoDeElementos Contexto { get; private set; }
 
@@ -39,13 +39,19 @@ namespace Gestor.Elementos
             return (string)consulta.Registros[0][3];
         }
 
-        public ConsultarVariable(ContextoDeElementos contexto)
+        public CacheDeVariable(ContextoDeElementos contexto)
         {
             Contexto = contexto;
             if (cacheVariables == null)
                 cacheVariables = new ConcurrentDictionary<string, string>();
         }
 
-
+        public string BorrarCache(string variable)
+        {
+            var valor = "";
+            if (cacheVariables.ContainsKey(variable))
+                cacheVariables.Remove(variable, out valor);
+            return valor;
+        }
     }
 }

@@ -497,7 +497,7 @@ namespace Gestor.Elementos
 
         public void SubirArchivo(string rutaConFichero)
         {
-            var ruta = new ConsultarVariable(Contexto).ServidorDeArchivos;
+            var ruta = new CacheDeVariable(Contexto).ServidorDeArchivos;
             var fichero = Path.GetFileName(rutaConFichero);
             File.Move(rutaConFichero, $@"{ruta}\{fichero}",true);
         }
