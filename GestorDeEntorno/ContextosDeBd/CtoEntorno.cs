@@ -67,23 +67,27 @@ namespace Gestor.Elementos.Entorno
 
         private string ObtenerVersion()
         {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.version);
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Version);
             return registro == null ? "0.0.0" : registro.Valor;
         }
 
-        public static void NuevaVersion(CtoEntorno cnx)
+        public static void NuevaVersion(CtoEntorno cnx, string nuevaVersion)
         {
-            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.version);
+            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Version);
             if (version == null)
             {
-                cnx.Variables.Add(new VariableDtm { Nombre = Literal.Variable.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new VariableDtm { Nombre = Literal.Variable.Version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.SaveChanges();
             }
             else
             {
-                version.Valor = "0.0.2";
-                cnx.Variables.Update(version);
+                if (version.Valor != nuevaVersion)
+                {
+                    version.Valor = nuevaVersion;
+                    cnx.Variables.Update(version);
+                    cnx.SaveChanges();
+                }
             }
-            cnx.SaveChanges();
         }
 
         public static void InicializarMaestros(CtoEntorno contexto, GestorDeMenus gestorDeMenus, GestorDeVistasMvc gestorDeVistasMvc)

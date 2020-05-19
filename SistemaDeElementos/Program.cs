@@ -53,7 +53,7 @@ namespace MVCSistemaDeElementos
             {
                 ctoEntorno.Database.Migrate();
                 ctoEntorno.IniciarTraza();
-                CtoEntorno.NuevaVersion(ctoEntorno);
+                CtoEntorno.NuevaVersion(ctoEntorno, "0.1");
                 CtoEntorno.InicializarMaestros(ctoEntorno, gestorDeMenus, gestorDeVistasMvc);
             }
             catch (Exception ex)
