@@ -16,7 +16,7 @@ namespace Gestor.Elementos.Entorno
         public string Descripcion { get; set; }
 
         [Required]
-        [Column("VALOR", Order = 3, TypeName = "VARCHAR(50)")]
+        [Column("VALOR", Order = 3, TypeName = "VARCHAR(250)")]
         public string Valor { get; set; }
     }
 

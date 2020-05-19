@@ -17,11 +17,15 @@ namespace Gestor.Elementos
     public class Literal
     {
         internal static readonly string usuario = "jjimenezcf@gmail.com";
-        internal static readonly string DebugarSqls = nameof(DebugarSqls);
         internal static readonly string esquemaBd = "ENTORNO";
-        internal static readonly string version = "Versión";
         internal static readonly string Version_0 = "0.0.0";
         public static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
+
+        public class Variable
+        {
+            public static readonly string version = $"CFG_{nameof(version)}";
+            public static readonly string Debugar_Sqls = $"CFG_{nameof(Debugar_Sqls)}";
+        }
 
         public class Vista
         {
@@ -47,7 +51,7 @@ namespace Gestor.Elementos
         public bool DebugarSqls => (Registros.Count == 1 ? Registros[0][3].ToString() == "S" : false);
 
         public DebugarSql(ContextoDeElementos contexto)
-        : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.DebugarSqls}'")
+        : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.Variable.Debugar_Sqls}'")
         {
             Ejecutar();
         }
@@ -57,7 +61,7 @@ namespace Gestor.Elementos
         public string Version => (Registros.Count == 1 ? (string)Registros[0][3] : Literal.Version_0);
 
         public VersionSql(ContextoDeElementos contexto)
-            : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.version}'")
+            : base(contexto, $"Select * from {Literal.esquemaBd}.{Literal.Tabla.Variable} where NOMBRE like '{Literal.Variable.version}'")
         {
             Ejecutar();
         }

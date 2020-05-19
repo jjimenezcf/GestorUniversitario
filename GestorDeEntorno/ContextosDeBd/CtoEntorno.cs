@@ -4,21 +4,10 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Gestor.Elementos;
 
 namespace Gestor.Elementos.Entorno
 {
-    class Literal
-    {
-        internal static readonly string DebugarSqls = nameof(DebugarSqls);
-        internal static readonly string esquemaBd = "ENTORNO";
-        internal static readonly string version = "Versión";
-
-        internal class Tabla
-        {
-            internal static string Variable = "VARIABLE";
-        }
-    }
-       
     public class CtoEntorno : ContextoDeElementos
     {
 
@@ -30,7 +19,7 @@ namespace Gestor.Elementos.Entorno
                        .SetBasePath(Directory.GetCurrentDirectory())
                        .AddJsonFile("appsettings.json");
                 var configuaracion = generador.Build();
-                var cadenaDeConexion = configuaracion.GetConnectionString(Gestor.Elementos.Literal.CadenaDeConexion);
+                var cadenaDeConexion = configuaracion.GetConnectionString(Literal.CadenaDeConexion);
 
                 var opciones = new DbContextOptionsBuilder<CtoEntorno>();
                 opciones.UseSqlServer(cadenaDeConexion);
@@ -72,22 +61,22 @@ namespace Gestor.Elementos.Entorno
 
         private bool HayQueDebuggar()
         {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.DebugarSqls);
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Debugar_Sqls);
             return registro == null ? false : registro.Valor == "S";
         }
 
         private string ObtenerVersion()
         {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.version);
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.version);
             return registro == null ? "0.0.0" : registro.Valor;
         }
 
         public static void NuevaVersion(CtoEntorno cnx)
         {
-            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.version);
+            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.version);
             if (version == null)
             {
-                cnx.Variables.Add(new VariableDtm { Nombre = Literal.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new VariableDtm { Nombre = Literal.Variable.version, Descripcion = "Versión del producto", Valor = "0.0.1" });
             }
             else
             {
@@ -101,16 +90,6 @@ namespace Gestor.Elementos.Entorno
         {
             if (!contexto.Usuarios.Any())
                 IniciarEntorno.CrearDatosIniciales(contexto);
-
-            //if (!contexto.VistasMvc.Any())
-            //    gestorDeVistasMvc.InicializarVistasMvc();
-
-            //if (!contexto.Menus.Any())
-            //    gestorDeMenus.InicializarMenu();
-
-
-
-
 
         }
 
