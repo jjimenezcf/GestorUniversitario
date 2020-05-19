@@ -34,7 +34,6 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-
         public GestorDeVariables(CtoEntorno contexto, IMapper mapeador)
             :base(contexto,mapeador)
         {
