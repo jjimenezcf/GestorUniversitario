@@ -61,22 +61,22 @@ namespace Gestor.Elementos.Entorno
 
         private bool HayQueDebuggar()
         {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Debugar_Sqls);
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Variable.Debugar_Sqls);
             return registro == null ? false : registro.Valor == "S";
         }
 
         private string ObtenerVersion()
         {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Version);
+            var registro = Variables.SingleOrDefault(v => v.Nombre == Variable.Version);
             return registro == null ? "0.0.0" : registro.Valor;
         }
 
         public static void NuevaVersion(CtoEntorno cnx, string nuevaVersion)
         {
-            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Literal.Variable.Version);
+            var version = cnx.Variables.SingleOrDefault(v => v.Nombre == Variable.Version);
             if (version == null)
             {
-                cnx.Variables.Add(new VariableDtm { Nombre = Literal.Variable.Version, Descripcion = "Versión del producto", Valor = "0.0.1" });
+                cnx.Variables.Add(new VariableDtm { Nombre = Variable.Version, Descripcion = "Versión del producto", Valor = "0.0.1" });
                 cnx.SaveChanges();
             }
             else

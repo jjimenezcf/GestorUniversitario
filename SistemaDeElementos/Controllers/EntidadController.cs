@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Gestor.Elementos.Entorno;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -62,15 +63,22 @@ namespace MVCSistemaDeElementos.Controllers
 
             //var filePath = Path.GetTempFileName();
 
-            var filePath = $@".\wwwroot\Archivos\{fichero.FileName}";
+            var rutaFichero = $@".\wwwroot\Archivos\{fichero.FileName}";
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (var stream = new FileStream(rutaFichero, FileMode.Create))
             {
-                fichero.CopyTo(stream);
+                fichero.CopyTo(stream);                
             }
+
+            SubirArchivo(rutaFichero);
 
             return new JsonResult(r);
 
+        }
+
+        protected void SubirArchivo(string rutaFichero)
+        {
+            GestorDeElementos.SubirArchivo(rutaFichero);
         }
 
 

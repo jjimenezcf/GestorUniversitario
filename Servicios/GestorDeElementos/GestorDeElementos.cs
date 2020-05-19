@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -486,6 +487,19 @@ namespace Gestor.Elementos
                 return null;
 
             return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+        }
+
+
+        #endregion
+
+        #region gestión documental
+
+
+        public void SubirArchivo(string rutaConFichero)
+        {
+            var ruta = new ConsultarVariable(Contexto).ServidorDeArchivos;
+            var fichero = Path.GetFileName(rutaConFichero);
+            File.Move(rutaConFichero, $@"{ruta}\{fichero}",true);
         }
 
         #endregion
