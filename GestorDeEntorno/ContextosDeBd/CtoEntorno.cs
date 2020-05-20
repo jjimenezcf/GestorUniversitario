@@ -8,35 +8,38 @@ using Gestor.Elementos;
 
 namespace Gestor.Elementos.Entorno
 {
+    public class ConstructorDelContexto : IDesignTimeDbContextFactory<CtoEntorno>
+    {
+        public CtoEntorno CreateDbContext(string[] arg)
+        {
+
+            var datosDeConexion = ObtenerDatosDeConexion();
+
+            var opciones = new DbContextOptionsBuilder<CtoEntorno>();
+            opciones.UseSqlServer(datosDeConexion.CadenaConexion);
+            object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
+
+            return (CtoEntorno)Activator.CreateInstance(typeof(CtoEntorno), parametros);
+        }
+    }
+
     public class CtoEntorno : ContextoDeElementos
     {
 
-        public class ConstructorDelContexto : IDesignTimeDbContextFactory<CtoEntorno>
-        {
-            public CtoEntorno CreateDbContext(string[] arg)
-            {
-
-                var datosDeConexion = ObtenerCadenaDeConexion();
-
-                var opciones = new DbContextOptionsBuilder<CtoEntorno>();
-                opciones.UseSqlServer(datosDeConexion.CadenaConexion);
-                object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
-
-                return (CtoEntorno)Activator.CreateInstance(typeof(CtoEntorno), parametros);
-            }
-        }
-
         public static CtoEntorno CrearContexto()
         {
-            return new ConstructorDelContexto().CreateDbContext(new string[] { });
+            return (CtoEntorno)ObtenerContexto(nameof(CtoEntorno), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
         }
 
+        #region dbSets del contexto de seguridad
         public DbSet<MenuDtm> Menus { get; set; }
         public DbSet<ArbolDeMenuDtm> MenuSe { get; set; }
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
         public DbSet<UsuPermisoDtm> UsuPermisos { get; set; }
+
+        #endregion
 
         public CtoEntorno(DbContextOptions<CtoEntorno> options, IConfiguration configuracion) :
         base(options, configuracion)
@@ -53,18 +56,6 @@ namespace Gestor.Elementos.Entorno
             TablaMenu.Definir(modelBuilder);
             VistaMenuSe.Definir(modelBuilder);
             VistaUsuarioPermiso.Definir(modelBuilder);
-        }
-
-        private bool HayQueDebuggar()
-        {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Variable.Debugar_Sqls);
-            return registro == null ? false : registro.Valor == "S";
-        }
-
-        private string ObtenerVersion()
-        {
-            var registro = Variables.SingleOrDefault(v => v.Nombre == Variable.Version);
-            return registro == null ? "0.0.0" : registro.Valor;
         }
 
         public static void NuevaVersion(CtoEntorno cnx, string nuevaVersion)
