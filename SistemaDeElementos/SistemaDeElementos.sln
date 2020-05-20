@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeEntorno", "..\Gesto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migraciones", "..\Migraciones\Migraciones.csproj", "{8C8425B1-EF9D-420C-9FBB-5C801DF3467B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDePermisos", "..\GestorDePermisos\GestorDePermisos.csproj", "{3860F964-99F4-4C46-97B2-66D4E238F1E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeSeguridad", "..\GestorDePermisos\GestorDeSeguridad.csproj", "{3860F964-99F4-4C46-97B2-66D4E238F1E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

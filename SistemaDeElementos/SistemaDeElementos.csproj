@@ -75,7 +75,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GestorDeEntorno\GestorDeEntorno.csproj" />
-    <ProjectReference Include="..\GestorDePermisos\GestorDePermisos.csproj" />
+    <ProjectReference Include="..\GestorDePermisos\GestorDeSeguridad.csproj" />
     <ProjectReference Include="..\Migraciones\Migraciones.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeErrores\GestorDeErrores.csproj" />
