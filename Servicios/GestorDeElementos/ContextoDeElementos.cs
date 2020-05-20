@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Utilidades;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Design;
+using System.Reflection;
 
 namespace Gestor.Elementos
 {
@@ -78,6 +80,19 @@ namespace Gestor.Elementos
 
         public TrazaSql Traza { get; private set; }
         private InterceptadorDeConsultas _interceptadorDeConsultas;
+
+
+        public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerCadenaDeConexion()
+        {
+            var generador = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json");
+
+            var configuracion = generador.Build();
+            var cadenaDeConexion = configuracion.GetConnectionString(Literal.CadenaDeConexion);
+            return (configuracion, cadenaDeConexion);
+        }
+
 
         public ContextoDeElementos(DbContextOptions options, IConfiguration configuracion) :
         base(options)

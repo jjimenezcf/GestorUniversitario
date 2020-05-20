@@ -15,23 +15,19 @@ namespace Gestor.Elementos.Entorno
         {
             public CtoEntorno CreateDbContext(string[] arg)
             {
-                var generador = new ConfigurationBuilder()
-                       .SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json");
-                var configuaracion = generador.Build();
-                var cadenaDeConexion = configuaracion.GetConnectionString(Literal.CadenaDeConexion);
+
+                var datosDeConexion = ObtenerCadenaDeConexion();
 
                 var opciones = new DbContextOptionsBuilder<CtoEntorno>();
-                opciones.UseSqlServer(cadenaDeConexion);
-                object[] parametros = { opciones.Options, configuaracion };
+                opciones.UseSqlServer(datosDeConexion.CadenaConexion);
+                object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
 
                 return (CtoEntorno)Activator.CreateInstance(typeof(CtoEntorno), parametros);
             }
         }
 
-        public static CtoEntorno Crear()
+        public static CtoEntorno CrearContexto()
         {
-
             return new ConstructorDelContexto().CreateDbContext(new string[] { });
         }
 

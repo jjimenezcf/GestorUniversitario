@@ -14,20 +14,21 @@ namespace Gestor.Elementos.Seguridad
         {
             public CtoSeguridad CreateDbContext(string[] arg)
             {
-                var generador = new ConfigurationBuilder()
-                       .SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json");
-                var configuaracion = generador.Build();
-                var cadenaDeConexion = configuaracion.GetConnectionString(Gestor.Elementos.Literal.CadenaDeConexion);
+
+                var datosDeConexion = ObtenerCadenaDeConexion();
 
                 var opciones = new DbContextOptionsBuilder<CtoSeguridad>();
-                opciones.UseSqlServer(cadenaDeConexion);
-                object[] parametros = { opciones.Options, configuaracion };
+                opciones.UseSqlServer(datosDeConexion.CadenaConexion);
+                object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
 
                 return (CtoSeguridad)Activator.CreateInstance(typeof(CtoSeguridad), parametros);
             }
         }
 
+        public static CtoSeguridad CrearContexto()
+        {
+            return new ConstructorDelContexto().CreateDbContext(new string[] { });
+        }
 
         public DbSet<TipoPermisoDtm> TiposDePermisos { get; set; }
         public DbSet<ClasePermisoDtm> ClasesDePermisos { get; set; }

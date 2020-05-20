@@ -12,16 +12,21 @@ using System.Collections.Concurrent;
 
 namespace GestorDeElementos
 {
-    public class Generador 
+    public class Generador<TContexto, IMapper> 
     {
         public static ConcurrentDictionary<string, object> cacheObjetos = new ConcurrentDictionary<string, object>();
 
         public static object GenerarObjeto(string dll, string nombreClase, object[] parametros)
         {
+            if (!dll.EndsWith(".dll")) dll = dll + ".dll";
+
             if (!cacheObjetos.ContainsKey(nombreClase) || cacheObjetos[nombreClase] == null)
             {
                 var clase = ReferenciarClase(dll, nombreClase);
-                cacheObjetos[nombreClase] = clase.InvokeMember("Crear", BindingFlags.InvokeMethod, null, null, parametros); 
+                var constructorConParametros = clase.GetConstructor(new[] { typeof(TContexto), typeof(IMapper) });
+                var objetoConParametros = constructorConParametros.Invoke(parametros);
+
+                cacheObjetos[nombreClase] = objetoConParametros;
             }
 
 

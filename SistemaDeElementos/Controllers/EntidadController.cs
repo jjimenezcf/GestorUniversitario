@@ -17,6 +17,11 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Gestor.Elementos.Entorno;
+using GestorDeElementos;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
+using Gestor.Elementos.Seguridad;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -67,8 +72,21 @@ namespace MVCSistemaDeElementos.Controllers
 
             using (var stream = new FileStream(rutaFichero, FileMode.Create))
             {
-                fichero.CopyTo(stream);                
+                fichero.CopyTo(stream);
             }
+
+            var contexto = CtoSeguridad.CrearContexto();
+
+            var gestorDeVariables = (GestorDeClaseDePermisos) 
+                Generador<CtoSeguridad, IMapper>.GenerarObjeto(contexto.GetType().Assembly.GetName().Name
+                                                             , nameof(GestorDeClaseDePermisos)
+                                                             , new object[] { contexto, GestorDeElementos.Mapeador });
+
+            var variable = gestorDeVariables.LeerRegistros(0
+                , 1
+                , new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado() { Criterio = CriteriosDeFiltrado.igual, Propiedad = nameof(VariableDto.Nombre), Valor = Variable.Servidor_Archivos } }
+                );
+
 
             SubirArchivo(rutaFichero);
 
