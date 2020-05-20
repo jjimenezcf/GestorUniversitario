@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Design;
 using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace Gestor.Elementos
 {
@@ -38,18 +39,9 @@ namespace Gestor.Elementos
         public string Usuario { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
- 
-    }
-    public class DebugarSql : ConsultaSql
-    {
-        public bool DebugarSqls => (Registros.Count == 1 ? Registros[0][3].ToString() == "S" : false);
 
-        public DebugarSql(ContextoDeElementos contexto)
-        : base(contexto, $"Select * from {Literal.Tabla.Variable} where NOMBRE like '{Variable.Debugar_Sqls}'")
-        {
-            Ejecutar();
-        }
     }
+
     public class VersionSql : ConsultaSql
     {
         public string Version => (Registros.Count == 1 ? (string)Registros[0][3] : Literal.Version_0);
@@ -62,27 +54,20 @@ namespace Gestor.Elementos
     }
     public class ContextoDeElementos : DbContext
     {
+        private static ConcurrentDictionary<string, ContextoDeElementos> _CacheDeContextos { get; set; }
         public DatosDeConexion DatosDeConexion { get; private set; }
         public IConfiguration Configuracion { get; private set; }
 
-        public bool Debuggar
-        {
-            get
-            {
-                var a = new DebugarSql(this);
-                if (a != null)
-                    return a.DebugarSqls;
+        public bool Debuggar => new CacheDeVariable(this).HayQueDebuggar;
 
-                return false;
-            }
-        }
+        private string ObtenerVersion => new CacheDeVariable(this).Version;
 
 
         public TrazaSql Traza { get; private set; }
+
         private InterceptadorDeConsultas _interceptadorDeConsultas;
 
-
-        public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerCadenaDeConexion()
+        public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerDatosDeConexion()
         {
             var generador = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
@@ -93,6 +78,16 @@ namespace Gestor.Elementos
             return (configuracion, cadenaDeConexion);
         }
 
+        protected static ContextoDeElementos ObtenerContexto(string nombreContexto, Func<ContextoDeElementos> crearContexto)
+        {
+            if (!_CacheDeContextos.ContainsKey(nombreContexto))
+            {
+                var contexto = crearContexto();
+                _CacheDeContextos[nombreContexto] = contexto;
+            }
+
+            return _CacheDeContextos[nombreContexto];
+        }
 
         public ContextoDeElementos(DbContextOptions options, IConfiguration configuracion) :
         base(options)
@@ -119,26 +114,10 @@ namespace Gestor.Elementos
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
             DatosDeConexion.Usuario = Literal.usuario;
+            DatosDeConexion.Version = ObtenerVersion;
 
-            try
-            {
-                DatosDeConexion.Version = new ExisteTabla(this, Literal.Tabla.Variable.Split('.')[1]).Existe ?
-                                          ObtenerVersion() :
-                                          Literal.Version_0;
-            }
-            catch
-            {
-                DatosDeConexion.Version = Literal.Version_0;
-            }
-        }
-
-        private string ObtenerVersion()
-        {
-            var a = new VersionSql(this);
-            if (a != null)
-                return a.Version;
-
-            return Literal.Version_0;
+            if (_CacheDeContextos == null)
+                _CacheDeContextos = new ConcurrentDictionary<string, ContextoDeElementos>();
         }
 
         public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }

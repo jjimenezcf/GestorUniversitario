@@ -88,15 +88,10 @@ namespace MVCSistemaDeElementos.Controllers
                 );
 
 
-            SubirArchivo(rutaFichero);
+            GestorDeElementos.SubirArchivo(rutaFichero);
 
             return new JsonResult(r);
 
-        }
-
-        protected void SubirArchivo(string rutaFichero)
-        {
-            GestorDeElementos.SubirArchivo(rutaFichero);
         }
 
 

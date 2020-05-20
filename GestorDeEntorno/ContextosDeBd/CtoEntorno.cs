@@ -13,7 +13,7 @@ namespace Gestor.Elementos.Entorno
         public CtoEntorno CreateDbContext(string[] arg)
         {
 
-            var datosDeConexion = ObtenerDatosDeConexion();
+            var datosDeConexion = ContextoDeElementos.ObtenerDatosDeConexion();
 
             var opciones = new DbContextOptionsBuilder<CtoEntorno>();
             opciones.UseSqlServer(datosDeConexion.CadenaConexion);

@@ -64,7 +64,7 @@ namespace Gestor.Elementos
             if (consulta.Registros.Count == 0)
                 Errores.GestorDeErrores.Emitir($"No se han localizado registros para la {sentencia}");
 
-            if (consulta.Registros.Count == 1)
+            if (consulta.Registros.Count > 1)
                 Errores.GestorDeErrores.Emitir($"Hay más de un registros para la {sentencia}");
 
             return (string)consulta.Registros[0][3];
