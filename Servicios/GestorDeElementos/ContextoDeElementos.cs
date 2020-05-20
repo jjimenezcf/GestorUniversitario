@@ -42,16 +42,7 @@ namespace Gestor.Elementos
 
     }
 
-    public class VersionSql : ConsultaSql
-    {
-        public string Version => (Registros.Count == 1 ? (string)Registros[0][3] : Literal.Version_0);
 
-        public VersionSql(ContextoDeElementos contexto)
-            : base(contexto, $"Select * from {Literal.Tabla.Variable} where NOMBRE like '{Variable.Version}'")
-        {
-            Ejecutar();
-        }
-    }
     public class ContextoDeElementos : DbContext
     {
         private static ConcurrentDictionary<string, ContextoDeElementos> _CacheDeContextos { get; set; }
