@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using Gestor.Errores;
 using Gestor.Elementos;
@@ -13,15 +11,10 @@ using MVCSistemaDeElementos.UtilidadesIu;
 using Newtonsoft.Json;
 using MVCSistemaDeElementos.Descriptores;
 using System.Linq;
-using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Gestor.Elementos.Entorno;
-using GestorDeElementos;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
-using Gestor.Elementos.Seguridad;
+using Gestor.Elementos.Archivos;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -75,20 +68,9 @@ namespace MVCSistemaDeElementos.Controllers
                 fichero.CopyTo(stream);
             }
 
-            var contexto = CtoSeguridad.CrearContexto();
+            var contexto = CtoEntorno.CrearContexto();
 
-            var gestorDeVariables = (GestorDeClaseDePermisos) 
-                Generador<CtoSeguridad, IMapper>.GenerarObjeto(contexto.GetType().Assembly.GetName().Name
-                                                             , nameof(GestorDeClaseDePermisos)
-                                                             , new object[] { contexto, GestorDeElementos.Mapeador });
-
-            var variable = gestorDeVariables.LeerRegistros(0
-                , 1
-                , new List<ClausulaDeFiltrado>() { new ClausulaDeFiltrado() { Criterio = CriteriosDeFiltrado.igual, Propiedad = nameof(VariableDto.Nombre), Valor = Variable.Servidor_Archivos } }
-                );
-
-
-            GestorDeElementos.SubirArchivo(rutaFichero);
+            Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
 
             return new JsonResult(r);
 

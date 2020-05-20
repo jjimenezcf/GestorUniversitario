@@ -5,6 +5,7 @@ using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -122,6 +123,8 @@ namespace Gestor.Elementos
         private GestorDeErrores _gestorDeErrores;
         public IMapper Mapeador;
 
+        private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros;
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -139,6 +142,7 @@ namespace Gestor.Elementos
         {
             Contexto = contexto;
             Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
+            _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         }
 
         #region ASYNC
@@ -247,9 +251,41 @@ namespace Gestor.Elementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
+        public TRegistro LeerRegistroCacheado(string propiedad, string valor)
+        {
+            var indice = $"{nameof(TRegistro)}-{propiedad}-{valor}";
+            if (!_CacheDeRegistros.ContainsKey(indice))
+            {
+                _CacheDeRegistros[indice] = LeerRegistro(propiedad, valor);
+            }
+            return _CacheDeRegistros[indice];
+        }
+
+        public TRegistro LeerRegistro(string propiedad, string valor)
+        {
+            var filtro = new ClausulaDeFiltrado()
+            {
+                Criterio = CriteriosDeFiltrado.igual,
+                Propiedad = propiedad,
+                Valor = valor
+            };
+
+            var filtros = new List<ClausulaDeFiltrado>() { filtro } ;
+            IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
+
+            var elementosDeBd = registros.AsNoTracking().ToList();
+
+            if (elementosDeBd.Count == 0)
+                GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
+
+            if (elementosDeBd.Count >1)
+                GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
+
+            return elementosDeBd[0];
+        }
+
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
-
             List<TRegistro> elementosDeBd;
 
             IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins, parametros);
@@ -492,17 +528,6 @@ namespace Gestor.Elementos
 
         #endregion
 
-        #region gestión documental
-
-
-        public void SubirArchivo(string rutaConFichero)
-        {
-            var ruta = new CacheDeVariable(Contexto).ServidorDeArchivos;
-            var fichero = Path.GetFileName(rutaConFichero);
-            File.Move(rutaConFichero, $@"{ruta}\{fichero}",true);
-        }
-
-        #endregion
 
     }
 

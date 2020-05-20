@@ -14,8 +14,32 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : VariableDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(VariableDto.Nombre))
-                    return regristros.Where(x => x.Nombre.Contains(filtro.Valor) || x.Valor.Contains(filtro.Valor));
+            {
+                if (filtro.Propiedad.ToLower() == nameof(VariableDto.Nombre).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return regristros.Where(x => x.Nombre == filtro.Valor);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return regristros.Where(x => x.Nombre.Contains(filtro.Valor));
+                }
+            }
+
+            return regristros;
+        }
+        public static IQueryable<T> FiltrarPorValor<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : VariableDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Propiedad.ToLower() == nameof(VariableDto.Valor).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return regristros.Where(x => x.Valor == filtro.Valor);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return regristros.Where(x => x.Valor.Contains(filtro.Valor));
+                }
+            }
 
             return regristros;
         }
@@ -25,9 +49,9 @@ namespace Gestor.Elementos.Entorno
     public class GestorDeVariables : GestorDeElementos<CtoEntorno, VariableDtm, VariableDto>
     {
 
-        public class MapearMenus : Profile
+        public class MapearVariables : Profile
         {
-            public MapearMenus()
+            public MapearVariables()
             {
                 CreateMap<VariableDtm, VariableDto>();
                 CreateMap<VariableDto, VariableDtm>();
@@ -40,7 +64,7 @@ namespace Gestor.Elementos.Entorno
         //}
 
         public GestorDeVariables(CtoEntorno contexto, IMapper mapeador)
-            :base(contexto,mapeador)
+            : base(contexto, mapeador)
         {
 
         }
@@ -52,7 +76,8 @@ namespace Gestor.Elementos.Entorno
                     return base.AplicarFiltros(registros, filtros, parametros);
 
             return registros
-                   .FiltrarPorNombre(filtros);
+                   .FiltrarPorNombre(filtros)
+                   .FiltrarPorValor(filtros);
         }
 
         protected override void AntesModificarFila(VariableDto elemento, ParametrosDeNegocio opciones)

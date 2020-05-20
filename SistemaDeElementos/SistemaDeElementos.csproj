@@ -80,6 +80,7 @@
     <ProjectReference Include="..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeErrores\GestorDeErrores.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
+    <ProjectReference Include="..\GestorDeArchivos\GestorDocumental.csproj" />
   </ItemGroup>
 
   <ItemGroup>
