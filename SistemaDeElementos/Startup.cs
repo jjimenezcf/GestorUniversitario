@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Gestor.Elementos;
-using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Seguridad;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using ServicioDeDatos;
+using Gestor.Elementos.Entorno;
+using Gestor.Elementos.Seguridad;
 
 namespace MVCSistemaDeElementos
 {
@@ -37,8 +37,7 @@ namespace MVCSistemaDeElementos
             services.AddRazorPages();
             var cadenaDeConexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
 
-            services.AddDbContext<CtoEntorno>(options => options.UseSqlServer(cadenaDeConexion));
-            services.AddDbContext<CtoSeguridad>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<ContextoDeElementos>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();

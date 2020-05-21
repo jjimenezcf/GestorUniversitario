@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AutoMapper;
-using Utilidades;
+using ServicioDeDatos;
+using ServicioDeDatos.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class GestorDeArbolDeMenu : GestorDeElementos<CtoEntorno, ArbolDeMenuDtm, ArbolDeMenuDto>
+    public class GestorDeArbolDeMenu : GestorDeElementos<ContextoDeElementos, ArbolDeMenuDtm, ArbolDeMenuDto>
     {
         public class MapearMenus : Profile
         {
@@ -16,7 +15,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeArbolDeMenu(CtoEntorno contexto, IMapper mapeador)
+        public GestorDeArbolDeMenu(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

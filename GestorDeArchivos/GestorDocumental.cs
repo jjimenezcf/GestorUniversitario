@@ -1,18 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using Utilidades;
-using System;
-using Gestor.Elementos.ModeloIu;
 using Gestor.Elementos.Entorno;
-using GestorDeElementos;
-using Gestor.Elementos.Archivos;
 using System.IO;
+using ServicioDeDatos.Archivos;
+using ServicioDeDatos;
+using ServicioDeDatos.Utilidades;
 
 namespace Gestor.Elementos.Archivos
 {
-    public class GestorDocumental : GestorDeElementos<CtoDocumental, ArchivosDtm, ArchivosDto>
+    public class GestorDocumental : GestorDeElementos<ContextoDeElementos, ArchivosDtm, ArchivosDto>
     {
         public class MapearArchivos : Profile
         {
@@ -27,25 +23,24 @@ namespace Gestor.Elementos.Archivos
         public static void SubirArchivo(string rutaConFichero, IMapper mapeador)
         {
 
-            var contexto = CtoDocumental.CrearContexto();
+            var contexto = ContextoDeElementos.CrearContexto();
 
-            var gestorDocumental = (GestorDocumental)Generador<CtoDocumental, IMapper>.GenerarObjeto(contexto.GetType().Assembly.GetName().Name
-                                                             , nameof(GestorDocumental)
-                                                             , new object[] { contexto, mapeador });
+            var gestorDocumental = new GestorDocumental(contexto, mapeador);
 
             gestorDocumental.SubirArchivoInterno(rutaConFichero);
         }
 
-        public GestorDocumental(CtoDocumental contexto, IMapper mapeador) : base(contexto, mapeador)
+        public GestorDocumental(ContextoDeElementos contexto, IMapper mapeador) 
+        : base(contexto, mapeador)
         {
         }
 
         private void SubirArchivoInterno(string rutaConFichero)
         {
 
-            var contexto = CtoEntorno.CrearContexto();
+            var contexto = ContextoDeElementos.CrearContexto();
 
-            var gestorDeVariables = (GestorDeVariables) Generador<CtoEntorno, IMapper>.GenerarObjeto(contexto.GetType().Assembly.GetName().Name
+            var gestorDeVariables = (GestorDeVariables) Generador<ContextoDeElementos, IMapper>.GenerarObjeto("GestorDeEntorno"
                                                              , nameof(GestorDeVariables)
                                                              , new object[] { contexto, Mapeador });
 

@@ -4,6 +4,8 @@ using System.Linq;
 using AutoMapper;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
+using ServicioDeDatos.Entorno;
+using ServicioDeDatos;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -63,7 +65,7 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-    public class GestorDeUsuarios : GestorDeElementos<CtoEntorno, UsuarioDtm, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<ContextoDeElementos, UsuarioDtm, UsuarioDto>
     {
 
         public class MapearUsuario : Profile
@@ -75,7 +77,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeUsuarios(CtoEntorno contexto, IMapper mapeador)
+        public GestorDeUsuarios(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

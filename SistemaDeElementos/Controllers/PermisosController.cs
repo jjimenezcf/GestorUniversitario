@@ -1,16 +1,14 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 using Gestor.Elementos.Seguridad;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ServicioDeDatos.Seguridad;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class PermisosController : EntidadController<CtoSeguridad, PermisoDtm, PermisoDto>
+    public class PermisosController : EntidadController<ContextoDeElementos, PermisoDtm, PermisoDto>
     {
         public PermisosController(GestorDePermisos gestorDePermisos, GestorDeErrores gestorDeErrores)
         : base

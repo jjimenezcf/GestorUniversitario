@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Gestor.Elementos.Entorno;
+﻿using ServicioDeDatos;
 using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
-using Utilidades;
+using ServicioDeDatos.Entorno;
+using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class VariablesController : EntidadController<CtoEntorno, VariableDtm, VariableDto>
+    public class VariablesController : EntidadController<ContextoDeElementos, VariableDtm, VariableDto>
     {
 
         public VariablesController(GestorDeVariables gestorDeVariables, GestorDeErrores gestorDeErrores)

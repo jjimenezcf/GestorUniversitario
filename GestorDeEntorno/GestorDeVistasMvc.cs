@@ -4,11 +4,13 @@ using System.Linq;
 using AutoMapper;
 using Utilidades;
 using Gestor.Elementos.ModeloIu;
+using ServicioDeDatos;
+using ServicioDeDatos.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeVistasMvc : GestorDeElementos<CtoEntorno, VistaMvcDtm, VistaMvcDto>
+    public class GestorDeVistasMvc : GestorDeElementos<ContextoDeElementos, VistaMvcDtm, VistaMvcDto>
     {
 
         public class MapearVistasMvc : Profile
@@ -22,7 +24,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeVistasMvc(CtoEntorno contexto, IMapper mapeador)
+        public GestorDeVistasMvc(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

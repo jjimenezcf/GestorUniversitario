@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Models;
 using Gestor.Errores;
 using System;
-using Gestor.Elementos.Entorno;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
     public class HomeController : BaseController
     {
 
-        public HomeController(CtoEntorno contexto, GestorDeErrores gestorDeErrores):
+        public HomeController(ContextoDeElementos contexto, GestorDeErrores gestorDeErrores):
         base(gestorDeErrores)
         {
             DatosDeConexion = contexto.DatosDeConexion;

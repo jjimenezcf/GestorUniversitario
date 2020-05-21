@@ -4,20 +4,22 @@ using System.Text;
 using AutoMapper;
 using Gestor.Elementos;
 using Gestor.Elementos.Seguridad;
+using ServicioDeDatos;
+using ServicioDeDatos.Seguridad;
 
 namespace Gestor.Elementos.Seguridad
 {
-    public class GestorDeClaseDePermisos : GestorDeElementos<CtoSeguridad, ClasePermisoDtm, ClasePermisoDto>
+    public class GestorDeClaseDePermisos : GestorDeElementos<ContextoDeElementos, ClasePermisoDtm, ClasePermisoDto>
     {
         public class MapearClasePermiso : Profile
         {
             public MapearClasePermiso()
             {
-                CreateMap<ClasePermisoDtm, ClasePermisoDto>();
+                CreateMap<ContextoDeElementos, ClasePermisoDto>();
             }
         }
 
-        public GestorDeClaseDePermisos(CtoSeguridad contexto, IMapper mapeador)
+        public GestorDeClaseDePermisos(ContextoDeElementos contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
 

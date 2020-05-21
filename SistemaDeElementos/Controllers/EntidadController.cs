@@ -2,7 +2,6 @@
 using System;
 using Gestor.Errores;
 using Gestor.Elementos;
-using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 using System.Collections.Generic;
@@ -13,8 +12,8 @@ using MVCSistemaDeElementos.Descriptores;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Archivos;
+using ServicioDeDatos;
+using ServicioDeDatos.Elemento;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -68,7 +67,7 @@ namespace MVCSistemaDeElementos.Controllers
                 fichero.CopyTo(stream);
             }
 
-            var contexto = CtoEntorno.CrearContexto();
+            var contexto = ContextoDeElementos.CrearContexto();
 
             Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
 

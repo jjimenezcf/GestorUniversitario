@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using Gestor.Elementos.ModeloBd;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using ServicioDeDatos;
+using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Utilidades;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Utilidades;
 
@@ -118,13 +118,12 @@ namespace Gestor.Elementos
         where TElemento : Elemento
         where TContexto : ContextoDeElementos
     {
-        protected ClaseDeElemetos<TRegistro, TElemento> Metadatos;
         public TContexto Contexto;
         private GestorDeErrores _gestorDeErrores;
         public IMapper Mapeador;
 
         private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros;
-
+        
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -141,7 +140,6 @@ namespace Gestor.Elementos
         protected virtual void IniciarClase(TContexto contexto)
         {
             Contexto = contexto;
-            Metadatos = ClaseDeElemetos<TRegistro, TElemento>.ObtenerGestorDeLaClase();
             _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         }
 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gestor.Elementos.Entorno;
+using ServicioDeDatos;
 using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
+using ServicioDeDatos.Entorno;
 using Utilidades;
+using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class MenusController : EntidadController<CtoEntorno, MenuDtm, MenuDto>
+    public class MenusController : EntidadController<ContextoDeElementos, MenuDtm, MenuDto>
     {
         public GestorDeMenus GestorDeMenus { get; set; }
 

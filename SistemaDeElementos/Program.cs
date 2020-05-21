@@ -1,10 +1,12 @@
 ﻿using System;
-using Gestor.Elementos.Entorno;
+using ServicioDeDatos;
 using Gestor.Elementos.Seguridad;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Gestor.Elementos.Entorno;
+
 namespace MVCSistemaDeElementos
 {
     public class Program
@@ -26,7 +28,7 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoDeSeguro(IServiceProvider services)
         {
-            var ctoPermisos = services.GetRequiredService<CtoSeguridad>();
+            var ctoPermisos = services.GetRequiredService<ContextoDeElementos>();
             try
             {
                 ctoPermisos.Database.Migrate();
@@ -46,25 +48,23 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
-            var ctoEntorno = services.GetRequiredService<CtoEntorno>();
+            var contexto = services.GetRequiredService<ContextoDeElementos>();
             var gestorDeMenus = services.GetRequiredService<GestorDeMenus>();
             var gestorDeVistasMvc = services.GetRequiredService<GestorDeVistasMvc>();
             try
             {
-                ctoEntorno.Database.Migrate();
-                ctoEntorno.IniciarTraza();
-                CtoEntorno.NuevaVersion(ctoEntorno, "0.1");
-                CtoEntorno.InicializarMaestros(ctoEntorno, gestorDeMenus, gestorDeVistasMvc);
+                contexto.Database.Migrate();
+                contexto.IniciarTraza();
             }
             catch (Exception ex)
             {
                 Gestor.Errores.GestorDeErrores.EnviaError("Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {ctoEntorno.GetType().Name}", ex);
+                throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}", ex);
             }
             finally
             {
-                if (ctoEntorno != null)
-                    ctoEntorno.CerrarTraza();
+                if (contexto != null)
+                    contexto.CerrarTraza();
             }
         }
 

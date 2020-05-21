@@ -3,6 +3,8 @@ using System.Linq;
 using AutoMapper;
 using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
+using ServicioDeDatos;
+using ServicioDeDatos.Seguridad;
 using Utilidades;
 
 namespace Gestor.Elementos.Seguridad
@@ -38,7 +40,7 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-        public class GestorDeRolesDePermisos : GestorDeElementos<CtoSeguridad, RolPermisoDtm, RolPermisoDto>
+    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoDeElementos, RolPermisoDtm, RolPermisoDto>
     {
 
         public class MapearRolPermiso : Profile
@@ -49,7 +51,7 @@ namespace Gestor.Elementos.Seguridad
             }
         }
 
-        public GestorDeRolesDePermisos(CtoSeguridad contexto, IMapper mapeador)
+        public GestorDeRolesDePermisos(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
         }
@@ -64,7 +66,7 @@ namespace Gestor.Elementos.Seguridad
         protected override IQueryable<RolPermisoDtm> AplicarJoins(IQueryable<RolPermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            registros = registros.AplicarJoinsDeRolPermiso(joins,parametros);
+            registros = registros.AplicarJoinsDeRolPermiso(joins, parametros);
             return registros;
         }
 

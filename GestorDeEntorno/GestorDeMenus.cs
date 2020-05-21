@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Utilidades;
-using System;
+using ServicioDeDatos;
+using ServicioDeDatos.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -74,7 +75,7 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-    public class GestorDeMenus : GestorDeElementos<CtoEntorno, MenuDtm, MenuDto>
+    public class GestorDeMenus : GestorDeElementos<ContextoDeElementos, MenuDtm, MenuDto>
     {
         public class MapearMenus : Profile
         {
@@ -86,7 +87,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeMenus(CtoEntorno contexto, IMapper mapeador)
+        public GestorDeMenus(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

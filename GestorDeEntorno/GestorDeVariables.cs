@@ -5,6 +5,8 @@ using AutoMapper;
 using Utilidades;
 using System;
 using Gestor.Elementos.ModeloIu;
+using ServicioDeDatos.Entorno;
+using ServicioDeDatos;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -46,7 +48,7 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-    public class GestorDeVariables : GestorDeElementos<CtoEntorno, VariableDtm, VariableDto>
+    public class GestorDeVariables : GestorDeElementos<ContextoDeElementos, VariableDtm, VariableDto>
     {
 
         public class MapearVariables : Profile
@@ -63,7 +65,7 @@ namespace Gestor.Elementos.Entorno
         //    return new GestorDeVariables(contexto, mapeador);
         //}
 
-        public GestorDeVariables(CtoEntorno contexto, IMapper mapeador)
+        public GestorDeVariables(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

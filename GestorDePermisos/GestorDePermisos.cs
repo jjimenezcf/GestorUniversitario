@@ -6,6 +6,8 @@ using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Gestor.Errores;
+using ServicioDeDatos.Seguridad;
+using ServicioDeDatos;
 
 namespace Gestor.Elementos.Seguridad
 {
@@ -119,7 +121,7 @@ namespace Gestor.Elementos.Seguridad
         }
     }
 
-    public class GestorDePermisos : GestorDeElementos<CtoSeguridad, PermisoDtm, PermisoDto>
+    public class GestorDePermisos : GestorDeElementos<ContextoDeElementos, PermisoDtm, PermisoDto>
     {
         public class MapearPermiso : Profile
         {
@@ -136,7 +138,7 @@ namespace Gestor.Elementos.Seguridad
             }
         }
 
-        public GestorDePermisos(CtoSeguridad contexto, IMapper mapeador)
+        public GestorDePermisos(ContextoDeElementos contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
