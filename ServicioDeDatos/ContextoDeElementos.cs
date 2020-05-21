@@ -65,7 +65,7 @@ namespace ServicioDeDatos
         public DbSet<VistaMvcDtm> VistasMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
-        public DbSet<UsuPermisoDtm> UsuPermisos { get; set; }
+        public DbSet<UsuariosDeUnPermisoDtm> UsuPermisos { get; set; }
 
         #endregion
 
@@ -75,10 +75,10 @@ namespace ServicioDeDatos
         public DbSet<ClasePermisoDtm> ClasesDePermisos { get; set; }
         public DbSet<PermisoDtm> Permisos { get; set; }
         public DbSet<RolDtm> Roles { get; set; }
-        public DbSet<rPuesto> Puestos { get; set; }
-        public DbSet<RolPermisoDtm> PermisosDeUnRol { get; set; }
-        public DbSet<rRolPuesto> PuestosDeUnRol { get; set; }
-        public DbSet<RegUsuPuesto> PuestosDeUnUsuario { get; set; }
+        public DbSet<PuestoDtm> Puestos { get; set; }
+        public DbSet<RolesDeUnPermiso> PermisosDeUnRol { get; set; }
+        public DbSet<RolesDeUnPuestoDtm> PuestosDeUnRol { get; set; }
+        public DbSet<PuestosDeUsuarioDtm> PuestosDeUnUsuario { get; set; }
 
         #endregion
 
@@ -161,6 +161,45 @@ namespace ServicioDeDatos
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<CatalogoDelSe>().ToView(Literal.Vista.Catalogo);
+
+            DefinirTablasDelEsquemaDeEntorno(modelBuilder);
+
+            DefinirEsquemaDeSeguridad(modelBuilder);
+
+        }
+
+        private static void DefinirEsquemaDeSeguridad(ModelBuilder modelBuilder)
+        {
+            TablaClasePermiso.Definir(modelBuilder);
+
+            TablaPermiso.Definir(modelBuilder);
+
+            TablaPuesto.Definir(modelBuilder);
+
+            TablaRol.Definir(modelBuilder);
+
+            TablaRolPermiso.Definir(modelBuilder);
+
+            TablaRolPuesto.Definir(modelBuilder);
+
+            TablaPermisoTipo.Definir(modelBuilder);
+
+            TablaUsuPuesto.Definir(modelBuilder);
+        }
+
+        private static void DefinirTablasDelEsquemaDeEntorno(ModelBuilder modelBuilder)
+        {
+            TablaVistaMvc.Definir(modelBuilder);
+
+            TablaVariable.Definir(modelBuilder);
+
+            VistaUsuarioPermiso.Definir(modelBuilder);
+
+            TablaUsuario.Definir(modelBuilder);
+
+            TablaMenu.Definir(modelBuilder);
+
+            VistaMenuSe.Definir(modelBuilder);
         }
 
         public void IniciarTraza()

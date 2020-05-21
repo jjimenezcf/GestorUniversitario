@@ -11,7 +11,7 @@ namespace Gestor.Elementos.Seguridad
 {
     public static partial class Joins
     {
-        public static IQueryable<T> AplicarJoinsDeRolPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : RolPermisoDtm
+        public static IQueryable<T> AplicarJoinsDeRolPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : RolesDeUnPermiso
         {
             foreach (ClausulaDeJoin join in joins)
             {
@@ -29,10 +29,10 @@ namespace Gestor.Elementos.Seguridad
 
     static class FiltrosDeRolesDePermisos
     {
-        public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolPermisoDtm
+        public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolesDeUnPermiso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(RolPermisoDtm.IdPermiso).ToLower())
+                if (filtro.Propiedad.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower())
                     return registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
 
             return registros;
@@ -40,14 +40,14 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoDeElementos, RolPermisoDtm, RolPermisoDto>
+    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoDeElementos, RolesDeUnPermiso, RolPermisoDto>
     {
 
         public class MapearRolPermiso : Profile
         {
             public MapearRolPermiso()
             {
-                CreateMap<RolPermisoDtm, RolPermisoDto>();
+                CreateMap<RolesDeUnPermiso, RolPermisoDto>();
             }
         }
 
@@ -63,14 +63,14 @@ namespace Gestor.Elementos.Seguridad
             joins.Add(new ClausulaDeJoin { Dtm = typeof(RolDtm) });
         }
 
-        protected override IQueryable<RolPermisoDtm> AplicarJoins(IQueryable<RolPermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<RolesDeUnPermiso> AplicarJoins(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
             registros = registros.AplicarJoinsDeRolPermiso(joins, parametros);
             return registros;
         }
 
-        protected override IQueryable<RolPermisoDtm> AplicarFiltros(IQueryable<RolPermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        protected override IQueryable<RolesDeUnPermiso> AplicarFiltros(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)

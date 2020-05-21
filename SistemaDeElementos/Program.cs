@@ -49,11 +49,9 @@ namespace MVCSistemaDeElementos
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
             var contexto = services.GetRequiredService<ContextoDeElementos>();
-            var gestorDeMenus = services.GetRequiredService<GestorDeMenus>();
-            var gestorDeVistasMvc = services.GetRequiredService<GestorDeVistasMvc>();
             try
             {
-                contexto.Database.Migrate();
+               // contexto.Database.Migrate();
                 contexto.IniciarTraza();
             }
             catch (Exception ex)

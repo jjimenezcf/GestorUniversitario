@@ -28,7 +28,8 @@ namespace ServicioDeDatos.Seguridad
 
             modelBuilder.Entity<TipoPermisoDtm>()
                 .HasMany(tp => tp.Permisos)
-                .WithOne(p => p.Tipo);
+                .WithOne(p => p.Tipo)
+                .HasForeignKey(p => p.IdTipo);
 
         }
     }

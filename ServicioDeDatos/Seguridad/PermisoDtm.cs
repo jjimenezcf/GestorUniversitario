@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Entorno;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,18 +15,15 @@ namespace ServicioDeDatos.Seguridad
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
         public string Nombre { get; set; }
 
-        [Column("IDCLASE", TypeName = "INT")]
         public int IdClase { get; set; }
         public virtual ClasePermisoDtm Clase { get; set; }
         
-        [Required]
-        [Column("IDTIPO", TypeName = "INT")]
         public int IdTipo { get; set; }
 
         public virtual TipoPermisoDtm Tipo { get; set; }
 
-        public ICollection<RolPermisoDtm> Roles { get; set; }
-        public ICollection<PerUsuarioDtm> Usuarios { get; set; }
+        public ICollection<RolesDeUnPermiso> Roles { get; set; }
+        public ICollection<UsuariosDeUnPermisoDtm> Usuarios { get; set; }
     }
 
     public static class TablaPermiso
@@ -40,6 +38,8 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PermisoDtm>().Property(p => p.IdTipo).IsRequired();
             modelBuilder.Entity<PermisoDtm>().Property(p => p.IdClase).IsRequired();
 
+            modelBuilder.Entity<PermisoDtm>().Property(p => p.IdTipo).HasColumnName("IDTIPO");
+            modelBuilder.Entity<PermisoDtm>().Property(p => p.IdClase).HasColumnName("IDCLASE");
 
             modelBuilder.Entity<PermisoDtm>()
                         .HasIndex(p => new {p.IdClase, p.IdTipo})
@@ -58,6 +58,16 @@ namespace ServicioDeDatos.Seguridad
                         .HasForeignKey(p => p.IdTipo)
                         .HasConstraintName("FK_PERMISO_IDTIPO")
                         .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PermisoDtm>()
+                .HasMany(p => p.Roles)
+                .WithOne(p => p.Permiso)
+                .HasForeignKey(p => p.IdRol);
+
+            modelBuilder.Entity<PermisoDtm>()
+                .HasMany(p => p.Usuarios)
+                .WithOne(p => p.Permiso)
+                .HasForeignKey(p => p.IdUsua);
         }
     }
 }

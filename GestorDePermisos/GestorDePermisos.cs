@@ -191,7 +191,7 @@ namespace Gestor.Elementos.Seguridad
             base.AntesEliminarFila(elemento, opciones);
 
             var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
-            var filtro = new ClausulaDeFiltrado { Propiedad = nameof(RolPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
+            var filtro = new ClausulaDeFiltrado { Propiedad = nameof(RolesDeUnPermiso.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
             var filtros = new List<ClausulaDeFiltrado>();
             filtros.Add(filtro);
             var r = gestor.LeerRegistros(0, 1, filtros);

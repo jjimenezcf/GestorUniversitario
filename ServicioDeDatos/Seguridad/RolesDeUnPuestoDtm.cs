@@ -6,7 +6,7 @@ namespace ServicioDeDatos.Seguridad
 {
 
     [Table("ROL_PUESTO", Schema = "SEGURIDAD")]
-    public class rRolPuesto: Registro
+    public class RolesDeUnPuestoDtm: Registro
     {
         [Column("IDROL", TypeName = "INT")]
         public int IdRol { get; set; }
@@ -15,24 +15,24 @@ namespace ServicioDeDatos.Seguridad
         public int idPuesto { get; set; }
 
         public RolDtm Rol { get; set; }
-        public rPuesto Puesto { get; set; }
+        public PuestoDtm Puesto { get; set; }
     }
 
     public static class TablaRolPuesto
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<rRolPuesto>()
+            modelBuilder.Entity<RolesDeUnPuestoDtm>()
                 .HasAlternateKey(p => new { p.IdRol, p.idPuesto })
                 .HasName("AK_ROL_PUESTO");
 
-            modelBuilder.Entity<rRolPuesto>()
+            modelBuilder.Entity<RolesDeUnPuestoDtm>()
                 .HasOne(x => x.Rol)
                 .WithMany(r => r.Puestos)
                 .HasForeignKey(x => x.IdRol)
                 .HasConstraintName("FK_ROL_PUESTO_IDROL");
 
-            modelBuilder.Entity<rRolPuesto>()
+            modelBuilder.Entity<RolesDeUnPuestoDtm>()
                 .HasOne(x => x.Puesto)
                 .WithMany(p => p.Roles)
                 .HasForeignKey(x => x.idPuesto)

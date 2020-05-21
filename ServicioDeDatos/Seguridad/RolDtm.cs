@@ -17,8 +17,8 @@ namespace ServicioDeDatos.Seguridad
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
-        public ICollection<RolPermisoDtm> Permisos { get; set; }
-        public ICollection<rRolPuesto> Puestos { get; set; }
+        public ICollection<RolesDeUnPermiso> Permisos { get; set; }
+        public ICollection<RolesDeUnPuestoDtm> Puestos { get; set; }
     }
 
     public static class TablaRol
@@ -26,8 +26,19 @@ namespace ServicioDeDatos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RolDtm>()
-                        .HasAlternateKey(p => p.Nombre)
-                        .HasName("AK_ROL_NOMBRE");
+                        .HasIndex(p => p.Nombre)
+                        .HasName("I_ROL_NOMBRE")
+                        .IsUnique();
+
+            modelBuilder.Entity<RolDtm>()
+                    .HasMany(p => p.Permisos)
+                    .WithOne(p => p.Rol)
+                    .HasForeignKey(p => p.IdPermiso);
+
+            modelBuilder.Entity<RolDtm>()
+                    .HasMany(p => p.Puestos)
+                    .WithOne(p => p.Rol)
+                    .HasForeignKey(p => p.IdRol);
         }
     }
 }

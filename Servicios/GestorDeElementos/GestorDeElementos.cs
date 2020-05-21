@@ -282,6 +282,7 @@ namespace Gestor.Elementos
             return elementosDeBd[0];
         }
 
+
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
             List<TRegistro> elementosDeBd;

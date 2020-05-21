@@ -143,64 +143,16 @@ namespace Gestor.Elementos.Entorno
             return elementos;
         }
 
-        public List<ArbolDeMenuDto> LeerArbolDeMenu()
+        public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
-            var resultadoDto = new List<ArbolDeMenuDto>();
-            var gestor = new GestorDeArbolDeMenu(Contexto, Mapeador);
-            List<ArbolDeMenuDtm> arbolDeMenu = gestor.LeerRegistros(0, -1);
-            procesarSubMenus(gestor, resultadoDto, arbolDeMenu, padre: null);
-            return resultadoDto;
-        }
 
-        private void procesarSubMenus(GestorDeArbolDeMenu gestor, List<ArbolDeMenuDto> resultadoDto, List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)
-        {
-            List<ArbolDeMenuDtm> procesarMenus = MenusParaProcesar(arbolDeMenu, padre);
-            if (procesarMenus.Count == 0)
-                return;
+            var contexto = ContextoDeElementos.ObtenerContexto();
+            var gestor = (GestorDeArbolDeMenu)Generador<ContextoDeElementos, IMapper>.CachearGestor("GestorDeEntorno"
+                                                           , nameof(GestorDeArbolDeMenu)
+                                                           , () => new GestorDeArbolDeMenu(contexto, mapeador));
 
-            foreach (var menuDtm in procesarMenus)
-            {
-                var menuDto = gestor.MapearElemento(menuDtm);
-                if (padre != null)
-                    padre.Submenus.Add(menuDto);
 
-                resultadoDto.Add(menuDto);
-                if (menuDtm.IdVistaMvc == null)
-                {
-                    procesarSubMenus(gestor, resultadoDto, arbolDeMenu, padre: menuDto);
-                }
-            }
-        }
-
-        private List<ArbolDeMenuDtm> MenusParaProcesar(List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)
-        {
-            var resultado = new List<ArbolDeMenuDtm>();
-            var procesar = new List<ArbolDeMenuDtm>();
-
-            foreach (var nodo in arbolDeMenu)
-                if ((nodo.IdPadre == null && padre == null) || (padre != null && nodo.IdPadre == padre.Id))
-                    procesar.Add(nodo);
-
-            if (procesar.Count == 0)
-                return resultado;
-
-            while (procesar.Count > 0)
-            {
-                var orden = procesar[0].Orden;
-                var quitar = 0;
-                for (var i = 0; i < procesar.Count; i++)
-                {
-                    if (procesar[i].Orden <= orden)
-                    {
-                        orden = procesar[i].Orden;
-                        quitar = i;
-                    }
-                }
-                resultado.Add(procesar[quitar]);
-                procesar.RemoveAt(quitar);
-            }
-
-            return resultado;
+           return gestor.LeerArbolDeMenu();
         }
 
 

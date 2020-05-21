@@ -49,7 +49,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var procesadas = new List<int>();
-                List<ArbolDeMenuDto> menu = GestorDeMenus.LeerArbolDeMenu();
+                List<ArbolDeMenuDto> menu = GestorDeMenus.LeerArbolDeMenu(GestorDeElementos.Mapeador);
                 var menuHtml = @$"<ul id='id_menuraiz' class=¨menu-contenido¨>{Environment.NewLine}" +
                                @$"   {RenderOpcionesMenu(menu, procesadas, 0)}{Environment.NewLine}" +
                                @$"</ul>{Environment.NewLine}";

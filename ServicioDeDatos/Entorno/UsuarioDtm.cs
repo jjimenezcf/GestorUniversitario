@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Seguridad;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,7 +29,9 @@ namespace ServicioDeDatos.Entorno
         public DateTime Alta { get; set; }
 
 
-        public virtual ICollection<UsuPermisoDtm> Permisos { get; private set; }
+        public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
+
+        public virtual ICollection<PuestosDeUsuarioDtm> Puestos { get; private set; }
 
     }
     public static class TablaUsuario
@@ -40,7 +43,19 @@ namespace ServicioDeDatos.Entorno
             .IsUnique(true)
             .HasName("IX_USUARIO");
 
+            modelBuilder.Entity<UsuarioDtm>()
+                    .HasMany(tu => tu.Puestos)
+                    .WithOne(p => p.Usuario)
+                    .HasForeignKey(p => p.IdUsua);
+
+            modelBuilder.Entity<UsuarioDtm>()
+                    .HasMany(tu => tu.Permisos)
+                    .WithOne(p => p.Usuario)
+                    .HasForeignKey(p => p.IdUsua);
+
         }
+
+
     }
 
 }
