@@ -36,6 +36,7 @@ namespace ServicioDeDatos
         public string ServidorBd { get; set; }
         public string Bd { get; set; }
         public string Usuario { get; set; }
+        public int IdUsuario { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
 
@@ -94,7 +95,7 @@ namespace ServicioDeDatos
 
         private InterceptadorDeConsultas _interceptadorDeConsultas;
 
-        public static ContextoDeElementos CrearContexto()
+        public static ContextoDeElementos ObtenerContexto()
         {
             return ObtenerContexto(nameof(ContextoDeElementos), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
         }
@@ -128,8 +129,10 @@ namespace ServicioDeDatos
 
             _interceptadorDeConsultas = new InterceptadorDeConsultas();
             DbInterception.Add(_interceptadorDeConsultas);
+            if (_CacheDeContextos == null)
+                _CacheDeContextos = new ConcurrentDictionary<string, ContextoDeElementos>();
 
-            InicializarDatosContexto();
+            InicializarDatosDeConexion();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -139,17 +142,16 @@ namespace ServicioDeDatos
                    .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
         }
 
-        public void InicializarDatosContexto()
+        public void InicializarDatosDeConexion()
         {
             DatosDeConexion = new DatosDeConexion();
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
             DatosDeConexion.Usuario = Literal.usuario;
+            DatosDeConexion.IdUsuario = 1;
             DatosDeConexion.Version = ObtenerVersion;
 
-            if (_CacheDeContextos == null)
-                _CacheDeContextos = new ConcurrentDictionary<string, ContextoDeElementos>();
         }
 
         public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }

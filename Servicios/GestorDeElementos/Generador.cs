@@ -4,14 +4,15 @@ using System.Reflection;
 using System.Linq;
 using System.Collections.Concurrent;
 using Gestor.Errores;
+using System.Reflection.Metadata.Ecma335;
 
-namespace ServicioDeDatos.Utilidades
+namespace Gestor.Elementos
 {
     public class Generador<TContexto, IMapper> 
     {
         public static ConcurrentDictionary<string, object> cacheObjetos = new ConcurrentDictionary<string, object>();
 
-        public static object GenerarObjeto(string dll, string nombreClase, object[] parametros)
+        public static object ObtenerGestor(string dll, string nombreClase, object[] parametros)
         {
             if (!dll.EndsWith(".dll")) dll = dll + ".dll";
             var indice = dll + '-' + nombreClase;
@@ -24,6 +25,17 @@ namespace ServicioDeDatos.Utilidades
 
                 cacheObjetos[indice] = objetoConParametros;
             }
+            return cacheObjetos[indice];
+        }
+
+        public static object CachearGestor(string dll, string nombreClase, Func<object> creador)
+        {
+            if (!dll.EndsWith(".dll")) dll = dll + ".dll";
+            var indice = dll + '-' + nombreClase;
+
+            if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
+                cacheObjetos[indice] = creador();
+
             return cacheObjetos[indice];
         }
 

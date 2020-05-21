@@ -67,8 +67,6 @@ namespace MVCSistemaDeElementos.Controllers
                 fichero.CopyTo(stream);
             }
 
-            var contexto = ContextoDeElementos.CrearContexto();
-
             Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
 
             return new JsonResult(r);

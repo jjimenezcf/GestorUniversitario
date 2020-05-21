@@ -5,6 +5,7 @@ using System.IO;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos;
 using ServicioDeDatos.Utilidades;
+using System;
 
 namespace Gestor.Elementos.Archivos
 {
@@ -23,9 +24,11 @@ namespace Gestor.Elementos.Archivos
         public static void SubirArchivo(string rutaConFichero, IMapper mapeador)
         {
 
-            var contexto = ContextoDeElementos.CrearContexto();
-
-            var gestorDocumental = new GestorDocumental(contexto, mapeador);
+            var contexto = ContextoDeElementos.ObtenerContexto();
+             
+            var gestorDocumental = (GestorDocumental) Generador<ContextoDeElementos, IMapper>.CachearGestor("GestorDocumental"
+                                                             , nameof(GestorDeVariables)
+                                                             , () => new GestorDocumental(contexto, mapeador));
 
             gestorDocumental.SubirArchivoInterno(rutaConFichero);
         }
@@ -37,17 +40,15 @@ namespace Gestor.Elementos.Archivos
 
         private void SubirArchivoInterno(string rutaConFichero)
         {
-
-            var contexto = ContextoDeElementos.CrearContexto();
-
-            var gestorDeVariables = (GestorDeVariables) Generador<ContextoDeElementos, IMapper>.GenerarObjeto("GestorDeEntorno"
+            var gestor = (GestorDeVariables) Generador<ContextoDeElementos, IMapper>.ObtenerGestor("GestorDeEntorno"
                                                              , nameof(GestorDeVariables)
-                                                             , new object[] { contexto, Mapeador });
+                                                             , new object[] { Contexto, Mapeador });
 
-            var rutaDocumental = gestorDeVariables.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
+            var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
+            var fecha = DateTime.Now;
+            var ruta = $@"{rutaDocumental.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{gestor.Contexto.DatosDeConexion.IdUsuario}";
+            Directory.CreateDirectory(ruta);
 
-
-            var ruta = new CacheDeVariable(Contexto).ServidorDeArchivos;
             var fichero = Path.GetFileName(rutaConFichero);
             File.Move(rutaConFichero, $@"{ruta}\{fichero}", true);
         }
