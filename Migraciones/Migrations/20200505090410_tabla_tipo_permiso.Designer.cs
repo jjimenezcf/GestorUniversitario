@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoDeElementos))]
+    [DbContext(typeof(ContextoSe))]
     [Migration("20200505090410_tabla_tipo_permiso")]
     partial class tabla_tipo_permiso
     {

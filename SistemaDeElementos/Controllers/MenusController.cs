@@ -10,7 +10,7 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class MenusController : EntidadController<ContextoDeElementos, MenuDtm, MenuDto>
+    public class MenusController : EntidadController<ContextoSe, MenuDtm, MenuDto>
     {
         public GestorDeMenus GestorDeMenus { get; set; }
 

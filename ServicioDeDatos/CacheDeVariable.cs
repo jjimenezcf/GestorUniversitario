@@ -17,7 +17,7 @@ namespace ServicioDeDatos
 
     public class CacheDeVariable 
     {
-        public ContextoDeElementos Contexto { get; private set; }
+        public ContextoSe Contexto { get; private set; }
 
         private static ConcurrentDictionary<string, string> cacheVariables;
 
@@ -69,7 +69,7 @@ namespace ServicioDeDatos
             return (string)consulta.Registros[0][3];
         }
 
-        public CacheDeVariable(ContextoDeElementos contexto)
+        public CacheDeVariable(ContextoSe contexto)
         {
             Contexto = contexto;
             if (cacheVariables == null)

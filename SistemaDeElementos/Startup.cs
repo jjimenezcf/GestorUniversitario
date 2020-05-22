@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos
             services.AddRazorPages();
             var cadenaDeConexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
 
-            services.AddDbContext<ContextoDeElementos>(options => options.UseSqlServer(cadenaDeConexion));
+            services.AddDbContext<ContextoSe>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();

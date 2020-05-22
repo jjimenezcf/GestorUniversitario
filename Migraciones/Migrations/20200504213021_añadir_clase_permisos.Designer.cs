@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoDeElementos))]
+    [DbContext(typeof(ContextoSe))]
     [Migration("20200504213021_añadir_clase_permisos")]
     partial class añadir_clase_permisos
     {

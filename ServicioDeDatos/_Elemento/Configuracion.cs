@@ -15,7 +15,7 @@
         public bool Existe => Leidos == 0 ? false : (int)Registros[0][0] == 1;
 
 
-        public ExisteTabla(ContextoDeElementos contexto, string tabla)
+        public ExisteTabla(ContextoSe contexto, string tabla)
         : base(contexto, $"SELECT 1 FROM sysobjects WHERE type = 'U' AND name = '{tabla}'")
         {
             Ejecutar();

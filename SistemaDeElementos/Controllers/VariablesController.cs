@@ -7,7 +7,7 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class VariablesController : EntidadController<ContextoDeElementos, VariableDtm, VariableDto>
+    public class VariablesController : EntidadController<ContextoSe, VariableDtm, VariableDto>
     {
 
         public VariablesController(GestorDeVariables gestorDeVariables, GestorDeErrores gestorDeErrores)

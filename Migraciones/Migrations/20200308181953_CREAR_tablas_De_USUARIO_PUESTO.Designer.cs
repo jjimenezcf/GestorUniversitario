@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoDeElementos))]
+    [DbContext(typeof(ContextoSe))]
     [Migration("20200308181953_CREAR_tablas_De_USUARIO_PUESTO")]
     partial class CREAR_tablas_De_USUARIO_PUESTO
     {

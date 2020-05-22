@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestorDeEntorno.Migrations
 {
-    [DbContext(typeof(ContextoDeElementos))]
+    [DbContext(typeof(ContextoSe))]
     [Migration("20200519073140_ampliarTamañoCampoValorDeLaTablaVariable")]
     partial class ampliarTamañoCampoValorDeLaTablaVariable
     {

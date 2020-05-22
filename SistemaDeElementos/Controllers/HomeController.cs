@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Controllers
     public class HomeController : BaseController
     {
 
-        public HomeController(ContextoDeElementos contexto, GestorDeErrores gestorDeErrores):
+        public HomeController(ContextoSe contexto, GestorDeErrores gestorDeErrores):
         base(gestorDeErrores)
         {
             DatosDeConexion = contexto.DatosDeConexion;

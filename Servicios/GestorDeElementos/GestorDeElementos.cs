@@ -116,7 +116,7 @@ namespace Gestor.Elementos
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
         where TRegistro : Registro
         where TElemento : Elemento
-        where TContexto : ContextoDeElementos
+        where TContexto : ContextoSe
     {
         public TContexto Contexto;
         private GestorDeErrores _gestorDeErrores;

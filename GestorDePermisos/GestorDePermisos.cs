@@ -121,7 +121,7 @@ namespace Gestor.Elementos.Seguridad
         }
     }
 
-    public class GestorDePermisos : GestorDeElementos<ContextoDeElementos, PermisoDtm, PermisoDto>
+    public class GestorDePermisos : GestorDeElementos<ContextoSe, PermisoDtm, PermisoDto>
     {
         public class MapearPermiso : Profile
         {
@@ -138,7 +138,7 @@ namespace Gestor.Elementos.Seguridad
             }
         }
 
-        public GestorDePermisos(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDePermisos(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

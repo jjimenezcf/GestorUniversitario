@@ -12,6 +12,7 @@ using ServicioDeDatos.Elemento;
 using Microsoft.EntityFrameworkCore.Design;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
+using ServicioDeDatos.Archivos;
 
 namespace ServicioDeDatos
 {
@@ -42,47 +43,25 @@ namespace ServicioDeDatos
 
     }
 
-    public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoDeElementos>
+    public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoSe>
     {
-        public ContextoDeElementos CreateDbContext(string[] arg)
+        public ContextoSe CreateDbContext(string[] arg)
         {
 
-            var datosDeConexion = ContextoDeElementos.ObtenerDatosDeConexion();
+            var datosDeConexion = ContextoSe.ObtenerDatosDeConexion();
 
-            var opciones = new DbContextOptionsBuilder<ContextoDeElementos>();
+            var opciones = new DbContextOptionsBuilder<ContextoSe>();
             opciones.UseSqlServer(datosDeConexion.CadenaConexion);
             object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
 
-            return (ContextoDeElementos)Activator.CreateInstance(typeof(ContextoDeElementos), parametros);
+            return (ContextoSe)Activator.CreateInstance(typeof(ContextoSe), parametros);
         }
     }
 
-    public class ContextoDeElementos : DbContext
+    public partial class ContextoSe : DbContext
     {
-        #region dbSets del contexto de entorno
-        public DbSet<MenuDtm> Menus { get; set; }
-        public DbSet<ArbolDeMenuDtm> MenuSe { get; set; }
-        public DbSet<VistaMvcDtm> VistasMvc { get; set; }
-        public DbSet<VariableDtm> Variables { get; set; }
-        public DbSet<UsuarioDtm> Usuarios { get; set; }
-        public DbSet<UsuariosDeUnPermisoDtm> UsuPermisos { get; set; }
 
-        #endregion
-
-        #region dbSets del contexto de seguridad
-
-        public DbSet<TipoPermisoDtm> TiposDePermisos { get; set; }
-        public DbSet<ClasePermisoDtm> ClasesDePermisos { get; set; }
-        public DbSet<PermisoDtm> Permisos { get; set; }
-        public DbSet<RolDtm> Roles { get; set; }
-        public DbSet<PuestoDtm> Puestos { get; set; }
-        public DbSet<RolesDeUnPermiso> PermisosDeUnRol { get; set; }
-        public DbSet<RolesDeUnPuestoDtm> PuestosDeUnRol { get; set; }
-        public DbSet<PuestosDeUsuarioDtm> PuestosDeUnUsuario { get; set; }
-
-        #endregion
-
-        private static ConcurrentDictionary<string, ContextoDeElementos> _CacheDeContextos { get; set; }
+        private static ConcurrentDictionary<string, ContextoSe> _CacheDeContextos { get; set; }
         public DatosDeConexion DatosDeConexion { get; private set; }
         public IConfiguration Configuracion { get; private set; }
 
@@ -95,9 +74,9 @@ namespace ServicioDeDatos
 
         private InterceptadorDeConsultas _interceptadorDeConsultas;
 
-        public static ContextoDeElementos ObtenerContexto()
+        public static ContextoSe ObtenerContexto()
         {
-            return ObtenerContexto(nameof(ContextoDeElementos), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
+            return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
         }
 
         public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerDatosDeConexion()
@@ -111,7 +90,7 @@ namespace ServicioDeDatos
             return (configuracion, cadenaDeConexion);
         }
 
-        protected static ContextoDeElementos ObtenerContexto(string nombreContexto, Func<ContextoDeElementos> crearContexto)
+        protected static ContextoSe ObtenerContexto(string nombreContexto, Func<ContextoSe> crearContexto)
         {
             if (!_CacheDeContextos.ContainsKey(nombreContexto))
             {
@@ -122,7 +101,7 @@ namespace ServicioDeDatos
             return _CacheDeContextos[nombreContexto];
         }
 
-        public ContextoDeElementos(DbContextOptions options, IConfiguration configuracion) :
+        public ContextoSe(DbContextOptions options, IConfiguration configuracion) :
         base(options)
         {
             Configuracion = configuracion;
@@ -130,7 +109,7 @@ namespace ServicioDeDatos
             _interceptadorDeConsultas = new InterceptadorDeConsultas();
             DbInterception.Add(_interceptadorDeConsultas);
             if (_CacheDeContextos == null)
-                _CacheDeContextos = new ConcurrentDictionary<string, ContextoDeElementos>();
+                _CacheDeContextos = new ConcurrentDictionary<string, ContextoSe>();
 
             InicializarDatosDeConexion();
         }
@@ -152,54 +131,6 @@ namespace ServicioDeDatos
             DatosDeConexion.IdUsuario = 1;
             DatosDeConexion.Version = ObtenerVersion;
 
-        }
-
-        public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<CatalogoDelSe>().ToView(Literal.Vista.Catalogo);
-
-            DefinirTablasDelEsquemaDeEntorno(modelBuilder);
-
-            DefinirEsquemaDeSeguridad(modelBuilder);
-
-        }
-
-        private static void DefinirEsquemaDeSeguridad(ModelBuilder modelBuilder)
-        {
-            TablaClasePermiso.Definir(modelBuilder);
-
-            TablaPermiso.Definir(modelBuilder);
-
-            TablaPuesto.Definir(modelBuilder);
-
-            TablaRol.Definir(modelBuilder);
-
-            TablaRolPermiso.Definir(modelBuilder);
-
-            TablaRolPuesto.Definir(modelBuilder);
-
-            TablaPermisoTipo.Definir(modelBuilder);
-
-            TablaUsuPuesto.Definir(modelBuilder);
-        }
-
-        private static void DefinirTablasDelEsquemaDeEntorno(ModelBuilder modelBuilder)
-        {
-            TablaVistaMvc.Definir(modelBuilder);
-
-            TablaVariable.Definir(modelBuilder);
-
-            VistaUsuarioPermiso.Definir(modelBuilder);
-
-            TablaUsuario.Definir(modelBuilder);
-
-            TablaMenu.Definir(modelBuilder);
-
-            VistaMenuSe.Definir(modelBuilder);
         }
 
         public void IniciarTraza()

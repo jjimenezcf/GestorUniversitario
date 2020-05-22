@@ -75,7 +75,7 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-    public class GestorDeMenus : GestorDeElementos<ContextoDeElementos, MenuDtm, MenuDto>
+    public class GestorDeMenus : GestorDeElementos<ContextoSe, MenuDtm, MenuDto>
     {
         public class MapearMenus : Profile
         {
@@ -87,7 +87,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeMenus(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeMenus(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
@@ -146,8 +146,8 @@ namespace Gestor.Elementos.Entorno
         public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
 
-            var contexto = ContextoDeElementos.ObtenerContexto();
-            var gestor = (GestorDeArbolDeMenu)Generador<ContextoDeElementos, IMapper>.CachearGestor("GestorDeEntorno"
+            var contexto = ContextoSe.ObtenerContexto();
+            var gestor = (GestorDeArbolDeMenu)Generador<ContextoSe, IMapper>.CachearGestor("GestorDeEntorno"
                                                            , nameof(GestorDeArbolDeMenu)
                                                            , () => new GestorDeArbolDeMenu(contexto, mapeador));
 

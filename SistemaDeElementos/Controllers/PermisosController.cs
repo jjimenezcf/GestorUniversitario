@@ -8,7 +8,7 @@ using ServicioDeDatos;
 namespace MVCSistemaDeElementos.Controllers
 {
 
-    public class PermisosController : EntidadController<ContextoDeElementos, PermisoDtm, PermisoDto>
+    public class PermisosController : EntidadController<ContextoSe, PermisoDtm, PermisoDto>
     {
         public PermisosController(GestorDePermisos gestorDePermisos, GestorDeErrores gestorDeErrores)
         : base

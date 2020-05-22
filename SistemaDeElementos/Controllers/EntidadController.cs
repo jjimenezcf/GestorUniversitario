@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos.Controllers
 {
 
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
-        where TContexto : ContextoDeElementos
+        where TContexto : ContextoSe
         where TRegistro : Registro
         where TElemento : Elemento
     {

@@ -10,7 +10,7 @@ using ServicioDeDatos.Entorno;
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeVistasMvc : GestorDeElementos<ContextoDeElementos, VistaMvcDtm, VistaMvcDto>
+    public class GestorDeVistasMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
         public class MapearVistasMvc : Profile
@@ -24,7 +24,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeVistasMvc(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeVistasMvc(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

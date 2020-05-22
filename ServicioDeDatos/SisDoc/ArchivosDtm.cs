@@ -1,8 +1,25 @@
-﻿using ServicioDeDatos.Elemento;
+﻿using Microsoft.EntityFrameworkCore;
+using ServicioDeDatos.Elemento;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServicioDeDatos.Archivos
 {
-    public class ArchivosDtm : Registro
+    [Table("ARCHIVO", Schema = "SISDOC")]
+    public class ArchivosDtm : ElementoDtm
     {
+        [Required]
+        [Column("RUTA", TypeName = "VARCHAR(2000)")]
+        public string AlmacenadoEn { get; set; }
+
+    }
+
+    public static class TablaArchivo
+    {
+        public static void Definir(ModelBuilder modelBuilder)
+        {
+            GeneradorMd.DefinirElementoDto<ArchivosDtm>(modelBuilder);
+        }
+
     }
 }

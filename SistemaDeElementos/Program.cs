@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoDeSeguro(IServiceProvider services)
         {
-            var ctoPermisos = services.GetRequiredService<ContextoDeElementos>();
+            var ctoPermisos = services.GetRequiredService<ContextoSe>();
             try
             {
                 ctoPermisos.Database.Migrate();
@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos
 
         private static void IniciarContextoDeEntorno(IServiceProvider services)
         {
-            var contexto = services.GetRequiredService<ContextoDeElementos>();
+            var contexto = services.GetRequiredService<ContextoSe>();
             try
             {
                // contexto.Database.Migrate();

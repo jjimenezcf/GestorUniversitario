@@ -9,7 +9,7 @@ using System;
 
 namespace Gestor.Elementos.Archivos
 {
-    public class GestorDocumental : GestorDeElementos<ContextoDeElementos, ArchivosDtm, ArchivosDto>
+    public class GestorDocumental : GestorDeElementos<ContextoSe, ArchivosDtm, ArchivosDto>
     {
         public class MapearArchivos : Profile
         {
@@ -24,23 +24,23 @@ namespace Gestor.Elementos.Archivos
         public static void SubirArchivo(string rutaConFichero, IMapper mapeador)
         {
 
-            var contexto = ContextoDeElementos.ObtenerContexto();
+            var contexto = ContextoSe.ObtenerContexto();
              
-            var gestorDocumental = (GestorDocumental) Generador<ContextoDeElementos, IMapper>.CachearGestor("GestorDocumental"
+            var gestorDocumental = (GestorDocumental) Generador<ContextoSe, IMapper>.CachearGestor("GestorDocumental"
                                                              , nameof(GestorDeVariables)
                                                              , () => new GestorDocumental(contexto, mapeador));
 
             gestorDocumental.SubirArchivoInterno(rutaConFichero);
         }
 
-        public GestorDocumental(ContextoDeElementos contexto, IMapper mapeador) 
+        public GestorDocumental(ContextoSe contexto, IMapper mapeador) 
         : base(contexto, mapeador)
         {
         }
 
         private void SubirArchivoInterno(string rutaConFichero)
         {
-            var gestor = (GestorDeVariables) Generador<ContextoDeElementos, IMapper>.ObtenerGestor("GestorDeEntorno"
+            var gestor = (GestorDeVariables) Generador<ContextoSe, IMapper>.ObtenerGestor("GestorDeEntorno"
                                                              , nameof(GestorDeVariables)
                                                              , new object[] { Contexto, Mapeador });
 

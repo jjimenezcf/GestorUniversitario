@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Migraciones.Migrations
 {
-    [DbContext(typeof(ContextoDeElementos))]
+    [DbContext(typeof(ContextoSe))]
     [Migration("20200308150510_CREAR_TABLA_ROL_pERMISO2")]
     partial class CREAR_TABLA_ROL_pERMISO2
     {

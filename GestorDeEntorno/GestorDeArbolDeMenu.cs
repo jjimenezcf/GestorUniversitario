@@ -5,7 +5,7 @@ using ServicioDeDatos.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class GestorDeArbolDeMenu : GestorDeElementos<ContextoDeElementos, ArbolDeMenuDtm, ArbolDeMenuDto>
+    public class GestorDeArbolDeMenu : GestorDeElementos<ContextoSe, ArbolDeMenuDtm, ArbolDeMenuDto>
     {
         public class MapearMenus : Profile
         {
@@ -15,7 +15,7 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeArbolDeMenu(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeArbolDeMenu(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

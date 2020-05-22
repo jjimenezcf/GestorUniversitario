@@ -6,7 +6,7 @@ namespace ServicioDeDatos
 {
     public static class GestorDeConsultas
     {
-        public static void Seleccionar(ContextoDeElementos contexto, ConsultaSql consultaSql, params object[] parameters)
+        public static void Seleccionar(ContextoSe contexto, ConsultaSql consultaSql, params object[] parameters)
         {
             var sentenciaSql = contexto.Database.GetDbConnection().CreateCommand();
             sentenciaSql.CommandText = consultaSql.Select;

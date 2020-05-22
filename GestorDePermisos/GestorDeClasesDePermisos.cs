@@ -9,17 +9,17 @@ using ServicioDeDatos.Seguridad;
 
 namespace Gestor.Elementos.Seguridad
 {
-    public class GestorDeClaseDePermisos : GestorDeElementos<ContextoDeElementos, ClasePermisoDtm, ClasePermisoDto>
+    public class GestorDeClaseDePermisos : GestorDeElementos<ContextoSe, ClasePermisoDtm, ClasePermisoDto>
     {
         public class MapearClasePermiso : Profile
         {
             public MapearClasePermiso()
             {
-                CreateMap<ContextoDeElementos, ClasePermisoDto>();
+                CreateMap<ContextoSe, ClasePermisoDto>();
             }
         }
 
-        public GestorDeClaseDePermisos(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeClaseDePermisos(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
 

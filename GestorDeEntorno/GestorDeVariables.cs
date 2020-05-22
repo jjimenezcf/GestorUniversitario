@@ -48,7 +48,7 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-    public class GestorDeVariables : GestorDeElementos<ContextoDeElementos, VariableDtm, VariableDto>
+    public class GestorDeVariables : GestorDeElementos<ContextoSe, VariableDtm, VariableDto>
     {
 
         public class MapearVariables : Profile
@@ -65,7 +65,7 @@ namespace Gestor.Elementos.Entorno
         //    return new GestorDeVariables(contexto, mapeador);
         //}
 
-        public GestorDeVariables(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeVariables(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

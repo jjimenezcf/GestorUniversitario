@@ -53,6 +53,10 @@
     <Compile Remove="Migrations\20200521182100_ColumnasTipoClase.Designer.cs" />
     <Compile Remove="Migrations\20200521184249_ColumnasTipoClase.cs" />
     <Compile Remove="Migrations\20200521184249_ColumnasTipoClase.Designer.cs" />
+    <Compile Remove="Migrations\20200522072608_TablaDeArchivos.cs" />
+    <Compile Remove="Migrations\20200522072608_TablaDeArchivos.Designer.cs" />
+    <Compile Remove="Migrations\20200522073511_TablaDeArchivos.cs" />
+    <Compile Remove="Migrations\20200522073511_TablaDeArchivos.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

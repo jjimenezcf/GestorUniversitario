@@ -40,7 +40,7 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoDeElementos, RolesDeUnPermiso, RolPermisoDto>
+    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoSe, RolesDeUnPermiso, RolPermisoDto>
     {
 
         public class MapearRolPermiso : Profile
@@ -51,7 +51,7 @@ namespace Gestor.Elementos.Seguridad
             }
         }
 
-        public GestorDeRolesDePermisos(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeRolesDePermisos(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
         }

@@ -4,7 +4,7 @@ using Gestor.Elementos.Seguridad;
 
 namespace ServicioDeDatos.Seguridad
 {
-    class GestorDeTipoPermiso : GestorDeElementos<ContextoDeElementos, TipoPermisoDtm, TipoPermisoDto>
+    class GestorDeTipoPermiso : GestorDeElementos<ContextoSe, TipoPermisoDtm, TipoPermisoDto>
     {
         public class MapearTipoPermiso : Profile
         {
@@ -14,7 +14,7 @@ namespace ServicioDeDatos.Seguridad
             }
         }
 
-        public GestorDeTipoPermiso(ContextoDeElementos contexto, IMapper mapeador)
+        public GestorDeTipoPermiso(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
 

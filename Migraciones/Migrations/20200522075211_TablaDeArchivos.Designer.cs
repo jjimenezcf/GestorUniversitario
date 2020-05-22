@@ -10,8 +10,8 @@ using ServicioDeDatos;
 namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    [Migration("20200521221753_unificarContextos")]
-    partial class unificarContextos
+    [Migration("20200522075211_TablaDeArchivos")]
+    partial class TablaDeArchivos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,55 @@ namespace GestorDeEntorno.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ServicioDeDatos.Archivos.ArchivosDtm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasColumnType("INT")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AlmacenadoEn")
+                        .IsRequired()
+                        .HasColumnName("RUTA")
+                        .HasColumnType("VARCHAR(2000)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnName("FECCRE")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnName("FECMOD")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<int>("IdUsuaCrea")
+                        .HasColumnName("IDUSUCREA")
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("IdUsuaModi")
+                        .HasColumnName("IDUSUMODI")
+                        .HasColumnType("INT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnName("NOMBRE")
+                        .HasColumnType("VARCHAR(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdUsuaCrea")
+                        .HasName("I_ARCHIVO_IDUSUCREA");
+
+                    b.HasIndex("IdUsuaModi")
+                        .HasName("I_ARCHIVO_IDUSUMODI");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique()
+                        .HasName("I_ARCHIVO_NOMBRE");
+
+                    b.ToTable("ARCHIVO","SISDOC");
+                });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.ArbolDeMenuDtm", b =>
                 {
@@ -475,6 +524,22 @@ namespace GestorDeEntorno.Migrations
                         .HasName("I_TIPO_PERMISO_NOMBRE");
 
                     b.ToTable("TIPO_PERMISO","SEGURIDAD");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Archivos.ArchivosDtm", b =>
+                {
+                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "UsuarioCreador")
+                        .WithMany()
+                        .HasForeignKey("IdUsuaCrea")
+                        .HasConstraintName("FK_ARCHIVO_IDUSUCREA")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "UsuarioModificador")
+                        .WithMany()
+                        .HasForeignKey("IdUsuaModi")
+                        .HasConstraintName("FK_ARCHIVO_IDUSUMODI")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.MenuDtm", b =>

@@ -7,7 +7,7 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class UsuariosController : EntidadController<ContextoDeElementos, UsuarioDtm, UsuarioDto>
+    public class UsuariosController : EntidadController<ContextoSe, UsuarioDtm, UsuarioDto>
     {
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)
