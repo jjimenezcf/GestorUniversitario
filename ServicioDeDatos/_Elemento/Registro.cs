@@ -32,8 +32,7 @@ namespace ServicioDeDatos.Elemento
 
             modelBuilder.Entity<TEntity>()
                         .HasIndex(p => p.Nombre)
-                        .HasName($"I_{nombreDeTabla}_NOMBRE")
-                        .IsUnique();
+                        .HasName($"I_{nombreDeTabla}_NOMBRE");
 
             DefinirRegistroAuditado<TEntity>(modelBuilder, nombreDeTabla);
 

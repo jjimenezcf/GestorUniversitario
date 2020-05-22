@@ -17,7 +17,7 @@ namespace Gestor.Elementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
     public enum ModoDeOrdenancion { ascendente, descendente }
-    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar};
+    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar };
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -123,7 +123,7 @@ namespace Gestor.Elementos
         public IMapper Mapeador;
 
         private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros;
-        
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -185,17 +185,17 @@ namespace Gestor.Elementos
 
         #region Métodos de persistencia
 
-        public void PersistirElementos(List<TElemento> elementos, ParametrosDeNegocio parametros)
+        public void PersistirElementosDto(List<TElemento> elementosDto, ParametrosDeNegocio parametros)
         {
-            foreach (var e in elementos)
-                PersistirElemento(e, parametros);
+            foreach (var elementoDto in elementosDto)
+                PersistirElementoDto(elementoDto, parametros);
         }
 
-        public void PersistirElemento(TElemento elemento, ParametrosDeNegocio parametros)
+        public void PersistirElementoDto(TElemento elementoDto, ParametrosDeNegocio parametros)
         {
-            TRegistro registro = MapearRegistro(elemento, parametros);
+            TRegistro registro = MapearRegistro(elementoDto, parametros);
             PersistirRegistro(registro, parametros);
-            elemento.Id = registro.Id;
+            elementoDto.Id = registro.Id;
         }
 
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros) => PersistirRegistros(new List<TRegistro> { registro }, parametros);
@@ -229,6 +229,30 @@ namespace Gestor.Elementos
                 throw exc;
             }
         }
+
+        protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);
+
+        protected void PersistirElementosDtm(List<ElementoDtm> elementosDtm, ParametrosDeNegocio parametros)
+        {
+
+            foreach (var elementoDtm in elementosDtm)
+            {
+                if (parametros.Tipo == TipoOperacion.Insertar)
+                {
+                    elementoDtm.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
+                    elementoDtm.FechaCreacion = DateTime.Now;
+                }
+                else
+                if (parametros.Tipo == TipoOperacion.Modificar)
+                {
+                    elementoDtm.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
+                    elementoDtm.FechaModificacion = DateTime.Now;
+                }
+
+                PersistirRegistro(elementoDtm as TRegistro, parametros);
+            }
+        }
+
 
         #endregion
 
@@ -268,7 +292,7 @@ namespace Gestor.Elementos
                 Valor = valor
             };
 
-            var filtros = new List<ClausulaDeFiltrado>() { filtro } ;
+            var filtros = new List<ClausulaDeFiltrado>() { filtro };
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
 
             var elementosDeBd = registros.AsNoTracking().ToList();
@@ -276,7 +300,7 @@ namespace Gestor.Elementos
             if (elementosDeBd.Count == 0)
                 GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
 
-            if (elementosDeBd.Count >1)
+            if (elementosDeBd.Count > 1)
                 GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
 
             return elementosDeBd[0];
@@ -364,7 +388,7 @@ namespace Gestor.Elementos
             return total;
         }
 
-        private bool IniciarTransaccion(ParametrosDeNegocio parametros)
+        public bool IniciarTransaccion(ParametrosDeNegocio parametros)
         {
             if (Contexto.Database.CurrentTransaction == null)
             {
@@ -374,7 +398,7 @@ namespace Gestor.Elementos
             return false;
         }
 
-        private void Commit(ParametrosDeNegocio parametros, bool transaccionAbierta)
+        public void Commit(ParametrosDeNegocio parametros, bool transaccionAbierta)
         {
             if (transaccionAbierta)
             {
@@ -383,7 +407,7 @@ namespace Gestor.Elementos
             }
         }
 
-        private void RollBack(ParametrosDeNegocio parametros, bool transaccionAbierta)
+        public void RollBack(ParametrosDeNegocio parametros, bool transaccionAbierta)
         {
             if (transaccionAbierta)
             {

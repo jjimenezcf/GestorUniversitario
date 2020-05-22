@@ -82,7 +82,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
-                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
+                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
             }
@@ -104,7 +104,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
-                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "Registro modificado";
             }
@@ -159,7 +159,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 var elemento = GestorDeElementos.LeerElementoPorId(listaIds[0]);
-                GestorDeElementos.PersistirElemento(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
+                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "Registro eliminado";
             }

@@ -38,7 +38,7 @@ namespace Gestor.Elementos.Archivos
         {
         }
 
-        private void SubirArchivoInterno(string rutaConFichero)
+        private int SubirArchivoInterno(string rutaConFichero)
         {
             var gestor = (GestorDeVariables) Generador<ContextoSe, IMapper>.ObtenerGestor("GestorDeEntorno"
                                                              , nameof(GestorDeVariables)
@@ -46,11 +46,28 @@ namespace Gestor.Elementos.Archivos
 
             var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
             var fecha = DateTime.Now;
-            var ruta = $@"{rutaDocumental.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{gestor.Contexto.DatosDeConexion.IdUsuario}";
-            Directory.CreateDirectory(ruta);
-
+            var almacenarEn = $@"{rutaDocumental.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{gestor.Contexto.DatosDeConexion.IdUsuario}";
+            Directory.CreateDirectory(almacenarEn);
             var fichero = Path.GetFileName(rutaConFichero);
-            File.Move(rutaConFichero, $@"{ruta}\{fichero}", true);
+
+            var archivo = new ArchivosDtm();
+            archivo.Nombre = fichero;
+            archivo.AlmacenadoEn = almacenarEn;
+            var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+            var tran = IniciarTransaccion(parametros);
+            try
+            {
+                PersistirElementoDtm(archivo, parametros);
+                File.Move(rutaConFichero, $@"{archivo.AlmacenadoEn}\{archivo.Id}.se", true);
+                Commit(parametros, tran);
+            }
+            catch(Exception exc)
+            {
+                RollBack(parametros, tran);
+                throw exc;
+            }
+
+            return archivo.Id;
         }
 
     }

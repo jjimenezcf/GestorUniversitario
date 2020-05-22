@@ -128,7 +128,7 @@ namespace ServicioDeDatos
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
             DatosDeConexion.Usuario = Literal.usuario;
-            DatosDeConexion.IdUsuario = 1;
+            DatosDeConexion.IdUsuario = 11;
             DatosDeConexion.Version = ObtenerVersion;
 
         }
