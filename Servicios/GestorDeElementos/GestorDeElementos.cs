@@ -95,8 +95,6 @@ namespace Gestor.Elementos
     public class ParametrosDeNegocio
     {
         public TipoOperacion Tipo { get; private set; }
-        public IDbContextTransaction Transaccion { get; internal set; }
-
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
 
         public ParametrosDeNegocio(TipoOperacion tipo)
@@ -202,7 +200,7 @@ namespace Gestor.Elementos
 
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
         {
-            var transaccionAbierta = IniciarTransaccion(parametros);
+            var transaccion = Contexto.IniciarTransaccion();
             try
             {
                 foreach (var registro in registros)
@@ -220,12 +218,11 @@ namespace Gestor.Elementos
                 }
 
                 Contexto.SaveChanges();
-
-                Commit(parametros, transaccionAbierta);
+                Contexto.Commit(transaccion);
             }
             catch (Exception exc)
             {
-                RollBack(parametros, transaccionAbierta);
+                Contexto.Rollback(transaccion);
                 throw exc;
             }
         }
@@ -386,34 +383,6 @@ namespace Gestor.Elementos
             var total = registros.Count();
 
             return total;
-        }
-
-        public bool IniciarTransaccion(ParametrosDeNegocio parametros)
-        {
-            if (Contexto.Database.CurrentTransaction == null)
-            {
-                parametros.Transaccion = Contexto.Database.BeginTransaction();
-                return true;
-            }
-            return false;
-        }
-
-        public void Commit(ParametrosDeNegocio parametros, bool transaccionAbierta)
-        {
-            if (transaccionAbierta)
-            {
-                parametros.Transaccion.Commit();
-                parametros.Transaccion.Dispose();
-            }
-        }
-
-        public void RollBack(ParametrosDeNegocio parametros, bool transaccionAbierta)
-        {
-            if (transaccionAbierta)
-            {
-                parametros.Transaccion.Rollback();
-                parametros.Transaccion.Dispose();
-            }
         }
 
         #endregion

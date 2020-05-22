@@ -54,16 +54,16 @@ namespace Gestor.Elementos.Archivos
             archivo.Nombre = fichero;
             archivo.AlmacenadoEn = almacenarEn;
             var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
-            var tran = IniciarTransaccion(parametros);
+            var tran = Contexto.IniciarTransaccion();
             try
             {
                 PersistirElementoDtm(archivo, parametros);
                 File.Move(rutaConFichero, $@"{archivo.AlmacenadoEn}\{archivo.Id}.se", true);
-                Commit(parametros, tran);
+                Contexto.Commit(tran);
             }
             catch(Exception exc)
             {
-                RollBack(parametros, tran);
+                Contexto.Rollback(tran);
                 throw exc;
             }
 

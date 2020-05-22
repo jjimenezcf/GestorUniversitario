@@ -71,6 +71,15 @@ namespace Gestor.Elementos.Entorno
         ]
         public DateTime Alta { get; set; }
 
+        [IUPropiedad(
+            Etiqueta = "Fotografía",
+            Ayuda = "Fotografía adjunta",
+            Tipo = typeof(int),
+            TipoDeControl= TipoControl.Archivo,
+            Fila = 4,
+            Columna = 0)]
+        public int? IdArchivo { get; set; }
+
     }
 
 

@@ -28,11 +28,11 @@
     //    }
     //}
 
-    export function SubirArchivo() {
+    export function SubirArchivo(idSelectorDeArchivo: string) {
         let barra = document.getElementById("barra-estado");
         let span = barra.children[0];
-        let btnSubir = document.getElementById("subir-archivo");
-        let btnCancelar = document.getElementById("cancelar-subir-archivo");
+        //let btnSubir = document.getElementById("subir-archivo");
+        //let btnCancelar = document.getElementById("cancelar-subir-archivo");
 
         barra.classList.remove('barra-verde', 'barra-roja');
 
@@ -49,7 +49,7 @@
             span.innerHTML = "Proceso completado";
         })
 
-        let htmlFicheros: HTMLInputElement = document.getElementById("fichero-foto") as HTMLInputElement;
+        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
         let ficheros = htmlFicheros.files;
         let url: string = `/usuarios/epSubirArchivo`;
 
@@ -64,39 +64,43 @@
 
         peticion.send(datos);
 
-        btnCancelar.addEventListener("click", () => {
-            peticion.abort();
-            barra.classList.remove('barra-verde');
-            barra.classList.add('barra-roja');
-            span.innerHTML = "Proceso cancelado";
-        })
+        //btnCancelar.addEventListener("click", () => {
+        //    peticion.abort();
+        //    barra.classList.remove('barra-verde');
+        //    barra.classList.add('barra-roja');
+        //    span.innerHTML = "Proceso cancelado";
+        //})
 
     }
 
 
-    export function MostrarCanvas() {
+    export function MostrarCanvas(idSelectorDeArchivo: string, idCambas: string) {
+
+        function visializarImagen() {
+            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCambas) as HTMLCanvasElement;
+            htmlCanvas.width = 100;
+            htmlCanvas.height = 100;
+            var canvas = htmlCanvas.getContext('2d');
+            canvas.drawImage(img, 0, 0, 100, 100);
+            SubirArchivo(idSelectorDeArchivo);
+        }
+
+        function ErrorAlVisializar() {
+            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCambas) as HTMLCanvasElement;
+            htmlCanvas.width = htmlCanvas.width;
+            Mensaje(TipoMensaje.Error, "El fichero seleccionado no es una imagen");
+        }
+
         BlanquearMensaje();
-        let htmlFicheros: HTMLInputElement = document.getElementById("fichero-foto") as HTMLInputElement;
+        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
         let ficheros = htmlFicheros.files;
         
         var img = new Image();
+        img.src = URL.createObjectURL(ficheros[0]);
+
         img.onload = visializarImagen;
         img.onerror = ErrorAlVisializar;
-        img.src = URL.createObjectURL(ficheros[0]);
     };
 
-    function visializarImagen() {
-        let htmlCanvas: HTMLCanvasElement = document.getElementById('canvas-foto') as HTMLCanvasElement;
-        htmlCanvas.width = 100;
-        htmlCanvas.height = 100;
-        var canvas = htmlCanvas.getContext('2d');
-        canvas.drawImage(this, 0, 0, 100,100);
-    }
-
-    function ErrorAlVisializar() {
-        let htmlCanvas: HTMLCanvasElement = document.getElementById('canvas-foto') as HTMLCanvasElement;
-        htmlCanvas.width = htmlCanvas.width;
-        Mensaje(TipoMensaje.Error, "El fichero seleccionado no es una imagen");
-    }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Seguridad;
@@ -13,23 +14,26 @@ namespace ServicioDeDatos.Entorno
     public class UsuarioDtm : Registro
     {
         [Required]
-        [Column("LOGIN", Order = 1, TypeName = "VARCHAR(50)")]
+        [Column("LOGIN", TypeName = "VARCHAR(50)")]
         public string Login { get; set; }
 
         [Required]
-        [Column("APELLIDO", Order = 2, TypeName = "VARCHAR(250)")]
+        [Column("APELLIDO", TypeName = "VARCHAR(250)")]
         public string Apellido { get; set; }
 
 
         [Required]
-        [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
+        [Column("NOMBRE", TypeName = "VARCHAR(50)")]
         public string Nombre { get; set; }
         
         [Required]
-        [Column("F_ALTA", Order = 4, TypeName = "DATE")]
+        [Column("F_ALTA", TypeName = "DATE")]
         public DateTime Alta { get; set; }
 
+        public int? IdArchivo { get; set; }
 
+        public virtual ArchivosDtm Archivo { get; set; }
+        
         public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
 
         public virtual ICollection<PuestosDeUsuarioDtm> Puestos { get; private set; }
@@ -53,6 +57,8 @@ namespace ServicioDeDatos.Entorno
                     .HasMany(tu => tu.Permisos)
                     .WithOne(p => p.Usuario)
                     .HasForeignKey(p => p.IdUsua);
+
+            GeneradorMd.DefinirCampoArchivo<UsuarioDtm>(modelBuilder);            
 
         }
 

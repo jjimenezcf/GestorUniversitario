@@ -104,6 +104,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case TipoControl.SelectorDeElemento:
                     htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
                     break;
+                case TipoControl.Archivo:
+                    htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
+                    break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
                     break;
@@ -139,6 +142,44 @@ namespace MVCSistemaDeElementos.Descriptores
                                 </input>";
             return htmlContenedor.Replace("control", htmlInput);
         }
+
+
+        private static string RenderArchivoDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-archivo");
+
+            var htmlArchivo = @$"
+            <form class=¨¨ method=¨post¨ enctype=¨multipart/form-data¨>
+              <table class=¨tabla-archivo-subir¨>
+                 <tr>
+                   <td>                  
+                      <input  {RenderAtributosComunes(tabla, descriptorControl)}
+                              type=¨file¨ 
+                              name=¨fichero¨  
+                              placeholder =¨{atributos.Ayuda}¨
+                              onChange=¨ApiDeArchivos.MostrarCanvas('{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}')¨ />
+                  </td>
+                   <td>
+                      <div class=¨barra-azul¨ id=¨barra-estado¨>
+                          <span></span>
+                      </div>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td>
+                      <canvas id=¨canvas-{descriptorControl.IdHtml}¨></canvas>
+                   </td>
+                   <td>
+                   </td>
+                 </tr>
+              </table>
+
+             </form>
+            ";
+            return htmlContenedor.Replace("control", htmlArchivo);
+        }
+
 
         private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)
         {

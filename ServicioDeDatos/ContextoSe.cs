@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Archivos;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ServicioDeDatos
 {
@@ -58,12 +59,44 @@ namespace ServicioDeDatos
         }
     }
 
+    public static class Transaccion
+    {
+        public static bool IniciarTransaccion(this ContextoSe contexto)
+        {
+            if (contexto.Database.CurrentTransaction == null)
+            {
+                contexto.Transaccion = contexto.Database.BeginTransaction();
+                return true;
+            }
+            return false;
+        }
+
+        public static void Commit(this ContextoSe contexto, bool transaccion)
+        {
+            if (transaccion)
+            {
+                contexto.Transaccion.Commit();
+                contexto.Transaccion.Dispose();
+            }
+        }
+        public static void Rollback(this ContextoSe contexto, bool transaccion)
+        {
+            if (transaccion)
+            {
+                contexto.Transaccion.Rollback();
+                contexto.Transaccion.Dispose();
+            }
+        }
+    }
+
     public partial class ContextoSe : DbContext
     {
 
-        private static ConcurrentDictionary<string, ContextoSe> _CacheDeContextos { get; set; }
+        //private static ConcurrentDictionary<string, ContextoSe> _CacheDeContextos { get; set; }
         public DatosDeConexion DatosDeConexion { get; private set; }
         public IConfiguration Configuracion { get; private set; }
+
+        internal  IDbContextTransaction Transaccion { get; set; }
 
         public bool Debuggar => new CacheDeVariable(this).HayQueDebuggar;
 
@@ -76,7 +109,8 @@ namespace ServicioDeDatos
 
         public static ContextoSe ObtenerContexto()
         {
-            return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
+            //return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
+            return new ConstructorDelContexto().CreateDbContext(new string[] { });
         }
 
         public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerDatosDeConexion()
@@ -90,16 +124,21 @@ namespace ServicioDeDatos
             return (configuracion, cadenaDeConexion);
         }
 
-        protected static ContextoSe ObtenerContexto(string nombreContexto, Func<ContextoSe> crearContexto)
-        {
-            if (!_CacheDeContextos.ContainsKey(nombreContexto))
-            {
-                var contexto = crearContexto();
-                _CacheDeContextos[nombreContexto] = contexto;
-            }
+        /// <summary>
+        /// No se puede cachear la conexión, ya que si no compartirían la transacción a BD, el usuario de donexión etc..
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="configuracion"></param>
+        //protected static ContextoSe ObtenerContexto(string nombreContexto, Func<ContextoSe> crearContexto)
+        //{
+        //    if (!_CacheDeContextos.ContainsKey(nombreContexto))
+        //    {
+        //        var contexto = crearContexto();
+        //        _CacheDeContextos[nombreContexto] = contexto;
+        //    }
 
-            return _CacheDeContextos[nombreContexto];
-        }
+        //    return _CacheDeContextos[nombreContexto];
+        //}
 
         public ContextoSe(DbContextOptions options, IConfiguration configuracion) :
         base(options)
@@ -108,8 +147,10 @@ namespace ServicioDeDatos
 
             _interceptadorDeConsultas = new InterceptadorDeConsultas();
             DbInterception.Add(_interceptadorDeConsultas);
-            if (_CacheDeContextos == null)
-                _CacheDeContextos = new ConcurrentDictionary<string, ContextoSe>();
+
+            //No se puede cachear el contexto por los datos que este compartiría (transacción, usuario, etc...)
+            //if (_CacheDeContextos == null)
+            //    _CacheDeContextos = new ConcurrentDictionary<string, ContextoSe>();
 
             InicializarDatosDeConexion();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos.Elemento
@@ -26,7 +27,7 @@ namespace ServicioDeDatos.Elemento
             throw new Exception($"No se ha definido el nombre de la tabla de la clase {t.Name}");
         }
 
-        public static void DefinirElementoDto<TEntity>(ModelBuilder modelBuilder) where TEntity : ElementoDtm
+        internal static void DefinirElementoDto<TEntity>(ModelBuilder modelBuilder) where TEntity : ElementoDtm
         {
             var nombreDeTabla = NombreDeTabla(typeof(TEntity));
 
@@ -63,6 +64,29 @@ namespace ServicioDeDatos.Elemento
                         .HasIndex(p => p.IdUsuaModi)
                         .HasName($"I_{nombreDeTabla}_IDUSUMODI");
 
+        }
+
+        internal static void DefinirCampoArchivo<TEntity>(ModelBuilder modelBuilder) where TEntity : Registro
+        {
+            var nombreDeTabla = NombreDeTabla(typeof(TEntity));
+
+
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnName("IDARCHIVO");
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnType("INT");
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").IsRequired(false);
+
+
+
+            modelBuilder.Entity<TEntity>()
+                        .HasIndex("IdArchivo")
+                        .HasName($"I_{nombreDeTabla}_IDARCHIVO");
+
+            modelBuilder.Entity<TEntity>()
+                        .HasOne("Archivo")
+                        .WithMany()
+                        .HasForeignKey("IdArchivo")
+                        .HasConstraintName($"FK_{nombreDeTabla}_IDARCHIVO")
+                        .OnDelete(DeleteBehavior.Restrict);
         }
     }
 
