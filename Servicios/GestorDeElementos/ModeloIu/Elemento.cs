@@ -13,6 +13,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string SelectorDeElemento = "selector-de-elemento";
         public const string Editor = "editor";
         public const string Archivo = "archivo";
+        public const string ImagenDelCanvas = "imagen-de-canva";
         public const string Desplegable = "desplegable";
         public const string GridModal = "grid-modal";
         public const string TablaBloque = "tabla-bloque";
@@ -98,6 +99,9 @@ namespace Gestor.Elementos.ModeloIu
 
         public bool EsVisible(ModoDeTrabajo modo)
         {
+            if (TipoControl.ImagenDelCanvas == TipoDeControl)
+                return false;
+
             if (Visible)
             {
                 if (modo == ModoDeTrabajo.Edicion)

@@ -72,6 +72,7 @@ namespace Gestor.Elementos.Entorno
         public DateTime Alta { get; set; }
 
         [IUPropiedad(
+            VisibleEnGrid = false,
             Etiqueta = "Fotografía",
             Ayuda = "Fotografía adjunta",
             Tipo = typeof(int),
@@ -79,6 +80,11 @@ namespace Gestor.Elementos.Entorno
             Fila = 4,
             Columna = 0)]
         public int? IdArchivo { get; set; }
+
+        [IUPropiedad(
+            TipoDeControl = TipoControl.ImagenDelCanvas
+            )]
+        public string UrlDelArchivo { get; set; }
 
     }
 

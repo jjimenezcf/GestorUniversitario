@@ -186,9 +186,9 @@ namespace Gestor.Elementos.Seguridad
             return gestor.MapearElementos(tipos).ToList();
         }
 
-        protected override void AntesEliminarFila(PermisoDto elemento, ParametrosDeNegocio opciones)
+        protected override void AntesMapearRegistroParaEliminar(PermisoDto elemento, ParametrosDeNegocio opciones)
         {
-            base.AntesEliminarFila(elemento, opciones);
+            base.AntesMapearRegistroParaEliminar(elemento, opciones);
 
             var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
             var filtro = new ClausulaDeFiltrado { Propiedad = nameof(RolesDeUnPermiso.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };

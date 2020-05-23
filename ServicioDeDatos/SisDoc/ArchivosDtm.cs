@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ServicioDeDatos.Archivos
 {
     [Table("ARCHIVO", Schema = "SISDOC")]
-    public class ArchivosDtm : ElementoDtm
+    public class ArchivoDtm : ElementoDtm
     {
         [Required]
         [Column("RUTA", TypeName = "VARCHAR(2000)")]
@@ -18,7 +18,7 @@ namespace ServicioDeDatos.Archivos
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            GeneradorMd.DefinirElementoDto<ArchivosDtm>(modelBuilder);
+            GeneradorMd.DefinirElementoDto<ArchivoDtm>(modelBuilder);
         }
 
     }

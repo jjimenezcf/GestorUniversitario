@@ -171,6 +171,9 @@ namespace MVCSistemaDeElementos.Descriptores
                       <canvas id=¨canvas-{descriptorControl.IdHtml}¨></canvas>
                    </td>
                    <td>
+                       <div style=¨display: none;¨>
+                           <img id=¨img-{descriptorControl.IdHtml}¨ src=¨¨>
+                       </div>
                    </td>
                  </tr>
               </table>

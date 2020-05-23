@@ -44,7 +44,7 @@ namespace ServicioDeDatos
 
         #region dbSets del esquema de SISDOC
 
-        public DbSet<ArchivosDtm> Archivos { get; set; }
+        public DbSet<ArchivoDtm> Archivos { get; set; }
 
         #endregion
 

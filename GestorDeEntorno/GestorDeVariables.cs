@@ -82,15 +82,15 @@ namespace Gestor.Elementos.Entorno
                    .FiltrarPorValor(filtros);
         }
 
-        protected override void AntesModificarFila(VariableDto elemento, ParametrosDeNegocio opciones)
+        protected override void AntesMapearRegistroParaModificar(VariableDto elemento, ParametrosDeNegocio opciones)
         {
-            base.AntesModificarFila(elemento, opciones);
+            base.AntesMapearRegistroParaModificar(elemento, opciones);
             new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
         }
 
-        protected override void AntesEliminarFila(VariableDto elemento, ParametrosDeNegocio opciones)
+        protected override void AntesMapearRegistroParaEliminar(VariableDto elemento, ParametrosDeNegocio opciones)
         {
-            base.AntesEliminarFila(elemento, opciones);
+            base.AntesMapearRegistroParaEliminar(elemento, opciones);
             new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
         }
     }

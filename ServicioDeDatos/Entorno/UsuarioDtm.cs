@@ -32,7 +32,7 @@ namespace ServicioDeDatos.Entorno
 
         public int? IdArchivo { get; set; }
 
-        public virtual ArchivosDtm Archivo { get; set; }
+        public virtual ArchivoDtm Archivo { get; set; }
         
         public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
 

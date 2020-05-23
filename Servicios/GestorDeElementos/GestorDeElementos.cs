@@ -260,7 +260,9 @@ namespace Gestor.Elementos
         {
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
 
-            return (IEnumerable<TElemento>)Mapeador.Map(elementosDeBd, typeof(IEnumerable<TRegistro>), typeof(IEnumerable<TElemento>));
+            // (IEnumerable<TElemento>)Mapeador.Map(elementosDeBd, typeof(IEnumerable<TRegistro>), typeof(IEnumerable<TElemento>));
+
+            return MapearElementos(elementosDeBd);
         }
 
         public List<TElemento> ProyectarElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, ParametrosDeNegocio parametros = null)
@@ -349,6 +351,12 @@ namespace Gestor.Elementos
             return registros;
         }
 
+        /// <summary>
+        /// se indican que joins se han de montar cuando se defina la consulta en función de los filtros y los parámetros de negocio
+        /// </summary>
+        /// <param name="filtros">filtros que se van a aplicar</param>
+        /// <param name="joins">join a incluir</param>
+        /// <param name="parametros">parámetros de negocio que modifican el comportamiento</param>
         protected virtual void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
 
@@ -423,28 +431,28 @@ namespace Gestor.Elementos
         {
 
             if (opciones.Tipo == TipoOperacion.Insertar)
-                AntesNuevaFila(elemento, opciones);
+                AntesMapearRegistroParaInsertar(elemento, opciones);
             else
             if (opciones.Tipo == TipoOperacion.Modificar)
-                AntesModificarFila(elemento, opciones);
+                AntesMapearRegistroParaModificar(elemento, opciones);
             else
             if (opciones.Tipo == TipoOperacion.Eliminar)
-                AntesEliminarFila(elemento, opciones);
+                AntesMapearRegistroParaEliminar(elemento, opciones);
         }
 
-        protected virtual void AntesEliminarFila(TElemento elemento, ParametrosDeNegocio opciones)
+        protected virtual void AntesMapearRegistroParaEliminar(TElemento elemento, ParametrosDeNegocio opciones)
         {
             if (elemento.Id == 0)
                 GestorDeErrores.Emitir($"No puede eliminar un elemento {typeof(TElemento).Name} con id 0");
         }
 
-        protected virtual void AntesModificarFila(TElemento elemento, ParametrosDeNegocio opciones)
+        protected virtual void AntesMapearRegistroParaModificar(TElemento elemento, ParametrosDeNegocio opciones)
         {
             if (elemento.Id == 0)
                 GestorDeErrores.Emitir($"No puede modificar un elemento {typeof(TElemento).Name} con id 0");
         }
 
-        protected virtual void AntesNuevaFila(TElemento elemento, ParametrosDeNegocio opciones)
+        protected virtual void AntesMapearRegistroParaInsertar(TElemento elemento, ParametrosDeNegocio opciones)
         {
             if (elemento.Id > 0)
                 GestorDeErrores.Emitir($"No puede crear un elemento {typeof(TElemento).Name} con id {elemento.Id}");

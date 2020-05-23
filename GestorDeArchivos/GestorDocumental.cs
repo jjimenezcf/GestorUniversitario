@@ -9,14 +9,14 @@ using System;
 
 namespace Gestor.Elementos.Archivos
 {
-    public class GestorDocumental : GestorDeElementos<ContextoSe, ArchivosDtm, ArchivosDto>
+    public class GestorDocumental : GestorDeElementos<ContextoSe, ArchivoDtm, ArchivosDto>
     {
         public class MapearArchivos : Profile
         {
             public MapearArchivos()
             {
-                CreateMap<ArchivosDtm, ArchivosDto>();
-                CreateMap<ArchivosDto, ArchivosDtm>();
+                CreateMap<ArchivoDtm, ArchivosDto>();
+                CreateMap<ArchivosDto, ArchivoDtm>();
             }
         }
 
@@ -50,7 +50,7 @@ namespace Gestor.Elementos.Archivos
             Directory.CreateDirectory(almacenarEn);
             var fichero = Path.GetFileName(rutaConFichero);
 
-            var archivo = new ArchivosDtm();
+            var archivo = new ArchivoDtm();
             archivo.Nombre = fichero;
             archivo.AlmacenadoEn = almacenarEn;
             var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);

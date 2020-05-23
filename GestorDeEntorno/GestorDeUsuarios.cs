@@ -6,9 +6,26 @@ using Utilidades;
 using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
+using ServicioDeDatos.Archivos;
 
 namespace Gestor.Elementos.Entorno
 {
+
+    public static partial class Joins
+    {
+        public static IQueryable<T> AplicarJoinDeArchivo<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : UsuarioDtm
+        {
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(ArchivoDtm))
+                    registros = registros.Include(p => p.Archivo);
+            }
+
+            return registros;
+        }
+    }
+
+
     static class FiltrosDeUsuario
     {
         public static IQueryable<T> FiltrarPorNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
@@ -83,6 +100,18 @@ namespace Gestor.Elementos.Entorno
 
         }
 
+        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            base.DefinirJoins(filtros, joins, parametros);
+            joins.Add(new ClausulaDeJoin { Dtm = typeof(ArchivoDtm) });
+        }
+
+        protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, joins, parametros);
+            return Joins.AplicarJoinDeArchivo(registros, joins, parametros);
+        }
+
         protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)        {
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
@@ -99,16 +128,16 @@ namespace Gestor.Elementos.Entorno
                    .FiltrarPorRelacion(filtros);
         }                
 
-        protected override void AntesNuevaFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
+        protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
-            base.AntesNuevaFila(usuarioDto, opciones);
+            base.AntesMapearRegistroParaInsertar(usuarioDto, opciones);
             usuarioDto.Alta = System.DateTime.Now;
             validarDatos(usuarioDto);
         }
 
-        protected override void AntesModificarFila(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
+        protected override void AntesMapearRegistroParaModificar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
-            base.AntesModificarFila(usuarioDto, opciones);
+            base.AntesMapearRegistroParaModificar(usuarioDto, opciones);
             validarDatos(usuarioDto);
         }
 
@@ -121,6 +150,13 @@ namespace Gestor.Elementos.Entorno
                 Errores.GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
             if (usuarioDto.Nombre.IsNullOrEmpty())
                 Errores.GestorDeErrores.Emitir("Es necesario indicar el nombre del usuario");
+        }
+
+        protected override void DespuesDeMapearElemento(UsuarioDtm registro, UsuarioDto elemento, ParametrosDeMapeo parametros)
+        {
+            base.DespuesDeMapearElemento(registro, elemento, parametros);
+            if (registro.Archivo != null)
+                elemento.UrlDelArchivo = registro.Archivo.Nombre;
         }
 
     }

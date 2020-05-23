@@ -1,54 +1,12 @@
-﻿
-<Div id=¨usuario-creacion-foto¨ action=¨javascript: enviar(this)¨>
-    <div class=¨archivo-subir¨>
-        <label for¨¨>Foto</label>
-        <input type=¨file¨ name=¨foto¨ onchange=¨MostrarPreview¨ required />
+﻿<html>
+<head>
+</head>
+<body>
+    <div id=¨image-wrapper¨>
+        <canvas></canvas>
     </div>
-    <div class=¨barra¨>
-        <div class=¨barra-azul¨ id=¨barra-estado¨>
-            <span></span>
-        </div>
+    <div style=¨display: none;¨>
+        <img src=¨https://localhost:44396/Archivos/mifoto.png¨>
     </div>
-    <div class=¨acciones¨>
-        <input type=¨submit¨ class=¨btn¨ value=¨Enviar¨ />
-        <input type=¨button¨ class=¨cancel¨ id=¨cancelar¨ value=¨Cancelar¨ />
-    </div>
-    <div id=¨preview¨></div>
-</Div>
-
-
-<Div id=¨usuario-creacion-foto¨ action=¨javascript: enviar(this)¨>
-    <div class=¨archivo-subir¨>
-        <label for¨¨>Foto</label>
-        <input type=¨fichero-foto¨ name=¨foto¨ onchange=¨ApiDeArchivos.MostrarPreview()¨ required />
-    </div>
-    <div class=¨barra¨>
-        <div class=¨barra-azul¨ id=¨barra-estado¨>
-            <span></span>
-        </div>
-    </div>
-    <div class=¨acciones¨>
-        <input type=¨submit¨ class=¨btn¨ value=¨Enviar¨ />
-        <input type=¨button¨ class=¨cancel¨ id=¨cancelar¨ value=¨Cancelar¨ />
-    </div>
-    <div id=¨mostrar-foto¨></div>
-</Div>
-
-<form method=¨post¨ enctype=¨multipart/form-data¨>
-    <div id=¨usuario-creacion-foto¨ action=¨javascript: enviar(this)¨>
-        <div class=¨archivo-subir¨>
-            <label for¨¨>Foto</label>
-            <input id=¨fichero-foto¨ class=¨archivo-subir-file¨ name=¨ficheros[]¨ type=¨file¨ onChange=¨ApiDeArchivos.MostrarCanvas()¨ />
-        </div>
-        <div class=¨barra¨>
-            <div class=¨barra-azul¨ id=¨barra-estado¨>
-                <span></span>
-            </div>
-        </div>
-        <div class=¨acciones¨>
-            <input type=¨button¨ class=¨btn¨ value=¨Enviar¨ onclick=¨ApiDeArchivos.SubirArchivo()¨ />
-            <input type=¨button¨ class=¨cancel¨ id=¨cancelar-subir-archivo¨ value=¨Cancelar¨ />
-        </div>
-        <canvas id=¨canvas-foto¨></canvas>
-    </div>
-</form>
+</body>
+</html>
