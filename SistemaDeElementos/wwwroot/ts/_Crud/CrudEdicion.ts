@@ -58,7 +58,7 @@
         protected InicializarValores(infSel: InfoSelector) {
             let id: number = infSel.Seleccionados[0] as number;
 
-            let control: HTMLElement = this.BuscarInput(this.PanelDeEditar, Literal.id);
+            let control: HTMLElement = this.BuscarEditor(this.PanelDeEditar, Literal.id);
             if (control == null) {
                 Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
                 return;
@@ -85,7 +85,7 @@
         }
 
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
-            let edicion: CrudEdicion = (peticion.datos as CrudEdicion);
+            let edicion: CrudEdicion = (peticion.DatosDeEntrada as CrudEdicion);
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos[0]);
         }

@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion, Crud.Controlador);
             var htmContenedorEdt =
                 $@"
                    <Div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
@@ -59,6 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmdDescriptorControl = $@"<input id=¨{tabla.IdHtml}_idElemento¨ 
                                              propiedad=¨{nameof(Elemento.Id).ToLower()}¨ 
                                              class=¨propiedad propiedad-id¨ 
+                                             tipo=¨{TipoControl.Editor}¨ 
                                              type=¨text¨ 
                                              readonly
                                              value=¨¨>

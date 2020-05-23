@@ -22,6 +22,10 @@ const Atributo = {
     expresionElemento: "expresion-elemento"
 }
 
+const AtributoSelectorArchivo = {
+    idArchivo : "id-archivo"
+}
+
 const ModoOrdenacion = {
     ascedente: "ascendente",
     descendente: "descendente",
@@ -63,7 +67,10 @@ const ClaseCss = {
     ordenAscendente: "ordenada-ascendente",
     ordenDescendente: "ordenada-descendente",
     sinOrden: "ordenada-sin-orden",
-    selectorElemento: "selector-de-elemento"
+    selectorElemento: "selector-de-elemento",
+    barraVerde: "barra-verde",
+    barraRoja: "barra-roja",
+    barraAzul: "barra-azul"
 }
 
 const Ajax = {
@@ -90,13 +97,15 @@ const Ajax = {
         orden: "orden",
         usuario: "usuario",
         idsJson: "idsJson",
-        claseElemento:"claseElemento"
+        claseElemento: "claseElemento",
+        fichero: "fichero"
     },
     jsonResultError: 1,
     jsonResultOk: 0,
     jsonUndefined: undefined,
     eventoLoad: "load",
-    eventoError: "error"
+    eventoError: "error",
+    eventoProgreso: "progress"
 };
 
 const LiteralCrt = {
@@ -161,7 +170,8 @@ const TipoControl = {
     Tipo : "tipo",
     Editor : "editor",
     Selector: "selector",
-    SelectorDeElemento: "selector-de-elemento"
+    SelectorDeElemento: "selector-de-elemento",
+    Archivo: "archivo"
 };
 
 const ModoTrabajo = {

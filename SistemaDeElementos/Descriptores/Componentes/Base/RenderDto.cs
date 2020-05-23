@@ -158,7 +158,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               type=¨file¨ 
                               name=¨fichero¨  
                               placeholder =¨{atributos.Ayuda}¨
-                              onChange=¨ApiDeArchivos.MostrarCanvas('{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}')¨ />
+                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}','barra-estado')¨ />
                   </td>
                    <td>
                       <div class=¨barra-azul¨ id=¨barra-estado¨>

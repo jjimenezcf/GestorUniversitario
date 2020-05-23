@@ -58,16 +58,29 @@ namespace MVCSistemaDeElementos.Controllers
         {
             var r = new Resultado();
 
-            //var filePath = Path.GetTempFileName();
-
-            var rutaFichero = $@".\wwwroot\Archivos\{fichero.FileName}";
-
-            using (var stream = new FileStream(rutaFichero, FileMode.Create))
+            try
             {
-                fichero.CopyTo(stream);
+                if (fichero == null)
+                    throw new Exception("No se ha identificado el fichero");
+
+                var rutaFichero = $@".\wwwroot\Archivos\{fichero.FileName}";
+
+                using (var stream = new FileStream(rutaFichero, FileMode.Create))
+                {
+                    fichero.CopyTo(stream);
+                }
+
+                r.Datos = Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = "fichero subido";
+            }
+            catch(Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido subir el fichero";
             }
 
-            Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
 
             return new JsonResult(r);
 

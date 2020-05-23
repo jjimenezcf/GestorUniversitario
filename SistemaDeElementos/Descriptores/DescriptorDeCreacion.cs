@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual string htmlRenderObjetoVacio()
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Nuevo);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Nuevo, Crud.Controlador);
 
             var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-creacion¨>
                                   htmlFilas

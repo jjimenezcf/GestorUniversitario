@@ -160,7 +160,7 @@
         }
 
         private RecargarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let mnt: CrudMnt = (peticion.datos as CrudMnt);
+            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
             mnt.InfoSelector.QuitarTodos();
             mnt.Buscar(0);
         }
@@ -185,7 +185,7 @@
         }
 
         private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let mnt: CrudMnt = (peticion.datos as CrudMnt);
+            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
             let resultado = peticion.resultado as ResultadoHtml;
 
             if (mnt.IdGrid === mnt.Grid.getAttribute(Atributo.id)) {

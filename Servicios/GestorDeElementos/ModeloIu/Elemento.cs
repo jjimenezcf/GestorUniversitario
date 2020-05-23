@@ -12,7 +12,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string Selector = "selector";
         public const string SelectorDeElemento = "selector-de-elemento";
         public const string Editor = "editor";
-        public const string Archivo = "Archivo";
+        public const string Archivo = "archivo";
         public const string Desplegable = "desplegable";
         public const string GridModal = "grid-modal";
         public const string TablaBloque = "tabla-bloque";

@@ -195,7 +195,7 @@
         }
 
         private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let modal: ModalSeleccion = (peticion.datos as ModalSeleccion);
+            let modal: ModalSeleccion = (peticion.DatosDeEntrada as ModalSeleccion);
             let resultado = peticion.resultado as ResultadoHtml;
 
             if (modal.IdGrid === modal.Grid.getAttribute(Atributo.id)) {
@@ -232,7 +232,7 @@
 
 
         private TratarValoresDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
-            let modal: ModalSeleccion = (peticion.datos as ModalSeleccion);
+            let modal: ModalSeleccion = (peticion.DatosDeEntrada as ModalSeleccion);
             modal.ProcesarRegistrosLeidos(peticion.resultado.datos);
         }
 

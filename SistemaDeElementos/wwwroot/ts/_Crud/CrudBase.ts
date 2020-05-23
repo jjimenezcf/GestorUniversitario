@@ -34,28 +34,6 @@
 
     }
 
-    export class PeticionAjax {
-        public nombre: string;
-        public datos: any;
-        public resultado: ResultadoJson;
-
-        constructor(peticion: string, datos: string) {
-            this.nombre = peticion;
-            this.datos = datos;
-            this.resultado = undefined;
-        }
-
-        ParsearRespuesta(req: XMLHttpRequest) {
-            try {
-                this.resultado = JSON.parse(req.response);
-            }
-            catch
-            {
-                Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
-            }
-        }
-    }
-
     export class CrudBase {
 
         private modoTrabajo: string;
@@ -158,10 +136,12 @@
         private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
             this.MapearPropiedaAlEditor(panel, propiedad, valor);
             this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor);
+            this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor);
+
         }
 
         private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any) {
-            let editor: HTMLInputElement = this.BuscarInput(panel, propiedad);
+            let editor: HTMLInputElement = this.BuscarEditor(panel, propiedad);
 
             if (editor === null)
                 return;
@@ -184,14 +164,36 @@
         }
 
 
+        private MapearPropiedadAlSelectorDeArchivo(panel: HTMLDivElement, propiedad: string, valor: any) {
+            let selector: HTMLInputElement = this.BuscarSelectorDeArchivo(panel, propiedad);
+
+            if (selector === null)
+                return;
+
+            selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor);
+        }
+
+
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
-        protected BuscarInput(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let input: HTMLCollectionOf<HTMLInputElement> = controlPadre.getElementsByTagName("input") as HTMLCollectionOf<HTMLInputElement>;
-            for (var i = 0; i < input.length; i++) {
-                var control = input[i] as HTMLInputElement;
+        protected BuscarEditor(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+            let editores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < editores.length; i++) {
+                var control = editores[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
-                if (dto === propiedadDto)
+                if (dto === propiedadDto.toLowerCase())
+                    return control;
+            }
+            return null;
+        }
+
+
+        protected BuscarSelectorDeArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < selectores.length; i++) {
+                var control = selectores[i] as HTMLInputElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto.toLowerCase())
                     return control;
             }
             return null;
@@ -213,7 +215,7 @@
                 return JSON.parse(`{"${Literal.id}":"0"}`);
 
             if (this.ModoTrabajo === ModoTrabajo.editando) {
-                let input: HTMLInputElement = this.BuscarInput(panel, Literal.id);
+                let input: HTMLInputElement = this.BuscarEditor(panel, Literal.id);
                 if (Number(input.value) <= 0)
                     throw new Error(`El valor del id ${Number(input.value)} debe ser mayor a 0`);
                 return JSON.parse(`{"${Literal.id}":"${Number(input.value)}"}`);
@@ -225,6 +227,7 @@
 
             this.MapearSelectoresDeElementos(panel, elementoJson);
             this.MapearEditores(panel, elementoJson);
+            this.MapearArchivos(panel, elementoJson);
 
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
@@ -243,6 +246,12 @@
             }
         }
 
+        protected MapearArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < archivos.length; i++) {
+                this.MapearArchivo(archivos[i], elementoJson);
+            }
+        }
         private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
             let propiedadDto = selector.getAttribute(Atributo.propiedad);
             let guardarEn: string = selector.getAttribute(AtributoSelectorElemento.guardarEn);
@@ -275,6 +284,23 @@
             elementoJson[propiedadDto] = valor;
         }
 
+
+        private MapearArchivo(archivo: HTMLInputElement, elementoJson: JSON): void {
+            var propiedadDto = archivo.getAttribute(Atributo.propiedad);
+            let valor: string = archivo.getAttribute(AtributoSelectorArchivo.idArchivo);
+            let obligatorio: string = archivo.getAttribute(Atributo.obligatorio);
+
+            if (obligatorio === "S" && valor.NoDefinida()) {
+                archivo.classList.remove(ClaseCss.crtlValido);
+                archivo.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`El campo ${propiedadDto} es obligatorio`);
+            }
+
+            archivo.classList.remove(ClaseCss.crtlNoValido);
+            archivo.classList.add(ClaseCss.crtlValido);
+            elementoJson[propiedadDto] = valor;
+        }
+
         protected DespuesDeMapearDatosDeIU(panel: HTMLDivElement, elementoJson: JSON): JSON {
             return elementoJson;
         }
@@ -284,10 +310,11 @@
 
 
         protected CargarSelectorElemento(controlador: string, claseDeElementoDto: string, idSelector: string) {
-            let url: string = this.DefinirPeticionDeCargar(controlador, claseDeElementoDto);
 
+            let url: string = this.DefinirPeticionDeCargar(controlador, claseDeElementoDto);
+            let datosDeEntrada = `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`;
             let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerTodos
-                , `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`
+                , datosDeEntrada
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
                 , ApiDeAjax.ModoPeticion.Get
@@ -299,7 +326,7 @@
         }
 
         private MapearElementosAlSelector(peticion: ApiDeAjax.DescriptorAjax) {
-            let datos: DatosPeticionSelector = JSON.parse(peticion.datos);
+            let datos: DatosPeticionSelector = JSON.parse(peticion.DatosDeEntrada);
             let idSelector = datos.IdSelector;
             let selector = new SelectorDeElementos(idSelector);
             for (var i = 0; i < peticion.resultado.datos.length; i++) {

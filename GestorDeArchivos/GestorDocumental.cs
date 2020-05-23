@@ -21,7 +21,7 @@ namespace Gestor.Elementos.Archivos
         }
 
 
-        public static void SubirArchivo(string rutaConFichero, IMapper mapeador)
+        public static int SubirArchivo(string rutaConFichero, IMapper mapeador)
         {
 
             var contexto = ContextoSe.ObtenerContexto();
@@ -30,7 +30,7 @@ namespace Gestor.Elementos.Archivos
                                                              , nameof(GestorDeVariables)
                                                              , () => new GestorDocumental(contexto, mapeador));
 
-            gestorDocumental.SubirArchivoInterno(rutaConFichero);
+            return gestorDocumental.SubirArchivoInterno(rutaConFichero);
         }
 
         public GestorDocumental(ContextoSe contexto, IMapper mapeador) 

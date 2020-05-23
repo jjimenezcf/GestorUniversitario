@@ -148,11 +148,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public short NumeroDeColumnas { get; private set; } = 0;
 
+        public string Controlador { get; private set; }
+
         public string IdHtml => $"table_{_Tipo.Name}_{ModoDeTrabajo}".ToLower();
 
-        public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo)
+        public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo, string controlador)
         {
             _Tipo = tipo;
+            Controlador = controlador;
             ModoDeTrabajo = modoDeTrabajo;
             var propiedades = tipo.GetProperties();
             foreach (var p in propiedades)
