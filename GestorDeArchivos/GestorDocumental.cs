@@ -45,6 +45,10 @@ namespace Gestor.Elementos.Archivos
                                                              , new object[] { Contexto, Mapeador });
 
             var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
+
+            if (!Directory.Exists(rutaDocumental.Valor))
+                throw new Exception($"La ruta del servidor documental {rutaDocumental.Valor} asignada a la variable {Variable.Servidor_Archivos} no está definida");
+
             var fecha = DateTime.Now;
             var almacenarEn = $@"{rutaDocumental.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{gestor.Contexto.DatosDeConexion.IdUsuario}";
             Directory.CreateDirectory(almacenarEn);
