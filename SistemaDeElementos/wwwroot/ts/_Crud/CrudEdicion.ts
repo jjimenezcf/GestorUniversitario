@@ -45,6 +45,7 @@
             this.ModoTrabajo = ModoTrabajo.editando;
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeEditar);
+            //this.BlanquearControlesDeIU(this.PanelDeEditar);
             this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
             this.InicializarValores(infSel);
         }

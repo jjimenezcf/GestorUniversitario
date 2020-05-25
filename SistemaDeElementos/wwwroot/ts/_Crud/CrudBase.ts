@@ -77,21 +77,66 @@
 
         }
 
-        private BlanquearControlesDeIU(panel: HTMLDivElement) {
-            let controles: HTMLCollectionOf<Element> = panel.getElementsByClassName(ClaseCss.propiedad);
-            for (var i = 0; i < controles.length; i++) {
-                var control = controles[i] as HTMLElement;
+        protected BlanquearControlesDeIU(panel: HTMLDivElement) {
 
-                if (control instanceof HTMLInputElement) {
-                    this.BlanquearInput(control as HTMLInputElement);
-                }
+            this.BlanquearEditores(panel);
+            this.BlanquearSelectores(panel);
+            this.BlanquearArchivos(panel);
+
+
+        }
+
+        private BlanquearEditores(panel: HTMLDivElement) {
+            let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < editores.length; i++) {
+                this.BlanquearEditor(editores[i]);
             }
         }
 
-        private BlanquearInput(input: HTMLInputElement) {
-            input.classList.remove(ClaseCss.crtlNoValido);
-            input.classList.add(ClaseCss.crtlValido);
-            input.value = "";
+        private BlanquearEditor(editor: HTMLInputElement) {
+            editor.classList.remove(ClaseCss.crtlNoValido);
+            editor.classList.add(ClaseCss.crtlValido);
+            editor.value = "";
+        }
+
+
+        private BlanquearSelectores(panel: HTMLDivElement) {
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < selectores.length; i++) {
+                this.BlanquearSelector(selectores[i]);
+            }
+        }
+
+        private BlanquearSelector(selector: HTMLSelectElement) {
+            selector.classList.remove(ClaseCss.crtlNoValido);
+            selector.classList.add(ClaseCss.crtlValido);
+            selector.selectedIndex = 0;
+        }
+
+
+        private BlanquearArchivos(panel: HTMLDivElement) {
+            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < archivos.length; i++) {
+                this.BlanquearArchivo(archivos[i]);
+            }
+        }
+
+        private BlanquearArchivo(archivo: HTMLInputElement) {
+            archivo.classList.remove(ClaseCss.crtlNoValido);
+            archivo.classList.add(ClaseCss.crtlValido);
+            archivo.setAttribute(AtributoSelectorArchivo.idArchivo, '0');
+            archivo.files = null;
+            let canvasHtml: HTMLCanvasElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLCanvasElement;
+            canvasHtml.width = canvasHtml.width;
+            let imagenHtml: HTMLImageElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLImageElement;
+            imagenHtml.src = "";
+            let barraHtml: HTMLDivElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.barraVinculada)) as HTMLDivElement;
+            barraHtml.removeAttribute('style');
+            barraHtml.innerHTML = null;
+            barraHtml.appendChild(document.createElement("span"));
+            barraHtml.classList.remove(ClaseCss.barraVerde);
+            barraHtml.classList.remove(ClaseCss.barraRoja);
+            barraHtml.classList.add(ClaseCss.barraAzul);
         }
 
         protected MostrarPanel(panel: HTMLDivElement) {
@@ -137,6 +182,7 @@
             this.MapearPropiedaAlEditor(panel, propiedad, valor);
             this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor);
             this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor);
+            this.MapearPropiedadAlVisorDeImagen(panel, propiedad, valor);
 
         }
 
@@ -173,6 +219,30 @@
             selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor);
         }
 
+        private MapearPropiedadAlVisorDeImagen(panel: HTMLDivElement, propiedad: string, valor: any) {
+
+            let visor: HTMLImageElement = this.BuscarVisorDeImagen(panel, propiedad);
+
+            if (visor === null)
+                return
+
+            visor.setAttribute('src', valor);
+            let idCanva: string = visor.getAttribute(Atributo.id).replace('img', 'canvas');
+
+            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
+            htmlCanvas.width = 100;
+            htmlCanvas.height = 100;
+            var canvas = htmlCanvas.getContext('2d');
+
+
+            var img = new Image();
+            img.src = valor;
+            img.onload = function () {
+                    canvas.drawImage(img, 0, 0, 100, 100);
+            }
+
+        }
+
 
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
@@ -189,6 +259,29 @@
 
 
         protected BuscarSelectorDeArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < selectores.length; i++) {
+                var control = selectores[i] as HTMLInputElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto.toLowerCase())
+                    return control;
+            }
+            return null;
+        }
+
+        protected BuscarVisorDeImagen(controlPadre: HTMLDivElement, propiedadDto: string): HTMLImageElement {
+            let visor: NodeListOf<HTMLImageElement> = controlPadre.querySelectorAll(`img[tipo="${TipoControl.VisorDeArchivo}"]`) as NodeListOf<HTMLImageElement>;
+            for (var i = 0; i < visor.length; i++) {
+                var control = visor[i] as HTMLImageElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto.toLowerCase())
+                    return control;
+            }
+            return null;
+        }
+
+
+        protected BuscarUrlDelArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
             let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i] as HTMLInputElement;
@@ -232,40 +325,11 @@
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
 
-        protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
-            for (let i = 0; i < selectores.length; i++) {
-                this.MapearSelectorDeElementos(selectores[i], elementoJson);
-            }
-        }
-
         protected MapearEditores(panel: HTMLDivElement, elementoJson: JSON): void {
             let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < editores.length; i++) {
                 this.MapearEditor(editores[i], elementoJson);
             }
-        }
-
-        protected MapearArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
-            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < archivos.length; i++) {
-                this.MapearArchivo(archivos[i], elementoJson);
-            }
-        }
-        private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
-            let propiedadDto = selector.getAttribute(Atributo.propiedad);
-            let guardarEn: string = selector.getAttribute(AtributoSelectorElemento.guardarEn);
-            let obligatorio: string = selector.getAttribute(Atributo.obligatorio);
-
-            if (obligatorio === "S" && Number(selector.value) === 0) {
-                selector.classList.remove(ClaseCss.crtlValido);
-                selector.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
-            }
-
-            selector.classList.remove(ClaseCss.crtlNoValido);
-            selector.classList.add(ClaseCss.crtlValido);
-            elementoJson[guardarEn] = selector.value;
         }
 
         private MapearEditor(input: HTMLInputElement, elementoJson: JSON): void {
@@ -284,6 +348,35 @@
             elementoJson[propiedadDto] = valor;
         }
 
+        protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < selectores.length; i++) {
+                this.MapearSelectorDeElementos(selectores[i], elementoJson);
+            }
+        } 
+
+        private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
+            let propiedadDto = selector.getAttribute(Atributo.propiedad);
+            let guardarEn: string = selector.getAttribute(AtributoSelectorElemento.guardarEn);
+            let obligatorio: string = selector.getAttribute(Atributo.obligatorio);
+
+            if (obligatorio === "S" && Number(selector.value) === 0) {
+                selector.classList.remove(ClaseCss.crtlValido);
+                selector.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
+            }
+
+            selector.classList.remove(ClaseCss.crtlNoValido);
+            selector.classList.add(ClaseCss.crtlValido);
+            elementoJson[guardarEn] = selector.value;
+        }
+
+        protected MapearArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < archivos.length; i++) {
+                this.MapearArchivo(archivos[i], elementoJson);
+            }
+        }
 
         private MapearArchivo(archivo: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = archivo.getAttribute(Atributo.propiedad);

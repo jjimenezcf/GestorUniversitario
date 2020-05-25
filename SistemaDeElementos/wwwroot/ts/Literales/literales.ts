@@ -23,7 +23,10 @@ const Atributo = {
 }
 
 const AtributoSelectorArchivo = {
-    idArchivo : "id-archivo"
+    idArchivo: "id-archivo",
+    canvasVinculado: "canvas-vinculado",
+    imagenVinculada: "imagen-vinculado",
+    barraVinculada: "barra-vinculada"
 }
 
 const ModoOrdenacion = {
@@ -171,7 +174,8 @@ const TipoControl = {
     Editor : "editor",
     Selector: "selector",
     SelectorDeElemento: "selector-de-elemento",
-    Archivo: "archivo"
+    Archivo: "archivo",
+    VisorDeArchivo: "visor-archivo"
 };
 
 const ModoTrabajo = {

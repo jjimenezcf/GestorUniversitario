@@ -7,6 +7,7 @@ using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Archivos;
+using System.IO;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -42,10 +43,10 @@ namespace Gestor.Elementos.Entorno
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.Permisos)
                 {
-                    var listaIds = filtro.Valor.ListaEnteros(); 
-                    foreach(int id in listaIds)
+                    var listaIds = filtro.Valor.ListaEnteros();
+                    foreach (int id in listaIds)
                     {
-                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua ==u.Id));
+                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua == u.Id));
                     }
                 }
 
@@ -112,12 +113,13 @@ namespace Gestor.Elementos.Entorno
             return Joins.AplicarJoinDeArchivo(registros, joins, parametros);
         }
 
-        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)        {
+        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
+        {
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
-        }               
+        }
 
-        protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) 
+        protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             foreach (var f in filtros)
                 if (f.Propiedad == FiltroPor.Id)
@@ -126,7 +128,7 @@ namespace Gestor.Elementos.Entorno
             return registros
                    .FiltrarPorNombre(filtros)
                    .FiltrarPorRelacion(filtros);
-        }                
+        }
 
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
@@ -141,7 +143,7 @@ namespace Gestor.Elementos.Entorno
             validarDatos(usuarioDto);
         }
 
-   
+
         private void validarDatos(UsuarioDto usuarioDto)
         {
             if (usuarioDto.Login.IsNullOrEmpty())
@@ -156,8 +158,32 @@ namespace Gestor.Elementos.Entorno
         {
             base.DespuesDeMapearElemento(registro, elemento, parametros);
             if (registro.Archivo != null)
-                elemento.UrlDelArchivo = registro.Archivo.Nombre;
+            {
+                elemento.UrlDelArchivo = DescargarArchivo(registro.Archivo);
+            }
         }
+
+
+        #region codigo de la gestión documental
+
+        public static string DescargarArchivo(ArchivoDtm archivo)
+        {
+            var rutaDeDescarga = $@".\wwwroot\Archivos";
+            var ficheroCacheado = $"{archivo.Id}.se";
+
+            var nombreFichero = archivo.Nombre;
+
+            if (!File.Exists($@"{rutaDeDescarga}\{ficheroCacheado}"))
+                File.Move($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
+
+
+            File.Copy($@"{rutaDeDescarga}\{ficheroCacheado}", $@"{rutaDeDescarga}\{nombreFichero}", true);
+
+            var rutaUrlBase = "/Archivos";
+            return $@"{rutaUrlBase}/{nombreFichero}";
+        }
+
+        #endregion
 
     }
 

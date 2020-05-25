@@ -62,8 +62,9 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 if (fichero == null)
                     throw new Exception("No se ha identificado el fichero");
-
-                var rutaFichero = $@".\wwwroot\Archivos\{fichero.FileName}";
+               
+                var rutaDeDescarga = $@".\SistemaDeElementos\wwwroot\Archivos";
+                var rutaFichero = $@".{rutaDeDescarga}\{fichero.FileName}";
 
                 using (var stream = new FileStream(rutaFichero, FileMode.Create))
                 {

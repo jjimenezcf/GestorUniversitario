@@ -409,6 +409,10 @@ a {
     width: 100%;
 }
 
+.td-archivo-subir {
+        border-top: 0px !important
+    }
+
 .div-archivo-subir {
     float: left;
     width: 60%;

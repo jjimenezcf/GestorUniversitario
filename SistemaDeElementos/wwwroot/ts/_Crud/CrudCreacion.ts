@@ -45,6 +45,7 @@
             this.OcultarPanel(panelAnterior);
             this.MostrarPanel(this.PanelDeCrear);
             this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
+            //this.BlanquearControlesDeIU(this.PanelDeCrear)
         }
 
         public Crear() {

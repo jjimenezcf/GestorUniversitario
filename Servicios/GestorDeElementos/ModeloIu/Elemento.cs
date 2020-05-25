@@ -13,6 +13,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string SelectorDeElemento = "selector-de-elemento";
         public const string Editor = "editor";
         public const string Archivo = "archivo";
+        public const string VisorDeArchivo = "visor-archivo";
         public const string ImagenDelCanvas = "imagen-de-canva";
         public const string Desplegable = "desplegable";
         public const string GridModal = "grid-modal";

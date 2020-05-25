@@ -143,7 +143,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor.Replace("control", htmlInput);
         }
 
-
         private static string RenderArchivoDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
@@ -153,26 +152,31 @@ namespace MVCSistemaDeElementos.Descriptores
             <form class=¨¨ method=¨post¨ enctype=¨multipart/form-data¨>
               <table class=¨tabla-archivo-subir¨>
                  <tr>
-                   <td>                  
+                   <td class=¨td-archivo-subir¨>        
+                      <a href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
                       <input  {RenderAtributosComunes(tabla, descriptorControl)}
                               type=¨file¨ 
                               name=¨fichero¨  
+                              style=¨display: none;¨
+                              canvas-vinculado = ¨canvas-{descriptorControl.IdHtml}¨  
+                              imagen-vinculada = ¨img-{descriptorControl.IdHtml}¨   
+                              barra-vinculada = ¨barra-{descriptorControl.IdHtml}¨  
                               placeholder =¨{atributos.Ayuda}¨
-                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}','barra-estado')¨ />
+                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}','barra-{descriptorControl.IdHtml}')¨ />
                   </td>
-                   <td>
-                      <div class=¨barra-azul¨ id=¨barra-estado¨>
+                   <td class=¨td-archivo-subir¨>
+                      <div id = ¨barra-{descriptorControl.IdHtml}¨ class=¨barra-azul¨>
                           <span></span>
                       </div>
                    </td>
                  </tr>
                  <tr>
-                   <td>
+                   <td class=¨td-archivo-subir¨>
                       <canvas id=¨canvas-{descriptorControl.IdHtml}¨></canvas>
                    </td>
-                   <td>
+                   <td class=¨td-archivo-subir¨>
                        <div style=¨display: none;¨>
-                           <img id=¨img-{descriptorControl.IdHtml}¨ src=¨¨>
+                           <img id=¨img-{descriptorControl.IdHtml}¨ tipo=¨{TipoControl.VisorDeArchivo}¨  propiedad=¨urldelarchivo¨ src=¨¨>
                        </div>
                    </td>
                  </tr>
@@ -182,6 +186,7 @@ namespace MVCSistemaDeElementos.Descriptores
             ";
             return htmlContenedor.Replace("control", htmlArchivo);
         }
+
 
 
         private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)

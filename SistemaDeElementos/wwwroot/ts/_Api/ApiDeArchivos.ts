@@ -46,10 +46,10 @@
         selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
     }
 
-    export function MostrarCanvas(controlador: string, idSelectorDeArchivo: string, idCambas: string, idBarra: string) {
+    export function MostrarCanvas(controlador: string, idSelectorDeArchivo: string, idCanva: string, idBarra: string) {
 
         function visializarImagen() {
-            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCambas) as HTMLCanvasElement;
+            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
             htmlCanvas.width = 100;
             htmlCanvas.height = 100;
             var canvas = htmlCanvas.getContext('2d');
@@ -58,7 +58,7 @@
         }
 
         function ErrorAlVisializar() {
-            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCambas) as HTMLCanvasElement;
+            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
             htmlCanvas.width = htmlCanvas.width;
             Mensaje(TipoMensaje.Error, "El fichero seleccionado no es una imagen");
         }
@@ -74,5 +74,10 @@
         img.onerror = ErrorAlVisializar;
     };
 
-
+    export function SeleccionarArchivo(idSelector: string) {
+        let inputFile: HTMLDivElement = document.getElementById(idSelector) as HTMLDivElement;
+        if (inputFile) {
+            inputFile.click();
+        }
+    }
 }

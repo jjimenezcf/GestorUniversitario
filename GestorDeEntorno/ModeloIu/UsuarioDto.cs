@@ -74,7 +74,7 @@ namespace Gestor.Elementos.Entorno
         [IUPropiedad(
             VisibleEnGrid = false,
             Etiqueta = "Fotografía",
-            Ayuda = "Fotografía adjunta",
+            Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),
             TipoDeControl= TipoControl.Archivo,
             Fila = 4,
