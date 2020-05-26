@@ -136,10 +136,7 @@
                 this._divBarra.classList.add(ClaseCss.barraRoja);
                 this._span.innerHTML = "Error al subir el fichero";
             }
-
-            if (EsNula(this.Request.response)) 
-                return `La peticion ${this.nombre} no se ha podido realizar`;
-
+            
             let resultado: ResultadoJson = JSON.parse(this.Request.response);
             console.error(resultado.consola);
             if (!EsNula(resultado.mensaje))

@@ -143,6 +143,17 @@ namespace Gestor.Elementos.Entorno
             validarDatos(usuarioDto);
         }
 
+        protected override void AntesDePersistir(UsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+
+            if (registro.IdArchivo == 0 || registro.IdArchivo == null)
+            {
+                registro.IdArchivo = null;
+                registro.Archivo = null;
+            }
+        }
+
 
         private void validarDatos(UsuarioDto usuarioDto)
         {

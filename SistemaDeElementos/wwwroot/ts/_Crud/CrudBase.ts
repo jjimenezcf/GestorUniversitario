@@ -117,26 +117,8 @@
         private BlanquearArchivos(panel: HTMLDivElement) {
             let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < archivos.length; i++) {
-                this.BlanquearArchivo(archivos[i]);
+                ApiDeArchivos.BlanquearArchivo(archivos[i]);
             }
-        }
-
-        private BlanquearArchivo(archivo: HTMLInputElement) {
-            archivo.classList.remove(ClaseCss.crtlNoValido);
-            archivo.classList.add(ClaseCss.crtlValido);
-            archivo.setAttribute(AtributoSelectorArchivo.idArchivo, '0');
-            archivo.files = null;
-            let canvasHtml: HTMLCanvasElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLCanvasElement;
-            canvasHtml.width = canvasHtml.width;
-            let imagenHtml: HTMLImageElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLImageElement;
-            imagenHtml.src = "";
-            let barraHtml: HTMLDivElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.barraVinculada)) as HTMLDivElement;
-            barraHtml.removeAttribute('style');
-            barraHtml.innerHTML = null;
-            barraHtml.appendChild(document.createElement("span"));
-            barraHtml.classList.remove(ClaseCss.barraVerde);
-            barraHtml.classList.remove(ClaseCss.barraRoja);
-            barraHtml.classList.add(ClaseCss.barraAzul);
         }
 
         protected MostrarPanel(panel: HTMLDivElement) {

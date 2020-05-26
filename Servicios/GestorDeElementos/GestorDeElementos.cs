@@ -205,6 +205,8 @@ namespace Gestor.Elementos
             {
                 foreach (var registro in registros)
                 {
+                    AntesDePersistir(registro, parametros);
+                    
                     if (parametros.Tipo == TipoOperacion.Insertar)
                         Contexto.Add(registro);
                     else
@@ -214,10 +216,12 @@ namespace Gestor.Elementos
                     if (parametros.Tipo == TipoOperacion.Eliminar)
                         Contexto.Remove(registro);
                     else
-                        throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar}");
+                        throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
+                    Contexto.SaveChanges();
+                    
+                    DespuesDePersistir(registro, parametros);
                 }
 
-                Contexto.SaveChanges();
                 Contexto.Commit(transaccion);
             }
             catch (Exception exc)
@@ -225,6 +229,14 @@ namespace Gestor.Elementos
                 Contexto.Rollback(transaccion);
                 throw exc;
             }
+        }
+
+        protected virtual void DespuesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
+        {
+        }
+
+        protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
+        {
         }
 
         protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);
