@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
         (
           gestorDeUsuarios, 
           gestorDeErrores, 
-          new CrudUsuario(ModoDescriptor.Mantenimiento)
+          new DescriptorDeUsuario(ModoDescriptor.Mantenimiento)
         )
         {
 

@@ -13,6 +13,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
         public string htmlDeCreacionEspecifico { get; set; }
 
+        public bool EnModal { set; get; }
+
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
           padre: crud,
@@ -27,26 +29,62 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCancelarNuevo();
+            EnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
         }
 
 
 
         public override string RenderControl()
         {
-            var htmContenedorCreacion =
+            string htmContenedorCreacion;
+            if (this.EnModal)
+            {
+                htmContenedorCreacion = RendelModal();
+            }
+            else
+            {
+                htmContenedorCreacion = 
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
-                     <h2>Div de creación</h2>
-                     {MenuCreacion.RenderControl()}
-                     {htmlRenderObjetoVacio()}
-                     {htmlDeCreacionEspecifico}
-                   </Div>
+                   <div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
+                         <h2>Creación</h2> 
+                         {MenuCreacion.RenderControl()}
+                         {RendelDivDeCreacion()}
+                   </div>
                 ";
+            }
 
             return htmContenedorCreacion.Render();
         }
 
-        
+
+        private string RendelModal()
+        {
+            var htmlModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ controlador=¨{Crud.Controlador}¨>
+                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
+                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		    	<h2>Creación</h2>
+                                        </div>
+                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                                        {RendelDivDeCreacion()}
+                                        </div>
+                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeCreacion('crear-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeCreacion('cerrar-modal')¨ />
+                                        </div>
+                                      </div>
+                              </div>";
+            return htmlModal;
+        }
+
+
+        private string RendelDivDeCreacion()
+        {
+            var htmlModal = $@"
+                               {htmlRenderObjetoVacio()}
+                               {htmlDeCreacionEspecifico}";
+            return htmlModal;
+        }
+
 
         protected virtual string htmlRenderObjetoVacio()
         {

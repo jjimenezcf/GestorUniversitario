@@ -365,7 +365,7 @@
             let valor: string = archivo.getAttribute(AtributoSelectorArchivo.idArchivo);
             let obligatorio: string = archivo.getAttribute(Atributo.obligatorio);
 
-            if (obligatorio === "S" && valor.NoDefinida()) {
+            if (obligatorio === "S" && EsNula(valor)) {
                 archivo.classList.remove(ClaseCss.crtlValido);
                 archivo.classList.add(ClaseCss.crtlNoValido);
                 throw new Error(`El campo ${propiedadDto} es obligatorio`);

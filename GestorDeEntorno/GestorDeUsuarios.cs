@@ -185,7 +185,10 @@ namespace Gestor.Elementos.Entorno
             var nombreFichero = archivo.Nombre;
 
             if (!File.Exists($@"{rutaDeDescarga}\{ficheroCacheado}"))
-                File.Move($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
+                if (File.Exists($@"{archivo.AlmacenadoEn}\{ficheroCacheado}"))
+                    File.Move($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
+                else
+                    return "";
 
 
             File.Copy($@"{rutaDeDescarga}\{ficheroCacheado}", $@"{rutaDeDescarga}\{nombreFichero}", true);

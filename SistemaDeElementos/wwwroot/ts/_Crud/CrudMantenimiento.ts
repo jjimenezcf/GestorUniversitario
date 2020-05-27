@@ -60,16 +60,38 @@
             this.AbrirModalDeBorrar();
         }
 
-        public CerrarModalDeBorrado() {
-            this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            this.CerrarModal(this.idModalBorrar);
-        }
-
-
         private AbrirModalDeBorrar() {
             this.ModoTrabajo = ModoTrabajo.borrando;
             var ventana = document.getElementById(this.idModalBorrar);
             ventana.style.display = 'block';
+        }
+
+        public BorrarElemento() {
+            this.CerrarModalDeBorrado();
+            let id: number = this.InfoSelector.Seleccionados[0] as number;
+            let url: string = this.DefinirPeticionDeBorrado(id);
+
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Borrar
+                , this
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.RecargarGrid
+                , null
+            );
+
+            try {
+                a.Ejecutar();
+            }
+            catch (error) {
+                Mensaje(TipoMensaje.Error, error);
+                return;
+            }
+        }
+
+        public CerrarModalDeBorrado() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            this.CerrarModal(this.idModalBorrar);
         }
 
         public IraEditar() {
@@ -83,6 +105,14 @@
 
         public IraCrear() {
             this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
+        }
+
+        public CrearElemento() {
+            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.NuevoElemento);
+        }
+
+        public CerrarModalDeCreacion() {
+            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.CancelarNuevo);
         }
 
         public FilaPulsada(idCheck: string, idDelInput: string) {
@@ -125,29 +155,6 @@
         public ObtenerSiguientes() {
             let posicion: number = this.Navegador.getAttribute(Atributo.posicion).Numero();
             this.Buscar(posicion);
-        }
-
-        public BorrarElemento() {
-            this.CerrarModalDeBorrado();
-            let id: number = this.InfoSelector.Seleccionados[0] as number;
-            let url: string = this.DefinirPeticionDeBorrado(id);
-
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Borrar
-                , this
-                , url
-                , ApiDeAjax.TipoPeticion.Sincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.RecargarGrid
-                , null
-            );
-
-            try {
-                a.Ejecutar();
-            }
-            catch (error) {
-                Mensaje(TipoMensaje.Error, error);
-                return;
-            }
         }
 
         private DefinirPeticionDeBorrado(id: number): string {

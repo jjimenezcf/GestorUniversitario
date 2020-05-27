@@ -73,7 +73,8 @@ const ClaseCss = {
     selectorElemento: "selector-de-elemento",
     barraVerde: "barra-verde",
     barraRoja: "barra-roja",
-    barraAzul: "barra-azul"
+    barraAzul: "barra-azul",
+    contenedorModal: "contenedor-modal"
 }
 
 const Ajax = {
@@ -151,6 +152,13 @@ const LiteralModalBorrar = {
     Accion: {
         BorrarElemento: "borrar-elemento",
         CerrarModalDeBorrado: "cerrar-modal-de-borrado",
+    }
+}
+
+const LiteralModalCreacion = {
+    Accion: {
+        CrearElemento: "crear-elemento",
+        CerrarModal: "cerrar-modal",
     }
 }
 

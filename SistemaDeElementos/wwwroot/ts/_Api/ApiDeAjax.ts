@@ -48,7 +48,7 @@
         public set DatosPost(datos: FormData) { this._datosPost = datos; }
 
         public TrasLaPeticion: Function;
-        public SiHayError: Function;
+        public ProcesarError: Function;
         constructor(peticion: string, datos: any, url: string, tipo: TipoPeticion, modo: ModoPeticion, trasLaPeticion: Function, siHayError: Function) {
             this.nombre = peticion;
             this.DatosDeEntrada = datos;
@@ -72,7 +72,7 @@
             this._req = new XMLHttpRequest();
             this._url = url;
             this.TrasLaPeticion = trasLaPeticion;
-            this.SiHayError = siHayError;
+            this.ProcesarError = siHayError;
         }
 
         public Ejecutar() {
@@ -136,14 +136,22 @@
                 this._divBarra.classList.add(ClaseCss.barraRoja);
                 this._span.innerHTML = "Error al subir el fichero";
             }
-            
-            let resultado: ResultadoJson = JSON.parse(this.Request.response);
-            console.error(resultado.consola);
-            if (!EsNula(resultado.mensaje))
-                resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${resultado.mensaje}`;
 
-            if (this.SiHayError)
-                this.SiHayError(this, resultado.mensaje);   
+            if (this.Request.status === 404) {
+
+                this.resultado = new ResultadoJson();
+                this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición no definida`;
+                console.error(`No está definida la petición con los parámetros indicados: ${this.Url}`);
+            }
+            else {
+                this.resultado = JSON.parse(this.Request.response);
+                console.error(this.resultado.consola);
+                if (!EsNula(this.resultado.mensaje))
+                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
+            }
+
+            if (this.ProcesarError)
+                this.ProcesarError(this);   
         }
 
         private DespuesDeLaPeticion() {

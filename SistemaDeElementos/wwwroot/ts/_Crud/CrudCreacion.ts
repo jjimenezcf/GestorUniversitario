@@ -2,9 +2,19 @@
 
     export class CrudCreacion extends CrudBase {
 
-        protected PanelDeCrear: HTMLDivElement;
+        protected _PanelDeCrear: HTMLDivElement;
+        private _idPanelCreacion: string;
+
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
+
+        protected get PanelDeCrear(): HTMLDivElement {
+            return document.getElementById(this._idPanelCreacion) as HTMLDivElement;
+        }
+
+        private get EsModal(): boolean {
+            return this.PanelDeCrear.className === ClaseCss.contenedorModal;
+        }
 
         private get Controlador(): string {
             return this.PanelDeCrear.getAttribute(Literal.controlador);
@@ -15,7 +25,7 @@
             if (EsNula(idPanelCreacion))
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
-            this.PanelDeCrear = document.getElementById(idPanelCreacion) as HTMLDivElement;
+            this._idPanelCreacion = idPanelCreacion;
             this.PanelDeMnt = crud.PanelDeMnt;
             this.CrudDeMnt = crud;
         }
@@ -42,20 +52,33 @@
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {
             this.ModoTrabajo = ModoTrabajo.creando;
-            this.OcultarPanel(panelAnterior);
-            this.MostrarPanel(this.PanelDeCrear);
+
+            if (this.EsModal) {
+                var ventana = document.getElementById(this._idPanelCreacion);
+                ventana.style.display = 'block';
+            }
+            else {
+
+                this.OcultarPanel(panelAnterior);
+                this.MostrarPanel(this.PanelDeCrear);
+            }
             this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
             //this.BlanquearControlesDeIU(this.PanelDeCrear)
         }
 
-        public Crear() {
+        private Crear() {
             let json: JSON = this.MapearControlesDeIU(this.PanelDeCrear);
             this.CrearElemento(json);
         }
 
         public CerrarCreacion() {
-            this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            if (this.EsModal) {
+                this.CerrarModal(this._idPanelCreacion);
+            }
+            else {
+                this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
+            }
             this.CrudDeMnt.Buscar(0);
         }
 

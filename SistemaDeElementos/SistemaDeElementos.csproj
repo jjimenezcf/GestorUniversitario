@@ -88,7 +88,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Update="wwwroot\ts\Entorno\Usuarios.ts">
+    <TypeScriptCompile Update="wwwroot\ts\Entorno\CrudDeUsuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Variables.ts">

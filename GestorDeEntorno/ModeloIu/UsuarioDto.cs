@@ -17,7 +17,8 @@ namespace Gestor.Elementos.Entorno
     }
 
     [IUDto(AnchoEtiqueta =20
-         , AnchoSeparador =5)]
+         , AnchoSeparador =5
+        , CreacionEnModal = true)]
     public class UsuarioDto : Elemento
     {
         [IUPropiedad(

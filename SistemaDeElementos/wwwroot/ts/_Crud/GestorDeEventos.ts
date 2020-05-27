@@ -114,11 +114,28 @@
     export function EventosModalDeBorrar(accion: string): void {
         switch (accion) {
             case LiteralModalBorrar.Accion.CerrarModalDeBorrado: {
-                crudMnt.BorrarElemento();
+                crudMnt.CerrarModalDeBorrado();
                 break;
             }
             case LiteralModalBorrar.Accion.BorrarElemento: {
                 crudMnt.BorrarElemento();
+                break;
+            }
+            default: {
+                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                break;
+            }
+        }
+    }
+
+    export function EventosModalDeCreacion(accion: string): void {
+        switch (accion) {
+            case LiteralModalCreacion.Accion.CerrarModal: {
+                crudMnt.CerrarModalDeCreacion();
+                break;
+            }
+            case LiteralModalCreacion.Accion.CrearElemento: {
+                crudMnt.CrearElemento();
                 break;
             }
             default: {

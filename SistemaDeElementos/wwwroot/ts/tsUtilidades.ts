@@ -59,7 +59,7 @@ interface String {
 }
 
 function EsNula(valor: string): boolean {
-    if (valor == null || valor == undefined)
+    if (valor == null || valor.NoDefinida())
         return true;
 
     return valor.NoDefinida();

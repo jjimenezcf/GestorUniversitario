@@ -41,7 +41,7 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     return inputId.value;
 }
 function EsNula(valor) {
-    if (valor == null || valor == undefined)
+    if (valor == null || valor.NoDefinida())
         return true;
     return valor.NoDefinida();
 }

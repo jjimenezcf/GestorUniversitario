@@ -39,7 +39,7 @@ namespace Gestor.Elementos.ModeloIu
     }
 
     public enum LadoDeRenderizacion { izquierdo, derecho }
-    public enum ModoDeTrabajo { Nuevo, Consulta, Edicion }
+    public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
 
     public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
 
@@ -113,6 +113,9 @@ namespace Gestor.Elementos.ModeloIu
                 else
                 if (modo == ModoDeTrabajo.Consulta)
                     return VisibleAlConsultar;
+                else
+                if (modo == ModoDeTrabajo.Mantenimiento)
+                    return VisibleEnGrid;
             }
 
             return false;
@@ -141,10 +144,16 @@ namespace Gestor.Elementos.ModeloIu
         /// Ancho que se les da a las etiquetas en la iu
         /// </summary>
         public short AnchoEtiqueta { get; set; } = 15;
+       
         /// <summary>
-        /// Separación entre la etiqueta y el contro que muestra el dato
+        /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
+
+        /// <summary>
+        /// Indica si se crea en modal
+        /// </summary>
+        public bool CreacionEnModal { get; set; } = false;
     }
 
 
@@ -201,6 +210,9 @@ namespace Gestor.Elementos.ModeloIu
 
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
+
+                        case nameof(IUDtoAttribute.CreacionEnModal):
+                            return a.CreacionEnModal;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

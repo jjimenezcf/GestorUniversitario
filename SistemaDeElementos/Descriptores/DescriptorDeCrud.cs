@@ -75,7 +75,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 if (atributos != null)
                 {
-                    columna.Visible = atributos.VisibleEnGrid;
+                    columna.Visible = atributos.EsVisible(ModoDeTrabajo.Mantenimiento);
                     columna.Titulo = atributos.EtiquetaGrid;
                     columna.Ordenar = atributos.Ordenar;
                     columna.Alineada = atributos.Alineada;
