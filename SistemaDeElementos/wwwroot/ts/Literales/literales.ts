@@ -162,6 +162,12 @@ const LiteralModalCreacion = {
     }
 }
 
+const LiteralModalEdicion = {
+    Accion: {
+        ModificarElemento: "modificar-elemento",
+        CerrarModal: "cerrar-modal",
+    }
+}
 
 const LiteralModalSeleccion = {
     Accion: {

@@ -16,9 +16,10 @@ namespace Gestor.Elementos.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
-    [IUDto(AnchoEtiqueta =20
-         , AnchoSeparador =5
-        , CreacionEnModal = true)]
+    [IUDto(AnchoEtiqueta = 20
+          , AnchoSeparador = 5
+          , EdicionEnModal = true
+          , CreacionEnModal = true)]
     public class UsuarioDto : Elemento
     {
         [IUPropiedad(

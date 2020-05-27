@@ -32,46 +32,6 @@
         barraHtml.classList.add(ClaseCss.barraAzul);
     }
 
-
-    function SubirArchivo(controlador: string, idSelectorDeArchivo: string, idBarra: string) {
-
-        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
-        let ficheros = htmlFicheros.files;
-
-        let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
-
-        let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.SubirArchivo
-            , new DatosPeticionSubirArchivo(idSelectorDeArchivo)
-            , url
-            , ApiDeAjax.TipoPeticion.Asincrona
-            , ApiDeAjax.ModoPeticion.Post
-            , TrasSubirElArchivo
-            , SiHayErrorAlSubirElArchivo
-        );
-
-        let datosPost = new FormData();
-        datosPost.append(Ajax.Param.fichero, ficheros[0]);
-        a.DatosPost = datosPost;
-        a.IdBarraDeProceso = idBarra;
-
-        a.Ejecutar();
-    }
-
-    function TrasSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
-        let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
-        let selector: HTMLInputElement = datos.Selector();
-        selector.removeAttribute(AtributoSelectorArchivo.idArchivo);
-        selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
-    }
-
-
-    function SiHayErrorAlSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
-        let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
-        let selector: HTMLInputElement = datos.Selector();
-        BlanquearArchivo(selector);
-        Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
-    }
-
     export function MostrarCanvas(controlador: string, idSelectorDeArchivo: string, idCanva: string, idBarra: string) {
 
         function visializarImagen() {
@@ -106,4 +66,48 @@
             inputFile.click();
         }
     }
+
+    export function InicializarCanvases(panel: HTMLDivElement) {
+        let canvases: NodeListOf<HTMLCanvasElement> = panel.querySelectorAll("canvas") as NodeListOf<HTMLCanvasElement>;
+        canvases.forEach((canvas) => { canvas.width = canvas.width; });
+    }
+
+    function SubirArchivo(controlador: string, idSelectorDeArchivo: string, idBarra: string) {
+
+        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
+        let ficheros = htmlFicheros.files;
+
+        let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
+
+        let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.SubirArchivo
+            , new DatosPeticionSubirArchivo(idSelectorDeArchivo)
+            , url
+            , ApiDeAjax.TipoPeticion.Asincrona
+            , ApiDeAjax.ModoPeticion.Post
+            , TrasSubirElArchivo
+            , SiHayErrorAlSubirElArchivo
+        );
+
+        let datosPost = new FormData();
+        datosPost.append(Ajax.Param.fichero, ficheros[0]);
+        a.DatosPost = datosPost;
+        a.IdBarraDeProceso = idBarra;
+
+        a.Ejecutar();
+    }
+
+    function TrasSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
+        let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
+        let selector: HTMLInputElement = datos.Selector();
+        selector.removeAttribute(AtributoSelectorArchivo.idArchivo);
+        selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
+    }
+
+    function SiHayErrorAlSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
+        let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
+        let selector: HTMLInputElement = datos.Selector();
+        BlanquearArchivo(selector);
+        Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+    }
+
 }

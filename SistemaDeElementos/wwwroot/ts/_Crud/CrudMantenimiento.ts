@@ -103,6 +103,14 @@
             this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelDeMnt, this.InfoSelector);
         }
 
+        public CerrarModalDeEdicion() {
+            this.crudDeEdicion.EjecutarAcciones(LiteralEdt.Accion.CancelarEdicion);
+        }
+
+        public ModificarElemento() {
+            this.crudDeEdicion.EjecutarAcciones(LiteralModalEdicion.Accion.ModificarElemento);
+        }
+
         public IraCrear() {
             this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
         }

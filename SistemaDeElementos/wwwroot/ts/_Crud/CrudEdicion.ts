@@ -2,10 +2,17 @@
 
     export class CrudEdicion extends CrudBase {
 
-        protected PanelDeEditar: HTMLDivElement;
+        private _idPanelEdicion: string;
         protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
+        protected get PanelDeEditar(): HTMLDivElement {
+            return document.getElementById(this._idPanelEdicion) as HTMLDivElement;
+        }
+
+        private get EsModal(): boolean {
+            return this.PanelDeEditar.className === ClaseCss.contenedorModal;
+        }
 
         private get Controlador(): string {
             return this.PanelDeEditar.getAttribute(Literal.controlador);
@@ -17,7 +24,8 @@
             if (EsNula(idPanelEdicion))
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
-            this.PanelDeEditar = document.getElementById(idPanelEdicion) as HTMLDivElement;
+
+            this._idPanelEdicion = idPanelEdicion;
             this.PanelDeMnt = crud.PanelDeMnt;
             this.CrudDeMnt = crud;
         }
@@ -43,16 +51,31 @@
 
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
             this.ModoTrabajo = ModoTrabajo.editando;
-            this.OcultarPanel(panelAnterior);
-            this.MostrarPanel(this.PanelDeEditar);
-            //this.BlanquearControlesDeIU(this.PanelDeEditar);
+
+            if (this.EsModal) {
+                var ventana = document.getElementById(this._idPanelEdicion);
+                ventana.style.display = 'block';
+            }
+            else {
+
+                this.OcultarPanel(panelAnterior);
+                this.MostrarPanel(this.PanelDeEditar);
+            }
             this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
+            this.InicializarCanvases(this.PanelDeEditar);
             this.InicializarValores(infSel);
         }
 
         protected CerrarEdicion() {
-            this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
+
+
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            if (this.EsModal) {
+                this.CerrarModal(this._idPanelEdicion);
+            }
+            else {
+                this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
+            }
             this.CrudDeMnt.Buscar(0);
         }
 

@@ -8,6 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }
+        private bool EnModal { set; get; }
 
 
         public DescriptorDeEdicion(DescriptorDeCrud<TElemento> crud, string etiqueta)
@@ -24,23 +25,57 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuDeEdicion = new BarraDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
+            EnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
         }
 
 
         public override string RenderControl()
         {
             var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion, Crud.Controlador);
-            var htmContenedorEdt =
+            string htmContenedorEdt;
+            if (this.EnModal)
+            {
+                htmContenedorEdt = RendelModal(tabla);
+            }
+            else
+            {
+                htmContenedorEdt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
-                     <h2>Div de Edicion</h2>
-                     {MenuDeEdicion.RenderControl()}
-                     {htmlRenderObjetoVacio(tabla)}
-                     {htmlRenderPie(tabla)}
-                  </Div>
+                   <div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
+                         <h2>Edición</h2> 
+                         {MenuDeEdicion.RenderControl()}
+                         {RendelDivDeEdicion(tabla)}
+                   </div>
                 ";
+            }
 
             return htmContenedorEdt.Render();
+        }
+
+        private string RendelModal(DescriptorDeTabla tabla)
+        {
+            var htmlModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ controlador=¨{Crud.Controlador}¨>
+                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
+                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		    	<h2>Edición</h2>
+                                        </div>
+                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                                        {RendelDivDeEdicion(tabla)}
+                                        </div>
+                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
+                                        </div>
+                                      </div>
+                              </div>";
+            return htmlModal;
+        }
+
+        private string RendelDivDeEdicion(DescriptorDeTabla tabla)
+        {
+            var htmlModal = $@"{htmlRenderObjetoVacio(tabla)}
+                               {htmlRenderPie(tabla)}";
+            return htmlModal;
         }
 
         private object htmlRenderPie(DescriptorDeTabla tabla)

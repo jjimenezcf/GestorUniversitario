@@ -66,6 +66,11 @@
             }
         }
 
+        protected InicializarCanvases(panel: HTMLDivElement) {
+            let canvases: NodeListOf<HTMLCanvasElement> = panel.querySelectorAll("canvas") as NodeListOf<HTMLCanvasElement>;
+            canvases.forEach((canvas) => { canvas.width = canvas.width; });
+        }
+
         protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
 
             this.BlanquearControlesDeIU(panelCerrar);

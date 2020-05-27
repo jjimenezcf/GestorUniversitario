@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
         public string htmlDeCreacionEspecifico { get; set; }
 
-        public bool EnModal { set; get; }
+        private bool EnModal { set; get; }
 
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(

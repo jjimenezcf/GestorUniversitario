@@ -144,4 +144,21 @@
             }
         }
     }
+
+    export function EventosModalDeEdicion(accion: string): void {
+        switch (accion) {
+            case LiteralModalEdicion.Accion.CerrarModal: {
+                crudMnt.CerrarModalDeEdicion();
+                break;
+            }
+            case LiteralModalEdicion.Accion.ModificarElemento: {
+                crudMnt.ModificarElemento();
+                break;
+            }
+            default: {
+                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                break;
+            }
+        }
+    }
 }

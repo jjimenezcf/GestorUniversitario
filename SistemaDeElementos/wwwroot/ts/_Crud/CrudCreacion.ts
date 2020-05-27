@@ -2,7 +2,6 @@
 
     export class CrudCreacion extends CrudBase {
 
-        protected _PanelDeCrear: HTMLDivElement;
         private _idPanelCreacion: string;
 
         protected PanelDeMnt: HTMLDivElement;
@@ -19,6 +18,7 @@
         private get Controlador(): string {
             return this.PanelDeCrear.getAttribute(Literal.controlador);
         }
+
         constructor(crud: CrudMnt, idPanelCreacion: string) {
             super();
 
@@ -63,7 +63,7 @@
                 this.MostrarPanel(this.PanelDeCrear);
             }
             this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
-            //this.BlanquearControlesDeIU(this.PanelDeCrear)
+            this.InicializarCanvases(this.PanelDeCrear);
         }
 
         private Crear() {
