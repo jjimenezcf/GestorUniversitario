@@ -49,7 +49,6 @@ namespace Gestor.Elementos.Entorno
             Tipo = typeof(string),
             Fila = 2,
             Columna = 0,
-            Ordenar = true,
             PorAnchoMnt = 15
             )
         ]

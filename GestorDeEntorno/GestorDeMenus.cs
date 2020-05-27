@@ -63,7 +63,12 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> OrdenarMenus<T>(this IQueryable<T> registros, List<ClausulaDeOrdenacion> ordenacion) where T : MenuDtm
         {
             foreach (ClausulaDeOrdenacion orden in ordenacion)
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Padre.Orden)
+                    : registros.OrderByDescending(x => x.Padre.Orden);
+                else
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Nombre).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Orden)
                     : registros.OrderByDescending(x => x.Orden);
@@ -152,7 +157,7 @@ namespace Gestor.Elementos.Entorno
                                                            , () => new GestorDeArbolDeMenu(contexto, mapeador));
 
 
-           return gestor.LeerArbolDeMenu();
+            return gestor.LeerArbolDeMenu();
         }
 
 

@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Controllers
         (
           gestorDeMenus,
           gestorDeErrores,
-          new CrudMenu(ModoDescriptor.Mantenimiento)
+          new DescriptorDeMenu(ModoDescriptor.Mantenimiento)
         )
         {
             GestorDeMenus = gestorDeMenus;

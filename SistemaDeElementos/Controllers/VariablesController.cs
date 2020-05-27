@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
          (
            gestorDeVariables,
            gestorDeErrores,
-           new CrudVariable(ModoDescriptor.Mantenimiento)
+           new DescriptorDeVariable(ModoDescriptor.Mantenimiento)
          )
         {
         }

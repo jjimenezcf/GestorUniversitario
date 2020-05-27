@@ -7,9 +7,9 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudVariable : DescriptorDeCrud<VariableDto>
+    public class DescriptorDeVariable : DescriptorDeCrud<VariableDto>
     {
-        public CrudVariable(ModoDescriptor modo)
+        public DescriptorDeVariable(ModoDescriptor modo)
             :base(nameof(VariablesController),nameof(VariablesController.CrudVariable),modo)
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");

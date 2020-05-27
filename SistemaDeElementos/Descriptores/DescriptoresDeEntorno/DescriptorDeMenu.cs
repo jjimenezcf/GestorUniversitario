@@ -5,9 +5,9 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudMenu : DescriptorDeCrud<MenuDto>
+    public class DescriptorDeMenu : DescriptorDeCrud<MenuDto>
     {
-        public CrudMenu(ModoDescriptor modo)
+        public DescriptorDeMenu(ModoDescriptor modo)
         : base(controlador: nameof(MenusController)
               , vista: nameof(MenusController.CrudMenu)
               , modo: modo)
