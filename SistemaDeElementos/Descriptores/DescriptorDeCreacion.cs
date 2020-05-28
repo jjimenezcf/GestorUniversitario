@@ -70,6 +70,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
                                            <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeCreacion('crear-elemento')¨       />
                                            <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeCreacion('cerrar-modal')¨ />
+                                           {htmlRenderOpciones()}
                                         </div>
                                       </div>
                               </div>";
@@ -81,10 +82,27 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlModal = $@"
                                {htmlRenderObjetoVacio()}
-                               {htmlDeCreacionEspecifico}";
+                               {htmlDeCreacionEspecifico}
+                               {(EnModal ? "":htmlRenderOpciones())}
+            ";
             return htmlModal;
         }
 
+        private object htmlRenderOpciones()
+        {
+
+            var htmdDescriptorControl = $@"<input id=¨crear-mas-{IdHtml}¨ type=¨checkbox¨ checked/>
+                                           <label for=¨crear-mas-{IdHtml}¨>Cerrar tras crear</label>";
+
+
+            var htmContenedorPie =
+                   $@"
+                   <Div id=¨opciones-{IdHtml}¨ class=¨contenedor-opciones-creacion¨>
+                    {htmdDescriptorControl}
+                  </Div>
+                ";
+            return htmContenedorPie;
+        }
 
         protected virtual string htmlRenderObjetoVacio()
         {
