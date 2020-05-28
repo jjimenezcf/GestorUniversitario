@@ -186,7 +186,7 @@ namespace Gestor.Elementos.Entorno
 
             if (!File.Exists($@"{rutaDeDescarga}\{ficheroCacheado}"))
                 if (File.Exists($@"{archivo.AlmacenadoEn}\{ficheroCacheado}"))
-                    File.Move($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
+                    File.Copy($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
                 else
                     return "";
 
