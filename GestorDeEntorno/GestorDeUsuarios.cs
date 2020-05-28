@@ -170,34 +170,10 @@ namespace Gestor.Elementos.Entorno
             base.DespuesDeMapearElemento(registro, elemento, parametros);
             if (registro.Archivo != null)
             {
-                elemento.UrlDelArchivo = DescargarArchivo(registro.Archivo);
+                elemento.UrlDelArchivo = Utilidades.DescargarArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
             }
         }
 
-
-        #region codigo de la gestión documental
-
-        public static string DescargarArchivo(ArchivoDtm archivo)
-        {
-            var rutaDeDescarga = $@".\wwwroot\Archivos";
-            var ficheroCacheado = $"{archivo.Id}.se";
-
-            var nombreFichero = archivo.Nombre;
-
-            if (!File.Exists($@"{rutaDeDescarga}\{ficheroCacheado}"))
-                if (File.Exists($@"{archivo.AlmacenadoEn}\{ficheroCacheado}"))
-                    File.Copy($@"{archivo.AlmacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
-                else
-                    return "";
-
-
-            File.Copy($@"{rutaDeDescarga}\{ficheroCacheado}", $@"{rutaDeDescarga}\{nombreFichero}", true);
-
-            var rutaUrlBase = "/Archivos";
-            return $@"{rutaUrlBase}/{nombreFichero}";
-        }
-
-        #endregion
 
     }
 
