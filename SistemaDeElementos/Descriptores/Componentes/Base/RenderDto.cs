@@ -67,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 if (!descriptorControl.atributos.Etiqueta.IsNullOrEmpty())
                 {
-                    htmlControles = htmlControles + RenderEtiquetaDelDto(tabla, descriptorControl.atributos.Etiqueta, i, j, anchoEtiqueta);
+                    htmlControles = htmlControles + RenderEtiquetaDelDto(tabla, descriptorControl, i, j, anchoEtiqueta);
                     anchoTotal = anchoTotal + anchoEtiqueta;
                 }
 
@@ -85,10 +85,13 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, string etiqueta, short i, short j, double ancho)
+        private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
-            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨ name=¨lbl_propiedad¨ class=¨div-lbl-propiedad¨ style=¨width: {ancho}%¨>
-                         {etiqueta}: 
+            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
+                           name=¨lbl_propiedad¨
+                           class=¨div-lbl-propiedad¨ 
+                           style=¨width: {ancho}% { (descriptorControl.atributos.TipoDeControl == TipoControl.Archivo ? "; margin-top: 11px":"")}¨>
+                         {descriptorControl.atributos.Etiqueta}: 
                        </div>
                       ";
         }
