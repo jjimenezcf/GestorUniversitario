@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }
-        private bool EnModal { set; get; }
+        private bool AbrirEnModal { set; get; }
 
 
         public DescriptorDeEdicion(DescriptorDeCrud<TElemento> crud, string etiqueta)
@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuDeEdicion = new BarraDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
-            EnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
+            AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
         }
 
 
@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion, Crud.Controlador);
             string htmContenedorEdt;
-            if (this.EnModal)
+            if (this.AbrirEnModal)
             {
                 htmContenedorEdt = RendelModal(tabla);
             }
@@ -65,6 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
                                            <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
                                            <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
+                                           {HtmlRenderNavegadorDeSeleccionados(tabla)}
                                         </div>
                                       </div>
                               </div>";
@@ -74,24 +75,28 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RendelDivDeEdicion(DescriptorDeTabla tabla)
         {
             var htmlModal = $@"{htmlRenderObjetoVacio(tabla)}
-                               {HtmlRenderNavegadorDeSeleccionados(tabla)}
-                               {htmlRenderPie(tabla)}";
+                               {htmlRenderPie(tabla)}
+                               {(AbrirEnModal ? "" : HtmlRenderNavegadorDeSeleccionados(tabla))}";
             return htmlModal;
         }
 
         private string HtmlRenderNavegadorDeSeleccionados(DescriptorDeTabla tabla)
         {
+            var clase = AbrirEnModal ? "cotenido-pie-navegador" : "contenedor-pie-navegador";
             var htmlNavegadorGrid = $@"
-            <div id= ¨pie-edicion-{tabla.IdHtml}¨ class=¨pie-edicion¨>
-                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨pie-edicion¨>
+                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨{clase}¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨¨>
+
+                        <input type=¨text¨ 
+                               id=¨{tabla.IdHtml}-posicionador¨ 
+                               class = ¨cotenido-pie-navegador-posicionador¨
+                               value=¨0¨ 
+                               readonly/>
+
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨¨>
                         <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ onclick=¨¨>
                         <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨¨>
                 </div>
-                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨pie-edicion¨>
-                   registros seleccionados: ¨seleccionados¨ 
-                </div>
-            </div>
             ";
 
             return htmlNavegadorGrid;
