@@ -1,0 +1,66 @@
+﻿
+
+.cotenido-pie-navegador {
+    text-align: right;
+    margin-top: 1px;
+    margin-right: 11px;
+    float: right;
+    display: inline-block;
+    width: 50%;
+}
+
+    .cotenido-pie-navegador > img {
+        width: 22px;
+        height: 22px;
+        vertical-align: top;
+    }
+
+
+    .cotenido-pie-navegador > input {
+        width: 50px;
+        margin-top: -5px;
+        align-content: center;
+        border-radius: 10px;
+        text-align: right;
+    }
+
+.contenedor-pie-navegador {
+    text-align: left;
+    margin-top: 10px;
+    margin-right: 11px;
+    float: left;
+    display: inline-block;
+    width: 50%;
+}
+
+    .contenedor-pie-navegador > img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .contenedor-pie-navegador > input {
+        width: 50px;
+        margin-top: -5px;
+        align-content: center;
+        border-radius: 10px;
+        text-align: right;
+    }
+
+.contenedor-id {
+    float: right;
+    padding-top: 15px;
+    padding-right: 10px;
+    width: 100px;
+}
+
+    .contenedor-id > .propiedad-id {
+        border: 1px solid #ced4da;
+        text-align: right;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+        .contenedor-id > .propiedad-id.propiedad:read-only {
+            background: #a5a1a1
+        }
+

@@ -1,0 +1,81 @@
+﻿.div-grid {
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+}
+
+    .div-grid > .tabla-grid {
+        width: 100%;
+    }
+
+        .div-grid > .tabla-grid > thead {
+            border-collapse: collapse;
+            height: 25px;
+            width: 100%;
+            border-spacing: 2px;
+            border-color: grey;
+            background-color: #dcd6d6;
+        }
+
+        .div-grid > .tabla-grid > th {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            border-top: 2px solid #ddd;
+        }
+
+        .div-grid > .tabla-grid tr:hover td {
+            background-color: gainsboro;
+        }
+
+        .div-grid > .tabla-grid > td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+.columna-cabecera > a {
+    font-weight: bold;
+}
+
+.ordenada-sin-orden {
+    color: #a5a1a1
+}
+
+.ordenada-ascendente {
+    color: #00b9ff
+}
+
+.ordenada-descendente {
+    color: #f58eb1
+}
+
+.pie-grid {
+    align-content: center;
+    margin-top: 10px;
+}
+
+.info-grid {
+    float: right;
+}
+
+.cantidad-grid {
+    width: 50px;
+    margin-top: 5px;
+    align-content: center;
+    border-radius: 10px
+}
+
+.navegador-grid {
+    float: left;
+}
+
+    .navegador-grid > div {
+        display: inline-block;
+    }
+
+        .navegador-grid > div > img {
+            width: 22px;
+            height: 22px;
+        }

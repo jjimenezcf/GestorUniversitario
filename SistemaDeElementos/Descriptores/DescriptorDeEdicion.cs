@@ -89,7 +89,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
                         <input type=¨text¨ 
                                id=¨{tabla.IdHtml}-posicionador¨ 
-                               class = ¨cotenido-pie-navegador-posicionador¨
                                value=¨0¨ 
                                readonly/>
 
@@ -128,7 +127,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual string htmlRenderObjetoVacio(DescriptorDeTabla tabla)
         {
-            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-creacion¨>
+            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-edicion-creacion¨>
                                   htmlFilas
                                 </table>
                                ";

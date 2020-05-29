@@ -1,0 +1,20 @@
+﻿
+body {
+    background: #ffffff;
+    line-height: 18px;
+}
+
+
+.div-visible {
+    display: block;
+}
+
+.div-no-visible {
+    display: none;
+}
+
+
+/*.propiedad {
+}
+    .propiedad:read-only {
+    }*/
