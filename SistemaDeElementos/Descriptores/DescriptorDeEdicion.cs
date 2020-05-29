@@ -74,8 +74,27 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RendelDivDeEdicion(DescriptorDeTabla tabla)
         {
             var htmlModal = $@"{htmlRenderObjetoVacio(tabla)}
+                               {HtmlRenderNavegadorDeSeleccionados(tabla)}
                                {htmlRenderPie(tabla)}";
             return htmlModal;
+        }
+
+        private string HtmlRenderNavegadorDeSeleccionados(DescriptorDeTabla tabla)
+        {
+            var htmlNavegadorGrid = $@"
+            <div id= ¨pie-edicion-{tabla.IdHtml}¨ class=¨pie-edicion¨>
+                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨pie-edicion¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ onclick=¨¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨¨>
+                </div>
+                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨pie-edicion¨>
+                   registros seleccionados: ¨seleccionados¨ 
+                </div>
+            </div>
+            ";
+
+            return htmlNavegadorGrid;
         }
 
         private object htmlRenderPie(DescriptorDeTabla tabla)

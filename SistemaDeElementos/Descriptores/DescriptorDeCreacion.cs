@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
         public string htmlDeCreacionEspecifico { get; set; }
 
-        private bool EnModal { set; get; }
+        private bool AbrirEnModal { set; get; }
 
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCancelarNuevo();
-            EnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
+            AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
         }
 
 
@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public override string RenderControl()
         {
             string htmContenedorCreacion;
-            if (this.EnModal)
+            if ( AbrirEnModal)
             {
                 htmContenedorCreacion = RendelModal();
             }
@@ -83,7 +83,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlModal = $@"
                                {htmlRenderObjetoVacio()}
                                {htmlDeCreacionEspecifico}
-                               {(EnModal ? "":htmlRenderOpciones())}
+                               {(AbrirEnModal ? "":htmlRenderOpciones())}
             ";
             return htmlModal;
         }
