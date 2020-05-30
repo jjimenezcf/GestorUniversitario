@@ -115,7 +115,7 @@ const Ajax = {
 const LiteralCrt = {
     Accion: {
         NuevoElemento: "nuevo-elemento",
-        CancelarNuevo: "cancelar-nuevo",
+        CerrarCreacion: "cerrar-creacion",
     }
 };
 

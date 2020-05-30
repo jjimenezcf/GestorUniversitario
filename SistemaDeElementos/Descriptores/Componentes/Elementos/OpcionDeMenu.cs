@@ -17,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoAccionCreacion
     {
         public const string NuevoElemento = "nuevo-elemento";
-        public const string CancelarNuevo = "cancelar-nuevo";
+        public const string CerrarCreacion = "cerrar-creacion";
     }
     public static class TipoAccionEdicion
     {
@@ -118,10 +118,10 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public class CancelarNuevo : AccionDeMenuCreacion
+    public class CerrarCreacion : AccionDeMenuCreacion
     {
-        public CancelarNuevo()
-        : base(TipoAccionCreacion.CancelarNuevo)
+        public CerrarCreacion()
+        : base(TipoAccionCreacion.CerrarCreacion)
         {
         }
     }

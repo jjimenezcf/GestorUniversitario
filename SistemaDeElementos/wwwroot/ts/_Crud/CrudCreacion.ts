@@ -19,6 +19,11 @@
             return this.PanelDeCrear.getAttribute(Literal.controlador);
         }
 
+        private get SeguirCreando(): boolean {
+            let check: HTMLInputElement = document.getElementById(`crear-mas-${this._idPanelCreacion}`) as HTMLInputElement;
+            return !check.checked;
+        }
+
         constructor(crud: CrudMnt, idPanelCreacion: string) {
             super();
 
@@ -37,7 +42,7 @@
                 if (accion === LiteralCrt.Accion.NuevoElemento)
                     this.Crear();
                 else
-                    if (accion === LiteralCrt.Accion.CancelarNuevo)
+                    if (accion === LiteralCrt.Accion.CerrarCreacion)
                         hayError = false;
                     else
                         throw `la opción ${accion} no está definida`;
@@ -47,7 +52,16 @@
                 Mensaje(TipoMensaje.Error, error);
             }
 
-            if (!hayError) this.CerrarCreacion();
+            if (!hayError) {
+                this.BlanquearControlesDeIU(this.PanelDeCrear);
+                if (this.SeguirCreando && accion === LiteralCrt.Accion.NuevoElemento) {
+                    this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
+                    this.InicializarCanvases(this.PanelDeCrear);
+                }
+                else {
+                    this.CerrarCreacion();
+                }
+            }
         }
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {

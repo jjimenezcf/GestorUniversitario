@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.pnlCreador;
             MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
-            MenuCreacion.AnadirOpcionDeCancelarNuevo();
+            MenuCreacion.AnadirOpcionDeCerrarCreacion();
             AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
         }
 

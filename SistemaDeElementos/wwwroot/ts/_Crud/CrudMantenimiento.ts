@@ -120,7 +120,7 @@
         }
 
         public CerrarModalDeCreacion() {
-            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.CancelarNuevo);
+            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.CerrarCreacion);
         }
 
         public FilaPulsada(idCheck: string, idDelInput: string) {

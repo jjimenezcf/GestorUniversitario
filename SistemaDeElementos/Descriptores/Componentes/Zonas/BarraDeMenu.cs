@@ -98,10 +98,10 @@ namespace MVCSistemaDeElementos.Descriptores
             Menu.Add(opcion);
         }
 
-        internal void AnadirOpcionDeCancelarNuevo()
+        internal void AnadirOpcionDeCerrarCreacion()
         {
-            var cancelarNuevo = new CancelarNuevo();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarNuevo, $"Cancelar");
+            var cerrarCreacion = new CerrarCreacion();
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cerrarCreacion, $"Cerrar");
             Menu.Add(opcion);
         }
         #endregion

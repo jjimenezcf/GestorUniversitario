@@ -73,8 +73,6 @@
 
         protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
 
-            this.BlanquearControlesDeIU(panelCerrar);
-
             this.OcultarPanel(panelCerrar);
             this.MostrarPanel(panelMostrar);
 
