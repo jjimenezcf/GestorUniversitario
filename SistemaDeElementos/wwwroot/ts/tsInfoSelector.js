@@ -17,24 +17,36 @@ class InfoSelector {
         this.iniciarClase(idGrid);
         console.log(`Ha creado el infoselector ${idGrid}`);
     }
+    get Seleccionables() {
+        return this._Seleccionables == NaN
+            ? 0
+            : this._Seleccionables;
+    }
+    get PuedeSeleccionarMas() {
+        if (this.Seleccionables < 0)
+            return true;
+        return this.Cantidad < this.Seleccionables;
+    }
+    set Seleccionables(seleccionables) {
+        this._Seleccionables = seleccionables;
+    }
     get Id() { return this.idGrid; }
     get Cantidad() { return this.seleccionados.length; }
-    get Seleccionables() { return this.Seleccionables == NaN ? 0 : this.seleccionables; }
     get Seleccionados() { return this.seleccionados; }
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
-        this.seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
+        this.Seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
     }
     deshabilitarCheck(deshabilitar) {
         var ejecutar = false;
         //si has desmarcado checks y los seleccionados son menos que los seleccionables --> ok a habilitar
-        if (deshabilitar === false && this.Cantidad < this.seleccionables)
+        if (deshabilitar === false && this.PuedeSeleccionarMas)
             ejecutar = true;
         //Si has marcado y los seleccionados son más o igual que los seleccionables --> ok a deshabilitar
-        if (deshabilitar === true && this.Cantidad >= this.seleccionables)
+        if (deshabilitar === true && !this.PuedeSeleccionarMas)
             ejecutar = true;
         if (ejecutar) {
             document.getElementsByName(`chksel.${this.idGrid}`).forEach(c => {
@@ -68,7 +80,7 @@ class InfoSelector {
             console.error(`Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
         }
-        if (this.seleccionados.length < this.seleccionables) {
+        if (this.PuedeSeleccionarMas) {
             this.seleccionados.push(id);
             console.log(`Ha insertar en la lista el id ${id}`);
         }

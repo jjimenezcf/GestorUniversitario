@@ -161,4 +161,18 @@
             }
         }
     }
+
+    export function EjecutarMenuEdt(accion: string): void {
+        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+    }
+
+    export function EventosDeEdicion(accion: string): void {
+        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+    }
+
+    export function EjecutarMenuCrt(accion: string): void {
+        crudMnt.crudDeCreacion.EjecutarAcciones(accion);
+    }
+
+
 }

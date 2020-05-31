@@ -20,7 +20,7 @@
         }
 
         private get SeguirCreando(): boolean {
-            let check: HTMLInputElement = document.getElementById(`crear-mas-${this._idPanelCreacion}`) as HTMLInputElement;
+            let check: HTMLInputElement = document.getElementById(`${this._idPanelCreacion}-crear-mas`) as HTMLInputElement;
             return !check.checked;
         }
 
@@ -109,10 +109,6 @@
             a.Ejecutar();
 
         }
-    }
-
-    export function EjecutarMenuCrt(accion: string): void {
-        crudMnt.crudDeCreacion.EjecutarAcciones(accion);
     }
 
 }

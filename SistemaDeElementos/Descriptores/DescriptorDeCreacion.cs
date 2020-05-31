@@ -91,8 +91,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private object htmlRenderOpciones()
         {
 
-            var htmdDescriptorControl = $@"<input id=¨crear-mas-{IdHtml}¨ type=¨checkbox¨ checked/>
-                                           <label for=¨crear-mas-{IdHtml}¨>Cerrar tras crear</label>";
+            var htmdDescriptorControl = $@"<input id=¨{IdHtml}-crear-mas¨ type=¨checkbox¨ checked/>
+                                           <label for=¨{IdHtml}-crear-mas¨>Cerrar tras crear</label>";
 
 
             var htmContenedorPie =

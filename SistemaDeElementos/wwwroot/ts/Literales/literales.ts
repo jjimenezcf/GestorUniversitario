@@ -123,6 +123,10 @@ const LiteralEdt = {
     Accion: {
         ModificarElemento: "modificar-elemento",
         CancelarEdicion: "cancelar-edicion",
+        MostrarPrimero: "mostrar-primero",
+        MostrarAnterior: "mostrar-siguiente",
+        MostrarSiguiente: "mostrar-anterior",
+        MostrarUltimo: "mostrar-ultimo",
     },
     idCtrlCantidad: "nav_2_reg"
 };

@@ -118,7 +118,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = 2 seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨ expresion-elemento = ¨{expresion}¨>     
+            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = ¨-1¨ seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨ expresion-elemento = ¨{expresion}¨>     
                                        tabla_Navegador 
                                      </div>";
             var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")

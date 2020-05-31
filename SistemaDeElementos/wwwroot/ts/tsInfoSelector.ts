@@ -26,18 +26,34 @@ class InfoSelector {
     private idGrid: string;
     private seleccionados: Array<number>;
     private paraMostrarEnSelector: Array<string>;
-    private seleccionables: number;
+    private _Seleccionables: number;
     private htmlGrid: HTMLElement;
+
+    private get Seleccionables(): number {
+        return this._Seleccionables == NaN
+            ? 0
+            : this._Seleccionables;
+    }
+    private get PuedeSeleccionarMas(): boolean {
+        if (this.Seleccionables < 0)
+            return true;
+
+        return this.Cantidad < this.Seleccionables;
+    }
+
+    private set Seleccionables(seleccionables: number) {
+        this._Seleccionables = seleccionables;
+    }
 
     public get Id() { return this.idGrid; }
     public get Cantidad() { return this.seleccionados.length; }
-    public get Seleccionables() { return this.Seleccionables == NaN ? 0 : this.seleccionables; }
     public get Seleccionados() { return this.seleccionados; }
+
 
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
-        this.seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
+        this.Seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
     }
@@ -51,11 +67,11 @@ class InfoSelector {
 
         var ejecutar = false;
         //si has desmarcado checks y los seleccionados son menos que los seleccionables --> ok a habilitar
-        if (deshabilitar === false && this.Cantidad < this.seleccionables)
+        if (deshabilitar === false && this.PuedeSeleccionarMas)
             ejecutar = true;
 
         //Si has marcado y los seleccionados son más o igual que los seleccionables --> ok a deshabilitar
-        if (deshabilitar === true && this.Cantidad >= this.seleccionables)
+        if (deshabilitar === true && !this.PuedeSeleccionarMas)
             ejecutar = true;
 
         if (ejecutar) {
@@ -95,7 +111,7 @@ class InfoSelector {
             return -1;
         }
 
-        if (this.seleccionados.length < this.seleccionables) {
+        if (this.PuedeSeleccionarMas) {
             this.seleccionados.push(id);
             console.log(`Ha insertar en la lista el id ${id}`);
         }

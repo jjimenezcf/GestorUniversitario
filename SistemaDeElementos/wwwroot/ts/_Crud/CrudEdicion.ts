@@ -3,8 +3,10 @@
     export class CrudEdicion extends CrudBase {
 
         private _idPanelEdicion: string;
-        protected PanelDeMnt: HTMLDivElement;
+        private _infoSelectorEdicion;
+
         protected CrudDeMnt: CrudMnt;
+        protected PanelDeMnt: HTMLDivElement;
 
         protected get PanelDeEditar(): HTMLDivElement {
             return document.getElementById(this._idPanelEdicion) as HTMLDivElement;
@@ -12,6 +14,26 @@
 
         private get EsModal(): boolean {
             return this.PanelDeEditar.className === ClaseCss.contenedorModal;
+        }
+
+        private get InfoSelectorEdicion(): InfoSelector {
+            return this._infoSelectorEdicion;
+        }
+
+        private get Posicionador(): HTMLInputElement {
+            return document.getElementById(`${this._idPanelEdicion}-posicionador`) as HTMLInputElement;
+        }
+
+        private get IdEditor(): HTMLInputElement {
+            var control = this.BuscarEditor(this.PanelDeEditar, Literal.id);
+
+            if (control == null) {
+                Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
+                this.CerrarEdicion();
+            }
+
+            return control as HTMLInputElement;
+
         }
 
         private get Controlador(): string {
@@ -33,13 +55,28 @@
         public EjecutarAcciones(accion: string) {
             let hayError: boolean = false;
             try {
-                if (accion === LiteralEdt.Accion.ModificarElemento)
-                    this.Modificar();
-                else
-                    if (accion === LiteralEdt.Accion.CancelarEdicion)
+
+                switch (accion) {
+                    case LiteralEdt.Accion.ModificarElemento: {
+                        this.Modificar();
+                        break;
+                    }
+                    case LiteralEdt.Accion.CancelarEdicion: {
                         hayError = false;
-                    else
+                        break;
+                    }
+                    case LiteralEdt.Accion.MostrarPrimero: {
+                        console.log("primero");
+                        break;
+                    }
+                    case LiteralEdt.Accion.MostrarSiguiente: {
+                        console.log("siguiente");
+                        break;
+                    }
+                    default: {
                         throw `la opción ${accion} no está definida`;
+                    }
+                }
             }
             catch (error) {
                 hayError = true;
@@ -51,6 +88,7 @@
 
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
             this.ModoTrabajo = ModoTrabajo.editando;
+            this._infoSelectorEdicion = infSel;
 
             if (this.EsModal) {
                 var ventana = document.getElementById(this._idPanelEdicion);
@@ -63,7 +101,7 @@
             }
             this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
             this.InicializarCanvases(this.PanelDeEditar);
-            this.InicializarValores(infSel);
+            this.InicializarValores();
         }
 
         protected CerrarEdicion() {
@@ -79,16 +117,11 @@
             this.CrudDeMnt.Buscar(0);
         }
 
-        protected InicializarValores(infSel: InfoSelector) {
-            let id: number = infSel.Seleccionados[0] as number;
-
-            let control: HTMLElement = this.BuscarEditor(this.PanelDeEditar, Literal.id);
-            if (control == null) {
-                Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
-                return;
-            }
-            (control as HTMLInputElement).value = id.toString();
-
+        protected InicializarValores() {
+            let infSel: InfoSelector = this.InfoSelectorEdicion;
+            this.Posicionador.value = infSel.Seleccionados.length.toString();
+            let id: number = infSel.Seleccionados[0] as number;            
+            this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }
 
@@ -141,9 +174,4 @@
             a.Ejecutar();
         }
     }
-
-    export function EjecutarMenuEdt(accion: string): void {
-        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
-    }
-
 }

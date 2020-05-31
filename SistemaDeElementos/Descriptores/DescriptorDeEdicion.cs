@@ -65,7 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
                                            <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
                                            <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
-                                           {HtmlRenderNavegadorDeSeleccionados(tabla)}
+                                           {HtmlRenderNavegadorDeSeleccionados()}
                                         </div>
                                       </div>
                               </div>";
@@ -76,25 +76,26 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlModal = $@"{htmlRenderObjetoVacio(tabla)}
                                {htmlRenderPie(tabla)}
-                               {(AbrirEnModal ? "" : HtmlRenderNavegadorDeSeleccionados(tabla))}";
+                               {(AbrirEnModal ? "" : HtmlRenderNavegadorDeSeleccionados())}";
             return htmlModal;
         }
 
-        private string HtmlRenderNavegadorDeSeleccionados(DescriptorDeTabla tabla)
+        private string HtmlRenderNavegadorDeSeleccionados()
         {
             var clase = AbrirEnModal ? "cotenido-pie-navegador" : "contenedor-pie-navegador";
             var htmlNavegadorGrid = $@"
-                <div id= ¨pie-edicion-{tabla.IdHtml}-navegador¨ class = ¨{clase}¨>
-                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨¨>
+                <div id= ¨pie-edicion-{IdHtml}-navegador¨ class = ¨{clase}¨>
+                        <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Primer elemento¨ onclick=¨Crud.EventosDeEdicion('mostrar-primero')¨>
 
                         <input type=¨text¨ 
-                               id=¨{tabla.IdHtml}-posicionador¨ 
+                               id=¨{IdHtml}-posicionador¨ 
                                value=¨0¨ 
+                               title=¨Elementos seleccionados¨
                                readonly/>
 
-                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨¨>
-                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ onclick=¨¨>
-                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨¨>
+                        <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Elemento anterior¨ onclick=¨Crud.EventosDeEdicion('mostrar-anterior')¨>
+                        <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Elemento siguiente¨ onclick=¨Crud.EventosDeEdicion('mostrar-siguiente')¨>
+                        <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Último elemento¨ onclick=¨Crud.EventosDeEdicion('mostrar-ultimo')¨>
                 </div>
             ";
 
