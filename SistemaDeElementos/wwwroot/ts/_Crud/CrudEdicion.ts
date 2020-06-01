@@ -20,8 +20,29 @@
             return this._infoSelectorEdicion;
         }
 
-        private get Posicionador(): HTMLInputElement {
-            return document.getElementById(`${this._idPanelEdicion}-posicionador`) as HTMLInputElement;
+        private set InfoSelectorEdicion(info: InfoSelector) {
+            this._infoSelectorEdicion = info;
+            this.TotalSeleccionados = info.Cantidad;
+            this.Posicionador = 1;
+        }
+
+        private get Posicionador(): number {
+            let control: HTMLInputElement = document.getElementById(`${this._idPanelEdicion}-posicionador`) as HTMLInputElement;
+            return control.value.Numero();
+        }
+
+        private set Posicionador(posicionador: number) {
+            let control: HTMLInputElement = document.getElementById(`${this._idPanelEdicion}-posicionador`) as HTMLInputElement;
+            control.value = posicionador.toString();
+        }
+
+        private get TotalSeleccionados(): number {
+            return this.InfoSelectorEdicion.Cantidad;
+        }
+
+        private set TotalSeleccionados(cantidad: number) {
+            let control: HTMLInputElement = document.getElementById(`${this._idPanelEdicion}-total-seleccionados`) as HTMLInputElement;
+            control.value = cantidad.toString();
         }
 
         private get IdEditor(): HTMLInputElement {
@@ -46,31 +67,40 @@
             if (EsNula(idPanelEdicion))
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
-
             this._idPanelEdicion = idPanelEdicion;
             this.PanelDeMnt = crud.PanelDeMnt;
             this.CrudDeMnt = crud;
         }
 
         public EjecutarAcciones(accion: string) {
-            let hayError: boolean = false;
+            let cerrarEdicion: boolean = false;
             try {
 
                 switch (accion) {
                     case LiteralEdt.Accion.ModificarElemento: {
                         this.Modificar();
+                        if (this.TotalSeleccionados == 1)
+                            cerrarEdicion = true;
                         break;
                     }
                     case LiteralEdt.Accion.CancelarEdicion: {
-                        hayError = false;
+                        cerrarEdicion = true;
                         break;
                     }
                     case LiteralEdt.Accion.MostrarPrimero: {
-                        console.log("primero");
+                        this.EditarSeleccionado(1);
                         break;
                     }
                     case LiteralEdt.Accion.MostrarSiguiente: {
-                        console.log("siguiente");
+                        this.EditarSeleccionado(this.Posicionador + 1);
+                        break;
+                    }
+                    case LiteralEdt.Accion.MostrarAnterior: {
+                        this.EditarSeleccionado(this.Posicionador -1);
+                        break;
+                    }
+                    case LiteralEdt.Accion.MostrarUltimo: {
+                        this.EditarSeleccionado(this.TotalSeleccionados);
                         break;
                     }
                     default: {
@@ -79,16 +109,17 @@
                 }
             }
             catch (error) {
-                hayError = true;
                 Mensaje(TipoMensaje.Error, error);
             }
 
-            if (!hayError) this.CerrarEdicion();
+            if (cerrarEdicion)
+                this.CerrarEdicion();
         }
 
         public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
             this.ModoTrabajo = ModoTrabajo.editando;
-            this._infoSelectorEdicion = infSel;
+
+            this.InfoSelectorEdicion = infSel;
 
             if (this.EsModal) {
                 var ventana = document.getElementById(this._idPanelEdicion);
@@ -99,13 +130,32 @@
                 this.OcultarPanel(panelAnterior);
                 this.MostrarPanel(this.PanelDeEditar);
             }
-            this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
-            this.InicializarCanvases(this.PanelDeEditar);
-            this.InicializarValores();
+            this.EditarSeleccionado(1);
+        }
+
+        private EditarSeleccionado(seleccionado: number) {
+
+            if (this.TotalSeleccionados === 0 ) {
+                Mensaje(TipoMensaje.Error, "No hay elementos a editar.")
+                this.CerrarEdicion();
+            }
+
+            if (seleccionado === 0)
+                seleccionado = 1;
+
+            if (seleccionado > this.TotalSeleccionados)
+                seleccionado = this.TotalSeleccionados;
+
+            if (0 < seleccionado && seleccionado <= this.TotalSeleccionados) {
+                this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
+                this.InicializarCanvases(this.PanelDeEditar);
+                this.Posicionador = seleccionado;
+                this.InicializarValores(seleccionado -1);
+            }
+
         }
 
         protected CerrarEdicion() {
-
 
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
@@ -117,10 +167,9 @@
             this.CrudDeMnt.Buscar(0);
         }
 
-        protected InicializarValores() {
+        protected InicializarValores(seleccionado: number) {
             let infSel: InfoSelector = this.InfoSelectorEdicion;
-            this.Posicionador.value = infSel.Seleccionados.length.toString();
-            let id: number = infSel.Seleccionados[0] as number;            
+            let id: number = infSel.Seleccionados[seleccionado] as number;            
             this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }

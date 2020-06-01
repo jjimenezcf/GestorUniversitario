@@ -63,8 +63,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                         {RendelDivDeEdicion(tabla)}
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-modificar¨ class=¨boton-modal¨ value=¨Modificar¨ onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
                                            {HtmlRenderNavegadorDeSeleccionados()}
                                         </div>
                                       </div>
@@ -89,6 +89,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
                         <input type=¨text¨ 
                                id=¨{IdHtml}-posicionador¨ 
+                               value=¨0¨ 
+                               title=¨Elemento editado¨
+                               readonly/>
+
+                        <input type=¨text¨ 
+                               id=¨{IdHtml}-total-seleccionados¨ 
                                value=¨0¨ 
                                title=¨Elementos seleccionados¨
                                readonly/>

@@ -124,8 +124,8 @@ const LiteralEdt = {
         ModificarElemento: "modificar-elemento",
         CancelarEdicion: "cancelar-edicion",
         MostrarPrimero: "mostrar-primero",
-        MostrarAnterior: "mostrar-siguiente",
-        MostrarSiguiente: "mostrar-anterior",
+        MostrarAnterior: "mostrar-anterior",
+        MostrarSiguiente: "mostrar-siguiente",
         MostrarUltimo: "mostrar-ultimo",
     },
     idCtrlCantidad: "nav_2_reg"
