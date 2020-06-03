@@ -29,7 +29,7 @@ namespace Gestor.Elementos.Entorno
 
     static class FiltrosDeUsuario
     {
-        public static IQueryable<T> FiltrarPorNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
+        public static IQueryable<T> FiltrarPorNombreCompleto<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == UsuariosPor.NombreCompleto)
@@ -121,13 +121,14 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            foreach (var f in filtros)
-                if (f.Propiedad == FiltroPor.Id)
-                    return base.AplicarFiltros(registros, filtros, parametros);
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
 
             return registros
-                   .FiltrarPorNombre(filtros)
-                   .FiltrarPorRelacion(filtros);
+                .FiltrarPorNombre(filtros)
+                .FiltrarPorNombreCompleto(filtros)
+                .FiltrarPorRelacion(filtros);
         }
 
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)

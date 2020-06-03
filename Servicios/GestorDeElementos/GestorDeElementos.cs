@@ -47,19 +47,24 @@ namespace Gestor.Elementos
 
     public static partial class Filtros
     {
-        public static IQueryable<TRegistro> FiltroBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros = null) where TRegistro : Registro
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                return registros.FiltrarPorId(filtro);
-
-            return registros;
-        }
-
         public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro) where TRegistro : Registro
         {
-            if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
-                return registros.Where(x => x.Id == filtro.Valor.Entero());
+            return registros.Where(x => x.Id == filtro.Valor.Entero());
+        }
 
+        public static IQueryable<TRegistro> FiltrarPorNombre<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return registros.Where(x => x.Nombre.Contains(filtro.Valor));
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return registros.Where(x => x.Nombre == filtro.Valor);
+                }
+            }
             return registros;
         }
     }
@@ -206,7 +211,7 @@ namespace Gestor.Elementos
                 foreach (var registro in registros)
                 {
                     AntesDePersistir(registro, parametros);
-                    
+
                     if (parametros.Tipo == TipoOperacion.Insertar)
                         Contexto.Add(registro);
                     else
@@ -218,7 +223,7 @@ namespace Gestor.Elementos
                     else
                         throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
                     Contexto.SaveChanges();
-                    
+
                     DespuesDePersistir(registro, parametros);
                 }
 
@@ -381,12 +386,25 @@ namespace Gestor.Elementos
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            return registros.FiltroBase(filtros, parametros);
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
+
+            return registros.FiltrarPorNombre(filtros);
         }
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             return registros.JoinBase(joins, parametros);
+        }
+
+        protected (bool hay,IQueryable<TRegistro> registros) HayFiltroPorId(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
+                    return (true, registros.FiltrarPorId(filtro));
+
+            return (false,registros);
         }
 
         #endregion

@@ -59,6 +59,8 @@
     <Compile Remove="Migrations\20200522073511_TablaDeArchivos.Designer.cs" />
     <Compile Remove="Migrations\20200522125622_anadirArchivoUsuario.cs" />
     <Compile Remove="Migrations\20200522125622_anadirArchivoUsuario.Designer.cs" />
+    <Compile Remove="Migrations\20200603204138_anadirNombre.cs" />
+    <Compile Remove="Migrations\20200603204138_anadirNombre.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

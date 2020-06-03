@@ -8,6 +8,7 @@ using System;
 using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
+using ServicioDeDatos.Elemento;
 
 namespace Gestor.Elementos.Seguridad
 {
@@ -30,15 +31,6 @@ namespace Gestor.Elementos.Seguridad
 
     static class FiltrosPermiso
     {
-        public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Nombre).ToLower())
-                    return registros.Where(x => x.Nombre.Contains(filtro.Valor));
-
-            return registros;
-        }
-
         public static IQueryable<T> FiltrarPorUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -146,17 +138,19 @@ namespace Gestor.Elementos.Seguridad
 
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            foreach (var f in filtros)
-                if (f.Propiedad == FiltroPor.Id)
-                    return base.AplicarFiltros(registros, filtros, parametros);
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
 
             return registros
-                .FiltroPorNombre(filtros)
+                .FiltrarPorNombre(filtros)
                 .FiltrarPorUsuario(filtros)
                 .FiltroPorRol(filtros)
                 .FiltroPorTipo(filtros)
                 .FiltroPorClase(filtros);
         }
+
+
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);

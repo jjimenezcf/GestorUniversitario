@@ -32,7 +32,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolesDeUnPermiso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower())
+                if (filtro.Propiedad.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower() && filtro.Valor.Entero() > 0)
                     return registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
 
             return registros;
@@ -72,9 +72,9 @@ namespace Gestor.Elementos.Seguridad
 
         protected override IQueryable<RolesDeUnPermiso> AplicarFiltros(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            foreach (var f in filtros)
-                if (f.Propiedad == FiltroPor.Id)
-                    return base.AplicarFiltros(registros, filtros, parametros);
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
 
             return registros.FiltroPorPermiso(filtros);
         }

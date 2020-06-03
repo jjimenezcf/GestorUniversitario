@@ -11,17 +11,17 @@ using ServicioDeDatos.Seguridad;
 namespace Gestor.Elementos.Seguridad
 {
 
-    static class FiltrosDeClaseDePermiso
-    {
-        public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : ClasePermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(ClasePermisoDtm.Nombre).ToLower())
-                    return registros.Where(x => x.Nombre.Contains(filtro.Valor));
+    //static class FiltrosDeClaseDePermiso
+    //{
+    //    public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : ClasePermisoDtm
+    //    {
+    //        foreach (ClausulaDeFiltrado filtro in filtros)
+    //            if (filtro.Propiedad.ToLower() == nameof(ClasePermisoDtm.Nombre).ToLower())
+    //                return registros.Where(x => x.Nombre.Contains(filtro.Valor));
 
-            return registros;
-        }
-    }
+    //        return registros;
+    //    }
+    //}
 
     public class GestorDeClaseDePermisos : GestorDeElementos<ContextoSe, ClasePermisoDtm, ClasePermisoDto>
     {
@@ -41,14 +41,14 @@ namespace Gestor.Elementos.Seguridad
         }
 
 
-        protected override IQueryable<ClasePermisoDtm> AplicarFiltros(IQueryable<ClasePermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        {
-            foreach (var f in filtros)
-                if (f.Propiedad.ToLower() == nameof(ClasePermisoDtm.Id).ToLower())
-                    return base.AplicarFiltros(registros, filtros, parametros);
+        //protected override IQueryable<ClasePermisoDtm> AplicarFiltros(IQueryable<ClasePermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        //{
+        //    foreach (var f in filtros)
+        //        if (f.Propiedad.ToLower() == nameof(ClasePermisoDtm.Id).ToLower())
+        //            return base.AplicarFiltros(registros, filtros, parametros);
 
-            return registros.FiltroPorNombre(filtros);
-        }
+        //    return registros.FiltroPorNombre(filtros);
+        //}
 
     }
 }

@@ -37,11 +37,9 @@ namespace Gestor.Elementos.Entorno
                     if (filtro.Criterio == CriteriosDeFiltrado.noEsNulo)
                         registros = registros.Where(x => x.IdPadre != null);
 
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual && filtro.Valor.Entero() > 0)
                         registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
                 }
-                else
-                    registros = registros.FiltrarPorId(filtro);
 
             return registros;
         }
@@ -120,9 +118,17 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) => registros
+        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
+
+            return registros
+                .FiltrarPorNombre(filtros)
                 .FiltrarMenus(filtros, parametros)
                 .FiltrarPorMenuPadre(filtros, parametros);
+        }
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {

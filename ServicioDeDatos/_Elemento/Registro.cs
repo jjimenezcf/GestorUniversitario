@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServicioDeDatos.Entorno;
@@ -97,6 +98,10 @@ namespace ServicioDeDatos.Elemento
         [Column("ID", Order = 1, TypeName = "INT")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        
+        [IgnoreDataMember]
+        [NotMapped]
+        public string Nombre { get; set; }
     }
 
     public class RegistroAuditado : Registro
@@ -124,7 +129,7 @@ namespace ServicioDeDatos.Elemento
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get; set; }
+        public new string Nombre { get; set; }
     }
 
     public class ConsultaSql

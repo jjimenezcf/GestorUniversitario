@@ -13,22 +13,6 @@ namespace Gestor.Elementos.Entorno
 
     public static class FiltrosDeVariables
     {
-        public static IQueryable<T> FiltrarPorNombre<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : VariableDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Propiedad.ToLower() == nameof(VariableDto.Nombre).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return regristros.Where(x => x.Nombre == filtro.Valor);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return regristros.Where(x => x.Nombre.Contains(filtro.Valor));
-                }
-            }
-
-            return regristros;
-        }
         public static IQueryable<T> FiltrarPorValor<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : VariableDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -73,9 +57,9 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<VariableDtm> AplicarFiltros(IQueryable<VariableDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            foreach (var f in filtros)
-                if (f.Propiedad == FiltroPor.Id)
-                    return base.AplicarFiltros(registros, filtros, parametros);
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
 
             return registros
                    .FiltrarPorNombre(filtros)
