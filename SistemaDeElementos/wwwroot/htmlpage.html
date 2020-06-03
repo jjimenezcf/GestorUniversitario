@@ -1,12 +1,48 @@
 ﻿<html>
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 </head>
 <body>
-    <div id=¨image-wrapper¨>
-        <canvas></canvas>
+
+
+    <label>without search box</label>
+    <select class="select2" data-width="100%" data-minimum-results-for-search="Infinity">
+        <option>one</option>
+        <option>two</option>
+    </select>
+
+    <label>with search box</label>
+    <select class="select2" data-width="100%">
+        <option>one</option>
+        <option>two</option>
+    </select>
+
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2();
+        });
+    </script>
+
+    <div id="div-crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase" class="contenedor-selector">
+        <input id="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase" 
+               class="lista-dinamica" tipo="lista-dinamica" 
+               propiedad="clase" control-de-filtro="S" 
+               criterio-de-filtro="igual" 
+               clase-elemento="ClasePermisoDto" 
+               guardar-en="IdClase" 
+               mostrar-propiedad="nombre" 
+               carga-dinamica="S" 
+               oninput="Crud.ListaDeElementos('cargar',this)" 
+               placeholder="Seleccionar ..." 
+               list="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase-lista">
+        <datalist id="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase-lista">
+        </datalist>
     </div>
-    <div style=¨display: none;¨>
-        <img src=¨https://localhost:44396/Archivos/mifoto.png¨>
-    </div>
+
+
+
 </body>
 </html>
+

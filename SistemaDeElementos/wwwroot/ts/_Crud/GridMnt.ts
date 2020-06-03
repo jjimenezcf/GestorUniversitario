@@ -198,8 +198,12 @@
                         clausula = this.ObtenerClausulaSelector(control as HTMLInputElement);;
                         break;
                     }
-                    case TipoControl.SelectorDeElemento: {
-                        clausula = this.ObtenerClausulaSelectorElemento(control as HTMLSelectElement);
+                    case TipoControl.ListaDeElementos: {
+                        clausula = this.ObtenerClausulaListaDeELemento(control as HTMLSelectElement);
+                        break;
+                    }
+                    case TipoControl.ListaDinamica: {
+                        clausula = this.ObtenerClausulaListaDinamica(control as HTMLInputElement);
                         break;
                     }
                     default: {
@@ -267,7 +271,23 @@
         }
 
 
-        private ObtenerClausulaSelectorElemento(selet: HTMLSelectElement): ClausulaDeFiltrado {
+        private ObtenerClausulaListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
+            var propiedad = input.getAttribute(Atributo.propiedad);
+            var criterio = input.getAttribute(Atributo.criterio);
+
+            let idLista: string = input.getAttribute(AtributosDeListas.idDeLaLista);
+            let lista: ListaDinamica = new ListaDinamica(idLista);
+            let valor: number = lista.BuscarSeleccionado(input.value);
+            
+
+            var clausula = null;
+            if (Number(valor) > 0) {
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
+            }
+            return clausula;
+        }
+
+        private ObtenerClausulaListaDeELemento(selet: HTMLSelectElement): ClausulaDeFiltrado {
             var propiedad = selet.getAttribute(Atributo.propiedad);
             var criterio = selet.getAttribute(Atributo.criterio);
             var valor = selet.value;

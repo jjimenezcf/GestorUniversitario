@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Entorno
         [IUPropiedad(
             Etiqueta = "Padre",
             Ayuda = "Indique el menú padre",
-            TipoDeControl = TipoControl.SelectorDeElemento,
+            TipoDeControl = TipoControl.ListaDeElemento,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
             MostrarPropiedad = nameof(Nombre),

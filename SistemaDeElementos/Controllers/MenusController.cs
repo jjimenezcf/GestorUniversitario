@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected override dynamic LeerTodos(string claseElemento)
+        protected override dynamic CargarLista(string claseElemento)
         {
             if (claseElemento == nameof(MenuDto))
                 return ((GestorDeMenus)GestorDeElementos).LeerPadres();

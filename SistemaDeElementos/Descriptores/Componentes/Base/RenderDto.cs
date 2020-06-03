@@ -104,7 +104,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case TipoControl.Editor:
                     htmdDescriptorControl = RenderEditorDto(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.SelectorDeElemento:
+                case TipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.Archivo:

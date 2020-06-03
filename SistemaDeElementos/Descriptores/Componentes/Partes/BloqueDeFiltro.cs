@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Controles.Add(c);
         }
-        public void AnadirSelectorElemento<t1>(SelectorDeElemento<t1> s) where t1 : Elemento 
+        public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : Elemento 
         {
             AnadirControl(s);
         }

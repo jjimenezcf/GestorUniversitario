@@ -147,7 +147,7 @@
                 seleccionado = this.TotalSeleccionados;
 
             if (0 < seleccionado && seleccionado <= this.TotalSeleccionados) {
-                this.InicializarSlectoresDeElementos(this.PanelDeEditar, this.Controlador);
+                this.InicializarListasDeElementos(this.PanelDeEditar, this.Controlador);
                 this.InicializarCanvases(this.PanelDeEditar);
                 this.Posicionador = seleccionado;
                 this.InicializarValores(seleccionado -1);

@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override dynamic LeerTodos(string claseElemento)
+        protected override dynamic CargarLista(string claseElemento)
         {
             if (claseElemento == nameof(ClasePermisoDto))
                 return ((GestorDePermisos)GestorDeElementos).LeerClases();
@@ -38,6 +38,14 @@ namespace MVCSistemaDeElementos.Controllers
             return null;
         }
 
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        {
 
+            if (claseElemento == nameof(ClasePermisoDto))
+                return ((GestorDePermisos)GestorDeElementos).LeerClases(posicion, cantidad, filtro);
+
+            return null;
+
+        }
     }
 }

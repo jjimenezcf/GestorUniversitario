@@ -10,7 +10,8 @@ namespace Gestor.Elementos.ModeloIu
     public static class TipoControl
     {
         public const string Selector = "selector";
-        public const string SelectorDeElemento = "selector-de-elemento";
+        public const string ListaDeElemento = "lista-de-elemento";
+        public const string ListaDinamica = "lista-dinamica";
         public const string Editor = "editor";
         public const string Archivo = "archivo";
         public const string VisorDeArchivo = "visor-archivo";
@@ -97,6 +98,8 @@ namespace Gestor.Elementos.ModeloIu
         public string GuardarEn { get; set; }
 
         public string MostrarPropiedad { get; set; }
+
+        public bool CargaDinamica { get; set; } = false;
 
         public bool EsVisible(ModoDeTrabajo modo)
         {

@@ -3,36 +3,81 @@
     export class HTMLSelector extends HTMLInputElement {
     }
 
-    export class SelectorDeElementos {
-        private selector: HTMLSelectElement;
+    export class ListaDeElemento {
+        private lista: HTMLSelectElement;
 
-        get Selector(): HTMLSelectElement {
-            return this.selector;
+        get Lista(): HTMLSelectElement {
+            return this.lista;
         }
 
-        constructor(idSelector: string) {
-            this.selector = document.getElementById(idSelector) as HTMLSelectElement;
+        constructor(idLista: string) {
+            this.lista = document.getElementById(idLista) as HTMLSelectElement;
         }
 
         public AgregarOpcion(valor: number, texto: string): void {
 
-            var miOption = document.createElement("option");
-            miOption.setAttribute("value", valor.toString());
-            miOption.setAttribute("label", texto);
-
-            this.Selector.appendChild(miOption);
+            var opcion = document.createElement("option");
+            opcion.setAttribute("value", valor.toString());
+            opcion.setAttribute("label", texto);
+            this.Lista.appendChild(opcion);
         }
     }
 
-    export class DatosPeticionSelector {
+    export class DatosPeticionLista {
         ClaseDeElemento: string;
-        IdSelector: string;
+        IdLista: string;
 
-        get Selector(): SelectorDeElementos {
-            return new SelectorDeElementos(this.IdSelector);
+        get Selector(): ListaDeElemento {
+            return new ListaDeElemento(this.IdLista);
+        }
+    }
+
+    export class ListaDinamica {
+        private lista: HTMLDataListElement;
+
+        get Lista(): HTMLDataListElement {
+            return this.lista;
+        }
+
+        constructor(idLista: string) {
+            this.lista = document.getElementById(idLista) as HTMLDataListElement;
+        }
+
+        public AgregarOpcion(valor: number, texto: string): void {
+
+            for (var i = 0; i < this.Lista.children.length; i++)
+                if (this.Lista.children[i].getAttribute(AtributosDeListas.identificador).Numero() === valor)
+                    return;
+
+            let opcion: HTMLOptionElement = document.createElement("option");
+            opcion.setAttribute("identificador", valor.toString());
+            opcion.value = texto;
+
+            this.Lista.appendChild(opcion);
+        }
+
+        public BuscarSeleccionado(valor: string): number {
+            for (var i = 0; i < this.Lista.children.length; i++) {
+                if (this.Lista.children[i] instanceof HTMLOptionElement) {
+                    let opcion: HTMLOptionElement = this.Lista.children[i] as HTMLOptionElement;
+                    if (opcion.value === valor)
+                        return opcion.getAttribute("identificador").Numero();
+                }
+            }
+            return 0;
         }
 
     }
+
+    export class DatosPeticionDinamica {
+        ClaseDeElemento: string;
+        IdLista: string;
+
+        get Selector(): ListaDinamica {
+            return new ListaDinamica(this.IdLista);
+        }
+    }
+
 
     export class CrudBase {
 
@@ -49,20 +94,14 @@
 
         //funciones de ayuda para la herencia
 
-        protected InicializarSlectoresDeElementos(panel: HTMLDivElement, controlador: string) {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
-            for (let i = 0; i < selectores.length; i++) {
-                if (selectores[i].getAttribute("ya-cargada") === "S")
+        protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
+            let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < listas.length; i++) {
+                if (listas[i].getAttribute(AtributosDeListas.yaCargado) === "S")
                     continue;
 
-                let claseElemento: string = selectores[i].getAttribute(AtributoSelectorElemento.claseElemento);
-                try {
-                    this.CargarSelectorElemento(controlador, claseElemento, selectores[i].getAttribute(Atributo.id));
-                    selectores[i].setAttribute("ya-cargada", "S");
-                }
-                catch (error) {
-                    Mensaje(TipoMensaje.Error, `Error en el selector de elemento ${selectores[0].getAttribute(Atributo.propiedad)} al ejecutar ${controlador}/${Ajax.EndPoint.LeerTodos}. ${error}`);
-                }
+                let claseElemento: string = listas[i].getAttribute(AtributosDeListas.claseElemento);
+                this.CargarListaDeElementos(controlador, claseElemento, listas[i].getAttribute(Atributo.id));
             }
         }
 
@@ -104,7 +143,7 @@
 
 
         private BlanquearSelectores(panel: HTMLDivElement) {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
                 this.BlanquearSelector(selectores[i]);
             }
@@ -209,7 +248,7 @@
             let visor: HTMLImageElement = this.BuscarVisorDeImagen(panel, propiedad);
 
             if (visor === null)
-                return
+                return;
 
             visor.setAttribute('src', valor);
             let idCanva: string = visor.getAttribute(Atributo.id).replace('img', 'canvas');
@@ -223,8 +262,8 @@
             var img = new Image();
             img.src = valor;
             img.onload = function () {
-                    canvas.drawImage(img, 0, 0, 100, 100);
-            }
+                canvas.drawImage(img, 0, 0, 100, 100);
+            };
 
         }
 
@@ -334,15 +373,15 @@
         }
 
         protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.SelectorDeElemento}"]`) as NodeListOf<HTMLSelectElement>;
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
                 this.MapearSelectorDeElementos(selectores[i], elementoJson);
             }
-        } 
+        }
 
         private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
             let propiedadDto = selector.getAttribute(Atributo.propiedad);
-            let guardarEn: string = selector.getAttribute(AtributoSelectorElemento.guardarEn);
+            let guardarEn: string = selector.getAttribute(AtributosDeListas.guardarEn);
             let obligatorio: string = selector.getAttribute(Atributo.obligatorio);
 
             if (obligatorio === "S" && Number(selector.value) === 0) {
@@ -386,35 +425,69 @@
 
         // funciones de carga de elementos para los selectores   ************************************************************************************
 
-
-        protected CargarSelectorElemento(controlador: string, claseDeElementoDto: string, idSelector: string) {
-
-            let url: string = this.DefinirPeticionDeCargar(controlador, claseDeElementoDto);
-            let datosDeEntrada = `{"ClaseDeElemento":"${claseDeElementoDto}", "IdSelector":"${idSelector}"}`;
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerTodos
+        protected CargarListaDinamica(selector: HTMLInputElement, controlador: string) {
+            let clase: string = selector.getAttribute(AtributosDeListas.claseElemento);
+            let idLista: string = selector.getAttribute('list');
+            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, selector.value);
+            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdLista":"${idLista}"}`;
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.CargaDinamica
                 , datosDeEntrada
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
-                , this.MapearElementosAlSelector
+                , this.AnadirOpciones
                 , null
             );
 
             a.Ejecutar();
         }
 
-        private MapearElementosAlSelector(peticion: ApiDeAjax.DescriptorAjax) {
-            let datos: DatosPeticionSelector = JSON.parse(peticion.DatosDeEntrada);
-            let idSelector = datos.IdSelector;
-            let selector = new SelectorDeElementos(idSelector);
+        private AnadirOpciones(peticion: ApiDeAjax.DescriptorAjax) {
+            let datos: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
+            let idLista = datos.IdLista;
+            let lista = new ListaDinamica(idLista);
             for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                selector.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
-
+                lista.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
             }
+
+            lista.Lista.click();
         }
 
-        private DefinirPeticionDeCargar(controlador: string, claseElemento: string): string {
-            let url: string = `/${controlador}/${Ajax.EndPoint.LeerTodos}?${Ajax.Param.claseElemento}=${claseElemento}`;
+        protected CargarListaDeElementos(controlador: string, claseDeElementoDto: string, idLista: string) {
+
+            let url: string = this.DefinirPeticionDeCargarElementos(controlador, claseDeElementoDto);
+            let datosDeEntrada = `{"ClaseDeElemento":"${claseDeElementoDto}", "IdLista":"${idLista}"}`;
+            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.CargarLista
+                , datosDeEntrada
+                , url
+                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.MapearElementosEnLista
+                , null
+            );
+
+            a.Ejecutar();
+        }
+
+        private MapearElementosEnLista(peticion: ApiDeAjax.DescriptorAjax) {
+            let datos: DatosPeticionLista = JSON.parse(peticion.DatosDeEntrada);
+            let idLista = datos.IdLista;
+            let lista = new ListaDeElemento(idLista);
+            for (var i = 0; i < peticion.resultado.datos.length; i++) {
+                lista.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
+            }
+
+            lista.Lista.setAttribute(AtributosDeListas.yaCargado, "S");
+        }
+
+        private DefinirPeticionDeCargarElementos(controlador: string, claseElemento: string): string {
+            let url: string = `/${controlador}/${Ajax.EndPoint.CargarLista}?${Ajax.Param.claseElemento}=${claseElemento}`;
+            return url;
+        }
+
+
+        private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, filtro: string): string {
+            let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=-1&filtro=${filtro}`;
             return url;
         }
 

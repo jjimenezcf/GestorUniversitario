@@ -36,10 +36,11 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Clase",
             Ayuda = "Indique clase de permiso",
-            TipoDeControl = TipoControl.SelectorDeElemento,
+            TipoDeControl = TipoControl.ListaDeElemento,
             SeleccionarDe = nameof(ClasePermisoDto),
             GuardarEn = nameof(IdClase),
             MostrarPropiedad = nameof(Nombre),
+            CargaDinamica = true,
             Fila = 1,
             Columna = 0,
             Ordenar = true,
@@ -58,7 +59,7 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Tipo",
             Ayuda = "Indique el tipo a aplicar",
-            TipoDeControl = TipoControl.SelectorDeElemento,
+            TipoDeControl = TipoControl.ListaDeElemento,
             SeleccionarDe = nameof(TipoPermisoDto),
             GuardarEn = nameof(IdTipo),
             MostrarPropiedad = nameof(Nombre),

@@ -28,12 +28,12 @@ namespace Gestor.Elementos.Seguridad
         }
     }
 
-    static class FiltrosDePermisos
+    static class FiltrosPermiso
     {
         public static IQueryable<T> FiltroPorNombre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == PermisoPor.Nombre)
+                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Nombre).ToLower())
                     return registros.Where(x => x.Nombre.Contains(filtro.Valor));
 
             return registros;
@@ -173,17 +173,37 @@ namespace Gestor.Elementos.Seguridad
         {
             return registros.AplicarJoinsDePermisos(joins, parametros);
         }
+
         public List<ClasePermisoDto> LeerClases()
         {
-            var clases = Contexto.ClasesDePermisos.AsNoTracking().ToList();
-            var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
-            return gestor.MapearElementos(clases).ToList();
+            return LeerClases(0,-1,"");
         }
+
+        public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, string valorDeFiltro)
+        {
+            var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!valorDeFiltro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Propiedad = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
+
+            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(clasesDtm).ToList();
+        }
+
         public List<TipoPermisoDto> LeerTipos()
         {
-            var tipos = Contexto.TiposDePermisos.AsNoTracking().ToList();
+            return LeerTipos(0, -1, "");
+        }
+
+        public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, string valorDeFiltro)
+        {
             var gestor = new GestorDeTipoPermiso(Contexto, Mapeador);
-            return gestor.MapearElementos(tipos).ToList();
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!valorDeFiltro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Propiedad = nameof(TipoPermisoDtm.Nombre), Valor = valorDeFiltro });
+
+            var tiposDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(tiposDtm).ToList();
         }
 
         protected override void AntesMapearRegistroParaEliminar(PermisoDto elemento, ParametrosDeNegocio opciones)

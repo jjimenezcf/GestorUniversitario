@@ -48,10 +48,13 @@ const AtributoSelector = {
     propiedadParaFiltrar: "propiedadFiltrar"
 }
 
-const AtributoSelectorElemento = {
+const AtributosDeListas = {
     claseElemento: 'clase-elemento',
     guardarEn: 'guardar-en',
-    mostrarPropiedad: 'mostrar-propiedad'
+    mostrarPropiedad: 'mostrar-propiedad',
+    yaCargado: 'ya-cargada',
+    idDeLaLista: 'list',
+    identificador: 'identificador'
 }
 
 const TagName = {
@@ -87,7 +90,8 @@ const Ajax = {
         Borrar: "epBorrarPorId",
         RecargarModalEnHtml: "epRecargarModalEnHtml",
         Leer: "epLeer",
-        LeerTodos: "epLeerTodos",
+        CargarLista: "epCargarLista",
+        CargaDinamica: "epCargaDinamica",
         SubirArchivo: "epSubirArchivo"
     },
     Param: {
@@ -173,17 +177,35 @@ const LiteralModalEdicion = {
     }
 }
 
-const LiteralModalSeleccion = {
-    Accion: {
-        AbrirModalDeSeleccion: "abrir-modal-seleccion",
-        SeleccionarElementos: "seleccionar-elementos",
-        CerrarModalDeSeleccion: "cerrar-modal-seleccion",
-        BuscarElementos: "buscar-elementos",
+//const LiteralModalSeleccion = {
+//    Accion: {
+//        AbrirModalDeSeleccion: "abrir-modal-seleccion",
+//        SeleccionarElementos: "seleccionar-elementos",
+//        CerrarModalDeSeleccion: "cerrar-modal-seleccion",
+//        BuscarElementos: "buscar-elementos",
+//        FilaPulsada: "fila-pulsada",
+//        ObtenerAnteriores: "obtener-anteriores",
+//        ObtenerSiguientes: "obtener-siguientes",
+//        ObtenerUltimos: "obtener-ultimos",
+//        OrdenarPor: "ordenar-por"
+//    }
+//}
+
+const Evento = {
+    ModalSeleccion: {
+        Abrir: "abrir-modal-seleccion",
+        Seleccionar: "seleccionar-elementos",
+        Cerrar: "cerrar-modal-seleccion",
+        Buscar: "buscar-elementos",
         FilaPulsada: "fila-pulsada",
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
+    },
+    ListaDinamica: {
+        Cargar: 'cargar',
+        Seleccionar: 'seleccionar'
     }
 }
 
@@ -191,7 +213,8 @@ const TipoControl = {
     Tipo : "tipo",
     Editor : "editor",
     Selector: "selector",
-    SelectorDeElemento: "selector-de-elemento",
+    ListaDeElementos: "lista-de-elemento",
+    ListaDinamica: "lista-dinamica",
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo"
 };

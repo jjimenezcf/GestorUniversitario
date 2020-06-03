@@ -55,7 +55,7 @@
             if (!hayError) {
                 this.BlanquearControlesDeIU(this.PanelDeCrear);
                 if (this.SeguirCreando && accion === LiteralCrt.Accion.NuevoElemento) {
-                    this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
+                    this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
                     this.InicializarCanvases(this.PanelDeCrear);
                 }
                 else {
@@ -76,7 +76,7 @@
                 this.OcultarPanel(panelAnterior);
                 this.MostrarPanel(this.PanelDeCrear);
             }
-            this.InicializarSlectoresDeElementos(this.PanelDeCrear, this.Controlador);
+            this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
             this.InicializarCanvases(this.PanelDeCrear);
         }
 

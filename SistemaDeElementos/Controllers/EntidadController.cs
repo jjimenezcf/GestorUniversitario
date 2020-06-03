@@ -292,14 +292,14 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde CrudMantenimiento.ts
-        public JsonResult epLeerTodos(string claseElemento)
+        //END-POINT: Desde CrudBase.ts
+        public JsonResult epCargarLista(string claseElemento)
         {
             var r = new Resultado();
             dynamic elementos;
             try
             {
-                elementos = LeerTodos(claseElemento);
+                elementos = CargarLista(claseElemento);
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
             }
@@ -313,7 +313,33 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual dynamic LeerTodos(string claseElemento)
+        //END-POINT: Desde CrudBase.ts
+        public JsonResult epCargaDinamica(string claseElemento,int posicion, int cantidad, string filtro)
+        {
+            var r = new Resultado();
+            dynamic elementos;
+            try
+            {
+                elementos = CargaDinamica(claseElemento,posicion, cantidad, filtro);
+                r.Datos = elementos;
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido leer los datos";
+            }
+
+            return new JsonResult(r);
+        }
+
+        protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual dynamic CargarLista(string claseElemento)
         {
             throw new NotImplementedException();
         }

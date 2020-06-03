@@ -23,7 +23,7 @@
             this.InicializarInformacionPaneles(idPanelMnt);
             this.InicializarNavegador();
             this.InicializarSelectores();
-            this.InicializarSlectoresDeElementos(this.ZonaDeFiltro, this.Controlador);
+            this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Controlador);
         }
 
         private InicializarInformacionPaneles(idPanelMnt: string) {
@@ -232,6 +232,14 @@
                 modal.InicializarModal();
             else
                modal.TextoSelectorCambiado(htmlSelector.value);
+        }
+
+        public CargarListaDinamica(selector: HTMLInputElement) {
+            super.CargarListaDinamica(selector, this.Controlador);
+        }
+
+        public SeleccionarListaDinamica(selector: HTMLInputElement) {
+            super.CargarListaDinamica(selector, this.Controlador);
         }
     }
 }

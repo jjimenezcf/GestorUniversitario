@@ -1,28 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class SelectorDeElemento<TElemento> : ControlFiltroHtml where TElemento : Elemento 
+    public class ListaDeElemento<TElemento> : ControlFiltroHtml where TElemento : Elemento 
     {
 
         public string GuardarEn { get; private set; }
         public string SeleccionarDe { get; private set; }
         public string MostrarPropiedad { get; private set; }
+        public bool CargaDinamica { get; private set; }
 
-        public SelectorDeElemento(BloqueDeFitro<TElemento> padre, string propiedad, Posicion posicion)
+        public ListaDeElemento(BloqueDeFitro<TElemento> padre, string propiedad, Posicion posicion)
         : base(
             padre: padre
-          , id: $"{padre.Id}_{TipoControl.SelectorDeElemento}_{propiedad}" 
+          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{propiedad}" 
           , ""
           , propiedad
           , ""
           , posicion
           )
         {
-            Tipo = TipoControl.SelectorDeElemento;
 
             var propiedades = typeof(TElemento).GetProperties();
             var p = propiedades.FirstOrDefault(x => x.Name == propiedad);
@@ -44,28 +45,58 @@ namespace MVCSistemaDeElementos.Descriptores
             Ayuda = atributos.Ayuda;
             SeleccionarDe = atributos.SeleccionarDe;
             GuardarEn = atributos.GuardarEn;
+            CargaDinamica = atributos.CargaDinamica;
             MostrarPropiedad = atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad;
 
+            Tipo = CargaDinamica ? TipoControl.ListaDinamica : TipoControl.ListaDeElemento;
             Criterio = TipoCriterio.igual.ToString();
             padre.AnadirSelectorElemento(this);
         }
 
         public override string RenderControl()
         {
-            return RenderSelectorDeElemento();
+            if (CargaDinamica)
+                return RenderListaDinamica();
+
+            return RenderListaDeElementos();
         }
 
+        private string RenderListaDinamica()
+        {
+            var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨contenedor-selector¨>
+                                    <input id=¨{IdHtml}¨ class=¨{TipoControl.ListaDinamica}¨ {RenderAtributos()} />
+                                    <datalist id=¨{IdHtml}-lista¨>
+                                    </datalist>
+                                </div>";
+            
+            //var htmlSelect2 = $@"<div id=¨div-{IdHtml}-select2¨  class=¨contenedor-selector¨>
+            //                        <select class=¨select2¨ data-width=¨100%¨ data-minimum-results-for-search=¨Infinity¨ />
+            //                    </div>";
+            //var scriptSelect2 = $@"<script>$(document).ready(function() {{$(¨.select2¨).select2();}}); </script>";
+
+            return htmlSelect;
+        }
+
+        
         public override string RenderAtributos(string atributos = "")
         {
             atributos = base.RenderAtributos(atributos);
-            atributos = $"{atributos} clase-elemento=¨{SeleccionarDe}¨ guardar-en=¨{GuardarEn}¨ mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨";
+            atributos = $@"{atributos} clase-elemento=¨{SeleccionarDe}¨ 
+                                       guardar-en=¨{GuardarEn}¨ 
+                                       mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨ ";
+            if (CargaDinamica)
+                atributos += $@"carga-dinamica=¨{(CargaDinamica ? 'S' : 'N')}¨ 
+                                oninput=¨Crud.ListaDeElementos('cargar',this)¨ 
+                                placeholder=¨Seleccionar ...¨ 
+                                list=¨{IdHtml}-lista¨
+                               ";
             return atributos;
         }
 
-        private string RenderSelectorDeElemento()
+        private string RenderListaDeElementos()
         {
             var htmlSelect = $@"<div id=¨div_{IdHtml}¨  class=¨contenedor-selector¨>
-                                    <select id=¨{IdHtml}¨ class=¨{TipoControl.SelectorDeElemento}¨ {RenderAtributos()} >
+                                    <select id=¨{IdHtml}¨ class=¨{TipoControl.ListaDeElemento}¨ {RenderAtributos()} >
                                          <option value=¨0¨>Seleccionar ...</option>
                                     </select>
                                 </div>";

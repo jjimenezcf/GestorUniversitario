@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 4));
 
-            new SelectorDeElemento<MenuDto>(padre: fltEspecificos,
+            new ListaDeElemento<MenuDto>(padre: fltEspecificos,
                                           propiedad: nameof(MenuDto.Padre),
                                           posicion: new Posicion() { fila = 0, columna = 0 });
 

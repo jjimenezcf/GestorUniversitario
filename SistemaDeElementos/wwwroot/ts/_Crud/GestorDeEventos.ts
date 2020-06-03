@@ -61,41 +61,41 @@
         let modal: ModalSeleccion = crudMnt.ObtenerModal(parIn[0]);
         try {
             switch (accion) {
-                case LiteralModalSeleccion.Accion.AbrirModalDeSeleccion: {
+                case Evento.ModalSeleccion.Abrir: {
                     modal.AbrirModalDeSeleccion();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.CerrarModalDeSeleccion: {
+                case Evento.ModalSeleccion.Cerrar: {
                     modal.CerrarModalDeSeleccion();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.SeleccionarElementos: {
+                case Evento.ModalSeleccion.Seleccionar: {
                     modal.SeleccionarElementos();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.FilaPulsada: {
+                case Evento.ModalSeleccion.FilaPulsada: {
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
-                case LiteralModalSeleccion.Accion.BuscarElementos: {
+                case Evento.ModalSeleccion.Buscar: {
                     modal.RecargarGrid();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.ObtenerSiguientes: {
+                case Evento.ModalSeleccion.ObtenerSiguientes: {
                     modal.ObtenerSiguientes();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.ObtenerAnteriores: {
+                case Evento.ModalSeleccion.ObtenerAnteriores: {
                     modal.ObtenerAnteriores();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.ObtenerUltimos: {
+                case Evento.ModalSeleccion.ObtenerUltimos: {
                     modal.ObtenerUltimos();
                     break;
                 }
-                case LiteralModalSeleccion.Accion.OrdenarPor: {
+                case Evento.ModalSeleccion.OrdenarPor: {
                     let columna: string = parIn[1];
                     modal.OrdenarPor(columna);
                     break;
@@ -112,66 +112,118 @@
     }
 
     export function EventosModalDeBorrar(accion: string): void {
-        switch (accion) {
-            case LiteralModalBorrar.Accion.CerrarModalDeBorrado: {
-                crudMnt.CerrarModalDeBorrado();
-                break;
+        try {
+            switch (accion) {
+                case LiteralModalBorrar.Accion.CerrarModalDeBorrado: {
+                    crudMnt.CerrarModalDeBorrado();
+                    break;
+                }
+                case LiteralModalBorrar.Accion.BorrarElemento: {
+                    crudMnt.BorrarElemento();
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
             }
-            case LiteralModalBorrar.Accion.BorrarElemento: {
-                crudMnt.BorrarElemento();
-                break;
-            }
-            default: {
-                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
-                break;
-            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
         }
     }
 
     export function EventosModalDeCreacion(accion: string): void {
-        switch (accion) {
-            case LiteralModalCreacion.Accion.CerrarModal: {
-                crudMnt.CerrarModalDeCreacion();
-                break;
+        try {
+            switch (accion) {
+                case LiteralModalCreacion.Accion.CerrarModal: {
+                    crudMnt.CerrarModalDeCreacion();
+                    break;
+                }
+                case LiteralModalCreacion.Accion.CrearElemento: {
+                    crudMnt.CrearElemento();
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
             }
-            case LiteralModalCreacion.Accion.CrearElemento: {
-                crudMnt.CrearElemento();
-                break;
-            }
-            default: {
-                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
-                break;
-            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
         }
     }
 
     export function EventosModalDeEdicion(accion: string): void {
-        switch (accion) {
-            case LiteralModalEdicion.Accion.CerrarModal: {
-                crudMnt.CerrarModalDeEdicion();
-                break;
+        try {
+            switch (accion) {
+                case LiteralModalEdicion.Accion.CerrarModal: {
+                    crudMnt.CerrarModalDeEdicion();
+                    break;
+                }
+                case LiteralModalEdicion.Accion.ModificarElemento: {
+                    crudMnt.ModificarElemento();
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
             }
-            case LiteralModalEdicion.Accion.ModificarElemento: {
-                crudMnt.ModificarElemento();
-                break;
-            }
-            default: {
-                Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
-                break;
-            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
         }
     }
 
     export function EjecutarMenuEdt(accion: string): void {
-        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+        try {
+            crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
     }
 
     export function EventosDeEdicion(accion: string): void {
-        crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+        try {
+            crudMnt.crudDeEdicion.EjecutarAcciones(accion);
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
     }
 
     export function EjecutarMenuCrt(accion: string): void {
-        crudMnt.crudDeCreacion.EjecutarAcciones(accion);
+        try {
+            crudMnt.crudDeCreacion.EjecutarAcciones(accion);
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
+    }
+
+    export function ListaDeElementos(accion: string, selector: HTMLInputElement) {
+
+        try {
+            switch (accion) {
+                case Evento.ListaDinamica.Cargar: {
+                    crudMnt.CargarListaDinamica(selector);
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
+
+
+
     }
 
 

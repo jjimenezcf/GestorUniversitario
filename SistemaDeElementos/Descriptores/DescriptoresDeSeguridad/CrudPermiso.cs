@@ -30,11 +30,11 @@ namespace MVCSistemaDeElementos.Descriptores
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
-                new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
+                new ListaDeElemento<PermisoDto>(padre: fltEspecificos,
                                               propiedad: nameof(PermisoDto.Clase) ,
                                               posicion: new Posicion() { fila = 0, columna = 0 });
                 
-                new SelectorDeElemento<PermisoDto>(padre: fltEspecificos,
+                new ListaDeElemento<PermisoDto>(padre: fltEspecificos,
                                         propiedad: nameof(PermisoDto.Tipo),
                                         posicion: new Posicion() { fila = 0, columna = 1 });
             }

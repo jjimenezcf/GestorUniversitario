@@ -193,7 +193,7 @@ a {
     width: 100%;
 }
 
-    .contenedor-selector > select {
+    .contenedor-selector > select, input.lista-dinamica {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;
@@ -208,28 +208,14 @@ a {
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
-    .contenedor-selector > option {
-        width: 100%;
-        height: calc(1.5em + .75rem + 2px);
-        padding: .375rem .75rem;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: .25rem;
-        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    }
+        .contenedor-selector > select.propiedad-no-valid, input.propiedad-no-validaa {
+            background: #f58eb1;
+        }
 
-    .contenedor-selector > select.propiedad-no-valida {
-        background: #f58eb1;
-    }
+        .contenedor-selector > select.propiedad-valida, input.propiedad-no-valida {
+            background: #dcd6d6;
+        }
 
-    .contenedor-selector > select.propiedad-valida {
-        background: #dcd6d6;
-    }
 
 
 
