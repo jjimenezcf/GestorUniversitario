@@ -105,11 +105,11 @@
         }
 
         public CerrarModalDeEdicion() {
-            this.crudDeEdicion.EjecutarAcciones(LiteralEdt.Accion.CancelarEdicion);
+            this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
         }
 
         public ModificarElemento() {
-            this.crudDeEdicion.EjecutarAcciones(LiteralModalEdicion.Accion.ModificarElemento);
+            this.crudDeEdicion.EjecutarAcciones(Evento.ModalEdicion.Modificar);
         }
 
         public IraCrear() {

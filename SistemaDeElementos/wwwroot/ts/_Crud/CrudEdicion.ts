@@ -77,29 +77,29 @@
             try {
 
                 switch (accion) {
-                    case LiteralEdt.Accion.ModificarElemento: {
+                    case Evento.Edicion.Modificar: {
                         this.Modificar();
                         if (this.TotalSeleccionados == 1)
                             cerrarEdicion = true;
                         break;
                     }
-                    case LiteralEdt.Accion.CancelarEdicion: {
+                    case Evento.Edicion.Cerrar: {
                         cerrarEdicion = true;
                         break;
                     }
-                    case LiteralEdt.Accion.MostrarPrimero: {
+                    case Evento.Edicion.MostrarPrimero: {
                         this.EditarSeleccionado(1);
                         break;
                     }
-                    case LiteralEdt.Accion.MostrarSiguiente: {
+                    case Evento.Edicion.MostrarSiguiente: {
                         this.EditarSeleccionado(this.Posicionador + 1);
                         break;
                     }
-                    case LiteralEdt.Accion.MostrarAnterior: {
+                    case Evento.Edicion.MostrarAnterior: {
                         this.EditarSeleccionado(this.Posicionador -1);
                         break;
                     }
-                    case LiteralEdt.Accion.MostrarUltimo: {
+                    case Evento.Edicion.MostrarUltimo: {
                         this.EditarSeleccionado(this.TotalSeleccionados);
                         break;
                     }

@@ -116,65 +116,17 @@ const Ajax = {
     eventoProgreso: "progress"
 };
 
-//const LiteralCrt = {
-//    Accion: {
-//        NuevoElemento: "nuevo-elemento",
-//        CerrarCreacion: "cerrar-creacion",
-//    }
-//};
-
 const LiteralEdt = {
-    Accion: {
-        ModificarElemento: "modificar-elemento",
-        CancelarEdicion: "cancelar-edicion",
-        MostrarPrimero: "mostrar-primero",
-        MostrarAnterior: "mostrar-anterior",
-        MostrarSiguiente: "mostrar-siguiente",
-        MostrarUltimo: "mostrar-ultimo",
-    },
     idCtrlCantidad: "nav_2_reg"
 };
 
 const LiteralMnt = {
-    Accion: {
-        CrearElemento: "crear-elemento",
-        EditarElemento: "editar-elemento",
-        EliminarElemento: "eliminar-elemento",
-        BuscarElementos: "buscar-elementos",
-        ObtenerAnteriores: "obtener-anteriores",
-        ObtenerSiguientes: "obtener-siguientes",
-        ObtenerUltimos: "obtener-ultimos",
-        OrdenarPor: "ordenar-por",
-        FilaPulsada: "fila-pulsada",
-        CambiarSelector:"cambiar-selector"
-    },
     posicion: "posicion",
     postfijoDeCheckDeSeleccion: ".chksel"
 };
 
 const LiteralGrid = {
     idCtrlCantidad: "nav_2_reg"
-}
-
-const LiteralModalBorrar = {
-    Accion: {
-        BorrarElemento: "borrar-elemento",
-        CerrarModalDeBorrado: "cerrar-modal-de-borrado",
-    }
-}
-
-const LiteralModalCreacion = {
-    Accion: {
-        CrearElemento: "crear-elemento",
-        CerrarModal: "cerrar-modal",
-    }
-}
-
-const LiteralModalEdicion = {
-    Accion: {
-        ModificarElemento: "modificar-elemento",
-        CerrarModal: "cerrar-modal",
-    }
 }
 
 const Evento = {
@@ -189,13 +141,45 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
     },
+    ModalCreacion: {
+        Crear: "crear-elemento",
+        Cerrar: "cerrar-modal",
+    },
+    ModalEdicion: {
+        Modificar: "modificar-elemento",
+        Cerrar: "cerrar-modal",
+    },
+    ModalBorrar: {
+        Borrar: "borrar-elemento",
+        Cerrar: "cerrar-modal-de-borrado",
+    },
     ListaDinamica: {
         Cargar: 'cargar',
         Seleccionar: 'seleccionar'
     },
+    Mnt: {
+        Crear: "crear-elemento",
+        Editar: "editar-elemento",
+        Borrar: "eliminar-elemento",
+        Buscar: "buscar-elementos",
+        ObtenerAnteriores: "obtener-anteriores",
+        ObtenerSiguientes: "obtener-siguientes",
+        ObtenerUltimos: "obtener-ultimos",
+        OrdenarPor: "ordenar-por",
+        FilaPulsada: "fila-pulsada",
+        CambiarSelector: "cambiar-selector"
+    },
     Creacion: {
         Crear: "nuevo-elemento",
         Cerrar: "cerrar-creacion",
+    },
+    Edicion: {
+        Modificar: "modificar-elemento",
+        Cerrar: "cancelar-edicion",
+        MostrarPrimero: "mostrar-primero",
+        MostrarAnterior: "mostrar-anterior",
+        MostrarSiguiente: "mostrar-siguiente",
+        MostrarUltimo: "mostrar-ultimo",
     }
 }
 

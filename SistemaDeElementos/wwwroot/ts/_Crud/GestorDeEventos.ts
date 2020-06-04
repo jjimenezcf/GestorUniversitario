@@ -3,44 +3,44 @@
     export function EventosDelMantenimiento(accion: string, parametros: string): void {
         try {
             switch (accion) {
-                case LiteralMnt.Accion.CrearElemento: {
+                case Evento.Mnt.Crear: {
                     crudMnt.IraCrear();
                     break;
                 }
-                case LiteralMnt.Accion.EditarElemento: {
+                case Evento.Mnt.Editar: {
                     crudMnt.IraEditar();
                     break;
                 }
-                case LiteralMnt.Accion.EliminarElemento: {
+                case Evento.Mnt.Borrar: {
                     crudMnt.AbrirModalBorrarElemento();
                     break;
                 }
-                case LiteralMnt.Accion.BuscarElementos: {
+                case Evento.Mnt.Buscar: {
                     crudMnt.Buscar(0);
                     break;
                 }
-                case LiteralMnt.Accion.ObtenerSiguientes: {
+                case Evento.Mnt.ObtenerSiguientes: {
                     crudMnt.ObtenerSiguientes();
                     break;
                 }
-                case LiteralMnt.Accion.ObtenerAnteriores: {
+                case Evento.Mnt.ObtenerAnteriores: {
                     crudMnt.ObtenerAnteriores();
                     break;
                 }
-                case LiteralMnt.Accion.ObtenerUltimos: {
+                case Evento.Mnt.ObtenerUltimos: {
                     crudMnt.ObtenerUltimos();
                     break;
                 }
-                case LiteralMnt.Accion.FilaPulsada: {
+                case Evento.Mnt.FilaPulsada: {
                     let parIn: Array<string> = parametros.split("#");
                     crudMnt.FilaPulsada(parIn[0], parIn[1]);
                     break;
                 }
-                case LiteralMnt.Accion.OrdenarPor: {
+                case Evento.Mnt.OrdenarPor: {
                     crudMnt.OrdenarPor(parametros);
                     break;
                 }
-                case LiteralMnt.Accion.CambiarSelector: {
+                case Evento.Mnt.CambiarSelector: {
                     crudMnt.CambiarSelector(parametros);
                     break;
                 }
@@ -114,11 +114,11 @@
     export function EventosModalDeBorrar(accion: string): void {
         try {
             switch (accion) {
-                case LiteralModalBorrar.Accion.CerrarModalDeBorrado: {
+                case Evento.ModalBorrar.Cerrar: {
                     crudMnt.CerrarModalDeBorrado();
                     break;
                 }
-                case LiteralModalBorrar.Accion.BorrarElemento: {
+                case Evento.ModalBorrar.Borrar: {
                     crudMnt.BorrarElemento();
                     break;
                 }
@@ -136,11 +136,11 @@
     export function EventosModalDeCreacion(accion: string): void {
         try {
             switch (accion) {
-                case LiteralModalCreacion.Accion.CerrarModal: {
+                case Evento.ModalCreacion.Cerrar: {
                     crudMnt.CerrarModalDeCreacion();
                     break;
                 }
-                case LiteralModalCreacion.Accion.CrearElemento: {
+                case Evento.ModalCreacion.Crear: {
                     crudMnt.CrearElemento();
                     break;
                 }
@@ -158,11 +158,11 @@
     export function EventosModalDeEdicion(accion: string): void {
         try {
             switch (accion) {
-                case LiteralModalEdicion.Accion.CerrarModal: {
+                case Evento.ModalEdicion.Cerrar: {
                     crudMnt.CerrarModalDeEdicion();
                     break;
                 }
-                case LiteralModalEdicion.Accion.ModificarElemento: {
+                case Evento.ModalEdicion.Modificar: {
                     crudMnt.ModificarElemento();
                     break;
                 }
