@@ -148,6 +148,7 @@
 
             if (0 < seleccionado && seleccionado <= this.TotalSeleccionados) {
                 this.InicializarListasDeElementos(this.PanelDeEditar, this.Controlador);
+                this.InicializarListasDinamicas(this.PanelDeEditar);
                 this.InicializarCanvases(this.PanelDeEditar);
                 this.Posicionador = seleccionado;
                 this.InicializarValores(seleccionado -1);
@@ -180,7 +181,7 @@
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerPorIds
-                , this
+                , null
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
                 , ApiDeAjax.ModoPeticion.Get
@@ -192,7 +193,7 @@
         }
 
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
-            let edicion: CrudEdicion = (peticion.DatosDeEntrada as CrudEdicion);
+            let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos[0]);
         }

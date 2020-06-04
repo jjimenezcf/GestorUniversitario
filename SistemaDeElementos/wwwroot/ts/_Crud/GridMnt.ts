@@ -275,8 +275,7 @@
             var propiedad = input.getAttribute(Atributo.propiedad);
             var criterio = input.getAttribute(Atributo.criterio);
 
-            let idLista: string = input.getAttribute(AtributosDeListas.idDeLaLista);
-            let lista: ListaDinamica = new ListaDinamica(idLista);
+            let lista: ListaDinamica = new ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
             
 

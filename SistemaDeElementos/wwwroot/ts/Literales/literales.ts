@@ -19,7 +19,8 @@ const Atributo = {
     obligatorio: "obligatorio",
     totalEnBd: "totalEnBd",
     modoOrdenacion: "modo-ordenacion",
-    expresionElemento: "expresion-elemento"
+    expresionElemento: "expresion-elemento",
+    tipo: "tipo"
 }
 
 const AtributoSelectorArchivo = {

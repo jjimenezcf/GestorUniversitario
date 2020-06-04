@@ -43,8 +43,8 @@
             return document.getElementById(this._IdLista) as HTMLDataListElement;
         }
 
-        constructor(idLista: string) {
-            this._IdLista = idLista;
+        constructor(input: HTMLInputElement) {           
+            this._IdLista = input.getAttribute(AtributosDeListas.idDeLaLista);
         }
 
         public AgregarOpcion(valor: number, texto: string): void {
@@ -79,12 +79,8 @@
     }
 
     export class DatosPeticionDinamica {
-        ClaseDeElemento: string;
-        IdLista: string;
-
-        get Selector(): ListaDinamica {
-            return new ListaDinamica(this.IdLista);
-        }
+        public ClaseDeElemento: string;
+        public IdInput: string;
     }
 
 
@@ -104,7 +100,7 @@
         //funciones de ayuda para la herencia
 
         protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
-            let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
+            let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${Atributo.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < listas.length; i++) {
                 if (listas[i].getAttribute(AtributosDeListas.yaCargado) === "S")
                     continue;
@@ -116,10 +112,9 @@
 
 
         protected InicializarListasDinamicas(panel: HTMLDivElement) {
-            let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+            let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < listas.length; i++) {
-                let idLista: string = listas[i].getAttribute(AtributosDeListas.idDeLaLista);
-                let lista: ListaDinamica = new ListaDinamica(idLista);
+                let lista: ListaDinamica = new ListaDinamica(listas[i]);
                 lista.Borrar();
             }
         }
@@ -143,7 +138,7 @@
         }
 
         private BlanquearEditores(panel: HTMLDivElement) {
-            let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < editores.length; i++) {
                 this.BlanquearEditor(editores[i]);
             }
@@ -157,7 +152,7 @@
 
 
         private BlanquearSelectores(panel: HTMLDivElement) {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
+            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${Atributo.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
                 this.BlanquearSelector(selectores[i]);
             }
@@ -171,7 +166,7 @@
 
 
         private BlanquearArchivos(panel: HTMLDivElement) {
-            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`${Atributo.tipo}[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < archivos.length; i++) {
                 ApiDeArchivos.BlanquearArchivo(archivos[i]);
             }
@@ -201,24 +196,56 @@
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
+            this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+        }
+
+        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON) {
+
+            let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+
+            for (var i = 0; i < listas.length; i++) {
+                let input: HTMLInputElement = listas[i] as HTMLInputElement;
+                let propiedad: string = input.getAttribute(AtributosDeListas.guardarEn);
+                let id: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
+
+                if (id > 0) {
+                    let listaDinamica = new ListaDinamica(input);
+                    listaDinamica.AgregarOpcion(id, input.value);
+                }
+                else {
+                    input.value = "";
+                }
+
+            }
         }
 
         private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
             var tipoDeObjeto = typeof valorPropiedadJson;
-            if (tipoDeObjeto == "object") {
+            if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                    console.log("clave: ", propiedad);
                     this.MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson[propiedad]);
                 }
             } else {
                 this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
             }
-
         }
+
+        private BuscarValorEnJson(propiedad: string, valorPropiedadJson: any) {
+            var tipoDeObjeto = typeof valorPropiedadJson;
+            if (tipoDeObjeto === "object") {
+                for (var p in valorPropiedadJson) {
+                    if (propiedad.toLowerCase() === p.toLowerCase())
+                        return valorPropiedadJson[p];
+                }
+            }
+            return null;
+        }
+
 
         private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
             this.MapearPropiedaAlEditor(panel, propiedad, valor);
             this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor);
+            this.MapearPropiedadEnLaListaDinamica(panel, propiedad, valor);
             this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor);
             this.MapearPropiedadAlVisorDeImagen(panel, propiedad, valor);
 
@@ -245,6 +272,13 @@
                     break;
                 }
             }
+        }
+
+        private MapearPropiedadEnLaListaDinamica(panel: HTMLDivElement, propiedad: string, valor: any) {
+            let input: HTMLInputElement = this.BuscarListaDinamica(panel, propiedad);
+            if (input === null)
+                return;
+            input.value = valor;
         }
 
 
@@ -285,7 +319,7 @@
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
         protected BuscarEditor(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let editores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            let editores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < editores.length; i++) {
                 var control = editores[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -334,6 +368,19 @@
             let select: HTMLCollectionOf<HTMLSelectElement> = controlPadre.getElementsByTagName("select") as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
                 var control = select[i] as HTMLSelectElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto)
+                    return control;
+            }
+            return null;
+        }
+
+        protected BuscarListaDinamica(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+
+            let inputs: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+
+            for (var i = 0; i < inputs.length; i++) {
+                var control = inputs[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
                 if (dto === propiedadDto)
                     return control;
@@ -398,8 +445,7 @@
             let propiedadDto = input.getAttribute(Atributo.propiedad);
             let guardarEn: string = input.getAttribute(AtributosDeListas.guardarEn);
             let obligatorio: string = input.getAttribute(Atributo.obligatorio);
-            let idLista: string = input.getAttribute(AtributosDeListas.idDeLaLista);
-            let lista: ListaDinamica = new ListaDinamica(idLista);
+            let lista: ListaDinamica = new ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
 
             if (obligatorio === "S" && (EsNula(input.value) || Number(valor) === 0)) {
@@ -466,11 +512,11 @@
 
         // funciones de carga de elementos para los selectores   ************************************************************************************
 
-        protected CargarListaDinamica(selector: HTMLInputElement, controlador: string) {
-            let clase: string = selector.getAttribute(AtributosDeListas.claseElemento);
-            let idLista: string = selector.getAttribute('list');
-            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, selector.value);
-            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdLista":"${idLista}"}`;
+        protected CargarListaDinamica(input: HTMLInputElement, controlador: string) {
+            let clase: string = input.getAttribute(AtributosDeListas.claseElemento);
+            let idInput: string = input.getAttribute('id');
+            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, input.value);
+            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CargaDinamica
                 , datosDeEntrada
@@ -486,13 +532,13 @@
 
         private AnadirOpciones(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
-            let idLista = datos.IdLista;
-            let lista = new ListaDinamica(idLista);
+
+            let listaDinamica: ListaDinamica = new ListaDinamica(document.getElementById(datos.IdInput) as HTMLInputElement);
             for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                lista.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
+                listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
             }
 
-            lista.Lista.click();
+            listaDinamica.Lista.click();
         }
 
         protected CargarListaDeElementos(controlador: string, claseDeElementoDto: string, idLista: string) {
