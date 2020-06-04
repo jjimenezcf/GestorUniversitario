@@ -33,14 +33,18 @@
     }
 
     export class ListaDinamica {
-        private lista: HTMLDataListElement;
+        private _IdLista: string;
+
+        get Input(): HTMLInputElement {
+            return document.querySelector(`input[list="${this._IdLista}"]`)
+        }
 
         get Lista(): HTMLDataListElement {
-            return this.lista;
+            return document.getElementById(this._IdLista) as HTMLDataListElement;
         }
 
         constructor(idLista: string) {
-            this.lista = document.getElementById(idLista) as HTMLDataListElement;
+            this._IdLista = idLista;
         }
 
         public AgregarOpcion(valor: number, texto: string): void {
@@ -50,7 +54,7 @@
                     return;
 
             let opcion: HTMLOptionElement = document.createElement("option");
-            opcion.setAttribute("identificador", valor.toString());
+            opcion.setAttribute(AtributosDeListas.identificador, valor.toString());
             opcion.value = texto;
 
             this.Lista.appendChild(opcion);
@@ -61,10 +65,15 @@
                 if (this.Lista.children[i] instanceof HTMLOptionElement) {
                     let opcion: HTMLOptionElement = this.Lista.children[i] as HTMLOptionElement;
                     if (opcion.value === valor)
-                        return opcion.getAttribute("identificador").Numero();
+                        return opcion.getAttribute(AtributosDeListas.identificador).Numero();
                 }
             }
             return 0;
+        }
+
+        public Borrar(): void {
+            this.Input.value = "";
+            this.Lista.innerHTML = "";
         }
 
     }
@@ -105,27 +114,32 @@
             }
         }
 
+
+        protected InicializarListasDinamicas(panel: HTMLDivElement) {
+            let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < listas.length; i++) {
+                let idLista: string = listas[i].getAttribute(AtributosDeListas.idDeLaLista);
+                let lista: ListaDinamica = new ListaDinamica(idLista);
+                lista.Borrar();
+            }
+        }
+
         protected InicializarCanvases(panel: HTMLDivElement) {
             let canvases: NodeListOf<HTMLCanvasElement> = panel.querySelectorAll("canvas") as NodeListOf<HTMLCanvasElement>;
             canvases.forEach((canvas) => { canvas.width = canvas.width; });
         }
 
         protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
-
             this.OcultarPanel(panelCerrar);
             this.MostrarPanel(panelMostrar);
 
             BlanquearMensaje();
-
         }
 
         protected BlanquearControlesDeIU(panel: HTMLDivElement) {
-
             this.BlanquearEditores(panel);
             this.BlanquearSelectores(panel);
             this.BlanquearArchivos(panel);
-
-
         }
 
         private BlanquearEditores(panel: HTMLDivElement) {
@@ -343,6 +357,7 @@
             let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel);
 
             this.MapearSelectoresDeElementos(panel, elementoJson);
+            this.MapearSelectoresDinamicos(panel, elementoJson);
             this.MapearEditores(panel, elementoJson);
             this.MapearArchivos(panel, elementoJson);
 
@@ -370,6 +385,32 @@
             input.classList.remove(ClaseCss.crtlNoValido);
             input.classList.add(ClaseCss.crtlValido);
             elementoJson[propiedadDto] = valor;
+        }
+
+        protected MapearSelectoresDinamicos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < selectores.length; i++) {
+                this.MapearSelectorDinamico(selectores[i], elementoJson);
+            }
+        }
+
+        private MapearSelectorDinamico(input: HTMLInputElement, elementoJson: JSON) {
+            let propiedadDto = input.getAttribute(Atributo.propiedad);
+            let guardarEn: string = input.getAttribute(AtributosDeListas.guardarEn);
+            let obligatorio: string = input.getAttribute(Atributo.obligatorio);
+            let idLista: string = input.getAttribute(AtributosDeListas.idDeLaLista);
+            let lista: ListaDinamica = new ListaDinamica(idLista);
+            let valor: number = lista.BuscarSeleccionado(input.value);
+
+            if (obligatorio === "S" && (EsNula(input.value) || Number(valor) === 0)) {
+                input.classList.remove(ClaseCss.crtlValido);
+                input.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
+            }
+
+            input.classList.remove(ClaseCss.crtlNoValido);
+            input.classList.add(ClaseCss.crtlValido);
+            elementoJson[guardarEn] = valor.toString();
         }
 
         protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
@@ -430,7 +471,8 @@
             let idLista: string = selector.getAttribute('list');
             let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, selector.value);
             let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdLista":"${idLista}"}`;
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.CargaDinamica
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.CargaDinamica
                 , datosDeEntrada
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
@@ -457,7 +499,8 @@
 
             let url: string = this.DefinirPeticionDeCargarElementos(controlador, claseDeElementoDto);
             let datosDeEntrada = `{"ClaseDeElemento":"${claseDeElementoDto}", "IdLista":"${idLista}"}`;
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.CargarLista
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.CargarLista
                 , datosDeEntrada
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona

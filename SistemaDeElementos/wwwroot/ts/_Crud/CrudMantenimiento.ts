@@ -71,7 +71,8 @@
             let id: number = this.InfoSelector.Seleccionados[0] as number;
             let url: string = this.DefinirPeticionDeBorrado(id);
 
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Borrar
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.Borrar
                 , this
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
@@ -116,11 +117,11 @@
         }
 
         public CrearElemento() {
-            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.NuevoElemento);
+            this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Crear);
         }
 
         public CerrarModalDeCreacion() {
-            this.crudDeCreacion.EjecutarAcciones(LiteralCrt.Accion.CerrarCreacion);
+            this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Cerrar);
         }
 
         public FilaPulsada(idCheck: string, idDelInput: string) {
@@ -186,7 +187,8 @@
             else {
                 let url: string = this.DefinirPeticionDeBusqueda(posicion);
 
-                let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerGridEnHtml
+                let a = new ApiDeAjax.DescriptorAjax(this
+                    , Ajax.EndPoint.LeerGridEnHtml
                     , this
                     , url
                     , ApiDeAjax.TipoPeticion.Sincrona

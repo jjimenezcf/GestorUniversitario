@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\seCrud.css" />
+    <None Include="wwwroot\css\Controles.css" />
     <None Include="wwwroot\Extensiones\selectores.js" />
   </ItemGroup>
 

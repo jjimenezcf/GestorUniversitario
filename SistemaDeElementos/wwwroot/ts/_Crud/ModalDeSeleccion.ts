@@ -165,7 +165,8 @@
 
         private Buscar(posicion: number) {
             let url: string = this.DefinirPeticionDeCargarGrid(posicion);
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.RecargarModalEnHtml
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.RecargarModalEnHtml
                 , this
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
@@ -207,7 +208,8 @@
             this.EditorDelGrid.value = this.Selector.value;
             let url: string = this.DefinirPeticionLeerParaSelector();
 
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Leer
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.Leer
                 , this
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona

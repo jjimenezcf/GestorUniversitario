@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
             CargaDinamica = atributos.CargaDinamica;
             MostrarPropiedad = atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad;
 
-            Tipo = CargaDinamica ? TipoControl.ListaDinamica : TipoControl.ListaDeElemento;
+            Tipo = atributos.TipoDeControl;
             Criterio = TipoCriterio.igual.ToString();
             padre.AnadirSelectorElemento(this);
         }

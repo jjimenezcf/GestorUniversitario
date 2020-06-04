@@ -32,7 +32,7 @@
         private _span: Element;
         private _datosPost: FormData;
 
-
+        public llamador: any
         public nombre: string;
         public DatosDeEntrada: any;
         public resultado: ResultadoJson;
@@ -49,7 +49,8 @@
 
         public TrasLaPeticion: Function;
         public ProcesarError: Function;
-        constructor(peticion: string, datos: any, url: string, tipo: TipoPeticion, modo: ModoPeticion, trasLaPeticion: Function, siHayError: Function) {
+        constructor(llamante: any, peticion: string, datos: any, url: string, tipo: TipoPeticion, modo: ModoPeticion, trasLaPeticion: Function, siHayError: Function) {
+            this.llamador = llamante;
             this.nombre = peticion;
             this.DatosDeEntrada = datos;
             this.resultado = undefined;

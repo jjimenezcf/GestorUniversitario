@@ -37,31 +37,15 @@
 
 
         public EjecutarAcciones(accion: string) {
-            let hayError: boolean = false;
-            try {
-                if (accion === LiteralCrt.Accion.NuevoElemento)
-                    this.Crear();
-                else
-                    if (accion === LiteralCrt.Accion.CerrarCreacion)
-                        hayError = false;
-                    else
-                        throw `la opción ${accion} no está definida`;
-            }
-            catch (error) {
-                hayError = true;
-                Mensaje(TipoMensaje.Error, error);
-            }
 
-            if (!hayError) {
-                this.BlanquearControlesDeIU(this.PanelDeCrear);
-                if (this.SeguirCreando && accion === LiteralCrt.Accion.NuevoElemento) {
-                    this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
-                    this.InicializarCanvases(this.PanelDeCrear);
-                }
-                else {
+            if (accion === Evento.Creacion.Crear)
+                this.Crear();
+            else
+                if (accion === Evento.Creacion.Cerrar)
                     this.CerrarCreacion();
-                }
-            }
+                else
+                    throw `la opción ${accion} no está definida`;
+
         }
 
         public ComenzarCreacion(panelAnterior: HTMLDivElement) {
@@ -76,7 +60,12 @@
                 this.OcultarPanel(panelAnterior);
                 this.MostrarPanel(this.PanelDeCrear);
             }
+            this.InicializarPanel();
+        }
+
+        private InicializarPanel() {
             this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
+            this.InicializarListasDinamicas(this.PanelDeCrear);
             this.InicializarCanvases(this.PanelDeCrear);
         }
 
@@ -98,17 +87,30 @@
 
         private CrearElemento(json: JSON) {
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.Crear}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Crear
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.Crear
                 , "{}"
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
-                , null
+                , this.DespuesDeCrear
                 , null
             );
             a.Ejecutar();
 
         }
+
+        private DespuesDeCrear(peticion: ApiDeAjax.DescriptorAjax) {
+            let crudCreador: CrudCreacion = peticion.llamador as CrudCreacion;
+            crudCreador.BlanquearControlesDeIU(crudCreador.PanelDeCrear);
+            if (crudCreador.SeguirCreando) {
+                crudCreador.InicializarPanel();
+            }
+            else {
+                crudCreador.CerrarCreacion();
+            }
+        }
+
     }
 
 }

@@ -183,9 +183,6 @@ a {
             background: #dcd6d6;
         }
 
-
-
-
 .contenedor-selector {
     position: relative;
     border-color: aqua;
@@ -208,11 +205,11 @@ a {
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
-        .contenedor-selector > select.propiedad-no-valid, input.propiedad-no-validaa {
+        .contenedor-selector > select.lista-de-elemento.propiedad-no-valida, input.lista-dinamica.propiedad-no-valida {
             background: #f58eb1;
         }
 
-        .contenedor-selector > select.propiedad-valida, input.propiedad-no-valida {
+        .contenedor-selector > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
             background: #dcd6d6;
         }
 

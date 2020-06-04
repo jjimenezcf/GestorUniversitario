@@ -178,7 +178,8 @@
             let idJson: string = this.DefinirFiltroPorId(id);
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${idJson}`;
 
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.LeerPorIds
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerPorIds
                 , this
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
@@ -212,7 +213,8 @@
             let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Modificar}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
 
-            let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.Modificar
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.Modificar
                 , this
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona

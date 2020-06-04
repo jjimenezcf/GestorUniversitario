@@ -107,6 +107,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case TipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
                     break;
+                case TipoControl.ListaDinamica:
+                    htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
+                    break;
                 case TipoControl.Archivo:
                     htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
                     break;
@@ -128,6 +131,30 @@ namespace MVCSistemaDeElementos.Descriptores
                                         guardar-en=¨{atributos.GuardarEn}¨>
                                         <option value=¨0¨>Seleccionar ...</option>
                                 </select>";
+
+            htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDeElemento}");
+
+            return htmlContenedor.Replace("control", htmlSelect);
+
+        }
+
+        private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
+
+            var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+                                       clase-elemento=¨{atributos.SeleccionarDe}¨ 
+                                       guardar-en=¨{atributos.GuardarEn}¨ 
+                                       carga-dinamica=¨S¨ 
+                                       oninput=¨Crud.ListaDeElementos('cargar',this)¨ 
+                                       placeholder=¨Seleccionar ...¨ 
+                                       list=¨{descriptorControl.IdHtml}-lista¨
+                                />
+                                <datalist id=¨{descriptorControl.IdHtml}-lista¨>
+                                </datalist>";
+
+            htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDinamica}");
 
             return htmlContenedor.Replace("control", htmlSelect);
 

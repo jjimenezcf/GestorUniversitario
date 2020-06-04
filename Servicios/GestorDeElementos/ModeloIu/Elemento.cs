@@ -99,7 +99,7 @@ namespace Gestor.Elementos.ModeloIu
 
         public string MostrarPropiedad { get; set; }
 
-        public bool CargaDinamica { get; set; } = false;
+        public bool CargaDinamica => TipoDeControl == TipoControl.ListaDinamica;
 
         public bool EsVisible(ModoDeTrabajo modo)
         {

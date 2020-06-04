@@ -116,12 +116,12 @@ const Ajax = {
     eventoProgreso: "progress"
 };
 
-const LiteralCrt = {
-    Accion: {
-        NuevoElemento: "nuevo-elemento",
-        CerrarCreacion: "cerrar-creacion",
-    }
-};
+//const LiteralCrt = {
+//    Accion: {
+//        NuevoElemento: "nuevo-elemento",
+//        CerrarCreacion: "cerrar-creacion",
+//    }
+//};
 
 const LiteralEdt = {
     Accion: {
@@ -177,20 +177,6 @@ const LiteralModalEdicion = {
     }
 }
 
-//const LiteralModalSeleccion = {
-//    Accion: {
-//        AbrirModalDeSeleccion: "abrir-modal-seleccion",
-//        SeleccionarElementos: "seleccionar-elementos",
-//        CerrarModalDeSeleccion: "cerrar-modal-seleccion",
-//        BuscarElementos: "buscar-elementos",
-//        FilaPulsada: "fila-pulsada",
-//        ObtenerAnteriores: "obtener-anteriores",
-//        ObtenerSiguientes: "obtener-siguientes",
-//        ObtenerUltimos: "obtener-ultimos",
-//        OrdenarPor: "ordenar-por"
-//    }
-//}
-
 const Evento = {
     ModalSeleccion: {
         Abrir: "abrir-modal-seleccion",
@@ -206,6 +192,10 @@ const Evento = {
     ListaDinamica: {
         Cargar: 'cargar',
         Seleccionar: 'seleccionar'
+    },
+    Creacion: {
+        Crear: "nuevo-elemento",
+        Cerrar: "cerrar-creacion",
     }
 }
 

@@ -79,7 +79,8 @@
 
         let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
 
-        let a = new ApiDeAjax.DescriptorAjax(Ajax.EndPoint.SubirArchivo
+        let a = new ApiDeAjax.DescriptorAjax(this
+            , Ajax.EndPoint.SubirArchivo
             , new DatosPeticionSubirArchivo(idSelectorDeArchivo)
             , url
             , ApiDeAjax.TipoPeticion.Asincrona
