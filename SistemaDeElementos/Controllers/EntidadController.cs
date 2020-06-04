@@ -62,7 +62,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 if (fichero == null)
                     throw new Exception("No se ha identificado el fichero");
-               
+
                 var rutaDeDescarga = $@".\SistemaDeElementos\wwwroot\Archivos";
                 var rutaFichero = $@".{rutaDeDescarga}\{fichero.FileName}";
 
@@ -75,7 +75,7 @@ namespace MVCSistemaDeElementos.Controllers
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "fichero subido";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
@@ -169,16 +169,22 @@ namespace MVCSistemaDeElementos.Controllers
         {
             var r = new Resultado();
 
+            var tran = GestorDeElementos.IniciarTransaccion();
             try
             {
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
-                var elemento = GestorDeElementos.LeerElementoPorId(listaIds[0]);
-                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
+                foreach (var id in listaIds)
+                {
+                    var elemento = GestorDeElementos.LeerElementoPorId(id);
+                    GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
+                }
                 r.Estado = EstadoPeticion.Ok;
-                r.Mensaje = "Registro eliminado";
+                r.Mensaje = listaIds.Count > 1 ? "Registros eliminados" : "Registro eliminado";
+                GestorDeElementos.Commit(tran);
             }
             catch (Exception e)
             {
+                GestorDeElementos.Rollback(tran);
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = GestorDeErrores.Mostrar(excepcion: e) ? e.Message : "No se ha podido eliminar";
@@ -314,13 +320,13 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         //END-POINT: Desde CrudBase.ts
-        public JsonResult epCargaDinamica(string claseElemento,int posicion, int cantidad, string filtro)
+        public JsonResult epCargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
             var r = new Resultado();
             dynamic elementos;
             try
             {
-                elementos = CargaDinamica(claseElemento,posicion, cantidad, filtro);
+                elementos = CargaDinamica(claseElemento, posicion, cantidad, filtro);
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
             }

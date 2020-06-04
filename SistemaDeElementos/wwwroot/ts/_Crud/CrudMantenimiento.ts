@@ -77,8 +77,14 @@
         }
 
         public BorrarElemento() {
-            let id: number = this.InfoSelector.Seleccionados[0] as number;
-            let url: string = this.DefinirPeticionDeBorrado(id);
+            let ids: string = "";
+            for (var i = 0; i < this.InfoSelector.Seleccionados.length; i++) {
+                if (ids !== "")
+                    ids = ids + ",";
+                ids = ids + this.InfoSelector.Seleccionados[i];
+            }
+            this.InfoSelector.Seleccionados[0] as number;
+            let url: string = this.DefinirPeticionDeBorrado(ids);
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.Borrar
@@ -178,11 +184,11 @@
             this.Buscar(posicion);
         }
 
-        private DefinirPeticionDeBorrado(id: number): string {
-            let idJson: JSON = JSON.parse(`[${id}]`);
+        private DefinirPeticionDeBorrado(ids: string): string {
+            let idsJson: JSON = JSON.parse(`[${ids}]`);
             var controlador = this.Navegador.getAttribute(Atributo.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
-            let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idJson)}`;
+            let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idsJson)}`;
             let peticion: string = url + '?' + parametros;
             return peticion;
         }

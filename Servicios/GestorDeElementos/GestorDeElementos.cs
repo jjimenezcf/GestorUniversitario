@@ -188,6 +188,20 @@ namespace Gestor.Elementos
 
         #region Métodos de persistencia
 
+        public bool IniciarTransaccion()
+        {
+            return Contexto.IniciarTransaccion(); 
+        }
+                
+        public void Rollback(bool transaccion)
+        {
+            Contexto.Rollback(transaccion);
+        }
+        public void Commit(bool transaccion)
+        {
+             Contexto.Commit(transaccion);
+        }
+
         public void PersistirElementosDto(List<TElemento> elementosDto, ParametrosDeNegocio parametros)
         {
             foreach (var elementoDto in elementosDto)
