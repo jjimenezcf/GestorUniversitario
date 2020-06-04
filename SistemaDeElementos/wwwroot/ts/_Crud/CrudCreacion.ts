@@ -94,7 +94,7 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.DespuesDeCrear
-                , null
+                , this.SiHayErrorTrasPeticionAjax
             );
             a.Ejecutar();
 

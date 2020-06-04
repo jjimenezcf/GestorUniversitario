@@ -10,8 +10,7 @@ namespace Gestor.Elementos.Seguridad
     }
 
     [IUDto(AnchoEtiqueta = 20
-          ,AnchoSeparador = 5
-          ,EdicionEnModal = true)]
+          ,AnchoSeparador = 5)]
     public class PermisoDto : Elemento
     {
         [IUPropiedad(

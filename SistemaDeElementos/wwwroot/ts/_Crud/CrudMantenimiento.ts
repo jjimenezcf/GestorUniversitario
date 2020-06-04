@@ -14,6 +14,10 @@
 
         public Modales: Array<ModalSeleccion> = new Array<ModalSeleccion>();
 
+        private get ModalDeBorrado(): HTMLDivElement {
+            return document.getElementById(this.idModalBorrar) as HTMLDivElement;
+        }
+
         constructor(idPanelMnt: string) {
             super(`${idPanelMnt}_grid`);
 
@@ -62,33 +66,41 @@
 
         private AbrirModalDeBorrar() {
             this.ModoTrabajo = ModoTrabajo.borrando;
-            var ventana = document.getElementById(this.idModalBorrar);
-            ventana.style.display = 'block';
+            this.ModalDeBorrado.style.display = 'block';
+            let mensaje: HTMLInputElement = document.getElementById(`${this.idModalBorrar}-mensaje`) as HTMLInputElement;
+            if (this.InfoSelector.Cantidad > 1) {
+                mensaje.value = "Seguro desea borrar todos los elementos seleccionados";
+            }
+            else {
+                mensaje.value = "Seguro desea borrar el elemento seleccionado";
+            }
         }
 
         public BorrarElemento() {
-            this.CerrarModalDeBorrado();
             let id: number = this.InfoSelector.Seleccionados[0] as number;
             let url: string = this.DefinirPeticionDeBorrado(id);
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.Borrar
-                , this
-                , url
-                , ApiDeAjax.TipoPeticion.Sincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.RecargarGrid
                 , null
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.DespuesDeBorrar
+                , this.SiHayErrorTrasPeticionAjax
             );
 
-            try {
-                a.Ejecutar();
-            }
-            catch (error) {
-                Mensaje(TipoMensaje.Error, error);
-                return;
-            }
+            a.Ejecutar();
+
         }
+
+        private DespuesDeBorrar(peticion: ApiDeAjax.DescriptorAjax) {
+            let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;            
+            mantenimiento.CerrarModalDeBorrado();
+            mantenimiento.InfoSelector.QuitarTodos();
+            mantenimiento.Buscar(0);
+        }
+
 
         public CerrarModalDeBorrado() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
@@ -175,11 +187,6 @@
             return peticion;
         }
 
-        private RecargarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
-            mnt.InfoSelector.QuitarTodos();
-            mnt.Buscar(0);
-        }
 
         public Buscar(posicion: number) {
             if (this.Navegador === null)
@@ -233,7 +240,7 @@
             if (EsNula(htmlSelector.value))
                 modal.InicializarModal();
             else
-               modal.TextoSelectorCambiado(htmlSelector.value);
+                modal.TextoSelectorCambiado(htmlSelector.value);
         }
 
         public CargarListaDinamica(selector: HTMLInputElement) {

@@ -19,21 +19,22 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RendelModal()
         {
             var htmlModal =$@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
-                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		<div id=¨{IdHtml}-contenido¨ class=¨cotenido-modal¨>
+                              		    <div id=¨{IdHtml}-cabecera¨ class=¨cotenido-cabecera¨>
                               		    	<h2>Confirmación de borrado</h2>
                                         </div>
-                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
-                              			    <input type=¨text¨ id=¨{IdHtml}_mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>
+                              		    <div id=¨{IdHtml}-cuerpo¨ class=¨cotenido-cuerpo¨>
+                              			    <input type=¨text¨ id=¨{IdHtml}-mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeBorrar('borrar-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeBorrar('borrar-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')¨ />
                                         </div>
                                       </div>
                               </div>";
             return htmlModal;
         }
+
 
         public override string RenderControl()
         {

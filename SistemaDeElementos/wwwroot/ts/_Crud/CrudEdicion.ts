@@ -79,8 +79,6 @@
                 switch (accion) {
                     case Evento.Edicion.Modificar: {
                         this.Modificar();
-                        if (this.TotalSeleccionados == 1)
-                            cerrarEdicion = true;
                         break;
                     }
                     case Evento.Edicion.Cerrar: {
@@ -183,10 +181,10 @@
                 , Ajax.EndPoint.LeerPorIds
                 , null
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.MapearElementoDevuelto
-                , null
+                , this.SiHayErrorTrasPeticionAjax
             );
 
             a.Ejecutar();
@@ -220,10 +218,18 @@
                 , url
                 , ApiDeAjax.TipoPeticion.Sincrona
                 , ApiDeAjax.ModoPeticion.Get
-                , null
-                , null
+                , this.DespuesDeModificar
+                , this.SiHayErrorTrasPeticionAjax
             );
             a.Ejecutar();
         }
+
+        private DespuesDeModificar(peticion: ApiDeAjax.DescriptorAjax) {
+            let crudEdicion: CrudEdicion = peticion.llamador as CrudEdicion;
+            if (crudEdicion.TotalSeleccionados === 1) {
+                crudEdicion.CerrarEdicion()
+            }
+        }
+
     }
 }

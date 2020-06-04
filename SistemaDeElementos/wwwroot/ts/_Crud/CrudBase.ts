@@ -192,6 +192,10 @@
 
         }
 
+        protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {
+            Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+        }
+
         // funciones para mapear un elemento Json a los controles de un panel
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
@@ -524,7 +528,7 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.AnadirOpciones
-                , null
+                , this.SiHayErrorTrasPeticionAjax
             );
 
             a.Ejecutar();
@@ -549,10 +553,10 @@
                 , Ajax.EndPoint.CargarLista
                 , datosDeEntrada
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.MapearElementosEnLista
-                , null
+                , this.SiHayErrorTrasPeticionAjax
             );
 
             a.Ejecutar();
