@@ -52,9 +52,15 @@ namespace MVCSistemaDeElementos.Controllers
             return RedirectToAction(GestorDelCrud.Descriptor.Vista);
         }
 
-        //END-POIN: desde el ApiDeArchivos
+        /// <summary>
+        /// END-POIN: desde el ApiDeArchivos. Sube un fichero al gestor documental o a la ruta indicada
+        /// </summary>
+        /// <param name="fichero">fichero a subir</param>
+        /// <param name="rutaDestino">si no se sube al gestor documenta, nombre de la ruta donde se almacenará</param>
+        /// <param name="extensionesValidas">extensiones que ha de tener el archivo a subir</param>
+        /// <returns>0 si no ha subido al gestor documental, o id del archivo subido al gestor documental</returns>
         [HttpPost]
-        public JsonResult epSubirArchivo(IFormFile fichero)
+        public JsonResult epSubirArchivo(IFormFile fichero, string rutaDestino, string extensionesValidas)
         {
             var r = new Resultado();
 
@@ -63,15 +69,33 @@ namespace MVCSistemaDeElementos.Controllers
                 if (fichero == null)
                     throw new Exception("No se ha identificado el fichero");
 
-                var rutaDeDescarga = $@".\SistemaDeElementos\wwwroot\Archivos";
-                var rutaFichero = $@".{rutaDeDescarga}\{fichero.FileName}";
+                ValidarExtension(fichero, extensionesValidas);
+                var rutaBase = @"..\SistemaDeElementos\wwwroot";
+                var rutaDeDescarga = $@"{rutaBase}\Archivos";
+                var rutaConFichero = $@"{rutaDeDescarga}\{fichero.FileName}";
 
-                using (var stream = new FileStream(rutaFichero, FileMode.Create))
+                using (var stream = new FileStream(rutaConFichero, FileMode.Create))
                 {
                     fichero.CopyTo(stream);
                 }
 
-                r.Datos = Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaFichero, GestorDeElementos.Mapeador);
+                if (rutaDestino.IsNullOrEmpty())
+                {
+                    r.Datos = Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaConFichero, GestorDeElementos.Mapeador);
+                }
+                else
+                {
+                    rutaDestino = $@"{rutaBase}{rutaDestino.Replace("/", @"\")}";
+
+                    if (!Directory.Exists(rutaDestino))
+                        Directory.CreateDirectory(rutaDestino);
+
+                    if (!System.IO.File.Exists($@"{rutaDestino}\{fichero.FileName}"))
+                        System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{fichero.FileName}");
+                    
+                    r.Datos = 0;
+                }
+
                 r.Estado = EstadoPeticion.Ok;
                 r.Mensaje = "fichero subido";
             }
@@ -87,6 +111,32 @@ namespace MVCSistemaDeElementos.Controllers
 
         }
 
+        private void ValidarExtension(IFormFile fichero, string extensiones)
+        {
+            if (extensiones.IsNullOrEmpty() || extensiones.EndsWith("*"))
+                return;
+
+            if (EsImagen(fichero) && (extensiones.Contains("png") 
+                                   || extensiones.Contains("jpg")
+                                   || extensiones.Contains("svg")
+                                   ))
+                return;
+
+            throw new Exception($"Para el tipo de fichero {fichero.ContentType} sólo se aceptan '{extensiones}'");
+
+        }
+
+        private bool EsImagen(IFormFile fichero)
+        {
+            return fichero.ContentType == "image/jpeg"
+                || fichero.ContentType == "image/png"
+                || fichero.ContentType == "image/gif"
+                || fichero.ContentType == "image/jpg"
+                || fichero.ContentType == "image/vnd.Microsoft.icon"
+                || fichero.ContentType == "image/x-icon"
+                || fichero.ContentType == "image/vnd.djvu"
+                || fichero.ContentType == "image/svg+xml";
+        }
 
         //END-POINT: Desde CrudCreacion.ts
         public JsonResult epCrearElemento(string elementoJson)

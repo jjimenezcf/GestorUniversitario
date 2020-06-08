@@ -104,7 +104,8 @@ namespace Gestor.Elementos.ModeloIu
 
         public string UrlDelArchivo { get; set; }
 
-        public string TiposDeFichero { get; set; } = "*.*";
+        public string ExtensionesValidas { get; set; } = "*.*";
+        public object RutaDestino { get; set; }
 
         public bool EsVisible(ModoDeTrabajo modo)
         {

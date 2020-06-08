@@ -79,7 +79,7 @@ namespace Gestor.Elementos.Entorno
             Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),
             TipoDeControl= TipoControl.Archivo,
-            TiposDeFichero = ".png, .jpg",
+            ExtensionesValidas = ".png, .jpg",
             UrlDelArchivo = nameof(Foto),
             Fila = 4,
             Columna = 0)]

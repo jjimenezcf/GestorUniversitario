@@ -27,7 +27,9 @@ const AtributoSelectorArchivo = {
     idArchivo: "id-archivo",
     canvasVinculado: "canvas-vinculado",
     imagenVinculada: "imagen-vinculado",
-    barraVinculada: "barra-vinculada"
+    barraVinculada: "barra-vinculada",
+    rutaDestino: "ruta-destino",
+    extensionesValidas: "accept"
 }
 
 const ModoOrdenacion = {
@@ -107,7 +109,9 @@ const Ajax = {
         usuario: "usuario",
         idsJson: "idsJson",
         claseElemento: "claseElemento",
-        fichero: "fichero"
+        fichero: "fichero",
+        rutaDestino: "rutaDestino",
+        extensiones: "extensionesValidas"
     },
     jsonResultError: 1,
     jsonResultOk: 0,

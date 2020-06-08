@@ -54,7 +54,7 @@
         let ficheros = htmlFicheros.files;
 
         let filePath: string = ficheros[0].name;
-        let extensiones: string = htmlFicheros.getAttribute("accept");
+        let extensiones: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.extensionesValidas);
 
         var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
         if (extensiones.indexOf(ext) < 0) {
@@ -100,6 +100,13 @@
 
         let datosPost = new FormData();
         datosPost.append(Ajax.Param.fichero, ficheros[0]);
+
+        let rutaDestino: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.rutaDestino);
+        datosPost.append(Ajax.Param.rutaDestino, rutaDestino);
+
+        let extensionesValidas: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.extensionesValidas);
+        datosPost.append(Ajax.Param.extensiones, extensionesValidas);
+
         a.DatosPost = datosPost;
         a.IdBarraDeProceso = idBarra;
 

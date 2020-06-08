@@ -144,6 +144,12 @@
                 this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición no definida`;
                 console.error(`No está definida la petición con los parámetros indicados: ${this.Url}`);
             }
+            else if (this.Request.status === 500) {
+
+                this.resultado = new ResultadoJson();
+                this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición ambigüa`;
+                console.error(`Petición mal definida: ${this.Url}. ${this.Request.response}`);
+            }
             else {
                 this.resultado = JSON.parse(this.Request.response);
                 console.error(this.resultado.consola);

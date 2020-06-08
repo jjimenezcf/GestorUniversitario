@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
+
+
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5)]
     public class MenuDto : Elemento
     {
+
         [IUPropiedad(
             Etiqueta = "Id del menú padre",
             Visible = false
@@ -25,7 +28,8 @@ namespace Gestor.Elementos.Entorno
             Fila = 0,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15
+            PorAnchoMnt = 15,
+            Obligatorio = false
             )
         ]
         public  string Padre { get; set; }
@@ -47,7 +51,8 @@ namespace Gestor.Elementos.Entorno
             Etiqueta = "Icono",
             Ayuda = "Seleccione un icono",
             TipoDeControl = TipoControl.UrlDeArchivo,
-            TiposDeFichero = ".svg",
+            ExtensionesValidas = ".svg",
+            RutaDestino = "/images/menu",
             Tipo = typeof(string),
             Fila = 2,
             Columna = 0,
@@ -73,11 +78,19 @@ namespace Gestor.Elementos.Entorno
         ]
         public List<MenuDto> Submenus { get; set; }
 
+
         [IUPropiedad(
-            Visible = false
+            TipoDeControl = TipoControl.Editor,
+            Visible = true,
+            Etiqueta = nameof(VistaMvc),
+            EditableAlEditar = false,
+            VisibleAlCrear = false,
+            Fila = 4,
+            Columna = 0,
+            Obligatorio = false
             )
         ]
-        public VistaMvcDto VistaMvc { get; set; }
+        public string VistaMvc { get; set; }
 
         [IUPropiedad(
             Visible = false

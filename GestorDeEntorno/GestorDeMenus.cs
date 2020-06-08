@@ -86,7 +86,7 @@ namespace Gestor.Elementos.Entorno
             {
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
-                .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc));
+                .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => $"{dtm.VistaMvc.Controlador}.{dtm.VistaMvc.Accion}"));
             }
         }
 

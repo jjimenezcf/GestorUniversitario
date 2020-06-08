@@ -193,7 +193,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               type=¨file¨ 
                               name=¨fichero¨  
                               style=¨display: none;¨
-                              accept=¨{atributos.TiposDeFichero}¨
+                              accept=¨{atributos.ExtensionesValidas}¨
+                              ruta-destino=¨{atributos.RutaDestino}¨
                               canvas-vinculado = ¨canvas-{descriptorControl.IdHtml}¨  
                               imagen-vinculada = ¨img-{descriptorControl.IdHtml}¨   
                               barra-vinculada = ¨barra-{descriptorControl.IdHtml}¨  
@@ -212,7 +213,10 @@ namespace MVCSistemaDeElementos.Descriptores
                    </td>
                    <td class=¨td-archivo-subir¨>
                        <div style=¨display: none;¨>
-                           <img id=¨img-{descriptorControl.IdHtml}¨ tipo=¨{TipoControl.VisorDeArchivo}¨  propiedad=¨{(atributos.TipoDeControl == TipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ src=¨¨>
+                           <img id=¨img-{descriptorControl.IdHtml}¨
+                                    tipo=¨{TipoControl.VisorDeArchivo}¨  
+                                    propiedad=¨{(atributos.TipoDeControl == TipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
+                                    src=¨¨>
                        </div>
                    </td>
                  </tr>
