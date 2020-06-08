@@ -247,52 +247,67 @@
 
 
         private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
-            this.MapearPropiedaAlEditor(panel, propiedad, valor);
-            this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor);
-            this.MapearPropiedadEnLaListaDinamica(panel, propiedad, valor);
-            this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor);
+
+            if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
+                return;
+
+           if (this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor))
+                return;
+
+            if (this.MapearPropiedadEnLaListaDinamica(panel, propiedad, valor))
+                return;
+
+            if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
+                return;
+
             this.MapearPropiedadAlVisorDeImagen(panel, propiedad, valor);
 
         }
 
-        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any) {
+        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any): Boolean {
             let editor: HTMLInputElement = this.BuscarEditor(panel, propiedad);
 
             if (editor === null)
-                return;
+                return false;
 
             editor.value = valor;
+            return true;
         }
 
-        private MapearPropiedadAlSelectorDeElemento(panel: HTMLDivElement, propiedad: string, valor: any) {
+        private MapearPropiedadAlSelectorDeElemento(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let select: HTMLSelectElement = this.BuscarSelect(panel, propiedad);
 
             if (select === null)
-                return;
+                return false;
 
             for (var i = 0; i < select.options.length; i++) {
                 if (select.options[i].label === valor) {
                     select.selectedIndex = i;
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        private MapearPropiedadEnLaListaDinamica(panel: HTMLDivElement, propiedad: string, valor: any) {
+        private MapearPropiedadEnLaListaDinamica(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let input: HTMLInputElement = this.BuscarListaDinamica(panel, propiedad);
             if (input === null)
-                return;
+                return false;
+
             input.value = valor;
+            return true;
         }
 
 
-        private MapearPropiedadAlSelectorDeArchivo(panel: HTMLDivElement, propiedad: string, valor: any) {
+        private MapearPropiedadAlSelectorDeArchivo(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let selector: HTMLInputElement = this.BuscarSelectorDeArchivo(panel, propiedad);
 
             if (selector === null)
-                return;
+                return false;
 
             selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor);
+            return true;
         }
 
         private MapearPropiedadAlVisorDeImagen(panel: HTMLDivElement, propiedad: string, valor: any) {
@@ -323,7 +338,7 @@
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
         protected BuscarEditor(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let editores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+            let editores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}='${TipoControl.Editor}']`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < editores.length; i++) {
                 var control = editores[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -346,7 +361,7 @@
         }
 
         protected BuscarVisorDeImagen(controlPadre: HTMLDivElement, propiedadDto: string): HTMLImageElement {
-            let visor: NodeListOf<HTMLImageElement> = controlPadre.querySelectorAll(`img[tipo="${TipoControl.VisorDeArchivo}"]`) as NodeListOf<HTMLImageElement>;
+            let visor: NodeListOf<HTMLImageElement> = controlPadre.querySelectorAll(`img[${Atributo.tipo}='${TipoControl.VisorDeArchivo}']`) as NodeListOf<HTMLImageElement>;
             for (var i = 0; i < visor.length; i++) {
                 var control = visor[i] as HTMLImageElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -369,7 +384,7 @@
         }
 
         protected BuscarSelect(controlPadre: HTMLDivElement, propiedadDto: string): HTMLSelectElement {
-            let select: HTMLCollectionOf<HTMLSelectElement> = controlPadre.getElementsByTagName("select") as HTMLCollectionOf<HTMLSelectElement>;
+            let select: HTMLCollectionOf<HTMLSelectElement> = controlPadre.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
                 var control = select[i] as HTMLSelectElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -382,7 +397,7 @@
         protected BuscarListaDinamica(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
 
             let inputs: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
-
+            
             for (var i = 0; i < inputs.length; i++) {
                 var control = inputs[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);

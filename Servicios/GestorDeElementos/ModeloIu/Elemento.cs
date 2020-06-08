@@ -14,6 +14,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string ListaDinamica = "lista-dinamica";
         public const string Editor = "editor";
         public const string Archivo = "archivo";
+        public const string UrlDeArchivo = "url-archivo";
         public const string VisorDeArchivo = "visor-archivo";
         public const string ImagenDelCanvas = "imagen-de-canva";
         public const string Desplegable = "desplegable";
@@ -64,7 +65,7 @@ namespace Gestor.Elementos.ModeloIu
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
         public bool Visible { get; set; } = true;
-        public bool VisibleEnGrid { get { return _visibleEnGrid && Visible; } set { _visibleEnGrid = value; } }
+        public bool VisibleEnGrid { get { return _visibleEnGrid && Visible && TipoDeControl != TipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
         public bool VisibleAlCrear { get; set; } = true;
         public bool VisibleAlEditar { get; set; } = true;
         public bool VisibleAlConsultar { get; set; } = true;
@@ -100,6 +101,10 @@ namespace Gestor.Elementos.ModeloIu
         public string MostrarPropiedad { get; set; }
 
         public bool CargaDinamica => TipoDeControl == TipoControl.ListaDinamica;
+
+        public string UrlDelArchivo { get; set; }
+
+        public string TiposDeFichero { get; set; } = "*.*";
 
         public bool EsVisible(ModoDeTrabajo modo)
         {

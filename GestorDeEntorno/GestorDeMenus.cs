@@ -140,6 +140,15 @@ namespace Gestor.Elementos.Entorno
             return registros.JoinConMenus(joins, parametros);
         }
 
+        protected override void DespuesDeMapearElemento(MenuDtm registro, MenuDto elemento, ParametrosDeMapeo parametros)
+        {
+            base.DespuesDeMapearElemento(registro, elemento, parametros);
+            if (registro.Icono != null)
+            {
+                elemento.Icono = $@"/images/menu/{elemento.Icono}";
+            }
+        }
+
         public List<MenuDto> LeerPadres()
         {
             var registros = Contexto

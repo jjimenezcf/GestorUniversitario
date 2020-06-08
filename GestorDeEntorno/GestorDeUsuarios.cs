@@ -171,7 +171,7 @@ namespace Gestor.Elementos.Entorno
             base.DespuesDeMapearElemento(registro, elemento, parametros);
             if (registro.Archivo != null)
             {
-                elemento.UrlDelArchivo = Utilidades.DescargarArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
+                elemento.Foto = Utilidades.DescargarArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
             }
         }
 

@@ -45,7 +45,9 @@ namespace Gestor.Elementos.Entorno
 
         [IUPropiedad(
             Etiqueta = "Icono",
-            Ayuda = "icono de presentación",
+            Ayuda = "Seleccione un icono",
+            TipoDeControl = TipoControl.UrlDeArchivo,
+            TiposDeFichero = ".svg",
             Tipo = typeof(string),
             Fila = 2,
             Columna = 0,

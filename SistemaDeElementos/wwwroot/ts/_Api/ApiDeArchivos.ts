@@ -53,6 +53,15 @@
         let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
         let ficheros = htmlFicheros.files;
 
+        let filePath: string = ficheros[0].name;
+        let extensiones: string = htmlFicheros.getAttribute("accept");
+
+        var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+        if (extensiones.indexOf(ext) < 0) {
+            Mensaje(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
+            return;
+        }
+
         var img = new Image();
         img.src = URL.createObjectURL(ficheros[0]);
 

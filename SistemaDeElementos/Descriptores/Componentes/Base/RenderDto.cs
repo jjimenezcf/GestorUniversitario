@@ -91,10 +91,12 @@ namespace MVCSistemaDeElementos.Descriptores
                            name=¨lbl_propiedad¨
                            class=¨div-lbl-propiedad¨ 
                            style=¨width: {ancho}% { (descriptorControl.atributos.TipoDeControl == TipoControl.Archivo ? "; margin-top: 11px":"")}¨>
-                         {descriptorControl.atributos.Etiqueta}: 
+                           <label for=¨{descriptorControl.IdHtml}¨>{descriptorControl.atributos.Etiqueta}:</label>
                        </div>
                       ";
         }
+
+        //
 
         private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
@@ -111,6 +113,9 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.Archivo:
+                    htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
+                    break;
+                case TipoControl.UrlDeArchivo:
                     htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
                     break;
                 default: 
@@ -188,6 +193,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               type=¨file¨ 
                               name=¨fichero¨  
                               style=¨display: none;¨
+                              accept=¨{atributos.TiposDeFichero}¨
                               canvas-vinculado = ¨canvas-{descriptorControl.IdHtml}¨  
                               imagen-vinculada = ¨img-{descriptorControl.IdHtml}¨   
                               barra-vinculada = ¨barra-{descriptorControl.IdHtml}¨  
@@ -206,7 +212,7 @@ namespace MVCSistemaDeElementos.Descriptores
                    </td>
                    <td class=¨td-archivo-subir¨>
                        <div style=¨display: none;¨>
-                           <img id=¨img-{descriptorControl.IdHtml}¨ tipo=¨{TipoControl.VisorDeArchivo}¨  propiedad=¨urldelarchivo¨ src=¨¨>
+                           <img id=¨img-{descriptorControl.IdHtml}¨ tipo=¨{TipoControl.VisorDeArchivo}¨  propiedad=¨{(atributos.TipoDeControl == TipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ src=¨¨>
                        </div>
                    </td>
                  </tr>

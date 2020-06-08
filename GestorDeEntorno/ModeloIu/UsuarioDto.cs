@@ -79,6 +79,8 @@ namespace Gestor.Elementos.Entorno
             Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),
             TipoDeControl= TipoControl.Archivo,
+            TiposDeFichero = ".png, .jpg",
+            UrlDelArchivo = nameof(Foto),
             Fila = 4,
             Columna = 0)]
         public int? IdArchivo { get; set; }
@@ -86,7 +88,7 @@ namespace Gestor.Elementos.Entorno
         [IUPropiedad(
             TipoDeControl = TipoControl.ImagenDelCanvas
             )]
-        public string UrlDelArchivo { get; set; }
+        public string Foto { get; set; }
 
     }
 
