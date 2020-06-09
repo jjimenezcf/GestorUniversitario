@@ -5,6 +5,10 @@ using AutoMapper;
 using Utilidades;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
+using AutoMapper.Configuration.Annotations;
+using System;
+using Gestor.Errores;
+using AutoMapper.Configuration.Conventions;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -87,6 +91,10 @@ namespace Gestor.Elementos.Entorno
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
                 .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => $"{dtm.VistaMvc.Controlador}.{dtm.VistaMvc.Accion}"));
+
+                CreateMap<MenuDto, MenuDtm>()
+                    .ForMember(dtm => dtm.IdVistaMvc, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.VistaMvc, dto => dto.Ignore());
             }
         }
 
@@ -106,16 +114,6 @@ namespace Gestor.Elementos.Entorno
 
             joins.Add(new ClausulaDeJoin { Dtm = typeof(MenuDtm) });
             joins.Add(new ClausulaDeJoin { Dtm = typeof(VistaMvcDtm) });
-        }
-
-        protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, ParametrosDeNegocio opciones)
-        {
-            base.DespuesDeMapearRegistro(elemento, registro, opciones);
-            if (TipoOperacion.Insertar == opciones.Tipo)
-            {
-                registro.Padre = null;
-                registro.VistaMvc = null;
-            }
         }
 
         protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -140,6 +138,7 @@ namespace Gestor.Elementos.Entorno
             return registros.JoinConMenus(joins, parametros);
         }
 
+
         protected override void DespuesDeMapearElemento(MenuDtm registro, MenuDto elemento, ParametrosDeMapeo parametros)
         {
             base.DespuesDeMapearElemento(registro, elemento, parametros);
@@ -147,6 +146,52 @@ namespace Gestor.Elementos.Entorno
             {
                 elemento.Icono = $@"/images/menu/{elemento.Icono}";
             }
+        }
+
+        protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, ParametrosDeNegocio opciones)
+        {
+            base.DespuesDeMapearRegistro(elemento, registro, opciones);
+
+            registro.IdVistaMvc = LeerVistaMvc(vistaMvc: elemento.VistaMvc);
+
+            registro.Activo = true;
+
+            if (TipoOperacion.Insertar == opciones.Tipo)
+            {
+                registro.Padre = null;
+                registro.VistaMvc = null;
+            }
+        }
+
+        private int? LeerVistaMvc(string vistaMvc)
+        {
+            if (vistaMvc.IsNullOrEmpty())
+                return null;
+
+            var partes = vistaMvc.Split(".");
+            
+            if (partes.Length != 2)
+                GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
+            
+            var gestor = GestorDeVistasMvc.Gestor(Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>
+                {
+                    new ClausulaDeFiltrado { Propiedad = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
+                    new ClausulaDeFiltrado { Propiedad = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
+                };
+
+            var vistas = gestor.LeerRegistros(0, -1, filtros);
+            if (vistas.Count != 1)
+            {
+                if (vistas.Count == 0)
+                    GestorDeErrores.Emitir($"No se ha localizado la vistaMvc {partes[0]}.{partes[1]}");
+                else
+                    GestorDeErrores.Emitir($"Se han localizado {vistas.Count} vistasMvc para {partes[0]}.{partes[1]}");
+            }
+
+            return vistas[0].Id;
+
+
         }
 
         public List<MenuDto> LeerPadres()
@@ -166,15 +211,10 @@ namespace Gestor.Elementos.Entorno
         public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
 
-            var contexto = ContextoSe.ObtenerContexto();
-            var gestor = (GestorDeArbolDeMenu)Generador<ContextoSe, IMapper>.CachearGestor("GestorDeEntorno"
-                                                           , nameof(GestorDeArbolDeMenu)
-                                                           , () => new GestorDeArbolDeMenu(contexto, mapeador));
+            object gestor = CrearGestor<GestorDeArbolDeMenu>(() => new GestorDeArbolDeMenu(() => ContextoSe.ObtenerContexto(), mapeador));
 
-
-            return gestor.LeerArbolDeMenu();
+            return ((GestorDeArbolDeMenu)gestor).LeerArbolDeMenu();
         }
-
 
     }
 

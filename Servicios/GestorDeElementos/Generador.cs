@@ -28,9 +28,11 @@ namespace Gestor.Elementos
             return cacheObjetos[indice];
         }
 
-        public static object CachearGestor(string dll, string nombreClase, Func<object> creador)
+        public static object CachearGestor(Type tipo, Func<object> creador)
         {
-            if (!dll.EndsWith(".dll")) dll = dll + ".dll";
+            var dll = tipo.Assembly.CodeBase;
+            var nombreClase = tipo.Name;
+            //if (!dll.EndsWith(".dll")) dll = dll + ".dll";
             var indice = dll + '-' + nombreClase;
 
             if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)

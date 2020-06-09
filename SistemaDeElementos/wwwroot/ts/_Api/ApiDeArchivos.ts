@@ -116,8 +116,14 @@
     function TrasSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
         let selector: HTMLInputElement = datos.Selector();
+
         selector.removeAttribute(AtributoSelectorArchivo.idArchivo);
-        selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
+        selector.removeAttribute(AtributoSelectorArchivo.nombreArchivo);
+        let tipo: string = selector.getAttribute(Atributo.tipo);
+        if ( tipo === TipoControl.Archivo)
+            selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
+        if (tipo === TipoControl.UrlDeArchivo)
+            selector.setAttribute(AtributoSelectorArchivo.nombreArchivo, peticion.resultado.datos);
     }
 
     function SiHayErrorAlSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {

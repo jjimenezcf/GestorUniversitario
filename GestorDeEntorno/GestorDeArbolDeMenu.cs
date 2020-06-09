@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
@@ -16,6 +17,13 @@ namespace Gestor.Elementos.Entorno
         }
 
         public GestorDeArbolDeMenu(ContextoSe contexto, IMapper mapeador)
+            : base(contexto, mapeador)
+        {
+
+        }
+
+
+        public GestorDeArbolDeMenu(Func<ContextoSe> contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 

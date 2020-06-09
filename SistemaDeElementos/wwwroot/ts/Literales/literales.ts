@@ -8,6 +8,12 @@ const Literal = {
     id: "id"
 };
 
+const ModoOrdenacion = {
+    ascedente: "ascendente",
+    descendente: "descendente",
+    sinOrden: "sin-orden"
+}
+
 const Atributo = {
     propiedad: "propiedad",
     criterio: "criterio-de-filtro",
@@ -20,23 +26,21 @@ const Atributo = {
     totalEnBd: "totalEnBd",
     modoOrdenacion: "modo-ordenacion",
     expresionElemento: "expresion-elemento",
-    tipo: "tipo"
+    tipo: "tipo",
+    imagenVinculada:"imagen-vinculada"
 }
 
 const AtributoSelectorArchivo = {
     idArchivo: "id-archivo",
+    nombreArchivo: "nombre-archivo",
     canvasVinculado: "canvas-vinculado",
-    imagenVinculada: "imagen-vinculado",
+    imagenVinculada: "imagen-vinculada",
     barraVinculada: "barra-vinculada",
     rutaDestino: "ruta-destino",
-    extensionesValidas: "accept"
+    extensionesValidas: "accept",
+    urlDeArchivo: "src"
 }
 
-const ModoOrdenacion = {
-    ascedente: "ascendente",
-    descendente: "descendente",
-    sinOrden: "sin-orden"
-}
 const AtributoSelector = {
     popiedadBuscar : "propiedadBuscar",
     criterioBuscar: "criterioBuscar",
@@ -195,7 +199,8 @@ const TipoControl = {
     ListaDeElementos: "lista-de-elemento",
     ListaDinamica: "lista-dinamica",
     Archivo: "archivo",
-    VisorDeArchivo: "visor-archivo"
+    VisorDeArchivo: "visor-archivo",
+    UrlDeArchivo: "url-archivo"
 };
 
 const ModoTrabajo = {

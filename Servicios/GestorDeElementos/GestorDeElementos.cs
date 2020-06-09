@@ -127,6 +127,13 @@ namespace Gestor.Elementos
 
         private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros;
 
+
+        public static object CrearGestor<T>(Func<object> creador)
+        {
+            var gestor = Generador<ContextoSe, IMapper>.CachearGestor(typeof(T), creador);
+            return gestor;
+        }
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -134,11 +141,18 @@ namespace Gestor.Elementos
             IniciarClase(contexto);
         }
 
+
+        public GestorDeElementos(Func<TContexto> generadorDeContexto, IMapper mapeador)
+        {
+            Mapeador = mapeador;
+
+            IniciarClase(generadorDeContexto());
+        }
+
         public void AsignarGestores(GestorDeErrores gestorErrores)
         {
             _gestorDeErrores = gestorErrores;
         }
-
 
         protected virtual void IniciarClase(TContexto contexto)
         {

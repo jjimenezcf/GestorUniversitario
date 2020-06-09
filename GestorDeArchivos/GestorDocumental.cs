@@ -24,16 +24,21 @@ namespace Gestor.Elementos.Archivos
         public static int SubirArchivo(string rutaConFichero, IMapper mapeador)
         {
 
-            var contexto = ContextoSe.ObtenerContexto();
-             
-            var gestorDocumental = (GestorDocumental) Generador<ContextoSe, IMapper>.CachearGestor("GestorDocumental"
-                                                             , nameof(GestorDeVariables)
-                                                             , () => new GestorDocumental(contexto, mapeador));
+            //var contexto = ContextoSe.ObtenerContexto();             
+            //var gestorDocumental = (GestorDocumental) Generador<ContextoSe, IMapper>.CachearGestor(typeof(GestorDocumental)
+            //                                                 , () => new GestorDocumental(contexto, mapeador));
 
-            return gestorDocumental.SubirArchivoInterno(rutaConFichero);
+            object gestor = CrearGestor<GestorDocumental>(() => new GestorDocumental(() => ContextoSe.ObtenerContexto(), mapeador));
+
+            return ((GestorDocumental)gestor).SubirArchivoInterno(rutaConFichero);
         }
 
         public GestorDocumental(ContextoSe contexto, IMapper mapeador) 
+        : base(contexto, mapeador)
+        {
+        }
+
+        public GestorDocumental(Func<ContextoSe> contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
         }

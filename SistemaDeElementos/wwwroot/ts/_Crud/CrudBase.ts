@@ -426,6 +426,7 @@
             this.MapearSelectoresDinamicos(panel, elementoJson);
             this.MapearEditores(panel, elementoJson);
             this.MapearArchivos(panel, elementoJson);
+            this.MapearUrlArchivos(panel, elementoJson);
 
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
@@ -508,6 +509,7 @@
             }
         }
 
+
         private MapearArchivo(archivo: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = archivo.getAttribute(Atributo.propiedad);
             let valor: string = archivo.getAttribute(AtributoSelectorArchivo.idArchivo);
@@ -521,6 +523,29 @@
 
             archivo.classList.remove(ClaseCss.crtlNoValido);
             archivo.classList.add(ClaseCss.crtlValido);
+            elementoJson[propiedadDto] = valor;
+        }
+
+        private MapearUrlArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
+            let urlsDeArchivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < urlsDeArchivos.length; i++) {
+                this.MapearUrlArchivo(urlsDeArchivos[i], elementoJson);
+            }
+        }
+
+        private MapearUrlArchivo(urlDeArchivo: HTMLInputElement, elementoJson: JSON): void {
+            var propiedadDto = urlDeArchivo.getAttribute(Atributo.propiedad);
+            let valor: string = urlDeArchivo.getAttribute(AtributoSelectorArchivo.nombreArchivo);
+            let obligatorio: string = urlDeArchivo.getAttribute(Atributo.obligatorio);
+
+            if (obligatorio === "S" && EsNula(valor)) {
+                urlDeArchivo.classList.remove(ClaseCss.crtlValido);
+                urlDeArchivo.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`El campo ${propiedadDto} es obligatorio`);
+            }
+
+            urlDeArchivo.classList.remove(ClaseCss.crtlNoValido);
+            urlDeArchivo.classList.add(ClaseCss.crtlValido);
             elementoJson[propiedadDto] = valor;
         }
 

@@ -6,11 +6,39 @@ using Utilidades;
 using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
+using System;
 
 namespace Gestor.Elementos.Entorno
 {
 
-    public class GestorDeVistasMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
+    public static partial class Filtros
+    {
+        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros , List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Controlador == filtro.Valor);
+                }
+
+            return registros;
+        }
+        public static IQueryable<T> FiltraPorAccion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == nameof(VistaMvcDtm.Accion).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Accion == filtro.Valor);
+                }
+
+            return registros;
+        }
+    }
+
+
+        public class GestorDeVistasMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
         public class MapearVistasMvc : Profile
@@ -25,9 +53,29 @@ namespace Gestor.Elementos.Entorno
         }
 
         public GestorDeVistasMvc(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador)
         {
 
+        }
+        
+        public GestorDeVistasMvc(Func<ContextoSe> generadorDeContexto, IMapper mapeador)
+        : base(generadorDeContexto, mapeador)
+        {
+
+        }
+
+        internal static GestorDeVistasMvc Gestor(IMapper mapeador)
+        {
+            return (GestorDeVistasMvc) CrearGestor<GestorDeVistasMvc>(() => new GestorDeVistasMvc(() => ContextoSe.ObtenerContexto(), mapeador));
+        }
+
+        protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            var a = HayFiltroPorId(registros, filtros);
+            if (a.hay)
+                return a.registros;
+
+            return  registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
         }
 
 
@@ -48,7 +96,6 @@ namespace Gestor.Elementos.Entorno
             var r_vistasMvc = MapearRegistros(e_vistasMvc, parametros);
             PersistirRegistros(r_vistasMvc, parametros);
         }
-
 
     }
 

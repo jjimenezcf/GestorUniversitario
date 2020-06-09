@@ -93,7 +93,7 @@ namespace MVCSistemaDeElementos.Controllers
                     if (!System.IO.File.Exists($@"{rutaDestino}\{fichero.FileName}"))
                         System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{fichero.FileName}");
                     
-                    r.Datos = 0;
+                    r.Datos = fichero.FileName;
                 }
 
                 r.Estado = EstadoPeticion.Ok;
