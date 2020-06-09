@@ -17,8 +17,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeFila Fila { get; set; }
         public short NumeroColumna { get; set; }
 
-        internal string IdHtmlContenedor => $"{Fila.Tabla.IdHtml}_{Fila.NumeroFila}_{NumeroColumna}_crtl";
-        internal string IdHtml => $"{Fila.Tabla.IdHtml}_{propiedad}";
+        internal string IdHtmlContenedor => $"{Fila.Tabla.IdHtml}-{Fila.NumeroFila}-{NumeroColumna}-crtl";
+        internal string IdHtml => $"{Fila.Tabla.IdHtml}-{propiedad}";
 
         internal IUPropiedadAttribute atributos => Elemento.ObtenerAtributos(Descriptor);
     }
@@ -101,7 +101,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         private Dictionary<short, DescriptorDeColumna> Columnas = new Dictionary<short, DescriptorDeColumna>();
 
-        public string IdHtml => $"{Tabla.IdHtml}_{NumeroFila}".ToLower();
+        public string IdHtml => $"{Tabla.IdHtml}-{NumeroFila}".ToLower();
 
         public short NumeroFila { get; set; }
 
@@ -150,7 +150,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Controlador { get; private set; }
 
-        public string IdHtml => $"table_{_Tipo.Name}_{ModoDeTrabajo}".ToLower();
+        public string IdHtml => $"table-{_Tipo.Name}-{ModoDeTrabajo}".ToLower();
 
         public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo, string controlador)
         {

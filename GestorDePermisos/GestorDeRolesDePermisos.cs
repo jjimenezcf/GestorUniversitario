@@ -72,9 +72,10 @@ namespace Gestor.Elementos.Seguridad
 
         protected override IQueryable<RolesDeUnPermiso> AplicarFiltros(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (HayFiltroPorId(registros))
+                return registros;
 
             return registros.FiltroPorPermiso(filtros);
         }

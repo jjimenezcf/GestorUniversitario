@@ -57,13 +57,12 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<VariableDtm> AplicarFiltros(IQueryable<VariableDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            return registros
-                   .FiltrarPorNombre(filtros)
-                   .FiltrarPorValor(filtros);
+            if (HayFiltroPorId(registros))
+                return registros;
+
+            return registros.FiltrarPorNombre(filtros).FiltrarPorValor(filtros);
         }
 
         protected override void AntesMapearRegistroParaModificar(VariableDto elemento, ParametrosDeNegocio opciones)

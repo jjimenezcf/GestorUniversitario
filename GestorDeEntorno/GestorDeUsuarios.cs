@@ -121,14 +121,12 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            return registros
-                .FiltrarPorNombre(filtros)
-                .FiltrarPorNombreCompleto(filtros)
-                .FiltrarPorRelacion(filtros);
+            if (HayFiltroPorId(registros))
+                return registros;
+
+            return registros.FiltrarPorNombreCompleto(filtros).FiltrarPorRelacion(filtros);
         }
 
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)

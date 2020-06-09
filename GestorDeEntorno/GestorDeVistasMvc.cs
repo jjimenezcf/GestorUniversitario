@@ -71,11 +71,12 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            return  registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
+            if (HayFiltroPorId(registros))
+                return registros;
+
+            return registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
         }
 
 

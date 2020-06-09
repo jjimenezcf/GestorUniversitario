@@ -93,7 +93,13 @@ namespace Gestor.Elementos.Entorno
         public string VistaMvc { get; set; }
 
         [IUPropiedad(
-            Visible = false
+            Etiqueta ="Opción activa",
+            VisibleEnGrid = false,
+            Obligatorio = true,
+            Fila = 5,
+            Columna = 0,
+            TipoDeControl = TipoControl.Check,
+            ValorPorDefecto = false
             )
         ]
         public bool Activo { get; set; }

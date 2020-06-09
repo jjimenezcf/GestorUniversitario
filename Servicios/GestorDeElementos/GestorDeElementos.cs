@@ -47,9 +47,14 @@ namespace Gestor.Elementos
 
     public static partial class Filtros
     {
-        public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro) where TRegistro : Registro
+        public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
         {
-            return registros.Where(x => x.Id == filtro.Valor.Entero());
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
+                    return registros.Where(x => x.Id == filtro.Valor.Entero());
+            }
+            return registros;
         }
 
         public static IQueryable<TRegistro> FiltrarPorNombre<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
@@ -204,16 +209,16 @@ namespace Gestor.Elementos
 
         public bool IniciarTransaccion()
         {
-            return Contexto.IniciarTransaccion(); 
+            return Contexto.IniciarTransaccion();
         }
-                
+
         public void Rollback(bool transaccion)
         {
             Contexto.Rollback(transaccion);
         }
         public void Commit(bool transaccion)
         {
-             Contexto.Commit(transaccion);
+            Contexto.Commit(transaccion);
         }
 
         public void PersistirElementosDto(List<TElemento> elementosDto, ParametrosDeNegocio parametros)
@@ -414,9 +419,10 @@ namespace Gestor.Elementos
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = registros.FiltrarPorId(filtros);
+
+            if (registros.Expression.ToString().Contains(".Where(x => x.Id"))
+                return registros;
 
             return registros.FiltrarPorNombre(filtros);
         }
@@ -426,13 +432,9 @@ namespace Gestor.Elementos
             return registros.JoinBase(joins, parametros);
         }
 
-        protected (bool hay,IQueryable<TRegistro> registros) HayFiltroPorId(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
+        protected bool HayFiltroPorId(IQueryable<TRegistro> registros)
         {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
-                    return (true, registros.FiltrarPorId(filtro));
-
-            return (false,registros);
+            return registros.Expression.ToString().Contains(".Where(x => x.Id");
         }
 
         #endregion

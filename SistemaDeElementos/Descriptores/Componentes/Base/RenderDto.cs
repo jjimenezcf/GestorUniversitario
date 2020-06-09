@@ -32,8 +32,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderColumnaParaElDto(DescriptorDeTabla tabla, short i, short j, double anchoColumna)
         {
 
-            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td_propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
-                         <div id=¨{tabla.IdHtml}_{i}_{j}_celda¨ name=¨div_propiedad¨ class=¨div-propiedad¨>
+            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td-propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
+                         <div id=¨{tabla.IdHtml}_{i}_{j}_celda¨ name=¨div-propiedad¨ class=¨div-propiedad¨>
                               {RenderControlesParaMapearElDto(tabla, i, j)}
                          </div>
                       </td>
@@ -61,7 +61,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (anadirSeparador)
                 {
                     htmlControles = htmlControles
-                        + "<div id=¨{tabla.IdHtml}_{i}_{j}_separador¨ name=¨div_separardor_propiedad¨ class=¨div-separardor-propiedad¨ style=¨width:2%¨></div>";
+                        + $"<div id=¨{tabla.IdHtml}-{i}-{j}-separador¨ class=¨div-separardor-propiedad¨ style=¨width:2%¨></div>";
                     anchoTotal += 2;
                 }
 
@@ -87,6 +87,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
         {
+            if (descriptorControl.atributos.TipoDeControl == TipoControl.Check)
+                return "";
+
             return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
                            name=¨lbl_propiedad¨
                            class=¨div-lbl-propiedad¨ 
@@ -104,7 +107,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmdDescriptorControl = "";
             switch(atributos.TipoDeControl) {
                 case TipoControl.Editor:
-                    htmdDescriptorControl = RenderEditorDto(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
@@ -113,10 +116,13 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.Archivo:
-                    htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.UrlDeArchivo:
-                    htmdDescriptorControl = RenderArchivoDto(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
+                    break;
+                case TipoControl.Check:
+                    htmdDescriptorControl = RenderCheck(tabla, descriptorControl, ancho);
                     break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
@@ -124,6 +130,19 @@ namespace MVCSistemaDeElementos.Descriptores
             }
 
             return htmdDescriptorControl;
+        }
+
+        private static string RenderCheck(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-check");
+            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+                                      type=¨checkbox¨
+                                      checked=¨{atributos.ValorPorDefecto}¨>
+                                </input>
+                                <label for=¨{descriptorControl.IdHtml}¨>{atributos.Etiqueta}</label>";
+
+            return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
         }
 
         private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
@@ -139,7 +158,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDeElemento}");
 
-            return htmlContenedor.Replace("control", htmlSelect);
+            return htmlContenedor.Replace("controlParaRenderizar", htmlSelect);
 
         }
 
@@ -161,11 +180,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
             htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDinamica}");
 
-            return htmlContenedor.Replace("control", htmlSelect);
+            return htmlContenedor.Replace("controlParaRenderizar", htmlSelect);
 
         }
 
-        private static string RenderEditorDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderEditor(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
@@ -175,10 +194,10 @@ namespace MVCSistemaDeElementos.Descriptores
                                       placeholder =¨{atributos.Ayuda}¨
                                       ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>
                                 </input>";
-            return htmlContenedor.Replace("control", htmlInput);
+            return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
         }
 
-        private static string RenderArchivoDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-archivo");
@@ -224,15 +243,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
              </form>
             ";
-            return htmlContenedor.Replace("control", htmlArchivo);
+            return htmlContenedor.Replace("controlParaRenderizar", htmlArchivo);
         }
 
 
 
         private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)
         {
-            return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨crtl_propiedad¨ class=¨{cssClaseContenedor}¨ style=¨width: {ancho}%¨ >
-                        control
+            return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ style=¨width: {ancho}%¨ >
+                        controlParaRenderizar
                       </div>";
         }
 

@@ -30,7 +30,7 @@ namespace Gestor.Elementos.Entorno
 
     public static partial class Filtros
     {
-        public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : MenuDtm
+        public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
@@ -48,12 +48,22 @@ namespace Gestor.Elementos.Entorno
             return registros;
         }
 
-        public static IQueryable<T> FiltrarPorMenuPadre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : MenuDtm
+        public static IQueryable<T> FiltrarPorMenuPadre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
                 {
                     registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
+                }
+
+            return registros;
+        }
+        public static IQueryable<T> FiltrarPorActivo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+                if (filtro.Propiedad.ToLower() == nameof(MenuDtm.Activo).ToLower())
+                {
+                    registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
                 }
 
             return registros;
@@ -118,14 +128,17 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+           
+            if (HayFiltroPorId(registros))
+                return registros;
 
-            return registros
-                .FiltrarPorNombre(filtros)
-                .FiltrarMenus(filtros, parametros)
-                .FiltrarPorMenuPadre(filtros, parametros);
+            registros = registros
+                .FiltrarMenus(filtros)
+                .FiltrarPorMenuPadre(filtros)
+                .FiltrarPorActivo(filtros);
+
+            return registros;
         }
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)

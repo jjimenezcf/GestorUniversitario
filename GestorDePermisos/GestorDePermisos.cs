@@ -138,12 +138,12 @@ namespace Gestor.Elementos.Seguridad
 
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            var a = HayFiltroPorId(registros, filtros);
-            if (a.hay)
-                return a.registros;
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (HayFiltroPorId(registros))
+                return registros;
 
             return registros
-                .FiltrarPorNombre(filtros)
                 .FiltrarPorUsuario(filtros)
                 .FiltroPorRol(filtros)
                 .FiltroPorTipo(filtros)

@@ -14,6 +14,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string ListaDinamica = "lista-dinamica";
         public const string Editor = "editor";
         public const string Archivo = "archivo";
+        public const string Check = "check";
         public const string UrlDeArchivo = "url-archivo";
         public const string VisorDeArchivo = "visor-archivo";
         public const string ImagenDelCanvas = "imagen-de-canva";
@@ -76,7 +77,7 @@ namespace Gestor.Elementos.ModeloIu
         public short Fila { get; set; }
         public short Columna { get; set; }
         public short Posicion { get; set; } = 0;
-        public string ValorPorDefecto { get; set; }
+        public object ValorPorDefecto { get; set; }
         public bool Ordenar { get; set; } = false;
         public int PosicionEnGrid { get; set; } = -1;
         public Aliniacion Alineada
