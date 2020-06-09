@@ -11,7 +11,7 @@ namespace ServicioDeDatos
         #region dbSets del esquema ENTORNO
         public DbSet<MenuDtm> Menus { get; set; }
         public DbSet<ArbolDeMenuDtm> MenuSe { get; set; }
-        public DbSet<VistaMvcDtm> VistasMvc { get; set; }
+        public DbSet<VistaMvcDtm> VistaMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
         public DbSet<UsuariosDeUnPermisoDtm> UsuPermisos { get; set; }

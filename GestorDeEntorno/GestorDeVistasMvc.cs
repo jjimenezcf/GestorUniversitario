@@ -38,12 +38,12 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-        public class GestorDeVistasMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
+        public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
-        public class MapearVistasMvc : Profile
+        public class MapearVistaMvc : Profile
         {
-            public MapearVistasMvc()
+            public MapearVistaMvc()
             {
                 CreateMap<VistaMvcDtm, VistaMvcDto>()
                 .ForMember("Menus", x => x.MapFrom(x => x.Menus));
@@ -52,21 +52,21 @@ namespace Gestor.Elementos.Entorno
             }
         }
 
-        public GestorDeVistasMvc(ContextoSe contexto, IMapper mapeador)
+        public GestorDeVistaMvc(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
 
         }
         
-        public GestorDeVistasMvc(Func<ContextoSe> generadorDeContexto, IMapper mapeador)
+        public GestorDeVistaMvc(Func<ContextoSe> generadorDeContexto, IMapper mapeador)
         : base(generadorDeContexto, mapeador)
         {
 
         }
 
-        internal static GestorDeVistasMvc Gestor(IMapper mapeador)
+        internal static GestorDeVistaMvc Gestor(IMapper mapeador)
         {
-            return (GestorDeVistasMvc) CrearGestor<GestorDeVistasMvc>(() => new GestorDeVistasMvc(() => ContextoSe.ObtenerContexto(), mapeador));
+            return (GestorDeVistaMvc) CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(() => ContextoSe.ObtenerContexto(), mapeador));
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -80,22 +80,22 @@ namespace Gestor.Elementos.Entorno
         }
 
 
-        public static List<VistaMvcDto> VistasMvc()
+        public static List<VistaMvcDto> VistaMvc()
         {
-            var vistasMvc = new List<VistaMvcDto>();
+            var vistaMvc = new List<VistaMvcDto>();
 
-            vistasMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Usuarios", Controlador = "Usuarios", Accion = "Index", Parametros = "" });
-            vistasMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Menus", Controlador = "Menus", Accion = "Index", Parametros = "" });
+            vistaMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Usuarios", Controlador = "Usuarios", Accion = "Index", Parametros = "" });
+            vistaMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Menus", Controlador = "Menus", Accion = "Index", Parametros = "" });
 
-            return vistasMvc;
+            return vistaMvc;
         }
 
-        public void InicializarVistasMvc()
+        public void InicializarVistaMvc()
         {
-            var e_vistasMvc = VistasMvc();
+            var e_vistaMvc = VistaMvc();
             var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
-            var r_vistasMvc = MapearRegistros(e_vistasMvc, parametros);
-            PersistirRegistros(r_vistasMvc, parametros);
+            var r_vistaMvc = MapearRegistros(e_vistaMvc, parametros);
+            PersistirRegistros(r_vistaMvc, parametros);
         }
 
     }

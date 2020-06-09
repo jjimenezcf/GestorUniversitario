@@ -10,6 +10,7 @@
     <Content Remove="wwwroot\js\selectores.js" />
     <Content Remove="wwwroot\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\Entorno\Variables.ts" />
+    <Content Remove="wwwroot\ts\Entorno\VistaMvc.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />

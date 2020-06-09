@@ -106,15 +106,4 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-    public class VistaMvcDto : Elemento
-    {
-        public string Nombre { get; set; }
-        public string Controlador { get; set; }
-        public string Accion { get; set; }
-        public string Parametros { get; set; }
-
-        public List<MenuDto> Menus { get; set; }
-    }
-
-
 }

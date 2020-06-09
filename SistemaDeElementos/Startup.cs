@@ -42,9 +42,10 @@ namespace MVCSistemaDeElementos
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeUsuarios>();
             services.AddScoped<GestorDePermisos>();
-            services.AddScoped<GestorDeVistasMvc>();
+            services.AddScoped<GestorDeVistaMvc>();
             services.AddScoped<GestorDeMenus>();
             services.AddScoped<GestorDeVariables>();
+            services.AddScoped<GestorDeVistaMvc>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

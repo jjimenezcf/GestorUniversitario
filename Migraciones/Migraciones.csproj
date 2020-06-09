@@ -61,6 +61,8 @@
     <Compile Remove="Migrations\20200522125622_anadirArchivoUsuario.Designer.cs" />
     <Compile Remove="Migrations\20200603204138_anadirNombre.cs" />
     <Compile Remove="Migrations\20200603204138_anadirNombre.Designer.cs" />
+    <Compile Remove="Migrations\20200609192010_anadir.cs" />
+    <Compile Remove="Migrations\20200609192010_anadir.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

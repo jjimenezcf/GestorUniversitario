@@ -348,7 +348,13 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde CrudBase.ts
+    
+        /// <summary>
+        /// END-POINT: Desde CrudBase.ts
+        /// llama al metodo del controlador CargarLista y en función de la claseElemento obtiene que elementos ha de cargar
+        /// </summary>
+        /// <param name="claseElemento">Indica la lista de elementos que se quiere cargar</param>
+        /// <returns></returns>
         public JsonResult epCargarLista(string claseElemento)
         {
             var r = new Resultado();

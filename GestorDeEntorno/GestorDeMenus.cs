@@ -184,7 +184,7 @@ namespace Gestor.Elementos.Entorno
             if (partes.Length != 2)
                 GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
             
-            var gestor = GestorDeVistasMvc.Gestor(Mapeador);
+            var gestor = GestorDeVistaMvc.Gestor(Mapeador);
             var filtros = new List<ClausulaDeFiltrado>
                 {
                     new ClausulaDeFiltrado { Propiedad = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
@@ -209,10 +209,22 @@ namespace Gestor.Elementos.Entorno
         {
             var registros = Contexto
                             .Menus
-                            .FromSqlInterpolated($@"select distinct t2.*
-                                                    from entorno.MENU t1
-                                                    inner join entorno.MENU t2 on t2.id =t1.IDPADRE
-                                                    order by t2.IDPADRE, t2.id")
+                            .FromSqlInterpolated($@"select 
+                                                      t1.ID
+                                                    , case
+                                                         WHEN t2.Nombre is null THEN t1.nombre
+                                                         ELSE t2.nombre+'.'+t1.nombre
+                                                      END as NOMBRE
+                                                    , t1.DESCRIPCION
+                                                    , t1.icono
+                                                    , t1.ACTIVO
+                                                    , t1.IDPADRE
+                                                    , t1.IDVISTA_MVC
+                                                    , T1.ORDEN
+                                                    from entorno.MENU_SE t1
+                                                    left join entorno.menu t2 on t2.id = t1.IDPADRE
+                                                    where vista is null
+                                                    order by t1.IDPADRE, T1.ORDEN, T1.NOMBRE")
                             .ToList();
 
             var elementos = MapearElementos(registros).ToList();
