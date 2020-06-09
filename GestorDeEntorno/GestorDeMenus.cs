@@ -152,22 +152,20 @@ namespace Gestor.Elementos.Entorno
         }
 
 
-        protected override void DespuesDeMapearElemento(MenuDtm registro, MenuDto elemento, ParametrosDeMapeo parametros)
-        {
-            base.DespuesDeMapearElemento(registro, elemento, parametros);
-            if (registro.Icono != null)
-            {
-                elemento.Icono = $@"/images/menu/{elemento.Icono}";
-            }
-        }
+        //protected override void DespuesDeMapearElemento(MenuDtm registro, MenuDto elemento, ParametrosDeMapeo parametros)
+        //{
+        //    base.DespuesDeMapearElemento(registro, elemento, parametros);
+        //    if (registro.Icono != null)
+        //    {
+        //        elemento.Icono = $@"/images/menu/{elemento.Icono}";
+        //    }
+        //}
 
         protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, ParametrosDeNegocio opciones)
         {
             base.DespuesDeMapearRegistro(elemento, registro, opciones);
 
             registro.IdVistaMvc = LeerVistaMvc(vistaMvc: elemento.VistaMvc);
-
-            registro.Activo = true;
 
             if (TipoOperacion.Insertar == opciones.Tipo)
             {

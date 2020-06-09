@@ -19,6 +19,7 @@
         archivo.classList.add(ClaseCss.crtlValido);
         archivo.setAttribute(AtributoSelectorArchivo.idArchivo, '0');
         archivo.files = null;
+        archivo.value = null;
         let canvasHtml: HTMLCanvasElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLCanvasElement;
         canvasHtml.width = canvasHtml.width;
         let imagenHtml: HTMLImageElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLImageElement;
@@ -44,9 +45,12 @@
         }
 
         function ErrorAlVisializar() {
-            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
-            htmlCanvas.width = htmlCanvas.width;
-            Mensaje(TipoMensaje.Error, "El fichero seleccionado no es una imagen");
+            ApiDeArchivos.BlanquearArchivo(htmlFicheros);
+            //let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
+            //htmlCanvas.width = htmlCanvas.width;
+            Mensaje(TipoMensaje.Error, "Fichero no válido para mostrar en un Canvas");
+            //htmlFicheros.value = null;
+            //htmlFicheros.files = null;
         }
 
         BlanquearMensaje();

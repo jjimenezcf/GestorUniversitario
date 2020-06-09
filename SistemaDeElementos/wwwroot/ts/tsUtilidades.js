@@ -40,6 +40,9 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     let inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
     return inputId.value;
 }
+function isString(obj) {
+    return Object.prototype.toString.call(obj) === '[object String]';
+}
 function EsNula(valor) {
     if (valor == null || valor.NoDefinida())
         return true;

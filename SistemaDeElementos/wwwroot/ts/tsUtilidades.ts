@@ -58,7 +58,12 @@ interface String {
     Numero(): number;
 }
 
+function isString(obj) {
+    return Object.prototype.toString.call(obj) === '[object String]';
+}
+
 function EsNula(valor: string): boolean {
+
     if (valor == null || valor.NoDefinida())
         return true;
 

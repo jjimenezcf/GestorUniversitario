@@ -36,14 +36,14 @@
         private _IdLista: string;
 
         get Input(): HTMLInputElement {
-            return document.querySelector(`input[list="${this._IdLista}"]`)
+            return document.querySelector(`input[list="${this._IdLista}"]`);
         }
 
         get Lista(): HTMLDataListElement {
             return document.getElementById(this._IdLista) as HTMLDataListElement;
         }
 
-        constructor(input: HTMLInputElement) {           
+        constructor(input: HTMLInputElement) {
             this._IdLista = input.getAttribute(AtributosDeListas.idDeLaLista);
         }
 
@@ -224,10 +224,16 @@
         }
 
         private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
+
+            if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
+                this.MapearPropiedad(panel, propiedad, "");
+                return
+            }
+
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                    this.MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson[propiedad]);
+                        this.MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson[propiedad]);
                 }
             } else {
                 this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
@@ -251,7 +257,7 @@
             if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
                 return;
 
-           if (this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor))
+            if (this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor))
                 return;
 
             if (this.MapearPropiedadEnLaListaDinamica(panel, propiedad, valor))
@@ -260,8 +266,11 @@
             if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
                 return;
 
-            this.MapearPropiedadAlVisorDeImagen(panel, propiedad, valor);
+            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor))
+                return;
 
+            if (this.MapearPropiedadAlCheck(panel, propiedad, valor))
+                return;
         }
 
         private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any): Boolean {
@@ -270,7 +279,21 @@
             if (editor === null)
                 return false;
 
+            editor.classList.remove(ClaseCss.crtlNoValido);
+            editor.classList.add(ClaseCss.crtlValido);
             editor.value = valor;
+            return true;
+        }
+
+        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any): Boolean {
+            let check: HTMLInputElement = this.BuscarCheck(panel, propiedad);
+
+            if (check === null)
+                return false;
+
+            check.classList.remove(ClaseCss.crtlNoValido);
+            check.classList.add(ClaseCss.crtlValido);
+            check.checked = valor;
             return true;
         }
 
@@ -280,12 +303,18 @@
             if (select === null)
                 return false;
 
+            select.classList.remove(ClaseCss.crtlNoValido);
+            select.classList.add(ClaseCss.crtlValido);
+
             for (var i = 0; i < select.options.length; i++) {
                 if (select.options[i].label === valor) {
                     select.selectedIndex = i;
                     return true;
                 }
             }
+
+            if (select.options.length >= 0)
+                select.selectedIndex = 0;
 
             return false;
         }
@@ -294,7 +323,8 @@
             let input: HTMLInputElement = this.BuscarListaDinamica(panel, propiedad);
             if (input === null)
                 return false;
-
+            input.classList.remove(ClaseCss.crtlNoValido);
+            input.classList.add(ClaseCss.crtlValido);
             input.value = valor;
             return true;
         }
@@ -306,7 +336,25 @@
             if (selector === null)
                 return false;
 
+            selector.classList.remove(ClaseCss.crtlNoValido);
+            selector.classList.add(ClaseCss.crtlValido);
             selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor);
+            return true;
+        }
+
+
+        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
+            let selector: HTMLInputElement = this.BuscarUrlDelArchivo(panel, propiedad);
+
+            if (selector === null)
+                return false;
+            let ruta: string = selector.getAttribute(AtributoSelectorArchivo.rutaDestino);
+
+            selector.classList.remove(ClaseCss.crtlNoValido);
+            selector.classList.add(ClaseCss.crtlValido);
+            selector.setAttribute(AtributoSelectorArchivo.nombreArchivo, valor);
+            this.MapearPropiedadAlVisorDeImagen(panel, propiedad, `${ruta}/${valor}`);
+
             return true;
         }
 
@@ -348,6 +396,16 @@
             return null;
         }
 
+        protected BuscarCheck(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
+            let checkes: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}='${TipoControl.Check}']`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < checkes.length; i++) {
+                var control = checkes[i] as HTMLInputElement;
+                var dto = control.getAttribute(Atributo.propiedad);
+                if (dto === propiedadDto.toLowerCase())
+                    return control;
+            }
+            return null;
+        }
 
         protected BuscarSelectorDeArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
             let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
@@ -371,9 +429,8 @@
             return null;
         }
 
-
         protected BuscarUrlDelArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -397,7 +454,7 @@
         protected BuscarListaDinamica(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
 
             let inputs: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
-            
+
             for (var i = 0; i < inputs.length; i++) {
                 var control = inputs[i] as HTMLInputElement;
                 var dto = control.getAttribute(Atributo.propiedad);
@@ -427,6 +484,7 @@
             this.MapearEditores(panel, elementoJson);
             this.MapearArchivos(panel, elementoJson);
             this.MapearUrlArchivos(panel, elementoJson);
+            this.MapearCheckes(panel, elementoJson);
 
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
@@ -437,6 +495,7 @@
                 this.MapearEditor(editores[i], elementoJson);
             }
         }
+
 
         private MapearEditor(input: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = input.getAttribute(Atributo.propiedad);
@@ -454,6 +513,18 @@
             elementoJson[propiedadDto] = valor;
         }
 
+        protected MapearCheckes(panel: HTMLDivElement, elementoJson: JSON): void {
+            let checkes: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Check}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < checkes.length; i++) {
+                this.MapearCheck(checkes[i], elementoJson);
+            }
+        }
+
+
+        private MapearCheck(check: HTMLInputElement, elementoJson: JSON): void {
+            var propiedadDto = check.getAttribute(Atributo.propiedad);
+            elementoJson[propiedadDto] = check.checked;
+        }
         protected MapearSelectoresDinamicos(panel: HTMLDivElement, elementoJson: JSON): void {
             let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < selectores.length; i++) {

@@ -194,7 +194,8 @@ const Evento = {
 
 const TipoControl = {
     Tipo : "tipo",
-    Editor : "editor",
+    Editor: "editor",
+    Check: "check",
     Selector: "selector",
     ListaDeElementos: "lista-de-elemento",
     ListaDinamica: "lista-dinamica",
