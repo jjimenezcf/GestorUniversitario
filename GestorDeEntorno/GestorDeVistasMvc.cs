@@ -20,6 +20,9 @@ namespace Gestor.Elementos.Entorno
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         registros = registros.Where(x => x.Controlador == filtro.Valor);
+                    
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        registros = registros.Where(x => x.Controlador.Contains(filtro.Valor));
                 }
 
             return registros;

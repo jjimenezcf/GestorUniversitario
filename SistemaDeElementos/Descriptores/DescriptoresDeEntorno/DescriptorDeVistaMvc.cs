@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , etiqueta: "Controlador"
                 , propiedad: nameof(VistaMvcDto.Controlador)
                 , ayuda: "buscar por controlador"
-                , new Posicion { fila = 0, columna = 1 });
+                , new Posicion { fila = 1, columna = 0 });
 
             Mnt.Datos.ExpresionElemento = $"([{nameof(VistaMvcDto.Nombre)}])";
         }

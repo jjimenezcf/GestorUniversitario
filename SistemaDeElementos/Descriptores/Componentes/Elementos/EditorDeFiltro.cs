@@ -15,6 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = TipoControl.Editor;
             Criterio = TipoCriterio.contiene.ToString();
+            bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControl(this);
         }
 

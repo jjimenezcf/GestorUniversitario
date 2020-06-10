@@ -16,6 +16,15 @@ namespace MVCSistemaDeElementos.Descriptores
             Filas = filas;
             Columnas = columnas;
         }
+
+        public void CambiarDimension(Posicion posicion)
+        {
+            if (posicion.fila >= Filas)
+                Filas = posicion.fila + 1;
+
+            if (posicion.columna >= Columnas)
+                Columnas = posicion.columna + 1;
+        }
     }
 
     public class TablaFiltro: ControlFiltroHtml
@@ -96,10 +105,10 @@ namespace MVCSistemaDeElementos.Descriptores
                     continue;
 
                 if (c.Posicion.fila >= Dimension.Filas)
-                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la fila indicada {c.Posicion.fila}, solo has {Dimension.Filas} filas");
+                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la fila indicada {c.Posicion.fila}, solo hay {Dimension.Filas} filas");
 
                 if (c.Posicion.columna >= Dimension.Columnas)
-                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la columna indicada {c.Posicion.columna}, solo has {Dimension.Columnas} columnas");
+                    Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la columna indicada {c.Posicion.columna}, solo hay {Dimension.Columnas} columnas");
 
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
                     htmlEtiqueta = $"{c.RenderLabel()}";
