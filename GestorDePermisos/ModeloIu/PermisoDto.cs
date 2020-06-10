@@ -35,7 +35,7 @@ namespace Gestor.Elementos.Seguridad
         [IUPropiedad(
             Etiqueta = "Clase",
             Ayuda = "Indique clase de permiso",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = TipoControl.ListaDeElemento,
             SeleccionarDe = nameof(ClasePermisoDto),
             GuardarEn = nameof(IdClase),
             MostrarPropiedad = nameof(Nombre),

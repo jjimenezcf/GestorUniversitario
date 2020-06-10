@@ -80,17 +80,21 @@ namespace Gestor.Elementos.Entorno
 
 
         [IUPropiedad(
-            TipoDeControl = TipoControl.Editor,
-            Visible = true,
             Etiqueta = nameof(VistaMvc),
-            EditableAlEditar = false,
-            VisibleAlCrear = false,
+            Ayuda = "Seleccione la vista",
+            TipoDeControl = TipoControl.ListaDinamica,
+            SeleccionarDe = nameof(VistaMvcDto),
+            GuardarEn = nameof(idVistaMvc),
+            MostrarPropiedad =nameof(Nombre),
             Fila = 4,
             Columna = 0,
             Obligatorio = false
             )
         ]
         public string VistaMvc { get; set; }
+        [IUPropiedad(Etiqueta = "Id de la vista",
+            Visible = false)]
+        public int? idVistaMvc { get; set; }
 
         [IUPropiedad(
             Etiqueta ="Opción activa",

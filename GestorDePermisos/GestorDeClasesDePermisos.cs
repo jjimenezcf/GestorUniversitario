@@ -40,15 +40,15 @@ namespace Gestor.Elementos.Seguridad
 
         }
 
+        public GestorDeClaseDePermisos(Func<ContextoSe> generadorDeContexto, IMapper mapeador) 
+        : base(generadorDeContexto, mapeador)
+        {
+        }
 
-        //protected override IQueryable<ClasePermisoDtm> AplicarFiltros(IQueryable<ClasePermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        //{
-        //    foreach (var f in filtros)
-        //        if (f.Propiedad.ToLower() == nameof(ClasePermisoDtm.Id).ToLower())
-        //            return base.AplicarFiltros(registros, filtros, parametros);
-
-        //    return registros.FiltroPorNombre(filtros);
-        //}
+        internal static GestorDeClaseDePermisos Gestor(IMapper mapeador)
+        {
+            return (GestorDeClaseDePermisos)CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(() => ContextoSe.ObtenerContexto(), mapeador));
+        }
 
     }
 }

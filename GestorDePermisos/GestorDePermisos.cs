@@ -34,7 +34,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltrarPorUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == PermisoPor.PermisosDeUnUsuario)
+                if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
@@ -49,7 +49,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == PermisoPor.PermisoDeUnRol)
+                if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
@@ -64,7 +64,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorClase<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Clase).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Clase).ToLower())
                 {
                     registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
                 }
@@ -74,7 +74,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorTipo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
                 {
                     registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
                 }
@@ -175,10 +175,10 @@ namespace Gestor.Elementos.Seguridad
 
         public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = new GestorDeClaseDePermisos(Contexto, Mapeador);
+            var gestor = GestorDeClaseDePermisos.Gestor(Mapeador); 
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Propiedad = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
 
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
@@ -191,10 +191,10 @@ namespace Gestor.Elementos.Seguridad
 
         public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = new GestorDeTipoPermiso(Contexto, Mapeador);
+            var gestor = GestorDeTipoPermiso.Gestor(Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Propiedad = nameof(TipoPermisoDtm.Nombre), Valor = valorDeFiltro });
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(TipoPermisoDtm.Nombre), Valor = valorDeFiltro });
 
             var tiposDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(tiposDtm).ToList();
@@ -204,8 +204,8 @@ namespace Gestor.Elementos.Seguridad
         {
             base.AntesMapearRegistroParaEliminar(elemento, opciones);
 
-            var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
-            var filtro = new ClausulaDeFiltrado { Propiedad = nameof(RolesDeUnPermiso.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
+            var gestor = GestorDeRolesDePermisos.Gestor(Mapeador);
+            var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermiso.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
             var filtros = new List<ClausulaDeFiltrado>();
             filtros.Add(filtro);
             var r = gestor.LeerRegistros(0, 1, filtros);

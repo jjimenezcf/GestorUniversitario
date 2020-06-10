@@ -16,7 +16,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros , List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         registros = registros.Where(x => x.Controlador == filtro.Valor);
@@ -30,7 +30,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltraPorAccion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(VistaMvcDtm.Accion).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Accion).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         registros = registros.Where(x => x.Accion == filtro.Valor);

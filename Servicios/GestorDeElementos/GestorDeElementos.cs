@@ -26,7 +26,7 @@ namespace Gestor.Elementos
     }
     public class ClausulaDeFiltrado
     {
-        public string Propiedad { get; set; }
+        public string Clausula { get; set; }
         public CriteriosDeFiltrado Criterio { get; set; }
         public string Valor { get; set; }
     }
@@ -51,7 +51,7 @@ namespace Gestor.Elementos
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Propiedad.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
+                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
                     return registros.Where(x => x.Id == filtro.Valor.Entero());
             }
             return registros;
@@ -61,7 +61,7 @@ namespace Gestor.Elementos
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
+                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
                         return registros.Where(x => x.Nombre.Contains(filtro.Valor));
@@ -148,10 +148,8 @@ namespace Gestor.Elementos
 
 
         public GestorDeElementos(Func<TContexto> generadorDeContexto, IMapper mapeador)
+        :this(generadorDeContexto(),mapeador)
         {
-            Mapeador = mapeador;
-
-            IniciarClase(generadorDeContexto());
         }
 
         public void AsignarGestores(GestorDeErrores gestorErrores)
@@ -337,7 +335,7 @@ namespace Gestor.Elementos
             var filtro = new ClausulaDeFiltrado()
             {
                 Criterio = CriteriosDeFiltrado.igual,
-                Propiedad = propiedad,
+                Clausula = propiedad,
                 Valor = valor
             };
 

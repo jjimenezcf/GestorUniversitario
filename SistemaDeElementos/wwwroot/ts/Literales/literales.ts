@@ -5,7 +5,14 @@ const TipoMensaje = { Info: "informativo", Error: "Error", Warning: "Revision" }
 
 const Literal = {
     controlador: "controlador",
-    id: "id"
+    id: "id",
+    filtro: {
+        clausulaId: 'id',
+        criterio: {
+            igual: 'igual'
+        }
+    }
+
 };
 
 const ModoOrdenacion = {

@@ -17,7 +17,7 @@ namespace Gestor.Elementos.Entorno
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Propiedad.ToLower() == nameof(VariableDto.Valor).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(VariableDto.Valor).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         return regristros.Where(x => x.Valor == filtro.Valor);
@@ -43,11 +43,6 @@ namespace Gestor.Elementos.Entorno
                 CreateMap<VariableDto, VariableDtm>();
             }
         }
-
-        //public GestorDeVariables Crear(CtoEntorno contexto, IMapper mapeador)
-        //{
-        //    return new GestorDeVariables(contexto, mapeador);
-        //}
 
         public GestorDeVariables(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)

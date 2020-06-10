@@ -33,7 +33,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
                         registros = registros.Where(x => x.IdPadre == null);
@@ -51,7 +51,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorMenuPadre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Padre).ToLower())
                 {
                     registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
                 }
@@ -61,7 +61,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorActivo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(MenuDtm.Activo).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Activo).ToLower())
                 {
                     registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
                 }
@@ -100,11 +100,11 @@ namespace Gestor.Elementos.Entorno
             {
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
-                .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => $"{dtm.VistaMvc.Controlador}.{dtm.VistaMvc.Accion}"));
+                .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc.Nombre));
 
                 CreateMap<MenuDto, MenuDtm>()
-                    .ForMember(dtm => dtm.IdVistaMvc, dto => dto.Ignore())
-                    .ForMember(dtm => dtm.VistaMvc, dto => dto.Ignore());
+                    .ForMember(dtm => dtm.IdVistaMvc, dto => dto.MapFrom(dto => dto.idVistaMvc==0 ? null: dto.idVistaMvc))                    
+                    .ForMember(dtm => dtm.IdPadre, dto => dto.MapFrom(dto => dto.idPadre == 0 ? null : dto.idPadre));
             }
         }
 
@@ -119,7 +119,7 @@ namespace Gestor.Elementos.Entorno
             base.DefinirJoins(filtros, joins, parametros);
 
             foreach (var filtro in filtros)
-                if (filtro.Propiedad == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
+                if (filtro.Clausula == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
                     return;
 
             joins.Add(new ClausulaDeJoin { Dtm = typeof(MenuDtm) });
@@ -151,29 +151,6 @@ namespace Gestor.Elementos.Entorno
             return registros.JoinConMenus(joins, parametros);
         }
 
-
-        //protected override void DespuesDeMapearElemento(MenuDtm registro, MenuDto elemento, ParametrosDeMapeo parametros)
-        //{
-        //    base.DespuesDeMapearElemento(registro, elemento, parametros);
-        //    if (registro.Icono != null)
-        //    {
-        //        elemento.Icono = $@"/images/menu/{elemento.Icono}";
-        //    }
-        //}
-
-        protected override void DespuesDeMapearRegistro(MenuDto elemento, MenuDtm registro, ParametrosDeNegocio opciones)
-        {
-            base.DespuesDeMapearRegistro(elemento, registro, opciones);
-
-            registro.IdVistaMvc = LeerVistaMvc(vistaMvc: elemento.VistaMvc);
-
-            if (TipoOperacion.Insertar == opciones.Tipo)
-            {
-                registro.Padre = null;
-                registro.VistaMvc = null;
-            }
-        }
-
         private int? LeerVistaMvc(string vistaMvc)
         {
             if (vistaMvc.IsNullOrEmpty())
@@ -187,8 +164,8 @@ namespace Gestor.Elementos.Entorno
             var gestor = GestorDeVistaMvc.Gestor(Mapeador);
             var filtros = new List<ClausulaDeFiltrado>
                 {
-                    new ClausulaDeFiltrado { Propiedad = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
-                    new ClausulaDeFiltrado { Propiedad = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
                 };
 
             var vistas = gestor.LeerRegistros(0, -1, filtros);
@@ -233,12 +210,20 @@ namespace Gestor.Elementos.Entorno
 
         public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
-
-            object gestor = CrearGestor<GestorDeArbolDeMenu>(() => new GestorDeArbolDeMenu(() => ContextoSe.ObtenerContexto(), mapeador));
-
-            return ((GestorDeArbolDeMenu)gestor).LeerArbolDeMenu();
+            var gestor = GestorDeArbolDeMenu.Gestor(mapeador);
+            return gestor.LeerArbolDeMenu();
         }
 
+        public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
+        {
+            var gestor = GestorDeVistaMvc.Gestor(Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!valorDeFiltro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(VistaMvcDto.Nombre), Valor = valorDeFiltro });
+
+            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(clasesDtm).ToList();
+        }
     }
 
 }

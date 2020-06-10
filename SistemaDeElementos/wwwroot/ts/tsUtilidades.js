@@ -64,13 +64,13 @@ String.prototype.Numero = function () {
     return Number(this);
 };
 class ClausulaDeFiltrado {
-    constructor(propiedad, criterio, valor) {
-        this.propiedad = propiedad;
+    constructor(clausula, criterio, valor) {
+        this.clausula = clausula;
         this.criterio = criterio;
         this.valor = valor;
     }
     EsVacia() {
-        return this.propiedad.NoDefinida() || this.valor.NoDefinida() || this.criterio.NoDefinida();
+        return this.clausula.NoDefinida() || this.valor.NoDefinida() || this.criterio.NoDefinida();
     }
 }
 class ResultadoJson {

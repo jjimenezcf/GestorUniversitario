@@ -29,6 +29,11 @@ namespace Gestor.Elementos.Entorno
 
         }
 
+        internal static GestorDeArbolDeMenu Gestor(IMapper mapeador)
+        {
+            return (GestorDeArbolDeMenu)CrearGestor<GestorDeArbolDeMenu>(() => new GestorDeArbolDeMenu(() => ContextoSe.ObtenerContexto(), mapeador));
+        }
+
         protected override void DespuesDeMapearElemento(ArbolDeMenuDtm registro, ArbolDeMenuDto elemento, ParametrosDeMapeo parametros)
         {
             base.DespuesDeMapearElemento(registro, elemento, parametros);
@@ -107,7 +112,6 @@ namespace Gestor.Elementos.Entorno
 
             return resultado;
         }
-
 
     }
 }

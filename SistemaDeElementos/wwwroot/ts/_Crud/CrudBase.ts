@@ -200,7 +200,26 @@
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
+            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+        }
+
+        MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
+            let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
+            for (var i = 0; i < select.length; i++) {
+                var selector = select[i] as HTMLSelectElement;
+                var guardarEn = selector.getAttribute(AtributosDeListas.guardarEn);
+                let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
+                if (id === null || id == 0)
+                    selector.selectedIndex = 0;
+                else
+                    for (var j = 0; j < selector.options.length; j++) {
+                        if (selector.options[j].value.Numero() == id) {
+                            selector.selectedIndex = j;
+                            break;
+                        }
+                    }
+            }
         }
 
         private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON) {
@@ -209,15 +228,17 @@
 
             for (var i = 0; i < listas.length; i++) {
                 let input: HTMLInputElement = listas[i] as HTMLInputElement;
-                let propiedad: string = input.getAttribute(AtributosDeListas.guardarEn);
-                let id: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
+                let propiedad: string = input.getAttribute(Atributo.propiedad);
+                let guardarEn: string = input.getAttribute(AtributosDeListas.guardarEn);
+                let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
+                let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
 
-                if (id > 0) {
-                    let listaDinamica = new ListaDinamica(input);
-                    listaDinamica.AgregarOpcion(id, input.value);
-                }
-                else {
+                if (id === null || id == 0) 
                     input.value = "";
+                else {
+                    let listaDinamica = new ListaDinamica(input);
+                    listaDinamica.AgregarOpcion(id, valor);
+                    input.value = valor;
                 }
 
             }
@@ -227,13 +248,13 @@
 
             if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
                 this.MapearPropiedad(panel, propiedad, "");
-                return
+                return;
             }
 
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                        this.MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson[propiedad]);
+                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad]);
                 }
             } else {
                 this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
@@ -255,12 +276,6 @@
         private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
 
             if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
-                return;
-
-            if (this.MapearPropiedadAlSelectorDeElemento(panel, propiedad, valor))
-                return;
-
-            if (this.MapearPropiedadEnLaListaDinamica(panel, propiedad, valor))
                 return;
 
             if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))

@@ -42,6 +42,17 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        {
+
+
+            if (claseElemento == nameof(VistaMvcDto))
+                return ((GestorDeMenus)GestorDeElementos).LeerVistas(posicion, cantidad, filtro);
+
+            return null;
+
+    }
+
         //END-POINT: Desde Menu.ts
         public JsonResult epSolicitarMenuHtml(string usuario)
         {

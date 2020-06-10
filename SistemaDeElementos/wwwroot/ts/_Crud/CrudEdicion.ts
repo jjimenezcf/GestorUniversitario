@@ -198,7 +198,7 @@
 
         private DefinirFiltroPorId(id: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
-            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado('id', 'igual', `${id}`);
+            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(Literal.filtro.clausulaId, Literal.filtro.criterio.igual, `${id}`);
             clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }

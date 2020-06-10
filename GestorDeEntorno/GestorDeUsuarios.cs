@@ -32,7 +32,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorNombreCompleto<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == UsuariosPor.NombreCompleto)
+                if (filtro.Clausula.ToLower() == UsuariosPor.NombreCompleto)
                     return regristros.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
 
             return regristros;
@@ -41,7 +41,7 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> FiltrarPorRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == UsuariosPor.Permisos)
+                if (filtro.Clausula.ToLower() == UsuariosPor.Permisos)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)

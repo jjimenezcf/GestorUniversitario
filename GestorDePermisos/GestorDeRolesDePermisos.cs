@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Gestor.Elementos.ModeloIu;
@@ -32,7 +33,7 @@ namespace Gestor.Elementos.Seguridad
         public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolesDeUnPermiso
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Propiedad.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower() && filtro.Valor.Entero() > 0)
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower() && filtro.Valor.Entero() > 0)
                     return registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
 
             return registros;
@@ -54,6 +55,16 @@ namespace Gestor.Elementos.Seguridad
         public GestorDeRolesDePermisos(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
+        }
+
+        public GestorDeRolesDePermisos(Func<ContextoSe> generadorDeContexto, IMapper mapeador) 
+        : base(generadorDeContexto, mapeador)
+        {
+        }
+
+        internal static GestorDeRolesDePermisos Gestor(IMapper mapeador)
+        {
+            return (GestorDeRolesDePermisos)CrearGestor<GestorDeRolesDePermisos>(() => new GestorDeRolesDePermisos(() => ContextoSe.ObtenerContexto(), mapeador));
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -79,7 +90,6 @@ namespace Gestor.Elementos.Seguridad
 
             return registros.FiltroPorPermiso(filtros);
         }
-
 
     }
 }
