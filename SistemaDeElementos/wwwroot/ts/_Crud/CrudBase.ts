@@ -202,6 +202,7 @@
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+            this.MapearSelectoresDeArchivo(panel, elementoJson);
         }
 
         MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
@@ -233,7 +234,7 @@
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
                 let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
 
-                if (id === null || id == 0) 
+                if (id === null || id == 0)
                     input.value = "";
                 else {
                     let listaDinamica = new ListaDinamica(input);
@@ -278,8 +279,8 @@
             if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
                 return;
 
-            if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
-                return;
+            //if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
+            //    return;
 
             if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor))
                 return;
@@ -308,57 +309,32 @@
 
             check.classList.remove(ClaseCss.crtlNoValido);
             check.classList.add(ClaseCss.crtlValido);
-            if (valor.toLowerCase() === 'true')
-                check.checked = true;
-            else
-                check.checked = false;
+            check.checked = valor;
 
             return true;
         }
 
-        private MapearPropiedadAlSelectorDeElemento(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
-            let select: HTMLSelectElement = this.BuscarSelect(panel, propiedad);
 
-            if (select === null)
-                return false;
+        private MapearSelectoresDeArchivo(panel: HTMLDivElement, elementoJson: JSON) {
 
-            select.classList.remove(ClaseCss.crtlNoValido);
-            select.classList.add(ClaseCss.crtlValido);
+            let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
 
-            for (var i = 0; i < select.options.length; i++) {
-                if (select.options[i].label === valor) {
-                    select.selectedIndex = i;
-                    return true;
-                }
+            for (var i = 0; i < selectores.length; i++) {
+                let selector: HTMLInputElement = selectores[i] as HTMLInputElement;
+                let propiedad: string = selector.getAttribute(Atributo.propiedad);
+                let valor: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
+                let visorVinculado: string = selector.getAttribute(AtributoSelectorArchivo.imagenVinculada);
+                selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor.toString());
+                this.MapearImagenes(panel, elementoJson, visorVinculado);
             }
 
-            if (select.options.length >= 0)
-                select.selectedIndex = 0;
-
-            return false;
         }
 
-        private MapearPropiedadEnLaListaDinamica(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
-            let input: HTMLInputElement = this.BuscarListaDinamica(panel, propiedad);
-            if (input === null)
-                return false;
-            input.classList.remove(ClaseCss.crtlNoValido);
-            input.classList.add(ClaseCss.crtlValido);
-            input.value = valor;
-            return true;
-        }
-
-
-        private MapearPropiedadAlSelectorDeArchivo(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
-            let selector: HTMLInputElement = this.BuscarSelectorDeArchivo(panel, propiedad);
-
-            if (selector === null)
-                return false;
-
-            selector.classList.remove(ClaseCss.crtlNoValido);
-            selector.classList.add(ClaseCss.crtlValido);
-            selector.setAttribute(AtributoSelectorArchivo.idArchivo, valor);
-            return true;
+        private MapearImagenes(panel: HTMLDivElement, elementoJson: JSON, visorVinculado: string) {
+            let visor: HTMLImageElement = document.getElementById(visorVinculado) as HTMLImageElement;
+            let propiedadDelVisor: string = visor.getAttribute(Atributo.propiedad);
+            let url: string = this.BuscarValorEnJson(propiedadDelVisor, elementoJson) as string;
+            this.MostrarImagenUrl(visor, url);
         }
 
 
@@ -378,29 +354,27 @@
         }
 
         private MapearPropiedadAlVisorDeImagen(panel: HTMLDivElement, propiedad: string, valor: any) {
-
             let visor: HTMLImageElement = this.BuscarVisorDeImagen(panel, propiedad);
 
             if (visor === null)
                 return;
 
-            visor.setAttribute('src', valor);
-            let idCanva: string = visor.getAttribute(Atributo.id).replace('img', 'canvas');
+            this.MostrarImagenUrl(visor, valor);
+        }
 
+        private MostrarImagenUrl(visor: HTMLImageElement, url: any) {
+            visor.setAttribute('src', url);
+            let idCanva: string = visor.getAttribute(Atributo.id).replace('img', 'canvas');
             let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
             htmlCanvas.width = 100;
             htmlCanvas.height = 100;
             var canvas = htmlCanvas.getContext('2d');
-
-
             var img = new Image();
-            img.src = valor;
-            img.onload = function () {
+            img.src = url;
+            img.onload = function() {
                 canvas.drawImage(img, 0, 0, 100, 100);
             };
-
         }
-
 
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
