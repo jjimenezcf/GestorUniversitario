@@ -250,7 +250,8 @@
             var valor = editor.value;
             var clausula = null;
             if (!EsNula(valor))
-                clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+                //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
 
             return clausula;
         }
