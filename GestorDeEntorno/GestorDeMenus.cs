@@ -151,37 +151,6 @@ namespace Gestor.Elementos.Entorno
             return registros.JoinConMenus(joins, parametros);
         }
 
-        private int? LeerVistaMvc(string vistaMvc)
-        {
-            if (vistaMvc.IsNullOrEmpty())
-                return null;
-
-            var partes = vistaMvc.Split(".");
-            
-            if (partes.Length != 2)
-                GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
-            
-            var gestor = GestorDeVistaMvc.Gestor(Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>
-                {
-                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
-                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
-                };
-
-            var vistas = gestor.LeerRegistros(0, -1, filtros);
-            if (vistas.Count != 1)
-            {
-                if (vistas.Count == 0)
-                    GestorDeErrores.Emitir($"No se ha localizado la vistaMvc {partes[0]}.{partes[1]}");
-                else
-                    GestorDeErrores.Emitir($"Se han localizado {vistas.Count} vistasMvc para {partes[0]}.{partes[1]}");
-            }
-
-            return vistas[0].Id;
-
-
-        }
-
         public List<MenuDto> LeerPadres()
         {
             var registros = Contexto

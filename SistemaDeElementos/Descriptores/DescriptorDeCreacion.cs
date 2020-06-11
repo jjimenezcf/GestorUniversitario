@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
         public string htmlDeCreacionEspecifico { get; set; }
 
-        private bool AbrirEnModal { set; get; }
+        public bool AbrirEnModal { set; get; }
 
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCerrarCreacion();
-            AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
+            //AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
         }
 
 

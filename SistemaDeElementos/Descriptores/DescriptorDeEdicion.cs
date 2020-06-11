@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }
-        private bool AbrirEnModal { set; get; }
+        public bool AbrirEnModal { set; get; }
 
 
         public DescriptorDeEdicion(DescriptorDeCrud<TElemento> crud, string etiqueta)
@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuDeEdicion = new BarraDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
-            AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
+            //AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
         }
 
 

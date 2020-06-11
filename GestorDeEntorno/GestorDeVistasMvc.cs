@@ -7,6 +7,7 @@ using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using System;
+using Gestor.Errores;
 
 namespace Gestor.Elementos.Entorno
 {
@@ -67,7 +68,7 @@ namespace Gestor.Elementos.Entorno
 
         }
 
-        internal static GestorDeVistaMvc Gestor(IMapper mapeador)
+        public static GestorDeVistaMvc Gestor(IMapper mapeador)
         {
             return (GestorDeVistaMvc) CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(() => ContextoSe.ObtenerContexto(), mapeador));
         }
@@ -80,6 +81,36 @@ namespace Gestor.Elementos.Entorno
                 return registros;
 
             return registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
+        }
+
+        public static VistaMvcDtm LeerVistaMvc(IMapper mapeador,  string vistaMvc)
+        {
+            if (vistaMvc.IsNullOrEmpty())
+                return null;
+
+            var partes = vistaMvc.Split(".");
+
+            if (partes.Length != 2)
+                GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
+
+            var gestor = Gestor(mapeador);
+            var filtros = new List<ClausulaDeFiltrado>
+                {
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
+                };
+
+            var vistas = gestor.LeerRegistros(0, -1, filtros);
+            if (vistas.Count != 1)
+            {
+                //if (vistas.Count == 0)
+                //    GestorDeErrores.Emitir($"No se ha localizado la vistaMvc {partes[0]}.{partes[1]}");
+                //else
+                //    GestorDeErrores.Emitir($"Se han localizado {vistas.Count} vistasMvc para {partes[0]}.{partes[1]}");
+                return null;
+            }
+
+            return vistas[0];
         }
 
 

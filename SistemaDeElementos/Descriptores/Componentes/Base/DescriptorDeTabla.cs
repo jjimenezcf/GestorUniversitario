@@ -64,6 +64,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 return numero;
             }
         }
+        public int ColSpan => Tabla.NumeroDeColumnas - Fila.NumeroDeColumnas + 1;
 
         public DescriptorDeColumna(DescriptorDeFila fila, short indice)
         {

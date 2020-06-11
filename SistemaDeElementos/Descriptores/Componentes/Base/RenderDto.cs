@@ -31,13 +31,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderColumnaParaElDto(DescriptorDeTabla tabla, short i, short j, double anchoColumna)
         {
-
-            return $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td-propiedad¨ class=¨td-propiedad¨  style=¨width:{anchoColumna}%¨>
+            var visible = tabla.ObtenerFila(i).ObtenerColumna(j).NumeroControlesVisibles > 0;
+            
+            var td = $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td-propiedad¨ class=¨td-propiedad¨ colspan=¨{tabla.ObtenerFila(i).ObtenerColumna(j).ColSpan}¨ style=¨width:{anchoColumna}%; {(visible ? "": "display:none")}¨>
                          <div id=¨{tabla.IdHtml}_{i}_{j}_celda¨ name=¨div-propiedad¨ class=¨div-propiedad¨>
                               {RenderControlesParaMapearElDto(tabla, i, j)}
                          </div>
                       </td>
                      ";
+            return td;
         }
 
         private static string RenderControlesParaMapearElDto(DescriptorDeTabla tabla, short i, short j)
@@ -50,6 +52,13 @@ namespace MVCSistemaDeElementos.Descriptores
             double anchoEtiqueta = columna.NumeroDeEtiquetasVisibles == 0 ? 0 : porcentajeDeEtiqueta / columna.NumeroDeEtiquetasVisibles;
             double anchoControl = columna.NumeroControlesVisibles == 0 ? 0 : (pocentajeDeControl - (porcentajeDelSeparador * (columna.NumeroControlesVisibles - 1))) / columna.NumeroControlesVisibles;
             var anadirSeparador = false;
+
+            if (columna.ColSpan > 1)
+            {
+                var ajuste = anchoEtiqueta / columna.ColSpan;
+                anchoEtiqueta = anchoEtiqueta - ajuste;
+                anchoControl = anchoControl + ajuste;
+            }
 
             double anchoTotal = 0;
             for (short z = 0; z <= columna.PosicionMaxima; z++)

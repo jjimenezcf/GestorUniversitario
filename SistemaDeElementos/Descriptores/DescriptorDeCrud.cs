@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gestor.Elementos.Entorno;
 using Gestor.Elementos.ModeloIu;
 using UtilidadesParaIu;
 

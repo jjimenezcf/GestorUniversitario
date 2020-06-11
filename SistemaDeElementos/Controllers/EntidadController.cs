@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
+using Gestor.Elementos.Entorno;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,6 +38,10 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<TElemento>(descriptor);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
+
+            var vista = GestorDeVistaMvc.LeerVistaMvc(gestorDeElementos.Mapeador, $"{descriptor.Controlador}.{descriptor.Vista}");
+            descriptor.Creador.AbrirEnModal = true;
+            descriptor.Editor.AbrirEnModal = true;
         }
 
 

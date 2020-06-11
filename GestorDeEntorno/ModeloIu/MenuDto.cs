@@ -96,17 +96,33 @@ namespace Gestor.Elementos.Entorno
             Visible = false)]
         public int? idVistaMvc { get; set; }
 
+
+        [IUPropiedad(
+            Etiqueta = "Orden",
+            Ayuda = "orden del menú",
+            Tipo = typeof(int),
+            Fila = 5,
+            Columna = 0,
+            Ordenar = true,
+            VisibleEnGrid = false
+            )
+        ]
+        public string Orden { get; set; }
+
+
         [IUPropiedad(
             Etiqueta ="Opción activa",
             VisibleEnGrid = false,
             Obligatorio = true,
             Fila = 5,
-            Columna = 0,
+            Columna = 1,
             TipoDeControl = TipoControl.Check,
             ValorPorDefecto = false
             )
         ]
         public bool Activo { get; set; }
+
+
     }
 
 
