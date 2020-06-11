@@ -112,6 +112,7 @@ namespace Gestor.Elementos.Entorno
 
         [IUPropiedad(
             Etiqueta ="Opción activa",
+            Ayuda = "indica si la opción de menú está activa",
             VisibleEnGrid = false,
             Obligatorio = true,
             Fila = 5,

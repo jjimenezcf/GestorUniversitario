@@ -53,10 +53,26 @@ namespace Gestor.Elementos.Entorno
             Fila = 4,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15
+            PorAnchoMnt = 15,
+            Obligatorio = false,
+            VisibleEnGrid =false
             )
         ]
         public string Parametros { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Mostrar en modal",
+            Ayuda = "indica si se ha de mostrar en modal la creación o edición",
+            VisibleEnGrid = false,
+            Obligatorio = true,
+            TipoDeControl = TipoControl.Check,
+            ValorPorDefecto = false,
+            Tipo = typeof(bool),
+            Fila = 4,
+            Columna = 1
+            )
+        ]
+        public string MostrarEnModal { get; set; }
 
         [IUPropiedad(Visible = false)]
         public List<MenuDto> Menus { get; set; }

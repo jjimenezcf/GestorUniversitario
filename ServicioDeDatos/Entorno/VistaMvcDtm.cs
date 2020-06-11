@@ -23,6 +23,9 @@ namespace ServicioDeDatos.Entorno
         [Column("PARAMETROS", TypeName = "VARCHAR(250)")]
         public string Parametros { get; set; }
 
+        [Column("MODAL", TypeName ="BIT")]
+        public bool MostrarEnModal { get; set; }
+
         public List<MenuDtm> Menus { get; set; }
     }
 
@@ -31,6 +34,8 @@ namespace ServicioDeDatos.Entorno
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<VistaMvcDtm>().Property(menu => menu.Parametros).IsRequired(false);
+
+            modelBuilder.Entity<VistaMvcDtm>().Property(menu => menu.MostrarEnModal).IsRequired(true).HasDefaultValue(false);
 
             modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.Controlador, vista.Accion, vista.Parametros })

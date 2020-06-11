@@ -9,6 +9,7 @@
     /*height: 100%;*/ /* Full height */
     overflow: auto; /* Enable scroll if needed */
     border: 1px solid #888;
+    background-color: #ffff;
 }
 
 .menu-contenedor {
@@ -37,12 +38,12 @@
         }
 
             .modal-menu .menu-contenido ul li a {
-                background: #f3e3e3;
+                background: #ffffff;
             }
 
 .menu-contenido .icono {
-    width: 12px;
-    height: 12px;
+    width: 20px;
+    height: 20px;
     line-height: 18px;
 }
 
@@ -72,7 +73,7 @@
 
 .menu-opcion {
     border: 0px;
-    background: #f3e3e3;
+    background: #ffffff;
     width: 100%;
     height: 32px;
     text-align: left;

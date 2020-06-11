@@ -40,8 +40,9 @@ namespace MVCSistemaDeElementos.Controllers
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
 
             var vista = GestorDeVistaMvc.LeerVistaMvc(gestorDeElementos.Mapeador, $"{descriptor.Controlador}.{descriptor.Vista}");
-            descriptor.Creador.AbrirEnModal = true;
-            descriptor.Editor.AbrirEnModal = true;
+
+            descriptor.Creador.AbrirEnModal = vista != null ? vista.MostrarEnModal: false;
+            descriptor.Editor.AbrirEnModal = vista != null ? vista.MostrarEnModal : false;
         }
 
 

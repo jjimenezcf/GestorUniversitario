@@ -37,8 +37,8 @@
             return;
         }
 
-        for (let i = 0; i < elementosHtml.length; i++)
-            plegarMenu(elementosHtml[i] as HTMLMenuElement);
+        //for (let i = 0; i < elementosHtml.length; i++)
+        //    plegarMenu(elementosHtml[i] as HTMLMenuElement);
 
         desplegarMenu(menuHtmlPulsado);
 

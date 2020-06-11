@@ -35,10 +35,10 @@ namespace Gestor.Elementos
             //if (!dll.EndsWith(".dll")) dll = dll + ".dll";
             var indice = dll + '-' + nombreClase;
 
-            if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
-                cacheObjetos[indice] = creador();
+            //if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
+            //    cacheObjetos[indice] = creador();
 
-            return cacheObjetos[indice];
+            return creador(); // cacheObjetos[indice];
         }
 
 

@@ -308,7 +308,11 @@
 
             check.classList.remove(ClaseCss.crtlNoValido);
             check.classList.add(ClaseCss.crtlValido);
-            check.checked = valor;
+            if (valor.toLowerCase() === 'true')
+                check.checked = true;
+            else
+                check.checked = false;
+
             return true;
         }
 

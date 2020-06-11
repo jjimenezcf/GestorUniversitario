@@ -180,6 +180,7 @@ namespace Gestor.Elementos.Entorno
         public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
             var gestor = GestorDeArbolDeMenu.Gestor(mapeador);
+            
             return gestor.LeerArbolDeMenu();
         }
 
