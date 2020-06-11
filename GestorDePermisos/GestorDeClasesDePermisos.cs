@@ -40,14 +40,11 @@ namespace Gestor.Elementos.Seguridad
 
         }
 
-        public GestorDeClaseDePermisos(Func<ContextoSe> generadorDeContexto, IMapper mapeador) 
-        : base(generadorDeContexto, mapeador)
-        {
-        }
 
         internal static GestorDeClaseDePermisos Gestor(IMapper mapeador)
         {
-            return (GestorDeClaseDePermisos)CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(() => ContextoSe.ObtenerContexto(), mapeador));
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDeClaseDePermisos)CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(contexto, mapeador));
         }
 
     }

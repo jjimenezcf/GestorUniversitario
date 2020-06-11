@@ -57,14 +57,11 @@ namespace Gestor.Elementos.Seguridad
         {
         }
 
-        public GestorDeRolesDePermisos(Func<ContextoSe> generadorDeContexto, IMapper mapeador) 
-        : base(generadorDeContexto, mapeador)
-        {
-        }
 
         internal static GestorDeRolesDePermisos Gestor(IMapper mapeador)
         {
-            return (GestorDeRolesDePermisos)CrearGestor<GestorDeRolesDePermisos>(() => new GestorDeRolesDePermisos(() => ContextoSe.ObtenerContexto(), mapeador));
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDeRolesDePermisos)CrearGestor<GestorDeRolesDePermisos>(() => new GestorDeRolesDePermisos(contexto, mapeador));
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

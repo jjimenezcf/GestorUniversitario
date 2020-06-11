@@ -22,14 +22,11 @@ namespace ServicioDeDatos.Seguridad
         {
         }
 
-        public GestorDeTipoPermiso(Func<ContextoSe> generadorDeContexto, IMapper mapeador) 
-        : base(generadorDeContexto, mapeador)
-        {
-        }
 
         internal static GestorDeTipoPermiso Gestor(IMapper mapeador)
         {
-            return (GestorDeTipoPermiso)CrearGestor<GestorDeTipoPermiso>(() => new GestorDeTipoPermiso(() => ContextoSe.ObtenerContexto(), mapeador));
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDeTipoPermiso)CrearGestor<GestorDeTipoPermiso>(() => new GestorDeTipoPermiso(contexto, mapeador));
         }
     }
 }

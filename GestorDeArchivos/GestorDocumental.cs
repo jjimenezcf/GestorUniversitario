@@ -33,14 +33,11 @@ namespace Gestor.Elementos.Archivos
         {
         }
 
-        public GestorDocumental(Func<ContextoSe> contexto, IMapper mapeador)
-        : base(contexto, mapeador)
-        {
-        }
 
         private static GestorDocumental Gestor(IMapper mapeador)
         {
-            return (GestorDocumental)CrearGestor<GestorDocumental>(() => new GestorDocumental(() => ContextoSe.ObtenerContexto(), mapeador));
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDocumental)CrearGestor<GestorDocumental>(() => new GestorDocumental(contexto, mapeador));
         }
 
         private int SubirArchivoInterno(string rutaConFichero)

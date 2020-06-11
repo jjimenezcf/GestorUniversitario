@@ -62,15 +62,11 @@ namespace Gestor.Elementos.Entorno
 
         }
         
-        public GestorDeVistaMvc(Func<ContextoSe> generadorDeContexto, IMapper mapeador)
-        : base(generadorDeContexto, mapeador)
-        {
-
-        }
 
         public static GestorDeVistaMvc Gestor(IMapper mapeador)
         {
-            return (GestorDeVistaMvc) CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(() => ContextoSe.ObtenerContexto(), mapeador));
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDeVistaMvc) CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(contexto, mapeador));
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
