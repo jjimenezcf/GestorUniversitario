@@ -184,6 +184,13 @@ namespace Gestor.Elementos.Entorno
             return gestor.LeerArbolDeMenu();
         }
 
+        protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            var gestor = GestorDeArbolDeMenu.Gestor(Mapeador);
+            gestor.LimpiarCacheDeArbolDeMenu();
+        }
+
         public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
         {
             var gestor = GestorDeVistaMvc.Gestor(Mapeador);

@@ -57,6 +57,12 @@ namespace Gestor.Elementos.Entorno
             return CacheArbolDeMenu;
         }
 
+
+        internal void LimpiarCacheDeArbolDeMenu()
+        {
+            CacheArbolDeMenu = null;
+        }
+
         private void procesarSubMenus(List<ArbolDeMenuDto> resultadoDto, List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)
         {
             List<ArbolDeMenuDtm> procesarMenus = MenusParaProcesar(arbolDeMenu, padre);
@@ -76,6 +82,7 @@ namespace Gestor.Elementos.Entorno
                 }
             }
         }
+
 
         private List<ArbolDeMenuDtm> MenusParaProcesar(List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)
         {

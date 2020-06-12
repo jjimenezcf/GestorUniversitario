@@ -109,7 +109,7 @@ namespace MVCSistemaDeElementos.Controllers
 $@"
 <li>
     <a style=¨display: flex; padding-top: 2px;padding-bottom: 2px;¨>
-      <img src=¨/images/menu/{funcion.Icono}¨ style=¨margin-top: 10px;margin-right: 0px; width: 20px; height: 20px;¨ />
+      <img src=¨/images/menu/{funcion.Icono}¨ style=¨margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;¨ />
       <input id='{funcion.Id}' type='button' class='menu-opcion' value='{funcion.Nombre}' style=¨padding-left: 3px;¨ onclick =¨ArbolDeMenu.MenuPulsado('{idMenuHtml}')¨ />
     </a>
     <ul id=¨{idMenuHtml}¨ name=¨menu¨ menu-padre=¨{idMenuPadreHtml}¨ menu-plegado=¨true¨>
@@ -127,7 +127,7 @@ $@"
             var opcionHtml =
             $@"<li>{Environment.NewLine}" +
             $@"  <a style=¨display: flex; padding-top: 2px;padding-bottom: 2px;¨>{Environment.NewLine}" +
-            $@"    <img src =¨/images/menu/{funcion.Icono}¨ style=¨margin-top: 10px;margin-right: 0px; width: 20px; height: 20px;¨ />" +
+            $@"    <img src =¨/images/menu/{funcion.Icono}¨ style=¨margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;¨ />" +
             $@"    <input id='{idHtml}' type='button' class='menu-opcion' value='{funcion.Nombre}' style=¨padding-left: 3px;¨ onclick =¨ArbolDeMenu.OpcionSeleccionada('{idHtml}','{funcion.VistaMvc.Controlador}','{funcion.VistaMvc.Accion}')¨ />{Environment.NewLine}" +
             $@"  </a>" +
             $@"</li>{Environment.NewLine}";
@@ -135,23 +135,5 @@ $@"
             return opcionHtml;
         }
 
-        private static object ComponerMenu(string literalOpcion, string icono, string idMenu)
-        {
-            var opcionHtml = 
- $@"
-  <img src=¨/images/menu/{icono}¨ style=¨margin-top: 10px;margin-right: 0px; width: 20px; height: 20px;¨ />
-  <input id='{idMenu}' type='button' class='menu-opcion' value='{literalOpcion}' style=¨padding-left: 3px;¨ onclick =¨ArbolDeMenu.MenuPulsado('{idMenu}')¨ />
-";
-
-            //if (!icono.IsNullOrEmpty()) //&& File.Exists(@$"wwwroot\images\menu\{icono}"))
-            //    opcionHtml = @$"<img src=¨/images/menu/{icono}¨ class=¨icono izquierdo¨ />{Environment.NewLine}";
-
-            //opcionHtml = $@"{opcionHtml}{literalOpcion}{Environment.NewLine}";
-
-            //if (!idMenu.IsNullOrEmpty())
-            //    opcionHtml = $"{opcionHtml}<img src=¨/images/menu/angle-down-solid.svg¨ class=¨icono derecho¨ onclick=¨ArbolDeMenu.MenuPulsado('{idMenu}')¨/>{Environment.NewLine}";
-
-            return opcionHtml;
-        }
     }
 }

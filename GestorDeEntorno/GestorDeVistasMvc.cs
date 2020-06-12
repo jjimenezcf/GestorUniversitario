@@ -79,7 +79,7 @@ namespace Gestor.Elementos.Entorno
             return registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
         }
 
-        public static VistaMvcDtm LeerVistaMvc(IMapper mapeador,  string vistaMvc)
+        public VistaMvcDtm LeerVistaMvc(string vistaMvc)
         {
             if (vistaMvc.IsNullOrEmpty())
                 return null;
@@ -89,14 +89,14 @@ namespace Gestor.Elementos.Entorno
             if (partes.Length != 2)
                 GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
 
-            var gestor = Gestor(mapeador);
+
             var filtros = new List<ClausulaDeFiltrado>
                 {
                     new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
                     new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
                 };
 
-            var vistas = gestor.LeerRegistros(0, -1, filtros);
+            var vistas = LeerRegistros(0, -1, filtros);
             if (vistas.Count != 1)
             {
                 //if (vistas.Count == 0)

@@ -39,7 +39,9 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDelCrud = new GestorCrud<TElemento>(descriptor);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
 
-            var vista = GestorDeVistaMvc.LeerVistaMvc(gestorDeElementos.Mapeador, $"{descriptor.Controlador}.{descriptor.Vista}");
+            var gestorDeVista = new GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
+
+            var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");
 
             descriptor.Creador.AbrirEnModal = vista != null ? vista.MostrarEnModal: false;
             descriptor.Editor.AbrirEnModal = vista != null ? vista.MostrarEnModal : false;
