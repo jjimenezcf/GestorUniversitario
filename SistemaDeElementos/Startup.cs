@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using ServicioDeDatos;
 using Gestor.Elementos.Entorno;
 using Gestor.Elementos.Seguridad;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos
 {
@@ -46,6 +47,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeMenus>();
             services.AddScoped<GestorDeVariables>();
             services.AddScoped<GestorDeVistaMvc>();
+            services.AddScoped<GestorDePuestosDeTrabajo>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

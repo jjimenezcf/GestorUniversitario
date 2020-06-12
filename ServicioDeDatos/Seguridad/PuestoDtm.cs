@@ -12,7 +12,7 @@ namespace ServicioDeDatos.Seguridad
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get; set; }
+        public new string Nombre { get; set; }
 
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
