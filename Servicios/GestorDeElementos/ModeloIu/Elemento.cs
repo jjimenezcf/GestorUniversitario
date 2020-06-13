@@ -159,16 +159,6 @@ namespace Gestor.Elementos.ModeloIu
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
-
-        /// <summary>
-        /// Indica si se crea en modal
-        /// </summary>
-        public bool CreacionEnModal { get; set; } = false;
-
-        /// <summary>
-        /// Indica si se la edición es en modal
-        /// </summary>
-        public bool EdicionEnModal { get; set; } = false;
     }
 
 
@@ -225,12 +215,6 @@ namespace Gestor.Elementos.ModeloIu
 
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
-
-                        case nameof(IUDtoAttribute.CreacionEnModal):
-                            return a.CreacionEnModal;
-
-                        case nameof(IUDtoAttribute.EdicionEnModal):
-                            return a.EdicionEnModal;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

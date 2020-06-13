@@ -35,7 +35,7 @@ namespace Gestor.Elementos
     {
         public string Propiedad { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
-    };
+    }
 
     public static partial class Joins
     {
@@ -80,8 +80,12 @@ namespace Gestor.Elementos
         {
             foreach (var orden in ordenacion)
             {
-                if (orden.Propiedad == nameof(Registro.Id))
+                if (orden.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
                     return registros.OrdenPorId(orden);
+
+                if (orden.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower())
+                    return registros.OrdenPorNombre(orden);
+
             }
 
             return registros;
@@ -89,13 +93,16 @@ namespace Gestor.Elementos
 
         public static IQueryable<TRegistro> OrdenPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden) where TRegistro : Registro
         {
+            return orden.Modo == ModoDeOrdenancion.ascendente
+                ? registros.OrderBy(x => x.Id)
+                : registros.OrderByDescending(x => x.Id);
+        }
 
-            if (orden.Propiedad == nameof(Registro.Id))
-                return orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Id)
-                    : registros.OrderByDescending(x => x.Id);
-
-            return registros;
+        public static IQueryable<TRegistro> OrdenPorNombre<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden) where TRegistro : Registro
+        {
+            return orden.Modo == ModoDeOrdenancion.ascendente
+                ? registros.OrderBy(x => x.Nombre)
+                : registros.OrderByDescending(x => x.Nombre);
         }
     }
     #endregion
@@ -148,7 +155,7 @@ namespace Gestor.Elementos
 
 
         public GestorDeElementos(Func<TContexto> generadorDeContexto, IMapper mapeador)
-        :this(generadorDeContexto(),mapeador)
+        : this(generadorDeContexto(), mapeador)
         {
         }
 
@@ -590,3 +597,4 @@ namespace Gestor.Elementos
     }
 
 }
+

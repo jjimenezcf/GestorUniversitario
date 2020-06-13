@@ -87,7 +87,8 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
-        public virtual void MapearElementosAlGrid(IEnumerable<TElemento> elementos, int cantidadPorLeer, int posicionInicial) 
+        public virtual void MapearElementosAlGrid<T>(IEnumerable<T> elementos, int cantidadPorLeer, int posicionInicial)
+            where T : Elemento
         {
             Mnt.Datos.PosicionInicial = posicionInicial;
             Mnt.Datos.CantidadPorLeer = cantidadPorLeer;

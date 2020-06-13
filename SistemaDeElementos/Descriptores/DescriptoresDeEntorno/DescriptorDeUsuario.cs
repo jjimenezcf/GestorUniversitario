@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        posicion: new Posicion() { fila = 0, columna = 0 },
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
-                       crudModal: new CrudPermiso(ModoDescriptor.Seleccion),
+                       crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
             
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            

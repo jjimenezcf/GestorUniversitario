@@ -8,9 +8,9 @@ using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CrudPermiso : DescriptorDeCrud<PermisoDto>
+    public class DescriptorDePermiso : DescriptorDeCrud<PermisoDto>
     {
-        public CrudPermiso(ModoDescriptor modo)
+        public DescriptorDePermiso(ModoDescriptor modo)
         : base(controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo)
         {            
             if (modo == ModoDescriptor.Mantenimiento)

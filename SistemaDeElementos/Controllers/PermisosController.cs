@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
         (
          gestorDePermisos,
          gestorDeErrores,
-         new CrudPermiso(ModoDescriptor.Mantenimiento)
+         new DescriptorDePermiso(ModoDescriptor.Mantenimiento)
         )
         {
         }

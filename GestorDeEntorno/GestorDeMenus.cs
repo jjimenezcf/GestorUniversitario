@@ -84,9 +84,6 @@ namespace Gestor.Elementos.Entorno
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Orden)
                     : registros.OrderByDescending(x => x.Orden);
-                else
-                    registros = registros.OrdenPorId(orden);
-
 
             return registros;
         }
@@ -143,6 +140,7 @@ namespace Gestor.Elementos.Entorno
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
+            registros = base.AplicarOrden(registros, ordenacion);
             return registros.OrdenarMenus(ordenacion);
         }
 

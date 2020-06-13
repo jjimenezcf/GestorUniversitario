@@ -420,6 +420,13 @@ namespace MVCSistemaDeElementos.Controllers
             return base.View(GestorDelCrud.Descriptor.Vista, GestorDelCrud.Descriptor);
         }
 
+        public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)
+        where T: Elemento
+        {
+            ViewBag.DatosDeConexion = DatosDeConexion;
+            return base.View(descriptor.Vista, descriptor);
+        }
+
 
         protected IEnumerable<TElemento> LeerOrdenados(string orden)
         {
