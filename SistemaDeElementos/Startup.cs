@@ -35,7 +35,10 @@ namespace MVCSistemaDeElementos
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
+
             services.AddRazorPages();
+
             var cadenaDeConexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
 
             services.AddDbContext<ContextoSe>(options => options.UseSqlServer(cadenaDeConexion));

@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , ayuda: "buscar por controlador"
                 , new Posicion { fila = 1, columna = 0 });
 
-            Mnt.Datos.ExpresionElemento = $"([{nameof(VistaMvcDto.Nombre)}])";
+            RutaVista = "Entorno";
         }
 
 

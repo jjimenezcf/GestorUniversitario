@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDePuestoDeTrabajo(ModoDescriptor modo)
             : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo)
         {
-            Mnt.Datos.ExpresionElemento = $"([{nameof(PuestoDto.Nombre)}])";
+            RutaVista = "Seguridad";
         }
 
 
@@ -32,5 +32,5 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    
+
 }

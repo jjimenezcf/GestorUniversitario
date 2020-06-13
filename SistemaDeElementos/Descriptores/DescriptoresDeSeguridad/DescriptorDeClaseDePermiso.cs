@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeClaseDePermiso(ModoDescriptor modo)
             : base(nameof(ClaseDePermisoController), nameof(ClaseDePermisoController.CrudClaseDePermiso), modo)
         {
-            Mnt.Datos.ExpresionElemento = $"([{nameof(ClasePermisoDto.Nombre)}])";
+            RutaVista = "Seguridad";
         }
 
 

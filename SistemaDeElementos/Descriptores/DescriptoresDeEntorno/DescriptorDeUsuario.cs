@@ -30,9 +30,9 @@ namespace MVCSistemaDeElementos.Descriptores
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
             
-            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");            
-
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
+            RutaVista = "Entorno";
         }
 
 

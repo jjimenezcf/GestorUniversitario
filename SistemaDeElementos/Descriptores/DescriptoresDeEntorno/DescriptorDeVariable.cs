@@ -18,8 +18,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , propiedad: nameof(VariableDto.Valor)
                 , ayuda: "buscar por valor"
                 , new Posicion { fila = 0, columna = 1 });
-
-           Mnt.Datos.ExpresionElemento = $"([{nameof(VariableDto.Nombre)}])";
+            RutaVista = "Entorno";
         }
 
 

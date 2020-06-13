@@ -38,8 +38,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                         propiedad: nameof(PermisoDto.Tipo),
                                         posicion: new Posicion() { fila = 0, columna = 1 });
             }
-
-            Mnt.Datos.ExpresionElemento = $"[{nameof(PermisoDto.Nombre)}]";
+            
+            RutaVista = "Seguridad";
         }
 
 

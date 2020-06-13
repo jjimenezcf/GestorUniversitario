@@ -417,7 +417,8 @@ namespace MVCSistemaDeElementos.Controllers
         public ViewResult ViewCrud()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
-            return base.View(GestorDelCrud.Descriptor.Vista, GestorDelCrud.Descriptor);
+
+            return base.View($"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty()? "": $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}", GestorDelCrud.Descriptor);
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

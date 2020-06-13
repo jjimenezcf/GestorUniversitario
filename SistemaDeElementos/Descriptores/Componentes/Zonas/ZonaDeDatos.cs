@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
+using ServicioDeDatos.Elemento;
 using Utilidades;
 using UtilidadesParaIu;
 
@@ -18,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private List<FilaDelGrid<TElemento>> Filas => Grid.filas;
 
-        public string ExpresionElemento { get; set; } 
+        public string ExpresionElemento { get; set; } = $"[{nameof(Registro.Nombre)}]"; 
 
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; } = 0;

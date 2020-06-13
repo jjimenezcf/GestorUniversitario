@@ -22,6 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
+        public string RutaVista { get; set; }
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(

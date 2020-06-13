@@ -19,9 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                           propiedad: nameof(MenuDto.Padre),
                                           posicion: new Posicion() { fila = 0, columna = 0 });
 
-
-
-            Mnt.Datos.ExpresionElemento = $"[{nameof(MenuDto.Nombre)}]";
+            RutaVista = "Entorno";
         }
     public override string RenderControl()
     {
