@@ -20,11 +20,14 @@ namespace Gestor.Elementos.Entorno
           , AnchoSeparador = 5)]
     public class UsuarioDto : ElementoDto
     {
+        [IUPropiedad(Visible = false)]
+        public string NombreCompleto => $"({Login}) {Apellido}, {Nombre}";
+
         [IUPropiedad(
             Etiqueta = "Usuario",
             Ayuda = "Usuario de conexión", 
             Tipo = typeof(string), 
-            Fila = 0, 
+            Fila = 1, 
             Columna = 0,
             Ordenar = true,
             PorAnchoMnt=25
@@ -38,7 +41,7 @@ namespace Gestor.Elementos.Entorno
             Ayuda = "Apellidos",
             Tipo = typeof(string),
             Fila = 2,
-            Columna = 0,
+            Columna = 1,
             Ordenar = true,
             PorAnchoMnt = 45
             )
@@ -50,7 +53,7 @@ namespace Gestor.Elementos.Entorno
             Etiqueta = "Nombre",
             Ayuda = "Nombre",
             Tipo = typeof(string),
-            Fila = 1,
+            Fila = 2,
             Columna = 0,
             Posicion = 0
             )

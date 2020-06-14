@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AutoMapper;
-using Gestor.Elementos;
-using Gestor.Elementos.Seguridad;
+﻿using AutoMapper;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 
 namespace Gestor.Elementos.Seguridad
 {
 
- 
+
     public class GestorDeClaseDePermisos : GestorDeElementos<ContextoSe, ClasePermisoDtm, ClasePermisoDto>
     {
 

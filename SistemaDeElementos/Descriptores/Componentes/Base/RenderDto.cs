@@ -79,6 +79,8 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmlControles = htmlControles + RenderEtiquetaDelDto(tabla, descriptorControl, i, j, anchoEtiqueta);
                     anchoTotal = anchoTotal + anchoEtiqueta;
                 }
+                else
+                    anchoControl = 100;
 
                 if (z == columna.PosicionMaxima)
                     anchoControl = 100 - anchoTotal;

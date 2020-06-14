@@ -26,16 +26,16 @@
     </script>
 
     <div id="div-crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase" class="contenedor-selector">
-        <input id="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase" 
-               class="lista-dinamica" tipo="lista-dinamica" 
-               propiedad="clase" control-de-filtro="S" 
-               criterio-de-filtro="igual" 
-               clase-elemento="ClasePermisoDto" 
-               guardar-en="IdClase" 
-               mostrar-propiedad="nombre" 
-               carga-dinamica="S" 
-               oninput="Crud.ListaDeElementos('cargar',this)" 
-               placeholder="Seleccionar ..." 
+        <input id="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase"
+               class="lista-dinamica" tipo="lista-dinamica"
+               propiedad="clase" control-de-filtro="S"
+               criterio-de-filtro="igual"
+               clase-elemento="ClasePermisoDto"
+               guardar-en="IdClase"
+               mostrar-propiedad="nombre"
+               carga-dinamica="S"
+               oninput="Crud.ListaDeElementos('cargar',this)"
+               placeholder="Seleccionar ..."
                list="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase-lista">
         <datalist id="crud_permisodto_mantenimiento_filtro_2_bloque_lista-de-elemento_clase-lista">
         </datalist>
@@ -45,4 +45,14 @@
 
 </body>
 </html>
+
+
+<Div id="crud_usuariodto_mantenimiento_zona-menu">
+    <div id="crud_usuariodto_mantenimiento_zona-menu_menu">
+        <input id="crud_usuariodto_mantenimiento_zona-menu_menu_opcion_0" type="button" value="Nuevo usuario" onClick="Crud.EventosDelMantenimiento('crear-elemento')" />
+        <input id="crud_usuariodto_mantenimiento_zona-menu_menu_opcion_1" type="button" value="Editar usuario" onClick="Crud.EventosDelMantenimiento('editar-elemento')" />
+        <input id="crud_usuariodto_mantenimiento_zona-menu_menu_opcion_2" type="button" value="Borrar usuario" onClick="Crud.EventosDelMantenimiento('eliminar-elemento')" />
+        <input id="crud_usuariodto_mantenimiento_zona-menu_menu_opcion_3" type="button" value="Puestos" onClick="Crud.EventosDelMantenimiento('relacionar-elementos', 'new Entorno.CrudMntPuestoDeUnUsuario('a',b,c,\'d\')' )"/>
+    </div>
+</Div>
 

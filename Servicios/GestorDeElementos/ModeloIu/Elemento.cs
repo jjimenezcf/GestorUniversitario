@@ -128,6 +128,7 @@ namespace Gestor.Elementos.ModeloIu
                     return VisibleEnGrid;
             }
 
+
             return false;
         }
         public bool EsEditable(ModoDeTrabajo modo)

@@ -122,6 +122,9 @@
             this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelDeMnt, this.InfoSelector);
         }
 
+        public IrARelacionar(crudDeRelacion: string) {
+        }
+
         public CerrarModalDeEdicion() {
             this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
         }

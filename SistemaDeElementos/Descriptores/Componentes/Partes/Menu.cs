@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlOpciones = "";
             foreach (OpcionDeMenu<TElemento> opcioDeMenu in OpcioneDeMenu)
             {
-                htmlOpciones = htmlOpciones + opcioDeMenu.RenderControl();
+                htmlOpciones = htmlOpciones + opcioDeMenu.RenderControl() + Environment.NewLine;
             }
 
             return htmlMenu.Replace("{idMenu}", IdHtml).Replace("{hmlOpciones}", $"{Environment.NewLine}{htmlOpciones}");

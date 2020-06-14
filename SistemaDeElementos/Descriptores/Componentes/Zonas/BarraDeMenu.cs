@@ -59,9 +59,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨>
+                   <div id=¨{IdHtml}¨>
                      {Menu.RenderControl()}
-                   </Div>
+                   </div>
                 ";
 
             return htmContenedorMnt.Render();

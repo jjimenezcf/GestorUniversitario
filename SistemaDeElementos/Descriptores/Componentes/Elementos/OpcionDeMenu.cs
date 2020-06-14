@@ -12,6 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string CrearElemento = "crear-elemento";
         public const string EditarElemento = "editar-elemento";
         public const string EliminarElemento = "eliminar-elemento";
+        public const string RelacionarElementos = "relacionar-elementos";
     }
 
     public static class TipoAccionCreacion
@@ -40,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class AccionDeMenuMnt : AccionDeMenu
     {
         string TipoAccion;
-
+        public string CrudDeRelacion { get; set; }
 
         public AccionDeMenuMnt(string tipoAccion)
         : base()
@@ -50,9 +51,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
+
+            if (TipoAccion == TipoAccionMnt.RelacionarElementos)
+                return $"Crud.EventosDelMantenimiento('{TipoAccion}','PuestoDeUnUsuario')";
+            else
+                return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
         }
     }
+
 
     public class AccionDeMenuCreacion : AccionDeMenu
     {

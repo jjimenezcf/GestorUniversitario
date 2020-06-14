@@ -25,7 +25,6 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuDeEdicion = new BarraDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
-            //AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.EdicionEnModal));
         }
 
 

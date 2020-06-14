@@ -682,6 +682,17 @@
             return url;
         }
 
+        protected DefinirFiltroPorId(id: number): string {
+            return this.DefinirFiltroPorRestrictor(Literal.filtro.clausulaId, id);
+        }
+
+        protected DefinirFiltroPorRestrictor(propiedad:string, valor: number): string {
+            var clausulas = new Array<ClausulaDeFiltrado>();
+            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, Literal.filtro.criterio.igual, `${valor}`);
+            clausulas.push(clausula);
+            return JSON.stringify(clausulas);
+        }
+
 
         private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, filtro: string): string {
             let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=-1&filtro=${filtro}`;

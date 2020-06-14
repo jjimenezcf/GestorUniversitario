@@ -1,6 +1,6 @@
 ﻿namespace Crud {
 
-    export function EventosDelMantenimiento(accion: string, parametros: string): void {
+    export function EventosDelMantenimiento(accion: string, parametros: any): void {
         try {
             switch (accion) {
                 case Evento.Mnt.Crear: {
@@ -13,6 +13,11 @@
                 }
                 case Evento.Mnt.Borrar: {
                     crudMnt.AbrirModalBorrarElemento();
+                    break;
+                }
+                case Evento.Mnt.Relacionar: {
+                    let crudDeRelacion:string = parametros;
+                    crudMnt.IrARelacionar(crudDeRelacion);
                     break;
                 }
                 case Evento.Mnt.Buscar: {
