@@ -2,7 +2,7 @@
 
 namespace Gestor.Elementos.Seguridad
 {
-    public class TipoPermisoDto : Elemento
+    public class TipoPermisoDto : ElementoDto
     {
         public string Nombre { get; set; }
     }

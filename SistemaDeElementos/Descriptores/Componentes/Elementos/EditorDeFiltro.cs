@@ -2,7 +2,7 @@
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class EditorFiltro<TElemento> : ControlFiltroHtml where TElemento : Elemento
+    public class EditorFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
         public EditorFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(padre: bloque

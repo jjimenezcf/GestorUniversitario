@@ -6,7 +6,7 @@ using Utilidades;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class BloqueDeFitro<TElemento> : ControlFiltroHtml where TElemento : Elemento
+    public class BloqueDeFitro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
         public TablaFiltro Tabla { get; set; }
 
@@ -33,12 +33,12 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Controles.Add(c);
         }
-        public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : Elemento 
+        public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto 
         {
             AnadirControl(s);
         }
 
-        public void AnadirSelector<t1,t2>(SelectorDeFiltro<t1, t2> s) where t1:Elemento where t2:Elemento
+        public void AnadirSelector<t1,t2>(SelectorDeFiltro<t1, t2> s) where t1:ElementoDto where t2:ElementoDto
         {
             AnadirControl(s);
             AnadirControl(s.Modal);

@@ -24,7 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
         where TContexto : ContextoSe
         where TRegistro : Registro
-        where TElemento : Elemento
+        where TElemento : ElementoDto
     {
 
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
@@ -422,7 +422,7 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)
-        where T: Elemento
+        where T: ElementoDto
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
             return base.View(descriptor.Vista, descriptor);

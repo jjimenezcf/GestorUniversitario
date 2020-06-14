@@ -3,7 +3,7 @@
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class SelectorDeFiltro<TElemento,TSeleccionado> : ControlFiltroHtml where TElemento : Elemento where TSeleccionado : Elemento
+    public class SelectorDeFiltro<TElemento,TSeleccionado> : ControlFiltroHtml where TElemento : ElementoDto where TSeleccionado : ElementoDto
     {
         public BloqueDeFitro<TElemento> Bloque => (BloqueDeFitro<TElemento>) Padre;
         public string propiedadParaFiltrar { get; private set; }

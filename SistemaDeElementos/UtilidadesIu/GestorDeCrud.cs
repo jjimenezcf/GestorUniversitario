@@ -5,7 +5,7 @@ using MVCSistemaDeElementos.UtilidadesIu;
 namespace UtilidadesParaIu
 {
 
-    public class GestorCrud<T> where T : Elemento
+    public class GestorCrud<T> where T : ElementoDto
     {
         public DescriptorDeCrud<T> Descriptor { get; }
 

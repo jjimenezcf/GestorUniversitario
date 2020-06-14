@@ -2,7 +2,7 @@
 
 namespace Gestor.Elementos.Archivos
 {
-    public class ArchivosDto: Elemento
+    public class ArchivosDto: ElementoDto
     {
     }
 }

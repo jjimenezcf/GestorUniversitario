@@ -6,7 +6,7 @@ using Utilidades;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : Elemento
+    public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
 
         public ICollection<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();

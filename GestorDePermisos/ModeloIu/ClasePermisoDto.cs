@@ -3,7 +3,7 @@
 namespace Gestor.Elementos.Seguridad
 {
     [IUDto]
-    public class ClasePermisoDto: Elemento
+    public class ClasePermisoDto: ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Clase",

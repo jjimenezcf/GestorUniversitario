@@ -44,9 +44,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderControlesParaMapearElDto(DescriptorDeTabla tabla, short i, short j)
         {
-            var porcentajeDeEtiqueta = (short)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.AnchoEtiqueta));
+            var porcentajeDeEtiqueta = (short)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.AnchoEtiqueta));
             var pocentajeDeControl = 100 - porcentajeDeEtiqueta;
-            var porcentajeDelSeparador = (short)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.AnchoSeparador));
+            var porcentajeDelSeparador = (short)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.AnchoSeparador));
             var columna = tabla.ObtenerFila(i).ObtenerColumna(j);
             var htmlControles = "";
             double anchoEtiqueta = columna.NumeroDeEtiquetasVisibles == 0 ? 0 : porcentajeDeEtiqueta / columna.NumeroDeEtiquetasVisibles;

@@ -13,7 +13,7 @@ namespace UtilidadesParaIu
         public string valor { get; set; }
     }
 
-    public class ColumnaDelGrid<TElemento> where TElemento : Elemento
+    public class ColumnaDelGrid<TElemento> where TElemento : ElementoDto
     {
         public ZonaDeDatos<TElemento> ZonaDeDatos { get; set; }
 

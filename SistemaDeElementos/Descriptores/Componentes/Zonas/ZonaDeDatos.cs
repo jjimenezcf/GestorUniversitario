@@ -9,7 +9,7 @@ using UtilidadesParaIu;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ZonaDeDatos<TElemento> : ControlHtml where TElemento : Elemento
+    public class ZonaDeDatos<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
 

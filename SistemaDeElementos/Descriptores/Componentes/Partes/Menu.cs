@@ -4,7 +4,7 @@ using Gestor.Elementos.ModeloIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class Menu<TElemento> : ControlHtml where TElemento : Elemento
+    public class Menu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public BarraDeMenu<TElemento> ZonaMenu => (BarraDeMenu<TElemento>)Padre;
         public ICollection<OpcionDeMenu<TElemento>> OpcioneDeMenu { get; private set; } = new List<OpcionDeMenu<TElemento>>();

@@ -4,7 +4,7 @@ using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
 {
-    public class FilaDelGrid<TElemento> where TElemento : Elemento
+    public class FilaDelGrid<TElemento> where TElemento : ElementoDto
     {
         private List<CeldaDelGrid<TElemento>> Celdas = new List<CeldaDelGrid<TElemento>>();
 
@@ -18,7 +18,7 @@ namespace UtilidadesParaIu
 
         public int NumeroDeFila { get; set; }
 
-        public FilaDelGrid(ZonaDeDatos<TElemento> datos, Gestor.Elementos.ModeloIu.Elemento elemento)
+        public FilaDelGrid(ZonaDeDatos<TElemento> datos, Gestor.Elementos.ModeloIu.ElementoDto elemento)
         {
             Datos = datos;
             var columna = datos.ObtenerColumna("chksel");

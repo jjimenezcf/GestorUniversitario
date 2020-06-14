@@ -130,7 +130,7 @@ namespace Gestor.Elementos
 
     public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
         where TRegistro : Registro
-        where TElemento : Elemento
+        where TElemento : ElementoDto
         where TContexto : ContextoSe
     {
         public TContexto Contexto;

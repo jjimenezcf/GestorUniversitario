@@ -18,7 +18,7 @@ namespace Gestor.Elementos.Entorno
 
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5)]
-    public class UsuarioDto : Elemento
+    public class UsuarioDto : ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Usuario",

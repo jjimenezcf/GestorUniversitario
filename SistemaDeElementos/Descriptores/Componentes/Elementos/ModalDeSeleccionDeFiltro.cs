@@ -4,7 +4,7 @@ using UtilidadesParaIu;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> : ControlFiltroHtml where TElemento : Elemento where TSeleccionado : Elemento
+    public class ModalDeSeleccionDeFiltro<TElemento, TSeleccionado> : ControlFiltroHtml where TElemento : ElementoDto where TSeleccionado : ElementoDto
     {
         public SelectorDeFiltro<TElemento, TSeleccionado> Selector { get; set; }
         public DescriptorDeCrud<TSeleccionado> CrudModal { get; set; }

@@ -7,7 +7,7 @@ namespace Gestor.Elementos.Entorno
 
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5)]
-    public class VistaMvcDto : Elemento
+    public class VistaMvcDto : ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Vista",

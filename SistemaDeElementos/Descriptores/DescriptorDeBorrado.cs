@@ -2,7 +2,7 @@
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeBorrado<TElemento> : ControlHtml where TElemento : Elemento
+    public class DescriptorDeBorrado<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorDeBorrado(DescriptorDeCrud<TElemento> crud, string etiqueta) 
         : base(

@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion }
 
-    public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : Elemento
+    public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public string NombreElemento => Etiqueta.ToLower();
 
@@ -73,7 +73,7 @@ namespace MVCSistemaDeElementos.Descriptores
             foreach (var p in propiedades)
             {
                 var columna = new ColumnaDelGrid<TElemento> { Propiedad = p.Name, Tipo = p.PropertyType };
-                IUPropiedadAttribute atributos = Elemento.ObtenerAtributos(p);
+                IUPropiedadAttribute atributos = ElementoDto.ObtenerAtributos(p);
 
                 if (atributos != null)
                 {
@@ -89,7 +89,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
         public virtual void MapearElementosAlGrid<T>(IEnumerable<T> elementos, int cantidadPorLeer, int posicionInicial)
-            where T : Elemento
+            where T : ElementoDto
         {
             Mnt.Datos.PosicionInicial = posicionInicial;
             Mnt.Datos.CantidadPorLeer = cantidadPorLeer;

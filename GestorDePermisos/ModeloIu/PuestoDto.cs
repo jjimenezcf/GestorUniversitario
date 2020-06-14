@@ -4,7 +4,7 @@ namespace Gestor.Elementos.Seguridad
 {
     [IUDto(AnchoEtiqueta = 20
       , AnchoSeparador = 5)]
-    public class PuestoDto : Elemento
+    public class PuestoDto : ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Puesto",

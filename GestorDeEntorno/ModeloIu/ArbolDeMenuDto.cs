@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Gestor.Elementos.Entorno
 {
-    public class ArbolDeMenuDto : Elemento
+    public class ArbolDeMenuDto : ElementoDto
     {
         public string Padre { get; set; }
 

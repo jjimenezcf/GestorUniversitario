@@ -20,7 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal string IdHtmlContenedor => $"{Fila.Tabla.IdHtml}-{Fila.NumeroFila}-{NumeroColumna}-crtl";
         internal string IdHtml => $"{Fila.Tabla.IdHtml}-{propiedad}";
 
-        internal IUPropiedadAttribute atributos => Elemento.ObtenerAtributos(Descriptor);
+        internal IUPropiedadAttribute atributos => ElementoDto.ObtenerAtributos(Descriptor);
     }
 
     public class DescriptorDeColumna
@@ -189,7 +189,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private void AnadirPropiedad(PropertyInfo propiedad)
         {
-            IUPropiedadAttribute atributos = Elemento.ObtenerAtributos(propiedad);
+            IUPropiedadAttribute atributos = ElementoDto.ObtenerAtributos(propiedad);
             if (atributos != null)
             {
                 var descriptorColumna = ObtenerColumna(atributos.Fila, atributos.Columna);

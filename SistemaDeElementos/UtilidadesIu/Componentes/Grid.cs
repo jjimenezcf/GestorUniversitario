@@ -8,7 +8,7 @@ using Utilidades;
 
 namespace UtilidadesParaIu
 {
-    public class Grid<TElemento> where TElemento : Elemento
+    public class Grid<TElemento> where TElemento : ElementoDto
     {
         public string Id { get; private set; }
 

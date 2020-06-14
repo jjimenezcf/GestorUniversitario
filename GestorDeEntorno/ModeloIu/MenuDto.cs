@@ -8,7 +8,7 @@ namespace Gestor.Elementos.Entorno
 
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5)]
-    public class MenuDto : Elemento
+    public class MenuDto : ElementoDto
     {
 
         [IUPropiedad(

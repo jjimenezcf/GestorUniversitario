@@ -11,7 +11,7 @@ namespace Gestor.Elementos.Seguridad
 
     [IUDto(AnchoEtiqueta = 20
           ,AnchoSeparador = 5)]
-    public class PermisoDto : Elemento
+    public class PermisoDto : ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Permiso",

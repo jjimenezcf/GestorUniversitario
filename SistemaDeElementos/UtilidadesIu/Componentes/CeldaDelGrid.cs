@@ -3,7 +3,7 @@ using Gestor.Elementos.ModeloIu;
 
 namespace UtilidadesParaIu
 {
-    public class CeldaDelGrid<TElemento> where TElemento : Elemento
+    public class CeldaDelGrid<TElemento> where TElemento : ElementoDto
     {
         private ColumnaDelGrid<TElemento> _columna;
 

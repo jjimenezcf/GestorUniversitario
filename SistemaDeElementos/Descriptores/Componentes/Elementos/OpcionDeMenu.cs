@@ -141,7 +141,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public class OpcionDeMenu<TElemento> : ControlHtml where TElemento : Elemento
+    public class OpcionDeMenu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public Menu<TElemento> Menu => (Menu<TElemento>)Padre;
         public AccionDeMenu Accion { get; private set; }

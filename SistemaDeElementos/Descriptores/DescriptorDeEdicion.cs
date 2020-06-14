@@ -4,7 +4,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeEdicion<TElemento> : ControlHtml where TElemento : Elemento
+    public class DescriptorDeEdicion<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }
@@ -122,7 +122,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderInputId(DescriptorDeTabla tabla)
         {
             var htmdDescriptorControl = $@"<input id=¨{tabla.IdHtml}_idElemento¨ 
-                                             propiedad=¨{nameof(Elemento.Id).ToLower()}¨ 
+                                             propiedad=¨{nameof(ElementoDto.Id).ToLower()}¨ 
                                              class=¨propiedad propiedad-id¨ 
                                              tipo=¨{TipoControl.Editor}¨ 
                                              type=¨text¨ 

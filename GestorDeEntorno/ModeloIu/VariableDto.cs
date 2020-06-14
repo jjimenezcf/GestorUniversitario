@@ -6,7 +6,7 @@ namespace Gestor.Elementos.Entorno
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5)]
-    public class VariableDto : Elemento
+    public class VariableDto : ElementoDto
     {
         [IUPropiedad(
           Etiqueta = "Variable",

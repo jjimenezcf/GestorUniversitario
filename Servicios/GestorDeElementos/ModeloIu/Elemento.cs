@@ -169,7 +169,7 @@ namespace Gestor.Elementos.ModeloIu
     }
 
 
-    public class Elemento
+    public class ElementoDto
     {
         [IUPropiedad(
             Etiqueta = "Id",

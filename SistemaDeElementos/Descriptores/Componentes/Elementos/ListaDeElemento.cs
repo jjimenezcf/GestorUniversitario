@@ -6,7 +6,7 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class ListaDeElemento<TElemento> : ControlFiltroHtml where TElemento : Elemento 
+    public class ListaDeElemento<TElemento> : ControlFiltroHtml where TElemento : ElementoDto 
     {
 
         public string GuardarEn { get; private set; }
@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var propiedades = typeof(TElemento).GetProperties();
             var p = propiedades.FirstOrDefault(x => x.Name == propiedad);
-            IUPropiedadAttribute atributos = Elemento.ObtenerAtributos(p);
+            IUPropiedadAttribute atributos = ElementoDto.ObtenerAtributos(p);
 
             if (atributos.Etiqueta.IsNullOrEmpty())
                 GestorDeErrores.Emitir($"No ha definido el atributo {nameof(atributos.Etiqueta)} de la propiedad {propiedad}");
