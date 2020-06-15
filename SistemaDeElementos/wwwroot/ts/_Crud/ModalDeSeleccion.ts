@@ -169,7 +169,7 @@
                 , Ajax.EndPoint.RecargarModalEnHtml
                 , this
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.ActualizarGrid
                 , null
@@ -212,7 +212,7 @@
                 , Ajax.EndPoint.Leer
                 , this
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.TratarValoresDevuelto
                 , null

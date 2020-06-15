@@ -32,13 +32,13 @@
         private _span: Element;
         private _datosPost: FormData;
 
-        public llamador: any
+        public llamador: any;
         public nombre: string;
         public DatosDeEntrada: any;
         public resultado: ResultadoJson;
         public Error: boolean = false;
 
-        public get IdBarraDeProceso(): string { return this._idBarraDeProceso;} ;
+        public get IdBarraDeProceso(): string { return this._idBarraDeProceso; };
         public get Tipo(): TipoPeticion { return this._tipoPeticion; }
         public get Request(): XMLHttpRequest { return this._req; }
         public get Url(): string { return this._url; }
@@ -78,7 +78,7 @@
 
         public Ejecutar() {
             BlanquearMensaje();
-            this.PeticionAjax();  
+            this.PeticionAjax();
             if (this.Error) throw `${this.resultado.mensaje}`;
         }
 
@@ -99,21 +99,30 @@
         private PeticionAjax() {
 
             function RespuestaCorrecta(descriptor: DescriptorAjax) {
-
-                if (EsNula(descriptor.Request.response))
-                    descriptor.ErrorEnPeticion();
-                else {
-                    descriptor.ParsearRespuesta();
-
-                    if (descriptor.resultado === undefined || descriptor.resultado.estado === Ajax.jsonResultError)
+                try {
+                    if (EsNula(descriptor.Request.response))
                         descriptor.ErrorEnPeticion();
-                    else
-                        descriptor.DespuesDeLaPeticion();
+                    else {
+                        descriptor.ParsearRespuesta();
+
+                        if (descriptor.resultado === undefined || descriptor.resultado.estado === Ajax.jsonResultError)
+                            descriptor.ErrorEnPeticion();
+                        else
+                            descriptor.DespuesDeLaPeticion();
+                    }
+                }
+                finally {
+                    QuitarCapa();
                 }
             }
 
             function RespuestaErronea() {
-                this.ErrorEnPeticion();
+                try {
+                    this.ErrorEnPeticion();
+                }
+                finally {
+                    QuitarCapa();
+                }
             }
 
             this.DefinirBarraDeProceso();
@@ -122,6 +131,10 @@
 
             this.Request.open(ParsearModo(this.Modo), this.Url, EsAsincrona(this.Tipo));
 
+            if (EsAsincrona(this.Tipo)) {
+                PonerCapa();
+            }
+
             if (this._datosPost != undefined)
                 this.Request.send(this._datosPost);
             else
@@ -129,36 +142,35 @@
         }
 
         private ErrorEnPeticion() {
+                this.Error = true;
+                if (this._divBarra != undefined) {
+                    this._divBarra.classList.remove(ClaseCss.barraVerde);
+                    this._divBarra.classList.remove(ClaseCss.barraAzul);
+                    this._divBarra.classList.add(ClaseCss.barraRoja);
+                    this._span.innerHTML = "Error al subir el fichero";
+                }
 
-            this.Error = true;
-            if (this._divBarra != undefined) {
-                this._divBarra.classList.remove(ClaseCss.barraVerde);
-                this._divBarra.classList.remove(ClaseCss.barraAzul);
-                this._divBarra.classList.add(ClaseCss.barraRoja);
-                this._span.innerHTML = "Error al subir el fichero";
-            }
+                if (this.Request.status === 404) {
 
-            if (this.Request.status === 404) {
+                    this.resultado = new ResultadoJson();
+                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición no definida`;
+                    console.error(`No está definida la petición con los parámetros indicados: ${this.Url}`);
+                }
+                else if (this.Request.status === 500) {
 
-                this.resultado = new ResultadoJson();
-                this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición no definida`;
-                console.error(`No está definida la petición con los parámetros indicados: ${this.Url}`);
-            }
-            else if (this.Request.status === 500) {
+                    this.resultado = new ResultadoJson();
+                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición ambigüa`;
+                    console.error(`Petición mal definida: ${this.Url}. ${this.Request.response}`);
+                }
+                else {
+                    this.resultado = JSON.parse(this.Request.response);
+                    console.error(this.resultado.consola);
+                    if (!EsNula(this.resultado.mensaje))
+                        this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
+                }
 
-                this.resultado = new ResultadoJson();
-                this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición ambigüa`;
-                console.error(`Petición mal definida: ${this.Url}. ${this.Request.response}`);
-            }
-            else {
-                this.resultado = JSON.parse(this.Request.response);
-                console.error(this.resultado.consola);
-                if (!EsNula(this.resultado.mensaje))
-                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
-            }
-
-            if (this.ProcesarError)
-                this.ProcesarError(this);   
+                if (this.ProcesarError)
+                    this.ProcesarError(this);
         }
 
         private DespuesDeLaPeticion() {

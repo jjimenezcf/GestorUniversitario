@@ -79,3 +79,29 @@
     text-align: left;
     padding-left: 15px;
 }
+
+.sin-capa-de-bloqueo {
+    background: #ffffff;
+    display: none;
+    width: 0px;
+    height: 0px;
+}
+
+.con-capa-de-bloqueo {
+    display: block;
+    border: double;
+    border-color: antiquewhite;
+    border-width: 10px;
+    background: #ffffff;
+    position: absolute;
+    background-image: url('/images/trabajando.gif');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.2;
+}

@@ -122,9 +122,6 @@
             this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelDeMnt, this.InfoSelector);
         }
 
-        public IrARelacionar(crudDeRelacion: string) {
-        }
-
         public CerrarModalDeEdicion() {
             this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
         }
@@ -207,7 +204,7 @@
                     , Ajax.EndPoint.LeerGridEnHtml
                     , this
                     , url
-                    , ApiDeAjax.TipoPeticion.Sincrona
+                    , ApiDeAjax.TipoPeticion.Asincrona
                     , ApiDeAjax.ModoPeticion.Get
                     , this.ActualizarGrid
                     , null

@@ -209,7 +209,7 @@
                 , Ajax.EndPoint.Modificar
                 , this
                 , url
-                , ApiDeAjax.TipoPeticion.Sincrona
+                , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.DespuesDeModificar
                 , this.SiHayErrorTrasPeticionAjax

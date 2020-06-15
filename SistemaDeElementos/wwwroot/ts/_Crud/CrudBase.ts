@@ -192,6 +192,9 @@
 
         }
 
+        public IrARelacionar(crudDeRelacion: string) {
+        }
+
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {
             Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
         }
