@@ -1,7 +1,7 @@
 ﻿namespace Entorno {
 
     const Relaciones = {
-        puestos: 'PuestoDeUnUsuario'
+        puestos: 'PuestoDto'
     };
 
 
@@ -14,16 +14,24 @@
             this.idModalBorrar = idModalBorrar;
         }
 
-        public IrARelacionar(crudDeRelacion: string) {
-            super.IrARelacionar(crudDeRelacion);
-            switch (crudDeRelacion) {
-                case Relaciones.puestos: {
-                    var filtro = this.DefinirFiltroPorRestrictor("idusuario", 1);
-                    document.location.href = `/PuestoDeUnUsuario/CrudPuestoDeUnUsuario?filtroUsuario=${filtro}&orden=permiso`;
-                    break;
-                }
+        public IrARelacionar(parametrosDeEntrada: string) {
+            let partes = parametrosDeEntrada.split('#');
+            let relacionarCon = partes[0].split('==')[1];
+            let url = partes[1].split('==')[1];
 
+            try {
+                switch (relacionarCon) {
+                    case Relaciones.puestos: {
+                        var filtro = this.DefinirFiltroPorRestrictor("idusuario", 1);
+                        url = url.replace("filtroJson", filtro);
+                        break;
+                    }
+                }
             }
+            catch (error) {
+                Mensaje(TipoMensaje.Error, error);
+            }
+            super.IrARelacionar(url);
         }
     }
 

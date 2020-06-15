@@ -192,7 +192,9 @@
 
         }
 
-        public IrARelacionar(crudDeRelacion: string) {
+        public IrARelacionar(urlCrudDeRelacion: string) {
+            PonerCapa();
+            document.location.href = `${urlCrudDeRelacion}`;
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {

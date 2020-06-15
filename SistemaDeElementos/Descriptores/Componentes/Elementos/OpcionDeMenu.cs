@@ -41,7 +41,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public class AccionDeMenuMnt : AccionDeMenu
     {
         string TipoAccion;
-        public string CrudDeRelacion { get; set; }
+        public string UrlDelCrudDeRelacion { get; set; }
+        public string RelacionarCon { get; set; }
+
 
         public AccionDeMenuMnt(string tipoAccion)
         : base()
@@ -53,7 +55,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
             if (TipoAccion == TipoAccionMnt.RelacionarElementos)
-                return $"Crud.EventosDelMantenimiento('{TipoAccion}','PuestoDeUnUsuario')";
+                return $"Crud.EventosDelMantenimiento('{TipoAccion}','RelacionarCon=={RelacionarCon}#Url=={UrlDelCrudDeRelacion}')";
             else
                 return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
         }

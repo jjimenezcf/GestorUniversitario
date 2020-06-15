@@ -7,9 +7,6 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePuestoDeUnUsuario : DescriptorDeCrud<PuestoDeUnUsuarioDto>
     {
-
-        public string CrudTs => $@"new Entorno.CrudMntPuestoDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}', 'idRestrictor') ";
-
         public DescriptorDePuestoDeUnUsuario(ModoDescriptor modo)
             : base(nameof(PuestoDeUnUsuarioController), nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
         {
@@ -24,7 +21,7 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Seguridad/PuestoDeUnUsuario.js¨></script>
                       <script>
-                         Crud.crudMnt = ${CrudTs}
+                         Crud.crudMnt = new Entorno.CrudMntPuestoDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                       </script>
                     ";
             return render.Render();

@@ -43,17 +43,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal void AnadirOpcionDePuestoDeUnUsuario()
         {
-            var nuevoPuesto = new CrudDePuestoDeUnUsuario(descriptorDePuestos.CrudTs);
+            var nuevoPuesto = new CrudDePuestoDeUnUsuario();
             var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.MenuDeMnt.Menu, nuevoPuesto, $"Puestos");
             Mnt.MenuDeMnt.Menu.Add(opcion);
         }
 
         private class CrudDePuestoDeUnUsuario : AccionDeMenuMnt
         {
-            public CrudDePuestoDeUnUsuario(string crud)
+            public CrudDePuestoDeUnUsuario()
             : base(TipoAccionMnt.RelacionarElementos)
             {
-                CrudDeRelacion = crud;
+                UrlDelCrudDeRelacion = $@"/{nameof(PuestoDeUnUsuarioController).Replace("Controller","")}/{nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario)}?filtroUsuario=filtroJson&orden=permiso"; 
+                RelacionarCon = nameof(PuestoDto);
             }
         }
 
