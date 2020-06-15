@@ -37,8 +37,8 @@ namespace Gestor.Elementos.Entorno
             Etiqueta = "Accion",
             Ayuda = "Nombre de la acción",
             Tipo = typeof(string),
-            Fila = 3,
-            Columna = 0,
+            Fila = 2,
+            Columna = 1,
             Ordenar = true,
             PorAnchoMnt = 15
             )
@@ -50,7 +50,7 @@ namespace Gestor.Elementos.Entorno
             Etiqueta = "Parametros",
             Ayuda = "Lista de parámetros de entrada",
             Tipo = typeof(string),
-            Fila = 4,
+            Fila = 3,
             Columna = 0,
             Ordenar = true,
             PorAnchoMnt = 15,
@@ -68,7 +68,7 @@ namespace Gestor.Elementos.Entorno
             TipoDeControl = TipoControl.Check,
             ValorPorDefecto = false,
             Tipo = typeof(bool),
-            Fila = 4,
+            Fila = 3,
             Columna = 1
             )
         ]
