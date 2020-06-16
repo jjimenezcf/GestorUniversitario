@@ -23,6 +23,7 @@
     }
 
     export function OpcionSeleccionada(idVistaMvc: string, controlador: string, accion) {
+        MostrarMenu();
         let urlBase: string = window.location.origin;
         PonerCapa();
         window.location.href = `${urlBase}/${controlador}/${accion}`;
