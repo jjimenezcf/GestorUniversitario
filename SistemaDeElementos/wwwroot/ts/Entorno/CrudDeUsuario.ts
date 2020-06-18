@@ -16,22 +16,35 @@
 
         public IrARelacionar(parametrosDeEntrada: string) {
             let partes = parametrosDeEntrada.split('#');
-            let relacionarCon = partes[0].split('==')[1];
-            let url = partes[1].split('==')[1];
+            let idForm = partes[0].split('==')[1];
+            let relacionarCon = partes[1].split('==')[1];
 
             try {
+                if (this.InfoSelector.Cantidad != 1) {
+                    throw new Error("Debe seleccionar solo un usuario");
+                }
+
                 switch (relacionarCon) {
                     case Relaciones.puestos: {
-                        var filtro = this.DefinirFiltroPorRestrictor("idusuario", 1);
-                        url = url.replace("filtroJson", filtro);
+                        let id: number = this.InfoSelector.LeerElemento(0).Id;     
+                        let filtro: string = this.DefinirFiltroPorRestrictor("idusuario", id);
+                        let orden: string = "puesto";
+
+                        sessionStorage["idusuario"] = id
+                        sessionStorage["nombreUsuario"] = this.InfoSelector.LeerElemento(0).Texto;
+
+                        parametrosDeEntrada = `${idForm}#${filtro}#${orden}`;
+
                         break;
                     }
                 }
+
+                super.IrARelacionar(parametrosDeEntrada);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
+                return;
             }
-            super.IrARelacionar(url);
         }
     }
 

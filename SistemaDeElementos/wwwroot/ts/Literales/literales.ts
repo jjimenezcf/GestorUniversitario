@@ -210,7 +210,8 @@ const TipoControl = {
     ListaDinamica: "lista-dinamica",
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo",
-    UrlDeArchivo: "url-archivo"
+    UrlDeArchivo: "url-archivo",
+    restrictor: "restrictor-filtro"
 };
 
 const ModoTrabajo = {

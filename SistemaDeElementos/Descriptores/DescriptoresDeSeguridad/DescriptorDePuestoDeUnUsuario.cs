@@ -8,9 +8,15 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePuestoDeUnUsuario : DescriptorDeCrud<PuestoDeUnUsuarioDto>
     {
         public DescriptorDePuestoDeUnUsuario(ModoDescriptor modo)
-            : base(nameof(PuestoDeUnUsuarioController), nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
+        : base(nameof(PuestoDeUnUsuarioController), nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
         {
             RutaVista = "Seguridad";
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            new RestrictorDeFiltro<PuestoDeUnUsuarioDto>(bloque: fltGeneral
+                  , etiqueta: "Usuario"
+                  , propiedad:nameof(PuestoDeUnUsuarioDto.IdUsuario)
+                  , ayuda: "buscar por usuario"
+                  , new Posicion { fila = 1, columna = 0 });
         }
 
 
@@ -21,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Seguridad/PuestoDeUnUsuario.js¨></script>
                       <script>
-                         Crud.crudMnt = new Entorno.CrudMntPuestoDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         Crud.crudMnt = new Seguridad.CrudMntPuestoDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                       </script>
                     ";
             return render.Render();

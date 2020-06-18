@@ -18,7 +18,7 @@ namespace ServicioDeDatos.Seguridad
         public string Descripcion { get; set; }
 
         public virtual ICollection<RolesDeUnPuestoDtm> Roles { get; set; }
-        public virtual ICollection<PuestosDeUsuarioDtm> Usuarios { get; set; }
+        public virtual ICollection<PuestoDeUnUsuarioDtm> Usuarios { get; set; }
     }
 
     public static class TablaPuesto
@@ -34,7 +34,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PuestoDtm>()
                     .HasMany(p => p.Usuarios)
                     .WithOne(p => p.Puesto)
-                    .HasForeignKey(p => p.IdUsua);
+                    .HasForeignKey(p => p.IdUsuario);
 
             modelBuilder.Entity<PuestoDtm>()
                     .HasMany(p => p.Roles)

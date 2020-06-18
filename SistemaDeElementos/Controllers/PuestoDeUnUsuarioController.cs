@@ -8,7 +8,7 @@ using GestorDeSeguridad.ModeloIu;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class PuestoDeUnUsuarioController :  EntidadController<ContextoSe, PuestosDeUsuarioDtm, PuestoDeUnUsuarioDto>
+    public class PuestoDeUnUsuarioController :  EntidadController<ContextoSe, PuestoDeUnUsuarioDtm, PuestoDeUnUsuarioDto>
     {
 
         public PuestoDeUnUsuarioController(GestorDePuestoDeUnUsuario gestor, GestorDeErrores errores)
@@ -21,9 +21,11 @@ namespace MVCSistemaDeElementos.Controllers
         {
         }
 
-        public IActionResult CrudPuestoDeUnUsuario(string filtroUsuario, string orden)
+        [HttpPost]
+        public IActionResult CrudPuestoDeUnUsuario(string restrictor, string orden)
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(filtroUsuario, orden), cantidadPorLeer: 5, posicionInicial: 0);
+            var elementosDto = LeerOrdenados(restrictor, orden);
+            GestorDelCrud.Descriptor.MapearElementosAlGrid(elementosDto, cantidadPorLeer: 5, posicionInicial: 0);
             GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }

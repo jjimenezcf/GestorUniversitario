@@ -38,24 +38,17 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
             RutaVista = "Entorno";
 
-            AnadirOpcionDePuestoDeUnUsuario();
+            AnadirOpcionDePuestoDeUnUsuario($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(PuestoDto)}");
         }
 
-        internal void AnadirOpcionDePuestoDeUnUsuario()
+        internal void AnadirOpcionDePuestoDeUnUsuario(string idForm)
         {
-            var nuevoPuesto = new CrudDePuestoDeUnUsuario();
-            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.MenuDeMnt.Menu, nuevoPuesto, $"Puestos");
+            var mntPuestos = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
+                  , $@"/{nameof(PuestoDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario)}"
+                  , nameof(PuestoDto)
+                  , idForm);
+            var opcion = new OpcionDeMenu<UsuarioDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntPuestos, tipoAccion: TipoAccion.Post, titulo: $"Puestos");
             Mnt.MenuDeMnt.Menu.Add(opcion);
-        }
-
-        private class CrudDePuestoDeUnUsuario : AccionDeMenuMnt
-        {
-            public CrudDePuestoDeUnUsuario()
-            : base(TipoAccionMnt.RelacionarElementos)
-            {
-                UrlDelCrudDeRelacion = $@"/{nameof(PuestoDeUnUsuarioController).Replace("Controller","")}/{nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario)}?filtroUsuario=filtroJson&orden=permiso"; 
-                RelacionarCon = nameof(PuestoDto);
-            }
         }
 
         public override string RenderControl()

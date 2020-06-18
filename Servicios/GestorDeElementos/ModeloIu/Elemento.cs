@@ -13,6 +13,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string ListaDeElemento = "lista-de-elemento";
         public const string ListaDinamica = "lista-dinamica";
         public const string Editor = "editor";
+        public const string RestrictorDeFiltro = "restrictor-filtro";
         public const string Archivo = "archivo";
         public const string Check = "check";
         public const string UrlDeArchivo = "url-archivo";

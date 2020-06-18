@@ -36,7 +36,7 @@ namespace ServicioDeDatos.Entorno
         
         public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
 
-        public virtual ICollection<PuestosDeUsuarioDtm> Puestos { get; private set; }
+        public virtual ICollection<PuestoDeUnUsuarioDtm> Puestos { get; private set; }
 
     }
     public static class TablaUsuario
@@ -51,7 +51,7 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<UsuarioDtm>()
                     .HasMany(tu => tu.Puestos)
                     .WithOne(p => p.Usuario)
-                    .HasForeignKey(p => p.IdUsua);
+                    .HasForeignKey(p => p.IdUsuario);
 
             modelBuilder.Entity<UsuarioDtm>()
                     .HasMany(tu => tu.Permisos)

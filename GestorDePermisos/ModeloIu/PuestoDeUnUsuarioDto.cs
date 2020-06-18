@@ -7,6 +7,7 @@ using Gestor.Elementos.Seguridad;
 
 namespace GestorDeSeguridad.ModeloIu
 {
+    [IUDto]
     public class PuestoDeUnUsuarioDto: ElementoDto
     {
         [IUPropiedad(
@@ -25,8 +26,8 @@ namespace GestorDeSeguridad.ModeloIu
             MostrarPropiedad = nameof(UsuarioDto.NombreCompleto),
             Fila = 0,
             Columna = 0,
-            Ordenar = true,
-            PorAnchoMnt = 15
+            PorAnchoMnt = 15,
+            VisibleEnGrid = false
             )
         ]
         public string Usuario { get; set; }
@@ -39,8 +40,8 @@ namespace GestorDeSeguridad.ModeloIu
         public int IdPuesto { get; set; }
 
         [IUPropiedad(
-            Etiqueta = "Tipo",
-            Ayuda = "Indique el tipo a aplicar",
+            Etiqueta = "Puesto",
+            Ayuda = "Indique el puesto de trabajo",
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(PuestoDto),
             GuardarEn = nameof(IdPuesto),
@@ -51,7 +52,7 @@ namespace GestorDeSeguridad.ModeloIu
             PorAnchoMnt = 15
             )
         ]
-        public string Tipo { get; set; }
+        public string Puesto { get; set; }
 
     }
 }

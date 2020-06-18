@@ -192,9 +192,23 @@
 
         }
 
-        public IrARelacionar(urlCrudDeRelacion: string) {
+        public IrARelacionar(parametros: string) {
+
+            let partes = parametros.split('#');
+            let idForm: string = partes[0];
+            let filtro: string = partes[1];
+            let orden: string = partes[2];
+
+            let form: HTMLFormElement = document.getElementById(idForm) as HTMLFormElement;
+            let idRestrictor: string = form.getAttribute("restrictor") as string;
+            let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
+            restrictor.value = filtro;
+
+            let idOrden: string = form.getAttribute("orden") as string;
+            let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
+            ordenInput.value = orden;
             PonerCapa();
-            document.location.href = `${urlCrudDeRelacion}`;
+            form.submit();
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {

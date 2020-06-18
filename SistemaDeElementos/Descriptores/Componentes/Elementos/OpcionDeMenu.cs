@@ -5,7 +5,7 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoAccion { IraMnt }
+    public enum TipoAccion { Post, Get }
 
     public static class TipoAccionMnt
     {
@@ -38,12 +38,33 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    public class AccionDeNavegarParaRelacionar : AccionDeMenu
+    {
+        public string TipoAccion { get; private set; }
+        public string UrlDelCrudDeRelacion { get; private set; }
+        public string RelacionarCon { get; private set; }
+        public string IdForm { get; private set; }
+
+
+
+        public AccionDeNavegarParaRelacionar(string tipoAccion, string urlDelCrud, string relacionarCon, string idForm)
+        : base()
+        {
+            TipoAccion = tipoAccion;
+            IdForm = idForm;
+            RelacionarCon = relacionarCon;
+            UrlDelCrudDeRelacion = urlDelCrud;
+        }
+
+        public override string RenderAccion()
+        {
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}','idForm==identificador#RelacionarCon=={RelacionarCon}')";
+        }
+    }
+
     public class AccionDeMenuMnt : AccionDeMenu
     {
         string TipoAccion;
-        public string UrlDelCrudDeRelacion { get; set; }
-        public string RelacionarCon { get; set; }
-
 
         public AccionDeMenuMnt(string tipoAccion)
         : base()
@@ -53,11 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-
-            if (TipoAccion == TipoAccionMnt.RelacionarElementos)
-                return $"Crud.EventosDelMantenimiento('{TipoAccion}','RelacionarCon=={RelacionarCon}#Url=={UrlDelCrudDeRelacion}')";
-            else
-                return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
         }
     }
 
@@ -153,8 +170,14 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public Menu<TElemento> Menu => (Menu<TElemento>)Padre;
         public AccionDeMenu Accion { get; private set; }
+        public TipoAccion TipoAccion { get; private set; } = TipoAccion.Get;
 
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo)
+        : this(menu, accion, TipoAccion.Get, titulo)
+        {
+        }
+
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoAccion tipoAccion, string titulo)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcioneDeMenu.Count}",
@@ -165,12 +188,26 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Opcion;
+            TipoAccion = tipoAccion;
             Accion = accion;
         }
 
         public override string RenderControl()
         {
             var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ />";
+
+            if (TipoAccion == TipoAccion.Post)
+            {
+                var htmlFormPost = $@"
+                    <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
+                        <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
+                        <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
+                        <input type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("identificador", IdHtml)}¨ />
+                    </form>
+                ";
+                return htmlFormPost;
+            }
+
             return htmlOpcionMenu;
         }
     }

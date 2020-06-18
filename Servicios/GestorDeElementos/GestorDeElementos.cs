@@ -426,7 +426,7 @@ namespace Gestor.Elementos
         {
             registros = registros.FiltrarPorId(filtros);
 
-            if (registros.Expression.ToString().Contains(".Where(x => x.Id"))
+            if (HayFiltroPorId(registros))
                 return registros;
 
             return registros.FiltrarPorNombre(filtros);
