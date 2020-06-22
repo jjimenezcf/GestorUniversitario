@@ -25,6 +25,11 @@ namespace MVCSistemaDeElementos.Descriptores
             if (posicion.columna >= Columnas)
                 Columnas = posicion.columna + 1;
         }
+
+        internal void NumeroDeFilas(int fila)
+        {
+            Filas = fila;
+        }
     }
 
     public class TablaFiltro: ControlFiltroHtml

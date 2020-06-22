@@ -28,7 +28,12 @@ namespace MVCSistemaDeElementos.Descriptores
         render = render +
                    $@"<script src=¨../../ts/Entorno/Menu.js¨></script>
                       <script>
-                         Crud.crudMnt = new Entorno.CrudMntMenu('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         try {{
+                           Crud.crudMnt = new Entorno.CrudMntMenu('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                      ";
         return render.Render();

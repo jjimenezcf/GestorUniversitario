@@ -10,13 +10,17 @@ function Mensaje(tipo, mensaje) {
 }
 function PonerCapa() {
     var capa = document.getElementById("CapaDeBloqueo");
-    capa.classList.remove("sin-capa-de-bloqueo");
-    capa.classList.add("con-capa-de-bloqueo");
+    if (capa != null) {
+        capa.classList.remove("sin-capa-de-bloqueo");
+        capa.classList.add("con-capa-de-bloqueo");
+    }
 }
 function QuitarCapa() {
     var capa = document.getElementById("CapaDeBloqueo");
-    capa.classList.remove("con-capa-de-bloqueo");
-    capa.classList.add("sin-capa-de-bloqueo");
+    if (capa != null) {
+        capa.classList.remove("con-capa-de-bloqueo");
+        capa.classList.add("sin-capa-de-bloqueo");
+    }
 }
 function BlanquearMensaje() {
     var control = document.getElementById("Mensaje");

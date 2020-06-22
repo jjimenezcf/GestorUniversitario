@@ -96,6 +96,9 @@ namespace Gestor.Elementos.ModeloIu
 
         public string TipoDeControl { get; set; } = TipoControl.Editor;
 
+        /// <summary>
+        /// Dto del que se van a seleccionar los valores
+        /// </summary>
         public string SeleccionarDe { get; set; }
 
         public string GuardarEn { get; set; }

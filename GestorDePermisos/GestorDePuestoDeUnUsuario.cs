@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Gestor.Elementos.Entorno;
 using GestorDeSeguridad.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos;
@@ -96,6 +98,26 @@ namespace Gestor.Elementos.Seguridad
             return registros.AnadirFiltros(filtros);
         }
 
+        public dynamic LeerUsuarios(int posicion, int cantidad, string filtro)
+        {
+            var gestor = GestorDeUsuarios.Gestor(Mapeador); var filtros = new List<ClausulaDeFiltrado>();
+            if (!filtro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(UsuarioDto.NombreCompleto), Valor = filtro });
+
+            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(clasesDtm).ToList();
+        }
+
+        public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
+        {
+            var gestor = GestorDePuestosDeTrabajo.Gestor(Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!filtro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDto.Nombre), Valor = filtro });
+
+            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(clasesDtm).ToList();
+        }
     }
 }
 

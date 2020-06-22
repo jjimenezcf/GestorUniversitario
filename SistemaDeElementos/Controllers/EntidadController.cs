@@ -406,7 +406,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
-            throw new NotImplementedException();
+            throw new Exception($"Debe implementar la función de CargaDinamica para la clase '{claseElemento}' en el controlador '{this.GetType().Name}'");
         }
 
         protected virtual dynamic CargarLista(string claseElemento)

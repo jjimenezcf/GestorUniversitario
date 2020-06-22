@@ -21,7 +21,7 @@ namespace GestorDeSeguridad.ModeloIu
             Etiqueta = "Usuario",
             Ayuda = "Puestos del usuario",
             TipoDeControl = TipoControl.ListaDinamica,
-            SeleccionarDe = nameof(Usuario),
+            SeleccionarDe = nameof(UsuarioDto),
             GuardarEn = nameof(IdUsuario),
             MostrarPropiedad = nameof(UsuarioDto.NombreCompleto),
             Fila = 0,

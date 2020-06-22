@@ -254,3 +254,5 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
+*.se
+/SistemaDeElementos/wwwroot/Archivos

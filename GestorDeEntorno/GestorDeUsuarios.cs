@@ -101,6 +101,12 @@ namespace Gestor.Elementos.Entorno
 
         }
 
+        public static GestorDeUsuarios Gestor(IMapper mapeador)
+        {
+            var contexto = ContextoSe.ObtenerContexto();
+            return (GestorDeUsuarios)CrearGestor<GestorDeUsuarios>(() => new GestorDeUsuarios(contexto, mapeador));
+        }
+
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             base.DefinirJoins(filtros, joins, parametros);

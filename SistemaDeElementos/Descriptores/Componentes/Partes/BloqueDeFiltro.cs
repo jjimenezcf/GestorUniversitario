@@ -33,6 +33,25 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Controles.Add(c);
         }
+
+        public void AnadirControlEn(ControlFiltroHtml c, Posicion posicion)
+        {
+            Controles.Add(c);
+            foreach (var control in Controles)
+            {
+                if (control.Id == c.Id)
+                    continue;
+
+                if (control.Posicion.fila >= c.Posicion.fila)
+                {
+                    control.Posicion.fila++;
+                    if (control.Posicion.fila >= Tabla.Dimension.Filas)
+                        Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
+                }
+            }
+
+        }
+
         public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto 
         {
             AnadirControl(s);

@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , etiqueta: "Usuario"
                   , propiedad:nameof(PuestoDeUnUsuarioDto.IdUsuario)
                   , ayuda: "buscar por usuario"
-                  , new Posicion { fila = 1, columna = 0 });
+                  , new Posicion { fila = 0, columna = 0 });
         }
 
 

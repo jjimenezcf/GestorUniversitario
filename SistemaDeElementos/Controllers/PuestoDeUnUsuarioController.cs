@@ -5,6 +5,7 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 using Gestor.Elementos.Seguridad;
 using GestorDeSeguridad.ModeloIu;
+using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -28,6 +29,17 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDelCrud.Descriptor.MapearElementosAlGrid(elementosDto, cantidadPorLeer: 5, posicionInicial: 0);
             GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
+        }
+
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        {
+            if (claseElemento == nameof(UsuarioDto))
+                return ((GestorDePuestoDeUnUsuario)GestorDeElementos).LeerUsuarios(posicion, cantidad, filtro);
+
+            if (claseElemento == nameof(PuestoDto))
+                return ((GestorDePuestoDeUnUsuario)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
     }
 }
