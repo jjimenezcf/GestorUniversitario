@@ -34,7 +34,9 @@ const Atributo = {
     modoOrdenacion: "modo-ordenacion",
     expresionElemento: "expresion-elemento",
     tipo: "tipo",
-    imagenVinculada:"imagen-vinculada"
+    imagenVinculada: "imagen-vinculada",
+    valor: "value",
+    restrictor: "restrictor"
 }
 
 const AtributoSelectorArchivo = {
@@ -211,7 +213,8 @@ const TipoControl = {
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo",
     UrlDeArchivo: "url-archivo",
-    restrictor: "restrictor-filtro"
+    restrictorDeFiltro: "restrictor-filtro",
+    restrictorDeEdicion: "restrictor-edicion"
 };
 
 const ModoTrabajo = {
@@ -221,5 +224,13 @@ const ModoTrabajo = {
     copiando: "copiando",
     borrando: "borrando",
     mantenimiento: "mantenimiento"
+}
+
+const Restrictor = {
+    idUsuario: "idusuario"
+}
+
+const Parametros = {
+    Usuario: "nombreUsuario"
 }
 

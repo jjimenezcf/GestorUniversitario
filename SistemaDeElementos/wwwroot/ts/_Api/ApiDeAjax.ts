@@ -83,7 +83,7 @@
         }
 
         public DefinirBarraDeProceso() {
-            if (!EsNula(this.IdBarraDeProceso)) {
+            if (!IsNullOrEmpty(this.IdBarraDeProceso)) {
                 this._divBarra = document.getElementById(this.IdBarraDeProceso) as HTMLDivElement;
                 this._span = this._divBarra.children[0];
                 this._divBarra.classList.remove(ClaseCss.barraVerde, ClaseCss.barraRoja);
@@ -100,7 +100,7 @@
 
             function RespuestaCorrecta(descriptor: DescriptorAjax) {
                 try {
-                    if (EsNula(descriptor.Request.response))
+                    if (IsNullOrEmpty(descriptor.Request.response))
                         descriptor.ErrorEnPeticion();
                     else {
                         descriptor.ParsearRespuesta();
@@ -165,7 +165,7 @@
                 else {
                     this.resultado = JSON.parse(this.Request.response);
                     console.error(this.resultado.consola);
-                    if (!EsNula(this.resultado.mensaje))
+                    if (!IsNullOrEmpty(this.resultado.mensaje))
                         this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
                 }
 
@@ -176,7 +176,7 @@
         private DespuesDeLaPeticion() {
             this.resultado = JSON.parse(this.Request.response);
 
-            if (!EsNula(this.resultado.mensaje))
+            if (!IsNullOrEmpty(this.resultado.mensaje))
                 Mensaje(TipoMensaje.Info, this.resultado.mensaje);
 
             if (this._divBarra != undefined) {

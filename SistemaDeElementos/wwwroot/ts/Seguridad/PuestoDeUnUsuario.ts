@@ -1,29 +1,23 @@
 ﻿namespace Seguridad {
 
     export class CrudMntPuestoDeUnUsuario extends Crud.CrudMnt {
-        private _IdUsuario: string
-        constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string, idUsuario: string) {
+        constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);
             this.crudDeCreacion = new CrudCreacionPuestoDeUnUsuario(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionPuestoDeUnUsuario(this, idPanelEdicion);
             this.idModalBorrar = idModalBorrar;
-            this._IdUsuario = idUsuario;
 
-            this._IdUsuario = sessionStorage["idusuario"];
-
-            if (this._IdUsuario === undefined || this._IdUsuario.Numero() == 0) {
+            if (!NumeroMayorDeCero(sessionStorage[Restrictor.idUsuario])) {
                 document.location.href = document.referrer;
             }
             else {
 
-                let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeMnt.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictor}"]`) as NodeListOf<HTMLInputElement>;
-                for (let i = 0; i < restrictores.length; i++) {
-                    if (restrictores[i].getAttribute(Atributo.propiedad) === "idusuario")
-                        restrictores[i].setAttribute("value", sessionStorage["nombreUsuario"]);
-                }
+                this.MapearRestrictorDeFiltro(Restrictor.idUsuario, sessionStorage[Restrictor.idUsuario].Numero(), sessionStorage[Parametros.Usuario]);
+                this.crudDeCreacion.MaperaRestrictorDeCreacion(Restrictor.idUsuario, sessionStorage[Restrictor.idUsuario].Numero(), sessionStorage[Parametros.Usuario]);
+                this.crudDeEdicion.MaperaRestrictorDeEdicion(Restrictor.idUsuario, sessionStorage[Restrictor.idUsuario].Numero(), sessionStorage[Parametros.Usuario]);
 
-                sessionStorage.removeItem("idusuario");
-                sessionStorage.removeItem("nombreUsuario");
+                sessionStorage.removeItem(Restrictor.idUsuario);
+                sessionStorage.removeItem(Parametros.Usuario);
             }
         }
     }

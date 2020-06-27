@@ -26,12 +26,12 @@
 
                 switch (relacionarCon) {
                     case Relaciones.puestos: {
-                        let id: number = this.InfoSelector.LeerElemento(0).Id;     
-                        let filtro: string = this.DefinirFiltroPorRestrictor("idusuario", id);
+                        let id: number = this.InfoSelector.LeerElemento(0).Id;
+                        let filtro: string = this.DefinirFiltroPorRestrictor(Restrictor.idUsuario, id);
                         let orden: string = "puesto";
 
-                        sessionStorage["idusuario"] = id
-                        sessionStorage["nombreUsuario"] = this.InfoSelector.LeerElemento(0).Texto;
+                        sessionStorage[Restrictor.idUsuario] = id;
+                        sessionStorage[Parametros.Usuario] = this.InfoSelector.LeerElemento(0).Texto;
 
                         parametrosDeEntrada = `${idForm}#${filtro}#${orden}`;
 

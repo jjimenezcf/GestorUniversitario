@@ -381,6 +381,15 @@
             this.MostrarImagenUrl(visor, valor);
         }
 
+        protected MapearRestrictor(restrictores: NodeListOf<HTMLInputElement>, porpiedadRestrictora: string, valorMostrar: string, valorRestrictor: number) {
+            for (let i = 0; i < restrictores.length; i++) {
+                if (restrictores[i].getAttribute(Atributo.propiedad) === porpiedadRestrictora) {
+                    restrictores[i].setAttribute(Atributo.valor, valorMostrar);
+                    restrictores[i].setAttribute(Atributo.restrictor, valorRestrictor.toString());
+                }
+            }
+        }
+
         private MostrarImagenUrl(visor: HTMLImageElement, url: any) {
             visor.setAttribute('src', url);
             let idCanva: string = visor.getAttribute(Atributo.id).replace('img', 'canvas');
@@ -551,7 +560,7 @@
             let lista: ListaDinamica = new ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
 
-            if (obligatorio === "S" && (EsNula(input.value) || Number(valor) === 0)) {
+            if (obligatorio === "S" && (IsNullOrEmpty(input.value) || Number(valor) === 0)) {
                 input.classList.remove(ClaseCss.crtlValido);
                 input.classList.add(ClaseCss.crtlNoValido);
                 throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
@@ -598,7 +607,7 @@
             let valor: string = archivo.getAttribute(AtributoSelectorArchivo.idArchivo);
             let obligatorio: string = archivo.getAttribute(Atributo.obligatorio);
 
-            if (obligatorio === "S" && EsNula(valor)) {
+            if (obligatorio === "S" && IsNullOrEmpty(valor)) {
                 archivo.classList.remove(ClaseCss.crtlValido);
                 archivo.classList.add(ClaseCss.crtlNoValido);
                 throw new Error(`El campo ${propiedadDto} es obligatorio`);
@@ -621,7 +630,7 @@
             let valor: string = urlDeArchivo.getAttribute(AtributoSelectorArchivo.nombreArchivo);
             let obligatorio: string = urlDeArchivo.getAttribute(Atributo.obligatorio);
 
-            if (obligatorio === "S" && EsNula(valor)) {
+            if (obligatorio === "S" && IsNullOrEmpty(valor)) {
                 urlDeArchivo.classList.remove(ClaseCss.crtlValido);
                 urlDeArchivo.classList.add(ClaseCss.crtlNoValido);
                 throw new Error(`El campo ${propiedadDto} es obligatorio`);

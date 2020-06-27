@@ -132,7 +132,7 @@
         protected EstablecerOrdenacion(idcolumna: string) {
             let htmlColumna: HTMLTableHeaderCellElement = document.getElementById(idcolumna) as HTMLTableHeaderCellElement;
             let modo: string = htmlColumna.getAttribute(Atributo.modoOrdenacion);
-            if (EsNula(modo))
+            if (IsNullOrEmpty(modo))
                 modo = ModoOrdenacion.ascedente;
             else if (modo === ModoOrdenacion.ascedente)
                 modo = ModoOrdenacion.descendente;
@@ -156,14 +156,14 @@
 
         protected ObtenerExpresionMostrar(idCheck: string): string {
             let expresion: string = this.Grid.getAttribute(Atributo.expresionElemento);
-            if (!EsNula(expresion)) {
+            if (!IsNullOrEmpty(expresion)) {
                 let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
                 let tds: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
                 for (let j = 0; j < tds.length; j++) {
                     let input: HTMLInputElement = tds[j].getElementsByTagName('input')[0] as HTMLInputElement;
                     if (input !== undefined) {
                         let propiedad: string = input.getAttribute(Atributo.propiedad);
-                        if (!EsNula(propiedad) && expresion.includes(`[${propiedad}]`)) {
+                        if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
                             expresion = expresion.replace(`[${propiedad}]`, input.value);
                         }
                     }
@@ -190,6 +190,10 @@
                 var tipo: string = control.getAttribute(TipoControl.Tipo);
 
                 switch (tipo) {
+                    case TipoControl.restrictorDeFiltro: {
+                        clausula = this.ObtenerClausulaRestrictor(control as HTMLInputElement);;
+                        break;
+                    }
                     case TipoControl.Editor: {
                         clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);;
                         break;
@@ -244,12 +248,24 @@
             return arrayIds;
         }
 
+        private ObtenerClausulaRestrictor(restrictor: HTMLInputElement): ClausulaDeFiltrado {
+            let propiedad: string = restrictor.getAttribute(Atributo.propiedad);
+            let criterio: string = Literal.filtro.criterio.igual;
+            let valor = restrictor.getAttribute(Atributo.restrictor);
+            let clausula: ClausulaDeFiltrado = null;
+            if (!IsNullOrEmpty(valor))
+                //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+
+            return clausula;
+        }
+
         private ObtenerClausulaEditor(editor: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad: string = editor.getAttribute(Atributo.propiedad);
             var criterio: string = editor.getAttribute(Atributo.criterio);
             var valor = editor.value;
             var clausula = null;
-            if (!EsNula(valor))
+            if (!IsNullOrEmpty(valor))
                 //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
 
@@ -292,7 +308,7 @@
             var criterio = selet.getAttribute(Atributo.criterio);
             var valor = selet.value;
             var clausula = null;
-            if (!EsNula(valor) && Number(valor) > 0) {
+            if (!IsNullOrEmpty(valor) && Number(valor) > 0) {
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             }
             return clausula;

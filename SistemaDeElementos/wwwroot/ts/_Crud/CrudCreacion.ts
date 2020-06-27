@@ -27,7 +27,7 @@
         constructor(crud: CrudMnt, idPanelCreacion: string) {
             super();
 
-            if (EsNula(idPanelCreacion))
+            if (IsNullOrEmpty(idPanelCreacion))
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this._idPanelCreacion = idPanelCreacion;
@@ -109,6 +109,11 @@
             else {
                 crudCreador.CerrarCreacion();
             }
+        }
+
+        public MaperaRestrictorDeCreacion(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
+            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeCrear.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 
     }

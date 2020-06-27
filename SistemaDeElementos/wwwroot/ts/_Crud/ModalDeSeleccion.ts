@@ -108,7 +108,7 @@
 
             if (check.checked) {
                 let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
-                if (EsNula(expresionElemento))
+                if (IsNullOrEmpty(expresionElemento))
                     Mensaje(TipoMensaje.Error, `No está definida la expresion del elemento del grid ${this.IdGrid}`);
                 else
                     this.AnadirAlInfoSelector(idCheck, expresionElemento);
@@ -274,7 +274,7 @@
         private mapearElementoAlHtmlSelector(elemento: Elemento) {
             this.EditorDelGrid.value = '';
             var valorDelSelector = this.Selector.value;
-            if (!EsNula(valorDelSelector))
+            if (!IsNullOrEmpty(valorDelSelector))
                 valorDelSelector = valorDelSelector + " | ";
 
             this.Selector.value = valorDelSelector + elemento.Texto;
@@ -289,7 +289,7 @@
                 listaDeIds = "";
             }
 
-            if (!EsNula(listaDeIds))
+            if (!IsNullOrEmpty(listaDeIds))
                 listaDeIds = listaDeIds + ';';
             listaDeIds = listaDeIds + id;
             this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, listaDeIds);

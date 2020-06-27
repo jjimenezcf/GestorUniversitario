@@ -20,13 +20,9 @@ namespace GestorDeSeguridad.ModeloIu
         [IUPropiedad(
             Etiqueta = "Usuario",
             Ayuda = "Puestos del usuario",
-            TipoDeControl = TipoControl.ListaDinamica,
-            SeleccionarDe = nameof(UsuarioDto),
-            GuardarEn = nameof(IdUsuario),
-            MostrarPropiedad = nameof(UsuarioDto.NombreCompleto),
+            TipoDeControl = TipoControl.RestrictorDeEdicion,
             Fila = 0,
             Columna = 0,
-            PorAnchoMnt = 15,
             VisibleEnGrid = false
             )
         ]

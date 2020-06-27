@@ -14,6 +14,7 @@ namespace Gestor.Elementos.ModeloIu
         public const string ListaDinamica = "lista-dinamica";
         public const string Editor = "editor";
         public const string RestrictorDeFiltro = "restrictor-filtro";
+        public const string RestrictorDeEdicion = "restrictor-edicion";
         public const string Archivo = "archivo";
         public const string Check = "check";
         public const string UrlDeArchivo = "url-archivo";
@@ -137,6 +138,9 @@ namespace Gestor.Elementos.ModeloIu
         }
         public bool EsEditable(ModoDeTrabajo modo)
         {
+            if (TipoControl.RestrictorDeEdicion == TipoDeControl)
+                return false;
+
             if (EsVisible(modo))
             {
                 if (modo == ModoDeTrabajo.Edicion)

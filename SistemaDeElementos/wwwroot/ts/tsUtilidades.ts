@@ -79,12 +79,20 @@ function isString(obj) {
     return Object.prototype.toString.call(obj) === '[object String]';
 }
 
-function EsNula(valor: string): boolean {
+function IsNullOrEmpty(valor: string): boolean {
 
     if (valor == null || valor.NoDefinida())
         return true;
 
     return valor.NoDefinida();
+}
+
+function NumeroMayorDeCero(valor: string): boolean {
+
+    if ( valor === null || valor === undefined )
+        return false;
+
+    return valor.Numero() > 0;
 }
 
 String.prototype.NoDefinida = function () {

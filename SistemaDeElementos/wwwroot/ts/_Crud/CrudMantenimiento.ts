@@ -21,7 +21,7 @@
         constructor(idPanelMnt: string) {
             super(`${idPanelMnt}_grid`);
 
-            if (EsNula(idPanelMnt))
+            if (IsNullOrEmpty(idPanelMnt))
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
 
             this.InicializarInformacionPaneles(idPanelMnt);
@@ -243,7 +243,7 @@
             var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
 
             let modal: ModalSeleccion = crudMnt.ObtenerModal(htmlSelector.getAttribute(AtributoSelector.idModal));
-            if (EsNula(htmlSelector.value))
+            if (IsNullOrEmpty(htmlSelector.value))
                 modal.InicializarModal();
             else
                 modal.TextoSelectorCambiado(htmlSelector.value);
@@ -256,5 +256,11 @@
         public SeleccionarListaDinamica(selector: HTMLInputElement) {
             super.CargarListaDinamica(selector, this.Controlador);
         }
+
+        public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
+            let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.PanelDeMnt.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
+            this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);
+        }
+
     }
 }

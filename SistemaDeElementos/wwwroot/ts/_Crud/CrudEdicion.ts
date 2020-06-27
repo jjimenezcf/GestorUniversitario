@@ -64,7 +64,7 @@
         constructor(crud: CrudMnt, idPanelEdicion: string) {
             super();
 
-            if (EsNula(idPanelEdicion))
+            if (IsNullOrEmpty(idPanelEdicion))
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
             this._idPanelEdicion = idPanelEdicion;
@@ -222,6 +222,11 @@
             if (crudEdicion.TotalSeleccionados === 1) {
                 crudEdicion.CerrarEdicion()
             }
+        }
+
+        public MaperaRestrictorDeEdicion(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
+            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeEditar.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 
     }

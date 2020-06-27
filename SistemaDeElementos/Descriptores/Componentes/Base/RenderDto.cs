@@ -120,6 +120,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case TipoControl.Editor:
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
+                case TipoControl.RestrictorDeEdicion:
+                    htmdDescriptorControl = RenderRestrictor(tabla, descriptorControl, ancho);
+                    break;
                 case TipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
                     break;
@@ -208,6 +211,17 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
         }
 
+        private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
+            var htmlRestrictor = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+                                      type=¨text¨ 
+                                      value=¨¨
+                                      placeholder =¨{atributos.Ayuda}¨>
+                                </input>";
+            return htmlContenedor.Replace("controlParaRenderizar", htmlRestrictor);
+        }
         private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
