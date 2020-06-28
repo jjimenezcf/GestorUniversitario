@@ -71,13 +71,13 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeCreacion()
         {
             var crearElemento = new CrearElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo {Mnt.Crud.NombreElemento}");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo"); // {Mnt.Crud.NombreElemento}
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeEditarElemento()
         {
             var editarElemento = new EditarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar {Mnt.Crud.NombreElemento}");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar");
             Menu.Add(opcion);
         }
         #endregion
@@ -94,7 +94,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeBorrarElemento()
         {
             var BorrarElemento = new BorrarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar {Mnt.Crud.NombreElemento}");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar");
             Menu.Add(opcion);
         }
 
