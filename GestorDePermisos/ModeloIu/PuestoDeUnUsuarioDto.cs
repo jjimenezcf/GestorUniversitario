@@ -10,12 +10,6 @@ namespace GestorDeSeguridad.ModeloIu
     [IUDto]
     public class PuestoDeUnUsuarioDto: ElementoDto
     {
-        [IUPropiedad(
-            Etiqueta = "Id del usuario",
-            Visible = false
-            )
-        ]
-        public int IdUsuario { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Usuario",
@@ -24,6 +18,14 @@ namespace GestorDeSeguridad.ModeloIu
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false
+            )
+        ]
+        public int IdUsuario { get; set; }
+
+
+        [IUPropiedad(
+            Etiqueta = "usuario",
+            Visible = false
             )
         ]
         public string Usuario { get; set; }
