@@ -500,25 +500,25 @@
         protected MapearControlesDeIU(panel: HTMLDivElement): JSON {
             let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel);
 
-            this.MapearSelectoresDeElementos(panel, elementoJson);
-            this.MapearSelectoresDinamicos(panel, elementoJson);
-            this.MapearEditores(panel, elementoJson);
-            this.MapearArchivos(panel, elementoJson);
-            this.MapearUrlArchivos(panel, elementoJson);
-            this.MapearCheckes(panel, elementoJson);
+            this.MapearSelectoresDeElementosAlJson(panel, elementoJson);
+            this.MapearSelectoresDinamicosAlJson(panel, elementoJson);
+            this.MapearRestrictoresAlJson(panel, elementoJson);
+            this.MapearEditoresAlJson(panel, elementoJson);
+            this.MapearArchivosAlJson(panel, elementoJson);
+            this.MapearUrlArchivosAlJson(panel, elementoJson);
+            this.MapearCheckesAlJson(panel, elementoJson);
 
             return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
         }
 
-        protected MapearEditores(panel: HTMLDivElement, elementoJson: JSON): void {
+        protected MapearEditoresAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < editores.length; i++) {
-                this.MapearEditor(editores[i], elementoJson);
+                this.MapearEditorAlJson(editores[i], elementoJson);
             }
         }
 
-
-        private MapearEditor(input: HTMLInputElement, elementoJson: JSON): void {
+        private MapearEditorAlJson(input: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = input.getAttribute(Atributo.propiedad);
             let valor: string = (input as HTMLInputElement).value;
             let obligatorio: string = input.getAttribute(Atributo.obligatorio);
@@ -534,19 +534,42 @@
             elementoJson[propiedadDto] = valor;
         }
 
-        protected MapearCheckes(panel: HTMLDivElement, elementoJson: JSON): void {
+
+        protected MapearRestrictoresAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
+            let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+            for (let i = 0; i < restrictores.length; i++) {
+                this.MapearRestrictorAlJson(restrictores[i], elementoJson);
+            }
+        }
+
+        private MapearRestrictorAlJson(input: HTMLInputElement, elementoJson: JSON): void {
+            let propiedadDto: string = input.getAttribute(Atributo.propiedad);
+            let idRestrictor: string = input.getAttribute(Atributo.restrictor);
+
+            if (!NumeroMayorDeCero(idRestrictor)) {
+                input.classList.remove(ClaseCss.crtlValido);
+                input.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`El campo ${propiedadDto} es obligatorio`);
+            }
+
+            input.classList.remove(ClaseCss.crtlNoValido);
+            input.classList.add(ClaseCss.crtlValido);
+            elementoJson[propiedadDto] = idRestrictor;
+        }
+
+        protected MapearCheckesAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let checkes: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Check}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < checkes.length; i++) {
-                this.MapearCheck(checkes[i], elementoJson);
+                this.MapearCheckAlJson(checkes[i], elementoJson);
             }
         }
 
 
-        private MapearCheck(check: HTMLInputElement, elementoJson: JSON): void {
+        private MapearCheckAlJson(check: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = check.getAttribute(Atributo.propiedad);
             elementoJson[propiedadDto] = check.checked;
         }
-        protected MapearSelectoresDinamicos(panel: HTMLDivElement, elementoJson: JSON): void {
+        protected MapearSelectoresDinamicosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < selectores.length; i++) {
                 this.MapearSelectorDinamico(selectores[i], elementoJson);
@@ -571,14 +594,14 @@
             elementoJson[guardarEn] = valor.toString();
         }
 
-        protected MapearSelectoresDeElementos(panel: HTMLDivElement, elementoJson: JSON): void {
+        protected MapearSelectoresDeElementosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < selectores.length; i++) {
-                this.MapearSelectorDeElementos(selectores[i], elementoJson);
+                this.MapearSelectorDeElementosAlJson(selectores[i], elementoJson);
             }
         }
 
-        private MapearSelectorDeElementos(selector: HTMLSelectElement, elementoJson: JSON) {
+        private MapearSelectorDeElementosAlJson(selector: HTMLSelectElement, elementoJson: JSON) {
             let propiedadDto = selector.getAttribute(Atributo.propiedad);
             let guardarEn: string = selector.getAttribute(AtributosDeListas.guardarEn);
             let obligatorio: string = selector.getAttribute(Atributo.obligatorio);
@@ -594,15 +617,15 @@
             elementoJson[guardarEn] = selector.value;
         }
 
-        protected MapearArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
+        protected MapearArchivosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < archivos.length; i++) {
-                this.MapearArchivo(archivos[i], elementoJson);
+                this.MapearArchivoAlJson(archivos[i], elementoJson);
             }
         }
 
 
-        private MapearArchivo(archivo: HTMLInputElement, elementoJson: JSON): void {
+        private MapearArchivoAlJson(archivo: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = archivo.getAttribute(Atributo.propiedad);
             let valor: string = archivo.getAttribute(AtributoSelectorArchivo.idArchivo);
             let obligatorio: string = archivo.getAttribute(Atributo.obligatorio);
@@ -618,14 +641,14 @@
             elementoJson[propiedadDto] = valor;
         }
 
-        private MapearUrlArchivos(panel: HTMLDivElement, elementoJson: JSON): void {
+        private MapearUrlArchivosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
             let urlsDeArchivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < urlsDeArchivos.length; i++) {
-                this.MapearUrlArchivo(urlsDeArchivos[i], elementoJson);
+                this.MapearUrlArchivoAlJson(urlsDeArchivos[i], elementoJson);
             }
         }
 
-        private MapearUrlArchivo(urlDeArchivo: HTMLInputElement, elementoJson: JSON): void {
+        private MapearUrlArchivoAlJson(urlDeArchivo: HTMLInputElement, elementoJson: JSON): void {
             var propiedadDto = urlDeArchivo.getAttribute(Atributo.propiedad);
             let valor: string = urlDeArchivo.getAttribute(AtributoSelectorArchivo.nombreArchivo);
             let obligatorio: string = urlDeArchivo.getAttribute(Atributo.obligatorio);
