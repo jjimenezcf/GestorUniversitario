@@ -41,8 +41,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               			    crudDeSeleccion
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Seleccionar¨ onclick=¨Crud.EventosModalDeSeleccion('seleccionar-elementos','{IdHtml}')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeSeleccion('cerrar-modal-seleccion','{IdHtml}')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Seleccionar¨ readonly onclick=¨Crud.EventosModalDeSeleccion('seleccionar-elementos','{IdHtml}')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeSeleccion('cerrar-modal-seleccion','{IdHtml}')¨ />
                                         </div>
                                       </div>
                               </div>";

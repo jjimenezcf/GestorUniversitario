@@ -27,8 +27,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               			    <input type=¨text¨ id=¨{IdHtml}-mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ onclick=¨Crud.EventosModalDeBorrar('borrar-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ readonly onclick=¨Crud.EventosModalDeBorrar('borrar-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')¨ />
                                         </div>
                                       </div>
                               </div>";

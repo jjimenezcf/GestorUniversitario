@@ -29,7 +29,6 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCerrarCreacion();
-            //AbrirEnModal = (bool)Elemento.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.CreacionEnModal));
         }
 
 
@@ -68,8 +67,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                         {RendelDivDeCreacion()}
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-crear¨ class=¨boton-modal¨ value=¨Crear¨ onclick=¨Crud.EventosModalDeCreacion('crear-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  onclick=¨Crud.EventosModalDeCreacion('cerrar-modal')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-crear¨ class=¨boton-modal¨ value=¨Crear¨ readonly onclick=¨Crud.EventosModalDeCreacion('crear-elemento')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨Crud.EventosModalDeCreacion('cerrar-modal')¨ />
                                            {htmlRenderOpciones()}
                                         </div>
                                       </div>
