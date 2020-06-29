@@ -24,7 +24,7 @@ namespace ServicioDeDatos.Entorno
 
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(50)")]
-        public string Nombre { get; set; }
+        public new string Nombre { get; set; }
         
         [Required]
         [Column("F_ALTA", TypeName = "DATE")]
