@@ -30,8 +30,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderGridModal()
         {
-            var s = Selector;
-
             string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ grid=¨idGrid¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal modal-seleccion¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>

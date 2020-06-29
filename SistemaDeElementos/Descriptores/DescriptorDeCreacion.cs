@@ -58,21 +58,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RendelModal()
         {
-            var htmlModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ controlador=¨{Crud.Controlador}¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
-                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
-                              		    	<h2>Creación</h2>
-                                        </div>
-                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
-                                        {RendelDivDeCreacion()}
-                                        </div>
-                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-crear¨ class=¨boton-modal¨ value=¨Crear¨ readonly onclick=¨Crud.EventosModalDeCreacion('crear-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨Crud.EventosModalDeCreacion('cerrar-modal')¨ />
-                                           {htmlRenderOpciones()}
-                                        </div>
-                                      </div>
-                              </div>";
+            var htmlModal = RenderizarModal(
+                idHtml: IdHtml
+                , controlador: Crud.Controlador
+                , tituloH2: "Creación"
+                , cuerpo: RendelDivDeCreacion()
+                , idOpcion: $"{IdHtml}-crear"
+                , opcion: "Crear"
+                , accion: "Crud.EventosModalDeCreacion('crear-elemento')"
+                , cerrar: "Crud.EventosModalDeCreacion('cerrar-modal')"
+                , navegador: htmlRenderOpciones());
+
             return htmlModal;
         }
 
@@ -87,7 +83,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlModal;
         }
 
-        private object htmlRenderOpciones()
+        private string htmlRenderOpciones()
         {
 
             var htmdDescriptorControl = $@"<input id=¨{IdHtml}-crear-mas¨ type=¨checkbox¨ checked/>
