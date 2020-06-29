@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
                               		<div id=¨{idHtml}_contenido¨ class=¨cotenido-modal¨>
                               		    <div id=¨{idHtml}_cabecera¨ class=¨cotenido-cabecera¨>
-                              		    	<h2>tituloH2</h2>
+                              		    	<h2>{tituloH2}</h2>
                                         </div>
                               		    <div id=¨{idHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
                                         {cuerpo}

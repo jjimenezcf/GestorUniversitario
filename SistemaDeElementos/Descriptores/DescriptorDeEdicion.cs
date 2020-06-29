@@ -64,21 +64,6 @@ namespace MVCSistemaDeElementos.Descriptores
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
                 , navegador: HtmlRenderNavegadorDeSeleccionados());
 
-            //var htmlModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ controlador=¨{Crud.Controlador}¨>
-            //                  		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal¨>
-            //                  		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
-            //                  		    	<h2>Edición</h2>
-            //                            </div>
-            //                  		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
-            //                            {RendelDivDeEdicion(tabla)}
-            //                            </div>
-            //                            <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-            //                               <input type=¨text¨ id=¨{IdHtml}-modificar¨ class=¨boton-modal¨ value=¨Modificar¨ readonly onclick=¨Crud.EventosModalDeEdicion('modificar-elemento')¨       />
-            //                               <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨Crud.EventosModalDeEdicion('cerrar-modal')¨ />
-            //                               {HtmlRenderNavegadorDeSeleccionados()}
-            //                            </div>
-            //                          </div>
-            //                  </div>";
             return htmlModal;
         }
 

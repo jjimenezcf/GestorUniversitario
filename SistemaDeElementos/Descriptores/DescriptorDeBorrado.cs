@@ -4,6 +4,8 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeBorrado<TElemento> : ControlHtml where TElemento : ElementoDto
     {
+        public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
+
         public DescriptorDeBorrado(DescriptorDeCrud<TElemento> crud, string etiqueta) 
         : base(
           padre: crud,
@@ -18,20 +20,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RendelModal()
         {
-            var htmlModal =$@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨>
-                              		<div id=¨{IdHtml}-contenido¨ class=¨cotenido-modal¨>
-                              		    <div id=¨{IdHtml}-cabecera¨ class=¨cotenido-cabecera¨>
-                              		    	<h2>Confirmación de borrado</h2>
-                                        </div>
-                              		    <div id=¨{IdHtml}-cuerpo¨ class=¨cotenido-cuerpo¨>
-                              			    <input type=¨text¨ id=¨{IdHtml}-mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>
-                                        </div>
-                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-aceptar¨ class=¨boton-modal¨ value=¨Aceptar¨ readonly onclick=¨Crud.EventosModalDeBorrar('borrar-elemento')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')¨ />
-                                        </div>
-                                      </div>
-                              </div>";
+            var cuerpoHtml = $"<input type=¨text¨ id=¨{IdHtml}-mensaje¨ class=¨mensaje-modal¨ value=¨Desea borrar el elemento seleccionado¨></input>";
+           
+            var htmlModal = RenderizarModal(
+                idHtml: IdHtml
+                , controlador: Crud.Controlador
+                , tituloH2: "Confirmación de borrado"
+                , cuerpo: cuerpoHtml
+                , idOpcion: $"{IdHtml}-aceptar"
+                , opcion: "Aceptar"
+                , accion: "Crud.EventosModalDeBorrar('borrar-elemento')"
+                , cerrar: "Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')"
+                , navegador: "");
+
             return htmlModal;
         }
 
