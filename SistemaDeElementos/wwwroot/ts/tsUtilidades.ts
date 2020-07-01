@@ -75,8 +75,33 @@ interface String {
     Numero(): number;
 }
 
-function isString(obj) {
-    return Object.prototype.toString.call(obj) === '[object String]';
+
+function IsString(obj: any): boolean {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'string';
+        return a;
+    }
+    catch{
+        return false;
+    }
+}
+function IsBool(obj: any): boolean {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'boolean';
+        return a;
+    }
+    catch{
+        return false;
+    }
+}
+function IsNumber(obj: any): boolean {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'number';
+        return a;
+    }
+    catch{
+        return false;
+    }
 }
 
 function IsNullOrEmpty(valor: string): boolean {

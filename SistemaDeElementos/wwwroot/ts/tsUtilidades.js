@@ -54,8 +54,32 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     let inputId = document.getElementById(idCheck.replace(".chksel", `.${columna}`));
     return inputId.value;
 }
-function isString(obj) {
-    return Object.prototype.toString.call(obj) === '[object String]';
+function IsString(obj) {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'string';
+        return a;
+    }
+    catch {
+        return false;
+    }
+}
+function IsBool(obj) {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'boolean';
+        return a;
+    }
+    catch {
+        return false;
+    }
+}
+function IsNumber(obj) {
+    try {
+        var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'number';
+        return a;
+    }
+    catch {
+        return false;
+    }
 }
 function IsNullOrEmpty(valor) {
     if (valor == null || valor.NoDefinida())

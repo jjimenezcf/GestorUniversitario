@@ -320,7 +320,7 @@
             return true;
         }
 
-        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: string): boolean {
+        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let check: HTMLInputElement = this.BuscarCheck(panel, propiedad);
 
             if (check === null)
@@ -328,7 +328,12 @@
 
             check.classList.remove(ClaseCss.crtlNoValido);
             check.classList.add(ClaseCss.crtlValido);
-            check.checked = valor.toLowerCase() === 'true';
+
+            if (IsBool(valor))
+                check.checked = valor === true;
+            else
+            if (IsString(valor))
+                check.checked = valor.toLowerCase() === 'true';
 
             return true;
         }
