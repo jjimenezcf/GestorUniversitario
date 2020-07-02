@@ -11,9 +11,9 @@ namespace ServicioDeDatos.Seguridad
     [Table("PERMISO", Schema = "SEGURIDAD")]
     public class PermisoDtm : Registro
     {
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get; set; }
+        //[Required]
+        //[Column("NOMBRE", TypeName = "VARCHAR(250)")]
+        //public string Nombre { get; set; }
 
         public int IdClase { get; set; }
         public virtual ClasePermisoDtm Clase { get; set; }
@@ -30,6 +30,7 @@ namespace ServicioDeDatos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PermisoDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
             modelBuilder.Entity<PermisoDtm>()
                         .HasIndex(p => p.Nombre)
                         .HasName("I_PERMISO_NOMBRE")

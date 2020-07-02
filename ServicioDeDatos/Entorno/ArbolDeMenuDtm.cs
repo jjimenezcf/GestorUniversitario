@@ -11,10 +11,6 @@ namespace ServicioDeDatos.Entorno
         [Column("PADRE", TypeName = "VARCHAR(250)")]
         public string Padre { get; set; }
 
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get; set; }
-
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
@@ -59,6 +55,9 @@ namespace ServicioDeDatos.Entorno
                     .HasKey(x => new {
                         x.Id
                     });
+
+
+            modelBuilder.Entity<ArbolDeMenuDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
 
             modelBuilder.Entity<ArbolDeMenuDtm>().Property(menu => menu.IdPadre).IsRequired(false);
             modelBuilder.Entity<ArbolDeMenuDtm>().Property(menu => menu.IdVistaMvc).IsRequired(false);

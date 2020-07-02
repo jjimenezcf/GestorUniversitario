@@ -10,10 +10,6 @@ namespace ServicioDeDatos.Seguridad
     [Table("ROL", Schema = "SEGURIDAD")]
     public class RolDtm : Registro
     {
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get; set; }
-
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
@@ -25,6 +21,8 @@ namespace ServicioDeDatos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<RolDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
+
             modelBuilder.Entity<RolDtm>()
                         .HasIndex(p => p.Nombre)
                         .HasName("I_ROL_NOMBRE")

@@ -8,10 +8,6 @@ namespace ServicioDeDatos.Entorno
     [Table("VARIABLE", Schema = "ENTORNO")]
     public class VariableDtm : Registro
     {
-        [Required]
-        [Column("NOMBRE", Order = 3, TypeName = "VARCHAR(50)")]
-        public string Nombre { get; set; }
-
         [Column("DESCRIPCION", Order = 4, TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
@@ -24,6 +20,7 @@ namespace ServicioDeDatos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<VariableDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(50)").IsRequired();
             modelBuilder.Entity<VariableDtm>().Property(v => v.Descripcion).IsRequired(false);
             modelBuilder.Entity<VistaMvcDtm>()
             .HasIndex(v => new { v.Nombre })

@@ -9,10 +9,6 @@ namespace ServicioDeDatos.Entorno
     [Table("MENU", Schema = "ENTORNO")]
     public class MenuDtm : Registro
     {
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public new string Nombre { get; set; }
-
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
@@ -46,6 +42,7 @@ namespace ServicioDeDatos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MenuDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdPadre).IsRequired(false);
             modelBuilder.Entity<MenuDtm>().Property(menu => menu.IdVistaMvc).IsRequired(false);
 

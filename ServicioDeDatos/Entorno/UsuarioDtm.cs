@@ -20,12 +20,7 @@ namespace ServicioDeDatos.Entorno
         [Required]
         [Column("APELLIDO", TypeName = "VARCHAR(250)")]
         public string Apellido { get; set; }
-
-
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(50)")]
-        public new string Nombre { get; set; }
-        
+                
         [Required]
         [Column("F_ALTA", TypeName = "DATE")]
         public DateTime Alta { get; set; }
@@ -43,6 +38,8 @@ namespace ServicioDeDatos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UsuarioDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(50)").IsRequired();
+
             modelBuilder.Entity<UsuarioDtm>()
             .HasIndex(v => new { v.Login })
             .IsUnique(true)

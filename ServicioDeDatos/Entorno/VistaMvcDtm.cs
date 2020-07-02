@@ -10,9 +10,6 @@ namespace ServicioDeDatos.Entorno
     public class VistaMvcDtm : Registro
     {
         [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public new string Nombre { get; set; }
-        [Required]
         [Column("CONTROLADOR", TypeName = "VARCHAR(250)")]
         public string Controlador { get; set; }
 
@@ -33,6 +30,8 @@ namespace ServicioDeDatos.Entorno
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<VistaMvcDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
+
             modelBuilder.Entity<VistaMvcDtm>().Property(menu => menu.Parametros).IsRequired(false);
 
             modelBuilder.Entity<VistaMvcDtm>().Property(menu => menu.MostrarEnModal).IsRequired(true).HasDefaultValue(false);
