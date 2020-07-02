@@ -13,7 +13,7 @@ namespace ServicioDeDatos.Seguridad
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
 
-        public ICollection<RolesDeUnPermiso> Permisos { get; set; }
+        public ICollection<RolesDeUnPermisoDtm> Permisos { get; set; }
         public ICollection<RolesDeUnPuestoDtm> Puestos { get; set; }
     }
 

@@ -22,7 +22,7 @@ namespace ServicioDeDatos.Seguridad
 
         public virtual TipoPermisoDtm Tipo { get; set; }
 
-        public ICollection<RolesDeUnPermiso> Roles { get; set; }
+        public ICollection<RolesDeUnPermisoDtm> Roles { get; set; }
         public ICollection<UsuariosDeUnPermisoDtm> Usuarios { get; set; }
     }
 

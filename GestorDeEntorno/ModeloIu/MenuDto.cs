@@ -104,7 +104,7 @@ namespace Gestor.Elementos.Entorno
             Fila = 5,
             Columna = 0,
             Ordenar = true,
-            VisibleEnGrid = false
+            VisibleEnGrid = true
             )
         ]
         public string Orden { get; set; }

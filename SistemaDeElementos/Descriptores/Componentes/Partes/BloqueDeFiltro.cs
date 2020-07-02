@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Controles.Add(c);
         }
 
-        public void AnadirControlEn(ControlFiltroHtml c, Posicion posicion)
+        public void AnadirControlEn(ControlFiltroHtml c)
         {
             Controles.Add(c);
             foreach (var control in Controles)
@@ -44,12 +44,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 if (control.Posicion.fila >= c.Posicion.fila)
                 {
-                    control.Posicion.fila++;
-                    if (control.Posicion.fila >= Tabla.Dimension.Filas)
-                        Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
+                    if (control.Posicion.fila == c.Posicion.fila && control.Posicion.columna == c.Posicion.columna)
+                       control.Posicion.fila++;
                 }
-            }
 
+                if (control.Posicion.fila >= Tabla.Dimension.Filas)
+                    Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
+            }
         }
 
         public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto 

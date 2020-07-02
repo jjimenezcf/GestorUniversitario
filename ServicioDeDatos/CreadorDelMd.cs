@@ -25,7 +25,7 @@ namespace ServicioDeDatos
         public DbSet<PermisoDtm> Permisos { get; set; }
         public DbSet<RolDtm> Roles { get; set; }
         public DbSet<PuestoDtm> Puestos { get; set; }
-        public DbSet<RolesDeUnPermiso> PermisosDeUnRol { get; set; }
+        public DbSet<RolesDeUnPermisoDtm> PermisosDeUnRol { get; set; }
         public DbSet<RolesDeUnPuestoDtm> PuestosDeUnRol { get; set; }
         public DbSet<PuestoDeUnUsuarioDtm> PuestosDeUnUsuario { get; set; }
 

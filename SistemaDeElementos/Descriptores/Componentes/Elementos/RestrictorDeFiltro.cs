@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.RestrictorDeFiltro;
             Criterio = TipoCriterio.igual.ToString();
             bloque.Tabla.Dimension.CambiarDimension(posicion);
-            bloque.AnadirControlEn(this,posicion);
+            bloque.AnadirControlEn(this);
         }
 
         public override string RenderControl()

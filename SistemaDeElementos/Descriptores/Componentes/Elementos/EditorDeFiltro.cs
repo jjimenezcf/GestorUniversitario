@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.Editor;
             Criterio = TipoCriterio.contiene.ToString();
             bloque.Tabla.Dimension.CambiarDimension(posicion);
-            bloque.AnadirControlEn(this,posicion);
+            bloque.AnadirControlEn(this);
         }
 
         public override string RenderControl()

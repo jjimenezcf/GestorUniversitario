@@ -75,15 +75,32 @@ namespace Gestor.Elementos.Entorno
         public static IQueryable<T> OrdenarMenus<T>(this IQueryable<T> registros, List<ClausulaDeOrdenacion> ordenacion) where T : MenuDtm
         {
             foreach (ClausulaDeOrdenacion orden in ordenacion)
+            {
                 if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre.Orden)
                     : registros.OrderByDescending(x => x.Padre.Orden);
-                else
+
+                    break;
+                }
+
                 if (orden.Propiedad.ToLower() == nameof(MenuDtm.Nombre).ToLower())
+                {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Orden)
-                    : registros.OrderByDescending(x => x.Orden);
+                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Nombre)
+                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Nombre);
+                    break;
+                }
+
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
+                {
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x=>x.Nombre)
+                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Orden).ThenBy(x => x.Nombre);
+                    break;
+                }
+            }
 
             return registros;
         }
@@ -100,7 +117,7 @@ namespace Gestor.Elementos.Entorno
                 .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc.Nombre));
 
                 CreateMap<MenuDto, MenuDtm>()
-                    .ForMember(dtm => dtm.IdVistaMvc, dto => dto.MapFrom(dto => dto.idVistaMvc==0 ? null: dto.idVistaMvc))                    
+                    .ForMember(dtm => dtm.IdVistaMvc, dto => dto.MapFrom(dto => dto.idVistaMvc == 0 ? null : dto.idVistaMvc))
                     .ForMember(dtm => dtm.IdPadre, dto => dto.MapFrom(dto => dto.idPadre == 0 ? null : dto.idPadre));
             }
         }
@@ -126,7 +143,7 @@ namespace Gestor.Elementos.Entorno
         protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
-           
+
             if (HayFiltroPorId(registros))
                 return registros;
 
@@ -178,7 +195,7 @@ namespace Gestor.Elementos.Entorno
         public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
         {
             var gestor = GestorDeArbolDeMenu.Gestor(mapeador);
-            
+
             return gestor.LeerArbolDeMenu();
         }
 

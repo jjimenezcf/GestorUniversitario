@@ -12,7 +12,7 @@ namespace Gestor.Elementos.Seguridad
 {
     public static partial class Joins
     {
-        public static IQueryable<T> AplicarJoinsDeRolPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : RolesDeUnPermiso
+        public static IQueryable<T> AplicarJoinsDeRolPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : RolesDeUnPermisoDtm
         {
             foreach (ClausulaDeJoin join in joins)
             {
@@ -30,10 +30,10 @@ namespace Gestor.Elementos.Seguridad
 
     static class FiltrosDeRolesDePermisos
     {
-        public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolesDeUnPermiso
+        public static IQueryable<T> FiltroPorPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : RolesDeUnPermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPermiso.IdPermiso).ToLower() && filtro.Valor.Entero() > 0)
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPermisoDtm.IdPermiso).ToLower() && filtro.Valor.Entero() > 0)
                     return registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
 
             return registros;
@@ -41,14 +41,14 @@ namespace Gestor.Elementos.Seguridad
     }
 
 
-    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoSe, RolesDeUnPermiso, RolPermisoDto>
+    public class GestorDeRolesDePermisos : GestorDeElementos<ContextoSe, RolesDeUnPermisoDtm, RolPermisoDto>
     {
 
         public class MapearRolPermiso : Profile
         {
             public MapearRolPermiso()
             {
-                CreateMap<RolesDeUnPermiso, RolPermisoDto>();
+                CreateMap<RolesDeUnPermisoDtm, RolPermisoDto>();
             }
         }
 
@@ -71,14 +71,14 @@ namespace Gestor.Elementos.Seguridad
             joins.Add(new ClausulaDeJoin { Dtm = typeof(RolDtm) });
         }
 
-        protected override IQueryable<RolesDeUnPermiso> AplicarJoins(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<RolesDeUnPermisoDtm> AplicarJoins(IQueryable<RolesDeUnPermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
             registros = registros.AplicarJoinsDeRolPermiso(joins, parametros);
             return registros;
         }
 
-        protected override IQueryable<RolesDeUnPermiso> AplicarFiltros(IQueryable<RolesDeUnPermiso> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        protected override IQueryable<RolesDeUnPermisoDtm> AplicarFiltros(IQueryable<RolesDeUnPermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 

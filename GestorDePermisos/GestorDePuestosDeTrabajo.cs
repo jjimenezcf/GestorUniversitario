@@ -31,16 +31,5 @@ namespace ServicioDeDatos.Seguridad
             return (GestorDePuestosDeTrabajo)CrearGestor<GestorDePuestosDeTrabajo>(() => new GestorDePuestosDeTrabajo(contexto, mapeador));
         }
 
-        protected override IQueryable<PuestoDtm> AplicarFiltros(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarFiltros(registros, filtros, parametros);
-
-            if (HayFiltroPorId(registros))
-                return registros;
-
-            registros = registros.FiltrarPorNombre(filtros);
-
-            return registros;
-        }
     }
 }
