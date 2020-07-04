@@ -8,7 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePuestosDeUnUsuario : DescriptorDeCrud<PuestosDeUnUsuarioDto>
     {
         public DescriptorDePuestosDeUnUsuario(ModoDescriptor modo)
-        : base(nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
+        : base(nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario), modo)
         {
             RutaVista = "Seguridad";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");

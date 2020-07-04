@@ -44,7 +44,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDePuestosDeUnUsuario(string idForm)
         {
             var mntPuestos = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
-                  , $@"/{nameof(PuestosDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestosDeUnUsuarioController.CrudPuestoDeUnUsuario)}"
+                  , $@"/{nameof(PuestosDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)}"
                   , nameof(PuestoDto)
                   , idForm);
             var opcion = new OpcionDeMenu<UsuarioDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntPuestos, tipoAccion: TipoAccion.Post, titulo: $"Puestos");

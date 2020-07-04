@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrudPuestoDeUnUsuario(string restrictor, string orden)
+        public IActionResult CrudPuestosDeUnUsuario(string restrictor, string orden)
         {
             var elementosDto = LeerOrdenados(restrictor, orden);
             GestorDelCrud.Descriptor.MapearElementosAlGrid(elementosDto, cantidadPorLeer: 5, posicionInicial: 0);
