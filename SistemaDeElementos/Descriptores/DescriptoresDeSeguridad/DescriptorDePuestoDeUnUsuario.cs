@@ -25,9 +25,9 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/PuestoDeUnUsuario.js¨></script>
+                   $@"<script src=¨../../ts/Seguridad/PuestosDeUnUsuario.js¨></script>
                       <script>
-                         Crud.crudMnt = new Seguridad.CrudMntPuestoDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         Crud.crudMnt = new Seguridad.CrudMntPuestosDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                       </script>
                     ";
             return render.Render();

@@ -1,6 +1,6 @@
 ﻿namespace Seguridad {
 
-    export class CrudMntPuestoDeUnUsuario extends Crud.CrudMnt {
+    export class CrudMntPuestosDeUnUsuario extends Crud.CrudMnt {
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);
             this.crudDeCreacion = new CrudCreacionPuestoDeUnUsuario(this, idPanelCreacion);

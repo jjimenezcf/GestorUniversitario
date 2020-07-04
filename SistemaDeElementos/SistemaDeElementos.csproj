@@ -17,8 +17,9 @@
     <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Permisos.ts" />
     <Content Remove="wwwroot\ts\Seguridad\PuestoDeTrabajo.ts" />
-    <Content Remove="wwwroot\ts\Seguridad\PuestoDeUnUsuario.ts" />
+    <Content Remove="wwwroot\ts\Seguridad\PuestosDeUnUsuario.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Rol.ts" />
+    <Content Remove="wwwroot\ts\Seguridad\RolesDeUnPuesto.ts" />
     <Content Remove="wwwroot\ts\tsSelectores.js" />
     <Content Remove="wwwroot\ts\tsSelectores.js.map" />
     <Content Remove="wwwroot\ts\tsSelectores.ts" />
@@ -99,10 +100,13 @@
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Variables.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Update="wwwroot\ts\Seguridad\PuestoDeUnUsuario.ts">
+    <TypeScriptCompile Update="wwwroot\ts\Seguridad\PuestosDeUnUsuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\Rol.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Seguridad\RolesDeUnPuesto.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

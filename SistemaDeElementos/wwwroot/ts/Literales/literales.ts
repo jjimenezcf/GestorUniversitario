@@ -227,10 +227,12 @@ const ModoTrabajo = {
 }
 
 const Restrictor = {
-    idUsuario: "idusuario"
+    idUsuario: "idusuario",
+    idPuesto: "idpuesto"
 }
 
 const Parametros = {
-    Usuario: "nombreUsuario"
+    Usuario: "nombreUsuario",
+    Puesto: "nombrePuesto"
 }
 

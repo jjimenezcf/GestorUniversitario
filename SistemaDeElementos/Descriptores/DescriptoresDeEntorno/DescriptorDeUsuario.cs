@@ -38,10 +38,10 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
             RutaVista = "Entorno";
 
-            AnadirOpcionDePuestoDeUnUsuario($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(PuestoDto)}");
+            AnadirOpcionDePuestosDeUnUsuario($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(PuestoDto)}");
         }
 
-        internal void AnadirOpcionDePuestoDeUnUsuario(string idForm)
+        internal void AnadirOpcionDePuestosDeUnUsuario(string idForm)
         {
             var mntPuestos = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
                   , $@"/{nameof(PuestoDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario)}"
