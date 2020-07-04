@@ -9,15 +9,15 @@ using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class PuestoDeUnUsuarioController :  EntidadController<ContextoSe, PuestoDeUnUsuarioDtm, PuestoDeUnUsuarioDto>
+    public class PuestosDeUnUsuarioController :  EntidadController<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
     {
 
-        public PuestoDeUnUsuarioController(GestorDePuestoDeUnUsuario gestor, GestorDeErrores errores)
+        public PuestosDeUnUsuarioController(GestorDePuestosDeUnUsuario gestor, GestorDeErrores errores)
          : base
          (
            gestor,
            errores,
-           new DescriptorDePuestoDeUnUsuario(ModoDescriptor.Mantenimiento)
+           new DescriptorDePuestosDeUnUsuario(ModoDescriptor.Mantenimiento)
          )
         {
         }
@@ -34,10 +34,10 @@ namespace MVCSistemaDeElementos.Controllers
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
             if (claseElemento == nameof(UsuarioDto))
-                return ((GestorDePuestoDeUnUsuario)GestorDeElementos).LeerUsuarios(posicion, cantidad, filtro);
+                return ((GestorDePuestosDeUnUsuario)GestorDeElementos).LeerUsuarios(posicion, cantidad, filtro);
 
             if (claseElemento == nameof(PuestoDto))
-                return ((GestorDePuestoDeUnUsuario)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+                return ((GestorDePuestosDeUnUsuario)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }

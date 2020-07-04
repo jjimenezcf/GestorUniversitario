@@ -9,7 +9,7 @@ namespace ServicioDeDatos.Seguridad
 
 
     [Table("USU_PUESTO", Schema = "SEGURIDAD")]
-    public class PuestoDeUnUsuarioDtm : Registro
+    public class PuestosDeUnUsuarioDtm : Registro
     {
         [Column("IDUSUA", TypeName = "INT")]
         public int IdUsuario { get; set; }
@@ -26,37 +26,37 @@ namespace ServicioDeDatos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>().Property(p => p.IdUsuario).IsRequired();
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>().Property(p => p.idPuesto).IsRequired();
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.IdUsuario).IsRequired();
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.idPuesto).IsRequired();
 
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>().Property(p => p.IdUsuario).HasColumnName("IDUSUA");
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>().Property(p => p.idPuesto).HasColumnName("IDPUESTO");
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.IdUsuario).HasColumnName("IDUSUA");
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.idPuesto).HasColumnName("IDPUESTO");
 
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>()
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                         .HasIndex(p =>new { p.idPuesto, p.IdUsuario })
                         .HasName("I_USU_PUESTO_IDPUESTO_IDUSUA")
                         .IsUnique();
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>()
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasIndex(p => p.IdUsuario)
                 .IsUnique(false)
                 .HasName("I_USU_PUESTO_IDUSUA");
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>()
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasIndex(p => p.idPuesto)
                 .IsUnique(false)
                 .HasName("I_USU_PUESTO_IDPUESTO");
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>()
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasOne(x => x.Puesto)
                 .WithMany(p => p.Usuarios)
                 .HasForeignKey(x => x.idPuesto)
                 .HasConstraintName("FK_USU_PUESTO_IDPUESTO")
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PuestoDeUnUsuarioDtm>()
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasOne(x => x.Usuario)
                 .WithMany(p => p.Puestos)
                 .HasForeignKey(x => x.IdUsuario)

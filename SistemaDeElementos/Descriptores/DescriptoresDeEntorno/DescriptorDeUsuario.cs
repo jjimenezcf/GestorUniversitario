@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeUsuario : DescriptorDeCrud<UsuarioDto>
     {
-        DescriptorDePuestoDeUnUsuario descriptorDePuestos = new DescriptorDePuestoDeUnUsuario(ModoDescriptor.Mantenimiento);
+        DescriptorDePuestosDeUnUsuario descriptorDePuestos = new DescriptorDePuestosDeUnUsuario(ModoDescriptor.Mantenimiento);
 
         public DescriptorDeUsuario(ModoDescriptor modo)
         : base(controlador: nameof(UsuariosController)
@@ -44,7 +44,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDePuestosDeUnUsuario(string idForm)
         {
             var mntPuestos = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
-                  , $@"/{nameof(PuestoDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario)}"
+                  , $@"/{nameof(PuestosDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestosDeUnUsuarioController.CrudPuestoDeUnUsuario)}"
                   , nameof(PuestoDto)
                   , idForm);
             var opcion = new OpcionDeMenu<UsuarioDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntPuestos, tipoAccion: TipoAccion.Post, titulo: $"Puestos");

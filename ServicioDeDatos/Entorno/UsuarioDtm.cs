@@ -31,7 +31,7 @@ namespace ServicioDeDatos.Entorno
         
         public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
 
-        public virtual ICollection<PuestoDeUnUsuarioDtm> Puestos { get; private set; }
+        public virtual ICollection<PuestosDeUnUsuarioDtm> Puestos { get; private set; }
 
     }
     public static class TablaUsuario

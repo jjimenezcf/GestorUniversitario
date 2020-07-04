@@ -52,7 +52,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeVistaMvc>();
             services.AddScoped<GestorDePuestosDeTrabajo>();
             services.AddScoped<GestorDeClaseDePermisos>();
-            services.AddScoped<GestorDePuestoDeUnUsuario>();
+            services.AddScoped<GestorDePuestosDeUnUsuario>();
             services.AddScoped<GestorDeRolesDeUnPuesto>();
             services.AddScoped<GestorDeRoles>();
 

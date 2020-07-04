@@ -8,7 +8,7 @@ using Gestor.Elementos.Seguridad;
 namespace GestorDeSeguridad.ModeloIu
 {
     [IUDto]
-    public class PuestoDeUnUsuarioDto: ElementoDto
+    public class PuestosDeUnUsuarioDto: ElementoDto
     {
 
         [IUPropiedad(

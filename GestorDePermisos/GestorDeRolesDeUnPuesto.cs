@@ -69,10 +69,10 @@ namespace Gestor.Elementos.Seguridad
 
         }
 
-        internal static GestorDePuestoDeUnUsuario Gestor(IMapper mapeador)
+        internal static GestorDePuestosDeUnUsuario Gestor(IMapper mapeador)
         {
             var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDePuestoDeUnUsuario)CrearGestor<GestorDePuestoDeUnUsuario>(() => new GestorDePuestoDeUnUsuario(contexto, mapeador));
+            return (GestorDePuestosDeUnUsuario)CrearGestor<GestorDePuestosDeUnUsuario>(() => new GestorDePuestosDeUnUsuario(contexto, mapeador));
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

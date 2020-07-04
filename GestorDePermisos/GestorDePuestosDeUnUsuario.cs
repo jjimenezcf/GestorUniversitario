@@ -15,7 +15,7 @@ namespace Gestor.Elementos.Seguridad
     public static partial class Joins
     {
         public static IQueryable<T> JoinDePuestosDeUnUsuario<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        where T : PuestoDeUnUsuarioDtm
+        where T : PuestosDeUnUsuarioDtm
         {
             foreach (ClausulaDeJoin join in joins)
             {
@@ -32,11 +32,11 @@ namespace Gestor.Elementos.Seguridad
     static class FiltrosDePuestosDeUnUsuario    {
 
         public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
-        where T : PuestoDeUnUsuarioDtm
+        where T : PuestosDeUnUsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(PuestoDeUnUsuarioDtm.IdUsuario).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower())
                 {
                     registros = registros.Where(p => p.IdUsuario == filtro.Valor.Entero());
                 }
@@ -46,32 +46,32 @@ namespace Gestor.Elementos.Seguridad
         }
     }
 
-    public class GestorDePuestoDeUnUsuario : GestorDeElementos<ContextoSe, PuestoDeUnUsuarioDtm, PuestoDeUnUsuarioDto>
+    public class GestorDePuestosDeUnUsuario : GestorDeElementos<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
     {
 
         public class MapearClasePermiso : Profile
         {
             public MapearClasePermiso()
             {
-                CreateMap<PuestoDeUnUsuarioDtm, PuestoDeUnUsuarioDto>()
+                CreateMap<PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>()
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
                     .ForMember(dto => dto.Usuario, dtm => dtm.MapFrom(dtm => dtm.Usuario.Login));
 
-                CreateMap<PuestoDeUnUsuarioDto, PuestoDeUnUsuarioDtm>();
+                CreateMap<PuestosDeUnUsuarioDto, PuestosDeUnUsuarioDtm>();
             }
         }
 
-        public GestorDePuestoDeUnUsuario(ContextoSe contexto, IMapper mapeador)
+        public GestorDePuestosDeUnUsuario(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
 
 
         }
 
-        internal static GestorDePuestoDeUnUsuario Gestor(IMapper mapeador)
+        internal static GestorDePuestosDeUnUsuario Gestor(IMapper mapeador)
         {
             var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDePuestoDeUnUsuario)CrearGestor<GestorDePuestoDeUnUsuario>(() => new GestorDePuestoDeUnUsuario(contexto, mapeador));
+            return (GestorDePuestosDeUnUsuario)CrearGestor<GestorDePuestosDeUnUsuario>(() => new GestorDePuestosDeUnUsuario(contexto, mapeador));
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -81,14 +81,14 @@ namespace Gestor.Elementos.Seguridad
             joins.Add(new ClausulaDeJoin { Dtm = typeof(PuestoDtm) });
         }
 
-        protected override IQueryable<PuestoDeUnUsuarioDtm> AplicarJoins(IQueryable<PuestoDeUnUsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarJoins(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
 
             return registros.JoinDePuestosDeUnUsuario(joins, parametros);
         }
 
-        protected override IQueryable<PuestoDeUnUsuarioDtm> AplicarFiltros(IQueryable<PuestoDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarFiltros(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 

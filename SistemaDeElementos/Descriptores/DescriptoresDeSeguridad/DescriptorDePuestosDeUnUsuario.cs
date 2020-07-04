@@ -5,16 +5,16 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDePuestoDeUnUsuario : DescriptorDeCrud<PuestoDeUnUsuarioDto>
+    public class DescriptorDePuestosDeUnUsuario : DescriptorDeCrud<PuestosDeUnUsuarioDto>
     {
-        public DescriptorDePuestoDeUnUsuario(ModoDescriptor modo)
-        : base(nameof(PuestoDeUnUsuarioController), nameof(PuestoDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
+        public DescriptorDePuestosDeUnUsuario(ModoDescriptor modo)
+        : base(nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestoDeUnUsuario), modo)
         {
             RutaVista = "Seguridad";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
-            new RestrictorDeFiltro<PuestoDeUnUsuarioDto>(bloque: fltGeneral
+            new RestrictorDeFiltro<PuestosDeUnUsuarioDto>(bloque: fltGeneral
                   , etiqueta: "Usuario"
-                  , propiedad:nameof(PuestoDeUnUsuarioDto.IdUsuario)
+                  , propiedad:nameof(PuestosDeUnUsuarioDto.IdUsuario)
                   , ayuda: "buscar por usuario"
                   , new Posicion { fila = 0, columna = 0 });
         }
