@@ -90,6 +90,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\SisDoc\" />
     <Folder Include="Descriptores\Componentes\Plantillas\" />
   </ItemGroup>
 
