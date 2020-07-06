@@ -24,9 +24,12 @@ const ModoOrdenacion = {
 const Atributo = {
     propiedad: "propiedad",
     criterio: "criterio-de-filtro",
-    zonaDeFiltro: "zonaDeFiltro",
+    zonaDeFiltro: "zona-de-filtro",
     filtro: "control-de-filtro",
+    tablaDeDatos: "tabla-de-datos",
     id: Literal.id,
+    grid: 'grid',
+    crudModal: 'crud-modal',
     controlador: "controlador",
     posicion: "posicion",
     obligatorio: "obligatorio",
@@ -224,6 +227,15 @@ const ModoTrabajo = {
     copiando: "copiando",
     borrando: "borrando",
     mantenimiento: "mantenimiento"
+}
+
+
+const Relaciones = {
+    roles: 'RolDto',
+    puestos: 'PuestoDto'
+};
+const ValorStorage = {
+    entrada : "entrada"
 }
 
 const Restrictor = {

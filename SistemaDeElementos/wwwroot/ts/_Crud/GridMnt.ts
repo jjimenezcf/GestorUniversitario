@@ -1,6 +1,5 @@
 ﻿namespace Crud {
 
-
     class ClausulaDeOrdenacion {
         propiedad: string;
         modo: string;
@@ -87,8 +86,15 @@
         protected Ordenacion: Ordenacion;
         protected InfoSelector: InfoSelector;
 
+        protected idPanelMnt: string;
 
-        protected IdGrid: string;
+        protected get PanelMnt(): HTMLDivElement {
+            return document.getElementById(this.idPanelMnt) as HTMLDivElement;
+        }
+
+        protected get IdGrid(): string {
+            return this.PanelMnt.getAttribute(Atributo.grid);
+        }
         private idHtmlFiltro: string;
 
         protected get ZonaDeFiltro(): HTMLDivElement {
@@ -99,6 +105,11 @@
             return document.getElementById(this.IdGrid) as HTMLDivElement;
         }
 
+        protected get Tabla(): HTMLTableElement {
+            let idTabla: string = this.Grid.getAttribute(Atributo.tablaDeDatos);
+            return document.getElementById(idTabla) as HTMLTableElement;
+        }
+
         protected get Navegador(): HTMLInputElement {
             return this.ObtenerNavegador();
         }
@@ -107,13 +118,12 @@
             return this.Navegador.getAttribute(Atributo.controlador);
         }
 
-        constructor(idGrid: string) {
+
+        constructor(idPanelMnt: string) {
             super();
-            this.IdGrid = idGrid;
+            this.idPanelMnt = idPanelMnt;
             this.InfoSelector = new InfoSelector(this.IdGrid);
-
             this.idHtmlFiltro = this.Grid.getAttribute(Atributo.zonaDeFiltro);
-
             this.Ordenacion = new Ordenacion();
         }
 
@@ -211,7 +221,7 @@
                         break;
                     }
                     default: {
-                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`)
+                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`);
                     }
                 }
 
@@ -287,14 +297,13 @@
             return clausula;
         }
 
-
         private ObtenerClausulaListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad = input.getAttribute(Atributo.propiedad);
             var criterio = input.getAttribute(Atributo.criterio);
 
             let lista: ListaDinamica = new ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
-            
+
 
             var clausula = null;
             if (Number(valor) > 0) {
@@ -364,5 +373,47 @@
                 contenedorGrid.InfoSelector.SincronizarCheck();
             }
         }
+
+        protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
+
+            let fila: HTMLTableRowElement = this.ObtenerFila(id);
+            let celda: HTMLTableDataCellElement = this.ObtenerCelda(fila, propiedad);
+            let input: HTMLInputElement = celda.querySelector("input");
+            if (input === null)
+                throw new Error(`la celda asociada a la propiedad '${propiedad}' no tiene un control input definido`);
+
+            return input.value;
+        }
+
+        private ObtenerFila(id: number): HTMLTableRowElement {
+            let tabla: HTMLTableElement = this.Tabla;
+            for (var i = 0; i < tabla.rows.length; i++) {
+                let fila: HTMLTableRowElement = tabla.rows[i];
+                for (var j = 0; j < fila.cells.length; j++) {
+                    let celda: HTMLTableDataCellElement = fila.cells[j];
+                    let input: HTMLInputElement = celda.querySelector("input");
+                    if (input !== null) {
+                        let propiedad: string = input.getAttribute(Atributo.propiedad);
+                        if (propiedad.toLocaleLowerCase() === Atributo.id) {
+                            let valor: string = input.value;
+                            if (valor.Numero() == id)
+                                return fila;
+                        }
+                    }
+                }
+            }
+            throw new Error(`No se ha localizado una fila con la propiedad Id definida`);
+        }
+
+        private ObtenerCelda(fila: HTMLTableRowElement, propiedadBuscada: string): HTMLTableDataCellElement {
+            for (var j = 0; j < fila.cells.length; j++) {
+                let celda: HTMLTableDataCellElement = fila.cells[j];
+                let propiedadCelda: string = celda.getAttribute(Atributo.propiedad);
+                if (propiedadCelda.toLocaleLowerCase() === propiedadBuscada)
+                    return celda;
+            }
+            throw new Error(`No se ha localizado una celda con la propiedad '${propiedadBuscada}' definida`);
+        }
     }
+
 }

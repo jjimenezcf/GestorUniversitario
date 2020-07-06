@@ -10,7 +10,9 @@
         public crudDeEdicion: CrudEdicion;
         public idModalBorrar: string;
 
-        public PanelDeMnt: HTMLDivElement;
+        public get PanelDeMnt(): HTMLDivElement {
+            return document.getElementById(this.Pagina) as HTMLDivElement;
+        }
 
         public Modales: Array<ModalSeleccion> = new Array<ModalSeleccion>();
 
@@ -19,29 +21,28 @@
         }
 
         constructor(idPanelMnt: string) {
-            super(`${idPanelMnt}_grid`);
+            super(idPanelMnt);
+
+            if (!this.Estado.containsKey(Estado.Pagina)) {
+                Mensaje(TipoMensaje.Info, "primera vez");
+            }
 
             if (IsNullOrEmpty(idPanelMnt))
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
 
-            this.InicializarInformacionPaneles(idPanelMnt);
+            this.Pagina = idPanelMnt;
             this.InicializarNavegador();
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Controlador);
         }
 
-        private InicializarInformacionPaneles(idPanelMnt: string) {
-            this.PanelDeMnt = document.getElementById(idPanelMnt) as HTMLDivElement;
-        }
-
         private InicializarSelectores() {
             let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;;
             selectores.forEach((selector) => {
-
-                let idGridModal: string = selector.getAttribute(AtributoSelector.idGridModal);
-
                 let idModal: string = selector.getAttribute(AtributoSelector.idModal);
-                let modal: ModalSeleccion = new ModalSeleccion(idModal, idGridModal);
+                let modalHtml = document.getElementById(idModal);
+                let idPanelMnt = modalHtml.getAttribute(Atributo.crudModal);
+                let modal: ModalSeleccion = new ModalSeleccion(idModal, idPanelMnt);
                 this.Modales.push(modal);
 
             });

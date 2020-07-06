@@ -119,14 +119,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            const string htmlDiv = @"<div id = ¨{idZonaDeDatos}¨ class=¨ZonaDeDatos¨ seleccionables = ¨-1¨ seleccionados =¨¨ zonaDeFiltro = ¨{idFiltro}¨ expresion-elemento = ¨{expresion}¨>     
-                                       tabla_Navegador 
-                                     </div>";
-            var htmlContenedor = htmlDiv.Replace("{idZonaDeDatos}", $"{IdHtml}")
-                                        .Replace("{idFiltro}", idHtmlZonaFiltro)
-                                        .Replace("{expresion}", ExpresionElemento)
-                                        .Replace("tabla_Navegador", Grid.ToHtml());
-            return htmlContenedor;
+            var htmlDiv = @$"<div id = ¨{IdHtml}¨ class=¨ZonaDeDatos¨ seleccionables = ¨-1¨ seleccionados =¨¨ zona-de-filtro = ¨{idHtmlZonaFiltro}¨ expresion-elemento = ¨{ExpresionElemento}¨ tabla-de-datos = ¨{Grid.IdHtmlTabla}¨>     
+                              {Grid.ToHtml()}
+                             </div>";
+            return htmlDiv;
         }
         public string RenderDelGrid(ModoDescriptor modo)
         {

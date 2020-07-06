@@ -2,10 +2,6 @@
 
     export class ModalSeleccion extends GridMnt {
 
-        private ExpresionNombre: string;
-        private ColumnaId: string;
-        private ColumnaCheck: string;
-        private idSelector;
 
         private get Selector(): HTMLSelector {
             return <HTMLSelector>document.getElementById(this.idSelector);
@@ -16,22 +12,26 @@
             return <HTMLInputElement>document.getElementById(idEditorMostrar);
         }
 
-        private Modal: HTMLDivElement;
-
         public IdModal: string;
+        protected get Modal(): HTMLDivElement {
+            return document.getElementById(this.IdModal) as HTMLDivElement;
+        };
 
-        constructor(idModal: string, idGrid: string) {
-            super(idGrid);
+        private get idSelector(): string {
+            return this.Modal.getAttribute(AtributoSelector.selector);
+        }
 
-            this.Modal = document.getElementById(idModal) as HTMLDivElement;
+        private get ExpresionNombre(): string {
+            return this.Grid.getAttribute(Atributo.expresionElemento);
+        }
+        private get ColumnaId(): string {
+            return this.Selector.getAttribute(AtributoSelector.propiedadParaFiltrar);
+        }
 
+
+        constructor(idModal: string, idCrudModal: string) {
+            super(idCrudModal);
             this.IdModal = idModal;
-            this.IdGrid = idGrid;
-
-            this.ExpresionNombre = this.Grid.getAttribute(Atributo.expresionElemento);
-
-            this.idSelector = this.Modal.getAttribute(AtributoSelector.selector);
-            this.ColumnaId = this.Selector.getAttribute(AtributoSelector.propiedadParaFiltrar);
         }
 
         public InicializarModal() {
@@ -42,11 +42,6 @@
                 this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, '');
         };
 
-        private InicializarSelector() {
-            this.InicializarModal();
-            this.EditorDelGrid.value = '';
-            this.InicializarListaDeSeleccionados();
-        }
 
         private InicializarListaDeSeleccionados() {
             if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados))

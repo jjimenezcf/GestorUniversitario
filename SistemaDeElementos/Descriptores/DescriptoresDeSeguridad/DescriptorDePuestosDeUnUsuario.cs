@@ -1,4 +1,5 @@
-﻿using Gestor.Elementos.Seguridad;
+﻿using Gestor.Elementos.ModeloIu;
+using Gestor.Elementos.Seguridad;
 using GestorDeSeguridad.ModeloIu;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
@@ -17,6 +18,11 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad:nameof(PuestosDeUnUsuarioDto.IdUsuario)
                   , ayuda: "buscar por usuario"
                   , new Posicion { fila = 0, columna = 0 });
+
+            AnadirOpcionDeRolesDeUnPuesto(Mnt
+                , nameof(RolesDeUnPuestoController)
+                , nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
+                , nameof(RolDto));
         }
 
 

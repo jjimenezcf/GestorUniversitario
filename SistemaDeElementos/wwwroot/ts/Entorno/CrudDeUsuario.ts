@@ -1,9 +1,5 @@
 ﻿namespace Entorno {
 
-    const Relaciones = {
-        puestos: 'PuestoDto'
-    };
-
 
     export class CrudMntUsuario extends Crud.CrudMnt {
 

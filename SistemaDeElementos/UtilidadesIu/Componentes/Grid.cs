@@ -125,7 +125,8 @@ namespace UtilidadesParaIu
             var tdHtml = $@"<td id=¨{celda.idHtmlTd}¨ 
                                 name=¨{nombreTd}¨ 
                                 class=¨{celda.AlineacionCss()}¨ 
-                                {onclickTd} 
+                                propiedad=¨{celda.Propiedad}¨ 
+                                { onclickTd} 
                                 {ocultar} >
                                 {RenderCeldaDelTd(celda)}
                            </td>";

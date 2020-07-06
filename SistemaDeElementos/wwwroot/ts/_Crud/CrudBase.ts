@@ -90,15 +90,29 @@
         protected get ModoTrabajo(): string {
             return this.modoTrabajo;
         }
+
         protected set ModoTrabajo(modo: string) {
             this.modoTrabajo = modo;
+        }
+
+        public Estado = new Diccionario<any>();
+
+        protected get Pagina(): string {
+            let pagina: string = this.Estado[Estado.Pagina];
+            if (IsNullOrEmpty(pagina))
+                throw new Error("Página no definida");
+
+            return pagina;
+        }
+
+        protected set Pagina(idPagina: string) {
+            this.Estado[Estado.Pagina] = idPagina;
         }
 
         constructor() {
         }
 
         //funciones de ayuda para la herencia
-
         protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
             let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${Atributo.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < listas.length; i++) {
@@ -200,6 +214,11 @@
             let orden: string = partes[2];
 
             let form: HTMLFormElement = document.getElementById(idForm) as HTMLFormElement;
+
+            if (form === null) {
+                throw new Error(`El formulario '${idForm}' no es válido, actualice la clase TS o el Descriptor`);
+            }
+
             let idRestrictor: string = form.getAttribute("restrictor") as string;
             let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
             restrictor.value = filtro;
@@ -208,6 +227,7 @@
             let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
             ordenInput.value = orden;
             PonerCapa();
+            HistorialDeNavegacion[this.Pagina] = this.Estado;
             form.submit();
         }
 
@@ -332,8 +352,8 @@
             if (IsBool(valor))
                 check.checked = valor === true;
             else
-            if (IsString(valor))
-                check.checked = valor.toLowerCase() === 'true';
+                if (IsString(valor))
+                    check.checked = valor.toLowerCase() === 'true';
 
             return true;
         }
@@ -404,7 +424,7 @@
             var canvas = htmlCanvas.getContext('2d');
             var img = new Image();
             img.src = url;
-            img.onload = function() {
+            img.onload = function () {
                 canvas.drawImage(img, 0, 0, 100, 100);
             };
         }
@@ -742,7 +762,7 @@
             return this.DefinirFiltroPorRestrictor(Literal.filtro.clausulaId, id);
         }
 
-        protected DefinirFiltroPorRestrictor(propiedad:string, valor: number): string {
+        protected DefinirFiltroPorRestrictor(propiedad: string, valor: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
             var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, Literal.filtro.criterio.igual, `${valor}`);
             clausulas.push(clausula);

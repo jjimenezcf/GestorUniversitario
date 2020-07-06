@@ -10,9 +10,6 @@ namespace MVCSistemaDeElementos.Descriptores
             : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo)
         {
             RutaVista = "Seguridad";
-
-
-
             AnadirOpcionDeRolesDeUnPuesto($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(RolDto)}");
         }
 

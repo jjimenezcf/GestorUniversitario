@@ -1,9 +1,5 @@
 ﻿namespace Seguridad {
 
-    const Relaciones = {
-        puestos: 'RolDto'
-    };
-
     export class CrudMntPuestoDeTrabajo extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
@@ -24,7 +20,7 @@
                 }
 
                 switch (relacionarCon) {
-                    case Relaciones.puestos: {
+                    case Relaciones.roles: {
                         let id: number = this.InfoSelector.LeerElemento(0).Id;
                         let filtro: string = this.DefinirFiltroPorRestrictor(Restrictor.idPuesto, id);
                         let orden: string = "rol";

@@ -151,6 +151,21 @@ namespace MVCSistemaDeElementos.Descriptores
             }
             throw new Exception($"El modo {modo} no está definido");
         }
+
+        #region Opciones de menú de relaciones entres dtos
+        internal static void AnadirOpcionDeRolesDeUnPuesto(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string nombreDtoRelacionado)
+        {
+            var idForm = $"{Mnt.MenuDeMnt.Menu.IdHtml}-{nombreDtoRelacionado}";
+            var mntRoles = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
+                  , $@"/{controlador.Replace("Controller", "")}/{vista}"
+                  , nombreDtoRelacionado
+                  , idForm);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"Roles");
+            Mnt.MenuDeMnt.Menu.Add(opcion);
+        }
+
+        #endregion
+
     }
 
 }
