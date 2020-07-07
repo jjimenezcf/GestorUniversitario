@@ -1,60 +1,70 @@
 ﻿interface IDiccionario<T> {
-    add(key: string, value: T): void;
-    remove(key: string): void;
-    containsKey(key: string): boolean;
-    keys(): string[];
-    values(): T[];
-}
+    _claves: Array<string>;
+    _valores: Array<T>;
 
+    anadir(clave: string, valor: T);
+    quitar(clave: string);
+    claves(): Array<string>;
+    valores(): Array<T>;
+    contiene(clave: string): boolean;
+    obtener(clave: string): T;
+}
 
 class Diccionario<T> implements IDiccionario<T> {
 
-    _keys: string[] = [];
-    _values: T[] = [];
+    _claves = new Array<string>();
+    _valores = new Array<T>();
 
-    constructor(init?: { key: string; value: T; }[]) {
-        if (init) {
-            for (var x = 0; x < init.length; x++) {
-                this[init[x].key] = init[x].value;
-                this._keys.push(init[x].key);
-                this._values.push(init[x].value);
+    constructor(inicilizar?: { clave: string; valor: T; }[]) {
+        if (inicilizar) {
+            for (var x = 0; x < inicilizar.length; x++) {
+                this.anadir(inicilizar[x].clave, inicilizar[x].valor);
             }
         }
     }
 
-    add(key: string, value: T) {
-        this[key] = value;
-        this._keys.push(key);
-        this._values.push(value);
+    anadir(clave: string, valor: T) {
+        this._claves.push(clave);
+        this._valores.push(valor);
     }
 
-    remove(key: string) {
-        var index = this._keys.indexOf(key, 0);
-        this._keys.splice(index, 1);
-        this._values.splice(index, 1);
-
-        delete this[key];
+    quitar(key: string) {
+        var index = this._claves.indexOf(key, 0);
+        this._claves.splice(index, 1);
+        this._valores.splice(index, 1);
     }
 
-    keys(): string[] {
-        return this._keys;
+    claves(): Array<string> {
+        return this._claves;
     }
 
-    values(): T[] {
-        return this._values;
+    valores(): Array<T> {
+        return this._valores;
     }
 
-    containsKey(key: string) {
-        if (typeof this[key] === "undefined") {
-            return false;
-        }
-
-        return true;
+    contiene(clave: string): boolean {
+        return this._claves.indexOf(clave) > -1;
     }
 
-    toLookup(): IDiccionario<T> {
-        return this;
+    obtener(clave: string): T {
+        let pos: number = this._claves.indexOf(clave);
+        if (pos >= 0)
+            return (this._valores.slice(pos)[0]) as T;
+
+        return undefined;
     }
+}
+
+function ObjetoToDiccionario<T>(objeto: object): Diccionario<T> {
+    let diccionario: Diccionario<T> = new Diccionario<T>();
+    for (var i = 0; i < objeto["_claves"].length; i++)
+        diccionario.anadir(objeto["_claves"][i], objeto["_valores"][i]);
+    return diccionario;
+}
+
+function JsonToDiccionario<T>(json: string): Diccionario<T> {
+    let pares: Diccionario<T> = JSON.parse(json);
+    return ObjetoToDiccionario<T>(pares);
 }
 
 interface IPila<T> {

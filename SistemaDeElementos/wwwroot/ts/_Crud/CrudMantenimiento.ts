@@ -23,14 +23,16 @@
         constructor(idPanelMnt: string) {
             super(idPanelMnt);
 
-            if (!this.Estado.containsKey(Estado.Pagina)) {
-                Mensaje(TipoMensaje.Info, "primera vez");
-            }
-
             if (IsNullOrEmpty(idPanelMnt))
                 throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
 
             this.Pagina = idPanelMnt;
+
+            if (!this.HayHistorial)
+                Mensaje(TipoMensaje.Info, `Entrando por primera vez: ${this.Estado.obtener(Estado.Pagina)}`);
+            else
+                Mensaje(TipoMensaje.Info, `No es la primera vez: ${this.Estado.obtener(Estado.Pagina)}`);
+
             this.InicializarNavegador();
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Controlador);

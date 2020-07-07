@@ -95,19 +95,32 @@
             this.modoTrabajo = modo;
         }
 
-        public Estado = new Diccionario<any>();
+
+
+        private _idPagina: string;
 
         protected get Pagina(): string {
-            let pagina: string = this.Estado[Estado.Pagina];
-            if (IsNullOrEmpty(pagina))
-                throw new Error("Página no definida");
-
-            return pagina;
+            return this._idPagina;
         }
-
         protected set Pagina(idPagina: string) {
-            this.Estado[Estado.Pagina] = idPagina;
+            this._idPagina = idPagina;
         }
+
+        public get Estado(): EstadoPagina {
+            let historial = LeerHistorialDeNavegacion();
+            if (!historial.contiene(this.Pagina))
+                historial.anadir(this.Pagina, CrearEstado(this.Pagina));
+
+            var a = historial.obtener(this.Pagina) as EstadoPagina;
+            return ObjetoToDiccionario<EstadoPagina>(a);
+        }
+
+        public get HayHistorial(): boolean {
+            let historial = LeerHistorialDeNavegacion();
+            var claves = historial.claves();
+            return claves.indexOf(this.Pagina) > -1;
+        }
+
 
         constructor() {
         }
@@ -216,7 +229,7 @@
             let form: HTMLFormElement = document.getElementById(idForm) as HTMLFormElement;
 
             if (form === null) {
-                throw new Error(`El formulario '${idForm}' no es válido, actualice la clase TS o el Descriptor`);
+                throw new Error(`El formulario '${idForm}' no es válido, actualice la clase TS o el uescriptor`);
             }
 
             let idRestrictor: string = form.getAttribute("restrictor") as string;
@@ -227,7 +240,7 @@
             let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
             ordenInput.value = orden;
             PonerCapa();
-            HistorialDeNavegacion[this.Pagina] = this.Estado;
+            GuardarEstado(this.Estado);
             form.submit();
         }
 
