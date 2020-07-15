@@ -7,18 +7,8 @@
             this.crudDeEdicion = new CrudEdicionRolDeUnPuesto(this, idPanelEdicion);
             this.idModalBorrar = idModalBorrar;
 
-            if (!NumeroMayorDeCero(sessionStorage[Restrictor.idPuesto])) {
-                document.location.href = document.referrer;
-            }
-            else {
-
-                this.MapearRestrictorDeFiltro(Restrictor.idPuesto, sessionStorage[Restrictor.idPuesto].Numero(), sessionStorage[Parametros.Puesto]);
-                this.crudDeCreacion.MaperaRestrictorDeCreacion(Restrictor.idPuesto, sessionStorage[Restrictor.idPuesto].Numero(), sessionStorage[Parametros.Puesto]);
-                this.crudDeEdicion.MaperaRestrictorDeEdicion(Restrictor.idPuesto, sessionStorage[Restrictor.idPuesto].Numero(), sessionStorage[Parametros.Puesto]);
-
-                sessionStorage.removeItem(Restrictor.idPuesto);
-                sessionStorage.removeItem(Parametros.Puesto);
-            }
+            if (this.HayHistorial)
+                this.RecuperarFiltros();
         }
     }
 

@@ -76,6 +76,14 @@ const AtributosDeListas = {
     identificador: 'identificador'
 }
 
+
+const AtributosDeRelacion = {
+    navegarA: 'navegar-al-crud',
+    restrictor: 'restrictor',
+    orden: 'orden'
+}
+
+
 const TagName = {
     input: "input",
     select: "select"
@@ -246,5 +254,10 @@ const Restrictor = {
 const Parametros = {
     Usuario: "nombreUsuario",
     Puesto: "nombrePuesto"
+}
+
+const Sesion = {
+    historial: "historial",
+    restrictorDeEntrada: "restrictor"
 }
 

@@ -10,6 +10,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
+        internal static string nombreCrud = $"Crud_{typeof(TElemento).Name}";
+
         public string NombreElemento => Etiqueta.ToLower();
 
         public string Vista { get; private set; }
@@ -153,16 +155,19 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
         #region Opciones de menú de relaciones entres dtos
-        internal static void AnadirOpcionDeRolesDeUnPuesto(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string nombreDtoRelacionado)
+        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud)
         {
-            var idForm = $"{Mnt.MenuDeMnt.Menu.IdHtml}-{nombreDtoRelacionado}";
-            var mntRoles = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
-                  , $@"/{controlador.Replace("Controller", "")}/{vista}"
-                  , nombreDtoRelacionado
-                  , idForm);
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"Roles");
+            var idForm = $"{Mnt.MenuDeMnt.Menu.IdHtml}-{relacionarCon}";
+            var mntRoles = new AccionDeNavegarParaRelacionar(
+                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
+                  , relacionarCon: relacionarCon
+                  , nombreDelMnt: navegarAlCrud
+                  , idForm: idForm);
+            var titulo = relacionarCon.ToLower().Replace("dto", "");
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"relacionar con {titulo}");
             Mnt.MenuDeMnt.Menu.Add(opcion);
         }
+
 
         #endregion
 

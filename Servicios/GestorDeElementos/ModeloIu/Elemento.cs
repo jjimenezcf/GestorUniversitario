@@ -168,6 +168,11 @@ namespace Gestor.Elementos.ModeloIu
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
+
+        /// <summary>
+        /// indica las propiedades del dto con las que se conforma el nombre
+        /// </summary>
+        public string ExpresionNombre { get; set; } = "[Nombre]";
     }
 
 
@@ -224,6 +229,9 @@ namespace Gestor.Elementos.ModeloIu
 
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
+
+                        case nameof(IUDtoAttribute.ExpresionNombre):
+                            return a.ExpresionNombre;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

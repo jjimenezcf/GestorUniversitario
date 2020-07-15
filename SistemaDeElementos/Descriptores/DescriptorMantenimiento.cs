@@ -1,15 +1,20 @@
 ﻿using System;
 using Gestor.Elementos.ModeloIu;
+using GestorDeEntorno.Migrations;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorMantenimiento<TElemento>: ControlHtml where TElemento : ElementoDto
     {
+        public static string nombreMnt = $"{DescriptorDeCrud<TElemento>.nombreCrud}_{TipoControl.Mantenimiento}";
+
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public BarraDeMenu<TElemento> MenuDeMnt { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
+
+        public new string IdHtml => nombreMnt;
 
         public DescriptorMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(

@@ -10,32 +10,22 @@
             this.idModalBorrar = idModalBorrar;
         }
 
-        public IrARelacionar(parametrosDeEntrada: string) {
-            let partes = parametrosDeEntrada.split('#');
-            let idForm = partes[0].split('==')[1];
-            let relacionarCon = partes[1].split('==')[1];
-
+        public RelacionarCon(parametrosDeEntrada: string): Crud.DatosParaRelacionar {
+            let datos = super.RelacionarCon(parametrosDeEntrada)
             try {
                 if (this.InfoSelector.Cantidad != 1) {
                     throw new Error("Debe seleccionar solo un usuario");
                 }
 
-                switch (relacionarCon) {
+                switch (datos.RelacionarCon) {
                     case Relaciones.puestos: {
                         let id: number = this.InfoSelector.LeerElemento(0).Id;
-                        let filtro: string = this.DefinirFiltroPorRestrictor(Restrictor.idUsuario, id);
-                        let orden: string = "puesto";
-
-                        sessionStorage[Restrictor.idUsuario] = id;
-                        sessionStorage[Parametros.Usuario] = this.InfoSelector.LeerElemento(0).Texto;
-
-                        parametrosDeEntrada = `${idForm}#${filtro}#${orden}`;
-
+                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Restrictor.idUsuario, id, this.InfoSelector.LeerElemento(0).Texto)
                         break;
                     }
                 }
 
-                super.IrARelacionar(parametrosDeEntrada);
+                super.NavegarARelacionar(datos.IdFormHtml, datos.FiltroRestrictor);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);

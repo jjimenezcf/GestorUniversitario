@@ -86,7 +86,7 @@
         protected Ordenacion: Ordenacion;
         protected InfoSelector: InfoSelector;
 
-        protected idPanelMnt: string;
+        private idPanelMnt: string;
 
         protected get PanelMnt(): HTMLDivElement {
             return document.getElementById(this.idPanelMnt) as HTMLDivElement;
@@ -165,14 +165,14 @@
         }
 
         protected ObtenerExpresionMostrar(idCheck: string): string {
-            let expresion: string = this.Grid.getAttribute(Atributo.expresionElemento);
+            let expresion: string = this.Grid.getAttribute(Atributo.expresionElemento).toLowerCase();
             if (!IsNullOrEmpty(expresion)) {
                 let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
                 let tds: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
                 for (let j = 0; j < tds.length; j++) {
                     let input: HTMLInputElement = tds[j].getElementsByTagName('input')[0] as HTMLInputElement;
                     if (input !== undefined) {
-                        let propiedad: string = input.getAttribute(Atributo.propiedad);
+                        let propiedad: string = input.getAttribute(Atributo.propiedad).toLowerCase();
                         if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
                             expresion = expresion.replace(`[${propiedad}]`, input.value);
                         }

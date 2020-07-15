@@ -8,6 +8,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePuestosDeUnUsuario : DescriptorDeCrud<PuestosDeUnUsuarioDto>
     {
+        
         public DescriptorDePuestosDeUnUsuario(ModoDescriptor modo)
         : base(nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario), modo)
         {
@@ -19,10 +20,11 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por usuario"
                   , new Posicion { fila = 0, columna = 0 });
 
-            AnadirOpcionDeRolesDeUnPuesto(Mnt
-                , nameof(RolesDeUnPuestoController)
-                , nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
-                , nameof(RolDto));
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(RolesDeUnPuestoController)
+                , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
+                , relacionarCon: nameof(RolDto)
+                , navegarAlCrud: DescriptorMantenimiento<RolesDeUnPuestoDto>.nombreMnt);
         }
 
 

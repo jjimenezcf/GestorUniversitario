@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gestor.Elementos.Entorno;
-using Gestor.Elementos.ModeloIu;
+﻿using Gestor.Elementos.ModeloIu;
 using Gestor.Elementos.Seguridad;
 
 namespace GestorDeSeguridad.ModeloIu
 {
-    [IUDto]
+    [IUDto(ExpresionNombre = "[Puesto]")]
     public class PuestosDeUnUsuarioDto: ElementoDto
     {
 

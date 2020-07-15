@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private List<FilaDelGrid<TElemento>> Filas => Grid.filas;
 
-        public string ExpresionElemento { get; set; } = $"[{nameof(Registro.Nombre)}]"; 
+        public string ExpresionElemento { get; private set; } = (string) ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ExpresionNombre)); 
 
         public int CantidadPorLeer { get; set; } = 5;
         public int PosicionInicial { get; set; } = 0;
@@ -94,7 +94,7 @@ namespace MVCSistemaDeElementos.Descriptores
             }
 
             if (totalPorcentaje > 100)
-                Gestor.Errores.GestorDeErrores.Emitir($"Las columnas definidas para el tipo {typeof(TElemento)} sobrepasan el 100%");
+                GestorDeErrores.Emitir($"Las columnas definidas para el tipo {typeof(TElemento)} sobrepasan el 100%");
 
             var porcDeReparto = 100 - totalPorcentaje;
             

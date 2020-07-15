@@ -46,6 +46,17 @@ namespace Gestor.Elementos.Seguridad
         }
     }
 
+    static class OrdenacionDePuestosDeUnUsuario
+    {
+        public static IQueryable<PuestosDeUnUsuarioDtm> Orden(this IQueryable<PuestosDeUnUsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            if (ordenacion.Count == 0)
+                return set.OrderBy(x => x.Puesto.Nombre);
+            return set;
+        }
+    }
+
+
     public class GestorDePuestosDeUnUsuario : GestorDeElementos<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
     {
 
@@ -97,6 +108,13 @@ namespace Gestor.Elementos.Seguridad
 
             return registros.AnadirFiltros(filtros);
         }
+
+        protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarOrden(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            registros = base.AplicarOrden(registros, ordenacion);
+            return registros.Orden(ordenacion);
+        }
+
 
         public dynamic LeerUsuarios(int posicion, int cantidad, string filtro)
         {

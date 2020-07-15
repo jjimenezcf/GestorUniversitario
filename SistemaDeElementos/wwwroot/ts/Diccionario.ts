@@ -2,12 +2,10 @@
     _claves: Array<string>;
     _valores: Array<T>;
 
-    anadir(clave: string, valor: T);
-    quitar(clave: string);
-    claves(): Array<string>;
-    valores(): Array<T>;
-    contiene(clave: string): boolean;
-    obtener(clave: string): T;
+    Persistir(clave: string, valor: T);
+    Quitar(clave: string);
+    Contiene(clave: string): boolean;
+    Obtener(clave: string): T;
 }
 
 class Diccionario<T> implements IDiccionario<T> {
@@ -15,50 +13,76 @@ class Diccionario<T> implements IDiccionario<T> {
     _claves = new Array<string>();
     _valores = new Array<T>();
 
+    public get Elementos(): number {
+        return this._claves.length;
+    }
+
     constructor(inicilizar?: { clave: string; valor: T; }[]) {
         if (inicilizar) {
             for (var x = 0; x < inicilizar.length; x++) {
-                this.anadir(inicilizar[x].clave, inicilizar[x].valor);
+                this.Persistir(inicilizar[x].clave, inicilizar[x].valor);
             }
         }
     }
 
-    anadir(clave: string, valor: T) {
-        this._claves.push(clave);
-        this._valores.push(valor);
+    Persistir(clave: string, valor: T) {
+
+        if (!this.Contiene(clave)) {
+            this._claves.push(clave);
+            this._valores.push(valor);
+        }
+        else {
+            let i: number = this._claves.indexOf(clave);
+            this._valores.splice(i, 1, valor);
+        }
     }
 
-    quitar(key: string) {
-        var index = this._claves.indexOf(key, 0);
-        this._claves.splice(index, 1);
-        this._valores.splice(index, 1);
+    Quitar(clave: string) {
+        var indice = this._claves.indexOf(clave, 0);
+        this._claves.splice(indice, 1);
+        this._valores.splice(indice, 1);
     }
 
-    claves(): Array<string> {
-        return this._claves;
-    }
-
-    valores(): Array<T> {
-        return this._valores;
-    }
-
-    contiene(clave: string): boolean {
+    Contiene(clave: string): boolean {
         return this._claves.indexOf(clave) > -1;
     }
 
-    obtener(clave: string): T {
+    Obtener(clave: string): T {
         let pos: number = this._claves.indexOf(clave);
         if (pos >= 0)
             return (this._valores.slice(pos)[0]) as T;
 
         return undefined;
     }
+
+    Valor(posicion: number): T {
+        if (this._valores.length <= posicion)
+            return undefined;
+        let clave: string = this._claves.slice(posicion)[0];
+        return this.Obtener(clave);
+    }
+
+    Elemento(posicion: number): T {
+        if (posicion <= this.Elementos)
+            return this._valores.splice(posicion)[0];
+
+        return undefined;
+    }
+
+    Clave(posicion: number): string {
+        if (posicion <= this.Elementos)
+            return this._claves.splice(posicion)[0];
+
+        return undefined;
+    }
+
+
 }
 
 function ObjetoToDiccionario<T>(objeto: object): Diccionario<T> {
     let diccionario: Diccionario<T> = new Diccionario<T>();
     for (var i = 0; i < objeto["_claves"].length; i++)
-        diccionario.anadir(objeto["_claves"][i], objeto["_valores"][i]);
+        diccionario.Persistir(objeto["_claves"][i], objeto["_valores"][i]);
     return diccionario;
 }
 

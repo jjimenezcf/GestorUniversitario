@@ -83,6 +83,27 @@
         public IdInput: string;
     }
 
+    export class DatosRestrictor {
+        public Propiedad: string;
+        public Valor: number;
+        public Texto: string;
+
+        constructor(propiedad: string, valor: number, texto: string) {
+            this.Propiedad = propiedad;
+            this.Valor = valor;
+            this.Texto = texto;
+        }
+    }
+
+    export class DatosParaRelacionar {
+        public IdFormHtml: string;
+        public RelacionarCon: string;
+        public FiltroRestrictor: DatosRestrictor;
+
+        constructor() {
+        }
+    }
+
 
     export class CrudBase {
 
@@ -103,22 +124,16 @@
             return this._idPagina;
         }
         protected set Pagina(idPagina: string) {
+            EntornoSe.InicializarHistorial();
             this._idPagina = idPagina;
         }
 
         public get Estado(): EstadoPagina {
-            let historial = LeerHistorialDeNavegacion();
-            if (!historial.contiene(this.Pagina))
-                historial.anadir(this.Pagina, CrearEstado(this.Pagina));
-
-            var a = historial.obtener(this.Pagina) as EstadoPagina;
-            return ObjetoToDiccionario<EstadoPagina>(a);
+            return EntornoSe.Historial.ObtenerEstadoDePagina(this.Pagina);
         }
 
         public get HayHistorial(): boolean {
-            let historial = LeerHistorialDeNavegacion();
-            var claves = historial.claves();
-            return claves.indexOf(this.Pagina) > -1;
+            return EntornoSe.Historial.HayHistorial(this.Pagina);
         }
 
 
@@ -219,28 +234,42 @@
 
         }
 
-        public IrARelacionar(parametros: string) {
+        public RelacionarCon(parametros: string): DatosParaRelacionar {
+            let datos: DatosParaRelacionar = new DatosParaRelacionar();
 
             let partes = parametros.split('#');
-            let idForm: string = partes[0];
-            let filtro: string = partes[1];
-            let orden: string = partes[2];
+            datos.IdFormHtml = partes[0].split('==')[1];
+            datos.RelacionarCon = partes[1].split('==')[1];
+            datos.FiltroRestrictor = undefined;
+            return datos;
+        }
 
-            let form: HTMLFormElement = document.getElementById(idForm) as HTMLFormElement;
+        public NavegarARelacionar(idFormHtml: string, filtroRestrictor: DatosRestrictor) {
+
+            let filtro: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+
+            let form: HTMLFormElement = document.getElementById(idFormHtml) as HTMLFormElement;
 
             if (form === null) {
-                throw new Error(`El formulario '${idForm}' no es válido, actualice la clase TS o el uescriptor`);
+                throw new Error(`El formulario '${idFormHtml}' no es válido, actualice la clase TS o el descriptor`);
             }
 
-            let idRestrictor: string = form.getAttribute("restrictor") as string;
+            let navegarA: string = form.getAttribute(AtributosDeRelacion.navegarA);
+            let idRestrictor: string = form.getAttribute(AtributosDeRelacion.restrictor) as string;
+            let idOrden: string = form.getAttribute(AtributosDeRelacion.orden) as string;
+
             let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
             restrictor.value = filtro;
-
-            let idOrden: string = form.getAttribute("orden") as string;
             let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
-            ordenInput.value = orden;
+            ordenInput.value = "";
+
+            let estadoDeLaPagina: EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(navegarA);
+            estadoDeLaPagina.Persistir(AtributosDeRelacion.restrictor, filtroRestrictor);
+            EntornoSe.Historial.GuardarEstadoDePagina(estadoDeLaPagina);
+            EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+            EntornoSe.Historial.Persistir();
+
             PonerCapa();
-            GuardarEstado(this.Estado);
             form.submit();
         }
 

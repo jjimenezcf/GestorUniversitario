@@ -1,11 +1,6 @@
 ﻿using Gestor.Elementos.ModeloIu;
 using System;
-using System.Linq;
 
-/*
- * ClaseTypeScriptDeCreacion = "Usuarios.CrudCreacionUsuario"
-         , ClaseTypeScriptDeEdicion = "Usuarios.CrudEdicionUsuario"
- * */
 
 namespace Gestor.Elementos.Entorno
 {
@@ -17,7 +12,8 @@ namespace Gestor.Elementos.Entorno
     }
 
     [IUDto(AnchoEtiqueta = 20
-          , AnchoSeparador = 5)]
+           , AnchoSeparador = 5
+           , ExpresionNombre = "([Login]) [Apellido], [Nombre]")]
     public class UsuarioDto : ElementoDto
     {
         [IUPropiedad(Visible = false)]

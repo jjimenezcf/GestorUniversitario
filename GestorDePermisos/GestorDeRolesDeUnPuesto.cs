@@ -31,7 +31,6 @@ namespace Gestor.Elementos.Seguridad
 
     static class FiltrosDeRolesDeUnPuesto
     {
-
         public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
         where T : RolesDeUnPuestoDtm
         {
@@ -44,6 +43,15 @@ namespace Gestor.Elementos.Seguridad
             }
 
             return registros;
+        }
+    }
+    static class OrdenacionDeRolesDeUnPuesto
+    {
+        public static IQueryable<RolesDeUnPuestoDtm> Orden(this IQueryable<RolesDeUnPuestoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            if (ordenacion.Count == 0)
+                return set.OrderBy(x => x.Rol.Nombre);
+            return set;
         }
     }
 
@@ -97,6 +105,12 @@ namespace Gestor.Elementos.Seguridad
                 return registros;
 
             return registros.AnadirFiltros(filtros);
+        }
+
+        protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            registros = base.AplicarOrden(registros, ordenacion);
+            return registros.Orden(ordenacion);
         }
 
         public dynamic LeerRoles(int posicion, int cantidad, string filtro)

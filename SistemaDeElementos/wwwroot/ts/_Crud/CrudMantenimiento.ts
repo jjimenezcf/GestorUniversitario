@@ -29,13 +29,23 @@
             this.Pagina = idPanelMnt;
 
             if (!this.HayHistorial)
-                Mensaje(TipoMensaje.Info, `Entrando por primera vez: ${this.Estado.obtener(Estado.Pagina)}`);
+                Mensaje(TipoMensaje.Info, `Entrando por primera vez: ${this.Estado.Obtener(Estado.Pagina)}`);
             else
-                Mensaje(TipoMensaje.Info, `No es la primera vez: ${this.Estado.obtener(Estado.Pagina)}`);
+                Mensaje(TipoMensaje.Info, `No es la primera vez: ${this.Estado.Obtener(Estado.Pagina)}`);
 
             this.InicializarNavegador();
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Controlador);
+        }
+
+
+        public RecuperarFiltros() {
+            if (this.Estado.Contiene(AtributosDeRelacion.restrictor)) {
+                let restrictor: Crud.DatosRestrictor = this.Estado.Obtener(AtributosDeRelacion.restrictor);
+                this.MapearRestrictorDeFiltro(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                this.crudDeCreacion.MaperaRestrictorDeCreacion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                this.crudDeEdicion.MaperaRestrictorDeEdicion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            }
         }
 
         private InicializarSelectores() {

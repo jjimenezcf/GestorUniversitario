@@ -12,9 +12,10 @@
     <Content Remove="wwwroot\ts\Diccionario.ts" />
     <Content Remove="wwwroot\ts\Entorno\Variables.ts" />
     <Content Remove="wwwroot\ts\Entorno\VistaMvc.ts" />
-    <Content Remove="wwwroot\ts\EstadoPagina.ts" />
     <Content Remove="wwwroot\ts\Grid.ts" />
+    <Content Remove="wwwroot\ts\HistorialDeNavegacion.ts" />
     <Content Remove="wwwroot\ts\InfoSelector.ts" />
+    <Content Remove="wwwroot\ts\InicializarEntorno.ts" />
     <Content Remove="wwwroot\ts\Literales\literales.ts" />
     <Content Remove="wwwroot\ts\Seguridad\ClaseDePermiso.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />

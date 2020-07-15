@@ -54,7 +54,7 @@ namespace Gestor.Elementos.Entorno
         }
     }
 
-    static class UsuarioRegOrd
+    static class OrdenacioDeUsuarios
     {
         public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {

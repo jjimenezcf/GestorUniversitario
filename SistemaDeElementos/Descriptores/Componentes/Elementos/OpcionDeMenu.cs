@@ -45,15 +45,16 @@ namespace MVCSistemaDeElementos.Descriptores
         public string RelacionarCon { get; private set; }
         public string IdForm { get; private set; }
 
+        public string NavegarAlCrud { get; private set; }
 
-
-        public AccionDeNavegarParaRelacionar(string tipoAccion, string urlDelCrud, string relacionarCon, string idForm)
+        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string idForm)
         : base()
         {
-            TipoAccion = tipoAccion;
+            TipoAccion = TipoAccionMnt.RelacionarElementos;
             IdForm = idForm;
             RelacionarCon = relacionarCon;
             UrlDelCrudDeRelacion = urlDelCrud;
+            NavegarAlCrud = nombreDelMnt;
         }
 
         public override string RenderAccion()
@@ -199,7 +200,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (TipoAccion == TipoAccion.Post)
             {
                 var htmlFormPost = $@"
-                    <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
+                    <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
                         <input type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("identificador", IdHtml)}¨ />

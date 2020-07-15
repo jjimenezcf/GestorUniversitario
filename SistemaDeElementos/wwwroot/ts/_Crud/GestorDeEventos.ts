@@ -17,7 +17,7 @@
                 }
                 case Evento.Mnt.Relacionar: {
                     let crudDeRelacion:string = parametros;
-                    crudMnt.IrARelacionar(crudDeRelacion);
+                    crudMnt.RelacionarCon(crudDeRelacion);
                     break;
                 }
                 case Evento.Mnt.Buscar: {

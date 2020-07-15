@@ -35,20 +35,14 @@ namespace MVCSistemaDeElementos.Descriptores
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
             
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
-            Mnt.Datos.ExpresionElemento = $"([{nameof(UsuarioDtm.Login)}]) [{nameof(UsuarioDtm.Apellido)}], [{nameof(UsuarioDtm.Nombre)}]";
             RutaVista = "Entorno";
 
-            AnadirOpcionDePuestosDeUnUsuario($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(PuestoDto)}");
-        }
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(PuestosDeUnUsuarioController)
+                , vista: nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)
+                , relacionarCon: nameof(PuestoDto)
+                , navegarAlCrud: DescriptorMantenimiento<PuestosDeUnUsuarioDto>.nombreMnt);
 
-        internal void AnadirOpcionDePuestosDeUnUsuario(string idForm)
-        {
-            var mntPuestos = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
-                  , $@"/{nameof(PuestosDeUnUsuarioController).Replace("Controller", "")}/{nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)}"
-                  , nameof(PuestoDto)
-                  , idForm);
-            var opcion = new OpcionDeMenu<UsuarioDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntPuestos, tipoAccion: TipoAccion.Post, titulo: $"Puestos");
-            Mnt.MenuDeMnt.Menu.Add(opcion);
         }
 
         public override string RenderControl()

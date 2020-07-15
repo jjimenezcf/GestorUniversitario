@@ -24,10 +24,11 @@
     <script src="~/ts/Utilidades.js"></script>
     <script src="~/ts/InfoSelector.js"></script>
     <script src="~/ts/Diccionario.js"></script>
-    <script src="~/ts/EstadoPagina.js"></script>
+    <script src="~/ts/HistorialDeNavegacion.js"></script>
     <script src="~/ts/_Api/ApiDeAjax.js"></script>
     <script src="~/ts/_Api/ApiDeArchivos.js"></script>
     <script src="~/ts/ArbolDeMenu.js"></script>
+    <script src="~/ts/InicializarEntorno.js"></script>
     <script src="~/ts/_Crud/CrudBase.js"></script>
     <script src="~/ts/_Crud/GridMnt.js"></script>
     <script src="~/ts/_Crud/CrudCreacion.js"></script>
@@ -117,9 +118,9 @@
         @RenderSection("Scripts", required: false)
 
         <script>
-            window.onload = ArbolDeMenu.ReqSolicitarMenu('@datosDeConexion.Usuario', 'id_contenedormenu');
+            window.onload = EntornoSe.IniciarEntorno('@datosDeConexion.Usuario');
         </script>
-        <script>$(document).ready(function () { $(".select2").select2(); });</script>
+
 
         <partial name="_CookieConsentPartial" />
     </div>

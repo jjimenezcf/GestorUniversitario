@@ -1,4 +1,5 @@
 ﻿using Gestor.Elementos.Seguridad;
+using GestorDeSeguridad.ModeloIu;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
@@ -15,10 +16,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal void AnadirOpcionDeRolesDeUnPuesto(string idForm)
         {
-            var mntRoles = new AccionDeNavegarParaRelacionar(TipoAccionMnt.RelacionarElementos
-                  , $@"/{nameof(RolesDeUnPuestoController).Replace("Controller", "")}/{nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)}"
-                  , nameof(RolDto)
-                  , idForm);
+            var mntRoles = new AccionDeNavegarParaRelacionar(
+                    urlDelCrud: $@"/{nameof(RolesDeUnPuestoController).Replace("Controller", "")}/{nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)}"
+                  , relacionarCon: nameof(RolDto)
+                  , nombreDelMnt: DescriptorMantenimiento<RolesDeUnPuestoDto>.nombreMnt
+                  , idForm: idForm);
             var opcion = new OpcionDeMenu<PuestoDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"Roles");
             Mnt.MenuDeMnt.Menu.Add(opcion);
         }
