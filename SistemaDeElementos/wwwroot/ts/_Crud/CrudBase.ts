@@ -128,8 +128,12 @@
             this._idPagina = idPagina;
         }
 
+        private _estado: EstadoPagina = undefined;
+
         public get Estado(): EstadoPagina {
-            return EntornoSe.Historial.ObtenerEstadoDePagina(this.Pagina);
+            if (this._estado === undefined)
+                this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this.Pagina);
+            return this._estado;
         }
 
         public get HayHistorial(): boolean {
@@ -264,13 +268,20 @@
             ordenInput.value = "";
 
             let estadoDeLaPagina: EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(navegarA);
-            estadoDeLaPagina.Persistir(AtributosDeRelacion.restrictor, filtroRestrictor);
+            estadoDeLaPagina.Agregar(AtributosDeRelacion.restrictor, filtroRestrictor);
             EntornoSe.Historial.GuardarEstadoDePagina(estadoDeLaPagina);
+            this.Navegar(form);
+        }
+
+        private Navegar(form: HTMLFormElement) {
+            this.AntesDeNavegar();
             EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
             EntornoSe.Historial.Persistir();
-
             PonerCapa();
             form.submit();
+        }
+
+        public AntesDeNavegar() {
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {

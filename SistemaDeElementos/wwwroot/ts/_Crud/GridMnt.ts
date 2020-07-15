@@ -127,9 +127,13 @@
             this.Ordenacion = new Ordenacion();
         }
 
-        //funciones de ayuda para la herencia
-
         protected InicializarNavegador() {
+            if (this.HayHistorial) {
+                let cantidad: string = this.Estado.Obtener(Variables.Grid.Cantidad);
+                if (NumeroMayorDeCero(cantidad))
+                    this.Navegador.value = cantidad;
+            }
+
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
@@ -413,6 +417,11 @@
                     return celda;
             }
             throw new Error(`No se ha localizado una celda con la propiedad '${propiedadBuscada}' definida`);
+        }
+
+        public AntesDeNavegar() {
+            super.AntesDeNavegar();
+            this.Estado.Agregar(Variables.Grid.Cantidad, this.Navegador.value);
         }
     }
 

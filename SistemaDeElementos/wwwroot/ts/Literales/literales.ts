@@ -242,18 +242,19 @@ const Relaciones = {
     roles: 'RolDto',
     puestos: 'PuestoDto'
 };
-const ValorStorage = {
-    entrada : "entrada"
-}
 
-const Restrictor = {
-    idUsuario: "idusuario",
-    idPuesto: "idpuesto"
-}
-
-const Parametros = {
-    Usuario: "nombreUsuario",
-    Puesto: "nombrePuesto"
+const Variables = {
+    Usuario: {
+        restrictor: "idusuario",
+        Usuario: "nombre-usuario",
+    },
+    Puesto: {
+        restrictor: "idpuesto",
+        puesto: "nombre-puesto",
+    },
+    Grid: {
+        Cantidad: "cantidad-a-mostrar"
+    }
 }
 
 const Sesion = {

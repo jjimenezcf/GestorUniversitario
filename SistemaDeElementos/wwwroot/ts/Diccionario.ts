@@ -2,7 +2,7 @@
     _claves: Array<string>;
     _valores: Array<T>;
 
-    Persistir(clave: string, valor: T);
+    Agregar(clave: string, valor: T);
     Quitar(clave: string);
     Contiene(clave: string): boolean;
     Obtener(clave: string): T;
@@ -20,12 +20,12 @@ class Diccionario<T> implements IDiccionario<T> {
     constructor(inicilizar?: { clave: string; valor: T; }[]) {
         if (inicilizar) {
             for (var x = 0; x < inicilizar.length; x++) {
-                this.Persistir(inicilizar[x].clave, inicilizar[x].valor);
+                this.Agregar(inicilizar[x].clave, inicilizar[x].valor);
             }
         }
     }
 
-    Persistir(clave: string, valor: T) {
+    public Agregar(clave: string, valor: T) {
 
         if (!this.Contiene(clave)) {
             this._claves.push(clave);
@@ -37,17 +37,17 @@ class Diccionario<T> implements IDiccionario<T> {
         }
     }
 
-    Quitar(clave: string) {
+    public Quitar(clave: string) {
         var indice = this._claves.indexOf(clave, 0);
         this._claves.splice(indice, 1);
         this._valores.splice(indice, 1);
     }
 
-    Contiene(clave: string): boolean {
+    public Contiene(clave: string): boolean {
         return this._claves.indexOf(clave) > -1;
     }
 
-    Obtener(clave: string): T {
+    public Obtener(clave: string): T {
         let pos: number = this._claves.indexOf(clave);
         if (pos >= 0)
             return (this._valores.slice(pos)[0]) as T;
@@ -55,21 +55,21 @@ class Diccionario<T> implements IDiccionario<T> {
         return undefined;
     }
 
-    Valor(posicion: number): T {
+    public Valor(posicion: number): T {
         if (this._valores.length <= posicion)
             return undefined;
         let clave: string = this._claves.slice(posicion)[0];
         return this.Obtener(clave);
     }
 
-    Elemento(posicion: number): T {
+    public Elemento(posicion: number): T {
         if (posicion <= this.Elementos)
             return this._valores.splice(posicion)[0];
 
         return undefined;
     }
 
-    Clave(posicion: number): string {
+    public Clave(posicion: number): string {
         if (posicion <= this.Elementos)
             return this._claves.splice(posicion)[0];
 
@@ -82,7 +82,7 @@ class Diccionario<T> implements IDiccionario<T> {
 function ObjetoToDiccionario<T>(objeto: object): Diccionario<T> {
     let diccionario: Diccionario<T> = new Diccionario<T>();
     for (var i = 0; i < objeto["_claves"].length; i++)
-        diccionario.Persistir(objeto["_claves"][i], objeto["_valores"][i]);
+        diccionario.Agregar(objeto["_claves"][i], objeto["_valores"][i]);
     return diccionario;
 }
 

@@ -155,7 +155,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
         #region Opciones de menú de relaciones entres dtos
-        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud)
+        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion)
         {
             var idForm = $"{Mnt.MenuDeMnt.Menu.IdHtml}-{relacionarCon}";
             var mntRoles = new AccionDeNavegarParaRelacionar(
@@ -163,8 +163,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
                   , idForm: idForm);
-            var titulo = relacionarCon.ToLower().Replace("dto", "");
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"relacionar con {titulo}");
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"{nombreOpcion}");
             Mnt.MenuDeMnt.Menu.Add(opcion);
         }
 

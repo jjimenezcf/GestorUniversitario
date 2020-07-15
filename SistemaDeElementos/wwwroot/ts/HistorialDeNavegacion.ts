@@ -58,7 +58,7 @@ class HistorialDeNavegacion {
 
     public GuardarEstadoDePagina(estado: EstadoPagina): void {
         let clave: string = estado.Obtener(Estado.Pagina);
-        this._paginas.Persistir(clave, estado);
+        this._paginas.Agregar(clave, estado);
     }
 
     public Persistir(): void {
@@ -72,7 +72,7 @@ class HistorialDeNavegacion {
     private ObjetoToEstadoPagina(pagina: string, objeto: object): EstadoPagina {
         let estadoDeLaPagina: EstadoPagina = CrearEstado(pagina);
         for (var i = 0; i < objeto["_claves"].length; i++)
-            estadoDeLaPagina.Persistir(objeto["_claves"][i], objeto["_valores"][i]);
+            estadoDeLaPagina.Agregar(objeto["_claves"][i], objeto["_valores"][i]);
         return estadoDeLaPagina;
     }
 
@@ -82,7 +82,7 @@ class HistorialDeNavegacion {
 class EstadoPagina extends Diccionario<any> implements IDiccionario<any> {
     constructor(pagina: string) {
         super();
-        this.Persistir(Estado.Pagina, pagina);
+        this.Agregar(Estado.Pagina, pagina);
     }
 }
 

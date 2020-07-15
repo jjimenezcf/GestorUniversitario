@@ -19,7 +19,7 @@
                 switch (datos.RelacionarCon) {
                     case Relaciones.roles: {
                         let id: number = this.InfoSelector.LeerElemento(0).Id;
-                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Restrictor.idPuesto, id, this.InfoSelector.LeerElemento(0).Texto)
+                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Variables.Puesto.restrictor, id, this.InfoSelector.LeerElemento(0).Texto)
                         break;
                     }
                 }
