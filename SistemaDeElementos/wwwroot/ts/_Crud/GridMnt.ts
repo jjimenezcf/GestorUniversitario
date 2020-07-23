@@ -118,7 +118,6 @@
             return this.Navegador.getAttribute(Atributo.controlador);
         }
 
-
         constructor(idPanelMnt: string) {
             super();
             this.idPanelMnt = idPanelMnt;
@@ -369,7 +368,7 @@
             }
         }
 
-        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {
+        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {            
             contenedorGrid.Grid.innerHTML = resultadoHtml;
             contenedorGrid.InicializarNavegador();
             if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
@@ -423,6 +422,7 @@
             super.AntesDeNavegar();
             this.Estado.Agregar(Variables.Grid.Cantidad, this.Navegador.value);
         }
+
     }
 
 }

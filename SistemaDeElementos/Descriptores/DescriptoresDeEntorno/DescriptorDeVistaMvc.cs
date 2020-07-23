@@ -27,9 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Entorno/VistaMvc.js¨></script>
                       <script>
-                         Crud.crudMnt = new Entorno.CrudMntVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');
-                         if (Crud.crudMnt === undefined)
-                             alert('crud mal definido');
+                         Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');
                       </script>
                     ";
             return render.Render();

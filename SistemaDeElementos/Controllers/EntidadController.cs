@@ -15,6 +15,9 @@ using System.IO;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using Gestor.Elementos.Entorno;
+using Migraciones.Migrations;
+using System.Collections;
+using System.Reflection;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -292,6 +295,67 @@ namespace MVCSistemaDeElementos.Controllers
 
             return new JsonResult(r);
         }
+
+        //END-POINT: Desde CrudMantenimiento.ts
+        public JsonResult epLeerDatosParaElGrid(string modo, string posicion, string cantidad, string filtro, string orden)
+        {
+            var r = new Resultado();
+            int pos = posicion.Entero();
+            int can = cantidad.Entero();
+            try
+            {
+                //si me pide leer los últimos registros
+                if (pos == -1)
+                {
+                    var total = Contar();
+                    pos = total - can;
+                    if (pos < 0) pos = 0;
+                    posicion = pos.ToString();
+                }
+
+                var elementos = Leer(pos, can, filtro, orden);
+                //si no he leido nada por estar al final, vuelvo a leer los últimos
+                if (pos > 0 && elementos.Count() == 0)
+                {
+                    pos = pos - can;
+                    if (pos < 0) pos = 0;
+                    elementos = Leer(pos, can, filtro, orden);
+                    r.Mensaje = "No hay más elementos";
+                }
+
+                r.Datos = ElementosLeidos(elementos.ToList());
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "No se ha podido recuperar datos para el grid";
+            }
+
+            var a = new JsonResult(r);
+            return a;
+        }
+
+        private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
+        {
+            var listaDeElementos = new List<Dictionary<string, object>>();
+            PropertyInfo[] propiedades = elementos[0].GetType().GetProperties();
+
+            foreach (TElemento elemento in elementos)
+            {
+                var registro = new Dictionary<string, object>();
+                foreach (PropertyInfo propiedad in propiedades)
+                {
+                    object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
+                    registro[propiedad.Name] = valor == null ? "" : valor;
+                }
+                listaDeElementos.Add(registro);
+            }
+
+            return listaDeElementos;
+        }
+
 
         //END-POINT: Desde ModalSeleccion.ts
         public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)

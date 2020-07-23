@@ -1,5 +1,11 @@
 ﻿namespace Entorno {
 
+    export function CrearCrudVistaMvc(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
+        Crud.crudMnt = new Entorno.CrudMntVistaMvc(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
+        Crud.crudMnt.RenderGrid = false;
+        Crud.crudMnt.LeerDatosParaElGrid(0);
+    }
+
     export class CrudMntVistaMvc extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {

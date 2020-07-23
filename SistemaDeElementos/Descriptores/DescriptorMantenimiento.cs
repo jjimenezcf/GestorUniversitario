@@ -47,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{MenuDeMnt.IdHtml}¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{MenuDeMnt.IdHtml}¨>
                      {htmlMnt}
                    </Div>
                 ";
@@ -65,7 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
                      {htmlMnt}
                    </Div>
                 ";

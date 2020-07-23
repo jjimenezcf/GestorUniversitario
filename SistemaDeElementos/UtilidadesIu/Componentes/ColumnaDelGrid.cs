@@ -1,5 +1,6 @@
 ﻿using System;
 using Gestor.Elementos.ModeloIu;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
@@ -37,12 +38,17 @@ namespace UtilidadesParaIu
         {
             get
             {
-                return _alineada == Aliniacion.no_definida
-                       ? (Tipo == typeof(int) || (Tipo == typeof(decimal)) || (Tipo == typeof(DateTime))
-                          ? Aliniacion.derecha
-                          : Aliniacion.izquierda)
-                       : _alineada;
+                if (_alineada != Aliniacion.no_definida)
+                    return _alineada;
+
+                if (Tipo == typeof(int) || Tipo == typeof(decimal))
+                        return Aliniacion.derecha;
+                if (Tipo == typeof(DateTime))
+                    return Aliniacion.centrada;
+
+                return Aliniacion.izquierda;
             }
+
             set { _alineada = value; }
         }
 

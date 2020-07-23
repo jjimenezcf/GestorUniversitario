@@ -23,12 +23,13 @@ const ModoOrdenacion = {
 
 const Atributo = {
     propiedad: "propiedad",
+    nombre: "name",
     criterio: "criterio-de-filtro",
     zonaDeFiltro: "zona-de-filtro",
     filtro: "control-de-filtro",
     tablaDeDatos: "tabla-de-datos",
     id: Literal.id,
-    grid: 'grid',
+    grid: 'grid-del-mnt',
     crudModal: 'crud-modal',
     controlador: "controlador",
     posicion: "posicion",
@@ -111,6 +112,7 @@ const Ajax = {
     EndPoint: {
         Crear: "epCrearElemento",
         LeerGridEnHtml: "epLeerGridHtml",
+        LeerDatosParaElGrid: "epLeerDatosParaElGrid",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
         LeerPorIds: "epLeerPorIds",
         Modificar: "epModificarPorId",

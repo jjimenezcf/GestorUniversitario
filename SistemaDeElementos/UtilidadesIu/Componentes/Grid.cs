@@ -63,46 +63,35 @@ namespace UtilidadesParaIu
             var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
                 ? columna.PorAnchoSel
                 : columna.PorAnchoMnt;
+            var atributosDelEstilo = $"text-align: {columna.AlineacionCss}";
+            if (columna.Visible)
+                atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
+            string htmlRef = columna.Ordenar ? RenderAccionOrdenar(columna) : columna.Visible ? columna.Titulo : "";
 
+            string claseCss = columna.Visible ? "columna-cabecera" : "columna-cabecera-oculta";
 
-
-            var visible = columna.Visible ? "visibility: visible;" : "visibility: hidden";
-            var ancho = columna.PorAnchoMnt == 0 ? "" : $"width:{porcentaje}%";
-            var estilo = $"style=¨{ancho}¨;";
-
-            string htmlRef = RenderAccionOrdenar(columna);
-
-            var htmlTh = $@"{Environment.NewLine}<th id = ¨{columna.IdHtml}¨ 
-                                               class=¨columna-cabecera {columna.AlineacionCss}¨ 
-                                               propiedad = ¨{columna.Propiedad.ToLower()}¨
-                                               modo-ordenacion=¨sin-orden¨ 
-                                               {estilo} 
-                                               {visible}>
-                                               {htmlRef}
-                                           </td>";
+            var htmlTh = $@"{Environment.NewLine}
+                          <th id = ¨{columna.IdHtml}¨ 
+                              class=¨{claseCss}¨ 
+                              propiedad = ¨{columna.Propiedad.ToLower()}¨
+                              modo-ordenacion=¨sin-orden¨ 
+                              style = ¨{atributosDelEstilo}¨
+                              alineacion=¨{columna.AlineacionCss}¨
+                              >
+                              {htmlRef}
+                          </th>";
             return htmlTh;
         }
 
         private static string RenderAccionOrdenar(ColumnaDelGrid<TElemento> columna)
         {
-            string htmlRef;
-            if (columna.ZonaDeDatos.IdHtmlModal.IsNullOrEmpty())
-            {
+            string htmlRef = columna.ZonaDeDatos.IdHtmlModal.IsNullOrEmpty()
+                ? $"href =¨javascript: Crud.EventosDelMantenimiento('ordenar-por', '{columna.IdHtml}')¨"
+                : $"href=¨javascript:Crud.EventosModalDeSeleccion('ordenar-por','{columna.ZonaDeDatos.IdHtmlModal}#{columna.IdHtml}')¨";
 
-                htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EventosDelMantenimiento('ordenar-por','{columna.IdHtml}')¨  
-                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
-                                                </a>"
-                        : $"<a>{columna.Titulo}</a>";
-            }
-            else
-            {
-                htmlRef = columna.Ordenar ? $@"<a href=¨javascript:Crud.EventosModalDeSeleccion('ordenar-por','{columna.ZonaDeDatos.IdHtmlModal}#{columna.IdHtml}')¨  
-                                                 class=¨ordenada-sin-orden¨>{columna.Titulo} 
-                                                </a>"
-                        : $"<a>{columna.Titulo}</a>";
-            }
+            var estilo = columna.Visible ? "" : @"visibility: hidden; style=¨width: 0px; height: 0px; float: right;¨";
 
-            return htmlRef;
+            return $@"<a {htmlRef} class=¨ordenada-sin-orden¨ {estilo}>{columna.Titulo}</a>";
         }
 
         private static string RenderEventoPuslsa(CeldaDelGrid<TElemento> celda, string idControlHtml)
@@ -197,10 +186,13 @@ namespace UtilidadesParaIu
                             {cabeceraHtml}{Environment.NewLine}
                          </tr>{Environment.NewLine}
                       </thead>";
+
         }
 
         private static string RenderDetalleGrid(Grid<TElemento> grid)
         {
+            return "";
+
             var htmlDetalleGrid = new StringBuilder();
             for (var i = 0; i < grid.NumeroDeFilas; i++)
             {
@@ -278,6 +270,7 @@ namespace UtilidadesParaIu
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
             return (htmlTabla + htmlNavegador + RenderOpcionesGrid());
         }
+
 
     }
 }

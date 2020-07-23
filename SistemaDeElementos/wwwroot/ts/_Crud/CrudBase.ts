@@ -297,7 +297,7 @@
             this.MapearSelectoresDeArchivo(panel, elementoJson);
         }
 
-        MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
+        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
             let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
                 var selector = select[i] as HTMLSelectElement;

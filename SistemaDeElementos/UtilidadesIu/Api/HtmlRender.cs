@@ -22,15 +22,15 @@ namespace UtilidadesParaIu
             switch (alineacion)
             {
                 case Aliniacion.izquierda:
-                    return "text-left";
+                    return "left";
                 case Aliniacion.derecha:
-                    return "text-right";
+                    return "right";
                 case Aliniacion.centrada:
-                    return "text-center";
+                    return "center";
                 case Aliniacion.justificada:
-                    return "text-justify";
+                    return "justify";
                 default:
-                    return "text-left";
+                    return "left";
             }
         }
 
