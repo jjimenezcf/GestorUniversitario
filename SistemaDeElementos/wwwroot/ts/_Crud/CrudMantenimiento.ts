@@ -1,20 +1,6 @@
 ﻿namespace Crud {
 
 
-    class PropiedadesDeLaFila {
-        id: string;
-        propiedad: string;
-        visible: boolean;
-        estilo: CSSStyleDeclaration;
-        claseCss: string;
-        editable: boolean;
-        tipo: string;
-
-        constructor() {
-
-        }
-    }
-
     export let crudMnt: CrudMnt = null;
 
     export class CrudMnt extends GridMnt {
@@ -221,6 +207,27 @@
             return peticion;
         }
 
+        public Buscar(posicion: number) {
+            this.LeerDatosParaElGrid(posicion);
+            //if (this.Navegador === null)
+            //    Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
+            //else {
+            //    let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerGridEnHtml, posicion);
+
+            //    let a = new ApiDeAjax.DescriptorAjax(this
+            //        , Ajax.EndPoint.LeerGridEnHtml
+            //        , this
+            //        , url
+            //        , ApiDeAjax.TipoPeticion.Asincrona
+            //        , ApiDeAjax.ModoPeticion.Get
+            //        , this.ActualizarGrid
+            //        , null
+            //    );
+
+            //    a.Ejecutar();
+            //}
+        }
+
         public LeerDatosParaElGrid(posicion: number) {
             let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, posicion);
             let a = new ApiDeAjax.DescriptorAjax(this
@@ -236,121 +243,15 @@
             a.Ejecutar();
         }
 
-        private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
 
-            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
-            var registros = peticion.resultado.datos;
-            let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
-            var datosDelGrid = document.createElement("tbody");
-            for (let i = 0; i < registros.length; i++) {
-                let fila = mnt.crearFila(filaCabecera, registros[i], i);
-                datosDelGrid.append(fila);
-            }
-            mnt.Tabla.append(datosDelGrid);
-        }
+        //private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
+        //    let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
+        //    let resultado = peticion.resultado as ResultadoHtml;
 
-        private crearFila(columnaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
-            let fila = document.createElement("tr");
-            fila.id = `${this.IdGrid}_d_tr_${numeroDeFila}`;
-            for (let j = 0; j < columnaCabecera.length; j++) {
-                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, columnaCabecera[j], j);
-                fila.append(celdaDelTd);
-            }
-            return fila;
-        }
-
-        private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number): HTMLTableCellElement {
-            let celdaDelTd: HTMLTableCellElement = document.createElement("td");
-            celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
-            celdaDelTd.setAttribute(Atributo.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
-            if (columnaCabecera.claseCss === "columna-cabecera-oculta") {
-                celdaDelTd.style.visibility = "none";
-                celdaDelTd.hidden = true;
-            }
-
-            if (columnaCabecera.propiedad === 'chksel')
-                this.insertarCheckEnElTd(celdaDelTd, columnaCabecera.propiedad);
-            else {
-                this.insertarInputEnElTd(registro, columnaCabecera, celdaDelTd);
-            }
-            return celdaDelTd;
-        }
-
-        private insertarInputEnElTd(registro: any, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement) {
-            let valor = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
-            let input = document.createElement("input");
-            input.value = valor;
-            input.readOnly = true;
-            input.hidden = celdaDelTd.hidden;
-            input.style.border = "0px";
-            input.style.textAlign = columnaCabecera.estilo.textAlign;
-            input.style.width = "100%";
-            celdaDelTd.append(input);
-        }
-
-        private insertarCheckEnElTd(celdaDelTd: HTMLTableCellElement, propiedad: string) {
-            let checkbox: HTMLInputElement = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.name = `${propiedad}.${this.IdGrid}`;
-            checkbox.value = "false";
-            checkbox.id = `${celdaDelTd.id}`;
-            celdaDelTd.append(checkbox);
-        }
-
-        private obtenerDescriptorDeLaCabecera(mnt: CrudMnt): Array<PropiedadesDeLaFila> {
-            let filaCabecera: Array<PropiedadesDeLaFila> = new Array<PropiedadesDeLaFila>();
-            var cabecera = mnt.Tabla.rows[0];
-            var ths = cabecera.querySelectorAll('th');
-            for (let i = 0; i < ths.length; i++) {
-                let p: PropiedadesDeLaFila = new PropiedadesDeLaFila();
-                p.id = ths[i].id;
-                p.visible = !ths[i].hidden;
-                p.claseCss = ths[i].className;
-                p.estilo = ths[i].style;
-                p.editable = false;
-                p.propiedad = ths[i].getAttribute('propiedad');
-                filaCabecera.push(p);
-            }
-            return filaCabecera;
-        }
-
-
-        private BuscarValorDeColumnaRegistro(registro, propiedadDeLaFila: string): string {
-            for (const propiedad in registro) {
-                if (propiedad.toLowerCase() === propiedadDeLaFila)
-                    return registro[propiedad];
-            }
-            return "";
-        }
-
-        public Buscar(posicion: number) {
-            if (this.Navegador === null)
-                Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
-            else {
-                let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerGridEnHtml, posicion);
-
-                let a = new ApiDeAjax.DescriptorAjax(this
-                    , Ajax.EndPoint.LeerGridEnHtml
-                    , this
-                    , url
-                    , ApiDeAjax.TipoPeticion.Asincrona
-                    , ApiDeAjax.ModoPeticion.Get
-                    , this.ActualizarGrid
-                    , null
-                );
-
-                a.Ejecutar();
-            }
-        }
-
-        private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
-            let resultado = peticion.resultado as ResultadoHtml;
-
-            if (mnt.IdGrid === mnt.Grid.getAttribute(Atributo.id)) {
-                mnt.ActualizarGridHtml(mnt, resultado.html);
-            }
-        }
+        //    if (mnt.IdGrid === mnt.Grid.getAttribute(Atributo.id)) {
+        //        mnt.ActualizarGridHtml(mnt, resultado.html);
+        //    }
+        //}
 
         private DefinirPeticionDeBusqueda(accion: string, posicion: number): string {
             var cantidad = this.Navegador.value.Numero();

@@ -113,9 +113,9 @@ namespace UtilidadesParaIu
 
             var tdHtml = $@"<td id=¨{celda.idHtmlTd}¨ 
                                 name=¨{nombreTd}¨ 
-                                class=¨{celda.AlineacionCss()}¨ 
+                                style=¨text-align: {celda.AlineacionCss()};¨ 
                                 propiedad=¨{celda.Propiedad}¨ 
-                                { onclickTd} 
+                                {onclickTd} 
                                 {ocultar} >
                                 {RenderCeldaDelTd(celda)}
                            </td>";
@@ -139,7 +139,7 @@ namespace UtilidadesParaIu
 
             var input = $" <input {tipoHtml} id=¨{idDelInput}¨ " +
             $"        name=¨{nombreInput}¨ " +
-            $"        class=¨{celda.AlineacionCss()}¨  " +
+            $"        style=¨width:100%; border:0; text-align: {celda.AlineacionCss()};¨ " +
             $"        propiedad=¨{celda.Propiedad}¨ " +
             $"        style=¨width:100%; border:0¨ " +
             $"        {editable} " +

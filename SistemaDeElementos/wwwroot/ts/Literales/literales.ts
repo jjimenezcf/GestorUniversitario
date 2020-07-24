@@ -40,7 +40,10 @@ const Atributo = {
     tipo: "tipo",
     imagenVinculada: "imagen-vinculada",
     valor: "value",
-    restrictor: "restrictor"
+    restrictor: "restrictor",
+    eventoJs: {
+        onclick: 'onclick'
+    }
 }
 
 const AtributoSelectorArchivo = {

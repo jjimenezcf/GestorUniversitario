@@ -81,6 +81,21 @@
         }
     }
 
+
+    class PropiedadesDeLaFila {
+        id: string;
+        propiedad: string;
+        visible: boolean;
+        estilo: CSSStyleDeclaration;
+        claseCss: string;
+        editable: boolean;
+        tipo: string;
+
+        constructor() {
+
+        }
+    }
+
     export class GridMnt extends CrudBase {
 
         protected Ordenacion: Ordenacion;
@@ -377,6 +392,14 @@
             }
         }
 
+        protected ActualizarTrasLeer(contenedorGrid: GridMnt) {
+            contenedorGrid.InicializarNavegador();
+            if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
+                contenedorGrid.MarcarElementos();
+                contenedorGrid.InfoSelector.SincronizarCheck();
+            }
+        }
+
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
 
             let fila: HTMLTableRowElement = this.ObtenerFila(id);
@@ -422,6 +445,146 @@
             super.AntesDeNavegar();
             this.Estado.Agregar(Variables.Grid.Cantidad, this.Navegador.value);
         }
+
+        /*
+         * 
+         * métodos para mapear los registros leidos a un dbgrid 
+         * 
+         */
+
+        protected CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
+
+            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
+
+            var registros = peticion.resultado.datos;
+            let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
+            var datosDelGrid = document.createElement("tbody");
+            for (let i = 0; i < registros.length; i++) {
+                let fila = mnt.crearFila(filaCabecera, registros[i], i);
+                datosDelGrid.append(fila);
+            }
+
+            var tabla = mnt.Grid.querySelector("table");
+            var tbody = tabla.querySelector("tbody");
+            if (tbody === null || tbody === undefined)
+                tabla.append(datosDelGrid);
+            else {
+                tabla.removeChild(tbody);
+                tabla.append(datosDelGrid);
+            }
+
+            mnt.ActualizarTrasLeer(mnt);
+        }
+
+        private crearFila(columnaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
+            let fila = document.createElement("tr");
+            fila.id = `${this.IdGrid}_d_tr_${numeroDeFila}`;
+            for (let j = 0; j < columnaCabecera.length; j++) {
+                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, columnaCabecera[j], j);
+                fila.append(celdaDelTd);
+            }
+
+            let valor = this.BuscarValorDeColumnaRegistro(registro, Atributo.id);
+            fila.setAttribute(Atributo.valor, valor);
+
+            return fila;
+        }
+
+        private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number): HTMLTableCellElement {
+            let celdaDelTd: HTMLTableCellElement = document.createElement("td");
+            celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
+            celdaDelTd.setAttribute(Atributo.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
+            celdaDelTd.setAttribute(Atributo.propiedad, `${columnaCabecera.propiedad}`);
+
+            let idCheckDeSeleccion: string = `${fila.id}.chksel`;
+            let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
+            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+
+            if (columnaCabecera.claseCss === "columna-cabecera-oculta") {
+                celdaDelTd.style.visibility = "none";
+                celdaDelTd.hidden = true;
+            }
+
+            if (columnaCabecera.propiedad === 'chksel')
+                this.insertarCheckEnElTd(fila.id, celdaDelTd, columnaCabecera.propiedad);
+            else {
+                this.insertarInputEnElTd(fila.id, registro, columnaCabecera, celdaDelTd);
+            }
+            return celdaDelTd;
+        }
+
+        private definirPulsarCheck(idCheckDeSeleccion: string, idControlHtml: string): string {
+            let a: string = `Crud.EventosDelMantenimiento('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+            return a;
+        }
+
+        private insertarInputEnElTd(idFila: string, registro: any, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement) {
+            let valor = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
+            let input = document.createElement("input");
+            input.type = "text";
+            input.id = `${idFila}.${columnaCabecera.propiedad}`;
+            input.name = `${columnaCabecera.propiedad}.${this.IdGrid}`;
+            input.setAttribute(Atributo.propiedad, columnaCabecera.propiedad);
+
+            input.style.border = "0px";
+            input.style.textAlign = columnaCabecera.estilo.textAlign;
+            input.style.width = "100%";
+
+            let idCheckBox = `${idFila}.chksel`;
+            let eventoOnClick: string = this.definirPulsarCheck(idCheckBox, input.id);
+            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+
+            input.readOnly = true;
+            input.hidden = celdaDelTd.hidden;
+            input.value = valor;
+
+            celdaDelTd.append(input);
+
+        }
+
+        private insertarCheckEnElTd(idFila: string, celdaDelTd: HTMLTableCellElement, propiedad: string) {
+            let checkbox: HTMLInputElement = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.id = `${idFila}.${propiedad}`;
+            checkbox.name = `${propiedad}.${this.IdGrid}`;
+            checkbox.setAttribute(Atributo.propiedad, `${propiedad}`);
+
+            checkbox.style.border = "0px";
+            checkbox.style.textAlign = "center";
+            checkbox.style.width = "100%";
+
+            let eventoOnClick: string = this.definirPulsarCheck(checkbox.id, checkbox.id);
+            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+
+            checkbox.value = "false";
+            celdaDelTd.append(checkbox);
+        }
+
+        private obtenerDescriptorDeLaCabecera(mnt: CrudMnt): Array<PropiedadesDeLaFila> {
+            let filaCabecera: Array<PropiedadesDeLaFila> = new Array<PropiedadesDeLaFila>();
+            var cabecera = mnt.Tabla.rows[0];
+            var ths = cabecera.querySelectorAll('th');
+            for (let i = 0; i < ths.length; i++) {
+                let p: PropiedadesDeLaFila = new PropiedadesDeLaFila();
+                p.id = ths[i].id;
+                p.visible = !ths[i].hidden;
+                p.claseCss = ths[i].className;
+                p.estilo = ths[i].style;
+                p.editable = false;
+                p.propiedad = ths[i].getAttribute('propiedad');
+                filaCabecera.push(p);
+            }
+            return filaCabecera;
+        }
+
+        private BuscarValorDeColumnaRegistro(registro, propiedadDeLaFila: string): string {
+            for (const propiedad in registro) {
+                if (propiedad.toLowerCase() === propiedadDeLaFila)
+                    return registro[propiedad];
+            }
+            return "";
+        }
+
 
     }
 

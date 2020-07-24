@@ -121,7 +121,12 @@ namespace Utilidades.Traza
         private void Escribir(string log)
         {
             if (_Abierta)
-                _sw.WriteLine(log);
+                try
+                {
+                    _sw.WriteLine(log);
+                }
+                catch 
+                { }
         }
 
         private void Log(NivelDeTraza tipoNivel, string mensaje)
