@@ -163,7 +163,7 @@
             else {
                 this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
             }
-            this.CrudDeMnt.Buscar(0);
+            this.CrudDeMnt.Buscar(Variables.Grid.accion.buscar, 0);
         }
 
         protected InicializarValores(seleccionado: number) {

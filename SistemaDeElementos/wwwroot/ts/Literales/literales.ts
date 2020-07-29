@@ -29,12 +29,9 @@ const Atributo = {
     filtro: "control-de-filtro",
     tablaDeDatos: "tabla-de-datos",
     id: Literal.id,
-    grid: 'grid-del-mnt',
     crudModal: 'crud-modal',
     controlador: "controlador",
-    posicion: "posicion",
     obligatorio: "obligatorio",
-    totalEnBd: "totalEnBd",
     modoOrdenacion: "modo-ordenacion",
     expresionElemento: "expresion-elemento",
     tipo: "tipo",
@@ -43,7 +40,17 @@ const Atributo = {
     restrictor: "restrictor",
     eventoJs: {
         onclick: 'onclick'
+    },
+    grid: {
+        id: 'grid-del-mnt',
+        navegador: {
+            pagina: "pagina",
+            leidos: "leidos",
+            posicion: "posicion",
+            total: "total-en-bd"
+        }
     }
+    
 }
 
 const AtributoSelectorArchivo = {
@@ -258,7 +265,15 @@ const Variables = {
         puesto: "nombre-puesto",
     },
     Grid: {
-        Cantidad: "cantidad-a-mostrar"
+        cantidad: "cantidad-a-mostrar",
+        paginaDeDatos: "pagina-de-datos",
+        accion: {
+            buscar: "buscar",
+            siguiente: "sigiente",
+            anterior: "anterior",
+            ultima: "ultima",
+            ordenar: "ordenar"
+        }
     }
 }
 

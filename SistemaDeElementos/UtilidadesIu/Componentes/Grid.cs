@@ -236,7 +236,7 @@ namespace UtilidadesParaIu
                                min=¨1¨ step=¨1¨ max=¨999¨ 
                                posicion=¨{grid.Ultimo_Leido}¨  
                                controlador=¨{grid.Controlador}¨  
-                               totalEnBd=¨{grid.TotalEnBd}¨ 
+                               total-en-bd=¨{grid.TotalEnBd}¨ 
                                title=¨leidos {grid.filas.Count} desde la posición {grid.PosicionInicial}¨ />
                     </div>
                     <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >

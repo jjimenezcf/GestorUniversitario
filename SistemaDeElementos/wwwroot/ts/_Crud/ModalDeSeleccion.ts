@@ -140,8 +140,8 @@
         }
 
         public ObtenerAnteriores() {
-            let cantidad: number = this.Navegador.value.Numero();
-            let posicion: number = this.Navegador.getAttribute(Atributo.posicion).Numero();
+            let cantidad: number = Numero(this.Navegador.value);
+            let posicion: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.posicion));
             posicion = posicion - (cantidad * 2);
             if (posicion < 0)
                 posicion = 0;
@@ -149,7 +149,7 @@
         }
 
         public ObtenerSiguientes() {
-            let posicion: number = this.Navegador.getAttribute(Atributo.posicion).Numero();
+            let posicion: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.posicion));
             this.Buscar(posicion);
         }
 

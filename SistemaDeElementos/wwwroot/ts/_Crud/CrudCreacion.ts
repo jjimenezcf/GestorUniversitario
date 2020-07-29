@@ -82,7 +82,7 @@
             else {
                 this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
             }
-            this.CrudDeMnt.Buscar(0);
+            this.CrudDeMnt.Buscar(Variables.Grid.accion.buscar,0);
         }
 
         private CrearElemento(json: JSON) {

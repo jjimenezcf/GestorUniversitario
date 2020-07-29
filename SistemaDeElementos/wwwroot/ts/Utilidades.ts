@@ -140,6 +140,13 @@ String.prototype.Numero = function () {
     return Number(this);
 };
 
+function Numero(valor: string): number {
+    if (valor === undefined || valor === null)
+        return 0;
+
+    return valor.Numero();
+}
+
 
 class ClausulaDeFiltrado {
     clausula: string;

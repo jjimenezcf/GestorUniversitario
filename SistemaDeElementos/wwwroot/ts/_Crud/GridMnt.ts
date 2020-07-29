@@ -96,6 +96,30 @@
         }
     }
 
+
+    export class DatosPeticionNavegarGrid {
+        private _mnt: CrudMnt;
+        private _accion: string;
+        private _posicion: number;
+
+        public get Mnt(): CrudMnt {
+            return this._mnt;
+        }
+
+        public get Accion(): string {
+            return this._accion;
+        }
+        public get PosicionDesdeLaQueSeLee(): number {
+            return this._posicion;
+        }
+        constructor(mnt: CrudMnt, accion: string, posicion: number) {
+            this._mnt = mnt;
+            this._accion = accion;
+            this._posicion = posicion;
+        }
+
+    }
+
     export class GridMnt extends CrudBase {
 
         protected Ordenacion: Ordenacion;
@@ -108,7 +132,7 @@
         }
 
         protected get IdGrid(): string {
-            return this.PanelMnt.getAttribute(Atributo.grid);
+            return this.PanelMnt.getAttribute(Atributo.grid.id);
         }
         private idHtmlFiltro: string;
 
@@ -125,8 +149,13 @@
             return document.getElementById(idTabla) as HTMLTableElement;
         }
 
+        private _navegador: HTMLInputElement;
+
         protected get Navegador(): HTMLInputElement {
-            return this.ObtenerNavegador();
+            if (this._navegador === undefined || this._navegador === null)
+                this._navegador = this.ObtenerNavegador();
+
+            return this._navegador;
         }
 
         protected get Controlador(): string {
@@ -143,7 +172,7 @@
 
         protected InicializarNavegador() {
             if (this.HayHistorial) {
-                let cantidad: string = this.Estado.Obtener(Variables.Grid.Cantidad);
+                let cantidad: string = this.Estado.Obtener(Variables.Grid.cantidad);
                 if (NumeroMayorDeCero(cantidad))
                     this.Navegador.value = cantidad;
             }
@@ -155,6 +184,50 @@
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
+        }
+
+
+        protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+            let registrosSolicitados: string = this.Estado.Obtener(Variables.Grid.cantidad);
+            if (NumeroMayorDeCero(registrosSolicitados))
+                this.Navegador.value = registrosSolicitados;
+
+            this.ActualizarPaginaDeNavegacion(accion, posicionDesdeLaQueSeLeyo, Numero(this.Navegador.value), registrosLeidos);
+
+            let paginaDeDatos: string = this.Estado.Obtener(Variables.Grid.paginaDeDatos);
+
+
+            for (var i = 0; i < this.Ordenacion.Count(); i++) {
+                let orden: Orden = this.Ordenacion.Leer(i);
+                let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
+                columna.setAttribute(Atributo.modoOrdenacion, orden.Modo);
+                let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
+                a.setAttribute("class", orden.ccsClase);
+            }
+        }
+
+        private ActualizarPaginaDeNavegacion(accion: string, posicionDesdeLaQueSeLeyo: number, registrosSolicitados: number, registrosLeidos: number) {
+            this.Navegador.value = registrosSolicitados.toString();
+            this.Navegador.setAttribute(Atributo.grid.navegador.leidos, registrosLeidos.toString());
+
+            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
+            let posicionNueva: number = accion == Variables.Grid.accion.ultima ? total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
+            this.Navegador.setAttribute(Atributo.grid.navegador.posicion, posicionNueva.toString());
+
+
+            let paginaAnterior: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
+            let paginaNueva: number = 1;
+            if (accion == Variables.Grid.accion.siguiente)
+                paginaNueva = paginaAnterior + 1;
+            else
+                if (accion == Variables.Grid.accion.anterior)
+                    paginaNueva = paginaAnterior - 1;
+                else
+                    if (accion == Variables.Grid.accion.ultima) {
+                        posicionDesdeLaQueSeLeyo = total - registrosLeidos;
+                        paginaNueva = (registrosSolicitados >= total) ? 1 : Math.ceil(total / registrosSolicitados);
+                    }
+            this.Navegador.setAttribute(Atributo.grid.navegador.pagina, paginaNueva <= 0 ? "1" : paginaNueva.toString());
         }
 
         protected EstablecerOrdenacion(idcolumna: string) {
@@ -383,7 +456,7 @@
             }
         }
 
-        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {            
+        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {
             contenedorGrid.Grid.innerHTML = resultadoHtml;
             contenedorGrid.InicializarNavegador();
             if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
@@ -392,8 +465,8 @@
             }
         }
 
-        protected ActualizarTrasLeer(contenedorGrid: GridMnt) {
-            contenedorGrid.InicializarNavegador();
+        protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+            contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
             if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
                 contenedorGrid.MarcarElementos();
                 contenedorGrid.InfoSelector.SincronizarCheck();
@@ -443,7 +516,7 @@
 
         public AntesDeNavegar() {
             super.AntesDeNavegar();
-            this.Estado.Agregar(Variables.Grid.Cantidad, this.Navegador.value);
+            this.Estado.Agregar(Variables.Grid.cantidad, this.Navegador.value);
         }
 
         /*
@@ -454,7 +527,8 @@
 
         protected CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
 
-            let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
+            let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
+            let mnt: CrudMnt = datosDeEntrada.Mnt;
 
             var registros = peticion.resultado.datos;
             let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
@@ -473,7 +547,7 @@
                 tabla.append(datosDelGrid);
             }
 
-            mnt.ActualizarTrasLeer(mnt);
+            mnt.ActualizarInformacionDelGrid(mnt, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
         }
 
         private crearFila(columnaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {

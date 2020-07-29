@@ -118,7 +118,7 @@
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             mantenimiento.CerrarModalDeBorrado();
             mantenimiento.InfoSelector.QuitarTodos();
-            mantenimiento.Buscar(0);
+            mantenimiento.Buscar(Variables.Grid.accion.buscar, 0);
         }
 
 
@@ -177,25 +177,45 @@
 
         public OrdenarPor(columna: string) {
             this.EstablecerOrdenacion(columna);
-            this.Buscar(0);
+            this.Buscar(Variables.Grid.accion.ordenar, 0);
         }
 
         public ObtenerUltimos() {
-            this.Buscar(-1);
+            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
+            let cantidad: number = Numero(this.Navegador.value);
+            let ultimaPagina: number = Math.ceil(total / cantidad);
+            if (ultimaPagina <= 1)
+                return;
+
+            let posicion: number = (ultimaPagina - 1) * cantidad;
+            if (posicion >= total)
+                return;
+            this.Buscar(Variables.Grid.accion.ultima, posicion);
         }
 
         public ObtenerAnteriores() {
-            let cantidad: number = this.Navegador.value.Numero();
-            let posicion: number = this.Navegador.getAttribute(Atributo.posicion).Numero();
-            posicion = posicion - (cantidad * 2);
+            let cantidad: number = Numero(this.Navegador.value);
+            let pagina: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
+            if (pagina == 1)
+                return;
+
+            let posicion: number = (pagina - 2) * cantidad;
+
             if (posicion < 0)
                 posicion = 0;
-            this.Buscar(posicion);
+
+            this.Buscar(Variables.Grid.accion.anterior, posicion);
         }
 
         public ObtenerSiguientes() {
-            let posicion: number = this.Navegador.getAttribute(Atributo.posicion).Numero();
-            this.Buscar(posicion);
+            let cantidad: number = Numero(this.Navegador.value);
+            let pagina: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
+            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
+            let posicion: number = pagina * cantidad;
+            if (posicion >= total)
+                return;
+
+            this.Buscar(Variables.Grid.accion.siguiente, posicion);
         }
 
         private DefinirPeticionDeBorrado(ids: string): string {
@@ -207,8 +227,8 @@
             return peticion;
         }
 
-        public Buscar(posicion: number) {
-            this.LeerDatosParaElGrid(posicion);
+        public Buscar(accion: string, posicion: number) {
+            this.LeerDatosParaElGrid(accion, posicion);
             //if (this.Navegador === null)
             //    Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
             //else {
@@ -228,11 +248,14 @@
             //}
         }
 
-        public LeerDatosParaElGrid(posicion: number) {
+        public LeerDatosParaElGrid(accion: string, posicion: number) {
+
+            var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
+
             let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, posicion);
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerDatosParaElGrid
-                , this
+                , datosDePeticion
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
