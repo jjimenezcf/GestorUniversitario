@@ -27,7 +27,12 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Entorno/VistaMvc.js¨></script>
                       <script>
-                         Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');
+                         try {{                           
+                            Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                     ";
             return render.Render();

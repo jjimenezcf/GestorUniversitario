@@ -51,9 +51,14 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Entorno/CrudDeUsuario.js¨></script>
+                   $@"<script src=¨../../ts/Entorno/Usuario.js¨></script>
                       <script>
-                         Crud.crudMnt = new Entorno.CrudMntUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         try {{                           
+                            Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                     ";
             return render.Render();

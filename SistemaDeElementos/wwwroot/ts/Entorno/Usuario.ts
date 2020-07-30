@@ -1,7 +1,12 @@
 ﻿namespace Entorno {
 
+    export function CrearCrudDeUsuarios(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
+        Crud.crudMnt = new Entorno.CrudDeUsuarios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
+        Crud.crudMnt.RenderGrid = false;
+        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+    }
 
-    export class CrudMntUsuario extends Crud.CrudMnt {
+    export class CrudDeUsuarios extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);

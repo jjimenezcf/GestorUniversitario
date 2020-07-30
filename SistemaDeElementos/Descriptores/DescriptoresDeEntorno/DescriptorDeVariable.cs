@@ -29,7 +29,12 @@ namespace MVCSistemaDeElementos.Descriptores
         render = render +
                $@"<script src=¨../../ts/Entorno/Variables.js¨></script>
                       <script>
-                         Crud.crudMnt = new Entorno.CrudMntVariable('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         try {{      
+                           Entorno.CrearCrudDeVariables('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                     ";
         return render.Render();
