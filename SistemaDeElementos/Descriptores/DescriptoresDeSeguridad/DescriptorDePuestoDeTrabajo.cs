@@ -32,7 +32,12 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Seguridad/PuestoDeTrabajo.js¨></script>
                       <script>
-                         Crud.crudMnt = new Seguridad.CrudMntPuestoDeTrabajo('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         try {{                           
+                            Seguridad.CrearCrudDePuestosDeTrabajo('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                     ";
             return render.Render();

@@ -50,7 +50,12 @@ namespace MVCSistemaDeElementos.Descriptores
             render = render +
                    $@"<script src=¨../../ts/Seguridad/Permisos.js¨></script>
                       <script>
-                         Crud.crudMnt = new Seguridad.CrudMntPermiso('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         try {{                           
+                            Seguridad.CrearCrudDePermisos('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                         }}
+                         catch(error) {{                           
+                            Mensaje(TipoMensaje.Error, error);
+                         }}
                       </script>
                     ";
             return render.Render();

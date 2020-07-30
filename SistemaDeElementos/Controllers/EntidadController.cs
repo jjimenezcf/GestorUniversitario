@@ -24,6 +24,8 @@ using System.Reflection;
 namespace MVCSistemaDeElementos.Controllers
 {
 
+    enum epAcciones { buscar, siguiente, anterior, ultima, ordenar }
+
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
         where TContexto : ContextoSe
         where TRegistro : Registro
@@ -296,23 +298,20 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        class ResultadoDeLectura
+        {
+           public List<Dictionary<string, object>> registros;
+           public int total;
+        }
+
         //END-POINT: Desde CrudMantenimiento.ts
-        public JsonResult epLeerDatosParaElGrid(string modo, string posicion, string cantidad, string filtro, string orden)
+        public JsonResult epLeerDatosParaElGrid(string modo, string accion, string posicion, string cantidad, string filtro, string orden)
         {
             var r = new Resultado();
             int pos = posicion.Entero();
             int can = cantidad.Entero();
             try
             {
-                //si me pide leer los últimos registros
-                if (pos == -1)
-                {
-                    var total = Contar();
-                    pos = total - can;
-                    if (pos < 0) pos = 0;
-                    posicion = pos.ToString();
-                }
-
                 var elementos = Leer(pos, can, filtro, orden);
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.Count() == 0)
@@ -323,7 +322,13 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Mensaje = "No hay más elementos";
                 }
 
-                r.Datos = ElementosLeidos(elementos.ToList());
+                var rdl = new ResultadoDeLectura();
+
+                rdl.registros = ElementosLeidos(elementos.ToList());
+                rdl.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): 0;
+
+                r.Datos = rdl.registros;
+                r.Total = rdl.total;
                 r.Estado = EstadoPeticion.Ok;
             }
             catch (Exception e)

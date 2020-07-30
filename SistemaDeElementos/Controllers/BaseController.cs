@@ -11,6 +11,7 @@ namespace MVCSistemaDeElementos.Controllers
         public EstadoPeticion Estado { get; set; }
         public string Mensaje { get; set; }
         public string consola { get; set; }
+        public int Total { get; set; } = 0;
         public dynamic Datos { get; set; }
     }
 

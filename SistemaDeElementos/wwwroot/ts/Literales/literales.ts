@@ -138,6 +138,7 @@ const Ajax = {
         idModal: "idModal",
         idGrid: "idGrid",
         modo: "modo",
+        accion: "accion",
         posicion: "posicion",
         cantidad: "cantidad",
         filtro: "filtro",

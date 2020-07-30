@@ -168,6 +168,7 @@ class ResultadoJson {
     estado: number;
     mensaje: string;
     consola: string;
+    total: number;
     datos: any;
     error: boolean;
 }

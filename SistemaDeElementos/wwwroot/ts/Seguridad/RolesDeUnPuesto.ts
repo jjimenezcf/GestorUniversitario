@@ -1,6 +1,12 @@
 ﻿namespace Seguridad {
 
-    export class CrudMntRolesDeUnPuesto extends Crud.CrudMnt {
+    export function CrearCrudDeRolesDeUnPuesto(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
+        Crud.crudMnt = new Seguridad.CrudDeRolesDeUnPuesto(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
+        Crud.crudMnt.RenderGrid = false;
+        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+    }
+
+      export class CrudDeRolesDeUnPuesto extends Crud.CrudMnt {
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);
             this.crudDeCreacion = new CrudCreacionRolDeUnPuesto(this, idPanelCreacion);

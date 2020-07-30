@@ -252,7 +252,7 @@
 
             var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
 
-            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, posicion);
+            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerDatosParaElGrid
                 , datosDePeticion
@@ -276,14 +276,15 @@
         //    }
         //}
 
-        private DefinirPeticionDeBusqueda(accion: string, posicion: number): string {
+        private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
             var cantidad = this.Navegador.value.Numero();
             var controlador = this.Navegador.getAttribute(Atributo.controlador);
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
-            let url: string = `/${controlador}/${accion}`;
+            let url: string = `/${controlador}/${endPoint}`;
             let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
+                `&${Ajax.Param.accion}=${accion}` + 
                 `&${Ajax.Param.posicion}=${posicion}` +
                 `&${Ajax.Param.cantidad}=${cantidad}` +
                 `&${Ajax.Param.filtro}=${filtroJson}` +

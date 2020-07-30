@@ -97,6 +97,12 @@
     }
 
 
+    class ResultadoDeLectura {
+        registros: any;
+        total: number;
+    }
+
+
     export class DatosPeticionNavegarGrid {
         private _mnt: CrudMnt;
         private _accion: string;
@@ -531,6 +537,9 @@
             let mnt: CrudMnt = datosDeEntrada.Mnt;
 
             var registros = peticion.resultado.datos;
+            if (datosDeEntrada.Accion == Variables.Grid.accion.buscar)
+               mnt.Navegador.setAttribute(Atributo.grid.navegador.total, peticion.resultado.total.toString())
+
             let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
             var datosDelGrid = document.createElement("tbody");
             for (let i = 0; i < registros.length; i++) {

@@ -1,6 +1,12 @@
 ﻿namespace Seguridad {
 
-    export class CrudMntClaseDePermiso extends Crud.CrudMnt {
+    export function CrearCrudDeClasesDePermiso(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
+        Crud.crudMnt = new Seguridad.CrudDeClasesDePermiso(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
+        Crud.crudMnt.RenderGrid = false;
+        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+    }
+
+    export class CrudDeClasesDePermiso extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt);
