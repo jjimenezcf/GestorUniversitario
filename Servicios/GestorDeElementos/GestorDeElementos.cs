@@ -137,7 +137,8 @@ namespace Gestor.Elementos
         private GestorDeErrores _gestorDeErrores;
         public IMapper Mapeador;
 
-        private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros;
+        private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
+        private static ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
 
 
         public static object CrearGestor<T>(Func<object> creador)
@@ -167,7 +168,6 @@ namespace Gestor.Elementos
         protected virtual void IniciarClase(TContexto contexto)
         {
             Contexto = contexto;
-            _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         }
 
         #region ASYNC
@@ -276,6 +276,15 @@ namespace Gestor.Elementos
 
         protected virtual void DespuesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
+            _CacheDeRecuentos[typeof(TRegistro).FullName] = true;
+
+            foreach(var clave in _CacheDeRegistros.Keys)
+            {
+                if (clave.StartsWith(typeof(TRegistro).FullName))
+                {
+                    _CacheDeRegistros.TryRemove(clave, out _);
+                }
+            }
         }
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
@@ -329,7 +338,7 @@ namespace Gestor.Elementos
 
         public TRegistro LeerRegistroCacheado(string propiedad, string valor)
         {
-            var indice = $"{nameof(TRegistro)}-{propiedad}-{valor}";
+            var indice = $"{typeof(TRegistro).FullName}-{propiedad}-{valor}";
             if (!_CacheDeRegistros.ContainsKey(indice))
             {
                 _CacheDeRegistros[indice] = LeerRegistro(propiedad, valor);
@@ -455,7 +464,19 @@ namespace Gestor.Elementos
             var registros = DefinirConsulta(0, -1, filtros, null, joins, parametros);
             var total = registros.Count();
 
+            _CacheDeRecuentos[typeof(TRegistro).FullName] = false;
+
             return total;
+        }
+
+        public int Recontar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
+        {
+            if (!_CacheDeRecuentos.ContainsKey(typeof(TRegistro).FullName) || _CacheDeRecuentos[typeof(TRegistro).FullName] )
+            {
+                return Contar(filtros,joins,parametros);
+            }
+
+            return 0;
         }
 
         #endregion

@@ -1,0 +1,5 @@
+﻿1. Que el grid modal pase por el nuevo ep
+2. Que al navegar, se almacene el estado del grid para reposicionarse a la vuelta
+3. Pasar la CacheDeVariables a la CacheDeRegistro
+4. Implementar seguridad
+5. Crear callejero

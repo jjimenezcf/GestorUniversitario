@@ -19,8 +19,6 @@ using Migraciones.Migrations;
 using System.Collections;
 using System.Reflection;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MVCSistemaDeElementos.Controllers
 {
 
@@ -325,7 +323,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var rdl = new ResultadoDeLectura();
 
                 rdl.registros = ElementosLeidos(elementos.ToList());
-                rdl.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): 0;
+                rdl.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): Recontar(filtro);
 
                 r.Datos = rdl.registros;
                 r.Total = rdl.total;
@@ -521,6 +519,16 @@ namespace MVCSistemaDeElementos.Controllers
                                                : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
             return GestorDeElementos.Contar(filtros);
+        }
+
+
+        public int Recontar(string filtro = null)
+        {
+            List<ClausulaDeFiltrado> filtros = filtro.IsNullOrEmpty()
+                                               ? new List<ClausulaDeFiltrado>()
+                                               : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+
+            return GestorDeElementos.Recontar(filtros);
         }
 
         protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
