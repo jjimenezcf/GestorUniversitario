@@ -535,8 +535,8 @@
 
             let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
             let mnt: CrudMnt = datosDeEntrada.Mnt;
-
-            var registros = peticion.resultado.datos;
+            let rdl: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
+            var registros = rdl.registros;
             if (datosDeEntrada.Accion == Variables.Grid.accion.buscar)
                mnt.Navegador.setAttribute(Atributo.grid.navegador.total, peticion.resultado.total.toString())
 

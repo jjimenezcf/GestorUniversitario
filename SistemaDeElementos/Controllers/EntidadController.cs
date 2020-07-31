@@ -18,6 +18,7 @@ using Gestor.Elementos.Entorno;
 using Migraciones.Migrations;
 using System.Collections;
 using System.Reflection;
+using System.Dynamic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -296,10 +297,10 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        class ResultadoDeLectura
+        public class ResultadoDeLectura
         {
-           public List<Dictionary<string, object>> registros;
-           public int total;
+           public List<Dictionary<string, object>> registros { get; set; }
+           public int total { get; set; }
         }
 
         //END-POINT: Desde CrudMantenimiento.ts
@@ -325,7 +326,13 @@ namespace MVCSistemaDeElementos.Controllers
                 rdl.registros = ElementosLeidos(elementos.ToList());
                 rdl.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): Recontar(filtro);
 
-                r.Datos = rdl.registros;
+
+                //r.Datos= new ExpandoObject();
+                //r.Datos.registros = rdl.registros;
+                //r.Datos.total = rdl.total;
+
+                r.Datos = rdl;
+
                 r.Total = rdl.total;
                 r.Estado = EstadoPeticion.Ok;
             }
