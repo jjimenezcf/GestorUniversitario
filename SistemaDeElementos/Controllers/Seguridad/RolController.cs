@@ -21,10 +21,8 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        public IActionResult CrudRol(string orden)
+        public IActionResult CrudRol()
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(null, orden), cantidadPorLeer: 5, posicionInicial: 0);
-            GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }
     }

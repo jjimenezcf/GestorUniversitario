@@ -535,10 +535,10 @@
 
             let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
             let mnt: CrudMnt = datosDeEntrada.Mnt;
-            let rdl: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
-            var registros = rdl.registros;
+            let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
+            var registros = infoObtenida.registros;
             if (datosDeEntrada.Accion == Variables.Grid.accion.buscar)
-               mnt.Navegador.setAttribute(Atributo.grid.navegador.total, peticion.resultado.total.toString())
+                mnt.Navegador.setAttribute(Atributo.grid.navegador.total, infoObtenida.total.toString())
 
             let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
             var datosDelGrid = document.createElement("tbody");

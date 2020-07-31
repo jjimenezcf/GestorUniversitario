@@ -20,10 +20,8 @@ namespace MVCSistemaDeElementos.Controllers
         {
         }
 
-        public IActionResult CrudPermiso(string orden)
+        public IActionResult CrudPermiso()
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(null, orden), cantidadPorLeer: 5, posicionInicial: 0);
-            GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }
 

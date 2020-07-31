@@ -25,9 +25,9 @@ namespace MVCSistemaDeElementos.Controllers
         [HttpPost]
         public IActionResult CrudPuestosDeUnUsuario(string restrictor, string orden)
         {
-            var elementosDto = LeerOrdenados(restrictor, orden);
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(elementosDto, cantidadPorLeer: 5, posicionInicial: 0);
-            GestorDelCrud.Descriptor.TotalEnBd(Contar());
+            //var elementosDto = LeerOrdenados(restrictor, orden);
+            //GestorDelCrud.Descriptor.MapearElementosAlGrid(elementosDto, cantidadPorLeer: 5, posicionInicial: 0);
+            //GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }
 

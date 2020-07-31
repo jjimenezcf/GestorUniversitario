@@ -321,19 +321,12 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Mensaje = "No hay más elementos";
                 }
 
-                var rdl = new ResultadoDeLectura();
+                var infoObtenida = new ResultadoDeLectura();
 
-                rdl.registros = ElementosLeidos(elementos.ToList());
-                rdl.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): Recontar(filtro);
+                infoObtenida.registros = ElementosLeidos(elementos.ToList());
+                infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): Recontar(filtro);
 
-
-                //r.Datos= new ExpandoObject();
-                //r.Datos.registros = rdl.registros;
-                //r.Datos.total = rdl.total;
-
-                r.Datos = rdl;
-
-                r.Total = rdl.total;
+                r.Datos = infoObtenida;
                 r.Estado = EstadoPeticion.Ok;
             }
             catch (Exception e)

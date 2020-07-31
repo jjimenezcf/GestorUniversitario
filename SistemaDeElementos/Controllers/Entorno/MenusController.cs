@@ -25,10 +25,8 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDeMenus = gestorDeMenus;
         }
 
-        public IActionResult CrudMenu(string orden)
+        public IActionResult CrudMenu()
         {
-            GestorDelCrud.Descriptor.MapearElementosAlGrid(LeerOrdenados(null, orden), cantidadPorLeer: 5, posicionInicial: 0);
-            GestorDelCrud.Descriptor.TotalEnBd(Contar());
             return ViewCrud();
         }
 
