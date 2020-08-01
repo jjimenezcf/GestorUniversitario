@@ -96,7 +96,7 @@
     }
 
     export class DatosParaRelacionar {
-        public IdFormHtml: string;
+        public idOpcionDeMenu: string;
         public RelacionarCon: string;
         public FiltroRestrictor: DatosRestrictor;
 
@@ -238,24 +238,14 @@
 
         }
 
-        public RelacionarCon(parametros: string): DatosParaRelacionar {
-            let datos: DatosParaRelacionar = new DatosParaRelacionar();
-
-            let partes = parametros.split('#');
-            datos.IdFormHtml = partes[0].split('==')[1];
-            datos.RelacionarCon = partes[1].split('==')[1];
-            datos.FiltroRestrictor = undefined;
-            return datos;
-        }
-
-        public NavegarARelacionar(idFormHtml: string, filtroRestrictor: DatosRestrictor) {
+        public NavegarARelacionar(idOpcionDeMenu: string, filtroRestrictor: DatosRestrictor) {
 
             let filtro: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
 
-            let form: HTMLFormElement = document.getElementById(idFormHtml) as HTMLFormElement;
+            let form: HTMLFormElement = document.getElementById(idOpcionDeMenu) as HTMLFormElement;
 
             if (form === null) {
-                throw new Error(`El formulario '${idFormHtml}' no es válido, actualice la clase TS o el descriptor`);
+                throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
             }
 
             let navegarA: string = form.getAttribute(atRelacion.navegarA);

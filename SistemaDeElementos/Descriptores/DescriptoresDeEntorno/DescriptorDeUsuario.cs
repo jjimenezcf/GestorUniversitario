@@ -42,7 +42,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , vista: nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)
                 , relacionarCon: nameof(PuestoDto)
                 , navegarAlCrud: DescriptorMantenimiento<PuestosDeUnUsuarioDto>.nombreMnt
-                , nombreOpcion: "Puestos");
+                , nombreOpcion: "Puestos"
+                , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario).ToLower());
 
         }
 

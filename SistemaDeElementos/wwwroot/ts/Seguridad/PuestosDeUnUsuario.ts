@@ -17,31 +17,6 @@
             if (this.HayHistorial)
                 this.RecuperarFiltros();
         }
-
-        public RelacionarCon(parametrosDeEntrada: string): Crud.DatosParaRelacionar {
-            let datos = super.RelacionarCon(parametrosDeEntrada)
-
-            try {
-                if (this.InfoSelector.Cantidad != 1) {
-                    throw new Error("Debe seleccionar solo un usuario");
-                }
-
-                switch (datos.RelacionarCon) {
-                    case Relaciones.roles: {
-                        let id: number = this.InfoSelector.LeerElemento(0).Id;
-                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Variables.Puesto.restrictor, id, this.InfoSelector.LeerElemento(0).Texto)
-                        break;
-                    }
-                }
-
-                this.NavegarARelacionar(datos.IdFormHtml, datos.FiltroRestrictor);
-            }
-            catch (error) {
-                Mensaje(TipoMensaje.Error, error);
-                return;
-            }
-        }
-
     }
 
     export class CrudCreacionPuestoDeUnUsuario extends Crud.CrudCreacion {

@@ -11,19 +11,30 @@ namespace MVCSistemaDeElementos.Descriptores
             : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo)
         {
             RutaVista = "Seguridad";
-            AnadirOpcionDeRolesDeUnPuesto($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(RolDto)}");
+            //AnadirOpcionDeRolesDeUnPuesto($"{Mnt.MenuDeMnt.Menu.IdHtml}-{nameof(RolDto)}");
+
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(RolesDeUnPuestoController)
+                , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
+                , relacionarCon: nameof(RolDto)
+                , navegarAlCrud: DescriptorMantenimiento<RolesDeUnPuestoDto>.nombreMnt
+                , nombreOpcion: "Roles"
+                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+
+
         }
 
-        internal void AnadirOpcionDeRolesDeUnPuesto(string idForm)
-        {
-            var mntRoles = new AccionDeNavegarParaRelacionar(
-                    urlDelCrud: $@"/{nameof(RolesDeUnPuestoController).Replace("Controller", "")}/{nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)}"
-                  , relacionarCon: nameof(RolDto)
-                  , nombreDelMnt: DescriptorMantenimiento<RolesDeUnPuestoDto>.nombreMnt
-                  , idForm: idForm);
-            var opcion = new OpcionDeMenu<PuestoDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"Roles");
-            Mnt.MenuDeMnt.Menu.Add(opcion);
-        }
+        //internal void AnadirOpcionDeRolesDeUnPuesto(string idForm)
+        //{
+        //    var mntRoles = new AccionDeNavegarParaRelacionar(
+        //            urlDelCrud: $@"/{nameof(RolesDeUnPuestoController).Replace("Controller", "")}/{nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)}"
+        //          , relacionarCon: nameof(RolDto)
+        //          , nombreDelMnt: DescriptorMantenimiento<RolesDeUnPuestoDto>.nombreMnt
+        //          , idOpciondeMenu: idForm
+        //          , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+        //    var opcion = new OpcionDeMenu<PuestoDto>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"Roles");
+        //    Mnt.MenuDeMnt.Menu.Add(opcion);
+        //}
 
         public override string RenderControl()
         {

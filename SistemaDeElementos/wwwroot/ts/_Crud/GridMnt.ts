@@ -200,9 +200,6 @@
 
             this.ActualizarPaginaDeNavegacion(accion, posicionDesdeLaQueSeLeyo, Numero(this.Navegador.value), registrosLeidos);
 
-            let paginaDeDatos: string = this.Estado.Obtener(atGrid.paginaDeDatos);
-
-
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
@@ -523,6 +520,45 @@
         public AntesDeNavegar() {
             super.AntesDeNavegar();
             this.Estado.Agregar(atGrid.cantidad, this.Navegador.value);
+        }
+
+
+        //permite relacionar un usuario con diferentes entidades
+        // parametros de entrada:
+        // idOpcionDeMenu --> id de la opción de menú que almacena los parámetros y la acción a someter
+        // relacionarCon --> entidad con la que se relaciona
+        // PropiedadRestrictora --> propiedad bindeada al control de filtro de la página de destino donde se mapea el restrictor seleccionado en el grid
+        public RelacionarCon(parametrosDeEntrada: string): void {
+            try {
+                let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this.InfoSelector, parametrosDeEntrada);
+                super.NavegarARelacionar(datos.idOpcionDeMenu, datos.FiltroRestrictor);
+            }
+            catch (error) {
+                Mensaje(TipoMensaje.Error, error);
+                return;
+            }
+        }
+
+        private PrepararParametrosDeRelacionarCon(infoSelector: InfoSelector, parametros: string): DatosParaRelacionar {
+
+            if (infoSelector.Cantidad != 1)
+                throw new Error("Debe seleccionar solo una elemento");
+
+            let datos: DatosParaRelacionar = new DatosParaRelacionar();
+
+            let partes = parametros.split('#');
+
+            if (partes.length != 3)
+                throw new Error("Los parámetros de relación están mal definidos");
+
+            datos.idOpcionDeMenu = partes[0].split('==')[1];
+            datos.RelacionarCon = partes[1].split('==')[1];
+            let PropiedadRestrictora: string = partes[2].split('==')[1];
+
+            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, infoSelector.LeerElemento(0).Id, infoSelector.LeerElemento(0).Texto);
+
+            datos.FiltroRestrictor = filtro;
+            return datos;
         }
 
         /*

@@ -154,21 +154,17 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"El modo {modo} no está definido");
         }
 
-        #region Opciones de menú de relaciones entres dtos
-        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion)
+        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadRestrictora)
         {
-            var idForm = $"{Mnt.MenuDeMnt.Menu.IdHtml}-{relacionarCon}";
-            var mntRoles = new AccionDeNavegarParaRelacionar(
+            var accionDeRelacion = new AccionDeNavegarParaRelacionar(
                     urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
-                  , idForm: idForm);
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: mntRoles, tipoAccion: TipoAccion.Post, titulo: $"{nombreOpcion}");
+                  , propiedadRestrictora: propiedadRestrictora);
+
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: accionDeRelacion, tipoAccion: TipoAccion.Post, titulo: $"{nombreOpcion}");
             Mnt.MenuDeMnt.Menu.Add(opcion);
         }
-
-
-        #endregion
 
     }
 

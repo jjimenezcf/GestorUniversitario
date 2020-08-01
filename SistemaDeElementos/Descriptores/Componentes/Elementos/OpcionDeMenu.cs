@@ -43,23 +43,22 @@ namespace MVCSistemaDeElementos.Descriptores
         public string TipoAccion { get; private set; }
         public string UrlDelCrudDeRelacion { get; private set; }
         public string RelacionarCon { get; private set; }
-        public string IdForm { get; private set; }
-
+        public string PropiedadRestrictora { get; private set; }
         public string NavegarAlCrud { get; private set; }
 
-        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string idForm)
+        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadRestrictora)
         : base()
         {
             TipoAccion = TipoAccionMnt.RelacionarElementos;
-            IdForm = idForm;
-            RelacionarCon = relacionarCon;
+            RelacionarCon = relacionarCon.ToLower();
+            PropiedadRestrictora = propiedadRestrictora.ToLower();
             UrlDelCrudDeRelacion = urlDelCrud;
             NavegarAlCrud = nombreDelMnt;
         }
 
         public override string RenderAccion()
         {
-            return $"Crud.EventosDelMantenimiento('{TipoAccion}','idForm==identificador#RelacionarCon=={RelacionarCon}')";
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}','IdOpcionDeMenu==idDeOpcMenu#{nameof(RelacionarCon)}=={RelacionarCon}#{nameof(PropiedadRestrictora)}=={PropiedadRestrictora}')";
         }
     }
 
@@ -195,20 +194,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ />";
-
             if (TipoAccion == TipoAccion.Post)
             {
                 var htmlFormPost = $@"
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("identificador", IdHtml)}¨ />
+                        <input type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ />
                     </form>
                 ";
                 return htmlFormPost;
             }
 
+            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ />";
             return htmlOpcionMenu;
         }
     }
