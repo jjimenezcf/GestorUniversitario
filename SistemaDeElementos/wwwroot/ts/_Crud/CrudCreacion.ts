@@ -82,7 +82,7 @@
             else {
                 this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
             }
-            this.CrudDeMnt.Buscar(Variables.Grid.accion.buscar,0);
+            this.CrudDeMnt.Buscar(atGrid.accion.buscar,0);
         }
 
         private CrearElemento(json: JSON) {
@@ -112,7 +112,7 @@
         }
 
         public MaperaRestrictorDeCreacion(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
-            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeCrear.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeCrear.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
             this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 

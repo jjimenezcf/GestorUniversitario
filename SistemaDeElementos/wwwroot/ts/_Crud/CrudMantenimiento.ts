@@ -41,8 +41,8 @@
 
 
         public RecuperarFiltros() {
-            if (this.Estado.Contiene(AtributosDeRelacion.restrictor)) {
-                let restrictor: Crud.DatosRestrictor = this.Estado.Obtener(AtributosDeRelacion.restrictor);
+            if (this.Estado.Contiene(atRelacion.restrictor)) {
+                let restrictor: Crud.DatosRestrictor = this.Estado.Obtener(atRelacion.restrictor);
                 this.MapearRestrictorDeFiltro(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeCreacion.MaperaRestrictorDeCreacion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeEdicion.MaperaRestrictorDeEdicion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
@@ -52,9 +52,9 @@
         private InicializarSelectores() {
             let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;;
             selectores.forEach((selector) => {
-                let idModal: string = selector.getAttribute(AtributoSelector.idModal);
+                let idModal: string = selector.getAttribute(atSelector.idModal);
                 let modalHtml = document.getElementById(idModal);
-                let idPanelMnt = modalHtml.getAttribute(Atributo.crudModal);
+                let idPanelMnt = modalHtml.getAttribute(atControl.crudModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal, idPanelMnt);
                 this.Modales.push(modal);
 
@@ -118,7 +118,7 @@
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             mantenimiento.CerrarModalDeBorrado();
             mantenimiento.InfoSelector.QuitarTodos();
-            mantenimiento.Buscar(Variables.Grid.accion.buscar, 0);
+            mantenimiento.Buscar(atGrid.accion.buscar, 0);
         }
 
 
@@ -177,11 +177,11 @@
 
         public OrdenarPor(columna: string) {
             this.EstablecerOrdenacion(columna);
-            this.Buscar(Variables.Grid.accion.ordenar, 0);
+            this.Buscar(atGrid.accion.ordenar, 0);
         }
 
         public ObtenerUltimos() {
-            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
+            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
             let cantidad: number = Numero(this.Navegador.value);
             let ultimaPagina: number = Math.ceil(total / cantidad);
             if (ultimaPagina <= 1)
@@ -190,12 +190,12 @@
             let posicion: number = (ultimaPagina - 1) * cantidad;
             if (posicion >= total)
                 return;
-            this.Buscar(Variables.Grid.accion.ultima, posicion);
+            this.Buscar(atGrid.accion.ultima, posicion);
         }
 
         public ObtenerAnteriores() {
             let cantidad: number = Numero(this.Navegador.value);
-            let pagina: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
+            let pagina: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
             if (pagina == 1)
                 return;
 
@@ -204,23 +204,23 @@
             if (posicion < 0)
                 posicion = 0;
 
-            this.Buscar(Variables.Grid.accion.anterior, posicion);
+            this.Buscar(atGrid.accion.anterior, posicion);
         }
 
         public ObtenerSiguientes() {
             let cantidad: number = Numero(this.Navegador.value);
-            let pagina: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
-            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
+            let pagina: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
+            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
             let posicion: number = pagina * cantidad;
             if (posicion >= total)
                 return;
 
-            this.Buscar(Variables.Grid.accion.siguiente, posicion);
+            this.Buscar(atGrid.accion.siguiente, posicion);
         }
 
         private DefinirPeticionDeBorrado(ids: string): string {
             let idsJson: JSON = JSON.parse(`[${ids}]`);
-            var controlador = this.Navegador.getAttribute(Atributo.controlador);
+            var controlador = this.Navegador.getAttribute(atControl.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
             let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idsJson)}`;
             let peticion: string = url + '?' + parametros;
@@ -278,7 +278,7 @@
 
         private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
             var cantidad = this.Navegador.value.Numero();
-            var controlador = this.Navegador.getAttribute(Atributo.controlador);
+            var controlador = this.Navegador.getAttribute(atControl.controlador);
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
@@ -296,7 +296,7 @@
         public CambiarSelector(idSelector: string) {
             var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
 
-            let modal: ModalSeleccion = crudMnt.ObtenerModal(htmlSelector.getAttribute(AtributoSelector.idModal));
+            let modal: ModalSeleccion = crudMnt.ObtenerModal(htmlSelector.getAttribute(atSelector.idModal));
             if (IsNullOrEmpty(htmlSelector.value))
                 modal.InicializarModal();
             else
@@ -312,7 +312,7 @@
         }
 
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
-            let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.PanelDeMnt.querySelectorAll(`input[${Atributo.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
+            let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.PanelDeMnt.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
             this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 

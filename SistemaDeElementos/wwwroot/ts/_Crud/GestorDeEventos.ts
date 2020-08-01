@@ -21,7 +21,7 @@
                     break;
                 }
                 case Evento.Mnt.Buscar: {
-                    crudMnt.Buscar(Variables.Grid.accion.buscar,0);
+                    crudMnt.Buscar(atGrid.accion.buscar,0);
                     break;
                 }
                 case Evento.Mnt.ObtenerSiguientes: {

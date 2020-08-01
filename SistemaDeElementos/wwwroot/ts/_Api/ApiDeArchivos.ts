@@ -17,14 +17,14 @@
     export function BlanquearArchivo(archivo: HTMLInputElement) {
         archivo.classList.remove(ClaseCss.crtlNoValido);
         archivo.classList.add(ClaseCss.crtlValido);
-        archivo.setAttribute(AtributoSelectorArchivo.idArchivo, '0');
+        archivo.setAttribute(atArchivo.id, '0');
         archivo.files = null;
         archivo.value = null;
-        let canvasHtml: HTMLCanvasElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLCanvasElement;
+        let canvasHtml: HTMLCanvasElement = document.getElementById(archivo.getAttribute(atArchivo.canvas)) as HTMLCanvasElement;
         canvasHtml.width = canvasHtml.width;
-        let imagenHtml: HTMLImageElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.canvasVinculado)) as HTMLImageElement;
+        let imagenHtml: HTMLImageElement = document.getElementById(archivo.getAttribute(atArchivo.canvas)) as HTMLImageElement;
         imagenHtml.src = "";
-        let barraHtml: HTMLDivElement = document.getElementById(archivo.getAttribute(AtributoSelectorArchivo.barraVinculada)) as HTMLDivElement;
+        let barraHtml: HTMLDivElement = document.getElementById(archivo.getAttribute(atArchivo.barra)) as HTMLDivElement;
         barraHtml.removeAttribute('style');
         barraHtml.innerHTML = null;
         barraHtml.appendChild(document.createElement("span"));
@@ -58,7 +58,7 @@
         let ficheros = htmlFicheros.files;
 
         let filePath: string = ficheros[0].name;
-        let extensiones: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.extensionesValidas);
+        let extensiones: string = htmlFicheros.getAttribute(atArchivo.extensionesValidas);
 
         var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
         if (extensiones.indexOf(ext) < 0) {
@@ -105,10 +105,10 @@
         let datosPost = new FormData();
         datosPost.append(Ajax.Param.fichero, ficheros[0]);
 
-        let rutaDestino: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.rutaDestino);
+        let rutaDestino: string = htmlFicheros.getAttribute(atArchivo.rutaDestino);
         datosPost.append(Ajax.Param.rutaDestino, rutaDestino);
 
-        let extensionesValidas: string = htmlFicheros.getAttribute(AtributoSelectorArchivo.extensionesValidas);
+        let extensionesValidas: string = htmlFicheros.getAttribute(atArchivo.extensionesValidas);
         datosPost.append(Ajax.Param.extensiones, extensionesValidas);
 
         a.DatosPost = datosPost;
@@ -121,13 +121,13 @@
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
         let selector: HTMLInputElement = datos.Selector();
 
-        selector.removeAttribute(AtributoSelectorArchivo.idArchivo);
-        selector.removeAttribute(AtributoSelectorArchivo.nombreArchivo);
-        let tipo: string = selector.getAttribute(Atributo.tipo);
+        selector.removeAttribute(atArchivo.id);
+        selector.removeAttribute(atArchivo.nombre);
+        let tipo: string = selector.getAttribute(atControl.tipo);
         if ( tipo === TipoControl.Archivo)
-            selector.setAttribute(AtributoSelectorArchivo.idArchivo, peticion.resultado.datos);
+            selector.setAttribute(atArchivo.id, peticion.resultado.datos);
         if (tipo === TipoControl.UrlDeArchivo)
-            selector.setAttribute(AtributoSelectorArchivo.nombreArchivo, peticion.resultado.datos);
+            selector.setAttribute(atArchivo.nombre, peticion.resultado.datos);
     }
 
     function SiHayErrorAlSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {

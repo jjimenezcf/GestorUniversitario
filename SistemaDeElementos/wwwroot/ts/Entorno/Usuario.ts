@@ -3,7 +3,7 @@
     export function CrearCrudDeUsuarios(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudDeUsuarios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+        Crud.crudMnt.LeerDatosParaElGrid(atGrid.accion.buscar, 0);
     }
 
     export class CrudDeUsuarios extends Crud.CrudMnt {
@@ -15,6 +15,10 @@
             this.idModalBorrar = idModalBorrar;
         }
 
+        //permite relacionar un usuario con diferentes entidades
+        // parametros de entrada:
+        // idForm --> control Html que almacena los parámetros y la acción para someter
+        // relacionarCon --> entidad con la que se relaciona
         public RelacionarCon(parametrosDeEntrada: string): Crud.DatosParaRelacionar {
             let datos = super.RelacionarCon(parametrosDeEntrada)
             try {
@@ -24,8 +28,8 @@
 
                 switch (datos.RelacionarCon) {
                     case Relaciones.puestos: {
-                        let id: number = this.InfoSelector.LeerElemento(0).Id;
-                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Variables.Usuario.restrictor, id, this.InfoSelector.LeerElemento(0).Texto)
+                        let idUsuario: number = this.InfoSelector.LeerElemento(0).Id;
+                        datos.FiltroRestrictor = new Crud.DatosRestrictor(Variables.Usuario.restrictor, idUsuario, this.InfoSelector.LeerElemento(0).Texto)
                         break;
                     }
                 }

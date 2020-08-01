@@ -138,7 +138,7 @@
         }
 
         protected get IdGrid(): string {
-            return this.PanelMnt.getAttribute(Atributo.grid.id);
+            return this.PanelMnt.getAttribute(atGrid.id);
         }
         private idHtmlFiltro: string;
 
@@ -151,7 +151,7 @@
         }
 
         protected get Tabla(): HTMLTableElement {
-            let idTabla: string = this.Grid.getAttribute(Atributo.tablaDeDatos);
+            let idTabla: string = this.Grid.getAttribute(atControl.tablaDeDatos);
             return document.getElementById(idTabla) as HTMLTableElement;
         }
 
@@ -165,20 +165,20 @@
         }
 
         protected get Controlador(): string {
-            return this.Navegador.getAttribute(Atributo.controlador);
+            return this.Navegador.getAttribute(atControl.controlador);
         }
 
         constructor(idPanelMnt: string) {
             super();
             this.idPanelMnt = idPanelMnt;
             this.InfoSelector = new InfoSelector(this.IdGrid);
-            this.idHtmlFiltro = this.Grid.getAttribute(Atributo.zonaDeFiltro);
+            this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
         }
 
         protected InicializarNavegador() {
             if (this.HayHistorial) {
-                let cantidad: string = this.Estado.Obtener(Variables.Grid.cantidad);
+                let cantidad: string = this.Estado.Obtener(atGrid.cantidad);
                 if (NumeroMayorDeCero(cantidad))
                     this.Navegador.value = cantidad;
             }
@@ -186,7 +186,7 @@
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
-                columna.setAttribute(Atributo.modoOrdenacion, orden.Modo);
+                columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
@@ -194,19 +194,19 @@
 
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
-            let registrosSolicitados: string = this.Estado.Obtener(Variables.Grid.cantidad);
+            let registrosSolicitados: string = this.Estado.Obtener(atGrid.cantidad);
             if (NumeroMayorDeCero(registrosSolicitados))
                 this.Navegador.value = registrosSolicitados;
 
             this.ActualizarPaginaDeNavegacion(accion, posicionDesdeLaQueSeLeyo, Numero(this.Navegador.value), registrosLeidos);
 
-            let paginaDeDatos: string = this.Estado.Obtener(Variables.Grid.paginaDeDatos);
+            let paginaDeDatos: string = this.Estado.Obtener(atGrid.paginaDeDatos);
 
 
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
-                columna.setAttribute(Atributo.modoOrdenacion, orden.Modo);
+                columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
@@ -214,31 +214,31 @@
 
         private ActualizarPaginaDeNavegacion(accion: string, posicionDesdeLaQueSeLeyo: number, registrosSolicitados: number, registrosLeidos: number) {
             this.Navegador.value = registrosSolicitados.toString();
-            this.Navegador.setAttribute(Atributo.grid.navegador.leidos, registrosLeidos.toString());
+            this.Navegador.setAttribute(atGrid.navegador.leidos, registrosLeidos.toString());
 
-            let total: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.total));
-            let posicionNueva: number = accion == Variables.Grid.accion.ultima ? total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
-            this.Navegador.setAttribute(Atributo.grid.navegador.posicion, posicionNueva.toString());
+            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
+            let posicionNueva: number = accion == atGrid.accion.ultima ? total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
+            this.Navegador.setAttribute(atGrid.navegador.posicion, posicionNueva.toString());
 
 
-            let paginaAnterior: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.pagina));
+            let paginaAnterior: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
             let paginaNueva: number = 1;
-            if (accion == Variables.Grid.accion.siguiente)
+            if (accion == atGrid.accion.siguiente)
                 paginaNueva = paginaAnterior + 1;
             else
-                if (accion == Variables.Grid.accion.anterior)
+                if (accion == atGrid.accion.anterior)
                     paginaNueva = paginaAnterior - 1;
                 else
-                    if (accion == Variables.Grid.accion.ultima) {
+                    if (accion == atGrid.accion.ultima) {
                         posicionDesdeLaQueSeLeyo = total - registrosLeidos;
                         paginaNueva = (registrosSolicitados >= total) ? 1 : Math.ceil(total / registrosSolicitados);
                     }
-            this.Navegador.setAttribute(Atributo.grid.navegador.pagina, paginaNueva <= 0 ? "1" : paginaNueva.toString());
+            this.Navegador.setAttribute(atGrid.navegador.pagina, paginaNueva <= 0 ? "1" : paginaNueva.toString());
         }
 
         protected EstablecerOrdenacion(idcolumna: string) {
             let htmlColumna: HTMLTableHeaderCellElement = document.getElementById(idcolumna) as HTMLTableHeaderCellElement;
-            let modo: string = htmlColumna.getAttribute(Atributo.modoOrdenacion);
+            let modo: string = htmlColumna.getAttribute(atControl.modoOrdenacion);
             if (IsNullOrEmpty(modo))
                 modo = ModoOrdenacion.ascedente;
             else if (modo === ModoOrdenacion.ascedente)
@@ -248,10 +248,10 @@
             else if (modo === ModoOrdenacion.sinOrden)
                 modo = ModoOrdenacion.ascedente;
 
-            let propiedad: string = htmlColumna.getAttribute(Atributo.propiedad);
+            let propiedad: string = htmlColumna.getAttribute(atControl.propiedad);
             this.Ordenacion.Actualizar(idcolumna, propiedad, modo);
 
-            htmlColumna.setAttribute(Atributo.modoOrdenacion, modo);
+            htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
 
         }
 
@@ -262,14 +262,14 @@
         }
 
         protected ObtenerExpresionMostrar(idCheck: string): string {
-            let expresion: string = this.Grid.getAttribute(Atributo.expresionElemento).toLowerCase();
+            let expresion: string = this.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
             if (!IsNullOrEmpty(expresion)) {
                 let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
                 let tds: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
                 for (let j = 0; j < tds.length; j++) {
                     let input: HTMLInputElement = tds[j].getElementsByTagName('input')[0] as HTMLInputElement;
                     if (input !== undefined) {
-                        let propiedad: string = input.getAttribute(Atributo.propiedad).toLowerCase();
+                        let propiedad: string = input.getAttribute(atControl.propiedad).toLowerCase();
                         if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
                             expresion = expresion.replace(`[${propiedad}]`, input.value);
                         }
@@ -335,9 +335,9 @@
 
             for (let i = 0; i < arrayHtmlInput.length; i++) {
                 var htmlInput = arrayHtmlInput[i];
-                var esFiltro = htmlInput.getAttribute(Atributo.filtro);
+                var esFiltro = htmlInput.getAttribute(atControl.filtro);
                 if (esFiltro === 'S') {
-                    var id = htmlInput.getAttribute(Atributo.id);
+                    var id = htmlInput.getAttribute(atControl.id);
                     if (id === null)
                         console.log(`Falta el atributo id del componente de filtro ${htmlInput}`);
                     else
@@ -348,7 +348,7 @@
             var arrayHtmlSelect = this.ZonaDeFiltro.getElementsByTagName(TagName.select);
             for (let i = 0; i < arrayHtmlSelect.length; i++) {
                 var htmlSelect = arrayHtmlSelect[i];
-                var id = htmlSelect.getAttribute(Atributo.id);
+                var id = htmlSelect.getAttribute(atControl.id);
                 arrayIds.push(id);
             }
 
@@ -356,9 +356,9 @@
         }
 
         private ObtenerClausulaRestrictor(restrictor: HTMLInputElement): ClausulaDeFiltrado {
-            let propiedad: string = restrictor.getAttribute(Atributo.propiedad);
+            let propiedad: string = restrictor.getAttribute(atControl.propiedad);
             let criterio: string = Literal.filtro.criterio.igual;
-            let valor = restrictor.getAttribute(Atributo.restrictor);
+            let valor = restrictor.getAttribute(atControl.restrictor);
             let clausula: ClausulaDeFiltrado = null;
             if (!IsNullOrEmpty(valor))
                 //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
@@ -368,8 +368,8 @@
         }
 
         private ObtenerClausulaEditor(editor: HTMLInputElement): ClausulaDeFiltrado {
-            var propiedad: string = editor.getAttribute(Atributo.propiedad);
-            var criterio: string = editor.getAttribute(Atributo.criterio);
+            var propiedad: string = editor.getAttribute(atControl.propiedad);
+            var criterio: string = editor.getAttribute(atControl.criterio);
             var valor = editor.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor))
@@ -380,12 +380,12 @@
         }
 
         private ObtenerClausulaSelector(selector: HTMLInputElement): ClausulaDeFiltrado {
-            var propiedad = selector.getAttribute(Atributo.propiedad);
-            var criterio = selector.getAttribute(Atributo.criterio);
+            var propiedad = selector.getAttribute(atControl.propiedad);
+            var criterio = selector.getAttribute(atControl.criterio);
             var valor = null;
             var clausula = null;
-            if (selector.hasAttribute(AtributoSelector.ListaDeSeleccionados)) {
-                var ids = selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
+            if (selector.hasAttribute(atSelector.ListaDeSeleccionados)) {
+                var ids = selector.getAttribute(atSelector.ListaDeSeleccionados);
                 if (!ids.NoDefinida()) {
                     valor = ids;
                     clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
@@ -395,8 +395,8 @@
         }
 
         private ObtenerClausulaListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
-            var propiedad = input.getAttribute(Atributo.propiedad);
-            var criterio = input.getAttribute(Atributo.criterio);
+            var propiedad = input.getAttribute(atControl.propiedad);
+            var criterio = input.getAttribute(atControl.criterio);
 
             let lista: ListaDinamica = new ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
@@ -410,8 +410,8 @@
         }
 
         private ObtenerClausulaListaDeELemento(selet: HTMLSelectElement): ClausulaDeFiltrado {
-            var propiedad = selet.getAttribute(Atributo.propiedad);
-            var criterio = selet.getAttribute(Atributo.criterio);
+            var propiedad = selet.getAttribute(atControl.propiedad);
+            var criterio = selet.getAttribute(atControl.criterio);
             var valor = selet.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor) && Number(valor) > 0) {
@@ -453,7 +453,7 @@
                 for (var j = 0; j < len; j++) {
                     let id: number = this.InfoSelector.LeerId(i);
                     if ((<HTMLInputElement>celdasId[j]).value.Numero() == id) {
-                        var idCheck = celdasId[j].id.replace(`.${Atributo.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                        var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                         var check = document.getElementById(idCheck);
                         (<HTMLInputElement>check).checked = true;
                         break;
@@ -498,8 +498,8 @@
                     let celda: HTMLTableDataCellElement = fila.cells[j];
                     let input: HTMLInputElement = celda.querySelector("input");
                     if (input !== null) {
-                        let propiedad: string = input.getAttribute(Atributo.propiedad);
-                        if (propiedad.toLocaleLowerCase() === Atributo.id) {
+                        let propiedad: string = input.getAttribute(atControl.propiedad);
+                        if (propiedad.toLocaleLowerCase() === atControl.id) {
                             let valor: string = input.value;
                             if (valor.Numero() == id)
                                 return fila;
@@ -513,7 +513,7 @@
         private ObtenerCelda(fila: HTMLTableRowElement, propiedadBuscada: string): HTMLTableDataCellElement {
             for (var j = 0; j < fila.cells.length; j++) {
                 let celda: HTMLTableDataCellElement = fila.cells[j];
-                let propiedadCelda: string = celda.getAttribute(Atributo.propiedad);
+                let propiedadCelda: string = celda.getAttribute(atControl.propiedad);
                 if (propiedadCelda.toLocaleLowerCase() === propiedadBuscada)
                     return celda;
             }
@@ -522,7 +522,7 @@
 
         public AntesDeNavegar() {
             super.AntesDeNavegar();
-            this.Estado.Agregar(Variables.Grid.cantidad, this.Navegador.value);
+            this.Estado.Agregar(atGrid.cantidad, this.Navegador.value);
         }
 
         /*
@@ -537,8 +537,8 @@
             let mnt: CrudMnt = datosDeEntrada.Mnt;
             let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
             var registros = infoObtenida.registros;
-            if (datosDeEntrada.Accion == Variables.Grid.accion.buscar)
-                mnt.Navegador.setAttribute(Atributo.grid.navegador.total, infoObtenida.total.toString())
+            if (datosDeEntrada.Accion == atGrid.accion.buscar)
+                mnt.Navegador.setAttribute(atGrid.navegador.total, infoObtenida.total.toString())
 
             let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
             var datosDelGrid = document.createElement("tbody");
@@ -567,8 +567,8 @@
                 fila.append(celdaDelTd);
             }
 
-            let valor = this.BuscarValorDeColumnaRegistro(registro, Atributo.id);
-            fila.setAttribute(Atributo.valor, valor);
+            let valor = this.BuscarValorDeColumnaRegistro(registro, atControl.id);
+            fila.setAttribute(atControl.valor, valor);
 
             return fila;
         }
@@ -576,12 +576,12 @@
         private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number): HTMLTableCellElement {
             let celdaDelTd: HTMLTableCellElement = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
-            celdaDelTd.setAttribute(Atributo.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
-            celdaDelTd.setAttribute(Atributo.propiedad, `${columnaCabecera.propiedad}`);
+            celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
+            celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
 
             let idCheckDeSeleccion: string = `${fila.id}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
-            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+            celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
 
             if (columnaCabecera.claseCss === "columna-cabecera-oculta") {
                 celdaDelTd.style.visibility = "none";
@@ -607,7 +607,7 @@
             input.type = "text";
             input.id = `${idFila}.${columnaCabecera.propiedad}`;
             input.name = `${columnaCabecera.propiedad}.${this.IdGrid}`;
-            input.setAttribute(Atributo.propiedad, columnaCabecera.propiedad);
+            input.setAttribute(atControl.propiedad, columnaCabecera.propiedad);
 
             input.style.border = "0px";
             input.style.textAlign = columnaCabecera.estilo.textAlign;
@@ -615,7 +615,7 @@
 
             let idCheckBox = `${idFila}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckBox, input.id);
-            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+            celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
 
             input.readOnly = true;
             input.hidden = celdaDelTd.hidden;
@@ -630,14 +630,14 @@
             checkbox.type = "checkbox";
             checkbox.id = `${idFila}.${propiedad}`;
             checkbox.name = `${propiedad}.${this.IdGrid}`;
-            checkbox.setAttribute(Atributo.propiedad, `${propiedad}`);
+            checkbox.setAttribute(atControl.propiedad, `${propiedad}`);
 
             checkbox.style.border = "0px";
             checkbox.style.textAlign = "center";
             checkbox.style.width = "100%";
 
             let eventoOnClick: string = this.definirPulsarCheck(checkbox.id, checkbox.id);
-            celdaDelTd.setAttribute(Atributo.eventoJs.onclick, eventoOnClick);
+            celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
 
             checkbox.value = "false";
             celdaDelTd.append(checkbox);

@@ -3,7 +3,7 @@
     export function CrearCrudDeVariables(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudDeVariables(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+        Crud.crudMnt.LeerDatosParaElGrid(atGrid.accion.buscar, 0);
     }
 
     export class CrudDeVariables extends Crud.CrudMnt {

@@ -8,7 +8,7 @@
         }
 
         private get EditorDelGrid(): HTMLInputElement {
-            var idEditorMostrar: string = this.Selector.getAttribute(AtributoSelector.idEditorMostrar);
+            var idEditorMostrar: string = this.Selector.getAttribute(atSelector.idEditorMostrar);
             return <HTMLInputElement>document.getElementById(idEditorMostrar);
         }
 
@@ -18,14 +18,14 @@
         };
 
         private get idSelector(): string {
-            return this.Modal.getAttribute(AtributoSelector.selector);
+            return this.Modal.getAttribute(atSelector.selector);
         }
 
         private get ExpresionNombre(): string {
-            return this.Grid.getAttribute(Atributo.expresionElemento);
+            return this.Grid.getAttribute(atControl.expresionElemento);
         }
         private get ColumnaId(): string {
-            return this.Selector.getAttribute(AtributoSelector.propiedadParaFiltrar);
+            return this.Selector.getAttribute(atSelector.propiedadParaFiltrar);
         }
 
 
@@ -38,14 +38,14 @@
             let referenciaCheck: string = `chksel.${this.IdGrid}`;
             this.blanquearCheck(referenciaCheck);
             this.InfoSelector.QuitarTodos();
-            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados))
-                this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, '');
+            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
+                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
         };
 
 
         private InicializarListaDeSeleccionados() {
-            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados))
-                this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, '');
+            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
+                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
         }
 
         public AbrirModalDeSeleccion() {
@@ -115,8 +115,8 @@
         private elementosMarcados() {
             var ids = "";
             var elementos = new Array();
-            if (this.Selector.hasAttribute(AtributoSelector.ListaDeSeleccionados)) {
-                ids = this.Selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
+            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados)) {
+                ids = this.Selector.getAttribute(atSelector.ListaDeSeleccionados);
                 if (!ids.NoDefinida()) {
                     var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
                     var listaIds = ids.split(';');
@@ -141,7 +141,7 @@
 
         public ObtenerAnteriores() {
             let cantidad: number = Numero(this.Navegador.value);
-            let posicion: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.posicion));
+            let posicion: number = Numero(this.Navegador.getAttribute(atGrid.navegador.posicion));
             posicion = posicion - (cantidad * 2);
             if (posicion < 0)
                 posicion = 0;
@@ -149,7 +149,7 @@
         }
 
         public ObtenerSiguientes() {
-            let posicion: number = Numero(this.Navegador.getAttribute(Atributo.grid.navegador.posicion));
+            let posicion: number = Numero(this.Navegador.getAttribute(atGrid.navegador.posicion));
             this.Buscar(posicion);
         }
 
@@ -176,7 +176,7 @@
 
         private DefinirPeticionDeCargarGrid(posicion: number): string {
             var cantidad = this.Navegador.value.Numero();
-            var controlador = this.Navegador.getAttribute(Atributo.controlador);
+            var controlador = this.Navegador.getAttribute(atControl.controlador);
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
@@ -194,7 +194,7 @@
             let modal: ModalSeleccion = (peticion.DatosDeEntrada as ModalSeleccion);
             let resultado = peticion.resultado as ResultadoHtml;
 
-            if (modal.IdGrid === modal.Grid.getAttribute(Atributo.id)) {
+            if (modal.IdGrid === modal.Grid.getAttribute(atControl.id)) {
                 modal.ActualizarGridHtml(modal, resultado.html);
             }
         }
@@ -218,7 +218,7 @@
         }
 
         private DefinirPeticionLeerParaSelector(): string {
-            var controlador = this.Navegador.getAttribute(Atributo.controlador);
+            var controlador = this.Navegador.getAttribute(atControl.controlador);
             let filtroJson: string = this.ObtenerClausulaParaSelector();
 
             let url: string = `/${controlador}/${Ajax.EndPoint.Leer}`;
@@ -241,8 +241,8 @@
         }
 
         private ClausulaSegunLoEscrito(): ClausulaDeFiltrado {
-            var propiedad = this.Selector.getAttribute(AtributoSelector.popiedadBuscar);
-            var criterio = this.Selector.getAttribute(AtributoSelector.criterioBuscar);
+            var propiedad = this.Selector.getAttribute(atSelector.popiedadBuscar);
+            var criterio = this.Selector.getAttribute(atSelector.criterioBuscar);
             var valor = this.Selector.value.trim();
             var clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             return clausula;
@@ -250,7 +250,7 @@
 
         private ProcesarRegistrosLeidos(registros: Array<any>) {
             this.InicializarModal();
-            var propiedadmostrar = this.Selector.getAttribute(AtributoSelector.propiedadmostrar);
+            var propiedadmostrar = this.Selector.getAttribute(atSelector.propiedadmostrar);
             if (registros.length === 1) {
                 var registro = registros[0];
                 for (let key in registro) {
@@ -277,9 +277,9 @@
         }
 
         private mapearIdAlHtmlSelector(id: number) {
-            var listaDeIds = this.Selector.getAttribute(AtributoSelector.ListaDeSeleccionados);
+            var listaDeIds = this.Selector.getAttribute(atSelector.ListaDeSeleccionados);
             if (listaDeIds === null) {
-                var atributo = document.createAttribute(AtributoSelector.ListaDeSeleccionados);
+                var atributo = document.createAttribute(atSelector.ListaDeSeleccionados);
                 this.Selector.setAttributeNode(atributo);
                 listaDeIds = "";
             }
@@ -287,7 +287,7 @@
             if (!IsNullOrEmpty(listaDeIds))
                 listaDeIds = listaDeIds + ';';
             listaDeIds = listaDeIds + id;
-            this.Selector.setAttribute(AtributoSelector.ListaDeSeleccionados, listaDeIds);
+            this.Selector.setAttribute(atSelector.ListaDeSeleccionados, listaDeIds);
         }
 
 

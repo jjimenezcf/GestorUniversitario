@@ -19,9 +19,9 @@ const ModoOrdenacion = {
     ascedente: "ascendente",
     descendente: "descendente",
     sinOrden: "sin-orden"
-}
+};
 
-const Atributo = {
+const atControl = {
     propiedad: "propiedad",
     nombre: "name",
     criterio: "criterio-de-filtro",
@@ -40,32 +40,41 @@ const Atributo = {
     restrictor: "restrictor",
     eventoJs: {
         onclick: 'onclick'
-    },
-    grid: {
-        id: 'grid-del-mnt',
-        navegador: {
-            pagina: "pagina",
-            leidos: "leidos",
-            posicion: "posicion",
-            total: "total-en-bd"
-        }
     }
-    
-}
+};
 
-const AtributoSelectorArchivo = {
-    idArchivo: "id-archivo",
-    nombreArchivo: "nombre-archivo",
-    canvasVinculado: "canvas-vinculado",
-    imagenVinculada: "imagen-vinculada",
-    barraVinculada: "barra-vinculada",
+const atGrid = {
+    id: 'grid-del-mnt',
+    navegador: {
+        pagina: "pagina",
+        leidos: "leidos",
+        posicion: "posicion",
+        total: "total-en-bd"
+    },
+    cantidad: "cantidad-a-mostrar",
+    paginaDeDatos: "pagina-de-datos",
+    accion: {
+        buscar: "buscar",
+        siguiente: "sigiente",
+        anterior: "anterior",
+        ultima: "ultima",
+        ordenar: "ordenar"
+    }
+};
+
+const atArchivo = {
+    id: "id-archivo",
+    nombre: "nombre-archivo",
+    canvas: "canvas-vinculado",
+    imagen: "imagen-vinculada",
+    barra: "barra-vinculada",
     rutaDestino: "ruta-destino",
     extensionesValidas: "accept",
-    urlDeArchivo: "src"
-}
+    url: "src"
+};
 
-const AtributoSelector = {
-    popiedadBuscar : "propiedadBuscar",
+const atSelector = {
+    popiedadBuscar: "propiedadBuscar",
     criterioBuscar: "criterioBuscar",
     idEditorMostrar: "ideditormostrar",
     idGridModal: "id-grid-modal",
@@ -76,29 +85,29 @@ const AtributoSelector = {
     ListaDeSeleccionados: 'idsSeleccionados',
     selector: "selector",
     propiedadParaFiltrar: "propiedadFiltrar"
-}
+};
 
-const AtributosDeListas = {
+const atListas = {
     claseElemento: 'clase-elemento',
     guardarEn: 'guardar-en',
     mostrarPropiedad: 'mostrar-propiedad',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
     identificador: 'identificador'
-}
+};
 
 
-const AtributosDeRelacion = {
+const atRelacion = {
     navegarA: 'navegar-al-crud',
     restrictor: 'restrictor',
     orden: 'orden'
-}
+};
 
 
 const TagName = {
     input: "input",
     select: "select"
-}
+};
 
 const ClaseCss = {
     crtlValido: "propiedad-valida",
@@ -116,7 +125,7 @@ const ClaseCss = {
     barraRoja: "barra-roja",
     barraAzul: "barra-azul",
     contenedorModal: "contenedor-modal"
-}
+};
 
 const Ajax = {
     EndPoint: {
@@ -169,7 +178,7 @@ const LiteralMnt = {
 
 const LiteralGrid = {
     idCtrlCantidad: "nav_2_reg"
-}
+};
 
 const Evento = {
     ModalSeleccion: {
@@ -225,10 +234,10 @@ const Evento = {
         MostrarSiguiente: "mostrar-siguiente",
         MostrarUltimo: "mostrar-ultimo",
     }
-}
+};
 
 const TipoControl = {
-    Tipo : "tipo",
+    Tipo: "tipo",
     Editor: "editor",
     Check: "check",
     Selector: "selector",
@@ -248,7 +257,7 @@ const ModoTrabajo = {
     copiando: "copiando",
     borrando: "borrando",
     mantenimiento: "mantenimiento"
-}
+};
 
 
 const Relaciones = {
@@ -264,22 +273,11 @@ const Variables = {
     Puesto: {
         restrictor: "idpuesto",
         puesto: "nombre-puesto",
-    },
-    Grid: {
-        cantidad: "cantidad-a-mostrar",
-        paginaDeDatos: "pagina-de-datos",
-        accion: {
-            buscar: "buscar",
-            siguiente: "sigiente",
-            anterior: "anterior",
-            ultima: "ultima",
-            ordenar: "ordenar"
-        }
     }
-}
+};
 
 const Sesion = {
     historial: "historial",
     restrictorDeEntrada: "restrictor"
-}
+};
 

@@ -3,7 +3,7 @@
     export function CrearCrudDePuestosDeTrabajo(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDePuestosDeTrabajo(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.LeerDatosParaElGrid(Variables.Grid.accion.buscar, 0);
+        Crud.crudMnt.LeerDatosParaElGrid(atGrid.accion.buscar, 0);
     }
 
     export class CrudDePuestosDeTrabajo extends Crud.CrudMnt {
