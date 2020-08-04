@@ -36,7 +36,7 @@
 
             this.InicializarNavegador();
             this.InicializarSelectores();
-            this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Controlador);
+            this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
         }
 
 
@@ -160,12 +160,9 @@
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
-            if (idCheck === idDelInput) {
+            if (idCheck !== idDelInput) {
                 check.checked = !check.checked;
-                return;
             }
-
-            check.checked = !check.checked;
 
             if (check.checked) {
                 let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
@@ -181,8 +178,8 @@
         }
 
         public ObtenerUltimos() {
-            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
-            let cantidad: number = Numero(this.Navegador.value);
+            let total: number = this.Navegador.Total;
+            let cantidad: number = this.Navegador.Cantidad;
             let ultimaPagina: number = Math.ceil(total / cantidad);
             if (ultimaPagina <= 1)
                 return;
@@ -194,8 +191,8 @@
         }
 
         public ObtenerAnteriores() {
-            let cantidad: number = Numero(this.Navegador.value);
-            let pagina: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
+            let cantidad: number = this.Navegador.Cantidad;
+            let pagina: number = this.Navegador.Pagina;
             if (pagina == 1)
                 return;
 
@@ -207,10 +204,26 @@
             this.Buscar(atGrid.accion.anterior, posicion);
         }
 
+        public RestaurarPagina() {
+
+            this.Navegador.EsRestauracion = false;
+            let cantidad: number = this.Navegador.Cantidad;
+            let pagina: number = this.Navegador.Pagina;
+            if (pagina <= 1)
+                this.Buscar(atGrid.accion.buscar,0);
+
+            let posicion: number = (pagina - 1) * cantidad;
+
+            if (posicion < 0)
+                posicion = 0;
+
+            this.Buscar(atGrid.accion.restaurar, posicion);
+        }
+
         public ObtenerSiguientes() {
-            let cantidad: number = Numero(this.Navegador.value);
-            let pagina: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
-            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
+            let cantidad: number = this.Navegador.Cantidad;
+            let pagina: number = this.Navegador.Pagina;
+            let total: number = this.Navegador.Total;
             let posicion: number = pagina * cantidad;
             if (posicion >= total)
                 return;
@@ -220,7 +233,7 @@
 
         private DefinirPeticionDeBorrado(ids: string): string {
             let idsJson: JSON = JSON.parse(`[${ids}]`);
-            var controlador = this.Navegador.getAttribute(atControl.controlador);
+            var controlador = this.Navegador.Controlador;
             let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
             let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idsJson)}`;
             let peticion: string = url + '?' + parametros;
@@ -228,28 +241,12 @@
         }
 
         public Buscar(accion: string, posicion: number) {
-            this.LeerDatosParaElGrid(accion, posicion);
-            //if (this.Navegador === null)
-            //    Mensaje(TipoMensaje.Error, `No está definido el control de la cantidad de elementos a obtener`);
-            //else {
-            //    let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerGridEnHtml, posicion);
 
-            //    let a = new ApiDeAjax.DescriptorAjax(this
-            //        , Ajax.EndPoint.LeerGridEnHtml
-            //        , this
-            //        , url
-            //        , ApiDeAjax.TipoPeticion.Asincrona
-            //        , ApiDeAjax.ModoPeticion.Get
-            //        , this.ActualizarGrid
-            //        , null
-            //    );
-
-            //    a.Ejecutar();
-            //}
-        }
-
-        public LeerDatosParaElGrid(accion: string, posicion: number) {
-
+            if (this.Navegador.EsRestauracion) {
+                this.RestaurarPagina();
+                return;
+            }
+            
             var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
 
             let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
@@ -277,8 +274,9 @@
         //}
 
         private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
-            var cantidad = this.Navegador.value.Numero();
-            var controlador = this.Navegador.getAttribute(atControl.controlador);
+            var posicion = posicion;
+            var cantidad = this.Navegador.Cantidad;
+            var controlador = this.Navegador.Controlador;
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
@@ -304,11 +302,11 @@
         }
 
         public CargarListaDinamica(selector: HTMLInputElement) {
-            super.CargarListaDinamica(selector, this.Controlador);
+            super.CargarListaDinamica(selector, this.Navegador.Controlador);
         }
 
         public SeleccionarListaDinamica(selector: HTMLInputElement) {
-            super.CargarListaDinamica(selector, this.Controlador);
+            super.CargarListaDinamica(selector, this.Navegador.Controlador);
         }
 
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {

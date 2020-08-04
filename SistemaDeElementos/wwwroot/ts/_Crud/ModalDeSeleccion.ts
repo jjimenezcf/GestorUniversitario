@@ -140,8 +140,8 @@
         }
 
         public ObtenerAnteriores() {
-            let cantidad: number = Numero(this.Navegador.value);
-            let posicion: number = Numero(this.Navegador.getAttribute(atGrid.navegador.posicion));
+            let cantidad: number = this.Navegador.Cantidad;
+            let posicion: number = this.Navegador.Posicion;
             posicion = posicion - (cantidad * 2);
             if (posicion < 0)
                 posicion = 0;
@@ -149,7 +149,7 @@
         }
 
         public ObtenerSiguientes() {
-            let posicion: number = Numero(this.Navegador.getAttribute(atGrid.navegador.posicion));
+            let posicion: number = this.Navegador.Posicion;
             this.Buscar(posicion);
         }
 
@@ -175,8 +175,8 @@
         }
 
         private DefinirPeticionDeCargarGrid(posicion: number): string {
-            var cantidad = this.Navegador.value.Numero();
-            var controlador = this.Navegador.getAttribute(atControl.controlador);
+            var cantidad = this.Navegador.Cantidad;
+            var controlador = this.Navegador.Controlador;
             var filtroJson = this.ObtenerFiltros();
             var ordenJson = this.ObtenerOrdenacion();
 
@@ -218,7 +218,7 @@
         }
 
         private DefinirPeticionLeerParaSelector(): string {
-            var controlador = this.Navegador.getAttribute(atControl.controlador);
+            var controlador = this.Navegador.Controlador;
             let filtroJson: string = this.ObtenerClausulaParaSelector();
 
             let url: string = `/${controlador}/${Ajax.EndPoint.Leer}`;

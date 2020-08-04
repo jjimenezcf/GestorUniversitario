@@ -50,7 +50,7 @@ class Diccionario<T> implements IDiccionario<T> {
     public Obtener(clave: string): T {
         let pos: number = this._claves.indexOf(clave);
         if (pos >= 0)
-            return (this._valores.slice(pos)[0]) as T;
+            return this._valores.slice(pos)[0] as T;
 
         return undefined;
     }
@@ -58,20 +58,14 @@ class Diccionario<T> implements IDiccionario<T> {
     public Valor(posicion: number): T {
         if (this._valores.length <= posicion)
             return undefined;
-        let clave: string = this._claves.slice(posicion)[0];
+
+        let clave: string = this.Clave(posicion);
         return this.Obtener(clave);
-    }
-
-    public Elemento(posicion: number): T {
-        if (posicion <= this.Elementos)
-            return this._valores.splice(posicion)[0];
-
-        return undefined;
     }
 
     public Clave(posicion: number): string {
         if (posicion <= this.Elementos)
-            return this._claves.splice(posicion)[0];
+            return this._claves.slice(posicion)[0];
 
         return undefined;
     }

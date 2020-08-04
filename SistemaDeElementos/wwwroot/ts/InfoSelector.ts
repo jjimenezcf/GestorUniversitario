@@ -105,8 +105,8 @@ class InfoSelector {
         return Elemento.ElementoVacio;
     }
 
-    InsertarId(id) {
-        if (!id || isNaN(parseInt(id))) {
+    public InsertarId(id: number) {
+        if (!id || isNaN(id)) {
             console.error(`Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
         }
@@ -144,22 +144,22 @@ class InfoSelector {
         return this.Cantidad;
     }
 
-    InsertarIds(ids) {
+    //InsertarIds(ids: Array<number>) {
 
-        if (!ids || ids.length === 1 && isNaN(parseInt(ids))) {
-            console.log(`Ha intentado insertar en la lista un array de ids no válidos ${ids}`);
-            return -2;
-        }
+    //    if (!ids || (ids.length === 1 && isNaN(ids[0]))) {
+    //        console.log(`Ha intentado insertar en la lista un array de ids no válidos ${ids}`);
+    //        return -2;
+    //    }
 
-        for (var i = 0; i < ids.length; i++) {
-            var idSeleccionado = ids[i];
-            this.InsertarId(idSeleccionado);
-        }
+    //    for (var i = 0; i < ids.length; i++) {
+    //        var idSeleccionado = ids[i];
+    //        this.InsertarId(idSeleccionado);
+    //    }
 
-        return this.Cantidad;
-    }
+    //    return this.Cantidad;
+    //}
 
-    Buscar(id): number {
+    public Buscar(id: number): number {
         return this.seleccionados.indexOf(id);
     }
 

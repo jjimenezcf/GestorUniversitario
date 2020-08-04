@@ -234,10 +234,11 @@ namespace UtilidadesParaIu
                                class = ¨cantidad-grid¨
                                value=¨{grid.CantidadPorLeer}¨ 
                                min=¨1¨ step=¨1¨ max=¨999¨ 
+                               pagina=¨1¨  
                                posicion=¨{grid.Ultimo_Leido}¨  
                                controlador=¨{grid.Controlador}¨  
                                total-en-bd=¨{grid.TotalEnBd}¨ 
-                               title=¨leidos {grid.filas.Count} desde la posición {grid.PosicionInicial}¨ />
+                               title=¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd/grid.CantidadPorLeer))}¨ />
                     </div>
                     <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨{accionAnterior}¨>
@@ -246,7 +247,7 @@ namespace UtilidadesParaIu
                     </div>
                 </div>
                 <div id= ¨{grid.IdHtml}_info¨ class=¨info-grid¨>
-                   {grid.filas.Count} desde la posición {grid.PosicionInicial}
+                   ¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}¨
                 </div>
             </div>
             ";

@@ -3,7 +3,7 @@
     export function CrearCrudDeRoles(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDeRoles(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.LeerDatosParaElGrid(atGrid.accion.buscar, 0);
+        Crud.crudMnt.Buscar(atGrid.accion.buscar, 0);
     }
 
     export class CrudDeRoles extends Crud.CrudMnt {

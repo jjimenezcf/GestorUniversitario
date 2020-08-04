@@ -126,10 +126,147 @@
 
     }
 
+    class InfoNavegador {
+        public cantidad: number;
+        public posicion: number;
+        public pagina: number;
+        public leidos: number;
+        public total: number;
+    }
+
+    class Navegador {
+
+        private id: string;
+        private idInfo: string;
+
+        private esRestauracion: boolean;
+
+        public get EsRestauracion(): boolean {
+            return this.esRestauracion;
+        }
+        public set EsRestauracion(valor: boolean) {
+            this.esRestauracion = valor;
+        }
+
+        public get Cantidad(): number {
+            return this.Navegador.value.Numero();
+        }
+        public get Posicion(): number {
+            return this.Navegador.getAttribute(atGrid.navegador.posicion).Numero();
+        }
+        public get Pagina(): number {
+            return this.Navegador.getAttribute(atGrid.navegador.pagina).Numero();
+        }
+        public get Leidos(): number {
+            return this.Navegador.getAttribute(atGrid.navegador.leidos).Numero();
+        }
+        public get Total(): number {
+            return this.Navegador.getAttribute(atGrid.navegador.total).Numero();
+        }
+        public get Id(): string {
+            return this.id;
+        }
+
+        public set Cantidad(valor: number) {
+            this.Navegador.value = valor.toString();
+        }
+        public set Posicion(valor: number) {
+            this.Navegador.setAttribute(atGrid.navegador.posicion, valor.toString());
+        }
+        public set Pagina(valor: number) {
+            this.Navegador.setAttribute(atGrid.navegador.pagina, valor.toString());
+        }
+        public set Titulo(valor: string) {
+            this.Navegador.setAttribute(atGrid.navegador.titulo, valor);
+        }
+        public set Info(valor: string) {
+            let div: HTMLDivElement = document.getElementById(this.idInfo) as HTMLDivElement;
+            div.innerHTML = valor
+        }
+        public set Leidos(valor: number) {
+            this.Navegador.setAttribute(atGrid.navegador.leidos, valor.toString());
+        }
+        public set Total(valor: number) {
+            this.Navegador.setAttribute(atGrid.navegador.total, valor.toString());
+        }
+        public set Id(valor: string) {
+            this.id = valor;
+        }
+
+        constructor(idGrid: string) {
+            this.id = `${idGrid}_${atGrid.idCtrlCantidad}`;
+            this.idInfo = `${idGrid}_${atGrid.idInfo}`;
+        }
+
+        public get Navegador(): HTMLInputElement {
+            let input = document.getElementById(this.Id) as HTMLInputElement;
+            return input;
+        }
+
+        public get Controlador(): string {
+            return this.Navegador.getAttribute(atControl.controlador);
+        }
+
+        public get Datos(): InfoNavegador {
+            let datos: InfoNavegador = new InfoNavegador();
+            datos.cantidad = this.Cantidad;
+            datos.leidos = this.Leidos;
+            datos.pagina = this.Pagina;
+            datos.posicion = this.Posicion;
+            datos.total = this.Total;
+            return datos;
+        }
+
+        public RestaurarDatos(datos: InfoNavegador): void {
+            if (datos !== undefined) {
+                this.Cantidad = datos.cantidad;
+                this.Leidos = datos.leidos;
+                this.Pagina = datos.pagina;
+                this.Posicion = datos.posicion;
+                this.Total = datos.total;
+                this.EsRestauracion = true;
+            }
+            else {
+                this.Cantidad = 5;
+                this.Leidos = 0;
+                this.Pagina = 1;
+                this.Posicion = 0;
+                this.Total = 0;
+                this.esRestauracion = false;
+            }
+        }
+
+        public Actualizar(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+            this.Leidos = registrosLeidos;
+            this.Posicion = accion == atGrid.accion.ultima ? this.Total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
+            let paginasTotales: number = Math.ceil(this.Total / this.Cantidad);
+
+            let paginaAnterior: number = this.Pagina;
+            let paginaNueva: number = 1;
+            if (accion === atGrid.accion.siguiente)
+                paginaNueva = paginaAnterior + 1;
+            else
+                if (accion === atGrid.accion.anterior)
+                    paginaNueva = paginaAnterior - 1;
+                else
+                    if (accion === atGrid.accion.restaurar)
+                        paginaNueva = paginaAnterior;
+                    else
+                        if (accion === atGrid.accion.ultima) {
+                            posicionDesdeLaQueSeLeyo = this.Total - registrosLeidos;
+                            paginaNueva = (this.Cantidad >= this.Total) ? 1 : paginasTotales;
+                        }
+            this.Pagina = paginaNueva <= 0 ? 1 : paginaNueva;
+            this.Titulo = `Pagina ${this.Pagina} de ${paginasTotales}`;
+            this.Info = `Pagina ${this.Pagina} de ${paginasTotales}`;
+        }
+    }
+
     export class GridMnt extends CrudBase {
 
         protected Ordenacion: Ordenacion;
         protected InfoSelector: InfoSelector;
+        protected Navegador: Navegador;
 
         private idPanelMnt: string;
 
@@ -155,32 +292,18 @@
             return document.getElementById(idTabla) as HTMLTableElement;
         }
 
-        private _navegador: HTMLInputElement;
-
-        protected get Navegador(): HTMLInputElement {
-            if (this._navegador === undefined || this._navegador === null)
-                this._navegador = this.ObtenerNavegador();
-
-            return this._navegador;
-        }
-
-        protected get Controlador(): string {
-            return this.Navegador.getAttribute(atControl.controlador);
-        }
-
         constructor(idPanelMnt: string) {
             super();
             this.idPanelMnt = idPanelMnt;
             this.InfoSelector = new InfoSelector(this.IdGrid);
+            this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
         }
 
         protected InicializarNavegador() {
             if (this.HayHistorial) {
-                let cantidad: string = this.Estado.Obtener(atGrid.cantidad);
-                if (NumeroMayorDeCero(cantidad))
-                    this.Navegador.value = cantidad;
+                this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             }
 
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
@@ -194,11 +317,8 @@
 
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
-            let registrosSolicitados: string = this.Estado.Obtener(atGrid.cantidad);
-            if (NumeroMayorDeCero(registrosSolicitados))
-                this.Navegador.value = registrosSolicitados;
 
-            this.ActualizarPaginaDeNavegacion(accion, posicionDesdeLaQueSeLeyo, Numero(this.Navegador.value), registrosLeidos);
+            this.Navegador.Actualizar(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
 
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
@@ -207,30 +327,6 @@
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
-        }
-
-        private ActualizarPaginaDeNavegacion(accion: string, posicionDesdeLaQueSeLeyo: number, registrosSolicitados: number, registrosLeidos: number) {
-            this.Navegador.value = registrosSolicitados.toString();
-            this.Navegador.setAttribute(atGrid.navegador.leidos, registrosLeidos.toString());
-
-            let total: number = Numero(this.Navegador.getAttribute(atGrid.navegador.total));
-            let posicionNueva: number = accion == atGrid.accion.ultima ? total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
-            this.Navegador.setAttribute(atGrid.navegador.posicion, posicionNueva.toString());
-
-
-            let paginaAnterior: number = Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
-            let paginaNueva: number = 1;
-            if (accion == atGrid.accion.siguiente)
-                paginaNueva = paginaAnterior + 1;
-            else
-                if (accion == atGrid.accion.anterior)
-                    paginaNueva = paginaAnterior - 1;
-                else
-                    if (accion == atGrid.accion.ultima) {
-                        posicionDesdeLaQueSeLeyo = total - registrosLeidos;
-                        paginaNueva = (registrosSolicitados >= total) ? 1 : Math.ceil(total / registrosSolicitados);
-                    }
-            this.Navegador.setAttribute(atGrid.navegador.pagina, paginaNueva <= 0 ? "1" : paginaNueva.toString());
         }
 
         protected EstablecerOrdenacion(idcolumna: string) {
@@ -250,12 +346,6 @@
 
             htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
 
-        }
-
-        private ObtenerNavegador(): HTMLInputElement {
-            let idCrtlCantidad: string = `${this.IdGrid}_${LiteralGrid.idCtrlCantidad}`;
-            let input = document.getElementById(`${idCrtlCantidad}`) as HTMLInputElement;
-            return input;
         }
 
         protected ObtenerExpresionMostrar(idCheck: string): string {
@@ -433,6 +523,11 @@
             this.InfoSelector.Quitar(id);
         }
 
+        protected EstaMarcado(idCheck: string): boolean {
+            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            return this.InfoSelector.Buscar(Numero(id)) >= 0 ? true : false;
+        }
+
         private ObtenerElIdDelElementoDelaFila(idCheck: string): string {
             let columnaId: string = idCheck.replace(".chksel", `.${Literal.id}`);
             let inputId: HTMLInputElement = document.getElementById(columnaId) as HTMLInputElement;
@@ -470,6 +565,7 @@
 
         protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
+
             if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
                 contenedorGrid.MarcarElementos();
                 contenedorGrid.InfoSelector.SincronizarCheck();
@@ -519,7 +615,8 @@
 
         public AntesDeNavegar() {
             super.AntesDeNavegar();
-            this.Estado.Agregar(atGrid.cantidad, this.Navegador.value);
+            this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
+            this.Estado.Agregar(atGrid.selector, this.InfoSelector);
         }
 
 
@@ -574,7 +671,7 @@
             let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
             var registros = infoObtenida.registros;
             if (datosDeEntrada.Accion == atGrid.accion.buscar)
-                mnt.Navegador.setAttribute(atGrid.navegador.total, infoObtenida.total.toString())
+                mnt.Navegador.Total = infoObtenida.total;
 
             let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
             var datosDelGrid = document.createElement("tbody");

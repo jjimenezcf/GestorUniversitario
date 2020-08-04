@@ -46,20 +46,25 @@ const atControl = {
 const atGrid = {
     id: 'grid-del-mnt',
     navegador: {
+        cantidad: "cantidad-a-mostrar",
         pagina: "pagina",
         leidos: "leidos",
         posicion: "posicion",
-        total: "total-en-bd"
+        total: "total-en-bd",
+        titulo: "title"
     },
-    cantidad: "cantidad-a-mostrar",
     paginaDeDatos: "pagina-de-datos",
     accion: {
         buscar: "buscar",
         siguiente: "sigiente",
         anterior: "anterior",
+        restaurar: "restaurar",
         ultima: "ultima",
         ordenar: "ordenar"
-    }
+    },
+    selector: "selector",    
+    idCtrlCantidad: "nav_2_reg",
+    idInfo: "info"
 };
 
 const atArchivo = {
@@ -174,10 +179,6 @@ const LiteralEdt = {
 const LiteralMnt = {
     posicion: "posicion",
     postfijoDeCheckDeSeleccion: ".chksel"
-};
-
-const LiteralGrid = {
-    idCtrlCantidad: "nav_2_reg"
 };
 
 const Evento = {

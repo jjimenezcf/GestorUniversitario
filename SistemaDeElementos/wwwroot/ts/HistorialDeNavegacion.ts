@@ -49,7 +49,7 @@ class HistorialDeNavegacion {
     }
 
     public Elemento(posicion: number): EstadoPagina {
-        let objeto: EstadoPagina = this._paginas.Elemento(posicion);
+        let objeto: EstadoPagina = this._paginas.Valor(posicion);
         if (objeto !== undefined) {
             return this.ObjetoToEstadoPagina(this._paginas.Clave(posicion), objeto);
         }

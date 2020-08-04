@@ -410,9 +410,11 @@
                 let selector: HTMLInputElement = selectores[i] as HTMLInputElement;
                 let propiedad: string = selector.getAttribute(atControl.propiedad);
                 let valor: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
-                let visorVinculado: string = selector.getAttribute(atArchivo.imagen);
-                selector.setAttribute(atArchivo.id, valor.toString());
-                this.MapearImagenes(panel, elementoJson, visorVinculado);
+                if (valor !== null) {
+                    let visorVinculado: string = selector.getAttribute(atArchivo.imagen);
+                    selector.setAttribute(atArchivo.id, valor.toString());
+                    this.MapearImagenes(panel, elementoJson, visorVinculado);
+                }
             }
 
         }
