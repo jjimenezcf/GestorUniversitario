@@ -63,7 +63,7 @@ class InfoSelector {
         console.log(`Ha creado el infoselector ${idGrid}`);
     }
 
-    deshabilitarCheck(deshabilitar) {
+    private deshabilitarCheck(deshabilitar: boolean) {
 
         var ejecutar = false;
         //si has desmarcado checks y los seleccionados son menos que los seleccionables --> ok a habilitar
@@ -144,21 +144,6 @@ class InfoSelector {
         return this.Cantidad;
     }
 
-    //InsertarIds(ids: Array<number>) {
-
-    //    if (!ids || (ids.length === 1 && isNaN(ids[0]))) {
-    //        console.log(`Ha intentado insertar en la lista un array de ids no válidos ${ids}`);
-    //        return -2;
-    //    }
-
-    //    for (var i = 0; i < ids.length; i++) {
-    //        var idSeleccionado = ids[i];
-    //        this.InsertarId(idSeleccionado);
-    //    }
-
-    //    return this.Cantidad;
-    //}
-
     public Buscar(id: number): number {
         return this.seleccionados.indexOf(id);
     }
@@ -191,67 +176,9 @@ class InfoSelector {
         return ids;
     }
 
-    SincronizarCheck() {
+    public SincronizarCheck() {
         this.deshabilitarCheck(true);
     }
 
 }
-
-
-class InfoSelectores {
-
-    _infoSelectores = new Array<InfoSelector>();
-
-    constructor() {
-        console.log("Aray de Infoselectores construido");
-    }
-
-    get Cantidad(): number {
-        if (!this._infoSelectores)
-            return 0;
-        else
-            return this._infoSelectores.length;
-    }
-
-    Obtener(id: string): InfoSelector {
-        if (!this._infoSelectores || this._infoSelectores.length === 0)
-            return undefined;
-
-        for (var i = 0; i < this.Cantidad; i++) {
-            if (this._infoSelectores[i].Id === id)
-                return this._infoSelectores[i];
-        }
-        return undefined;
-    }
-
-
-    Insertar(infoSelector: InfoSelector): number {
-        var infSel = this.Obtener(infoSelector.Id);
-        if (!infSel)
-            this._infoSelectores.push(infoSelector);
-
-        return this._infoSelectores.length;
-    }
-
-    Borrar(id: string): number {
-        for (var i = 0; i < this.Cantidad; i++) {
-            if (this._infoSelectores[i].Id === id)
-                this._infoSelectores.splice(i, 1);
-        }
-        return this._infoSelectores.length;
-    }
-
-    Crear(id: string): InfoSelector {
-        this.Borrar(id);
-        let infSel: InfoSelector = new InfoSelector(id);
-        infoSelectores.Insertar(infSel);
-        return infSel;
-    }
-}
-
-
-var infoSelectores = new InfoSelectores();
-
-
-
 

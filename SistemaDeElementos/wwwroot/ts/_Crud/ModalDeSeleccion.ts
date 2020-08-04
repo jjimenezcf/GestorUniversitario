@@ -166,12 +166,11 @@
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
-                , this.ActualizarGrid
+                , this.CrearFilasEnElGrid
                 , null
             );
 
             a.Ejecutar();
-
         }
 
         private DefinirPeticionDeCargarGrid(posicion: number): string {
@@ -188,15 +187,6 @@
                 `&${Ajax.Param.orden}=${ordenJson}`;
             let peticion: string = url + '?' + parametros;
             return peticion;
-        }
-
-        private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-            let modal: ModalSeleccion = (peticion.DatosDeEntrada as ModalSeleccion);
-            let resultado = peticion.resultado as ResultadoHtml;
-
-            if (modal.IdGrid === modal.Grid.getAttribute(atControl.id)) {
-                modal.ActualizarGridHtml(modal, resultado.html);
-            }
         }
 
         public TextoSelectorCambiado(valor: string) {

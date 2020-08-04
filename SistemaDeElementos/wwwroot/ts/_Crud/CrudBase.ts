@@ -257,9 +257,10 @@
             let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
             ordenInput.value = "";
 
-            let estadoDeLaPagina: EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(navegarA);
-            estadoDeLaPagina.Agregar(atRelacion.restrictor, filtroRestrictor);
-            EntornoSe.Historial.GuardarEstadoDePagina(estadoDeLaPagina);
+            let estadoDeLaPaginaALaQueNavego: EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(navegarA);
+            estadoDeLaPaginaALaQueNavego.Agregar(atRelacion.restrictor, filtroRestrictor);
+            EntornoSe.Historial.GuardarEstadoDePagina(estadoDeLaPaginaALaQueNavego);
+            this.Estado.Agregar(atGrid.idSeleccionado, filtroRestrictor.Valor)
             this.Navegar(form);
         }
 

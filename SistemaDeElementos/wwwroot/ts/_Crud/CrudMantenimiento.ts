@@ -205,19 +205,17 @@
         }
 
         public RestaurarPagina() {
-
             this.Navegador.EsRestauracion = false;
             let cantidad: number = this.Navegador.Cantidad;
             let pagina: number = this.Navegador.Pagina;
             if (pagina <= 1)
-                this.Buscar(atGrid.accion.buscar,0);
-
-            let posicion: number = (pagina - 1) * cantidad;
-
-            if (posicion < 0)
-                posicion = 0;
-
-            this.Buscar(atGrid.accion.restaurar, posicion);
+                this.Buscar(atGrid.accion.buscar, 0);
+            else {
+                let posicion: number = (pagina - 1) * cantidad;
+                if (posicion < 0)
+                    posicion = 0;
+                this.Buscar(atGrid.accion.restaurar, posicion);
+            }
         }
 
         public ObtenerSiguientes() {
@@ -244,23 +242,24 @@
 
             if (this.Navegador.EsRestauracion) {
                 this.RestaurarPagina();
-                return;
             }
-            
-            var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
+            else {
 
-            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
-            let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.LeerDatosParaElGrid
-                , datosDePeticion
-                , url
-                , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.CrearFilasEnElGrid
-                , null
-            );
+                var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
 
-            a.Ejecutar();
+                let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
+                let a = new ApiDeAjax.DescriptorAjax(this
+                    , Ajax.EndPoint.LeerDatosParaElGrid
+                    , datosDePeticion
+                    , url
+                    , ApiDeAjax.TipoPeticion.Asincrona
+                    , ApiDeAjax.ModoPeticion.Get
+                    , this.CrearFilasEnElGrid
+                    , null
+                );
+
+                a.Ejecutar();
+            }
         }
 
 

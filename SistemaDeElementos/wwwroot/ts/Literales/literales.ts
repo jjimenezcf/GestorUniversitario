@@ -45,6 +45,7 @@ const atControl = {
 
 const atGrid = {
     id: 'grid-del-mnt',
+    idSeleccionado: 'id-seleccionado',
     navegador: {
         cantidad: "cantidad-a-mostrar",
         pagina: "pagina",

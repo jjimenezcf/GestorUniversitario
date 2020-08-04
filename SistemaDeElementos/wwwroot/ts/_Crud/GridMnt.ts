@@ -554,19 +554,11 @@
             }
         }
 
-        protected ActualizarGridHtml(contenedorGrid: GridMnt, resultadoHtml: string) {
-            contenedorGrid.Grid.innerHTML = resultadoHtml;
-            contenedorGrid.InicializarNavegador();
-            if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
-                contenedorGrid.MarcarElementos();
-                contenedorGrid.InfoSelector.SincronizarCheck();
-            }
-        }
 
         protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
-
-            if (contenedorGrid.InfoSelector !== undefined && contenedorGrid.InfoSelector.Cantidad > 0) {
+            if (this.Estado.Contiene(atGrid.idSeleccionado)) {
+                this.InfoSelector.InsertarId(this.Estado.Obtener(atGrid.idSeleccionado))            
                 contenedorGrid.MarcarElementos();
                 contenedorGrid.InfoSelector.SincronizarCheck();
             }
@@ -616,7 +608,6 @@
         public AntesDeNavegar() {
             super.AntesDeNavegar();
             this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
-            this.Estado.Agregar(atGrid.selector, this.InfoSelector);
         }
 
 
