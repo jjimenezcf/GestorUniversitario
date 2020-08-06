@@ -36,11 +36,15 @@
     <script src="~/ts/_Crud/ModalDeSeleccion.js"></script>
     <script src="~/ts/_Crud/CrudMantenimiento.js"></script>
     <script src="~/ts/_Crud/GestorDeEventos.js"></script>
+    <script>
+        EntornoSe.InicializarHistorial();
+    </script>
 </head>
 
 @using ServicioDeDatos
 
 <body>
+
     @{
         var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
     }

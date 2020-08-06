@@ -31,7 +31,7 @@
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this._idPanelCreacion = idPanelCreacion;
-            this.PanelDeMnt = crud.PanelDeMnt;
+            this.PanelDeMnt = crud.PanelMnt;
             this.CrudDeMnt = crud;
         }
 

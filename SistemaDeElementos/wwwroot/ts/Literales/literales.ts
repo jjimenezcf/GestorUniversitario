@@ -46,6 +46,7 @@ const atControl = {
 const atGrid = {
     id: 'grid-del-mnt',
     idSeleccionado: 'id-seleccionado',
+    nombreSeleccionado: 'nombre-Seleccionado',
     navegador: {
         cantidad: "cantidad-a-mostrar",
         pagina: "pagina",
@@ -104,8 +105,8 @@ const atListas = {
 
 
 const atRelacion = {
-    navegarA: 'navegar-al-crud',
-    restrictor: 'restrictor',
+    navegarAlCrud: 'navegar-al-crud',
+    idRestrictor: 'restrictor',
     orden: 'orden'
 };
 
@@ -280,6 +281,9 @@ const Variables = {
 
 const Sesion = {
     historial: "historial",
-    restrictorDeEntrada: "restrictor"
+    restrictor: "restrictor",
+    paginaDestino: "pagina-destino",
+    paginaActual: "pagina-actual",
+    urlActual: "url-actual"
 };
 

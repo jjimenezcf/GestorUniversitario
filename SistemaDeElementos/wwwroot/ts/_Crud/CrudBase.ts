@@ -116,32 +116,31 @@
             this.modoTrabajo = modo;
         }
 
-
-
-        private _idPagina: string;
-
         protected get Pagina(): string {
-            return this._idPagina;
-        }
-        protected set Pagina(idPagina: string) {
-            EntornoSe.InicializarHistorial();
-            this._idPagina = idPagina;
+            return this.Estado.Obtener(Sesion.paginaActual);
         }
 
-        private _estado: EstadoPagina = undefined;
+        private _estado: HistorialSe.EstadoPagina = undefined;
 
-        public get Estado(): EstadoPagina {
-            if (this._estado === undefined)
-                this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this.Pagina);
+        public get Estado(): HistorialSe.EstadoPagina {
+            if (this._estado === undefined) {
+                throw new Error("Debe definir la variable estado");
+            }
             return this._estado;
         }
 
-        public get HayHistorial(): boolean {
-            return EntornoSe.Historial.HayHistorial(this.Pagina);
+        public set Estado(valor: HistorialSe.EstadoPagina) {
+                this._estado = valor;
         }
 
-
         constructor() {
+        }
+
+        public Inicializar(pagina: string) {
+            if (EntornoSe.Historial.HayHistorial(pagina))
+                this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(pagina);
+            else
+                this._estado = new HistorialSe.EstadoPagina(pagina);
         }
 
         //funciones de ayuda para la herencia
@@ -240,7 +239,7 @@
 
         public NavegarARelacionar(idOpcionDeMenu: string, filtroRestrictor: DatosRestrictor) {
 
-            let filtro: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+            let filtroJson: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
 
             let form: HTMLFormElement = document.getElementById(idOpcionDeMenu) as HTMLFormElement;
 
@@ -248,31 +247,30 @@
                 throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
             }
 
-            let navegarA: string = form.getAttribute(atRelacion.navegarA);
-            let idRestrictor: string = form.getAttribute(atRelacion.restrictor) as string;
+            let navegarAlCrud: string = form.getAttribute(atRelacion.navegarAlCrud);
+            let idRestrictor: string = form.getAttribute(atRelacion.idRestrictor) as string;
             let idOrden: string = form.getAttribute(atRelacion.orden) as string;
 
             let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
-            restrictor.value = filtro;
+            restrictor.value = filtroJson;
             let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
             ordenInput.value = "";
 
-            let estadoDeLaPaginaALaQueNavego: EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(navegarA);
-            estadoDeLaPaginaALaQueNavego.Agregar(atRelacion.restrictor, filtroRestrictor);
-            EntornoSe.Historial.GuardarEstadoDePagina(estadoDeLaPaginaALaQueNavego);
-            this.Estado.Agregar(atGrid.idSeleccionado, filtroRestrictor.Valor)
-            this.Navegar(form);
+            let valores: Diccionario<any> = new Diccionario<any>();
+            valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
+            valores.Agregar(Sesion.restrictor, filtroRestrictor);
+            this.Navegar(form, valores);
         }
 
-        private Navegar(form: HTMLFormElement) {
-            this.AntesDeNavegar();
+        private Navegar(form: HTMLFormElement, valores: Diccionario<any>) {
+            this.AntesDeNavegar(valores);
             EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
             EntornoSe.Historial.Persistir();
             PonerCapa();
             form.submit();
         }
 
-        public AntesDeNavegar() {
+        public AntesDeNavegar(valores: Diccionario<any>) {
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {

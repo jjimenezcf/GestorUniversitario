@@ -181,7 +181,7 @@
         }
         public set Info(valor: string) {
             let div: HTMLDivElement = document.getElementById(this.idInfo) as HTMLDivElement;
-            div.innerHTML = valor
+            div.innerHTML = valor;
         }
         public set Leidos(valor: number) {
             this.Navegador.setAttribute(atGrid.navegador.leidos, valor.toString());
@@ -268,14 +268,10 @@
         protected InfoSelector: InfoSelector;
         protected Navegador: Navegador;
 
-        private idPanelMnt: string;
-
-        protected get PanelMnt(): HTMLDivElement {
-            return document.getElementById(this.idPanelMnt) as HTMLDivElement;
-        }
+        private _idGrid: string;
 
         protected get IdGrid(): string {
-            return this.PanelMnt.getAttribute(atGrid.id);
+            return this._idGrid;
         }
         private idHtmlFiltro: string;
 
@@ -294,18 +290,20 @@
 
         constructor(idPanelMnt: string) {
             super();
-            this.idPanelMnt = idPanelMnt;
+            this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atGrid.id);
             this.InfoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
         }
 
-        protected InicializarNavegador() {
-            if (this.HayHistorial) {
-                this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
-            }
+        public Inicializar(pagina: string) {
+            super.Inicializar(pagina);
+            this.InicializarNavegador();
+        }
 
+        private InicializarNavegador() {
+            this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
@@ -558,7 +556,8 @@
         protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
             if (this.Estado.Contiene(atGrid.idSeleccionado)) {
-                this.InfoSelector.InsertarId(this.Estado.Obtener(atGrid.idSeleccionado))            
+                this.InfoSelector.InsertarElemento(this.Estado.Obtener(atGrid.idSeleccionado), this.Estado.Obtener(atGrid.nombreSeleccionado));
+
                 contenedorGrid.MarcarElementos();
                 contenedorGrid.InfoSelector.SincronizarCheck();
             }
@@ -605,9 +604,20 @@
             throw new Error(`No se ha localizado una celda con la propiedad '${propiedadBuscada}' definida`);
         }
 
-        public AntesDeNavegar() {
-            super.AntesDeNavegar();
+        public AntesDeNavegar(valores: Diccionario<any>) {
+            super.AntesDeNavegar(valores);
             this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
+
+            let datosRestrictor: DatosRestrictor = valores.Obtener(Sesion.restrictor) as DatosRestrictor;
+            this.Estado.Agregar(atGrid.idSeleccionado, datosRestrictor.Valor);
+            this.Estado.Agregar(atGrid.nombreSeleccionado, datosRestrictor.Texto);
+
+            let paginaDestino: string = valores.Obtener(Sesion.paginaDestino);
+            let estadoPaginaDestino: HistorialSe.EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(paginaDestino);
+            estadoPaginaDestino.Agregar(Sesion.restrictor, datosRestrictor);
+            estadoPaginaDestino.Quitar(atGrid.idSeleccionado);
+            estadoPaginaDestino.Quitar(atGrid.nombreSeleccionado);
+            EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
         }
 
 

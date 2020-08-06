@@ -68,7 +68,7 @@
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
             this._idPanelEdicion = idPanelEdicion;
-            this.PanelDeMnt = crud.PanelDeMnt;
+            this.PanelDeMnt = crud.PanelMnt;
             this.CrudDeMnt = crud;
         }
 

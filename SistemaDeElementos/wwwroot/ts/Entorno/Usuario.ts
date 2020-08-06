@@ -2,8 +2,7 @@
 
     export function CrearCrudDeUsuarios(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudDeUsuarios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.Buscar(atGrid.accion.buscar, 0);
+        Crud.crudMnt.Inicializar();
     }
 
     export class CrudDeUsuarios extends Crud.CrudMnt {

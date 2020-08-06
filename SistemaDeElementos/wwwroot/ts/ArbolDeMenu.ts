@@ -25,8 +25,7 @@
     export function OpcionSeleccionada(idVistaMvc: string, controlador: string, accion) {
         MostrarMenu();
         let urlBase: string = window.location.origin;
-        PonerCapa();
-        window.location.href = `${urlBase}/${controlador}/${accion}`;
+        EntornoSe.NavegarAUrl(`${urlBase}/${controlador}/${accion}`);
     }
 
     export function MenuPulsado(id_menu_pulsado: string) {

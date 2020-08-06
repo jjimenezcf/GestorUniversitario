@@ -1,6 +1,5 @@
 ﻿namespace Crud {
 
-
     export let crudMnt: CrudMnt = null;
 
     export class CrudMnt extends GridMnt {
@@ -9,10 +8,9 @@
         public crudDeEdicion: CrudEdicion;
         public idModalBorrar: string;
 
-        public RenderGrid: boolean = true;
-
-        public get PanelDeMnt(): HTMLDivElement {
-            return document.getElementById(this.Pagina) as HTMLDivElement;
+        private _idPanelMnt
+        public get PanelMnt(): HTMLDivElement {
+            return  document.getElementById(this._idPanelMnt) as HTMLDivElement;
         }
 
         public Modales: Array<ModalSeleccion> = new Array<ModalSeleccion>();
@@ -23,26 +21,24 @@
 
         constructor(idPanelMnt: string) {
             super(idPanelMnt);
+            this._idPanelMnt = idPanelMnt;
+        }
 
-            if (IsNullOrEmpty(idPanelMnt))
-                throw Error("No se puede construir un objeto del tipo CrudMantenimiento sin indica el panel de mantenimiento");
-
-            this.Pagina = idPanelMnt;
-
-            if (!this.HayHistorial)
-                Mensaje(TipoMensaje.Info, `Entrando por primera vez: ${this.Estado.Obtener(Estado.Pagina)}`);
-            else
-                Mensaje(TipoMensaje.Info, `No es la primera vez: ${this.Estado.Obtener(Estado.Pagina)}`);
-
-            this.InicializarNavegador();
+        public Inicializar() {
+            super.Inicializar(this._idPanelMnt);
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
+
+            this.AplicarRestrictores();
+
+            this.Buscar(atGrid.accion.buscar, 0);
+
         }
 
 
-        public RecuperarFiltros() {
-            if (this.Estado.Contiene(atRelacion.restrictor)) {
-                let restrictor: Crud.DatosRestrictor = this.Estado.Obtener(atRelacion.restrictor);
+        public AplicarRestrictores() {
+            if (this.Estado.Contiene(Sesion.restrictor)) {
+                let restrictor: DatosRestrictor = this.Estado.Obtener(Sesion.restrictor);
                 this.MapearRestrictorDeFiltro(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeCreacion.MaperaRestrictorDeCreacion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeEdicion.MaperaRestrictorDeEdicion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
@@ -133,7 +129,7 @@
                 return;
             }
 
-            this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelDeMnt, this.InfoSelector);
+            this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelMnt, this.InfoSelector);
         }
 
         public CerrarModalDeEdicion() {
@@ -145,7 +141,7 @@
         }
 
         public IraCrear() {
-            this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelDeMnt);
+            this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelMnt);
         }
 
         public CrearElemento() {
@@ -281,7 +277,7 @@
 
             let url: string = `/${controlador}/${endPoint}`;
             let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
-                `&${Ajax.Param.accion}=${accion}` + 
+                `&${Ajax.Param.accion}=${accion}` +
                 `&${Ajax.Param.posicion}=${posicion}` +
                 `&${Ajax.Param.cantidad}=${cantidad}` +
                 `&${Ajax.Param.filtro}=${filtroJson}` +
@@ -309,7 +305,7 @@
         }
 
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
-            let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.PanelDeMnt.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
+            let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.PanelMnt.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
             this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 

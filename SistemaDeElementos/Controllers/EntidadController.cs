@@ -343,17 +343,20 @@ namespace MVCSistemaDeElementos.Controllers
         private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
         {
             var listaDeElementos = new List<Dictionary<string, object>>();
-            PropertyInfo[] propiedades = elementos[0].GetType().GetProperties();
-
-            foreach (TElemento elemento in elementos)
+            if (elementos.Count > 0)
             {
-                var registro = new Dictionary<string, object>();
-                foreach (PropertyInfo propiedad in propiedades)
+                PropertyInfo[] propiedades = elementos[0].GetType().GetProperties();
+
+                foreach (TElemento elemento in elementos)
                 {
-                    object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
-                    registro[propiedad.Name] = valor == null ? "" : valor;
+                    var registro = new Dictionary<string, object>();
+                    foreach (PropertyInfo propiedad in propiedades)
+                    {
+                        object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
+                        registro[propiedad.Name] = valor == null ? "" : valor;
+                    }
+                    listaDeElementos.Add(registro);
                 }
-                listaDeElementos.Add(registro);
             }
 
             return listaDeElementos;

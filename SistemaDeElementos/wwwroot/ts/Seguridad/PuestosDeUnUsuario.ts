@@ -2,8 +2,7 @@
 
     export function CrearCrudDePuestosDeUnUsuario(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDePuestosDeUnUsuario(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.RenderGrid = false;
-        Crud.crudMnt.Buscar(atGrid.accion.buscar, 0);
+        Crud.crudMnt.Inicializar();
     }
 
     export class CrudDePuestosDeUnUsuario extends Crud.CrudMnt {
@@ -13,9 +12,6 @@
             this.crudDeCreacion = new CrudCreacionPuestoDeUnUsuario(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionPuestoDeUnUsuario(this, idPanelEdicion);
             this.idModalBorrar = idModalBorrar;
-
-            if (this.HayHistorial)
-                this.RecuperarFiltros();
         }
     }
 

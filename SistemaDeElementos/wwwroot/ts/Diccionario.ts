@@ -39,8 +39,10 @@ class Diccionario<T> implements IDiccionario<T> {
 
     public Quitar(clave: string) {
         var indice = this._claves.indexOf(clave, 0);
-        this._claves.splice(indice, 1);
-        this._valores.splice(indice, 1);
+        if (indice >= 0) {
+            this._claves.splice(indice, 1);
+            this._valores.splice(indice, 1);
+        }
     }
 
     public Contiene(clave: string): boolean {

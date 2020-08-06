@@ -1,5 +1,4 @@
-﻿
-function Mensaje(tipo: string, mensaje: string) {
+﻿function Mensaje(tipo: string, mensaje: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
     var mensaje = `(${tipo}) ${mensaje}`;
     if (control)
