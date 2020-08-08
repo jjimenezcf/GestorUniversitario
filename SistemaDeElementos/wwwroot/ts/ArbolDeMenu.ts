@@ -55,7 +55,7 @@
     export function ReqSolicitarMenu(usuario: string, idContenedorMenu: string): void {
         let url: string = `/Menus/${Ajax.EndPoint.SolicitarMenuEnHtml}?${Ajax.Param.usuario}=${usuario}`;
         let req: XMLHttpRequest = new XMLHttpRequest();
-        req.open('GET', url, false);
+        req.open('GET', url, true);
         PeticionSolicitarMenu(req, Ajax.EndPoint.SolicitarMenuEnHtml, () => DespuesDeSolitarMenu(req, idContenedorMenu), () => ErrorAlSolicitarMenu(req));
     }
 

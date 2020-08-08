@@ -148,7 +148,7 @@ class InfoSelector {
         return this.seleccionados.indexOf(id);
     }
 
-    Quitar(idSeleccionado) {
+    public Quitar(idSeleccionado: number) {
         var pos = this.seleccionados.indexOf(idSeleccionado);
         if (pos >= 0) {
             this.seleccionados.splice(pos, 1);
@@ -160,13 +160,13 @@ class InfoSelector {
             console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
 
-    QuitarTodos() {
+    public QuitarTodos() {
         this.seleccionados.splice(0, this.seleccionados.length);
         this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
 
     }
 
-    ToString() {
+    public ToString() {
         var ids = "";
         for (var i = 0; i < this.seleccionados.length; i++) {
             ids = ids + this.seleccionados[i];

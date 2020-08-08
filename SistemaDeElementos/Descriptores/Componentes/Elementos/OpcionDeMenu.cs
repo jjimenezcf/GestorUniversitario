@@ -44,21 +44,23 @@ namespace MVCSistemaDeElementos.Descriptores
         public string UrlDelCrudDeRelacion { get; private set; }
         public string RelacionarCon { get; private set; }
         public string PropiedadRestrictora { get; private set; }
+        public string PropiedadQueRestringe { get; private set; }
         public string NavegarAlCrud { get; private set; }
 
-        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadRestrictora)
+        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt,string propiedadQueRestringe, string propiedadRestrictora)
         : base()
         {
             TipoAccion = TipoAccionMnt.RelacionarElementos;
             RelacionarCon = relacionarCon.ToLower();
             PropiedadRestrictora = propiedadRestrictora.ToLower();
+            PropiedadQueRestringe = propiedadQueRestringe.ToLower();
             UrlDelCrudDeRelacion = urlDelCrud;
             NavegarAlCrud = nombreDelMnt;
         }
 
         public override string RenderAccion()
         {
-            return $"Crud.EventosDelMantenimiento('{TipoAccion}','IdOpcionDeMenu==idDeOpcMenu#{nameof(RelacionarCon)}=={RelacionarCon}#{nameof(PropiedadRestrictora)}=={PropiedadRestrictora}')";
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}','IdOpcionDeMenu==idDeOpcMenu#{nameof(RelacionarCon)}=={RelacionarCon}#{nameof(PropiedadQueRestringe)}=={PropiedadQueRestringe}#{nameof(PropiedadRestrictora)}=={PropiedadRestrictora}')";
         }
     }
 

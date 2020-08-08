@@ -517,7 +517,7 @@
         }
 
         protected QuitarDelSelector(idCheck: string) {
-            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            let id: number = Numero(this.ObtenerElIdDelElementoDelaFila(idCheck));
             this.InfoSelector.Quitar(id);
         }
 
@@ -646,14 +646,17 @@
 
             let partes = parametros.split('#');
 
-            if (partes.length != 3)
+            if (partes.length != 4)
                 throw new Error("Los parámetros de relación están mal definidos");
 
             datos.idOpcionDeMenu = partes[0].split('==')[1];
             datos.RelacionarCon = partes[1].split('==')[1];
-            let PropiedadRestrictora: string = partes[2].split('==')[1];
+            let PropiedadQueRestringe: string = partes[2].split('==')[1];
+            let PropiedadRestrictora: string = partes[3].split('==')[1];
 
-            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, infoSelector.LeerElemento(0).Id, infoSelector.LeerElemento(0).Texto);
+            let idRestrictor: number = Numero(this.obtenerValorDeLaFilaParaLaPropiedad(infoSelector.LeerElemento(0).Id, PropiedadQueRestringe));
+
+            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, idRestrictor, infoSelector.LeerElemento(0).Texto);
 
             datos.FiltroRestrictor = filtro;
             return datos;

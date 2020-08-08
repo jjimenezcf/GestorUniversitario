@@ -154,12 +154,13 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"El modo {modo} no está definido");
         }
 
-        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadRestrictora)
+        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora)
         {
             var accionDeRelacion = new AccionDeNavegarParaRelacionar(
                     urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
+                  , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
             var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: accionDeRelacion, tipoAccion: TipoAccion.Post, titulo: $"{nombreOpcion}");
