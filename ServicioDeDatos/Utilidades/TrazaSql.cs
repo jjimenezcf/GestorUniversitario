@@ -23,8 +23,8 @@ namespace ServicioDeDatos.Utilidades
         {
             Cronometro.Stop();
             mensaje = $"Petición finalizada" + Environment.NewLine +
-                      $"Total SQLs:     {duraciAcomulada.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
-                      $"Total petición: {Cronometro.ElapsedMilliseconds.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
+                      $"Total SQLs:     {duraciAcomulada,9:0.000}" + Environment.NewLine +
+                      $"Total petición: {Cronometro.ElapsedMilliseconds,9:0.000}" + Environment.NewLine +
                       Environment.NewLine +
                       Environment.NewLine +
                       $"Total Sentencias:{sentenciasEjecutadas}" + Environment.NewLine +
@@ -42,9 +42,9 @@ namespace ServicioDeDatos.Utilidades
                 duraciAcomulada += duracion;
                 string logTraza = $"Sentencia SQL:{Environment.NewLine}{setenciaSql}{Environment.NewLine}" +
                                   $"Parámetros:      {Environment.NewLine}{parametros}" +
-                                  $"Duracion SQL:    {duracion.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
-                                  $"Total SQLs:      {duraciAcomulada.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine +
-                                  $"Tiempo petición: {Cronometro.ElapsedMilliseconds.ToString("0.000").PadLeft(9, ' ')}" + Environment.NewLine;
+                                  $"Duracion SQL:    {duracion,9:0.000}" + Environment.NewLine +
+                                  $"Total SQLs:      {duraciAcomulada,9:0.000}" + Environment.NewLine +
+                                  $"Tiempo petición: {Cronometro.ElapsedMilliseconds,9:0.000}" + Environment.NewLine;
                 Registrar(logTraza);
                 Separador();
                 sentenciasEjecutadas++;

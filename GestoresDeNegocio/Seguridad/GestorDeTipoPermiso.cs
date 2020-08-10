@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using Gestor.Elementos;
+using GestorDeElementos;
 using ModeloDeDto.Seguridad;
+using ServicioDeDatos;
+using ServicioDeDatos.Seguridad;
 
-namespace ServicioDeDatos.Seguridad
+namespace GestoresDeNegocio.Seguridad
 {
     class GestorDeTipoPermiso : GestorDeElementos<ContextoSe, TipoPermisoDtm, TipoPermisoDto>
     {

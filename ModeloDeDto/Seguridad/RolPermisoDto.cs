@@ -1,4 +1,5 @@
-﻿using Gestor.Elementos.Seguridad;
+﻿
+using ServicioDeDatos.Seguridad;
 
 namespace ModeloDeDto.Seguridad
 {
@@ -7,7 +8,7 @@ namespace ModeloDeDto.Seguridad
     {
         public int IdCurso { get; set; }
         public int IdEstudiante { get; set; }
-        public Grado? Grado { get; set; }
+        public enumGrado? Grado { get; set; }
 
         public PermisoDto Curso { get; set; }
 

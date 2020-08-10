@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilidades;
 
-namespace Gestor.Elementos
+namespace GestorDeElementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual }
     public enum ModoDeOrdenancion { ascendente, descendente }
@@ -132,12 +132,10 @@ namespace Gestor.Elementos
         where TContexto : ContextoSe
     {
         public TContexto Contexto;
-        private GestorDeErrores _gestorDeErrores;
         public IMapper Mapeador;
 
-        private static ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
-        private static ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
-
+        private static readonly ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
+        private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
 
         public static object CrearGestor<T>(Func<object> creador)
         {
@@ -156,11 +154,6 @@ namespace Gestor.Elementos
         public GestorDeElementos(Func<TContexto> generadorDeContexto, IMapper mapeador)
         : this(generadorDeContexto(), mapeador)
         {
-        }
-
-        public void AsignarGestores(GestorDeErrores gestorErrores)
-        {
-            _gestorDeErrores = gestorErrores;
         }
 
         protected virtual void IniciarClase(TContexto contexto)
@@ -276,7 +269,7 @@ namespace Gestor.Elementos
         {
             _CacheDeRecuentos[typeof(TRegistro).FullName] = true;
 
-            foreach(var clave in _CacheDeRegistros.Keys)
+            foreach (var clave in _CacheDeRegistros.Keys)
             {
                 if (clave.StartsWith(typeof(TRegistro).FullName))
                 {
@@ -334,17 +327,44 @@ namespace Gestor.Elementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroCacheado(string propiedad, string valor)
+        public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
         {
             var indice = $"{typeof(TRegistro).FullName}-{propiedad}-{valor}";
             if (!_CacheDeRegistros.ContainsKey(indice))
             {
-                _CacheDeRegistros[indice] = LeerRegistro(propiedad, valor);
+                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno);
+                if (a == null)
+                    return null;
+
+                _CacheDeRegistros[indice] = a;
             }
             return _CacheDeRegistros[indice];
         }
 
-        public TRegistro LeerRegistro(string propiedad, string valor)
+        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno)
+        {
+            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor);
+
+            if (errorSiNoHay && registros.Count == 0)
+                GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
+
+            if (errorSiHayMasDeUno && registros.Count > 1)
+                GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
+
+            return registros.Count == 1 ? registros[0]: null;
+        }
+
+        public (int resultado, TRegistro registro) ExisteRegistro(string propiedad, string valor)
+        {
+            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor);
+
+            if (registros.Count == 0)
+                return (0, null);
+
+            return (registros.Count, registros[0]);
+        }
+
+        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor)
         {
             var filtro = new ClausulaDeFiltrado()
             {
@@ -352,21 +372,10 @@ namespace Gestor.Elementos
                 Clausula = propiedad,
                 Valor = valor
             };
-
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
-
-            var elementosDeBd = registros.AsNoTracking().ToList();
-
-            if (elementosDeBd.Count == 0)
-                GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
-
-            if (elementosDeBd.Count > 1)
-                GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
-
-            return elementosDeBd[0];
+            return registros.AsNoTracking().ToList();
         }
-
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
@@ -469,9 +478,9 @@ namespace Gestor.Elementos
 
         public int Recontar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
-            if (!_CacheDeRecuentos.ContainsKey(typeof(TRegistro).FullName) || _CacheDeRecuentos[typeof(TRegistro).FullName] )
+            if (!_CacheDeRecuentos.ContainsKey(typeof(TRegistro).FullName) || _CacheDeRecuentos[typeof(TRegistro).FullName])
             {
-                return Contar(filtros,joins,parametros);
+                return Contar(filtros, joins, parametros);
             }
 
             return 0;

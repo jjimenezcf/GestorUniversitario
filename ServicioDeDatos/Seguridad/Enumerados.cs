@@ -1,22 +1,22 @@
-﻿namespace Gestor.Elementos.Seguridad
+﻿namespace ServicioDeDatos.Seguridad
 {
-    public enum Grado
+    public enum enumGrado
     {
         A, B, C, D, F
     }
-    enum ClaseDePermiso
+    public enum enumClaseDePermiso
     {
-        Tipo = 1,
-        Estado = 2,
-        Transicion = 3,
-        CentroGestor = 4,
-        Negocio = 5,
-        Elemento = 6,
-        Funcion = 7,
-        Vista = 8,
-        Menu = 9
+        Tipo,
+        Estado,
+        Transicion,
+        CentroGestor,
+        Negocio,
+        Elemento,
+        Funcion,
+        Vista,
+        Menu
     }
-    enum TipoDePermiso
+    enum enumTipoDePermiso
     {
         Gestor = 1,
         Consultor = 2,

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-namespace Gestor.Elementos
+namespace GestorDeElementos
 {
-    public class Utilidades
+    public static class Utilidades
     {
         public static string DescargarArchivo(int id, string nombreFichero, string almacenadoEn)
         {

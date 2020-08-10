@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Gestor.Elementos;
+using GestorDeElementos;
 using ModeloDeDto.Seguridad;
 
 namespace ServicioDeDatos.Seguridad

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Gestor.Elementos.Entorno;
+using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
@@ -9,8 +9,9 @@ using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using Utilidades;
+using GestoresDeNegocio.Entorno;
 
-namespace Gestor.Elementos.Seguridad
+namespace GestoresDeNegocio.Seguridad
 {
     public static partial class Joins
     {
@@ -118,7 +119,8 @@ namespace Gestor.Elementos.Seguridad
 
         public dynamic LeerUsuarios(int posicion, int cantidad, string filtro)
         {
-            var gestor = GestorDeUsuarios.Gestor(Mapeador); var filtros = new List<ClausulaDeFiltrado>();
+            var gestor = GestorDeUsuarios.Gestor(Mapeador);            
+            var filtros = new List<ClausulaDeFiltrado>();
             if (!filtro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(UsuarioDto.NombreCompleto), Valor = filtro });
 

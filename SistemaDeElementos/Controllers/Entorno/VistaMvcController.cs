@@ -3,7 +3,7 @@ using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Entorno;
-using Gestor.Elementos.Entorno;
+using GestoresDeNegocio.Entorno;
 using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers

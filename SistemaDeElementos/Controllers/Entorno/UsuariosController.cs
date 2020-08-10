@@ -3,7 +3,7 @@ using ServicioDeDatos;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Entorno;
-using Gestor.Elementos.Entorno;
+using GestoresDeNegocio.Entorno;
 using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers

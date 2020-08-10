@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
-using Gestor.Elementos.Entorno;
 using System.IO;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos;
 using System;
 using ModeloDeDto.Archivos;
 using ModeloDeDto.Entorno;
+using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
 
-namespace Gestor.Elementos.Archivos
+namespace GestoresDeNegocio.Archivos
 {
     public class GestorDocumental : GestorDeElementos<ContextoSe, ArchivoDtm, ArchivosDto>
     {
@@ -42,10 +43,7 @@ namespace Gestor.Elementos.Archivos
 
         private int SubirArchivoInterno(string rutaConFichero)
         {
-            var gestor = (GestorDeVariables) Generador<ContextoSe, IMapper>.ObtenerGestor("GestorDeEntorno"
-                                                             , nameof(GestorDeVariables)
-                                                             , new object[] { Contexto, Mapeador });
-
+            var gestor = GestorDeVariables.Gestor(Mapeador);
             var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
 
             if (!Directory.Exists(rutaDocumental.Valor))
@@ -56,9 +54,7 @@ namespace Gestor.Elementos.Archivos
             Directory.CreateDirectory(almacenarEn);
             var fichero = Path.GetFileName(rutaConFichero);
 
-            var archivo = new ArchivoDtm();
-            archivo.Nombre = fichero;
-            archivo.AlmacenadoEn = almacenarEn;
+            var archivo = new ArchivoDtm { Nombre = fichero, AlmacenadoEn = almacenarEn };
             var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
             var tran = Contexto.IniciarTransaccion();
             try

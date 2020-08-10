@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using Utilidades;
 
-namespace Gestor.Elementos.Seguridad
+namespace GestoresDeNegocio.Seguridad
 {
     public static partial class Joins
     {

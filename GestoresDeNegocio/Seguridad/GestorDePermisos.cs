@@ -8,8 +8,9 @@ using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
 using ModeloDeDto.Seguridad;
+using GestorDeElementos;
 
-namespace Gestor.Elementos.Seguridad
+namespace GestoresDeNegocio.Seguridad
 {
     public static partial class Joins
     {
@@ -205,8 +206,7 @@ namespace Gestor.Elementos.Seguridad
 
             var gestor = GestorDeRolesDePermisos.Gestor(Mapeador);
             var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
-            var filtros = new List<ClausulaDeFiltrado>();
-            filtros.Add(filtro);
+            var filtros = new List<ClausulaDeFiltrado> {filtro};
             var r = gestor.LeerRegistros(0, 1, filtros);
             if (r.Count > 0)
             {

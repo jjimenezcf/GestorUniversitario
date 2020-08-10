@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using Gestor.Errores;
-using Gestor.Elementos;
+using GestorDeElementos;
 using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
-using Gestor.Elementos.Entorno;
 using System.Reflection;
 using ModeloDeDto;
+using GestoresDeNegocio.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -36,16 +36,15 @@ namespace MVCSistemaDeElementos.Controllers
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
-            GestorDeElementos.AsignarGestores(gestorErrores);
             GestorDelCrud = new GestorCrud<TElemento>(descriptor);
             DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
 
-            var gestorDeVista = new GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
+            var gestorDeVista = new GestoresDeNegocio.Entorno.GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
 
             var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");
 
-            descriptor.Creador.AbrirEnModal = vista != null ? vista.MostrarEnModal: false;
-            descriptor.Editor.AbrirEnModal = vista != null ? vista.MostrarEnModal : false;
+            descriptor.Creador.AbrirEnModal = vista != null && vista.MostrarEnModal;
+            descriptor.Editor.AbrirEnModal = vista != null && vista.MostrarEnModal;
         }
 
 
@@ -90,7 +89,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (rutaDestino.IsNullOrEmpty())
                 {
-                    r.Datos = Gestor.Elementos.Archivos.GestorDocumental.SubirArchivo(rutaConFichero, GestorDeElementos.Mapeador);
+                    r.Datos = GestoresDeNegocio.Archivos.GestorDocumental.SubirArchivo(rutaConFichero, GestorDeElementos.Mapeador);
                 }
                 else
                 {
@@ -273,7 +272,7 @@ namespace MVCSistemaDeElementos.Controllers
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.ToList().Count() == 0)
                 {
-                    pos = pos - can;
+                    pos -= can;
                     if (pos < 0) pos = 0;
                     elementos = Leer(pos, can, filtro, orden);
                     r.Mensaje = "No hay más elementos";

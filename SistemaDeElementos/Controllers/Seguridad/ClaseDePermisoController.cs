@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Gestor.Errores;
 using MVCSistemaDeElementos.Descriptores;
-using Gestor.Elementos.Seguridad;
+using GestoresDeNegocio.Seguridad;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
 using ModeloDeDto.Seguridad;

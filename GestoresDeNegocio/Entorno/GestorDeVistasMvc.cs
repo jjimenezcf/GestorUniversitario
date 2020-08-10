@@ -8,9 +8,10 @@ using ServicioDeDatos.Entorno;
 using System;
 using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
-using ModeloDeDto.Seguridad;
+using GestorDeElementos;
+using GestoresDeNegocio.Seguridad;
 
-namespace Gestor.Elementos.Entorno
+namespace GestoresDeNegocio.Entorno
 {
 
     public static partial class Filtros
@@ -141,12 +142,7 @@ namespace Gestor.Elementos.Entorno
 
         private void CrearPermiso(string clasePermiso, string nombreDelPermiso)
         {
-            var gestor =(GestorDeElementos<ContextoSe, ClasePermisoDtm, ClasePermisoDto>) Generador<ContextoSe, IMapper>.ObtenerGestor("GestorDeSeguridad"
-                                                  , "GestorDeClaseDePermisos"
-                                                  , new object[] { Contexto, Mapeador });
-
-           
-
+            var gestor = GestorDeClaseDePermisos.Gestor(Mapeador);
             var claseDePermiso = gestor.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), enumClaseDePermiso.Vista.ToString(),false,false);
             
         }

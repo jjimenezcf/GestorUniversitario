@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using GestorDeElementos;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 
-namespace Gestor.Elementos.Seguridad
+namespace GestoresDeNegocio.Seguridad
 {
 
 
@@ -30,7 +31,7 @@ namespace Gestor.Elementos.Seguridad
         internal static GestorDeClaseDePermisos Gestor(IMapper mapeador)
         {
             var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeClaseDePermisos)CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(contexto, mapeador));
+            return (GestorDeClaseDePermisos) CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(contexto, mapeador));
         }
 
     }

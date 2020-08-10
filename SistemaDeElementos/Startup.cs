@@ -9,8 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServicioDeDatos;
-using Gestor.Elementos.Entorno;
-using Gestor.Elementos.Seguridad;
+using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Seguridad;
 using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos

@@ -3,7 +3,7 @@ using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
-using Gestor.Elementos.Seguridad;
+using GestoresDeNegocio.Seguridad;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto.Entorno;
 

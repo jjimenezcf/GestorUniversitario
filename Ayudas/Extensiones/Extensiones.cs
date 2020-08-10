@@ -24,7 +24,10 @@ namespace Utilidades
             foreach(string n in numeros)
             {
                 var i = n.Entero();
-                if (i > 0)
+                if (i == 0 && quitarCeros)
+                    continue;
+
+                if (i >= 0)
                     l.Add(i);
             }
 

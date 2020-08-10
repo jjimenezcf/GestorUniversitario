@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 using ModeloDeDto.Seguridad;
+using GestoresDeNegocio.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {

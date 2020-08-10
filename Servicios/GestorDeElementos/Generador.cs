@@ -5,15 +5,27 @@ using System.Linq;
 using System.Collections.Concurrent;
 using Gestor.Errores;
 
-namespace Gestor.Elementos
+namespace GestorDeElementos
 {
     public class Generador<TContexto, IMapper> 
     {
         public static ConcurrentDictionary<string, object> cacheObjetos = new ConcurrentDictionary<string, object>();
 
+        public static object CachearGestor(Type tipo, Func<object> creador)
+        {
+            var dll = tipo.Assembly.CodeBase;
+            var nombreClase = tipo.Name;
+            var indice = dll + '-' + nombreClase;
+
+            if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
+                cacheObjetos[indice] = creador();
+
+            return cacheObjetos[indice];
+        }
+
         public static object ObtenerGestor(string dll, string nombreClase, object[] parametros)
         {
-            if (!dll.EndsWith(".dll")) dll = dll + ".dll";
+            if (!dll.EndsWith(".dll")) dll += ".dll";
             var indice = dll + '-' + nombreClase;
 
             if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
@@ -24,19 +36,6 @@ namespace Gestor.Elementos
 
                 cacheObjetos[indice] = objetoConParametros;
             }
-            return cacheObjetos[indice];
-        }
-
-        public static object CachearGestor(Type tipo, Func<object> creador)
-        {
-            var dll = tipo.Assembly.CodeBase;
-            var nombreClase = tipo.Name;
-            //if (!dll.EndsWith(".dll")) dll = dll + ".dll";
-            var indice = dll + '-' + nombreClase;
-
-            if (!cacheObjetos.ContainsKey(indice) || cacheObjetos[indice] == null)
-                cacheObjetos[indice] = creador();
-
             return cacheObjetos[indice];
         }
 

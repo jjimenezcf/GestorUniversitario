@@ -66,8 +66,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GestorDeEntorno\GestorDeEntorno.csproj" />
-    <ProjectReference Include="..\GestorDePermisos\GestorDeSeguridad.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
   </ItemGroup>
 
