@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+﻿using AutoMapper;
 using Gestor.Elementos.Entorno;
 using System.IO;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos;
-using ServicioDeDatos.Utilidades;
 using System;
+using ModeloDeDto.Archivos;
+using ModeloDeDto.Entorno;
 
 namespace Gestor.Elementos.Archivos
 {

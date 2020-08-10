@@ -1,5 +1,4 @@
-﻿using Gestor.Elementos.Seguridad;
-using GestorDeSeguridad.ModeloIu;
+﻿using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 

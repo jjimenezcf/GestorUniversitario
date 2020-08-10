@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MVCSistemaDeElementos.Descriptores
+﻿namespace MVCSistemaDeElementos.Descriptores
 {
 
     public class Posicion

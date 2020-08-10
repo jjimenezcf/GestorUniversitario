@@ -1,5 +1,4 @@
-﻿using System;
-using Gestor.Elementos.ModeloIu;
+﻿using ModeloDeDto;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores

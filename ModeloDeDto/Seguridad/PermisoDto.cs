@@ -1,6 +1,4 @@
-﻿using Gestor.Elementos.ModeloIu;
-
-namespace Gestor.Elementos.Seguridad
+﻿namespace ModeloDeDto.Seguridad
 {
     public static class PermisoPor
     {

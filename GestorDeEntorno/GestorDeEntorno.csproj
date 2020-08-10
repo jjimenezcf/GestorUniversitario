@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ModeloDeDto\ModeloDeDto.csproj" />
     <ProjectReference Include="..\ServicioDeDatos\ServicioDeDatos.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
   </ItemGroup>

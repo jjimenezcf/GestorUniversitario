@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
-using ServicioDeDatos;
-using Gestor.Elementos.Seguridad;
-using UtilidadesParaIu;
-using Microsoft.AspNetCore.Hosting;
+﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
-using Gestor.Elementos.Entorno;
-using ServicioDeDatos.Entorno;
-using ServicioDeDatos.Seguridad;
-using GestorDeSeguridad.ModeloIu;
+using ModeloDeDto.Entorno;
+using ModeloDeDto.Seguridad;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Entorno;
 using Gestor.Elementos.Entorno;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {

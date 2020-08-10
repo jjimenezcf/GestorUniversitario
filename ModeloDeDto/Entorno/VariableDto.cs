@@ -1,8 +1,4 @@
-﻿using Gestor.Elementos.ModeloIu;
-using System;
-using System.Linq;
-
-namespace Gestor.Elementos.Entorno
+﻿namespace ModeloDeDto.Entorno
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5)]

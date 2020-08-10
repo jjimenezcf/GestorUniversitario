@@ -1,7 +1,4 @@
-﻿using Gestor.Elementos.ModeloIu;
-using Gestor.Elementos.Seguridad;
-
-namespace GestorDeSeguridad.ModeloIu
+﻿namespace ModeloDeDto.Seguridad
 {
     [IUDto]
     public class RolesDeUnPuestoDto : ElementoDto

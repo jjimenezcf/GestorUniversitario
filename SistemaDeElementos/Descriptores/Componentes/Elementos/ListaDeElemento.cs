@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
-using Gestor.Elementos.ModeloIu;
+﻿using System.Linq;
 using Gestor.Errores;
+using ModeloDeDto;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores

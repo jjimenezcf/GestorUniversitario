@@ -4,7 +4,7 @@
     {
         A, B, C, D, F
     }
-    enum Clase
+    enum ClaseDePermiso
     {
         Tipo = 1,
         Estado = 2,
@@ -12,9 +12,11 @@
         CentroGestor = 4,
         Negocio = 5,
         Elemento = 6,
-        Funcion = 7
+        Funcion = 7,
+        Vista = 8,
+        Menu = 9
     }
-    enum TipoPermiso
+    enum TipoDePermiso
     {
         Gestor = 1,
         Consultor = 2,

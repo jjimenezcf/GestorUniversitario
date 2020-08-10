@@ -1,8 +1,7 @@
-﻿using Gestor.Elementos.ModeloIu;
-using System;
+﻿using System;
 
 
-namespace Gestor.Elementos.Entorno
+namespace ModeloDeDto.Entorno
 {
 
     public static class UsuariosPor

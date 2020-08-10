@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Utilidades;
-using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Archivos;
-using System.IO;
+using ModeloDeDto.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {

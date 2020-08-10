@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Ayudas\Extensiones\Utilidades.csproj" />
+    <ProjectReference Include="..\..\ModeloDeDto\ModeloDeDto.csproj" />
     <ProjectReference Include="..\..\ServicioDeDatos\ServicioDeDatos.csproj" />
     <ProjectReference Include="..\GestorDeCorreo\GestorDeCorreo.csproj" />
     <ProjectReference Include="..\GestorDeErrores\GestorDeErrores.csproj" />

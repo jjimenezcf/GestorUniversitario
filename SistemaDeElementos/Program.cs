@@ -1,11 +1,9 @@
 ﻿using System;
 using ServicioDeDatos;
-using Gestor.Elementos.Seguridad;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos
 {

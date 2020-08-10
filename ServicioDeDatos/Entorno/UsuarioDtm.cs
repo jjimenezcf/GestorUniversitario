@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Seguridad;

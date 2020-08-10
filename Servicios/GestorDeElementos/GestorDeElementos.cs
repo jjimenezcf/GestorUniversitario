@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using ModeloDeDto;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
-using ServicioDeDatos.Utilidades;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -592,6 +590,13 @@ namespace Gestor.Elementos
         #endregion
 
 
+        public string ObtenerTabla()
+        {
+            var entityType = Contexto.Model.FindEntityType(typeof(TRegistro));
+            var schema = entityType.GetSchema();
+            var tableName = entityType.GetTableName();
+            return $"{schema}.{tableName}";
+        }
 
         #region codigo creo que obsoleto
 

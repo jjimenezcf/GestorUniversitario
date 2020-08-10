@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Collections.Generic;
 using Utilidades;
-using Gestor.Elementos.ModeloIu;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
-using ServicioDeDatos.Elemento;
+using ModeloDeDto.Seguridad;
 
 namespace Gestor.Elementos.Seguridad
 {

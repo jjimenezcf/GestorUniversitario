@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
+using ModeloDeDto;
 using MVCSistemaDeElementos.Descriptores;
 
 namespace UtilidadesParaIu
@@ -18,7 +18,7 @@ namespace UtilidadesParaIu
 
         public int NumeroDeFila { get; set; }
 
-        public FilaDelGrid(ZonaDeDatos<TElemento> datos, Gestor.Elementos.ModeloIu.ElementoDto elemento)
+        public FilaDelGrid(ZonaDeDatos<TElemento> datos, ElementoDto elemento)
         {
             Datos = datos;
             var columna = datos.ObtenerColumna("chksel");

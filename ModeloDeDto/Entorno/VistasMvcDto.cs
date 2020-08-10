@@ -1,8 +1,6 @@
-﻿using Gestor.Elementos.ModeloIu;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Gestor.Elementos.Entorno
+namespace ModeloDeDto.Entorno
 {
 
     [IUDto(AnchoEtiqueta = 20

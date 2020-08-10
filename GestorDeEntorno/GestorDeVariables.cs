@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Utilidades;
-using System;
-using Gestor.Elementos.ModeloIu;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
+using ModeloDeDto.Entorno;
 
 namespace Gestor.Elementos.Entorno
 {

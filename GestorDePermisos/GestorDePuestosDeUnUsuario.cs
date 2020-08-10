@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Gestor.Elementos.Entorno;
-using GestorDeSeguridad.ModeloIu;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto.Entorno;
+using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;

@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Linq;
 using System.Collections.Concurrent;
 using Gestor.Errores;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Gestor.Elementos
 {

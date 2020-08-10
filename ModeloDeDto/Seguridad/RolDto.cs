@@ -1,6 +1,4 @@
-﻿using Gestor.Elementos.ModeloIu;
-
-namespace Gestor.Elementos.Seguridad
+﻿namespace ModeloDeDto.Seguridad
 {
     [IUDto(AnchoEtiqueta = 20
       , AnchoSeparador = 5)]

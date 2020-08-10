@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 

@@ -1,6 +1,5 @@
 ﻿using System;
-using Gestor.Elementos.ModeloIu;
-using GestorDeEntorno.Migrations;
+using ModeloDeDto;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Text.Json;
 using MVCSistemaDeElementos.Descriptores;
-using Gestor.Elementos.ModeloIu;
 using Utilidades;
+using ModeloDeDto;
 
 namespace UtilidadesParaIu
 {
@@ -189,21 +188,6 @@ namespace UtilidadesParaIu
 
         }
 
-        private static string RenderDetalleGrid(Grid<TElemento> grid)
-        {
-            return "";
-
-            var htmlDetalleGrid = new StringBuilder();
-            for (var i = 0; i < grid.NumeroDeFilas; i++)
-            {
-                var fila = grid.ObtenerFila(i);
-                htmlDetalleGrid.Append(RenderFilaSeleccionable(fila));
-            }
-            return $@"<tbody id='{grid.IdHtml}_detalle'>
-                         {htmlDetalleGrid}
-                      </tbody>";
-        }
-
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
             var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
@@ -265,7 +249,6 @@ namespace UtilidadesParaIu
             var htmlTabla = $@"<div class=¨div-grid¨> 
                                   <table id=¨{grid.IdHtmlTabla}¨ class=¨tabla-grid¨ >
                                     {RenderCabecera(grid)}
-                                    {RenderDetalleGrid(grid)}
                                   </table>
                                </div> ";
             var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";

@@ -1,7 +1,6 @@
-﻿using ServicioDeDatos;
+﻿using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
-using Gestor.Elementos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {

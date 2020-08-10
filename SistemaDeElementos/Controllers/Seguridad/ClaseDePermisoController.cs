@@ -4,6 +4,7 @@ using MVCSistemaDeElementos.Descriptores;
 using Gestor.Elementos.Seguridad;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
+using ModeloDeDto.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {

@@ -1,6 +1,5 @@
-﻿using Gestor.Elementos.ModeloIu;
+﻿using ModeloDeDto;
 using MVCSistemaDeElementos.Descriptores;
-using MVCSistemaDeElementos.UtilidadesIu;
 
 namespace UtilidadesParaIu
 {

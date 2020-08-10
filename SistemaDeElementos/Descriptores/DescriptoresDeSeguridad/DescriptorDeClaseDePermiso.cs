@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gestor.Elementos.ModeloIu;
-using Gestor.Elementos.Seguridad;
+﻿using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
-using MVCSistemaDeElementos.Descriptores;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores

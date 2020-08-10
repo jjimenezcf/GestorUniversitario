@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeSeguridad", "..\Ges
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDocumental", "..\GestorDeArchivos\GestorDocumental.csproj", "{229A9331-BB5D-4703-B3DA-ED8682A0E979}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicioDeDatos", "..\ServicioDeDatos\ServicioDeDatos.csproj", "{CA8BD4E7-700E-46C5-9C21-BBF2484B7E0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicioDeDatos", "..\ServicioDeDatos\ServicioDeDatos.csproj", "{CA8BD4E7-700E-46C5-9C21-BBF2484B7E0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeloDeDto", "..\ModeloDeDto\ModeloDeDto.csproj", "{A6F6747A-22E2-4374-ACE5-6553FCCA227B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -237,6 +239,26 @@ Global
 		{CA8BD4E7-700E-46C5-9C21-BBF2484B7E0C}.Release|x64.Build.0 = Release|Any CPU
 		{CA8BD4E7-700E-46C5-9C21-BBF2484B7E0C}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA8BD4E7-700E-46C5-9C21-BBF2484B7E0C}.Release|x86.Build.0 = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|ARM.Build.0 = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|ARM64.Build.0 = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|x64.Build.0 = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6F6747A-22E2-4374-ACE5-6553FCCA227B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

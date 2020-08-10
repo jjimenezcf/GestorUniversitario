@@ -1,27 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Utilidades;
-using Gestor.Elementos.ModeloIu;
+using ModeloDeDto.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using System;
 using Gestor.Errores;
+using ServicioDeDatos.Seguridad;
+using ModeloDeDto.Seguridad;
 
 namespace Gestor.Elementos.Entorno
 {
 
     public static partial class Filtros
     {
-        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros , List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
+        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         registros = registros.Where(x => x.Controlador == filtro.Valor);
-                    
+
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
                         registros = registros.Where(x => x.Controlador.Contains(filtro.Valor));
                 }
@@ -42,7 +43,7 @@ namespace Gestor.Elementos.Entorno
     }
 
 
-        public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
+    public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
         public class MapearVistaMvc : Profile
@@ -50,7 +51,9 @@ namespace Gestor.Elementos.Entorno
             public MapearVistaMvc()
             {
                 CreateMap<VistaMvcDtm, VistaMvcDto>()
-                .ForMember("Menus", x => x.MapFrom(x => x.Menus));
+                .ForMember(dto => dto.Menus , dtm => dtm.MapFrom(x => x.Menus))
+                //.ForMember("Permiso", dtm => dtm.MapFrom(x => x.Permiso))
+                ;
 
                 CreateMap<VistaMvcDto, VistaMvcDtm>();
             }
@@ -61,12 +64,12 @@ namespace Gestor.Elementos.Entorno
         {
 
         }
-        
+
 
         public static GestorDeVistaMvc Gestor(IMapper mapeador)
         {
             var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeVistaMvc) CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(contexto, mapeador));
+            return (GestorDeVistaMvc)CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(contexto, mapeador));
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -76,7 +79,7 @@ namespace Gestor.Elementos.Entorno
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros.FiltraPorControlador(filtros,parametros).FiltraPorAccion(filtros, parametros);
+            return registros.FiltraPorControlador(filtros, parametros).FiltraPorAccion(filtros, parametros);
         }
 
         public VistaMvcDtm LeerVistaMvc(string vistaMvc)
@@ -109,25 +112,41 @@ namespace Gestor.Elementos.Entorno
             return vistas[0];
         }
 
-
-        public static List<VistaMvcDto> VistaMvc()
+        protected override void AntesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
-            var vistaMvc = new List<VistaMvcDto>();
-
-            vistaMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Usuarios", Controlador = "Usuarios", Accion = "Index", Parametros = "" });
-            vistaMvc.Add(new VistaMvcDto { Id = 0, Nombre = "Menus", Controlador = "Menus", Accion = "Index", Parametros = "" });
-
-            return vistaMvc;
+            base.AntesDePersistir(registro, parametros);
         }
 
-        public void InicializarVistaMvc()
+        protected override void DespuesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
-            var e_vistaMvc = VistaMvc();
-            var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
-            var r_vistaMvc = MapearRegistros(e_vistaMvc, parametros);
-            PersistirRegistros(r_vistaMvc, parametros);
+            base.DespuesDePersistir(registro, parametros);
+            var clasePermiso = ObtenerTabla();
+            if (parametros.Tipo == TipoOperacion.Insertar) 
+                CrearPermiso(clasePermiso, registro.Nombre);
+            if (parametros.Tipo == TipoOperacion.Modificar)
+                ModificarPermiso(clasePermiso, registro.Nombre);
+            if (parametros.Tipo == TipoOperacion.Eliminar)
+                BorrarPermiso(clasePermiso, registro.Nombre);
         }
 
+        private void BorrarPermiso(string clasePermiso, string nombre)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ModificarPermiso(string clasePermiso, string nombre)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CrearPermiso(string clasePermiso, string nombreDelPermiso)
+        {
+            var gestor =(GestorDeElementos<ContextoSe, ClasePermisoDtm, ClasePermisoDto>) Generador<ContextoSe, IMapper>.ObtenerGestor("GestorDeSeguridad"
+                                                  , "GestorDeClaseDePermisos"
+                                                  , new object[] { Contexto, Mapeador });
+            var claseDePermiso = gestor.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), clasePermiso);
+            
+        }
     }
 
 }

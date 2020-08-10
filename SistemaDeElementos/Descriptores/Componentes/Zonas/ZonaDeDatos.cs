@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
+﻿using System.Collections.Generic;
 using Gestor.Errores;
-using ServicioDeDatos.Elemento;
+using ModeloDeDto;
 using Utilidades;
 using UtilidadesParaIu;
 

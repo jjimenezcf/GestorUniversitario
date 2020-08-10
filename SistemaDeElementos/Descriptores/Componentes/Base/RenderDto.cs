@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gestor.Elementos.ModeloIu;
 using Gestor.Errores;
+using ModeloDeDto;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores

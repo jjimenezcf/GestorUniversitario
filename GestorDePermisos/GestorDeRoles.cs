@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Gestor.Elementos;
-using Gestor.Elementos.Seguridad;
+using ModeloDeDto.Seguridad;
 
 namespace ServicioDeDatos.Seguridad
 {

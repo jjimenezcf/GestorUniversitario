@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Gestor.Elementos.ModeloIu;
-using Utilidades;
+﻿using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {

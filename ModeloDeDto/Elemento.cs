@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Utilidades;
 
-namespace Gestor.Elementos.ModeloIu
+namespace ModeloDeDto
 {
     public static class TipoControl
     {
@@ -199,12 +197,12 @@ namespace Gestor.Elementos.ModeloIu
         {
             var iEnumerableAtrb = propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute));
             if (iEnumerableAtrb == null || iEnumerableAtrb.ToList().Count == 0)
-                Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por no tener definidas los atributos {typeof(IUPropiedadAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por no tener definidas los atributos {typeof(IUPropiedadAttribute)}");
 
             var listaAtrb = iEnumerableAtrb.ToList();            
 
             if (listaAtrb.Count != 1)
-                Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por tener mas de una definición para {typeof(IUPropiedadAttribute)}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por tener mas de una definición para {typeof(IUPropiedadAttribute)}");
 
             var atributos = (IUPropiedadAttribute)propiedad.GetCustomAttributes(typeof(IUPropiedadAttribute)).ToList()[0];
             return atributos;
@@ -215,7 +213,7 @@ namespace Gestor.Elementos.ModeloIu
             Attribute[] atributosDeDto = System.Attribute.GetCustomAttributes(clase);
 
             if (atributosDeDto == null || atributosDeDto.Length == 0)
-                Errores.GestorDeErrores.Emitir($"No hay definido descriptores para el dto {clase.Name}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No hay definido descriptores para el dto {clase.Name}");
 
             foreach (Attribute propiedad in atributosDeDto)
             {

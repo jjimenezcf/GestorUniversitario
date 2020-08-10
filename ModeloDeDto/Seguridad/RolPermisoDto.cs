@@ -1,6 +1,6 @@
-﻿using Gestor.Elementos.ModeloIu;
+﻿using Gestor.Elementos.Seguridad;
 
-namespace Gestor.Elementos.Seguridad
+namespace ModeloDeDto.Seguridad
 {
 
     public class RolPermisoDto : ElementoDto
