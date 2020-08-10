@@ -75,10 +75,9 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        internal static GestorDePuestosDeUnUsuario Gestor(IMapper mapeador)
+        internal static GestorDePuestosDeUnUsuario Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDePuestosDeUnUsuario)CrearGestor<GestorDePuestosDeUnUsuario>(() => new GestorDePuestosDeUnUsuario(contexto, mapeador));
+            return new GestorDePuestosDeUnUsuario(contexto, mapeador);
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -113,7 +112,7 @@ namespace GestoresDeNegocio.Seguridad
 
         public dynamic LeerRoles(int posicion, int cantidad, string filtro)
         {
-            var gestor = GestorDeRoles.Gestor(Mapeador); var filtros = new List<ClausulaDeFiltrado>();
+            var gestor = GestorDeRoles.Gestor(Contexto, Mapeador); var filtros = new List<ClausulaDeFiltrado>();
             if (!filtro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(RolDto.Nombre), Valor = filtro });
 
@@ -123,7 +122,7 @@ namespace GestoresDeNegocio.Seguridad
 
         public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
         {
-            var gestor = GestorDePuestosDeTrabajo.Gestor(Mapeador);
+            var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
             if (!filtro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDto.Nombre), Valor = filtro });

@@ -58,10 +58,9 @@ namespace GestoresDeNegocio.Seguridad
         }
 
 
-        internal static GestorDeRolesDePermisos Gestor(IMapper mapeador)
+        internal static GestorDeRolesDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeRolesDePermisos)CrearGestor<GestorDeRolesDePermisos>(() => new GestorDeRolesDePermisos(contexto, mapeador));
+            return new GestorDeRolesDePermisos(contexto, mapeador);
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

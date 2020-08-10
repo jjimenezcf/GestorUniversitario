@@ -136,6 +136,11 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
+        internal static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
+        {
+            return new GestorDePermisos(contexto, mapeador);
+        }
+
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
@@ -156,6 +161,7 @@ namespace GestoresDeNegocio.Seguridad
             registros = base.AplicarOrden(registros, ordenacion);
             return registros.Orden(ordenacion);
         }
+
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             base.DefinirJoins(filtros, joins, parametros);
@@ -175,7 +181,7 @@ namespace GestoresDeNegocio.Seguridad
 
         public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = GestorDeClaseDePermisos.Gestor(Mapeador); 
+            var gestor = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador); 
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
@@ -191,7 +197,7 @@ namespace GestoresDeNegocio.Seguridad
 
         public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = GestorDeTipoPermiso.Gestor(Mapeador);
+            var gestor = GestorDeTipoPermiso.Gestor(Contexto, Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(TipoPermisoDtm.Nombre), Valor = valorDeFiltro });
@@ -204,7 +210,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             base.AntesMapearRegistroParaEliminar(elemento, opciones);
 
-            var gestor = GestorDeRolesDePermisos.Gestor(Mapeador);
+            var gestor = GestorDeRolesDePermisos.Gestor(Contexto, Mapeador);
             var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
             var filtros = new List<ClausulaDeFiltrado> {filtro};
             var r = gestor.LeerRegistros(0, 1, filtros);
@@ -218,6 +224,29 @@ namespace GestoresDeNegocio.Seguridad
                 throw exc;
             }
         }
+
+        internal PermisoDtm Crear(string nombrePermiso, TipoPermisoDtm tipoDePermiso, ClasePermisoDtm claseDePermiso)
+        {
+            var registro = new PermisoDtm();
+            registro.Nombre = nombrePermiso;
+            registro.IdClase = claseDePermiso.Id;
+            registro.IdTipo = tipoDePermiso.Id;
+            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return registro;
+        }
+        
+        internal PermisoDtm Modificar(PermisoDtm permiso)
+        {
+            PersistirRegistro(permiso, new ParametrosDeNegocio(TipoOperacion.Modificar));
+            return permiso;
+        }
+
+        internal PermisoDtm Eliminar(PermisoDtm permiso)
+        {
+            PersistirRegistro(permiso, new ParametrosDeNegocio(TipoOperacion.Eliminar));
+            return permiso;
+        }
+
     }
 
 }

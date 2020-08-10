@@ -47,10 +47,9 @@ namespace GestoresDeNegocio.Entorno
         {
 
         }
-        internal static GestorDeVariables Gestor(IMapper mapeador)
+        internal static GestorDeVariables Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeVariables)CrearGestor<GestorDeVariables>(() => new GestorDeVariables(contexto, mapeador));
+            return new GestorDeVariables(contexto, mapeador);
         }
 
         protected override void AntesMapearRegistroParaModificar(VariableDto elemento, ParametrosDeNegocio opciones)

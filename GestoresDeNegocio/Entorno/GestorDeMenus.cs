@@ -206,7 +206,7 @@ namespace GestoresDeNegocio.Entorno
 
         public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = GestorDeVistaMvc.Gestor(Mapeador);
+            var gestor = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(VistaMvcDto.Nombre), Valor = valorDeFiltro });

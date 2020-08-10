@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using GestorDeElementos;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
@@ -22,10 +23,17 @@ namespace GestoresDeNegocio.Seguridad
         }
 
 
-        internal static GestorDeTipoPermiso Gestor(IMapper mapeador)
+        internal static GestorDeTipoPermiso Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeTipoPermiso)CrearGestor<GestorDeTipoPermiso>(() => new GestorDeTipoPermiso(contexto, mapeador));
+            return new GestorDeTipoPermiso(contexto, mapeador);
+        }
+
+        internal TipoPermisoDtm Crear(enumTipoDePermiso acceso)
+        {
+            var registro = new TipoPermisoDtm();
+            registro.Nombre = acceso.ToString();
+            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return registro;
         }
     }
 }

@@ -89,7 +89,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (rutaDestino.IsNullOrEmpty())
                 {
-                    r.Datos = GestoresDeNegocio.Archivos.GestorDocumental.SubirArchivo(rutaConFichero, GestorDeElementos.Mapeador);
+                    r.Datos = GestoresDeNegocio.Archivos.GestorDocumental.SubirArchivo(GestorDeElementos.Contexto, rutaConFichero, GestorDeElementos.Mapeador);
                 }
                 else
                 {

@@ -22,9 +22,9 @@ namespace GestoresDeNegocio.Archivos
         }
 
 
-        public static int SubirArchivo(string rutaConFichero, IMapper mapeador)
+        public static int SubirArchivo(ContextoSe contexto, string rutaConFichero, IMapper mapeador)
         {
-            var gestor = Gestor(mapeador);
+            var gestor = Gestor(contexto, mapeador);
             return gestor.SubirArchivoInterno(rutaConFichero);
         }
 
@@ -35,15 +35,14 @@ namespace GestoresDeNegocio.Archivos
         }
 
 
-        private static GestorDocumental Gestor(IMapper mapeador)
+        private static GestorDocumental Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDocumental)CrearGestor<GestorDocumental>(() => new GestorDocumental(contexto, mapeador));
+            return new GestorDocumental(contexto, mapeador);
         }
 
         private int SubirArchivoInterno(string rutaConFichero)
         {
-            var gestor = GestorDeVariables.Gestor(Mapeador);
+            var gestor = GestorDeVariables.Gestor(Contexto, Mapeador);
             var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
 
             if (!Directory.Exists(rutaDocumental.Valor))

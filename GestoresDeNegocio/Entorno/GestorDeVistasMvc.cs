@@ -52,7 +52,7 @@ namespace GestoresDeNegocio.Entorno
             public MapearVistaMvc()
             {
                 CreateMap<VistaMvcDtm, VistaMvcDto>()
-                .ForMember(dto => dto.Menus , dtm => dtm.MapFrom(x => x.Menus))
+                .ForMember(dto => dto.Menus, dtm => dtm.MapFrom(x => x.Menus))
                 //.ForMember("Permiso", dtm => dtm.MapFrom(x => x.Permiso))
                 ;
 
@@ -67,10 +67,9 @@ namespace GestoresDeNegocio.Entorno
         }
 
 
-        public static GestorDeVistaMvc Gestor(IMapper mapeador)
+        public static GestorDeVistaMvc Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeVistaMvc)CrearGestor<GestorDeVistaMvc>(() => new GestorDeVistaMvc(contexto, mapeador));
+            return new GestorDeVistaMvc(contexto, mapeador);
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -116,35 +115,82 @@ namespace GestoresDeNegocio.Entorno
         protected override void AntesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
+            if (parametros.Tipo == TipoOperacion.Insertar)
+            {
+                registro.IdPermiso = CrearObtenerPermiso(registro.Nombre).Id;
+            }
+            if (parametros.Tipo == TipoOperacion.Modificar && registro.IdPermiso == null)
+            {
+                var registroEnBD = LeerRegistroPorId(registro.Id);
+                if (registroEnBD.IdPermiso != null)
+                    registro.IdPermiso = registroEnBD.IdPermiso;
+                else
+                {
+                    registro.IdPermiso = CrearObtenerPermiso(registro.Nombre).Id;
+                    parametros.Parametros["permisoCreado"] = true;
+                }
+            }
+            if (parametros.Tipo == TipoOperacion.Eliminar)
+            {
+                var registroEnBD = LeerRegistroPorId(registro.Id);
+                if (registroEnBD.IdPermiso != null)
+                    BorrarPermiso(registro);
+            }
         }
 
         protected override void DespuesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
-            var clasePermiso = ObtenerTabla();
-            if (parametros.Tipo == TipoOperacion.Insertar) 
-                CrearPermiso(clasePermiso, registro.Nombre);
-            if (parametros.Tipo == TipoOperacion.Modificar)
-                ModificarPermiso(clasePermiso, registro.Nombre);
-            if (parametros.Tipo == TipoOperacion.Eliminar)
-                BorrarPermiso(clasePermiso, registro.Nombre);
+
+            if (parametros.Tipo == TipoOperacion.Modificar && !parametros.Parametros.ContainsKey("permisoCreado"))
+                ModificarPermiso(registro);
         }
 
-        private void BorrarPermiso(string clasePermiso, string nombre)
+        private void BorrarPermiso(VistaMvcDtm vista)
         {
-            throw new NotImplementedException();
+            var gestorDePermiso = GestorDePermisos.Gestor(Contexto, Mapeador);
+            var permiso = gestorDePermiso.LeerRegistroPorId(vista.IdPermiso);
+            if (permiso != null)
+                gestorDePermiso.Eliminar(permiso);
         }
 
-        private void ModificarPermiso(string clasePermiso, string nombre)
+        private void ModificarPermiso(VistaMvcDtm vista)
         {
-            throw new NotImplementedException();
+            var gestorDePermiso = GestorDePermisos.Gestor(Contexto, Mapeador);
+            var permiso = gestorDePermiso.LeerRegistroPorId(vista.IdPermiso);
+            if (permiso != null)
+            {
+                permiso.Nombre = $"VISTA: {vista.Nombre}";
+                gestorDePermiso.Modificar(permiso);
+            }
         }
 
-        private void CrearPermiso(string clasePermiso, string nombreDelPermiso)
+        private PermisoDtm CrearObtenerPermiso(string nombreDeLaVista)
         {
-            var gestor = GestorDeClaseDePermisos.Gestor(Mapeador);
-            var claseDePermiso = gestor.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), enumClaseDePermiso.Vista.ToString(),false,false);
-            
+            var nombreDelPermiso = $"VISTA: {nombreDeLaVista}";
+            var gestorDePermiso = GestorDePermisos.Gestor(Contexto, Mapeador);
+            var permiso = gestorDePermiso.LeerRegistroCacheado(nameof(PermisoDtm.Nombre), nombreDelPermiso, false, false);
+            if (permiso == null)
+                permiso = CrearPermiso(gestorDePermiso, nombreDelPermiso);
+            return permiso;
+        }
+
+        private PermisoDtm CrearPermiso(GestorDePermisos gestorDePermiso, string nombreDelPermiso)
+        {
+            PermisoDtm permiso;
+            var gestorDeClase = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador);
+            var claseDePermiso = gestorDeClase.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), enumClaseDePermiso.Vista.ToString(), false, false);
+            if (claseDePermiso == null)
+                claseDePermiso = gestorDeClase.Crear(enumClaseDePermiso.Vista);
+
+
+            var gestorDeTipo = GestorDeTipoPermiso.Gestor(Contexto, Mapeador);
+            var tipoDePermiso = gestorDeTipo.LeerRegistroCacheado(nameof(TipoPermisoDtm.Nombre), enumTipoDePermiso.Acceso.ToString(), false, false);
+            if (tipoDePermiso == null)
+                tipoDePermiso = gestorDeTipo.Crear(enumTipoDePermiso.Acceso);
+
+            permiso = gestorDePermiso.Crear(nombreDelPermiso, tipoDePermiso, claseDePermiso);
+            return permiso;
         }
     }
 

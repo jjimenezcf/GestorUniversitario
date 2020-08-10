@@ -137,12 +137,6 @@ namespace GestorDeElementos
         private static readonly ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
 
-        public static object CrearGestor<T>(Func<object> creador)
-        {
-            var gestor = Generador<ContextoSe, IMapper>.CachearGestor(typeof(T), creador);
-            return gestor;
-        }
-
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -230,7 +224,11 @@ namespace GestorDeElementos
             elementoDto.Id = registro.Id;
         }
 
-        protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros) => PersistirRegistros(new List<TRegistro> { registro }, parametros);
+        protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
+        {
+            var registros = new List<TRegistro> { registro };
+            PersistirRegistros(registros, parametros);
+        }
 
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
         {

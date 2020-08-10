@@ -102,10 +102,9 @@ namespace GestoresDeNegocio.Entorno
 
         }
 
-        public static GestorDeUsuarios Gestor(IMapper mapeador)
+        public static GestorDeUsuarios Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeUsuarios)CrearGestor<GestorDeUsuarios>(() => new GestorDeUsuarios(contexto, mapeador));
+            return new GestorDeUsuarios(contexto, mapeador);
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

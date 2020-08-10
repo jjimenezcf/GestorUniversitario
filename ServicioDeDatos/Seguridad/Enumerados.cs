@@ -16,7 +16,7 @@
         Vista,
         Menu
     }
-    enum enumTipoDePermiso
+    public enum enumTipoDePermiso
     {
         Gestor = 1,
         Consultor = 2,

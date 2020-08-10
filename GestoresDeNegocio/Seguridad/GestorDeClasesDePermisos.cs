@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using GestorDeElementos;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
@@ -24,15 +25,20 @@ namespace GestoresDeNegocio.Seguridad
         : base(contexto, mapeador)
         {
 
-
         }
 
 
-        internal static GestorDeClaseDePermisos Gestor(IMapper mapeador)
+        internal static GestorDeClaseDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeClaseDePermisos) CrearGestor<GestorDeClaseDePermisos>(() => new GestorDeClaseDePermisos(contexto, mapeador));
+            return new GestorDeClaseDePermisos(contexto, mapeador);
         }
 
+        internal ClasePermisoDtm Crear(enumClaseDePermiso nombreDeClase)
+        {
+            var registro = new ClasePermisoDtm();
+            registro.Nombre = nombreDeClase.ToString();
+            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return registro;
+        }
     }
 }

@@ -24,10 +24,9 @@ namespace GestoresDeNegocio.Seguridad
         }
 
 
-        internal static GestorDeRoles Gestor(IMapper mapeador)
+        internal static GestorDeRoles Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDeRoles)CrearGestor<GestorDeRoles>(() => new GestorDeRoles(contexto, mapeador));
+            return new GestorDeRoles(contexto, mapeador);
         }
 
     }

@@ -22,10 +22,9 @@ namespace ServicioDeDatos.Seguridad
         }
 
 
-        internal static GestorDePuestosDeTrabajo Gestor(IMapper mapeador)
+        internal static GestorDePuestosDeTrabajo Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            var contexto = ContextoSe.ObtenerContexto();
-            return (GestorDePuestosDeTrabajo)CrearGestor<GestorDePuestosDeTrabajo>(() => new GestorDePuestosDeTrabajo(contexto, mapeador));
+            return new GestorDePuestosDeTrabajo(contexto, mapeador);
         }
 
     }
