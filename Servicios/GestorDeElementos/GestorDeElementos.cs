@@ -136,6 +136,7 @@ namespace GestorDeElementos
 
         private static readonly ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
+        private static readonly ConcurrentDictionary<Type, object> _CacheDeGestores = new ConcurrentDictionary<Type, object>();
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
@@ -149,6 +150,17 @@ namespace GestorDeElementos
         : this(generadorDeContexto(), mapeador)
         {
         }
+
+        protected T CrearGestor<T>(Func<T> constructor)
+        {
+            if (!_CacheDeGestores.ContainsKey(typeof(T)))
+            {
+                _CacheDeGestores.TryAdd(typeof(T), constructor());
+            }
+
+            return (T)_CacheDeGestores[typeof(T)];
+        }
+
 
         protected virtual void IniciarClase(TContexto contexto)
         {
@@ -349,7 +361,7 @@ namespace GestorDeElementos
             if (errorSiHayMasDeUno && registros.Count > 1)
                 GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
 
-            return registros.Count == 1 ? registros[0]: null;
+            return registros.Count == 1 ? registros[0] : null;
         }
 
         public (int resultado, TRegistro registro) ExisteRegistro(string propiedad, string valor)
@@ -373,6 +385,11 @@ namespace GestorDeElementos
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
             return registros.AsNoTracking().ToList();
+        }
+
+        public List<TRegistro> LeerRegistros(List<ClausulaDeFiltrado> filtros)
+        {
+            return LeerRegistros(0,0,filtros);
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)

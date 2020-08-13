@@ -160,7 +160,10 @@ namespace GestoresDeNegocio.Entorno
             {
                 var registroEnBD = LeerRegistroPorId(registro.Id);
                 if (registroEnBD.IdPermiso != null)
+                {
+                    registro.IdPermiso = registroEnBD.IdPermiso;
                     BorrarPermiso(registro);
+                }
             }
         }
 

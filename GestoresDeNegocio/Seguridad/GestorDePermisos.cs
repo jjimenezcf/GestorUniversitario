@@ -247,6 +247,23 @@ namespace GestoresDeNegocio.Seguridad
             return permiso;
         }
 
+        protected override void AntesDePersistir(PermisoDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+
+            //validamos que el permiso no esté en un rol
+            if (parametros.Tipo == TipoOperacion.Eliminar)
+            {
+                var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
+                var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = registro.Id.ToString() };
+                var filtros = new List<ClausulaDeFiltrado> { filtro };
+                if (gestor.Contar(filtros) > 0)
+                {
+                    throw new Exception($"El permiso {registro.Nombre} esta incluido en algún rol, desasígnelo primero");
+                }
+            }
+        }
+
     }
 
 }
