@@ -136,10 +136,67 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        internal static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
+        internal static GestorDePermisos ObtenerGestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePermisos(contexto, mapeador);
         }
+
+        public static PermisoDtm CrearObtener(ContextoSe contexto, IMapper mapeador, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
+        {
+            var nombreDelPermiso = ComponerNombre(nombre, clase, tipo);
+            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
+            var permiso = gestorDePermiso.LeerRegistroCacheado(nameof(PermisoDtm.Nombre), nombreDelPermiso, false, false);
+            if (permiso == null)
+                permiso = Crear(gestorDePermiso, nombreDelPermiso, clase, tipo);
+            return permiso;
+        }
+
+        public static void Modificar(ContextoSe contexto, IMapper mapeador, int idPermiso, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
+        {
+            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
+            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
+            if (permiso != null)
+            {
+                permiso.Nombre = ComponerNombre(nombre, clase, tipo);
+                gestorDePermiso.Modificar(permiso);
+            }
+        }
+
+        private static string ComponerNombre(string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
+        {
+            if (tipo.Equals(enumTipoDePermiso.Acceso))
+                return $"{clase.ToString().ToUpper()}: {nombre}";
+            else
+                return $"{clase.ToString().ToUpper()} ({tipo}): {nombre}";
+        }
+
+        public static void Eliminar(ContextoSe contexto, IMapper mapeador,int idPermiso)
+        {
+            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
+            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
+            if (permiso != null)
+                gestorDePermiso.Eliminar(permiso);
+        }
+
+
+        private static PermisoDtm Crear(GestorDePermisos gestorDePermiso, string nombreDelPermiso, enumClaseDePermiso clase, enumTipoDePermiso tipo)
+        {
+            PermisoDtm permiso;
+            var gestorDeClase = GestorDeClaseDePermisos.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
+            var claseDePermiso = gestorDeClase.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), enumClaseDePermiso.Vista.ToString(), false, false);
+            if (claseDePermiso == null)
+                claseDePermiso = gestorDeClase.Crear(clase);
+
+
+            var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
+            var tipoDePermiso = gestorDeTipo.LeerRegistroCacheado(nameof(TipoPermisoDtm.Nombre), enumTipoDePermiso.Acceso.ToString(), false, false);
+            if (tipoDePermiso == null)
+                tipoDePermiso = gestorDeTipo.Crear(tipo);
+
+            permiso = gestorDePermiso.Crear(nombreDelPermiso, tipoDePermiso, claseDePermiso);
+            return permiso;
+        }
+
 
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
@@ -154,7 +211,6 @@ namespace GestoresDeNegocio.Seguridad
                 .FiltroPorTipo(filtros)
                 .FiltroPorClase(filtros);
         }
-
 
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {

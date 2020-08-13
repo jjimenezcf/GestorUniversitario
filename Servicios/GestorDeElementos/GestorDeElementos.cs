@@ -138,6 +138,8 @@ namespace GestorDeElementos
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
         private static readonly ConcurrentDictionary<Type, object> _CacheDeGestores = new ConcurrentDictionary<Type, object>();
 
+        public TRegistro RegistroEnBD { get; private set; }
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -290,6 +292,7 @@ namespace GestorDeElementos
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
+            RegistroEnBD = LeerRegistroPorId(registro.Id);
         }
 
         protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);

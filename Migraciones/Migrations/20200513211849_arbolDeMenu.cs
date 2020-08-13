@@ -18,15 +18,15 @@ namespace GestorDeEntorno.Migrations
                                         WITH menuPadre 
                                         AS
                                         (
-                                         SELECT T1.ID, T1.NOMBRE, T1.DESCRIPCION, T1.ICONO, T1.ACTIVO, T1.IDPADRE,  T1.IDVISTA_MVC, T1.ORDEN 
+                                         SELECT T1.ID, T1.NOMBRE, T1.DESCRIPCION, T1.ICONO, T1.ACTIVO, T1.IDPADRE,  T1.IDVISTA_MVC, T1.ORDEN, T1.IDPERMISO
                                          FROM entorno.MENU T1
                                          UNION ALL
                                           --RECURSIVIDAD
-                                         SELECT S1.ID, S1.NOMBRE, S1.DESCRIPCION, S1.ICONO, S1.ACTIVO, S1.IDPADRE,  S1.IDVISTA_MVC, S1.ORDEN 
+                                         SELECT S1.ID, S1.NOMBRE, S1.DESCRIPCION, S1.ICONO, S1.ACTIVO, S1.IDPADRE,  S1.IDVISTA_MVC, S1.ORDEN , S1.IDPERMISO
                                          FROM ENTORNO.MENU AS S1 
                                          INNER JOIN menuPadre AS T1 ON S1.IDPADRE = T1.id
                                         )
-                                        SELECT DISTINCT P1.ID, P1.NOMBRE, P1.DESCRIPCION, P1.ICONO, P1.ACTIVO, P1.IDPADRE, P1.IDVISTA_MVC, P1.ORDEN 
+                                        SELECT DISTINCT P1.ID, P1.NOMBRE, P1.DESCRIPCION, P1.ICONO, P1.ACTIVO, P1.IDPADRE, P1.IDVISTA_MVC, P1.ORDEN, P1.IDPERMISO
                                         FROM menuPadre AS P1
                                    )
                                 ");
@@ -42,6 +42,7 @@ namespace GestorDeEntorno.Migrations
                                                 T1.IDPADRE, 
                                                 T1.IDVISTA_MVC, 
                                                 T1.ORDEN, 
+												T1.IDPERMISO,
                                                 T2.NOMBRE AS PADRE, 
                                                 T3.NOMBRE AS VISTA, 
                                                 T3.CONTROLADOR, 

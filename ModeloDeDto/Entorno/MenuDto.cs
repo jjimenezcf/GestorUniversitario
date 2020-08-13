@@ -121,6 +121,22 @@ namespace ModeloDeDto.Entorno
         ]
         public bool Activo { get; set; }
 
+        [IUPropiedad(
+            Etiqueta = "Permiso",
+            Ayuda = "Permiso de acceso",
+            EditableAlEditar = false,
+            Tipo = typeof(string),
+            Fila = 6,
+            Columna = 0,
+            Obligatorio = false,
+            VisibleEnGrid = false,
+            VisibleAlEditar = true,
+            VisibleAlConsultar = true,
+            VisibleAlCrear = false
+            )
+        ]
+        public string Permiso { get; set; }
+
 
     }
 

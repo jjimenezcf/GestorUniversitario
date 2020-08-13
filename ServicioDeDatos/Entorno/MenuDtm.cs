@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Seguridad;
 
 namespace ServicioDeDatos.Entorno
 {
@@ -35,6 +36,11 @@ namespace ServicioDeDatos.Entorno
         public int? IdVistaMvc { get; set; }
 
         public VistaMvcDtm VistaMvc { get; set; }
+
+        [Column("IDPERMISO", TypeName = "INT")]
+        public int? IdPermiso { get; set; }
+
+        public PermisoDtm Permiso { get; set; }
 
     }
 
@@ -69,12 +75,19 @@ namespace ServicioDeDatos.Entorno
 
             modelBuilder.Entity<MenuDtm>().HasIndex(x => x.Nombre).IsUnique();
 
-            //modelBuilder.Entity<R_Menu>()
-            //            .HasMany(menu => menu.Submenus)
-            //            .WithOne()
-            //            //.HasForeignKey("IDPADRE")
-            //            //.HasConstraintName("FK_MENU_IDPADRE")
-            //            .IsRequired(false);
+            modelBuilder.Entity<MenuDtm>().Property(p => p.IdPermiso).IsRequired(false);
+
+            modelBuilder.Entity<MenuDtm>()
+                .HasOne(p => p.Permiso)
+                .WithMany()
+                .IsRequired(false)
+                .HasForeignKey(p => p.IdPermiso)
+                .HasConstraintName("FK_MENU_IDPERMISO");
+
+            modelBuilder.Entity<MenuDtm>()
+               .HasIndex(vista => new { vista.IdPermiso })
+               .IsUnique(true)
+               .HasName("IX_MENU_IDPERMISO");
         }
     }
 
