@@ -72,6 +72,23 @@ namespace ModeloDeDto.Entorno
         ]
         public string MostrarEnModal { get; set; }
 
+
+        [IUPropiedad(
+            Etiqueta = "Permiso",
+            Ayuda = "Permiso de acceso",
+            EditableAlEditar = false,
+            Tipo = typeof(string),
+            Fila = 4,
+            Columna = 0,
+            Obligatorio = false,
+            VisibleEnGrid = false,
+            VisibleAlEditar = true,
+            VisibleAlConsultar = true,
+            VisibleAlCrear = false
+            )
+        ]
+        public string Permiso { get; set; }
+
         [IUPropiedad(Visible = false)]
         public List<MenuDto> Menus { get; set; }
     }

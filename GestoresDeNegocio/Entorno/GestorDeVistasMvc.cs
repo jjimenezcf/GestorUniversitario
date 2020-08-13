@@ -10,9 +10,23 @@ using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
 using GestorDeElementos;
 using GestoresDeNegocio.Seguridad;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestoresDeNegocio.Entorno
 {
+    public static partial class Joins
+    {
+        public static IQueryable<T> JoinConPermisos<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : VistaMvcDtm
+        {
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(PermisoDtm))
+                    registros = registros.Include(p => p.Permiso);                   
+            }
+
+            return registros;
+        }
+    }
 
     public static partial class Filtros
     {
@@ -53,7 +67,7 @@ namespace GestoresDeNegocio.Entorno
             {
                 CreateMap<VistaMvcDtm, VistaMvcDto>()
                 .ForMember(dto => dto.Menus, dtm => dtm.MapFrom(x => x.Menus))
-                //.ForMember("Permiso", dtm => dtm.MapFrom(x => x.Permiso))
+                .ForMember(dto => dto.Permiso , dtm => dtm.MapFrom(x => x.Permiso.Nombre))
                 ;
 
                 CreateMap<VistaMvcDto, VistaMvcDtm>();
@@ -70,6 +84,18 @@ namespace GestoresDeNegocio.Entorno
         public static GestorDeVistaMvc Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeVistaMvc(contexto, mapeador);
+        }
+
+        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            base.DefinirJoins(filtros, joins, parametros);
+            joins.Add(new ClausulaDeJoin { Dtm = typeof(PermisoDtm) });
+        }
+
+        protected override IQueryable<VistaMvcDtm> AplicarJoins(IQueryable<VistaMvcDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, joins, parametros);
+            return registros.JoinConPermisos(joins, parametros);
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)

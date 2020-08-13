@@ -161,6 +161,7 @@ namespace GestoresDeNegocio.Entorno
 
         protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
+            registros = base.AplicarJoins(registros, joins, parametros);
             return registros.JoinConMenus(joins, parametros);
         }
 
