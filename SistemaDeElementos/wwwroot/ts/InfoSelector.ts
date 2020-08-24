@@ -88,7 +88,7 @@ class InfoSelector {
         }
     }
 
-    LeerId(pos): number {
+    public LeerId(pos: number): number {
         if (pos >= 0 && pos < this.Cantidad) {
             return this.seleccionados[pos];
         }
@@ -97,38 +97,39 @@ class InfoSelector {
     }
 
     LeerElemento(pos: number): Elemento {
-            var id = this.LeerId(pos);
-            if (id > 0) {
-                var texto = this.paraMostrarEnSelector[pos];
-                return new Elemento(id, texto);
-            }
+        var id = this.LeerId(pos);
+        if (id > 0) {
+            var texto = this.paraMostrarEnSelector[pos];
+            return new Elemento(id, texto);
+        }
         return Elemento.ElementoVacio;
     }
 
-    public InsertarId(id: number) {
-        if (!id || isNaN(id)) {
-            console.error(`Ha intentado insertar en la lista un id no válido ${id}`);
-            return -1;
-        }
-
+    private InsertarId(id: number) {
         if (this.PuedeSeleccionarMas) {
             this.seleccionados.push(id);
-            console.log(`Ha insertar en la lista el id ${id}`);
         }
 
         this.deshabilitarCheck(true);
         return this.Cantidad;
     }
 
-    InsertarElemento(id, textoMostrar) {
-        var pos = this.InsertarId(id);
-        if (pos === this.seleccionados.length) {
-            this.paraMostrarEnSelector.push(textoMostrar);
+    public InsertarElemento(id: number, textoMostrar: string) {
+        if (!id || isNaN(id)) {
+            Mensaje(TipoMensaje.Error,`Ha intentado insertar en la lista un id no válido ${id}`);
+            return -1;
+        }
+        var pos = this.Buscar(id);
+        if (pos < 0) {
+            pos = this.InsertarId(id);
+            if (pos === this.seleccionados.length) {
+                this.paraMostrarEnSelector.push(textoMostrar);
+            }
         }
         return pos;
     }
 
-    InsertarElementos(elementos) {
+    public InsertarElementos(elementos) {
 
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {

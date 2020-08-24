@@ -2,4 +2,12 @@
 2. Que al navegar, se almacene el estado del grid para reposicionarse a la vuelta
 3. Pasar la CacheDeVariables a la CacheDeRegistro
 4. Implementar seguridad
+4.1 añadir el id permiso al menú y a las vistas
+4.2 corregir el error de que tras modificar hay que limpiar el info selector
+4.2.1 corregir error de al navegar para relacionar guardar el id seleccionado y no el id de la propiedad restrictora
+4.3 crear el crud de rol-permiso
+4.4 en el mantenimiento de roles poder navegar para incluir los permisos de un rol
+4.5 en el mantenimiento de roles ver que roles contienen un permiso
+4.6 en el mantenimiento de permisos ver que permisos tienen un rol
+4.7 en el mantenimiento de puestos de trabajo poder ver que puestos están asignados a un usuario
 5. Crear callejero

@@ -98,6 +98,7 @@
     export class DatosParaRelacionar {
         public idOpcionDeMenu: string;
         public RelacionarCon: string;
+        public idSeleccionado: number;
         public FiltroRestrictor: DatosRestrictor;
 
         constructor() {
@@ -228,8 +229,8 @@
         }
 
         protected CerrarModal(idModal: string) {
-            let modalBorrar: HTMLDivElement = document.getElementById(idModal) as HTMLDivElement;
-            modalBorrar.style.display = "none";
+            let modal: HTMLDivElement = document.getElementById(idModal) as HTMLDivElement;
+            modal.style.display = "none";
             var body = document.getElementsByTagName("body")[0];
             body.style.position = "inherit";
             body.style.height = "auto";
@@ -237,7 +238,7 @@
 
         }
 
-        public NavegarARelacionar(idOpcionDeMenu: string, filtroRestrictor: DatosRestrictor) {
+        public NavegarARelacionar(idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: DatosRestrictor) {
 
             let filtroJson: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
 
@@ -259,6 +260,7 @@
             let valores: Diccionario<any> = new Diccionario<any>();
             valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
             valores.Agregar(Sesion.restrictor, filtroRestrictor);
+            valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
             this.Navegar(form, valores);
         }
 

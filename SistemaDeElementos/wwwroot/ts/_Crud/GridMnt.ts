@@ -512,25 +512,25 @@
         }
 
         protected AnadirAlInfoSelector(idCheck: string, expresionElemento: string) {
-            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             this.InfoSelector.InsertarElemento(id, expresionElemento);
         }
 
         protected QuitarDelSelector(idCheck: string) {
-            let id: number = Numero(this.ObtenerElIdDelElementoDelaFila(idCheck));
+            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             this.InfoSelector.Quitar(id);
         }
 
         protected EstaMarcado(idCheck: string): boolean {
-            let id: string = this.ObtenerElIdDelElementoDelaFila(idCheck);
-            return this.InfoSelector.Buscar(Numero(id)) >= 0 ? true : false;
+            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
+            return this.InfoSelector.Buscar(id) >= 0 ? true : false;
         }
 
-        private ObtenerElIdDelElementoDelaFila(idCheck: string): string {
+        private ObtenerElIdDelElementoDelaFila(idCheck: string): number {
             let columnaId: string = idCheck.replace(".chksel", `.${Literal.id}`);
             let inputId: HTMLInputElement = document.getElementById(columnaId) as HTMLInputElement;
             let id: string = inputId.value;
-            return id;
+            return Numero(id);
         }
 
         protected MarcarElementos() {
@@ -556,11 +556,13 @@
         protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
             if (this.Estado.Contiene(atGrid.idSeleccionado)) {
-                this.InfoSelector.InsertarElemento(this.Estado.Obtener(atGrid.idSeleccionado), this.Estado.Obtener(atGrid.nombreSeleccionado));
-
-                contenedorGrid.MarcarElementos();
-                contenedorGrid.InfoSelector.SincronizarCheck();
+                let idSeleccionado: number = this.Estado.Obtener(atGrid.idSeleccionado);
+                let nombreSeleccionado: string = this.Estado.Obtener(atGrid.nombreSeleccionado);
+                this.InfoSelector.InsertarElemento(idSeleccionado, nombreSeleccionado);
             }
+
+            contenedorGrid.MarcarElementos();
+            contenedorGrid.InfoSelector.SincronizarCheck();
         }
 
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
@@ -609,7 +611,8 @@
             this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
 
             let datosRestrictor: DatosRestrictor = valores.Obtener(Sesion.restrictor) as DatosRestrictor;
-            this.Estado.Agregar(atGrid.idSeleccionado, datosRestrictor.Valor);
+            let idSeleccionado: number = valores.Obtener(Sesion.idSeleccionado) as number;
+            this.Estado.Agregar(atGrid.idSeleccionado, idSeleccionado);
             this.Estado.Agregar(atGrid.nombreSeleccionado, datosRestrictor.Texto);
 
             let paginaDestino: string = valores.Obtener(Sesion.paginaDestino);
@@ -629,7 +632,7 @@
         public RelacionarCon(parametrosDeEntrada: string): void {
             try {
                 let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this.InfoSelector, parametrosDeEntrada);
-                super.NavegarARelacionar(datos.idOpcionDeMenu, datos.FiltroRestrictor);
+                super.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
@@ -653,10 +656,12 @@
             datos.RelacionarCon = partes[1].split('==')[1];
             let PropiedadQueRestringe: string = partes[2].split('==')[1];
             let PropiedadRestrictora: string = partes[3].split('==')[1];
-
-            let idRestrictor: number = Numero(this.obtenerValorDeLaFilaParaLaPropiedad(infoSelector.LeerElemento(0).Id, PropiedadQueRestringe));
-
-            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, idRestrictor, infoSelector.LeerElemento(0).Texto);
+            let idSeleccionado: number = infoSelector.LeerElemento(0).Id;
+            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(idSeleccionado, PropiedadQueRestringe)
+            let idRestrictor: number = Numero(valorDeLaColumna);
+            let elemento: Elemento = infoSelector.LeerElemento(0);
+            datos.idSeleccionado = elemento.Id;
+            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, idRestrictor, elemento.Texto);
 
             datos.FiltroRestrictor = filtro;
             return datos;

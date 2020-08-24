@@ -282,6 +282,7 @@ const Variables = {
 const Sesion = {
     historial: "historial",
     restrictor: "restrictor",
+    idSeleccionado: "idSeleccionado",
     paginaDestino: "pagina-destino",
     paginaActual: "pagina-actual",
     urlActual: "url-actual"
