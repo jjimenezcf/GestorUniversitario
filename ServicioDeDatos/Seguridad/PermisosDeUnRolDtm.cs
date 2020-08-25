@@ -7,7 +7,7 @@ namespace ServicioDeDatos.Seguridad
 
 
     [Table("ROL_PERMISO", Schema = "SEGURIDAD")]
-    public class RolesDeUnPermisoDtm : Registro
+    public class PermisosDeUnRolDtm : Registro
     {
         [Column("IDROL", TypeName = "INT")]
         public int IdRol { get; set; }
@@ -24,17 +24,17 @@ namespace ServicioDeDatos.Seguridad
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RolesDeUnPermisoDtm>()
+            modelBuilder.Entity<PermisosDeUnRolDtm>()
                 .HasAlternateKey(p => new { p.IdRol, p.IdPermiso })
                 .HasName("AK_ROL_PERMISO");
 
-            modelBuilder.Entity<RolesDeUnPermisoDtm>()
+            modelBuilder.Entity<PermisosDeUnRolDtm>()
                 .HasOne(x => x.Rol)
                 .WithMany(r => r.Permisos)
                 .HasForeignKey(x => x.IdRol)
                 .HasConstraintName("FK_ROL_PERMISO_IDROL");
 
-            modelBuilder.Entity<RolesDeUnPermisoDtm>()
+            modelBuilder.Entity<PermisosDeUnRolDtm>()
                 .HasOne(x => x.Permiso)
                 .WithMany(p => p.Roles)
                 .HasForeignKey(x => x.IdPermiso)

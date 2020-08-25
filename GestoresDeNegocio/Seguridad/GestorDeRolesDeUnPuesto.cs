@@ -35,9 +35,10 @@ namespace GestoresDeNegocio.Seguridad
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower())
-                {
                     registros = registros.Where(p => p.idPuesto == filtro.Valor.Entero());
-                }
+
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower())
+                    registros = registros.Where(p => p.IdRol == filtro.Valor.Entero());
             }
 
             return registros;
@@ -56,9 +57,9 @@ namespace GestoresDeNegocio.Seguridad
     public class GestorDeRolesDeUnPuesto : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
     {
 
-        public class MapearClasePermiso : Profile
+        public class MapearRolesDeUnPuesto : Profile
         {
-            public MapearClasePermiso()
+            public MapearRolesDeUnPuesto()
             {
                 CreateMap<RolesDeUnPuestoDtm, RolesDeUnPuestoDto>()
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
@@ -110,25 +111,16 @@ namespace GestoresDeNegocio.Seguridad
             return registros.Orden(ordenacion);
         }
 
-        public dynamic LeerRoles(int posicion, int cantidad, string filtro)
+        public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
         {
-            var gestor = GestorDeRoles.Gestor(Contexto, Mapeador); var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(RolDto.Nombre), Valor = filtro });
-
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
+            var gestor = GestorDeRoles.Gestor(Contexto, Mapeador);
+            return GestorDeRoles.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
+        public List<PuestoDto> LeerPuestos(int posicion, int cantidad, string filtro)
         {
             var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDto.Nombre), Valor = filtro });
-
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
+            return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
         }
     }
 }

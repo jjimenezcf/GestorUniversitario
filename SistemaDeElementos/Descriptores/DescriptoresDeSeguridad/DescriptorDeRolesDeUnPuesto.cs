@@ -16,8 +16,17 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad:nameof(RolesDeUnPuestoDto.IdPuesto)
                   , ayuda: "buscar por puesto"
                   , new Posicion { fila = 0, columna = 0 });
-        }
 
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(PermisosDeUnRolController)
+                , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)
+                , relacionarCon: nameof(PermisoDto)
+                , navegarAlCrud: DescriptorMantenimiento<PermisosDeUnRolDto>.nombreMnt
+                , nombreOpcion: "Permisos"
+                , propiedadQueRestringe: nameof(RolesDeUnPuestoDto.IdRol )
+                , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
+
+        }
 
         public override string RenderControl()
         {

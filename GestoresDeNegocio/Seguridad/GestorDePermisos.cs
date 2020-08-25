@@ -28,7 +28,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
     }
-
     static class FiltrosPermiso
     {
         public static IQueryable<T> FiltrarPorUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
@@ -136,15 +135,26 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        internal static GestorDePermisos ObtenerGestor(ContextoSe contexto, IMapper mapeador)
+        internal static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePermisos(contexto, mapeador);
+        }
+
+
+        internal static List<PermisoDto> Leer(GestorDePermisos gestor, int posicion, int cantidad, string filtro)
+        {
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!filtro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PermisoDto.Nombre), Valor = filtro });
+
+            var permisosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(permisosDtm).ToList();
         }
 
         public static PermisoDtm CrearObtener(ContextoSe contexto, IMapper mapeador, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
         {
             var nombreDelPermiso = ComponerNombre(nombre, clase, tipo);
-            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
+            var gestorDePermiso = Gestor(contexto, mapeador);
             var permiso = gestorDePermiso.LeerRegistroCacheado(nameof(PermisoDtm.Nombre), nombreDelPermiso, false, false);
             if (permiso == null)
                 permiso = Crear(gestorDePermiso, nombreDelPermiso, clase, tipo);
@@ -153,13 +163,20 @@ namespace GestoresDeNegocio.Seguridad
 
         public static void Modificar(ContextoSe contexto, IMapper mapeador, int idPermiso, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
         {
-            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
+            var gestorDePermiso = Gestor(contexto, mapeador);
             var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
             if (permiso != null)
             {
                 permiso.Nombre = ComponerNombre(nombre, clase, tipo);
                 gestorDePermiso.Modificar(permiso);
             }
+        }
+        public static void Eliminar(ContextoSe contexto, IMapper mapeador, int idPermiso)
+        {
+            var gestorDePermiso = Gestor(contexto, mapeador);
+            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
+            if (permiso != null)
+                gestorDePermiso.Eliminar(permiso);
         }
 
         private static string ComponerNombre(string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
@@ -169,15 +186,6 @@ namespace GestoresDeNegocio.Seguridad
             else
                 return $"{clase.ToString().ToUpper()} ({tipo}): {nombre}";
         }
-
-        public static void Eliminar(ContextoSe contexto, IMapper mapeador,int idPermiso)
-        {
-            var gestorDePermiso = ObtenerGestor(contexto, mapeador);
-            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
-            if (permiso != null)
-                gestorDePermiso.Eliminar(permiso);
-        }
-
 
         private static PermisoDtm Crear(GestorDePermisos gestorDePermiso, string nombreDelPermiso, enumClaseDePermiso clase, enumTipoDePermiso tipo)
         {
@@ -196,7 +204,6 @@ namespace GestoresDeNegocio.Seguridad
             permiso = gestorDePermiso.Crear(nombreDelPermiso, tipoDePermiso, claseDePermiso);
             return permiso;
         }
-
 
         protected override IQueryable<PermisoDtm> AplicarFiltros(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
@@ -266,8 +273,8 @@ namespace GestoresDeNegocio.Seguridad
         {
             base.AntesMapearRegistroParaEliminar(elemento, opciones);
 
-            var gestor = GestorDeRolesDePermisos.Gestor(Contexto, Mapeador);
-            var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
+            var gestor = GestorDePermisosDeUnRol.Gestor(Contexto, Mapeador);
+            var filtro = new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnRolDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
             var filtros = new List<ClausulaDeFiltrado> {filtro};
             var r = gestor.LeerRegistros(0, 1, filtros);
             if (r.Count > 0)
@@ -281,7 +288,7 @@ namespace GestoresDeNegocio.Seguridad
             }
         }
 
-        internal PermisoDtm Crear(string nombrePermiso, TipoPermisoDtm tipoDePermiso, ClasePermisoDtm claseDePermiso)
+        private PermisoDtm Crear(string nombrePermiso, TipoPermisoDtm tipoDePermiso, ClasePermisoDtm claseDePermiso)
         {
             var registro = new PermisoDtm();
             registro.Nombre = nombrePermiso;
@@ -291,13 +298,13 @@ namespace GestoresDeNegocio.Seguridad
             return registro;
         }
         
-        internal PermisoDtm Modificar(PermisoDtm permiso)
+        private PermisoDtm Modificar(PermisoDtm permiso)
         {
             PersistirRegistro(permiso, new ParametrosDeNegocio(TipoOperacion.Modificar));
             return permiso;
         }
 
-        internal PermisoDtm Eliminar(PermisoDtm permiso)
+        private PermisoDtm Eliminar(PermisoDtm permiso)
         {
             PersistirRegistro(permiso, new ParametrosDeNegocio(TipoOperacion.Eliminar));
             return permiso;
@@ -310,8 +317,8 @@ namespace GestoresDeNegocio.Seguridad
             //validamos que el permiso no esté en un rol
             if (parametros.Tipo == TipoOperacion.Eliminar)
             {
-                var gestor = new GestorDeRolesDePermisos(Contexto, Mapeador);
-                var filtro = new ClausulaDeFiltrado { Clausula = nameof(RolesDeUnPermisoDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = registro.Id.ToString() };
+                var gestor = new GestorDePermisosDeUnRol(Contexto, Mapeador);
+                var filtro = new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnRolDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = registro.Id.ToString() };
                 var filtros = new List<ClausulaDeFiltrado> { filtro };
                 if (gestor.Contar(filtros) > 0)
                 {

@@ -55,6 +55,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePuestosDeUnUsuario>();
             services.AddScoped<GestorDeRolesDeUnPuesto>();
             services.AddScoped<GestorDeRoles>();
+            services.AddScoped<GestorDePermisosDeUnRol>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

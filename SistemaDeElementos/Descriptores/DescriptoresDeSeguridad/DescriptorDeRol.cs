@@ -10,6 +10,15 @@ namespace MVCSistemaDeElementos.Descriptores
             : base(nameof(RolController), nameof(RolController.CrudRol), modo)
         {
             RutaVista = "Seguridad";
+
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(PermisosDeUnRolController)
+                , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)
+                , relacionarCon: nameof(PermisoDto)
+                , navegarAlCrud: DescriptorMantenimiento<PermisosDeUnRolDto>.nombreMnt
+                , nombreOpcion: "Permisos"
+                , propiedadQueRestringe: nameof(RolDto.Id)
+                , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
         }
 
 

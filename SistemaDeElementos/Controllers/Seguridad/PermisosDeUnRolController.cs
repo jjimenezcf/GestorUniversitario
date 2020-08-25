@@ -8,34 +8,34 @@ using ModeloDeDto.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class RolesDeUnPuestoController :  EntidadController<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
+    public class PermisosDeUnRolController : EntidadController<ContextoSe, PermisosDeUnRolDtm, PermisosDeUnRolDto>
     {
-
-        public RolesDeUnPuestoController(GestorDeRolesDeUnPuesto gestor, GestorDeErrores errores)
+         public PermisosDeUnRolController(GestorDePermisosDeUnRol gestor, GestorDeErrores errores)
          : base
          (
            gestor,
            errores,
-           new DescriptorDeRolesDeUnPuesto(ModoDescriptor.Mantenimiento)
+           new DescriptorDePermisosDeUnRol(ModoDescriptor.Mantenimiento)
          )
         {
         }
 
         [HttpPost]
-        public IActionResult CrudRolesDeUnPuesto(string restrictor, string orden)
+        public IActionResult CrudPermisosDeUnRol(string restrictor, string orden)
         {
             return ViewCrud();
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
-            if (claseElemento == nameof(PuestoDto))
-                return ((GestorDeRolesDeUnPuesto)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+            if (claseElemento == nameof(PermisoDto))
+                return ((GestorDePermisosDeUnRol)GestorDeElementos).LeerPermisos(posicion, cantidad, filtro);
 
             if (claseElemento == nameof(RolDto))
-                return ((GestorDeRolesDeUnPuesto)GestorDeElementos).LeerRoles(posicion, cantidad, filtro);
+                return ((GestorDePermisosDeUnRol)GestorDeElementos).LeerRoles(posicion, cantidad, filtro);
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
+
     }
 }

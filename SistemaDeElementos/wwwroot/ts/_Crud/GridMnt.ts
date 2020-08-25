@@ -348,6 +348,7 @@
 
         protected ObtenerExpresionMostrar(idCheck: string): string {
             let expresion: string = this.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
+
             if (!IsNullOrEmpty(expresion)) {
                 let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
                 let tds: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
@@ -361,6 +362,10 @@
                     }
                 }
             }
+
+            if (expresion === '[nombre]')
+                throw new Error('No se ha definido la expresión del elemento');
+
             return expresion;
         }
 

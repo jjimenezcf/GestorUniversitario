@@ -155,15 +155,14 @@
         public FilaPulsada(idCheck: string, idDelInput: string) {
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+            let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
             //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
             if (idCheck !== idDelInput) {
                 check.checked = !check.checked;
             }
 
-            if (check.checked) {
-                let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
+            if (check.checked) 
                 this.AnadirAlInfoSelector(idCheck, expresionElemento);
-            }
             else
                 this.QuitarDelSelector(idCheck);
         }

@@ -1,6 +1,6 @@
 ﻿namespace ModeloDeDto.Seguridad
 {
-    [IUDto]
+    [IUDto(ExpresionNombre = "[Rol]")]
     public class RolesDeUnPuestoDto : ElementoDto
     {
         [IUPropiedad(Etiqueta = "Puesto",
