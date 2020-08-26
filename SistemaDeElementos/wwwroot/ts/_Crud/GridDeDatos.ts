@@ -104,12 +104,12 @@
 
 
     export class DatosPeticionNavegarGrid {
-        private _mnt: CrudMnt;
+        private _grid: GridDeDatos;
         private _accion: string;
         private _posicion: number;
 
-        public get Mnt(): CrudMnt {
-            return this._mnt;
+        public get Grid(): GridDeDatos {
+            return this._grid;
         }
 
         public get Accion(): string {
@@ -118,8 +118,8 @@
         public get PosicionDesdeLaQueSeLee(): number {
             return this._posicion;
         }
-        constructor(mnt: CrudMnt, accion: string, posicion: number) {
-            this._mnt = mnt;
+        constructor(grid: GridDeDatos, accion: string, posicion: number) {
+            this._grid = grid;
             this._accion = accion;
             this._posicion = posicion;
         }
@@ -262,7 +262,7 @@
         }
     }
 
-    export class GridMnt extends CrudBase {
+    export class GridDeDatos extends CrudBase {
 
         protected Ordenacion: Ordenacion;
         protected InfoSelector: InfoSelector;
@@ -312,7 +312,6 @@
                 a.setAttribute("class", orden.ccsClase);
             }
         }
-
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
 
@@ -557,8 +556,7 @@
             }
         }
 
-
-        protected ActualizarInformacionDelGrid(contenedorGrid: CrudMnt, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+        protected ActualizarInformacionDelGrid(contenedorGrid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
             if (this.Estado.Contiene(atGrid.idSeleccionado)) {
                 let idSeleccionado: number = this.Estado.Obtener(atGrid.idSeleccionado);
@@ -628,8 +626,7 @@
             EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
         }
 
-
-        //permite relacionar un usuario con diferentes entidades
+        // permite relacionar un elemento con diferentes entidades
         // parametros de entrada:
         // idOpcionDeMenu --> id de la opción de menú que almacena los parámetros y la acción a someter
         // relacionarCon --> entidad con la que se relaciona
@@ -677,24 +674,94 @@
          * métodos para mapear los registros leidos a un dbgrid 
          * 
          */
+        public ObtenerUltimos() {
+            let total: number = this.Navegador.Total;
+            let cantidad: number = this.Navegador.Cantidad;
+            let ultimaPagina: number = Math.ceil(total / cantidad);
+            if (ultimaPagina <= 1)
+                return;
 
-        protected CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
+            let posicion: number = (ultimaPagina - 1) * cantidad;
+            if (posicion >= total)
+                return;
 
+            this.CargarGrid(atGrid.accion.ultima, posicion);
+        }
+
+        public ObtenerAnteriores() {
+            let cantidad: number = this.Navegador.Cantidad;
+            let pagina: number = this.Navegador.Pagina;
+            if (pagina == 1)
+                return;
+
+            let posicion: number = (pagina - 2) * cantidad;
+
+            if (posicion < 0)
+                posicion = 0;
+
+            this.CargarGrid(atGrid.accion.anterior, posicion);
+        }
+        public ObtenerSiguientes() {
+            let cantidad: number = this.Navegador.Cantidad;
+            let pagina: number = this.Navegador.Pagina;
+            let total: number = this.Navegador.Total;
+            let posicion: number = pagina * cantidad;
+            if (posicion >= total)
+                return;
+
+            this.CargarGrid(atGrid.accion.siguiente, posicion);
+        }
+
+        protected CargarGrid(accion: string, posicion: number) {
+            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
+            var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
+                let a = new ApiDeAjax.DescriptorAjax(this
+                    , Ajax.EndPoint.LeerDatosParaElGrid
+                    , datosDePeticion
+                    , url
+                    , ApiDeAjax.TipoPeticion.Asincrona
+                    , ApiDeAjax.ModoPeticion.Get
+                    , this.CrearFilasEnElGrid
+                    , null
+                );
+
+                a.Ejecutar();
+        }
+
+        private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
+            var posicion = posicion;
+            var cantidad = this.Navegador.Cantidad;
+            var controlador = this.Navegador.Controlador;
+            var filtroJson = this.ObtenerFiltros();
+            var ordenJson = this.ObtenerOrdenacion();
+
+            let url: string = `/${controlador}/${endPoint}`;
+            let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
+                `&${Ajax.Param.accion}=${accion}` +
+                `&${Ajax.Param.posicion}=${posicion}` +
+                `&${Ajax.Param.cantidad}=${cantidad}` +
+                `&${Ajax.Param.filtro}=${filtroJson}` +
+                `&${Ajax.Param.orden}=${ordenJson}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
+        }
+
+        private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
-            let mnt: CrudMnt = datosDeEntrada.Mnt;
+            let grid: GridDeDatos = datosDeEntrada.Grid;
             let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
             var registros = infoObtenida.registros;
             if (datosDeEntrada.Accion == atGrid.accion.buscar)
-                mnt.Navegador.Total = infoObtenida.total;
+                grid.Navegador.Total = infoObtenida.total;
 
-            let filaCabecera: PropiedadesDeLaFila[] = mnt.obtenerDescriptorDeLaCabecera(mnt);
+            let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
             var datosDelGrid = document.createElement("tbody");
             for (let i = 0; i < registros.length; i++) {
-                let fila = mnt.crearFila(filaCabecera, registros[i], i);
+                let fila = grid.crearFila(filaCabecera, registros[i], i);
                 datosDelGrid.append(fila);
             }
 
-            var tabla = mnt.Grid.querySelector("table");
+            var tabla = grid.Grid.querySelector("table");
             var tbody = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
                 tabla.append(datosDelGrid);
@@ -703,7 +770,7 @@
                 tabla.append(datosDelGrid);
             }
 
-            mnt.ActualizarInformacionDelGrid(mnt, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+            grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
         }
 
         private crearFila(columnaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
@@ -790,9 +857,9 @@
             celdaDelTd.append(checkbox);
         }
 
-        private obtenerDescriptorDeLaCabecera(mnt: CrudMnt): Array<PropiedadesDeLaFila> {
+        private obtenerDescriptorDeLaCabecera(grid: GridDeDatos): Array<PropiedadesDeLaFila> {
             let filaCabecera: Array<PropiedadesDeLaFila> = new Array<PropiedadesDeLaFila>();
-            var cabecera = mnt.Tabla.rows[0];
+            var cabecera = grid.Tabla.rows[0];
             var ths = cabecera.querySelectorAll('th');
             for (let i = 0; i < ths.length; i++) {
                 let p: PropiedadesDeLaFila = new PropiedadesDeLaFila();
@@ -813,6 +880,26 @@
                     return registro[propiedad];
             }
             return "";
+        }
+
+        public FilaPulsada(idCheck: string, idDelInput: string) {
+
+            let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+            let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
+            //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
+            if (idCheck !== idDelInput) {
+                check.checked = !check.checked;
+            }
+
+            if (check.checked)
+                this.AnadirAlInfoSelector(idCheck, expresionElemento);
+            else
+                this.QuitarDelSelector(idCheck);
+        }
+
+        public OrdenarPor(columna: string) {
+            this.EstablecerOrdenacion(columna);
+            this.CargarGrid(atGrid.accion.buscar, 0);
         }
 
 

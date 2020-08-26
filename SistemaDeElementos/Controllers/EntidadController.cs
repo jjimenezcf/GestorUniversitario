@@ -251,7 +251,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde CrudMantenimiento.ts
+        //END-POINT: Desde CrudMantenimiento.ts (Obsoleto)
         public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
         {
             var r = new ResultadoHtml();
@@ -299,7 +299,7 @@ namespace MVCSistemaDeElementos.Controllers
            public int total { get; set; }
         }
 
-        //END-POINT: Desde CrudMantenimiento.ts
+        //END-POINT: Desde GridDeDatos.ts
         public JsonResult epLeerDatosParaElGrid(string modo, string accion, string posicion, string cantidad, string filtro, string orden)
         {
             var r = new Resultado();

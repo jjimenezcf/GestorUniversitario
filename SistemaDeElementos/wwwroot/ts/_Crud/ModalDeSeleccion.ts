@@ -1,6 +1,6 @@
 ﻿namespace Crud {
 
-    export class ModalSeleccion extends GridMnt {
+    export class ModalSeleccion extends GridDeDatos {
 
 
         private get Selector(): HTMLSelector {
@@ -90,28 +90,6 @@
             this.CerrarModalDeSeleccion();
         }
 
-        public FilaPulsada(idCheck: string, idDelInput: string) {
-
-            let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
-            //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
-            if (idCheck === idDelInput) {
-                check.checked = !check.checked;
-                return;
-            }
-
-            check.checked = !check.checked;
-
-            if (check.checked) {
-                let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
-                if (IsNullOrEmpty(expresionElemento))
-                    Mensaje(TipoMensaje.Error, `No está definida la expresion del elemento del grid ${this.IdGrid}`);
-                else
-                    this.AnadirAlInfoSelector(idCheck, expresionElemento);
-            }
-            else
-                this.QuitarDelSelector(idCheck);
-        }
-
         private elementosMarcados() {
             var ids = "";
             var elementos = new Array();
@@ -130,66 +108,12 @@
             return elementos;
         }
 
-        public OrdenarPor(columna: string) {
-            this.EstablecerOrdenacion(columna);
-            this.Buscar(0);
-        }
-
-        public ObtenerUltimos() {
-            this.Buscar(-1);
-        }
-
-        public ObtenerAnteriores() {
-            let cantidad: number = this.Navegador.Cantidad;
-            let posicion: number = this.Navegador.Posicion;
-            posicion = posicion - (cantidad * 2);
-            if (posicion < 0)
-                posicion = 0;
-            this.Buscar(posicion);
-        }
-
-        public ObtenerSiguientes() {
-            let posicion: number = this.Navegador.Posicion;
-            this.Buscar(posicion);
-        }
-
         public RecargarGrid() {
             BlanquearMensaje();
-            this.Buscar(0);
+            this.CargarGrid(atGrid.accion.buscar, 0);
         }
 
-        private Buscar(posicion: number) {
-            let url: string = this.DefinirPeticionDeCargarGrid(posicion);
-            let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.RecargarModalEnHtml
-                , this
-                , url
-                , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.CrearFilasEnElGrid
-                , null
-            );
-
-            a.Ejecutar();
-        }
-
-        private DefinirPeticionDeCargarGrid(posicion: number): string {
-            var cantidad = this.Navegador.Cantidad;
-            var controlador = this.Navegador.Controlador;
-            var filtroJson = this.ObtenerFiltros();
-            var ordenJson = this.ObtenerOrdenacion();
-
-            let url: string = `/${controlador}/${Ajax.EndPoint.RecargarModalEnHtml}`;
-            let parametros: string = `${Ajax.Param.idModal}=${this.IdModal}` +
-                `&${Ajax.Param.posicion}=${posicion}` +
-                `&${Ajax.Param.cantidad}=${cantidad}` +
-                `&${Ajax.Param.filtro}=${filtroJson}` +
-                `&${Ajax.Param.orden}=${ordenJson}`;
-            let peticion: string = url + '?' + parametros;
-            return peticion;
-        }
-
-        public TextoSelectorCambiado(valor: string) {
+        public TextoSelectorCambiado() {
             this.EditorDelGrid.value = this.Selector.value;
             let url: string = this.DefinirPeticionLeerParaSelector();
 

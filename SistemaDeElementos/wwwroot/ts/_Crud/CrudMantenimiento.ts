@@ -2,7 +2,7 @@
 
     export let crudMnt: CrudMnt = null;
 
-    export class CrudMnt extends GridMnt {
+    export class CrudMnt extends GridDeDatos {
 
         public crudDeCreacion: CrudCreacion;
         public crudDeEdicion: CrudEdicion;
@@ -114,7 +114,7 @@
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             mantenimiento.CerrarModalDeBorrado();
             mantenimiento.InfoSelector.QuitarTodos();
-            mantenimiento.Buscar(atGrid.accion.buscar, 0);
+            mantenimiento.CargarGrid(atGrid.accion.buscar, 0);
         }
 
 
@@ -152,76 +152,18 @@
             this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Cerrar);
         }
 
-        public FilaPulsada(idCheck: string, idDelInput: string) {
-
-            let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
-            let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
-            //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
-            if (idCheck !== idDelInput) {
-                check.checked = !check.checked;
-            }
-
-            if (check.checked) 
-                this.AnadirAlInfoSelector(idCheck, expresionElemento);
-            else
-                this.QuitarDelSelector(idCheck);
-        }
-
-        public OrdenarPor(columna: string) {
-            this.EstablecerOrdenacion(columna);
-            this.Buscar(atGrid.accion.ordenar, 0);
-        }
-
-        public ObtenerUltimos() {
-            let total: number = this.Navegador.Total;
-            let cantidad: number = this.Navegador.Cantidad;
-            let ultimaPagina: number = Math.ceil(total / cantidad);
-            if (ultimaPagina <= 1)
-                return;
-
-            let posicion: number = (ultimaPagina - 1) * cantidad;
-            if (posicion >= total)
-                return;
-            this.Buscar(atGrid.accion.ultima, posicion);
-        }
-
-        public ObtenerAnteriores() {
-            let cantidad: number = this.Navegador.Cantidad;
-            let pagina: number = this.Navegador.Pagina;
-            if (pagina == 1)
-                return;
-
-            let posicion: number = (pagina - 2) * cantidad;
-
-            if (posicion < 0)
-                posicion = 0;
-
-            this.Buscar(atGrid.accion.anterior, posicion);
-        }
-
         public RestaurarPagina() {
             this.Navegador.EsRestauracion = false;
             let cantidad: number = this.Navegador.Cantidad;
             let pagina: number = this.Navegador.Pagina;
             if (pagina <= 1)
-                this.Buscar(atGrid.accion.buscar, 0);
+                this.CargarGrid(atGrid.accion.buscar, 0);
             else {
                 let posicion: number = (pagina - 1) * cantidad;
                 if (posicion < 0)
                     posicion = 0;
                 this.Buscar(atGrid.accion.restaurar, posicion);
             }
-        }
-
-        public ObtenerSiguientes() {
-            let cantidad: number = this.Navegador.Cantidad;
-            let pagina: number = this.Navegador.Pagina;
-            let total: number = this.Navegador.Total;
-            let posicion: number = pagina * cantidad;
-            if (posicion >= total)
-                return;
-
-            this.Buscar(atGrid.accion.siguiente, posicion);
         }
 
         private DefinirPeticionDeBorrado(ids: string): string {
@@ -232,57 +174,15 @@
             let peticion: string = url + '?' + parametros;
             return peticion;
         }
-
+                
         public Buscar(accion: string, posicion: number) {
 
             if (this.Navegador.EsRestauracion) {
                 this.RestaurarPagina();
             }
             else {
-
-                var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
-
-                let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
-                let a = new ApiDeAjax.DescriptorAjax(this
-                    , Ajax.EndPoint.LeerDatosParaElGrid
-                    , datosDePeticion
-                    , url
-                    , ApiDeAjax.TipoPeticion.Asincrona
-                    , ApiDeAjax.ModoPeticion.Get
-                    , this.CrearFilasEnElGrid
-                    , null
-                );
-
-                a.Ejecutar();
+              this.CargarGrid(accion, posicion);
             }
-        }
-
-
-        //private ActualizarGrid(peticion: ApiDeAjax.DescriptorAjax) {
-        //    let mnt: CrudMnt = (peticion.DatosDeEntrada as CrudMnt);
-        //    let resultado = peticion.resultado as ResultadoHtml;
-
-        //    if (mnt.IdGrid === mnt.Grid.getAttribute(Atributo.id)) {
-        //        mnt.ActualizarGridHtml(mnt, resultado.html);
-        //    }
-        //}
-
-        private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
-            var posicion = posicion;
-            var cantidad = this.Navegador.Cantidad;
-            var controlador = this.Navegador.Controlador;
-            var filtroJson = this.ObtenerFiltros();
-            var ordenJson = this.ObtenerOrdenacion();
-
-            let url: string = `/${controlador}/${endPoint}`;
-            let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
-                `&${Ajax.Param.accion}=${accion}` +
-                `&${Ajax.Param.posicion}=${posicion}` +
-                `&${Ajax.Param.cantidad}=${cantidad}` +
-                `&${Ajax.Param.filtro}=${filtroJson}` +
-                `&${Ajax.Param.orden}=${ordenJson}`;
-            let peticion: string = url + '?' + parametros;
-            return peticion;
         }
 
         public CambiarSelector(idSelector: string) {
@@ -292,7 +192,7 @@
             if (IsNullOrEmpty(htmlSelector.value))
                 modal.InicializarModal();
             else
-                modal.TextoSelectorCambiado(htmlSelector.value);
+                modal.TextoSelectorCambiado();
         }
 
         public CargarListaDinamica(selector: HTMLInputElement) {
