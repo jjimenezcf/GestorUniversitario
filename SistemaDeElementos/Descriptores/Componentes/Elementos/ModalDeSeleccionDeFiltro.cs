@@ -30,14 +30,14 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderGridModal()
         {
             string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨cotenido-modal modal-seleccion¨ >
-                              		    <div id=¨{IdHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
+                              		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	titulo
                                         </div>
-                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
                               			    crudDeSeleccion
                                         </div>
-                                        <div id=¨{IdHtml}_pie¨ class=¨cotenido-pie¨>
+                                        <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
                                            <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Seleccionar¨ readonly onclick=¨Crud.EventosModalDeSeleccion('seleccionar-elementos','{IdHtml}')¨       />
                                            <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeSeleccion('cerrar-modal-seleccion','{IdHtml}')¨ />
                                         </div>

@@ -265,16 +265,22 @@
     export class GridDeDatos extends CrudBase {
 
         protected Ordenacion: Ordenacion;
-        protected InfoSelector: InfoSelector;
         protected Navegador: Navegador;
 
-        private _idGrid: string;
+        private _infoSelector: InfoSelector;
+        public get InfoSelector(): InfoSelector {
+            return this._infoSelector;
+        }
 
+        private _idGrid: string;
         protected get IdGrid(): string {
             return this._idGrid;
         }
-        private idHtmlFiltro: string;
+        protected get EsGridDeModal(): boolean {
+            return this.constructor.name === ModalSeleccion.name;
+        }
 
+        private idHtmlFiltro: string;
         protected get ZonaDeFiltro(): HTMLDivElement {
             return document.getElementById(this.idHtmlFiltro) as HTMLDivElement;
         }
@@ -291,7 +297,7 @@
         constructor(idPanelMnt: string) {
             super();
             this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atGrid.id);
-            this.InfoSelector = new InfoSelector(this.IdGrid);
+            this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
@@ -515,14 +521,14 @@
             return fila;
         }
 
-        protected AnadirAlInfoSelector(idCheck: string, expresionElemento: string) {
+        protected AnadirAlInfoSelector(infoSelector: InfoSelector, idCheck: string, expresionElemento: string) {
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
-            this.InfoSelector.InsertarElemento(id, expresionElemento);
+            infoSelector.InsertarElemento(id, expresionElemento);
         }
 
-        protected QuitarDelSelector(idCheck: string) {
+        protected QuitarDelSelector(infoSelector: InfoSelector, idCheck: string) {
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
-            this.InfoSelector.Quitar(id);
+            infoSelector.Quitar(id);
         }
 
         protected EstaMarcado(idCheck: string): boolean {
@@ -558,7 +564,8 @@
 
         protected ActualizarInformacionDelGrid(contenedorGrid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
-            if (this.Estado.Contiene(atGrid.idSeleccionado)) {
+
+            if (!this.EsGridDeModal && this.Estado.Contiene(atGrid.idSeleccionado)) {
                 let idSeleccionado: number = this.Estado.Obtener(atGrid.idSeleccionado);
                 let nombreSeleccionado: string = this.Estado.Obtener(atGrid.nombreSeleccionado);
                 this.InfoSelector.InsertarElemento(idSeleccionado, nombreSeleccionado);
@@ -633,7 +640,7 @@
         // PropiedadRestrictora --> propiedad bindeada al control de filtro de la página de destino donde se mapea el restrictor seleccionado en el grid
         public RelacionarCon(parametrosDeEntrada: string): void {
             try {
-                let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this.InfoSelector, parametrosDeEntrada);
+                let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
                 super.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
@@ -811,7 +818,14 @@
         }
 
         private definirPulsarCheck(idCheckDeSeleccion: string, idControlHtml: string): string {
-            let a: string = `Crud.EventosDelMantenimiento('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+            let a: string = '';
+            if (this.EsGridDeModal) {
+                let idModal: string = this.Grid.getAttribute(atSelector.idModal);
+                a = `Crud.EventosModalDeSeleccion('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+            }
+            else {
+                a = `Crud.EventosDelMantenimiento('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+            }
             return a;
         }
 
@@ -882,7 +896,7 @@
             return "";
         }
 
-        public FilaPulsada(idCheck: string, idDelInput: string) {
+        public FilaPulsada(infoSelector: InfoSelector,  idCheck: string, idDelInput: string) {
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
@@ -892,9 +906,9 @@
             }
 
             if (check.checked)
-                this.AnadirAlInfoSelector(idCheck, expresionElemento);
+                this.AnadirAlInfoSelector(infoSelector, idCheck, expresionElemento);
             else
-                this.QuitarDelSelector(idCheck);
+                this.QuitarDelSelector(infoSelector, idCheck);
         }
 
         public OrdenarPor(columna: string) {

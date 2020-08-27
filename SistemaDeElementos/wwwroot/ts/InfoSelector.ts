@@ -114,7 +114,7 @@ class InfoSelector {
         return this.Cantidad;
     }
 
-    public InsertarElemento(id: number, textoMostrar: string) {
+    public InsertarElemento(id: number, textoMostrar: string): number {
         if (!id || isNaN(id)) {
             Mensaje(TipoMensaje.Error,`Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
@@ -129,13 +129,12 @@ class InfoSelector {
         return pos;
     }
 
-    public InsertarElementos(elementos) {
-
+    public InsertarElementos(elementos: Array<Elemento>): number {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
-                var e = elementos[i];
-                if (this.seleccionados.indexOf(e.id) < 0)
-                    this.InsertarElemento(e.id, e.valor);
+                let e: Elemento = elementos[i];
+                if (this.seleccionados.indexOf(e.Id) < 0)
+                    this.InsertarElemento(e.Id, e.Texto);
             }
         }
         else {
@@ -161,14 +160,13 @@ class InfoSelector {
             console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
 
-    public QuitarTodos() {
+    public QuitarTodos(): void {
         this.seleccionados.splice(0, this.seleccionados.length);
         this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
-
     }
 
-    public ToString() {
-        var ids = "";
+    public ToString(): string {
+        let ids: string = "";
         for (var i = 0; i < this.seleccionados.length; i++) {
             ids = ids + this.seleccionados[i];
             if (i < this.seleccionados.length - 1)
@@ -177,7 +175,7 @@ class InfoSelector {
         return ids;
     }
 
-    public SincronizarCheck() {
+    public SincronizarCheck(): void {
         this.deshabilitarCheck(true);
     }
 

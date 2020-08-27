@@ -38,6 +38,7 @@ const atControl = {
     imagenVinculada: "imagen-vinculada",
     valor: "value",
     restrictor: "restrictor",
+    nombreModal: "idModal",
     eventoJs: {
         onclick: 'onclick'
     }
@@ -89,7 +90,7 @@ const atSelector = {
     refCheckDeSeleccion: "refCheckDeSeleccion",
     idModal: "id-modal",
     idBtnSelector: "idBtnSelector",
-    ListaDeSeleccionados: 'idsSeleccionados',
+    ListaDeSeleccionados: 'ids-seleccionados',
     selector: "selector",
     propiedadParaFiltrar: "propiedadFiltrar"
 };

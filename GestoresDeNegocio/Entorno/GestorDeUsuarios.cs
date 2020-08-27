@@ -30,13 +30,23 @@ namespace GestoresDeNegocio.Entorno
 
     static class FiltrosDeUsuario
     {
-        public static IQueryable<T> FiltrarPorNombreCompleto<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
+        public static IQueryable<T> FiltrarPorNombreCompleto<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Clausula.ToLower() == UsuariosPor.NombreCompleto)
-                    return regristros.Where(x => x.Apellido.Contains(filtro.Valor) || x.Nombre.Contains(filtro.Valor));
+                {
+                    var partesDelNombre = filtro.Valor.Split('(', ')',',');
+                    if (partesDelNombre.Length == 4)
+                        registros = registros.Where(x => x.Login == partesDelNombre[1].Trim()
+                                                      && x.Apellido == partesDelNombre[2].Trim()
+                                                      && x.Nombre == partesDelNombre[3].Trim());
+                    else
+                        registros = registros.Where(x => x.Apellido.Contains(filtro.Valor)
+                                                      || x.Nombre.Contains(filtro.Valor)
+                                                      || x.Login.Contains(filtro.Valor));
+                }
 
-            return regristros;
+            return registros;
         }
 
         public static IQueryable<T> FiltrarPorRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm

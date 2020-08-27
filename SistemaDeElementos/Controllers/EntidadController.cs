@@ -360,46 +360,46 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde ModalSeleccion.ts
-        public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
-        {
-            var r = new ResultadoHtml();
-            int pos = posicion.Entero();
-            int can = cantidad.Entero();
-            try
-            {
-                //si me pide leer los últimos registros
-                if (pos == -1)
-                {
-                    var total = Contar();
-                    pos = total - can;
-                    if (pos < 0) pos = 0;
-                    posicion = pos.ToString();
-                }
+        //public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
+        //{
+        //    var r = new ResultadoHtml();
+        //    int pos = posicion.Entero();
+        //    int can = cantidad.Entero();
+        //    try
+        //    {
+        //        //si me pide leer los últimos registros
+        //        if (pos == -1)
+        //        {
+        //            var total = Contar();
+        //            pos = total - can;
+        //            if (pos < 0) pos = 0;
+        //            posicion = pos.ToString();
+        //        }
 
-                var elementos = Leer(pos, can, filtro, orden);
-                //si no he leido nada por estar al final, vuelvo a leer los últimos
-                if (pos > 0 && elementos.ToList().Count() == 0)
-                {
-                    pos = pos - can;
-                    if (pos < 0) pos = 0;
-                    elementos = Leer(pos, can, filtro, orden);
-                    r.Mensaje = "No hay más elementos";
-                }
+        //        var elementos = Leer(pos, can, filtro, orden);
+        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
+        //        if (pos > 0 && elementos.ToList().Count() == 0)
+        //        {
+        //            pos = pos - can;
+        //            if (pos < 0) pos = 0;
+        //            elementos = Leer(pos, can, filtro, orden);
+        //            r.Mensaje = "No hay más elementos";
+        //        }
 
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
-                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
-                r.Datos = elementos.Count();
-                r.Estado = EstadoPeticion.Ok;
-            }
-            catch (Exception e)
-            {
-                r.Estado = EstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido recuperar datos para el grid";
-            }
+        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
+        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
+        //        r.Datos = elementos.Count();
+        //        r.Estado = EstadoPeticion.Ok;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        r.Estado = EstadoPeticion.Error;
+        //        r.consola = GestorDeErrores.Concatenar(e);
+        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
+        //    }
 
-            return new JsonResult(r);
-        }
+        //    return new JsonResult(r);
+        //}
 
         //END-POINT: Desde ModalSeleccion.ts
         public JsonResult epLeer(string filtro)

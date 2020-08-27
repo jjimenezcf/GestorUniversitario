@@ -26,7 +26,9 @@ namespace GestorDeElementos
     {
         public string Clausula { get; set; }
         public CriteriosDeFiltrado Criterio { get; set; }
-        public string Valor { get; set; }
+
+        private string _valor = "";
+        public string Valor { get { return _valor.Trim(); } set { _valor = value; } }
     }
 
     public class ClausulaDeOrdenacion

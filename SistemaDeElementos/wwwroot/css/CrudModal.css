@@ -26,21 +26,21 @@
         width: 60%;
     }
 
-.cotenido-cabecera {
+.contenido-cabecera {
     width: 100%;
 }
 
-.cotenido-cuerpo {
+.contenido-cuerpo {
     width: 100%;
 }
 
-    .cotenido-cuerpo > input {
+    .contenido-cuerpo > input {
         width: 100%;
         margin: 5px;
         border: 0px;
     }
 
-.cotenido-pie {
+.contenido-pie {
     width: 100%;
     margin-top: 20px;
     display: inline-block;

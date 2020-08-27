@@ -60,7 +60,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\Controles.css" />
-    <None Include="wwwroot\Extensiones\selectores.js" />
   </ItemGroup>
 
   <ItemGroup>

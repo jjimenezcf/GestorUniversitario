@@ -117,8 +117,15 @@ namespace MVCSistemaDeElementos.Descriptores
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
             var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            var htmlDiv = @$"<div id = ¨{IdHtml}¨ class=¨ZonaDeDatos¨ seleccionables = ¨-1¨ seleccionados =¨¨ zona-de-filtro = ¨{idHtmlZonaFiltro}¨ expresion-elemento = ¨{ExpresionElemento}¨ tabla-de-datos = ¨{Grid.IdHtmlTabla}¨>     
-                              {Grid.ToHtml()}
+            var htmlDiv = @$"<div id = ¨{IdHtml}¨ 
+                                  class=¨ZonaDeDatos¨ 
+                                  seleccionables = ¨-1¨ 
+                                  seleccionados =¨¨ 
+                                  zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
+                                  expresion-elemento = ¨{ExpresionElemento}¨ 
+                                  tabla-de-datos = ¨{Grid.IdHtmlTabla}¨ 
+                                  id-modal=¨{IdHtmlModal}¨>     
+                                  {Grid.ToHtml()}
                              </div>";
             return htmlDiv;
         }
@@ -130,14 +137,14 @@ namespace MVCSistemaDeElementos.Descriptores
             return Grid.ToHtml();
         }
 
-        public string RenderDelGridModal (string idModal)
-        {
-            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
-            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
-            crud.CambiarModo(ModoDescriptor.Seleccion);
-            crud.Mnt.Datos.IdHtmlModal = idModal;
-            return Grid.ToHtml();
-        }
+        //public string RenderDelGridModal (string idModal)
+        //{
+        //    var mnt = (DescriptorMantenimiento<TElemento>)Padre;
+        //    var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
+        //    crud.CambiarModo(ModoDescriptor.Seleccion);
+        //    crud.Mnt.Datos.IdHtmlModal = idModal;
+        //    return Grid.ToHtml();
+        //}
 
         public override string RenderControl()
         {

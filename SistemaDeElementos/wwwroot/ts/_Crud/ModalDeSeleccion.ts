@@ -4,7 +4,7 @@
 
 
         private get Selector(): HTMLSelector {
-            return <HTMLSelector>document.getElementById(this.idSelector);
+            return document.getElementById(this.idSelector) as HTMLSelector;
         }
 
         private get EditorDelGrid(): HTMLInputElement {
@@ -90,21 +90,21 @@
             this.CerrarModalDeSeleccion();
         }
 
-        private elementosMarcados() {
-            var ids = "";
-            var elementos = new Array();
-            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados)) {
-                ids = this.Selector.getAttribute(atSelector.ListaDeSeleccionados);
-                if (!ids.NoDefinida()) {
-                    var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
-                    var listaIds = ids.split(';');
-                    for (var i = 0; i < listaIds.length; i++) {
-                        var e = { id: listaIds[i], valor: listaNombres[i] };
-                        elementos.push(e);
-                    }
+        private elementosMarcados(): Array<Elemento> {
+            let elementos: Array<Elemento> = new Array<Elemento>();
+
+            let seleccionados: string = this.Selector.hasAttribute(atSelector.ListaDeSeleccionados) ?
+                this.Selector.getAttribute(atSelector.ListaDeSeleccionados) :
+                "";
+
+            if (!IsNullOrEmpty(seleccionados)) {
+                var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
+                var listaIds = seleccionados.split(';');
+                for (var i = 0; i < listaIds.length; i++) {
+                    let e: Elemento = new Elemento(Numero(listaIds[i]), listaNombres[i]);
+                    elementos.push(e);
                 }
             }
-
             return elementos;
         }
 

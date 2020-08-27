@@ -55,14 +55,14 @@
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador)
         {
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
-                              		<div id=¨{idHtml}_contenido¨ class=¨cotenido-modal¨>
-                              		    <div id=¨{idHtml}_cabecera¨ class=¨cotenido-cabecera¨>
+                              		<div id=¨{idHtml}_contenido¨ class=¨contenido-modal¨>
+                              		    <div id=¨{idHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	<h2>{tituloH2}</h2>
                                         </div>
-                              		    <div id=¨{idHtml}_cuerpo¨ class=¨cotenido-cuerpo¨>
+                              		    <div id=¨{idHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
                                         {cuerpo}
                                         </div>
-                                        <div id=¨{idHtml}_pie¨ class=¨cotenido-pie¨>
+                                        <div id=¨{idHtml}_pie¨ class=¨contenido-pie¨>
                                            <input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />
                                            <input type=¨text¨ id=¨{idHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨{cerrar}¨ />
                                            {navegador}

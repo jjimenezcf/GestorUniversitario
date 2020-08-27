@@ -77,7 +77,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string HtmlRenderNavegadorDeSeleccionados()
         {
-            var clase = AbrirEnModal ? "cotenido-pie-navegador" : "contenedor-pie-navegador";
+            var clase = AbrirEnModal ? "contenido-pie-navegador" : "contenedor-pie-navegador";
             var htmlNavegadorGrid = $@"
                 <div id= ¨pie-edicion-{IdHtml}-navegador¨ class = ¨{clase}¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Primer elemento¨ onclick=¨Crud.EventosDeEdicion('mostrar-primero')¨>
