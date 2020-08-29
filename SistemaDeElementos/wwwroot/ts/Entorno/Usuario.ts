@@ -8,10 +8,9 @@
     export class CrudDeUsuarios extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionUsuario(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionUsuario(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

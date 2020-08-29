@@ -8,10 +8,9 @@
     export class CrudDePuestosDeTrabajo extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionPuestoDeTrabajo(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionPuestoDeTrabajo(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

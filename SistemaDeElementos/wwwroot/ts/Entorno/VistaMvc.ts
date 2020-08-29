@@ -8,10 +8,9 @@
     export class CrudMntVistaMvc extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionVistaMvc(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionVistaMvc(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

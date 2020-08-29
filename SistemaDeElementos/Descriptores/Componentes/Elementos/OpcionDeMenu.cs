@@ -7,29 +7,29 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum TipoDeLlamada { Post, Get }
 
-    public static class TipoAccionMnt
+    public static class TipoDeAccionDeMnt
     {
         public const string CrearElemento = "crear-elemento";
         public const string EditarElemento = "editar-elemento";
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
-        public const string CrearRelaciones = "crear-relaciones";
+        public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
     }
 
-    public static class TipoAccionCreacion
+    public static class TipoDeAccionDeCreacion
     {
         public const string NuevoElemento = "nuevo-elemento";
         public const string CerrarCreacion = "cerrar-creacion";
     }
-    public static class TipoAccionEdicion
+    public static class TipoDeAccionDeEdicion
     {
         public const string ModificarElemento = "modificar-elemento";
         public const string CancelarEdicion = "cancelar-edicion";
     }
-    public static class TipoAccionCrearRelaciones
+    public static class TipoDeAccionDeRelacionar
     {
-        public const string RelacionarElementos = "relacionar-elementos";
-        public const string CancelarSeleccion = "cancelar-seleccion";
+        public const string Relacionar = "nuevas-relaciones";
+        public const string CerrarRelacionar = "cerrar-relacionar";
     }
 
     public class AccionDeMenu
@@ -62,9 +62,9 @@ namespace MVCSistemaDeElementos.Descriptores
         public string NavegarAlCrud { get; private set; }
 
         public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt,string propiedadQueRestringe, string propiedadRestrictora)
-        : base(TipoAccionMnt.RelacionarElementos)
+        : base(TipoDeAccionDeMnt.RelacionarElementos)
         {
-            TipoAccion = TipoAccionMnt.RelacionarElementos;
+            TipoAccion = TipoDeAccionDeMnt.RelacionarElementos;
             RelacionarCon = relacionarCon.ToLower();
             PropiedadRestrictora = propiedadRestrictora.ToLower();
             PropiedadQueRestringe = propiedadQueRestringe.ToLower();
@@ -104,7 +104,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CrearElemento : AccionDeMenuMnt
     {
         public CrearElemento()
-        : base(TipoAccionMnt.CrearElemento)
+        : base(TipoDeAccionDeMnt.CrearElemento)
         {
         }
     }
@@ -112,7 +112,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class BorrarElemento : AccionDeMenuMnt
     {
         public BorrarElemento()
-        : base(TipoAccionMnt.EliminarElemento)
+        : base(TipoDeAccionDeMnt.EliminarElemento)
         {
         }
     }
@@ -120,7 +120,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class EditarElemento : AccionDeMenuMnt
     {
         public EditarElemento()
-        : base(TipoAccionMnt.EditarElemento)
+        : base(TipoDeAccionDeMnt.EditarElemento)
         {
         }
     }
@@ -130,7 +130,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string IdHtmlDeLaModalAsociada {get; private set;}
         public Func<string> RenderDeLaModal { get; private set; }
         public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
-        : base(TipoAccionMnt.CrearRelaciones)
+        : base(TipoDeAccionDeMnt.AbrirModalParaRelacionar)
         {
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);
@@ -163,7 +163,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class NuevoElemento : AccionDeMenuCreacion
     {
         public NuevoElemento()
-        : base(TipoAccionCreacion.NuevoElemento)
+        : base(TipoDeAccionDeCreacion.NuevoElemento)
         {
         }
     }
@@ -171,7 +171,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CerrarCreacion : AccionDeMenuCreacion
     {
         public CerrarCreacion()
-        : base(TipoAccionCreacion.CerrarCreacion)
+        : base(TipoDeAccionDeCreacion.CerrarCreacion)
         {
         }
     }
@@ -197,14 +197,14 @@ namespace MVCSistemaDeElementos.Descriptores
     public class ModificarElemento : AccionDeMenuEdicion
     {
         public ModificarElemento()
-        : base(TipoAccionEdicion.ModificarElemento)
+        : base(TipoDeAccionDeEdicion.ModificarElemento)
         {
         }
     }
     public class CancelarEdicion : AccionDeMenuEdicion
     {
         public CancelarEdicion()
-        : base(TipoAccionEdicion.CancelarEdicion)
+        : base(TipoDeAccionDeEdicion.CancelarEdicion)
         {
         }
     }

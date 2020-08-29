@@ -196,6 +196,17 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
     },
+    ModalRelacionar: {
+        Abrir: "abrir-modal-relacionar",
+        Relacionar: "nuevas-relaciones",
+        Cerrar: "cerrar-modal-seleccion",
+        Buscar: "buscar-elementos",
+        FilaPulsada: "fila-pulsada",
+        ObtenerAnteriores: "obtener-anteriores",
+        ObtenerSiguientes: "obtener-siguientes",
+        ObtenerUltimos: "obtener-ultimos",
+        OrdenarPor: "ordenar-por"
+    },
     ModalCreacion: {
         Crear: "crear-elemento",
         Cerrar: "cerrar-modal",
@@ -217,7 +228,7 @@ const Evento = {
         Editar: "editar-elemento",
         Borrar: "eliminar-elemento",
         Relacionar: "relacionar-elementos",
-        CrearRelaciones: "crear-relaciones",
+        AbrirModalParaRelacionar: "abrir-modal-para-relacionar",
         Buscar: "buscar-elementos",
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",

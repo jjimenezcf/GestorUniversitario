@@ -158,7 +158,7 @@
 
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
-                this.CerrarModal(this._idPanelEdicion);
+                this.CerrarModal(this.PanelDeEditar);
             }
             else {
                 this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);

@@ -7,10 +7,9 @@
 
     export class CrudDePermisosDeUnRol extends Crud.CrudMnt {
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionPermisoDeUnRol(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionPermisoDeUnRol(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

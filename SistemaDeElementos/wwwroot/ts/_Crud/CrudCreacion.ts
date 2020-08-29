@@ -77,7 +77,7 @@
         public CerrarCreacion() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
-                this.CerrarModal(this._idPanelCreacion);
+                this.CerrarModal(this.PanelDeCrear);
             }
             else {
                 this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);

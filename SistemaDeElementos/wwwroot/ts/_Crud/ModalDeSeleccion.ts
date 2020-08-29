@@ -1,7 +1,6 @@
 ﻿namespace Crud {
 
-    export class ModalSeleccion extends GridDeDatos {
-
+    export class ModalSeleccion extends ModalConGrid {
 
         private get Selector(): HTMLSelector {
             return document.getElementById(this.idSelector) as HTMLSelector;
@@ -12,10 +11,6 @@
             return <HTMLInputElement>document.getElementById(idEditorMostrar);
         }
 
-        public IdModal: string;
-        protected get Modal(): HTMLDivElement {
-            return document.getElementById(this.IdModal) as HTMLDivElement;
-        };
 
         private get idSelector(): string {
             return this.Modal.getAttribute(atSelector.selector);
@@ -30,18 +25,14 @@
 
 
         constructor(idModal: string, idCrudModal: string) {
-            super(idCrudModal);
-            this.IdModal = idModal;
+            super(idModal,idCrudModal);
         }
 
-        public InicializarModal() {
-            let referenciaCheck: string = `chksel.${this.IdGrid}`;
-            this.blanquearCheck(referenciaCheck);
-            this.InfoSelector.QuitarTodos();
+        public InicializarModalDeSeleccion() {
+            super.InicializarModalConGrid()
             if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
                 this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
         };
-
 
         private InicializarListaDeSeleccionados() {
             if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
@@ -49,48 +40,17 @@
         }
 
         public AbrirModalDeSeleccion() {
-            BlanquearMensaje();
             this.EditorDelGrid.value = this.Selector.value;
-            this.RecargarGrid();
 
-            var arrayMarcados = this.elementosMarcados();
+            super.AbrirModalConGrid();
+
+            var arrayMarcados = this.ElementosMarcados();
             this.InfoSelector.InsertarElementos(arrayMarcados);
             this.MarcarElementos();
             this.InfoSelector.SincronizarCheck();
-            this.Modal.style.display = 'block';
         }
 
-        public CerrarModalDeSeleccion() {
-            let referenciaCheck: string = `chksel.${this.IdGrid}`;
-            this.blanquearCheck(referenciaCheck);
-            this.InfoSelector.QuitarTodos();
-
-            this.CerrarModal(this.IdModal);
-        }
-
-        private blanquearCheck(refCheckDeSeleccion: string) {
-            document.getElementsByName(`${refCheckDeSeleccion}`).forEach(c => {
-                let check = <HTMLInputElement>c;
-                check.checked = false;
-            }
-            );
-        }
-
-        public SeleccionarElementos() {
-            this.Selector.value = "";
-            this.InicializarListaDeSeleccionados();
-
-            for (var x = 0; x < this.InfoSelector.Cantidad; x++) {
-                var elemento: Elemento = this.InfoSelector.LeerElemento(x);
-                if (!elemento.EsVacio())
-                    this.mapearElementoAlHtmlSelector(elemento);
-                else
-                    Mensaje(TipoMensaje.Error, `Se ha leido mal el elemento del selector ${this.IdGrid} de la posición ${x}`);
-            }
-            this.CerrarModalDeSeleccion();
-        }
-
-        private elementosMarcados(): Array<Elemento> {
+        private ElementosMarcados(): Array<Elemento> {
             let elementos: Array<Elemento> = new Array<Elemento>();
 
             let seleccionados: string = this.Selector.hasAttribute(atSelector.ListaDeSeleccionados) ?
@@ -108,9 +68,22 @@
             return elementos;
         }
 
-        public RecargarGrid() {
-            BlanquearMensaje();
-            this.CargarGrid(atGrid.accion.buscar, 0);
+        public CerrarModalDeSeleccion() {
+            this.CerrarModalConGrid();
+        }
+
+          public SeleccionarElementos() {
+            this.Selector.value = "";
+            this.InicializarListaDeSeleccionados();
+
+            for (var x = 0; x < this.InfoSelector.Cantidad; x++) {
+                var elemento: Elemento = this.InfoSelector.LeerElemento(x);
+                if (!elemento.EsVacio())
+                    this.mapearElementoAlHtmlSelector(elemento);
+                else
+                    Mensaje(TipoMensaje.Error, `Se ha leido mal el elemento del selector ${this.IdGrid} de la posición ${x}`);
+            }
+            this.CerrarModalDeSeleccion();
         }
 
         public TextoSelectorCambiado() {
@@ -163,7 +136,7 @@
         };
 
         private ProcesarRegistrosLeidos(registros: Array<any>) {
-            this.InicializarModal();
+            this.InicializarModalDeSeleccion();
             var propiedadmostrar = this.Selector.getAttribute(atSelector.propiedadmostrar);
             if (registros.length === 1) {
                 var registro = registros[0];

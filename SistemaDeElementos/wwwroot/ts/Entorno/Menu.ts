@@ -8,10 +8,9 @@
     export class CrudDeMenus extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionMenu(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionMenu(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

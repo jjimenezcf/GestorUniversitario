@@ -55,7 +55,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             foreach (var o in ZonaMenu.Menu.OpcioneDeMenu)
             {
-                if (o.Accion.TipoDeAccion == TipoAccionMnt.CrearRelaciones)
+                if (o.Accion.TipoDeAccion == TipoDeAccionDeMnt.AbrirModalParaRelacionar)
                 {
                     var renderModal = ((RelacionarElementos)o.Accion).RenderDeLaModal();
                     htmContenedorMnt = htmContenedorMnt + Environment.NewLine + renderModal;

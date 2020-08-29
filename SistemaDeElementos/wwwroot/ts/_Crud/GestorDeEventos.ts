@@ -20,7 +20,7 @@
                     crudMnt.RelacionarCon(crudDeRelacion);
                     break;
                 }
-                case Evento.Mnt.CrearRelaciones: {
+                case Evento.Mnt.AbrirModalParaRelacionar: {
                     let idModal = parametros;
                     let modal = document.getElementById(idModal);
                     if (modal === undefined) 
@@ -116,6 +116,28 @@
                 case Evento.ModalSeleccion.OrdenarPor: {
                     let columna: string = parIn[1];
                     modal.OrdenarPor(columna);
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
+    }
+
+    export function EventosModalDeRelacionar(accion: string): void {
+        try {
+            switch (accion) {
+                case Evento.ModalCreacion.Cerrar: {
+                    crudMnt.CerrarModalDeCreacion();
+                    break;
+                }
+                case Evento.ModalCreacion.Crear: {
+                    crudMnt.CrearElemento();
                     break;
                 }
                 default: {

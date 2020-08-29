@@ -228,8 +228,7 @@
             panel.classList.remove(ClaseCss.divVisible);
         }
 
-        protected CerrarModal(idModal: string) {
-            let modal: HTMLDivElement = document.getElementById(idModal) as HTMLDivElement;
+        protected CerrarModal(modal: HTMLDivElement) {
             modal.style.display = "none";
             var body = document.getElementsByTagName("body")[0];
             body.style.position = "inherit";

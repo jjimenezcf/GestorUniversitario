@@ -8,10 +8,9 @@
     export class CrudDeRoles extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
-            super(idPanelMnt);
+            super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionRol(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionRol(this, idPanelEdicion);
-            this.idModalBorrar = idModalBorrar;
         }
     }
 

@@ -40,7 +40,9 @@
     <Content Remove="wwwroot\ts\_Crud\Grid.js.map" />
     <Content Remove="wwwroot\ts\_Crud\Grid.ts" />
     <Content Remove="wwwroot\ts\_Crud\GridDeDatos.ts" />
+    <Content Remove="wwwroot\ts\_Crud\ModalConGrid.ts" />
     <Content Remove="wwwroot\ts\_Crud\ModalDeSeleccion.ts" />
+    <Content Remove="wwwroot\ts\_Crud\ModalParaRelacionar.ts" />
   </ItemGroup>
 
   <ItemGroup>

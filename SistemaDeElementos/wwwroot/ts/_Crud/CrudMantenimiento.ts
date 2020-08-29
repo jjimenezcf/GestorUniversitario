@@ -6,7 +6,10 @@
 
         public crudDeCreacion: CrudCreacion;
         public crudDeEdicion: CrudEdicion;
-        public idModalBorrar: string;
+        private _idModalBorrar: string;
+        protected get ModalDeBorrado(): HTMLDivElement {
+            return document.getElementById(this._idModalBorrar) as HTMLDivElement;
+        };
 
         private _idPanelMnt
         public get PanelMnt(): HTMLDivElement {
@@ -15,13 +18,10 @@
 
         public Modales: Array<ModalSeleccion> = new Array<ModalSeleccion>();
 
-        private get ModalDeBorrado(): HTMLDivElement {
-            return document.getElementById(this.idModalBorrar) as HTMLDivElement;
-        }
-
-        constructor(idPanelMnt: string) {
+        constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
             this._idPanelMnt = idPanelMnt;
+            this._idModalBorrar = idModalDeBorrado;
         }
 
         public Inicializar() {
@@ -77,7 +77,7 @@
         private AbrirModalDeBorrar() {
             this.ModoTrabajo = ModoTrabajo.borrando;
             this.ModalDeBorrado.style.display = 'block';
-            let mensaje: HTMLInputElement = document.getElementById(`${this.idModalBorrar}-mensaje`) as HTMLInputElement;
+            let mensaje: HTMLInputElement = document.getElementById(`${this._idModalBorrar}-mensaje`) as HTMLInputElement;
             if (this.InfoSelector.Cantidad > 1) {
                 mensaje.value = "Seguro desea borrar todos los elementos seleccionados";
             }
@@ -120,7 +120,7 @@
 
         public CerrarModalDeBorrado() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            this.CerrarModal(this.idModalBorrar);
+            this.CerrarModal(this.ModalDeBorrado);
         }
 
         public IraEditar() {
@@ -190,7 +190,7 @@
 
             let modal: ModalSeleccion = crudMnt.ObtenerModal(htmlSelector.getAttribute(atSelector.idModal));
             if (IsNullOrEmpty(htmlSelector.value))
-                modal.InicializarModal();
+                modal.InicializarModalDeSeleccion();
             else
                 modal.TextoSelectorCambiado();
         }
