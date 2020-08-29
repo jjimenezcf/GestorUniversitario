@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionDeRelacionar
     {
         public const string Relacionar = "nuevas-relaciones";
-        public const string CerrarRelacionar = "cerrar-relacionar";
+        public const string Cerrar = "cerrar-relacionar";
     }
 
     public class AccionDeMenu

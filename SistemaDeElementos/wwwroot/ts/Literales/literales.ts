@@ -207,6 +207,10 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
     },
+    ModalParaRelacionar: {
+        Cerrar: "cerrar-relacionar",
+        Relacionar: "nuevas-relaciones"
+    },
     ModalCreacion: {
         Crear: "crear-elemento",
         Cerrar: "cerrar-modal",

@@ -16,20 +16,21 @@
                     break;
                 }
                 case Evento.Mnt.Relacionar: {
-                    let crudDeRelacion:string = parametros;
+                    let crudDeRelacion: string = parametros;
                     crudMnt.RelacionarCon(crudDeRelacion);
                     break;
                 }
                 case Evento.Mnt.AbrirModalParaRelacionar: {
                     let idModal = parametros;
-                    let modal = document.getElementById(idModal);
-                    if (modal === undefined) 
+                    let modal: ModalParaRelacionar = crudMnt.ObtenerModalParaRelacionar(idModal);
+                    if (modal === undefined)
                         throw new Error(`Modal ${idModal} no definida`);
-                    modal.style.display = 'block';
+
+                    modal.AbrirModalDeRelacion();
                     break;
                 }
                 case Evento.Mnt.Buscar: {
-                    crudMnt.Buscar(atGrid.accion.buscar,0);
+                    crudMnt.Buscar(atGrid.accion.buscar, 0);
                     break;
                 }
                 case Evento.Mnt.ObtenerSiguientes: {
@@ -71,7 +72,7 @@
     export function EventosModalDeSeleccion(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");
-        let modal: ModalSeleccion = crudMnt.ObtenerModal(parIn[0]);
+        let modal: ModalSeleccion = crudMnt.ObtenerModalDeSeleccion(parIn[0]);
         if (modal === undefined) {
             Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
             return;
@@ -129,15 +130,23 @@
         }
     }
 
-    export function EventosModalDeRelacionar(accion: string): void {
+    export function EventosModalDeCrearRelaciones(accion: string, parametros: string): void {
+
+        let parIn: Array<string> = parametros.split("#");
+        let modal: ModalParaRelacionar = crudMnt.ObtenerModalParaRelacionar(parIn[0]);
+        if (modal === undefined) {
+            Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            return;
+        }
+
         try {
             switch (accion) {
-                case Evento.ModalCreacion.Cerrar: {
-                    crudMnt.CerrarModalDeCreacion();
+                case Evento.ModalParaRelacionar.Cerrar: {
+                    modal.CerrarModalParaRelacionar();
                     break;
                 }
-                case Evento.ModalCreacion.Crear: {
-                    crudMnt.CrearElemento();
+                case Evento.ModalParaRelacionar.Relacionar: {
+                    modal.CrearRelaciones();
                     break;
                 }
                 default: {

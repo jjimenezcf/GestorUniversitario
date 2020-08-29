@@ -22,7 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderModalDeRelacionarElementos()
         {
-            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ >
+            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	titulo
@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
                                            <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.CerrarRelacionar}','{IdHtml}')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Cerrar}','{IdHtml}')¨ />
                                         </div>
                                       </div>
                               </div>";

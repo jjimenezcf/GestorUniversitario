@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
 
-        public new string IdHtml => nombreMnt;
+        public new string IdHtml => nombreMnt.ToLower();
 
         public DescriptorDeMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(

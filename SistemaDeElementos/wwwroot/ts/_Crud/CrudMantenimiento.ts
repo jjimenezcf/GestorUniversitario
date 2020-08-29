@@ -16,7 +16,8 @@
             return  document.getElementById(this._idPanelMnt) as HTMLDivElement;
         }
 
-        public Modales: Array<ModalSeleccion> = new Array<ModalSeleccion>();
+        public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
+        public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
 
         constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
@@ -52,18 +53,32 @@
                 let modalHtml = document.getElementById(idModal);
                 let idPanelMnt = modalHtml.getAttribute(atControl.crudModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal, idPanelMnt);
-                this.Modales.push(modal);
+                this.ModalesDeSeleccion.push(modal);
 
             });
         }
 
-        public ObtenerModal(idModal: string): ModalSeleccion {
-            for (let i: number = 0; i < this.Modales.length; i++) {
-                let modal: ModalSeleccion = this.Modales[i];
+        public ObtenerModalDeSeleccion(idModal: string): ModalSeleccion {
+            for (let i: number = 0; i < this.ModalesDeSeleccion.length; i++) {
+                let modal: ModalSeleccion = this.ModalesDeSeleccion[i];
                 if (modal.IdModal === idModal)
                     return modal;
             }
             return undefined;
+        }
+
+        public ObtenerModalParaRelacionar(idModal: string): ModalParaRelacionar {
+            for (let i: number = 0; i < this.ModalesParaRelacionar.length; i++) {
+                let modal: ModalParaRelacionar = this.ModalesParaRelacionar[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            
+            let modalHtml = document.getElementById(idModal);
+            let idPanelMnt = modalHtml.getAttribute(atControl.crudModal);
+            let modal: ModalParaRelacionar = new ModalParaRelacionar(idModal, idPanelMnt);
+            this.ModalesParaRelacionar.push(modal);
+            return modal;
         }
 
         public AbrirModalBorrarElemento() {
@@ -188,7 +203,7 @@
         public CambiarSelector(idSelector: string) {
             var htmlSelector: HTMLSelector = <HTMLSelector>document.getElementById(idSelector);
 
-            let modal: ModalSeleccion = crudMnt.ObtenerModal(htmlSelector.getAttribute(atSelector.idModal));
+            let modal: ModalSeleccion = crudMnt.ObtenerModalDeSeleccion(htmlSelector.getAttribute(atSelector.idModal));
             if (IsNullOrEmpty(htmlSelector.value))
                 modal.InicializarModalDeSeleccion();
             else
