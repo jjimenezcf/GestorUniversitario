@@ -1,21 +1,23 @@
 ﻿using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ModeloDeDto;
+using ModeloDeDto.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorMantenimiento<TElemento>: ControlHtml where TElemento : ElementoDto
+    public class DescriptorDeMantenimiento<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public static string nombreMnt = $"{DescriptorDeCrud<TElemento>.nombreCrud}_{TipoControl.Mantenimiento}";
 
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
-        public BarraDeMenu<TElemento> MenuDeMnt { get; private set; }
+        public ZonaDeMenu<TElemento> ZonaMenu { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
 
         public new string IdHtml => nombreMnt;
 
-        public DescriptorMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
+        public DescriptorDeMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
           padre: crud,
           id: $"{crud.Id}_{TipoControl.Mantenimiento}",
@@ -26,9 +28,9 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Mantenimiento;
-            MenuDeMnt = new BarraDeMenu<TElemento>(mnt: this);
+            ZonaMenu = new ZonaDeMenu<TElemento>(mnt: this);
             Filtro = new ZonaDeFiltro<TElemento>(mnt: this);
-            Datos = new ZonaDeDatos<TElemento>(mnt: this);  
+            Datos = new ZonaDeDatos<TElemento>(mnt: this);
         }
 
         public override string RenderControl()
@@ -37,7 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlMnt = ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo
                    ?
                    RenderTitulo() + Environment.NewLine +
-                   MenuDeMnt.RenderControl() + Environment.NewLine +
+                   ZonaMenu.RenderControl() + Environment.NewLine +
                    Filtro.RenderControl() + Environment.NewLine +
                    Datos.RenderControl() + Environment.NewLine
                    :
@@ -46,10 +48,21 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{MenuDeMnt.IdHtml}¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{ZonaMenu.IdHtml}¨>
                      {htmlMnt}
                    </Div>
                 ";
+
+            foreach (var o in ZonaMenu.Menu.OpcioneDeMenu)
+            {
+                if (o.Accion.TipoDeAccion == TipoAccionMnt.CrearRelaciones)
+                {
+                    var renderModal = ((RelacionarElementos)o.Accion).RenderDeLaModal();
+                    htmContenedorMnt = htmContenedorMnt + Environment.NewLine + renderModal;
+                }
+            }
+
+            htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderModalesFiltro();
 
             return htmContenedorMnt.Render();
         }
@@ -58,7 +71,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Datos.IdHtmlModal = idModal.ToLower();
 
-            var htmlMnt = 
+            var htmlMnt =
                    Filtro.RenderControl() + Environment.NewLine +
                    Datos.RenderControl() + Environment.NewLine;
 

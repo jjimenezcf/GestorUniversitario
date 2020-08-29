@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        private string RenderGridModal()
+        private string RenderModalDeSeleccionDeFiltro()
         {
             string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
@@ -47,14 +47,13 @@ namespace MVCSistemaDeElementos.Descriptores
             return _htmlMiModal
                 .Replace("titulo", Titulo)
                 .Replace("crudDeSeleccion", CrudModal.RenderCrudModal(idModal: this.IdHtml))
-                //.Replace("idGrid", CrudModal.Mnt.Datos.IdHtml)
                 .Replace("idSelector", Selector.IdHtml);
 
         }
 
         public override string RenderControl()
         {
-            return RenderGridModal();
+            return RenderModalDeSeleccionDeFiltro();
         }
     }
 }

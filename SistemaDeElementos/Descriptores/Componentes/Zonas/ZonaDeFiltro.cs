@@ -92,7 +92,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlFiltro.Replace("bloques", htmlBloques);
         }
 
-        private string RenderModalesFiltro()
+        public string RenderModalesFiltro()
         {
             var htmlModalesEnFiltro = "";
             foreach (BloqueDeFitro<TElemento> b in Bloques)
@@ -103,7 +103,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderFiltro() + Environment.NewLine + RenderModalesFiltro();
+            return RenderFiltro();
         }
     }
 

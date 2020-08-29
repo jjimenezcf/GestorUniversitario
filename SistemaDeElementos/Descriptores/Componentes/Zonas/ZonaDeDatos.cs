@@ -9,7 +9,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class ZonaDeDatos<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
+        public DescriptorDeMantenimiento<TElemento> Mnt => (DescriptorDeMantenimiento<TElemento>)Padre;
 
         public Grid<TElemento> Grid { get; private set; }
 
@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string IdHtmlModal { get; set; }
 
         public int TotalEnBd { get; set; }
-        public ZonaDeDatos(DescriptorMantenimiento<TElemento> mnt)
+        public ZonaDeDatos(DescriptorDeMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
           id: $"{mnt.Id}_Grid",
@@ -116,7 +116,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (ExpresionElemento.IsNullOrEmpty())
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
-            var idHtmlZonaFiltro = ((DescriptorMantenimiento<TElemento>)Padre).Filtro.IdHtml;
+            var idHtmlZonaFiltro = ((DescriptorDeMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             var htmlDiv = @$"<div id = ¨{IdHtml}¨ 
                                   class=¨ZonaDeDatos¨ 
                                   seleccionables = ¨-1¨ 
@@ -131,7 +131,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         public string RenderDelGrid(ModoDescriptor modo)
         {
-            var mnt = (DescriptorMantenimiento<TElemento>)Padre;
+            var mnt = (DescriptorDeMantenimiento<TElemento>)Padre;
             var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
             crud.CambiarModo(modo);
             return Grid.ToHtml();

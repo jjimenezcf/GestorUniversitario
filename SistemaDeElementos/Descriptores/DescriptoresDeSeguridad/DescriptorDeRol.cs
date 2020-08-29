@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , controlador: nameof(PermisosDeUnRolController)
                 , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)
                 , relacionarCon: nameof(PermisoDto)
-                , navegarAlCrud: DescriptorMantenimiento<PermisosDeUnRolDto>.nombreMnt
+                , navegarAlCrud: DescriptorDeMantenimiento<PermisosDeUnRolDto>.nombreMnt
                 , nombreOpcion: "Permisos"
                 , propiedadQueRestringe: nameof(RolDto.Id)
                 , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));

@@ -3,18 +3,18 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class BarraDeMenu<TElemento> : ControlHtml where TElemento : ElementoDto
+    public class ZonaDeMenu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public DescriptorMantenimiento<TElemento> Mnt => (DescriptorMantenimiento<TElemento>)Padre;
+        public DescriptorDeMantenimiento<TElemento> Mnt => (DescriptorDeMantenimiento<TElemento>)Padre;
         public DescriptorDeCreacion<TElemento> Creador => (DescriptorDeCreacion<TElemento>)Padre;
         public DescriptorDeEdicion<TElemento> Editor => (DescriptorDeEdicion<TElemento>)Padre;
 
         public Menu<TElemento> Menu { get; set; }
 
-        public BarraDeMenu(DescriptorMantenimiento<TElemento> mnt)
+        public ZonaDeMenu(DescriptorDeMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
-          id: $"{mnt.Id}_{TipoControl.ZonaMenu}",
+          id: $"{mnt.Id}_{TipoControl.ZonaDeMenu}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -22,13 +22,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaMenu;
+            Tipo = TipoControl.ZonaDeMenu;
         }
 
-        public BarraDeMenu(DescriptorDeCreacion<TElemento> creador)
+        public ZonaDeMenu(DescriptorDeCreacion<TElemento> creador)
         : base(
           padre: creador,
-          id: $"{creador.Id}_{TipoControl.ZonaMenu}",
+          id: $"{creador.Id}_{TipoControl.ZonaDeMenu}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -36,13 +36,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaMenu;
+            Tipo = TipoControl.ZonaDeMenu;
         }
 
-        public BarraDeMenu(DescriptorDeEdicion<TElemento> editor)
+        public ZonaDeMenu(DescriptorDeEdicion<TElemento> editor)
         : base(
           padre: editor,
-          id: $"{editor.Id}_{TipoControl.ZonaMenu}",
+          id: $"{editor.Id}_{TipoControl.ZonaDeMenu}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaMenu;
+            Tipo = TipoControl.ZonaDeMenu;
         }
 
 

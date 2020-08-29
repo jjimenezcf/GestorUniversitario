@@ -6,10 +6,10 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class Menu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public BarraDeMenu<TElemento> ZonaMenu => (BarraDeMenu<TElemento>)Padre;
+        public ZonaDeMenu<TElemento> ZonaMenu => (ZonaDeMenu<TElemento>)Padre;
         public ICollection<OpcionDeMenu<TElemento>> OpcioneDeMenu { get; private set; } = new List<OpcionDeMenu<TElemento>>();
 
-        public Menu(BarraDeMenu<TElemento> padre)
+        public Menu(ZonaDeMenu<TElemento> padre)
         : base(
           padre: padre,
           id: $"{padre.Id}_{TipoControl.Menu}",

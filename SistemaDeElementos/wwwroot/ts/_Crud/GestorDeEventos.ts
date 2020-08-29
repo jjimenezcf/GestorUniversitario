@@ -20,6 +20,14 @@
                     crudMnt.RelacionarCon(crudDeRelacion);
                     break;
                 }
+                case Evento.Mnt.CrearRelaciones: {
+                    let idModal = parametros;
+                    let modal = document.getElementById(idModal);
+                    if (modal === undefined) 
+                        throw new Error(`Modal ${idModal} no definida`);
+                    modal.style.display = 'block';
+                    break;
+                }
                 case Evento.Mnt.Buscar: {
                     crudMnt.Buscar(atGrid.accion.buscar,0);
                     break;

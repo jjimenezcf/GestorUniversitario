@@ -16,6 +16,19 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad: nameof(PermisosDeUnRolDto.IdRol)
                   , ayuda: "buscar por rol"
                   , new Posicion { fila = 0, columna = 0 });
+
+            //Añade una opcion de menú, para relacionar permisos
+            //- Abre una modal de selección
+            //- Le pasa el id del elemento con el que se va a relacionar (para no mostrar los ya relacionados)
+            //- Al aceptar --> llama al negocio y relaciona los id's 
+            //- Al cerrar no hace nada
+            var modalDePermisos =  new ModalDeRelacionarElementos<PermisosDeUnRolDto, PermisoDto>(mantenimiento: Mnt
+                  ,tituloModal: "Seleccione los permisos a relacionar"
+                  ,crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion));
+
+            var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
+            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos");
+            Mnt.ZonaMenu.Menu.Add(opcion);
         }
 
         public override string RenderControl()

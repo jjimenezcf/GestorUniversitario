@@ -22,9 +22,10 @@ namespace ModeloDeDto
         public const string GridModal = "grid-modal";
         public const string TablaBloque = "tabla-bloque";
         public const string Bloque = "bloque";
-        public const string ZonaDeOpciones = "zona-de-opciones";
+        public const string ZonaDeMenu = "zona-menu";
         public const string ZonaDeDatos = "zona-de-datos";
         public const string ZonaDeFiltro = "zona-de-filtro";
+        public const string Menu = "menu";
         public const string VistaCrud = "vista-crud";
         public const string DescriptorDeCrud = "descriptor-crud";
         public const string Opcion = "opcion";
@@ -37,8 +38,7 @@ namespace ModeloDeDto
         public const string pnlCreador = "panel-creador";
         public const string pnlEditor = "panel-editor";
         public const string pnlBorrado = "panel-borrado";
-        public const string ZonaMenu = "zona-menu";
-        public const string Menu = "menu";
+        public const string ModalDeRelacion = "modal-de-relacion";
     }
 
     public enum LadoDeRenderizacion { izquierdo, derecho }

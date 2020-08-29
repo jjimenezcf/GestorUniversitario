@@ -1,8 +1,11 @@
-﻿using ModeloDeDto;
+﻿using System;
+using System.Collections.Generic;
+using ModeloDeDto;
+using ServicioDeDatos.Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoAccion { Post, Get }
+    public enum TipoDeLlamada { Post, Get }
 
     public static class TipoAccionMnt
     {
@@ -10,6 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string EditarElemento = "editar-elemento";
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
+        public const string CrearRelaciones = "crear-relaciones";
     }
 
     public static class TipoAccionCreacion
@@ -22,11 +26,20 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string ModificarElemento = "modificar-elemento";
         public const string CancelarEdicion = "cancelar-edicion";
     }
+    public static class TipoAccionCrearRelaciones
+    {
+        public const string RelacionarElementos = "relacionar-elementos";
+        public const string CancelarSeleccion = "cancelar-seleccion";
+    }
 
     public class AccionDeMenu
     {
-        public AccionDeMenu()
+
+        public string TipoDeAccion { get; private set; }
+
+        public AccionDeMenu(string tipoDeAccion)
         {
+            TipoDeAccion = tipoDeAccion;
         }
 
         public virtual string RenderAccion()
@@ -35,6 +48,10 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    /**********************************************************/
+    // Acciones de menú de para navegar
+    // renderiza llamada Crud.EventosDelMantenimiento(...)
+    /**********************************************************/
     public class AccionDeNavegarParaRelacionar : AccionDeMenu
     {
         public string TipoAccion { get; private set; }
@@ -45,7 +62,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string NavegarAlCrud { get; private set; }
 
         public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt,string propiedadQueRestringe, string propiedadRestrictora)
-        : base()
+        : base(TipoAccionMnt.RelacionarElementos)
         {
             TipoAccion = TipoAccionMnt.RelacionarElementos;
             RelacionarCon = relacionarCon.ToLower();
@@ -61,52 +78,26 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    /**********************************************************/
+    // Acciones de menú de un mantenimiento
+    // renderiza llamada Crud.EventosDelMantenimiento(...)
+    /**********************************************************/
     public class AccionDeMenuMnt : AccionDeMenu
     {
-        string TipoAccion;
+        protected List<string> Parametros = new List<string>();
 
         public AccionDeMenuMnt(string tipoAccion)
-        : base()
+        : base(tipoAccion)
         {
-            TipoAccion = tipoAccion;
         }
 
         public override string RenderAccion()
         {
-            return $"Crud.EventosDelMantenimiento('{TipoAccion}')";
-        }
-    }
+            var parametros = ""; 
+            for(var i=0; i< Parametros.Count; i++)
+                parametros = $"{parametros}{(i ==0 ? "": "#")}{Parametros[i]}";
 
-
-    public class AccionDeMenuCreacion : AccionDeMenu
-    {
-        string TipoAccion;
-
-        public AccionDeMenuCreacion(string tipoAccion)
-            : base()
-        {
-            TipoAccion = tipoAccion;
-        }
-
-        public override string RenderAccion()
-        {
-            return $"Crud.EjecutarMenuCrt('{TipoAccion}')";
-        }
-    }
-
-
-    public class AccionDeMenuEdicion : AccionDeMenu
-    {
-        string TipoAccion;
-        public AccionDeMenuEdicion(string tipoAccion)
-        : base()
-        {
-            TipoAccion = tipoAccion;
-        }
-
-        public override string RenderAccion()
-        {
-            return $"Crud.EjecutarMenuEdt('{TipoAccion}')";
+            return $"Crud.EventosDelMantenimiento('{TipoDeAccion}'{(Parametros.Count == 0 ? "": $",'{parametros}'")})";
         }
     }
 
@@ -134,6 +125,41 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    public class RelacionarElementos: AccionDeMenuMnt
+    {
+        public string IdHtmlDeLaModalAsociada {get; private set;}
+        public Func<string> RenderDeLaModal { get; private set; }
+        public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
+        : base(TipoAccionMnt.CrearRelaciones)
+        {
+            IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
+            Parametros.Add(idHtmlDeLaModalAsociada);
+            RenderDeLaModal = renderDeLaModal;
+        }
+
+        public override string RenderAccion()
+        {
+            return base.RenderAccion();
+        }
+    }
+
+    /**********************************************************/
+    // Acciones de menú de la modal o vista de creación
+    // renderiza llamada Crud.EjecutarMenuCrt(...)
+    /**********************************************************/
+    public class AccionDeMenuCreacion : AccionDeMenu
+    {
+        public AccionDeMenuCreacion(string tipoDeAccionDeCreacion)
+            : base(tipoDeAccionDeCreacion)
+        {
+        }
+
+        public override string RenderAccion()
+        {
+            return $"Crud.EjecutarMenuCrt('{TipoDeAccion}')";
+        }
+    }
+
     public class NuevoElemento : AccionDeMenuCreacion
     {
         public NuevoElemento()
@@ -147,6 +173,24 @@ namespace MVCSistemaDeElementos.Descriptores
         public CerrarCreacion()
         : base(TipoAccionCreacion.CerrarCreacion)
         {
+        }
+    }
+
+
+    /**********************************************************/
+    // Acciones de menú de la modal o vista de creación
+    // renderiza llamada Crud.EjecutarMenuEdt(...)
+    /**********************************************************/
+    public class AccionDeMenuEdicion : AccionDeMenu
+    {
+        public AccionDeMenuEdicion(string tipoDeAccionDeEdicion)
+        : base(tipoDeAccionDeEdicion)
+        {
+        }
+
+        public override string RenderAccion()
+        {
+            return $"Crud.EjecutarMenuEdt('{TipoDeAccion}')";
         }
     }
 
@@ -165,18 +209,24 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+
+    /**********************************************************/
+    // Definir una opción dentro de un menú. 
+    // - la opción define que acción que ha de realizar
+    // - renderiza un boton que al pulsarlo ejecuta la opción
+    /**********************************************************/
     public class OpcionDeMenu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public Menu<TElemento> Menu => (Menu<TElemento>)Padre;
         public AccionDeMenu Accion { get; private set; }
-        public TipoAccion TipoAccion { get; private set; } = TipoAccion.Get;
+        public TipoDeLlamada TipoDeLLamada { get; private set; } = TipoDeLlamada.Get;
 
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo)
-        : this(menu, accion, TipoAccion.Get, titulo)
+        : this(menu, accion, TipoDeLlamada.Get, titulo)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoAccion tipoAccion, string titulo)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcioneDeMenu.Count}",
@@ -187,13 +237,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.Opcion;
-            TipoAccion = tipoAccion;
+            TipoDeLLamada = tipoAccion;
             Accion = accion;
         }
 
         public override string RenderControl()
         {
-            if (TipoAccion == TipoAccion.Post)
+            if (TipoDeLLamada == TipoDeLlamada.Post)
             {
                 var htmlFormPost = $@"
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >

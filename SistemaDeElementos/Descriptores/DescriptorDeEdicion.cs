@@ -7,7 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeEdicion<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
-        public BarraDeMenu<TElemento> MenuDeEdicion { get; private set; }
+        public ZonaDeMenu<TElemento> MenuDeEdicion { get; private set; }
         public bool AbrirEnModal { set; get; }
 
 
@@ -22,7 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.pnlEditor;
-            MenuDeEdicion = new BarraDeMenu<TElemento>(editor: this);
+            MenuDeEdicion = new ZonaDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
         }

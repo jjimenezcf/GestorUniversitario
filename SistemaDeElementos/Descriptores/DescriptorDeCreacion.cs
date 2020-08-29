@@ -7,7 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeCreacion<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
-        public BarraDeMenu<TElemento> MenuCreacion { get; private set; }
+        public ZonaDeMenu<TElemento> MenuCreacion { get; private set; }
         public string htmlDeCreacionEspecifico { get; set; }
 
         public bool AbrirEnModal { set; get; }
@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.pnlCreador;
-            MenuCreacion = new BarraDeMenu<TElemento>(creador: this);
+            MenuCreacion = new ZonaDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCerrarCreacion();
         }

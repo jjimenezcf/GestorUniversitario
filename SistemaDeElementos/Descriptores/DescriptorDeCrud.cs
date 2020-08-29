@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Vista { get; private set; }
 
-        public DescriptorMantenimiento<TElemento> Mnt { get; private set; }
+        public DescriptorDeMantenimiento<TElemento> Mnt { get; private set; }
         public DescriptorDeCreacion<TElemento> Creador { get; private set; }
         public DescriptorDeEdicion<TElemento> Editor { get; private set; }
         public DescriptorDeBorrado<TElemento> Borrado { get; private set; }
@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var elemento = typeof(TElemento).Name.Replace("Dto", "");
             Tipo = TipoControl.DescriptorDeCrud;
-            Mnt = new DescriptorMantenimiento<TElemento>(crud: this, etiqueta: elemento);
+            Mnt = new DescriptorDeMantenimiento<TElemento>(crud: this, etiqueta: elemento);
             Controlador = controlador.Replace("Controller",""); 
             Vista = $@"{vista}";
             Modo = modo;
@@ -50,9 +50,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
                 Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
 
-                Mnt.MenuDeMnt.AnadirOpcionDeCreacion();
-                Mnt.MenuDeMnt.AnadirOpcionDeEditarElemento();
-                Mnt.MenuDeMnt.AnadirOpcionDeBorrarElemento();
+                Mnt.ZonaMenu.AnadirOpcionDeCreacion();
+                Mnt.ZonaMenu.AnadirOpcionDeEditarElemento();
+                Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
             }
         }
 
@@ -153,7 +153,7 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"El modo {modo} no está definido");
         }
 
-        internal static void AnadirOpciondeRelacion(DescriptorMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora)
+        internal static void AnadirOpciondeRelacion(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora)
         {
             var accionDeRelacion = new AccionDeNavegarParaRelacionar(
                     urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
@@ -162,10 +162,9 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.MenuDeMnt.Menu, accion: accionDeRelacion, tipoAccion: TipoAccion.Post, titulo: $"{nombreOpcion}");
-            Mnt.MenuDeMnt.Menu.Add(opcion);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}");
+            Mnt.ZonaMenu.Menu.Add(opcion);
         }
-
     }
 
 }

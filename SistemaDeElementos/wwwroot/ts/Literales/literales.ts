@@ -217,7 +217,7 @@ const Evento = {
         Editar: "editar-elemento",
         Borrar: "eliminar-elemento",
         Relacionar: "relacionar-elementos",
-
+        CrearRelaciones: "crear-relaciones",
         Buscar: "buscar-elementos",
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
