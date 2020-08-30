@@ -4,7 +4,7 @@
     if (control)
         control.value = `${mensaje}`;
 
-    if (TipoMensaje.Error == tipo)
+    if (TipoMensaje.Error === tipo)
         console.error(mensaje);
     else
         console.log(mensaje)

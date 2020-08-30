@@ -360,48 +360,6 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde ModalSeleccion.ts
-        //public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
-        //{
-        //    var r = new ResultadoHtml();
-        //    int pos = posicion.Entero();
-        //    int can = cantidad.Entero();
-        //    try
-        //    {
-        //        //si me pide leer los últimos registros
-        //        if (pos == -1)
-        //        {
-        //            var total = Contar();
-        //            pos = total - can;
-        //            if (pos < 0) pos = 0;
-        //            posicion = pos.ToString();
-        //        }
-
-        //        var elementos = Leer(pos, can, filtro, orden);
-        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
-        //        if (pos > 0 && elementos.ToList().Count() == 0)
-        //        {
-        //            pos = pos - can;
-        //            if (pos < 0) pos = 0;
-        //            elementos = Leer(pos, can, filtro, orden);
-        //            r.Mensaje = "No hay más elementos";
-        //        }
-
-        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
-        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
-        //        r.Datos = elementos.Count();
-        //        r.Estado = EstadoPeticion.Ok;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        r.Estado = EstadoPeticion.Error;
-        //        r.consola = GestorDeErrores.Concatenar(e);
-        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
-        //    }
-
-        //    return new JsonResult(r);
-        //}
-
-        //END-POINT: Desde ModalSeleccion.ts
         public JsonResult epLeer(string filtro)
         {
             var r = new Resultado();
@@ -470,6 +428,46 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+
+        //END-POINT: Desde ModalParaRelacionar.ts
+        /// <summary>
+        /// crea las relaciones entre el id de un elemento pasado y la lista de id's de otros elementos
+        /// </summary>
+        /// <param name="id">id del elemento pasado</param>
+        /// <param name="idsJson">lista de ids en formato json de los ids con los que relacionar</param>
+        /// <returns></returns>
+        public JsonResult epCrearRelaciones(int id, string idsJson)
+        {
+            var r = new Resultado();
+            try
+            {
+                List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
+                var relacionados = 0;
+                var mensajeInformativo = "";
+                foreach (var idParaRelacionar in listaIds)
+                {
+                    string mensaje = GestorDeElementos.CrearRelacion(id, idParaRelacionar);
+                    if (mensaje.IsNullOrEmpty())
+                        relacionados++;
+                    else
+                        mensajeInformativo = mensajeInformativo + Environment.NewLine + mensaje;
+                }
+                r.Total = relacionados;
+                r.consola = mensajeInformativo;
+                r.Mensaje = $"Se han relacionado {relacionados} de los {listaIds.Count} marcados";
+                r.Estado = EstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "Error en el proceso de relación";
+            }
+
+            return new JsonResult(r);
+        }
+
+
         protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
             throw new Exception($"Debe implementar la función de CargaDinamica para la clase '{claseElemento}' en el controlador '{this.GetType().Name}'");
@@ -479,6 +477,8 @@ namespace MVCSistemaDeElementos.Controllers
         {
             throw new NotImplementedException();
         }
+
+
 
         public ViewResult ViewCrud()
         {
@@ -540,6 +540,49 @@ namespace MVCSistemaDeElementos.Controllers
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes);
         }
+
+
+        //END-POINT: Desde ModalSeleccion.ts
+        //public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
+        //{
+        //    var r = new ResultadoHtml();
+        //    int pos = posicion.Entero();
+        //    int can = cantidad.Entero();
+        //    try
+        //    {
+        //        //si me pide leer los últimos registros
+        //        if (pos == -1)
+        //        {
+        //            var total = Contar();
+        //            pos = total - can;
+        //            if (pos < 0) pos = 0;
+        //            posicion = pos.ToString();
+        //        }
+
+        //        var elementos = Leer(pos, can, filtro, orden);
+        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
+        //        if (pos > 0 && elementos.ToList().Count() == 0)
+        //        {
+        //            pos = pos - can;
+        //            if (pos < 0) pos = 0;
+        //            elementos = Leer(pos, can, filtro, orden);
+        //            r.Mensaje = "No hay más elementos";
+        //        }
+
+        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
+        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
+        //        r.Datos = elementos.Count();
+        //        r.Estado = EstadoPeticion.Ok;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        r.Estado = EstadoPeticion.Error;
+        //        r.consola = GestorDeErrores.Concatenar(e);
+        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
+        //    }
+
+        //    return new JsonResult(r);
+        //}
 
     }
 

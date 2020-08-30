@@ -7,7 +7,7 @@ namespace ServicioDeDatos.Seguridad
 
 
     [Table("ROL_PERMISO", Schema = "SEGURIDAD")]
-    public class PermisosDeUnRolDtm : Registro
+    public class PermisosDeUnRolDtm : RegistroDeRelacion
     {
         [Column("IDROL", TypeName = "INT")]
         public int IdRol { get; set; }
@@ -17,6 +17,12 @@ namespace ServicioDeDatos.Seguridad
 
         public RolDtm Rol { get; set; }
         public PermisoDtm Permiso { get; set; }
+
+        public PermisosDeUnRolDtm()
+        {
+            NombreDeLaPropiedadDelIdElemento1 = nameof(IdRol);
+            NombreDeLaPropiedadDelIdElemento2 = nameof(IdPermiso);
+        }
 
     }
 

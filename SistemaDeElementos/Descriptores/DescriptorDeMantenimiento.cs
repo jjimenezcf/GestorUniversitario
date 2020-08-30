@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{ZonaMenu.IdHtml}¨>
+                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ menu=¨{ZonaMenu.IdHtml}¨ controlador=¨{Crud.Controlador}¨>
                      {htmlMnt}
                    </Div>
                 ";

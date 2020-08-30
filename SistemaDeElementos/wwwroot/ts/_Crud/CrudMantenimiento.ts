@@ -19,6 +19,10 @@
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
 
+        public get Controlador() {
+            return this.PanelMnt.getAttribute(Literal.controlador);
+        }
+
         constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
             this._idPanelMnt = idPanelMnt;

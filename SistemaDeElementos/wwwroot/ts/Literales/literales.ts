@@ -148,7 +148,8 @@ const Ajax = {
         Leer: "epLeer",
         CargarLista: "epCargarLista",
         CargaDinamica: "epCargaDinamica",
-        SubirArchivo: "epSubirArchivo"
+        SubirArchivo: "epSubirArchivo",
+        CrearRelaciones: "epCrearRelaciones"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -161,6 +162,7 @@ const Ajax = {
         filtro: "filtro",
         orden: "orden",
         usuario: "usuario",
+        id: "id",
         idsJson: "idsJson",
         claseElemento: "claseElemento",
         fichero: "fichero",

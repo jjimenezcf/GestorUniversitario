@@ -176,6 +176,9 @@
         private DespuesDeLaPeticion() {
             this.resultado = JSON.parse(this.Request.response);
 
+            if (!IsNullOrEmpty(this.resultado.consola))
+                console.log(this.resultado.consola);
+
             if (!IsNullOrEmpty(this.resultado.mensaje))
                 Mensaje(TipoMensaje.Info, this.resultado.mensaje);
 

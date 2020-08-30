@@ -72,6 +72,7 @@ namespace GestorDeElementos
             }
             return registros;
         }
+
     }
 
     public static partial class Ordenaciones
@@ -238,6 +239,30 @@ namespace GestorDeElementos
             TRegistro registro = MapearRegistro(elementoDto, parametros);
             PersistirRegistro(registro, parametros);
             elementoDto.Id = registro.Id;
+        }
+
+        public string CrearRelacion(int idElemento1, int idElemento2)
+        {     
+            var registro = Registro.RegistroVacio<TRegistro>();
+            if (!registro.RegistroDeRelacion)
+                throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
+
+            MapearDatosDeRelacion((TRegistro)registro, idElemento1, idElemento2);
+            var filtros = new List<ClausulaDeFiltrado>();
+            filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento1), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento1.ToString() });
+            filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento2), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento2.ToString() });
+            var registros = LeerRegistros(filtros).ToList();
+            if (registros.Count != 0)
+                return $"El registro {registro} ya existe";
+
+            PersistirRegistro((TRegistro)registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+
+            return "";
+        }
+
+        protected virtual void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
+        {
+            throw new Exception($"El registro {typeof(TRegistro)} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
         }
 
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)

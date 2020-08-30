@@ -166,6 +166,12 @@
                     modal.OrdenarPor(columna);
                     break;
                 }
+                case Evento.ModalParaRelacionar.FilaPulsada: {
+                    let idCheck: string = parIn[1];
+                    let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
+                    modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;

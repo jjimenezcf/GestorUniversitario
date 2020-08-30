@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -91,17 +92,40 @@ namespace ServicioDeDatos.Elemento
         }
     }
 
-
     public class Registro
     {
         [Key]
         [Column("ID", Order = 1, TypeName = "INT")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        
+
         [IgnoreDataMember]
         [NotMapped]
         public string Nombre { get; set; }
+
+
+        [IgnoreDataMember]
+        [NotMapped]
+        public bool RegistroDeRelacion { get; set; } = false;
+
+
+        [IgnoreDataMember]
+        [NotMapped]
+        public bool RegistroConAuditoria { get; set; } = false;
+
+        public static TRegistro RegistroVacio<TRegistro>()
+        {
+            var className = typeof(TRegistro).FullName;
+            var assembly = Assembly.GetAssembly(Type.GetType(className));
+            var type = assembly.GetType(className);
+
+            //Constructor genérico           
+            var constructorSinParametros = type.GetConstructor(Type.EmptyTypes);
+
+            //Creamos el objeto de manera dinámica
+            return (TRegistro)constructorSinParametros.Invoke(new object[] { });
+        }
+
     }
 
     public class RegistroAuditado : Registro
@@ -122,6 +146,26 @@ namespace ServicioDeDatos.Elemento
         [Column("IDUSUMODI", Order = 1, TypeName = "INT")]
         public int? IdUsuaModi { get; set; }
         public virtual UsuarioDtm UsuarioModificador { get; set; }
+
+        public RegistroAuditado()
+        {
+            RegistroConAuditoria = true;
+        }
+    }
+
+    public class RegistroDeRelacion : Registro
+    {
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento1 { get; set; }
+
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
+        public RegistroDeRelacion()
+        {
+            RegistroDeRelacion = true;
+        }
     }
 
 

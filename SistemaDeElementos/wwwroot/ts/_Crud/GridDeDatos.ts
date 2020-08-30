@@ -276,9 +276,17 @@
         protected get IdGrid(): string {
             return this._idGrid;
         }
+
+        protected get EsModalDeSeleccion(): boolean {
+            return this.constructor.name === ModalSeleccion.name ;
+        }
+
+        protected get EsModalParaRelacionar(): boolean {
+            return this.constructor.name === ModalParaRelacionar.name;
+        }
+
         protected get EsModalConGrid(): boolean {
-            return this.constructor.name === ModalSeleccion.name ||
-                this.constructor.name === ModalParaRelacionar.name 
+            return this.EsModalParaRelacionar || this.EsModalDeSeleccion 
         }
 
         private idHtmlFiltro: string;
@@ -385,7 +393,7 @@
         }
 
         protected ObtenerFiltros(): string {
-            var arrayIds = this.ObtenerControlesDeFiltro();
+            let arrayIds: Array<string> = this.ObtenerControlesDeFiltro();
             var clausulas = new Array<ClausulaDeFiltrado>();
             for (let id of arrayIds) {
                 var clausula: ClausulaDeFiltrado = null;
@@ -424,9 +432,9 @@
             return JSON.stringify(clausulas);
         }
 
-        private ObtenerControlesDeFiltro() {
+        private ObtenerControlesDeFiltro(): Array<string> {
 
-            var arrayIds = new Array();
+            var arrayIds = new Array<string>();
             var arrayHtmlInput = this.ZonaDeFiltro.getElementsByTagName(TagName.input);
 
             for (let i = 0; i < arrayHtmlInput.length; i++) {
@@ -820,9 +828,13 @@
 
         private definirPulsarCheck(idCheckDeSeleccion: string, idControlHtml: string): string {
             let a: string = '';
-            if (this.EsModalConGrid) {
+            if (this.EsModalDeSeleccion) {
                 let idModal: string = this.Grid.getAttribute(atSelector.idModal);
                 a = `Crud.EventosModalDeSeleccion('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+            }
+            else if (this.EsModalParaRelacionar) {
+                let idModal: string = this.Grid.getAttribute(atSelector.idModal);
+                a = `Crud.EventosModalDeCrearRelaciones('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else {
                 a = `Crud.EventosDelMantenimiento('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
