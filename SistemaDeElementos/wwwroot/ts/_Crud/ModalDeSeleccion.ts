@@ -24,20 +24,15 @@
         }
 
 
-        constructor(idModal: string, idCrudModal: string) {
-            super(idModal,idCrudModal);
+        constructor(idModal: string) {
+            super(idModal, document.getElementById(idModal).getAttribute(atControl.crudModal));
         }
 
         public InicializarModalDeSeleccion() {
-            super.InicializarModalConGrid()
+            super.InicializarModalConGrid();
             if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
                 this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
         };
-
-        private InicializarListaDeSeleccionados() {
-            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
-                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
-        }
 
         public AbrirModalDeSeleccion() {
             this.EditorDelGrid.value = this.Selector.value;
@@ -72,9 +67,9 @@
             this.CerrarModalConGrid();
         }
 
-          public SeleccionarElementos() {
+        public SeleccionarElementos() {
             this.Selector.value = "";
-            this.InicializarListaDeSeleccionados();
+            this.BlanquearListaDeSeleccionados();
 
             for (var x = 0; x < this.InfoSelector.Cantidad; x++) {
                 var elemento: Elemento = this.InfoSelector.LeerElemento(x);
@@ -85,6 +80,13 @@
             }
             this.CerrarModalDeSeleccion();
         }
+
+
+        private BlanquearListaDeSeleccionados() {
+            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
+                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
+        }
+
 
         public TextoSelectorCambiado() {
             this.EditorDelGrid.value = this.Selector.value;

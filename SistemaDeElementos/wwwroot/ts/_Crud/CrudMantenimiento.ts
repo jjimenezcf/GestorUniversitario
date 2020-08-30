@@ -50,9 +50,7 @@
             let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;;
             selectores.forEach((selector) => {
                 let idModal: string = selector.getAttribute(atSelector.idModal);
-                let modalHtml = document.getElementById(idModal);
-                let idPanelMnt = modalHtml.getAttribute(atControl.crudModal);
-                let modal: ModalSeleccion = new ModalSeleccion(idModal, idPanelMnt);
+                let modal: ModalSeleccion = new ModalSeleccion(idModal);
                 this.ModalesDeSeleccion.push(modal);
 
             });
@@ -74,18 +72,23 @@
                     return modal;
             }
             
-            let modalHtml = document.getElementById(idModal);
-            let idPanelMnt = modalHtml.getAttribute(atControl.crudModal);
-            let modal: ModalParaRelacionar = new ModalParaRelacionar(idModal, idPanelMnt);
+            let modal: ModalParaRelacionar = new ModalParaRelacionar(this, idModal);
             this.ModalesParaRelacionar.push(modal);
             return modal;
         }
 
+        public AbrirModalParaRelacionar(idModalParaRelacionar: string) {
+            let modal: ModalParaRelacionar = this.ObtenerModalParaRelacionar(idModalParaRelacionar);
+            if (modal === undefined)
+                throw new Error(`Modal ${idModalParaRelacionar} no definida`);
+
+            modal.AbrirModalDeRelacion();
+        }
+
         public AbrirModalBorrarElemento() {
-            if (this.InfoSelector.Cantidad == 0) {
-                Mensaje(TipoMensaje.Info, "Debe marcar el elemento a borrar");
-                return;
-            }
+            if (this.InfoSelector.Cantidad != 1)
+                throw new Error(`Debe seleccionar el elemento a borrar, ha seleccionado ${this.InfoSelector.Cantidad}`);
+
             this.AbrirModalDeBorrar();
         }
 

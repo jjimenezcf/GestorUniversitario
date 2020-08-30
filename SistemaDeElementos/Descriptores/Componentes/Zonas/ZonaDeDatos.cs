@@ -137,15 +137,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return Grid.ToHtml();
         }
 
-        //public string RenderDelGridModal (string idModal)
-        //{
-        //    var mnt = (DescriptorMantenimiento<TElemento>)Padre;
-        //    var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
-        //    crud.CambiarModo(ModoDescriptor.Seleccion);
-        //    crud.Mnt.Datos.IdHtmlModal = idModal;
-        //    return Grid.ToHtml();
-        //}
-
         public override string RenderControl()
         {
             return RenderZonaDeDatos();

@@ -24,7 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
             //- Al cerrar no hace nada
             var modalDePermisos =  new ModalDeRelacionarElementos<PermisosDeUnRolDto, PermisoDto>(mantenimiento: Mnt
                   ,tituloModal: "Seleccione los permisos a relacionar"
-                  ,crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion));
+                  ,crudModal: new DescriptorDePermiso(ModoDescriptor.Relacion));
 
             var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
             var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos");

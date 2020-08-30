@@ -21,12 +21,8 @@
                     break;
                 }
                 case Evento.Mnt.AbrirModalParaRelacionar: {
-                    let idModal = parametros;
-                    let modal: ModalParaRelacionar = crudMnt.ObtenerModalParaRelacionar(idModal);
-                    if (modal === undefined)
-                        throw new Error(`Modal ${idModal} no definida`);
-
-                    modal.AbrirModalDeRelacion();
+                    let idModal: string = parametros;
+                    crudMnt.AbrirModalParaRelacionar(idModal);
                     break;
                 }
                 case Evento.Mnt.Buscar: {
@@ -59,7 +55,7 @@
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;
                 }
             }
@@ -120,7 +116,7 @@
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
                     break;
                 }
             }
@@ -149,8 +145,29 @@
                     modal.CrearRelaciones();
                     break;
                 }
+                case Evento.ModalParaRelacionar.Buscar: {
+                    modal.RecargarGrid();
+                    break;
+                }
+                case Evento.ModalParaRelacionar.ObtenerSiguientes: {
+                    modal.ObtenerSiguientes();
+                    break;
+                }
+                case Evento.ModalParaRelacionar.ObtenerAnteriores: {
+                    modal.ObtenerAnteriores();
+                    break;
+                }
+                case Evento.ModalParaRelacionar.ObtenerUltimos: {
+                    modal.ObtenerUltimos();
+                    break;
+                }
+                case Evento.ModalParaRelacionar.OrdenarPor: {
+                    let columna: string = parIn[1];
+                    modal.OrdenarPor(columna);
+                    break;
+                }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
                 }
             }

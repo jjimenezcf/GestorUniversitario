@@ -2,8 +2,14 @@
 
     export class ModalParaRelacionar extends ModalConGrid {
 
-        constructor(idModal: string, idCrudModal: string) {
-            super(idModal, idCrudModal);
+        private _crud: CrudMnt;
+        protected get Crud(): CrudMnt {
+            return this._crud;
+        }
+
+        constructor(crudPadre: CrudMnt, idModal: string) {
+            super(idModal, document.getElementById(idModal).getAttribute(atControl.crudModal));
+            this._crud = crudPadre;
         }
 
         public InicializarModalParaRelacionar() {
@@ -15,11 +21,14 @@
         }
 
         public AbrirModalDeRelacion() {
+            if (this.Crud.InfoSelector.Cantidad != 1)
+                throw new Error(`Debe seleccionar el elemento a relacionar, ha seleccionado ${this.InfoSelector.Cantidad}`);
+
             super.AbrirModalConGrid();             
         }
 
-        CrearRelaciones() {
-            throw new Error("Method not implemented.");
+        public CrearRelaciones() {
+            this.CerrarModalConGrid();
         }
 
     }

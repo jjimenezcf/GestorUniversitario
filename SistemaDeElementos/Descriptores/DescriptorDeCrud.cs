@@ -5,7 +5,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion }
+    public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion, Relacion }
 
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {

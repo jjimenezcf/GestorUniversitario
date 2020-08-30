@@ -13,7 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ModalDeSeleccionDeFiltro(SelectorDeFiltro<TElemento, TSeleccionado> selector, DescriptorDeCrud<TSeleccionado> crudModal)
         : base(
           padre: selector.Bloque,
-          id: $"Modal_{selector.IdHtml}",    //{(selectorAsociado.Id.Replace("_" + TipoControl.Selector.ToString(), ""))}",
+          id: $"Modal_{selector.IdHtml}",    
           etiqueta: $"Seleccionar {selector.propiedadParaMostrar}",
           propiedad: selector.propiedadParaMostrar,
           ayuda: selector.Ayuda,

@@ -196,20 +196,16 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
     },
-    ModalRelacionar: {
+    ModalParaRelacionar: {
         Abrir: "abrir-modal-relacionar",
         Relacionar: "nuevas-relaciones",
-        Cerrar: "cerrar-modal-seleccion",
+        Cerrar: "cerrar-relacionar",
         Buscar: "buscar-elementos",
         FilaPulsada: "fila-pulsada",
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por"
-    },
-    ModalParaRelacionar: {
-        Cerrar: "cerrar-relacionar",
-        Relacionar: "nuevas-relaciones"
     },
     ModalCreacion: {
         Crear: "crear-elemento",

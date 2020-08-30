@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MVCSistemaDeElementos.Descriptores;
 using Utilidades;
 using ModeloDeDto;
+using System.Reflection.Metadata.Ecma335;
 
 namespace UtilidadesParaIu
 {
@@ -60,6 +61,7 @@ namespace UtilidadesParaIu
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
             var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
+                          || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion
                 ? columna.PorAnchoSel
                 : columna.PorAnchoMnt;
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss}";
@@ -84,9 +86,17 @@ namespace UtilidadesParaIu
 
         private static string RenderAccionOrdenar(ColumnaDelGrid<TElemento> columna)
         {
-            string htmlRef = columna.ZonaDeDatos.IdHtmlModal.IsNullOrEmpty()
-                ? $"href =¨javascript: Crud.EventosDelMantenimiento('ordenar-por', '{columna.IdHtml}')¨"
-                : $"href=¨javascript:Crud.EventosModalDeSeleccion('ordenar-por','{columna.ZonaDeDatos.IdHtmlModal}#{columna.IdHtml}')¨";
+
+            var gestorDeEventos = RenderGestorDeEventos(columna.ZonaDeDatos.Mnt.Crud.Modo);
+
+            var parametros = $"{columna.IdHtml}";
+            if (columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion ||
+                columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion)
+            {
+                parametros = $"{columna.ZonaDeDatos.IdHtmlModal}#{parametros}";
+            }
+
+            string htmlRef = $"href =¨javascript: Crud.{gestorDeEventos}('ordenar-por', '{parametros}')¨";
 
             var estilo = columna.Visible ? "" : @"visibility: hidden; style=¨width: 0px; height: 0px; float: right;¨";
 
@@ -95,9 +105,33 @@ namespace UtilidadesParaIu
 
         private static string RenderEventoPuslsa(CeldaDelGrid<TElemento> celda, string idControlHtml)
         {
-            return celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-               ? $"Crud.EventosModalDeSeleccion('fila-pulsada', '{celda.Fila.Datos.IdHtmlModal}#{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}');"
-               : $"Crud.EventosDelMantenimiento('fila-pulsada', '{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}');";
+            var getorDeEventos = RenderGestorDeEventos(celda.Fila.Datos.Mnt.Crud.Modo);
+
+            var parametros = $"{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}";
+            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion)
+            {
+                parametros = $"{celda.Fila.Datos.IdHtmlModal}#{parametros}";
+            }
+            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Relacion)
+            {
+                parametros = $"{celda.Fila.Datos.IdHtmlModal}#{parametros}";
+            }
+
+            return $"Crud.{getorDeEventos}('fila-pulsada', '{parametros}');";
+        }
+
+        private static string RenderGestorDeEventos(ModoDescriptor modo)
+        {
+            var getorDeEventos = "EventosDelMantenimiento";
+            if (modo == ModoDescriptor.Seleccion)
+            {
+                getorDeEventos = "EventosModalDeSeleccion";
+            }
+            if (modo == ModoDescriptor.Relacion)
+            {
+                getorDeEventos = "EventosModalDeCrearRelaciones";
+            }
+            return getorDeEventos;
         }
 
 
@@ -190,21 +224,16 @@ namespace UtilidadesParaIu
 
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
-            var accionSiguiente = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"Crud.EventosModalDeSeleccion('obtener-siguientes','{grid.ZonaDeDatos.IdHtmlModal}')"
-                : $"Crud.EventosDelMantenimiento('obtener-siguientes')";
+            var getorDeEventos = RenderGestorDeEventos(grid.ZonaDeDatos.Mnt.Crud.Modo);
+            var parametros = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento ||
+                             grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta
+                ? ""
+                : $"{grid.ZonaDeDatos.IdHtmlModal}";
 
-            var accionBuscar = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"Crud.EventosModalDeSeleccion('buscar-elementos','{grid.ZonaDeDatos.IdHtmlModal}')"
-                : $"Crud.EventosDelMantenimiento('buscar-elementos')";
-
-            var accionAnterior = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"Crud.EventosModalDeSeleccion('obtener-anteriores','{grid.ZonaDeDatos.IdHtmlModal}')"
-                : $"Crud.EventosDelMantenimiento('obtener-anteriores')";
-
-            var accionUltimos = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
-                ? $"Crud.EventosModalDeSeleccion('obtener-ultimos','{grid.ZonaDeDatos.IdHtmlModal}')"
-                : $"Crud.EventosDelMantenimiento('obtener-ultimos')";
+            var accionUltimos = $"Crud.{getorDeEventos}('obtener-ultimos','{parametros}')";
+            var accionBuscar = $"Crud.{getorDeEventos}('buscar-elementos','{parametros}')";
+            var accionAnterior = $"Crud.{getorDeEventos}('obtener-anteriores','{parametros}')";
+            var accionSiguiente = $"Crud.{getorDeEventos}('obtener-siguientes','{parametros}')";
 
             var htmlNavegadorGrid = $@"
             <div id= ¨{grid.IdHtml}_pie¨ class=¨pie-grid¨>
@@ -222,7 +251,7 @@ namespace UtilidadesParaIu
                                posicion=¨{grid.Ultimo_Leido}¨  
                                controlador=¨{grid.Controlador}¨  
                                total-en-bd=¨{grid.TotalEnBd}¨ 
-                               title=¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd/grid.CantidadPorLeer))}¨ />
+                               title=¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}¨ />
                     </div>
                     <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨{accionAnterior}¨>

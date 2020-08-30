@@ -276,8 +276,9 @@
         protected get IdGrid(): string {
             return this._idGrid;
         }
-        protected get EsGridDeModal(): boolean {
-            return this.constructor.name === ModalSeleccion.name;
+        protected get EsModalConGrid(): boolean {
+            return this.constructor.name === ModalSeleccion.name ||
+                this.constructor.name === ModalParaRelacionar.name 
         }
 
         private idHtmlFiltro: string;
@@ -565,7 +566,7 @@
         protected ActualizarInformacionDelGrid(contenedorGrid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
 
-            if (!this.EsGridDeModal && this.Estado.Contiene(atGrid.idSeleccionado)) {
+            if (!this.EsModalConGrid && this.Estado.Contiene(atGrid.idSeleccionado)) {
                 let idSeleccionado: number = this.Estado.Obtener(atGrid.idSeleccionado);
                 let nombreSeleccionado: string = this.Estado.Obtener(atGrid.nombreSeleccionado);
                 this.InfoSelector.InsertarElemento(idSeleccionado, nombreSeleccionado);
@@ -652,7 +653,7 @@
         private PrepararParametrosDeRelacionarCon(infoSelector: InfoSelector, parametros: string): DatosParaRelacionar {
 
             if (infoSelector.Cantidad != 1)
-                throw new Error("Debe seleccionar solo una elemento");
+                throw new Error("Debe seleccionar un elemento para poder relacionarlo");
 
             let datos: DatosParaRelacionar = new DatosParaRelacionar();
 
@@ -819,7 +820,7 @@
 
         private definirPulsarCheck(idCheckDeSeleccion: string, idControlHtml: string): string {
             let a: string = '';
-            if (this.EsGridDeModal) {
+            if (this.EsModalConGrid) {
                 let idModal: string = this.Grid.getAttribute(atSelector.idModal);
                 a = `Crud.EventosModalDeSeleccion('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
