@@ -7,6 +7,12 @@
             return this._crud;
         }
 
+        protected get IdRestrictor(): number {
+            let p: string = this.Modal.getAttribute(atControl.propiedadRestrictora);
+            let i: HTMLInputElement = document.getElementById(p) as HTMLInputElement;
+            return Numero(i.value);
+        }
+
         constructor(crudPadre: CrudMnt, idModal: string) {
             super(idModal, document.getElementById(idModal).getAttribute(atControl.crudModal));
             this._crud = crudPadre;
@@ -49,10 +55,9 @@
         private DefinirPeticionDeCrearRelaciones(endPoint: string): string {
 
             let idsJson: string = JSON.stringify(this.InfoSelector.Seleccionados);
-
             let url: string = `/${this.Crud.Controlador}/${endPoint}`;
             let parametros: string =
-                `&${Ajax.Param.id}=${Numero("1")}` +
+                `&${Ajax.Param.id}=${this.IdRestrictor}` +
                 `&${Ajax.Param.idsJson}=${idsJson}`;
             let peticion: string = url + '?' + parametros;
             return peticion;

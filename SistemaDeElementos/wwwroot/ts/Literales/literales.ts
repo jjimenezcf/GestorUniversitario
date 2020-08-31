@@ -30,6 +30,7 @@ const atControl = {
     tablaDeDatos: "tabla-de-datos",
     id: Literal.id,
     crudModal: 'crud-modal',
+    propiedadRestrictora: 'propiedad-restrictora',
     controlador: "controlador",
     obligatorio: "obligatorio",
     modoOrdenacion: "modo-ordenacion",

@@ -9,7 +9,9 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public DescriptorDeCrud<TSeleccionado> CrudModal { get; set; }
 
-        public ModalDeRelacionarElementos(DescriptorDeMantenimiento<TElemento> mantenimiento, string tituloModal, DescriptorDeCrud<TSeleccionado> crudModal)
+        public string PropiedadRestrictora { get; private set; }
+
+        public ModalDeRelacionarElementos(DescriptorDeMantenimiento<TElemento> mantenimiento, string tituloModal, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadRestrictora)
         : base(padre: mantenimiento
               ,id: $"{mantenimiento.Id}-{TipoControl.ModalDeRelacion}-{typeof(TSeleccionado).Name}"
               ,etiqueta: tituloModal
@@ -18,11 +20,12 @@ namespace MVCSistemaDeElementos.Descriptores
               ,posicion: null)
         {
             CrudModal = crudModal;
+            PropiedadRestrictora = propiedadRestrictora;
         }
 
         private string RenderModalDeRelacionarElementos()
         {
-            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
+            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨ propiedad-restrictora=¨{PropiedadRestrictora}¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	titulo
