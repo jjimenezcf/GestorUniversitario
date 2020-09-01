@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , controlador: nameof(RolesDeUnPuestoController)
                 , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
                 , relacionarCon: nameof(RolDto)
-                , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.nombreMnt
+                , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
                 , nombreOpcion: "Roles"
                 , propiedadQueRestringe: nameof(PuestoDto.Id)
                 , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));

@@ -8,9 +8,20 @@
         }
 
         protected get IdRestrictor(): number {
-            let p: string = this.Modal.getAttribute(atControl.propiedadRestrictora);
-            let i: HTMLInputElement = document.getElementById(p) as HTMLInputElement;
-            return Numero(i.value);
+            let propiedadRestrictora: string = this.Modal.getAttribute(atControl.propiedadRestrictora);
+            if (IsNullOrEmpty(propiedadRestrictora))
+                throw new Error(`la modal ${this.IdModal} no tiene definida la ${propiedadRestrictora}`);
+
+            let input: HTMLInputElement = this.Crud.ZonaDeFiltro.querySelector(`input[${atControl.propiedad}="${propiedadRestrictora}"]`);
+            if (input === null)
+                throw new Error(`No se ha definido el control input asociado a la ${propiedadRestrictora}`);
+
+
+            let idRestrictor: string = input.getAttribute(atControl.restrictor);
+            if (IsNullOrEmpty(idRestrictor))
+                throw new Error(`No se ha pasado el id del retrictor a la propiedad restrictora ${propiedadRestrictora}`);
+
+            return Numero(idRestrictor);
         }
 
         constructor(crudPadre: CrudMnt, idModal: string) {

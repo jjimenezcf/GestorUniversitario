@@ -108,7 +108,7 @@ const atListas = {
 
 const atRelacion = {
     navegarAlCrud: 'navegar-al-crud',
-    idRestrictor: 'restrictor',
+    idRestrictor: atControl.restrictor,
     orden: 'orden'
 };
 

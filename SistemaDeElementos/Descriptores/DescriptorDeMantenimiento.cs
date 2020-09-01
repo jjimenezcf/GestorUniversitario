@@ -8,14 +8,14 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeMantenimiento<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public static string nombreMnt = $"{DescriptorDeCrud<TElemento>.nombreCrud}_{TipoControl.Mantenimiento}";
+        public static string NombreMnt = $"{DescriptorDeCrud<TElemento>.NombreCrud}_{TipoControl.Mantenimiento}".ToLower();
 
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public ZonaDeMenu<TElemento> ZonaMenu { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
 
-        public new string IdHtml => nombreMnt.ToLower();
+        public new string IdHtml => NombreMnt;
 
         public DescriptorDeMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(

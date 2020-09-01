@@ -20,7 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
               ,posicion: null)
         {
             CrudModal = crudModal;
-            PropiedadRestrictora = propiedadRestrictora;
+            PropiedadRestrictora = propiedadRestrictora.ToLower();
         }
 
         private string RenderModalDeRelacionarElementos()

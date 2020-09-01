@@ -9,7 +9,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        internal static string nombreCrud = $"Crud_{typeof(TElemento).Name}";
+        internal static string NombreCrud = $"Crud_{typeof(TElemento).Name}".ToLower();
 
         public string NombreElemento => Etiqueta.ToLower();
 

@@ -290,7 +290,7 @@
         }
 
         private idHtmlFiltro: string;
-        protected get ZonaDeFiltro(): HTMLDivElement {
+        public get ZonaDeFiltro(): HTMLDivElement {
             return document.getElementById(this.idHtmlFiltro) as HTMLDivElement;
         }
 
