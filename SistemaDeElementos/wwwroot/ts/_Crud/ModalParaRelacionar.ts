@@ -7,8 +7,12 @@
             return this._crud;
         }
 
+        protected get PropiedadRestrictora(): string {
+            return this.Modal.getAttribute(atControl.propiedadRestrictora);
+        }
+
         protected get IdRestrictor(): number {
-            let propiedadRestrictora: string = this.Modal.getAttribute(atControl.propiedadRestrictora);
+            let propiedadRestrictora: string = this.PropiedadRestrictora;
             if (IsNullOrEmpty(propiedadRestrictora))
                 throw new Error(`la modal ${this.IdModal} no tiene definida la ${propiedadRestrictora}`);
 
@@ -77,6 +81,16 @@
         private DespuesDeCrearRelaciones(peticion: ApiDeAjax.DescriptorAjax) {
             let modlParaRelacionar: ModalParaRelacionar = peticion.llamador as ModalParaRelacionar;
             modlParaRelacionar.RecargarGrid();
+        }
+
+        protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]): ClausulaDeFiltrado[] {
+            clausulas = super.FiltrosExcluyentes(clausulas);
+            let propiedad: string = this.PropiedadRestrictora;
+            let criterio: string = Literal.filtro.criterio.diferente;
+            let valor = this.IdRestrictor;
+            let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
+            clausulas.push(clausula);
+            return clausulas
         }
     }
 }

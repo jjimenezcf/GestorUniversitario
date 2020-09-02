@@ -9,7 +9,8 @@ const Literal = {
     filtro: {
         clausulaId: 'id',
         criterio: {
-            igual: 'igual'
+            igual: 'igual',
+            diferente: 'diferente'
         }
     }
 

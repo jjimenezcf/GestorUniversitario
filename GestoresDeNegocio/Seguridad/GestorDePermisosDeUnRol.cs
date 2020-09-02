@@ -44,7 +44,6 @@ namespace GestoresDeNegocio.Seguridad
                     filtro.Clausula.ToLower() == "idElemento2".ToLower())
                     registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
             }
-
             return registros;
         }
 

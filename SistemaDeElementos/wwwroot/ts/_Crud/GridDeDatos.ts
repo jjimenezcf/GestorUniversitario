@@ -429,7 +429,14 @@
                 if (clausula !== null)
                     clausulas.push(clausula);
             }
+
+            this.FiltrosExcluyentes(clausulas);
+
             return JSON.stringify(clausulas);
+        }
+
+        protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]) {
+            return clausulas;
         }
 
         private ObtenerControlesDeFiltro(): Array<string> {

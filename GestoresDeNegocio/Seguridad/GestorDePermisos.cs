@@ -9,6 +9,7 @@ using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
 using ModeloDeDto.Seguridad;
 using GestorDeElementos;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -48,6 +49,7 @@ namespace GestoresDeNegocio.Seguridad
         public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
+            {
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
@@ -57,8 +59,14 @@ namespace GestoresDeNegocio.Seguridad
                     }
                 }
 
-            return registros;
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros
+                        .Include(x=>x.Roles)
+                        .Where(i => i.Roles.Any(r => r.Id != filtro.Valor.Entero() ));
+            }
 
+            return registros;
         }
         public static IQueryable<T> FiltroPorClase<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
@@ -96,7 +104,7 @@ namespace GestoresDeNegocio.Seguridad
                     set = orden.Modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Nombre)
                         : set.OrderByDescending(x => x.Nombre);
-                
+
                 if (orden.Propiedad == nameof(PermisoDtm.Clase).ToLower())
                     set = orden.Modo == ModoDeOrdenancion.ascendente
                         ? set.OrderBy(x => x.Clase)
@@ -239,12 +247,12 @@ namespace GestoresDeNegocio.Seguridad
 
         public List<ClasePermisoDto> LeerClases()
         {
-            return LeerClases(0,-1,"");
+            return LeerClases(0, -1, "");
         }
 
         public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, string valorDeFiltro)
         {
-            var gestor = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador); 
+            var gestor = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
             if (!valorDeFiltro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
@@ -275,7 +283,7 @@ namespace GestoresDeNegocio.Seguridad
 
             var gestor = GestorDePermisosDeUnRol.Gestor(Contexto, Mapeador);
             var filtro = new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnRolDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
-            var filtros = new List<ClausulaDeFiltrado> {filtro};
+            var filtros = new List<ClausulaDeFiltrado> { filtro };
             var r = gestor.LeerRegistros(0, 1, filtros);
             if (r.Count > 0)
             {
@@ -297,7 +305,7 @@ namespace GestoresDeNegocio.Seguridad
             PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
             return registro;
         }
-        
+
         private PermisoDtm Modificar(PermisoDtm permiso)
         {
             PersistirRegistro(permiso, new ParametrosDeNegocio(TipoOperacion.Modificar));
