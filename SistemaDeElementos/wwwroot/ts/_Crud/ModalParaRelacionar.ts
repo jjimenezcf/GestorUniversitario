@@ -42,8 +42,8 @@
         }
 
         public AbrirModalDeRelacion() {
-            if (this.Crud.InfoSelector.Cantidad != 1)
-                throw new Error(`Debe seleccionar el elemento a relacionar, ha seleccionado ${this.InfoSelector.Cantidad}`);
+            if (this.IdRestrictor == 0)
+                throw new Error(`Debe seleccionar el elemento a con el que relacionar los elementos`);
 
             super.AbrirModalConGrid();
         }
@@ -52,7 +52,7 @@
             if (this.InfoSelector.Seleccionados.length == 0) 
                 throw new Error("Debe seleccionar algún registro con los que relacionar el elemento");
             
-            let url: string = this.DefinirPeticionDeCrearRelaciones(Ajax.EndPoint.CrearRelaciones);
+            let url: string = this.DefinirPeticionDeCrearRelaciones();
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CrearRelaciones
                 , "{}"
@@ -66,11 +66,9 @@
             a.Ejecutar();
         }
 
-
-        private DefinirPeticionDeCrearRelaciones(endPoint: string): string {
-
+        private DefinirPeticionDeCrearRelaciones(): string {
             let idsJson: string = JSON.stringify(this.InfoSelector.Seleccionados);
-            let url: string = `/${this.Crud.Controlador}/${endPoint}`;
+            let url: string = `/${this.Crud.Controlador}/${Ajax.EndPoint.CrearRelaciones}`;
             let parametros: string =
                 `&${Ajax.Param.id}=${this.IdRestrictor}` +
                 `&${Ajax.Param.idsJson}=${idsJson}`;
@@ -81,6 +79,7 @@
         private DespuesDeCrearRelaciones(peticion: ApiDeAjax.DescriptorAjax) {
             let modlParaRelacionar: ModalParaRelacionar = peticion.llamador as ModalParaRelacionar;
             modlParaRelacionar.RecargarGrid();
+            modlParaRelacionar.Crud.Buscar(atGrid.accion.buscar, 0);
         }
 
         protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]): ClausulaDeFiltrado[] {

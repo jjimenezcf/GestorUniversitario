@@ -90,7 +90,7 @@
         }
 
         public AbrirModalBorrarElemento() {
-            if (this.InfoSelector.Cantidad != 1)
+            if (this.InfoSelector.Cantidad == 0)
                 throw new Error(`Debe seleccionar el elemento a borrar, ha seleccionado ${this.InfoSelector.Cantidad}`);
 
             this.AbrirModalDeBorrar();
@@ -109,15 +109,7 @@
         }
 
         public BorrarElemento() {
-            let ids: string = "";
-            for (var i = 0; i < this.InfoSelector.Seleccionados.length; i++) {
-                if (ids !== "")
-                    ids = ids + ",";
-                ids = ids + this.InfoSelector.Seleccionados[i];
-            }
-            this.InfoSelector.Seleccionados[0] as number;
-            let url: string = this.DefinirPeticionDeBorrado(ids);
-
+            let url: string = this.DefinirPeticionDeBorrado();
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.Borrar
                 , null
@@ -127,16 +119,14 @@
                 , this.DespuesDeBorrar
                 , this.SiHayErrorTrasPeticionAjax
             );
-
             a.Ejecutar();
-
         }
 
         private DespuesDeBorrar(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             mantenimiento.CerrarModalDeBorrado();
             mantenimiento.InfoSelector.QuitarTodos();
-            mantenimiento.CargarGrid(atGrid.accion.buscar, 0);
+            mantenimiento.Buscar(atGrid.accion.buscar, 0);
         }
 
 
@@ -188,11 +178,11 @@
             }
         }
 
-        private DefinirPeticionDeBorrado(ids: string): string {
-            let idsJson: JSON = JSON.parse(`[${ids}]`);
+        private DefinirPeticionDeBorrado(): string {
+            let idsJson: string = JSON.stringify(this.InfoSelector.Seleccionados);
             var controlador = this.Navegador.Controlador;
             let url: string = `/${controlador}/${Ajax.EndPoint.Borrar}`;
-            let parametros: string = `${Ajax.Param.idsJson}=${JSON.stringify(idsJson)}`;
+            let parametros: string = `${Ajax.Param.idsJson}=${idsJson}`;
             let peticion: string = url + '?' + parametros;
             return peticion;
         }
