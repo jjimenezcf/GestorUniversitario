@@ -17,6 +17,15 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por puesto"
                   , new Posicion { fila = 0, columna = 0 });
 
+            var modalDeRoles = new ModalDeRelacionarElementos<RolesDeUnPuestoDto, RolDto>(mantenimiento: Mnt
+                              , tituloModal: "Seleccione los roles a relacionar"
+                              , crudModal: new DescriptorDeRol(ModoDescriptor.Relacion)
+                              , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+
+            var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl());
+            var opcion = new OpcionDeMenu<RolesDeUnPuestoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles");
+            Mnt.ZonaMenu.Menu.Add(opcion);
+
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PermisosDeUnRolController)
                 , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)

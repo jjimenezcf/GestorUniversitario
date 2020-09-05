@@ -9,6 +9,21 @@ using Utilidades;
 
 namespace GestoresDeNegocio.Seguridad
 {
+    static class FiltrosRoles
+    {
+        public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        where T : RolDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Puestos.Any(r => r.idPuesto == filtro.Valor.Entero()));
+            }
+
+            return registros;
+        }
+    }
 
     public class GestorDeRoles : GestorDeElementos<ContextoSe, RolDtm, RolDto>
     {
@@ -40,6 +55,16 @@ namespace GestoresDeNegocio.Seguridad
 
             var rolesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(rolesDtm).ToList();
+        }
+
+        protected override IQueryable<RolDtm> AplicarFiltros(IQueryable<RolDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (HayFiltroPorId(registros))
+                return registros;
+
+            return registros.AnadirFiltros(filtros);
         }
 
     }

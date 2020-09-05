@@ -6,7 +6,7 @@ namespace ServicioDeDatos.Seguridad
 {
 
     [Table("ROL_PUESTO", Schema = "SEGURIDAD")]
-    public class RolesDeUnPuestoDtm: Registro
+    public class RolesDeUnPuestoDtm: RegistroDeRelacion
     {
         [Column("IDROL", TypeName = "INT")]
         public int IdRol { get; set; }
@@ -16,6 +16,14 @@ namespace ServicioDeDatos.Seguridad
 
         public RolDtm Rol { get; set; }
         public PuestoDtm Puesto { get; set; }
+
+        public RolesDeUnPuestoDtm()
+        {
+            NombreDeLaPropiedadDelIdElemento1 = nameof(idPuesto);
+            NombreDeLaPropiedadDelIdElemento2 = nameof(IdRol);
+        }
+
+
     }
 
     public static class TablaRolPuesto
@@ -30,13 +38,15 @@ namespace ServicioDeDatos.Seguridad
                 .HasOne(x => x.Rol)
                 .WithMany(r => r.Puestos)
                 .HasForeignKey(x => x.IdRol)
-                .HasConstraintName("FK_ROL_PUESTO_IDROL");
+                .HasConstraintName("FK_ROL_PUESTO_IDROL")
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<RolesDeUnPuestoDtm>()
                 .HasOne(x => x.Puesto)
                 .WithMany(p => p.Roles)
                 .HasForeignKey(x => x.idPuesto)
-                .HasConstraintName("FK_ROL_PUESTO_IDPUESTO");
+                .HasConstraintName("FK_ROL_PUESTO_IDPUESTO")
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

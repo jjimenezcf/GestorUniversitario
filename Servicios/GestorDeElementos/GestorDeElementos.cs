@@ -110,10 +110,13 @@ namespace GestorDeElementos
 
     #region Extensiones a pasar a las operaciones a realizar
 
+    public enum enumParametro { Creado }
+
+
     public class ParametrosDeNegocio
     {
         public TipoOperacion Tipo { get; private set; }
-        public Dictionary<string, object> Parametros = new Dictionary<string, object>();
+        public Dictionary<enumParametro, object> Parametros = new Dictionary<enumParametro, object>();
 
         public ParametrosDeNegocio(TipoOperacion tipo)
         {
@@ -247,7 +250,7 @@ namespace GestorDeElementos
             if (!registro.RegistroDeRelacion)
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
 
-            MapearDatosDeRelacion((TRegistro)registro, idElemento1, idElemento2);
+            MapearDatosDeRelacion(registro, idElemento1, idElemento2);
             var filtros = new List<ClausulaDeFiltrado>();
             filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento1), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento1.ToString() });
             filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento2), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento2.ToString() });
@@ -255,7 +258,7 @@ namespace GestorDeElementos
             if (registros.Count != 0)
                 return $"El registro {registro} ya existe";
 
-            PersistirRegistro((TRegistro)registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
 
             return "";
         }

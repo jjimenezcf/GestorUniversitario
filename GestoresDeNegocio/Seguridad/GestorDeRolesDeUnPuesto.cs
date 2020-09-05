@@ -34,11 +34,13 @@ namespace GestoresDeNegocio.Seguridad
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower())
-                    registros = registros.Where(p => p.idPuesto == filtro.Valor.Entero());
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
+                    registros = registros.Where(x => x.idPuesto == filtro.Valor.Entero());
 
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower())
-                    registros = registros.Where(p => p.IdRol == filtro.Valor.Entero());
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
+                    registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
             }
 
             return registros;
@@ -121,6 +123,12 @@ namespace GestoresDeNegocio.Seguridad
         {
             var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
             return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
+        }
+
+        protected override void MapearDatosDeRelacion(RolesDeUnPuestoDtm registro, int idElemento1, int idElemento2)
+        {
+            registro.idPuesto = idElemento1;
+            registro.IdRol = idElemento2;
         }
     }
 }

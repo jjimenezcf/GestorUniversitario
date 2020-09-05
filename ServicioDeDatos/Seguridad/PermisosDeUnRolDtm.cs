@@ -38,13 +38,15 @@ namespace ServicioDeDatos.Seguridad
                 .HasOne(x => x.Rol)
                 .WithMany(r => r.Permisos)
                 .HasForeignKey(x => x.IdRol)
-                .HasConstraintName("FK_ROL_PERMISO_IDROL");
+                .HasConstraintName("FK_ROL_PERMISO_IDROL")
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PermisosDeUnRolDtm>()
                 .HasOne(x => x.Permiso)
                 .WithMany(p => p.Roles)
                 .HasForeignKey(x => x.IdPermiso)
-                .HasConstraintName("FK_ROL_PERMISO_IDPERMISO");
+                .HasConstraintName("FK_ROL_PERMISO_IDPERMISO")
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
