@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20200903162900_EvitarBorradosEnCascada")]
+    partial class EvitarBorradosEnCascada
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,6 +157,10 @@ namespace Migraciones.Migrations
                         .HasColumnName("IDPADRE")
                         .HasColumnType("INT");
 
+                    b.Property<int?>("IdPermiso")
+                        .HasColumnName("IDPERMISO")
+                        .HasColumnType("INT");
+
                     b.Property<int?>("IdVistaMvc")
                         .HasColumnName("IDVISTA_MVC")
                         .HasColumnType("INT");
@@ -173,6 +179,11 @@ namespace Migraciones.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdPadre");
+
+                    b.HasIndex("IdPermiso")
+                        .IsUnique()
+                        .HasName("IX_MENU_IDPERMISO")
+                        .HasFilter("[IDPERMISO] IS NOT NULL");
 
                     b.HasIndex("IdVistaMvc");
 
@@ -293,7 +304,7 @@ namespace Migraciones.Migrations
                         .HasColumnName("CONTROLADOR")
                         .HasColumnType("VARCHAR(250)");
 
-                    b.Property<int>("IdPermiso")
+                    b.Property<int?>("IdPermiso")
                         .HasColumnName("IDPERMISO")
                         .HasColumnType("INT");
 
@@ -316,7 +327,8 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("IdPermiso")
                         .IsUnique()
-                        .HasName("IX_VISTA_MVC_IDPERMISO");
+                        .HasName("IX_VISTA_MVC_IDPERMISO")
+                        .HasFilter("[IDPERMISO] IS NOT NULL");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
@@ -566,6 +578,12 @@ namespace Migraciones.Migrations
                         .WithMany("Submenus")
                         .HasForeignKey("IdPadre")
                         .HasConstraintName("FK_MENU_IDPADRE");
+
+                    b.HasOne("ServicioDeDatos.Seguridad.PermisoDtm", "Permiso")
+                        .WithMany()
+                        .HasForeignKey("IdPermiso")
+                        .HasConstraintName("FK_MENU_IDPERMISO")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ServicioDeDatos.Entorno.VistaMvcDtm", "VistaMvc")
                         .WithMany("Menus")

@@ -63,6 +63,8 @@
     <Compile Remove="Migrations\20200603204138_anadirNombre.Designer.cs" />
     <Compile Remove="Migrations\20200609192010_anadir.cs" />
     <Compile Remove="Migrations\20200609192010_anadir.Designer.cs" />
+    <Compile Remove="Migrations\20200905110520_permisoFueraEnMenuObligatorioEnVistas.cs" />
+    <Compile Remove="Migrations\20200905110520_permisoFueraEnMenuObligatorioEnVistas.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

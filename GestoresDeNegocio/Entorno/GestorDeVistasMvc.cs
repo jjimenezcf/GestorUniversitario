@@ -30,7 +30,8 @@ namespace GestoresDeNegocio.Entorno
 
     public static partial class Filtros
     {
-        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
+        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        where T : VistaMvcDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
@@ -147,18 +148,18 @@ namespace GestoresDeNegocio.Entorno
                 var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista,enumTipoDePermiso.Acceso);
                 registro.IdPermiso = permiso.Id;
             }
-            if (parametros.Tipo == TipoOperacion.Modificar && registro.IdPermiso == null)
+            if (parametros.Tipo == TipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
             {
-               if (RegistroEnBD.IdPermiso != null)
+               //if (RegistroEnBD.IdPermiso != null)
                     registro.IdPermiso = RegistroEnBD.IdPermiso;
-                else
-                {
-                    var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
-                    registro.IdPermiso = permiso.Id;
-                    parametros.Parametros["permisoCreado"] = true;
-                }
+                //else
+                //{
+                //    var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
+                //    registro.IdPermiso = permiso.Id;
+                //    parametros.Parametros[enumParametro.Creado] = true;
+                //}
             }
-            if (parametros.Tipo == TipoOperacion.Eliminar && RegistroEnBD.IdPermiso != null)
+            if (parametros.Tipo == TipoOperacion.Eliminar /*&& RegistroEnBD.IdPermiso != null*/)
                     GestorDePermisos.Eliminar(Contexto, Mapeador, (int) RegistroEnBD.IdPermiso);
         }
 
@@ -166,7 +167,9 @@ namespace GestoresDeNegocio.Entorno
         {
             base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Tipo == TipoOperacion.Modificar && !parametros.Parametros.ContainsKey("permisoCreado") && RegistroEnBD.Nombre != registro.Nombre)
+            if (parametros.Tipo == TipoOperacion.Modificar 
+                //&& !parametros.Parametros.ContainsKey(enumParametro.Creado) 
+                && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
         }
 

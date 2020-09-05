@@ -22,8 +22,8 @@ namespace GestoresDeNegocio.Entorno
                     registros = registros.Include(p => p.Padre);
                 if (join.Dtm == typeof(VistaMvcDtm))
                     registros = registros.Include(p => p.VistaMvc);
-                if (join.Dtm == typeof(PermisoDtm))
-                    registros = registros.Include(p => p.Permiso);
+                //if (join.Dtm == typeof(PermisoDtm))
+                //    registros = registros.Include(p => p.Permiso);
 
             }
 
@@ -118,11 +118,11 @@ namespace GestoresDeNegocio.Entorno
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
                 .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc.Nombre))
-                .ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(x => x.Permiso.Nombre))
+                //.ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(x => x.Permiso.Nombre))
                 ;
 
                 CreateMap<MenuDto, MenuDtm>()
-                .ForMember(dtm => dtm.Permiso, dto => dto.Ignore())
+                //.ForMember(dtm => dtm.Permiso, dto => dto.Ignore())
                 .ForMember(dtm => dtm.IdVistaMvc, dto => dto.MapFrom(dto => dto.idVistaMvc == 0 ? null : dto.idVistaMvc))
                 .ForMember(dtm => dtm.IdPadre, dto => dto.MapFrom(dto => dto.idPadre == 0 ? null : dto.idPadre));
             }
@@ -208,39 +208,39 @@ namespace GestoresDeNegocio.Entorno
             return gestor.LeerArbolDeMenu();
         }
 
-        protected override void AntesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
-        {
-            base.AntesDePersistir(registro, parametros);
-            if (parametros.Tipo == TipoOperacion.Insertar)
-            {
-                var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
-                registro.IdPermiso = permiso.Id;
-            }
-            if (parametros.Tipo == TipoOperacion.Modificar && registro.IdPermiso == null)
-            {
-                if (RegistroEnBD.IdPermiso != null)
-                    registro.IdPermiso = RegistroEnBD.IdPermiso;
-                else
-                {
-                    var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
-                    registro.IdPermiso = permiso.Id;
-                    parametros.Parametros["permisoCreado"] = true;
-                }
-            }
-            if (parametros.Tipo == TipoOperacion.Eliminar && RegistroEnBD.IdPermiso != null)
-                GestorDePermisos.Eliminar(Contexto, Mapeador, (int)RegistroEnBD.IdPermiso);
-        }
+        //protected override void AntesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
+        //{
+        //    base.AntesDePersistir(registro, parametros);
+        //    if (parametros.Tipo == TipoOperacion.Insertar)
+        //    {
+        //        var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
+        //        registro.IdPermiso = permiso.Id;
+        //    }
+        //    if (parametros.Tipo == TipoOperacion.Modificar && registro.IdPermiso == null)
+        //    {
+        //        if (RegistroEnBD.IdPermiso != null)
+        //            registro.IdPermiso = RegistroEnBD.IdPermiso;
+        //        else
+        //        {
+        //            var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
+        //            registro.IdPermiso = permiso.Id;
+        //            parametros.Parametros[enumParametro.Creado] = true;
+        //        }
+        //    }
+        //    if (parametros.Tipo == TipoOperacion.Eliminar && RegistroEnBD.IdPermiso != null)
+        //        GestorDePermisos.Eliminar(Contexto, Mapeador, (int)RegistroEnBD.IdPermiso);
+        //}
 
-        protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
-        {
-            base.DespuesDePersistir(registro, parametros);
+        //protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
+        //{
+        //    base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Tipo == TipoOperacion.Modificar && !parametros.Parametros.ContainsKey("permisoCreado") && RegistroEnBD.Nombre != registro.Nombre)
-                GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
+        //    if (parametros.Tipo == TipoOperacion.Modificar && !parametros.Parametros.ContainsKey(enumParametro.Creado) && RegistroEnBD.Nombre != registro.Nombre)
+        //        GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
 
-            var gestor = GestorDeArbolDeMenu.Gestor(Mapeador);
-            gestor.LimpiarCacheDeArbolDeMenu();
-        }
+        //    var gestor = GestorDeArbolDeMenu.Gestor(Mapeador);
+        //    gestor.LimpiarCacheDeArbolDeMenu();
+        //}
 
         public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
         {

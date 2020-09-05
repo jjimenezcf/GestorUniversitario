@@ -27,7 +27,7 @@ namespace ServicioDeDatos.Entorno
         public List<MenuDtm> Menus { get; set; }
 
         [Column("IDPERMISO", TypeName = "INT")]
-        public int? IdPermiso { get; set; }
+        public int IdPermiso { get; set; }
         
         public PermisoDtm Permiso { get; set; }
     }
@@ -42,14 +42,15 @@ namespace ServicioDeDatos.Entorno
 
             modelBuilder.Entity<VistaMvcDtm>().Property(p => p.MostrarEnModal).IsRequired(true).HasDefaultValue(false);
 
-            modelBuilder.Entity<VistaMvcDtm>().Property(p => p.IdPermiso).IsRequired(false);
+            //modelBuilder.Entity<VistaMvcDtm>().Property(p => p.IdPermiso).IsRequired(false);
 
             modelBuilder.Entity<VistaMvcDtm>()
                 .HasOne(p => p.Permiso)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(p => p.IdPermiso)
-                .HasConstraintName("FK_VISTA_MVC_IDPERMISO");
+                .HasConstraintName("FK_VISTA_MVC_IDPERMISO")
+                .OnDelete(DeleteBehavior.Restrict); ;
 
             modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.IdPermiso})
