@@ -8,7 +8,7 @@
 4.3 crear el crud de rol-permiso
 4.4 en el mantenimiento de roles poder navegar para incluir los permisos de un rol
 
-Pendiente
+
 4.5 Añadir muchos permisos a un rol
 arreglar la modal de selección
 desde el mantenimieto de permisos de un rol añadir una opción de menú: Añadir permisos
@@ -17,7 +17,19 @@ para hacer esto hay que pasar un parámetro (idrol) no visible en el crud de per
 dicho panel tiene dos opciones: cerrar y seleccionar
 si se pulsa seleccionar llamará a un ep que añadirá todos los registros seleccionados que están en el info selector
 
-4.6 en el mantenimiento de roles ver que roles contienen un permiso
-4.7 en el mantenimiento de permisos ver que permisos tienen un rol
-4.8 en el mantenimiento de puestos de trabajo poder ver que puestos están asignados a un usuario
-5. Crear callejero
+- Poder relacionar un usario con múltiples puestos
+- Poder relacionar un Puesto con múltiples roles
+- Poder relacionar un rol con múltiples permisos
+- Obtener el árbol de menú de un usuario
+
+pendiente
+- Montar sistema de caches
+- Montar ventana de login
+- Crear usuario administrador
+	- permiso de administrador asociado a variable 
+	- se lee al entrar (de BD o cache) en el controlador base
+
+- Añadir filtros a usuarios (selector de puesto)
+- Añadir filtro a puestos (selector de rol)
+- Añadir filtro a roles (selector de permiso)
+- Crud de Paises
