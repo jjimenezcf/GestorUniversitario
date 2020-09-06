@@ -201,11 +201,11 @@ namespace GestoresDeNegocio.Entorno
             return elementos;
         }
 
-        public static List<ArbolDeMenuDto> LeerArbolDeMenu(IMapper mapeador)
+        public static List<ArbolDeMenuDto> LeerArbolDeMenu(int idUsuario, IMapper mapeador)
         {
             var gestor = GestorDeArbolDeMenu.Gestor(mapeador);
 
-            return gestor.LeerArbolDeMenu();
+            return gestor.LeerArbolDeMenu(idUsuario);
         }
 
         //protected override void AntesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)

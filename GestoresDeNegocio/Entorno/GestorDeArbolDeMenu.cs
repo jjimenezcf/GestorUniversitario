@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
+using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
@@ -46,12 +48,33 @@ namespace GestoresDeNegocio.Entorno
 
         private static List<ArbolDeMenuDto> CacheArbolDeMenu;
 
-        public List<ArbolDeMenuDto> LeerArbolDeMenu()
+        public List<ArbolDeMenuDto> LeerArbolDeMenu(int idUsuario)
         {
             if (CacheArbolDeMenu == null)
             {
+                var arbolDeMenu = Contexto
+                .MenuSe
+                .FromSqlInterpolated($@"
+                                     SELECT T1.ID, 
+                                            T1.NOMBRE, 
+                                            T1.DESCRIPCION, 
+                                            T1.ICONO, 
+                                            T1.ACTIVO, 
+                                            T1.IDPADRE, 
+                                            T1.IDVISTA_MVC, 
+                                            T1.ORDEN, 
+                                            T2.NOMBRE AS PADRE, 
+                                            T3.NOMBRE AS VISTA, 
+                                            T3.CONTROLADOR, 
+                                            T3.ACCION, 
+                                            T3.PARAMETROS
+                                     FROM ENTORNO.ARBOL_MENU_POR_USUARIO({idUsuario}) AS T1
+                                     LEFT JOIN ENTORNO.MENU T2 ON T2.ID = T1.IDPADRE
+                                     LEFT JOIN ENTORNO.VISTA_MVC T3 ON T3.ID = T1.IDVISTA_MVC
+                                     order by t1.IDPADRE, T1.ORDEN, T1.NOMBRE").ToList();
+                
+                //List<ArbolDeMenuDtm> arbolDeMenu = LeerRegistros(0, -1);
                 var resultadoDto = new List<ArbolDeMenuDto>();
-                List<ArbolDeMenuDtm> arbolDeMenu = LeerRegistros(0, -1);
                 ProcesarSubMenus(resultadoDto, arbolDeMenu, padre: null);
                 CacheArbolDeMenu = resultadoDto;
             }

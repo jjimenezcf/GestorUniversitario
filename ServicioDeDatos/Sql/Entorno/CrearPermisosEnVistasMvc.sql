@@ -11,7 +11,7 @@ declare @permiso varchar(250)
 
 select id, nombre from ENTORNO.VISTA_MVC where IDPERMISO is null
 
-declare  vistas  CURSOR for select id, nombre from ENTORNO.VISTA_MVC where IDPERMISO is null
+declare vistas CURSOR for select id, nombre from ENTORNO.VISTA_MVC where IDPERMISO is null
 
 set @idtipo = (select id from SEGURIDAD.TIPO_PERMISO tp  where tp.NOMBRE  like 'Acceso')
 set @idclase = (select id from SEGURIDAD.CLASE_PERMISO cp where cp.NOMBRE like 'Vista')

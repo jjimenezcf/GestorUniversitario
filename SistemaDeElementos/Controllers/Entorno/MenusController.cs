@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var procesadas = new List<int>();
-                List<ArbolDeMenuDto> menu = GestorDeMenus.LeerArbolDeMenu(GestorDeElementos.Mapeador);
+                List<ArbolDeMenuDto> menu = GestorDeMenus.LeerArbolDeMenu(10, GestorDeElementos.Mapeador);
                 var menuHtml = 
 @$"
 <ul id='id_menuraiz' class=¨menu-contenido¨>
