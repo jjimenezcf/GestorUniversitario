@@ -7,6 +7,21 @@ using Utilidades;
 
 namespace ServicioDeDatos.Seguridad
 {
+    static class FiltrosPuestosDeTrabajo
+    {
+        public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        where T : PuestoDtm
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Usuarios.Any(r => r.IdUsuario == filtro.Valor.Entero()));
+            }
+
+            return registros;
+        }
+    }
 
     public class GestorDePuestosDeTrabajo : GestorDeElementos<ContextoSe, PuestoDtm, PuestoDto>
     {
@@ -38,6 +53,16 @@ namespace ServicioDeDatos.Seguridad
 
             var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(puestosDtm).ToList();
+        }
+
+        protected override IQueryable<PuestoDtm> AplicarFiltros(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (HayFiltroPorId(registros))
+                return registros;
+
+            return registros.AnadirFiltros(filtros);
         }
 
     }

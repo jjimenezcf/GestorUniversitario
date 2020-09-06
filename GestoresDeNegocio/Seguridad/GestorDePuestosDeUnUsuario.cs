@@ -37,10 +37,13 @@ namespace GestoresDeNegocio.Seguridad
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower())
-                {
-                    registros = registros.Where(p => p.IdUsuario == filtro.Valor.Entero());
-                }
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
+                    registros = registros.Where(x => x.IdUsuario == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
+                    registros = registros.Where(x => x.IdPuesto == filtro.Valor.Entero());
             }
 
             return registros;
@@ -125,6 +128,12 @@ namespace GestoresDeNegocio.Seguridad
 
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
+        }
+
+        protected override void MapearDatosDeRelacion(PuestosDeUnUsuarioDtm registro, int idElemento1, int idElemento2)
+        {
+            registro.IdUsuario = idElemento1;
+            registro.IdPuesto = idElemento2;
         }
 
         public dynamic LeerPuestos(int posicion, int cantidad, string filtro)

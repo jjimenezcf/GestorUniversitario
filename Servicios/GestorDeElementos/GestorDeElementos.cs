@@ -265,7 +265,7 @@ namespace GestorDeElementos
 
         protected virtual void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
         {
-            throw new Exception($"El registro {typeof(TRegistro)} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
+            throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
         }
 
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
