@@ -130,11 +130,11 @@ namespace GestoresDeNegocio.Seguridad
             return gestor.MapearElementos(clasesDtm).ToList();
         }
 
-        protected override void MapearDatosDeRelacion(PuestosDeUnUsuarioDtm registro, int idElemento1, int idElemento2)
-        {
-            registro.IdUsuario = idElemento1;
-            registro.IdPuesto = idElemento2;
-        }
+        //protected override void MapearDatosDeRelacion(PuestosDeUnUsuarioDtm registro, int idElemento1, int idElemento2)
+        //{
+        //    registro.IdUsuario = idElemento1;
+        //    registro.IdPuesto = idElemento2;
+        //}
 
         public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
         {

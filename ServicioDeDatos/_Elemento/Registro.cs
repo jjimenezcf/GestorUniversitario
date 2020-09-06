@@ -113,6 +113,14 @@ namespace ServicioDeDatos.Elemento
         [NotMapped]
         public bool RegistroConAuditoria { get; set; } = false;
 
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento1 { get; set; }
+
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
+
         public static TRegistro RegistroVacio<TRegistro>()
         {
             var className = typeof(TRegistro).FullName;
@@ -155,13 +163,6 @@ namespace ServicioDeDatos.Elemento
 
     public class RegistroDeRelacion : Registro
     {
-        [IgnoreDataMember]
-        [NotMapped]
-        public string NombreDeLaPropiedadDelIdElemento1 { get; set; }
-
-        [IgnoreDataMember]
-        [NotMapped]
-        public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
         public RegistroDeRelacion()
         {
             RegistroDeRelacion = true;

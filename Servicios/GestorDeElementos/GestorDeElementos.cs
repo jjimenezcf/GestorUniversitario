@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Utilidades;
 
@@ -263,9 +264,19 @@ namespace GestorDeElementos
             return "";
         }
 
-        protected virtual void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
+        private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
         {
-            throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
+            Type t = registro.GetType();
+            PropertyInfo[] props = t.GetProperties();
+            foreach (var prop in props)
+            {
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                    prop.SetValue(registro, idElemento1);
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+                    prop.SetValue(registro, idElemento2);
+            }
+
+            //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
         }
 
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)

@@ -121,10 +121,10 @@ namespace GestoresDeNegocio.Seguridad
             return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        protected override void MapearDatosDeRelacion(PermisosDeUnRolDtm registro, int idElemento1, int idElemento2)
-        {
-            registro.IdRol = idElemento1;
-            registro.IdPermiso = idElemento2;
-        }
+        //protected override void MapearDatosDeRelacion(PermisosDeUnRolDtm registro, int idElemento1, int idElemento2)
+        //{
+        //    registro.IdRol = idElemento1;
+        //    registro.IdPermiso = idElemento2;
+        //}
     }
 }

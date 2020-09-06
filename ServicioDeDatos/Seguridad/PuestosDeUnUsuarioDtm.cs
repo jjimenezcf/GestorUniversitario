@@ -19,11 +19,10 @@ namespace ServicioDeDatos.Seguridad
 
         public virtual PuestoDtm Puesto { get; set; }
 
-        public static new string NombreDeLaPropiedadDelIdElemento1 = nameof(IdUsuario);
-        public static new string NombreDeLaPropiedadDelIdElemento2 = nameof(IdPuesto);
-
         public PuestosDeUnUsuarioDtm()
         {
+            NombreDeLaPropiedadDelIdElemento1 = nameof(IdUsuario);
+            NombreDeLaPropiedadDelIdElemento2 = nameof(IdPuesto);
         }
     }
 
@@ -41,7 +40,7 @@ namespace ServicioDeDatos.Seguridad
 
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
-                        .HasIndex(p =>new { p.IdPuesto, p.IdUsuario })
+                        .HasIndex(p => new { p.IdPuesto, p.IdUsuario })
                         .HasName("I_USU_PUESTO_IDPUESTO_IDUSUA")
                         .IsUnique();
 

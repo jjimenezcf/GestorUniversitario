@@ -125,11 +125,11 @@ namespace GestoresDeNegocio.Seguridad
             return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        protected override void MapearDatosDeRelacion(RolesDeUnPuestoDtm registro, int idElemento1, int idElemento2)
-        {
-            registro.idPuesto = idElemento1;
-            registro.IdRol = idElemento2;
-        }
+        //protected override void MapearDatosDeRelacion(RolesDeUnPuestoDtm registro, int idElemento1, int idElemento2)
+        //{
+        //    registro.idPuesto = idElemento1;
+        //    registro.IdRol = idElemento2;
+        //}
     }
 }
 
