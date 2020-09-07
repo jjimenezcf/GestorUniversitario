@@ -8,7 +8,7 @@
 		<Model ID="{8CE7A42E-0174-4CED-9634-9D6D7E68CF86}" Loaded="No" Name="Entorno" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="Entorno.pdm"/>
 		<Model ID="{2C9ED104-F27C-4F64-AAD7-772E20F8CE1C}" Loaded="No" Name="Seguridad" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="/users/jjime/documents/programas/sistemadeelementos/modelodedatos/seguridad.pdm"/>
 		<Model Expanded="Yes" ID="{EA282A7F-EF6E-4DDB-8D78-76AE73C2EC75}" Loaded="No" Name="SISDOC" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="SISDOC.pdm"/>
-		<Model Expanded="Yes" ID="{5A05E49B-A8D7-4B6F-80E8-BC58EA362A5A}" Name="Procesos" Type="{3D3C409C-B60D-430E-A1C4-B880653AC634}" URL="Procesos de menú.bpm"/>
+		<Model Expanded="Yes" ID="{5A05E49B-A8D7-4B6F-80E8-BC58EA362A5A}" Name="Procesos" Selected="Yes" Type="{3D3C409C-B60D-430E-A1C4-B880653AC634}" URL="Procesos de menú.bpm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
