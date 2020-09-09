@@ -10,6 +10,7 @@ using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using Utilidades;
 using GestoresDeNegocio.Entorno;
+using ServicioDeDatos.Elemento;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -32,17 +33,26 @@ namespace GestoresDeNegocio.Seguridad
 
     static class FiltrosDePuestosDeUnUsuario    {
 
-        public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        public static IQueryable<T> PuestosDeUnUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
         where T : PuestosDeUnUsuarioDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower())
+                {
                     registros = registros.Where(x => x.IdUsuario == filtro.Valor.Entero());
+                }
 
-                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
+                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        registros = registros.Where(x => x.Puesto.Nombre.Contains(filtro.Valor));
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Puesto.Nombre == filtro.Valor);
+                }
+
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower())
                     registros = registros.Where(x => x.IdPuesto == filtro.Valor.Entero());
             }
 
@@ -52,7 +62,7 @@ namespace GestoresDeNegocio.Seguridad
 
     static class OrdenacionDePuestosDeUnUsuario
     {
-        public static IQueryable<PuestosDeUnUsuarioDtm> Orden(this IQueryable<PuestosDeUnUsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
+        public static IQueryable<PuestosDeUnUsuarioDtm> OrdenarPuestosDeUnUsuario(this IQueryable<PuestosDeUnUsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {
             if (ordenacion.Count == 0)
                 return set.OrderBy(x => x.Puesto.Nombre);
@@ -109,13 +119,13 @@ namespace GestoresDeNegocio.Seguridad
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros.AnadirFiltros(filtros);
+            return registros.PuestosDeUnUsuario(filtros);
         }
 
         protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarOrden(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.Orden(ordenacion);
+            return registros.OrdenarPuestosDeUnUsuario(ordenacion);
         }
 
 
@@ -129,12 +139,6 @@ namespace GestoresDeNegocio.Seguridad
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
         }
-
-        //protected override void MapearDatosDeRelacion(PuestosDeUnUsuarioDtm registro, int idElemento1, int idElemento2)
-        //{
-        //    registro.IdUsuario = idElemento1;
-        //    registro.IdPuesto = idElemento2;
-        //}
 
         public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
         {

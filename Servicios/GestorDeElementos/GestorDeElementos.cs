@@ -506,7 +506,7 @@ namespace GestorDeElementos
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros.FiltrarPorNombre(filtros);
+            return registros; //.FiltrarPorNombre(filtros);
         }
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
