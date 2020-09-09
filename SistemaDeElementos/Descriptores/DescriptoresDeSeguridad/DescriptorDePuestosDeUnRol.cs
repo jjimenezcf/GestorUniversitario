@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Seguridad;
+﻿using ModeloDeDto.Entorno;
+using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
@@ -26,14 +27,14 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<PuestosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Puestos");
             Mnt.ZonaMenu.Menu.Add(opcion);
 
-            //AnadirOpciondeRelacion(Mnt
-            //    , controlador: nameof(PermisosDeUnRolController)
-            //    , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)
-            //    , relacionarCon: nameof(PermisoDto)
-            //    , navegarAlCrud: DescriptorDeMantenimiento<PermisosDeUnRolDto>.NombreMnt
-            //    , nombreOpcion: "Permisos"
-            //    , propiedadQueRestringe: nameof(PuestosDeUnRolDto.IdRol )
-            //    , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(UsuariosDeUnPuestoController)
+                , vista: nameof(UsuariosDeUnPuestoController.CrudUsuariosDeUnPuesto)
+                , relacionarCon: nameof(UsuarioDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<UsuariosDeUnPuestoDto>.NombreMnt
+                , nombreOpcion: "Usuarios"
+                , propiedadQueRestringe: nameof(UsuariosDeUnPuestoDto.IdPuesto)
+                , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto));
         }
 
         public override string RenderControl()

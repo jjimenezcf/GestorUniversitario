@@ -53,6 +53,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePuestosDeTrabajo>();
             services.AddScoped<GestorDeClaseDePermisos>();
             services.AddScoped<GestorDePuestosDeUnUsuario>();
+            services.AddScoped<GestorDeUsuariosDeUnPuesto>();
             services.AddScoped<GestorDeRolesDeUnPuesto>();
             services.AddScoped<GestorDePuestosDeUnRol>();
             services.AddScoped<GestorDeRoles>();
