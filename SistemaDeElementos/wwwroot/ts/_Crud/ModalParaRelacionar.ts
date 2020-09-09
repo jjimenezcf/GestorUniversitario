@@ -78,6 +78,7 @@
 
         private DespuesDeCrearRelaciones(peticion: ApiDeAjax.DescriptorAjax) {
             let modlParaRelacionar: ModalParaRelacionar = peticion.llamador as ModalParaRelacionar;
+            modlParaRelacionar.InfoSelector.QuitarTodos();
             modlParaRelacionar.RecargarGrid();
             modlParaRelacionar.Crud.Buscar(atGrid.accion.buscar, 0);
         }

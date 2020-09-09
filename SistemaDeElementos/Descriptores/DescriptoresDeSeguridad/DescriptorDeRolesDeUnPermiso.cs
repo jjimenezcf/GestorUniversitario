@@ -26,14 +26,14 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles");
             Mnt.ZonaMenu.Menu.Add(opcion);
 
-            //AnadirOpciondeRelacion(Mnt
-            //    , controlador: nameof(RolesDeUnPuestoController)
-            //    , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
-            //    , relacionarCon: nameof(RolDto)
-            //    , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
-            //    , nombreOpcion: "Roles"
-            //    , propiedadQueRestringe: nameof(PuestosDeUnUsuarioDto.IdPuesto)
-            //    , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(PuestosDeUnRolController)
+                , vista: nameof(PuestosDeUnRolController.CrudPuestosDeUnRol)
+                , relacionarCon: nameof(PuestoDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<PuestosDeUnRolDto>.NombreMnt
+                , nombreOpcion: "Puestos"
+                , propiedadQueRestringe: nameof(PuestosDeUnRolDto.IdRol)
+                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol));
         }
 
 

@@ -12,7 +12,7 @@ namespace GestoresDeNegocio.Seguridad
 {
     public static partial class Joins
     {
-        public static IQueryable<T> JoinDeRolesDeUnPuesto<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        public static IQueryable<T> JoinDePuestosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         where T : RolesDeUnPuestoDtm
         {
             foreach (ClausulaDeJoin join in joins)
@@ -27,9 +27,9 @@ namespace GestoresDeNegocio.Seguridad
         }
     }
 
-    static class FiltrosDeRolesDeUnPuesto
+    static class FiltrosDePuestosDeUnRol
     {
-        public static IQueryable<T> RolesDeUnPuesto<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        public static IQueryable<T> PuestosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
         where T : RolesDeUnPuestoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -46,9 +46,9 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
     }
-    static class OrdenacionDeRolesDeUnPuesto
+    static class OrdenacionDePuestosDeUnRol
     {
-        public static IQueryable<RolesDeUnPuestoDtm> Orden(this IQueryable<RolesDeUnPuestoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
+        public static IQueryable<RolesDeUnPuestoDtm> OrdenarPuestosDeUnRol(this IQueryable<RolesDeUnPuestoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {
             if (ordenacion.Count == 0)
                 return set.OrderBy(x => x.Rol.Nombre);
@@ -56,26 +56,25 @@ namespace GestoresDeNegocio.Seguridad
         }
     }
 
-    public class GestorDeRolesDeUnPuesto : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
+    public class GestorDePuestosDeUnRol : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, PuestosDeUnRolDto>
     {
 
-        public class MapearRolesDeUnPuesto : Profile
+        public class MapearPuestosDeUnRol : Profile
         {
-            public MapearRolesDeUnPuesto()
+            public MapearPuestosDeUnRol()
             {
-                CreateMap<RolesDeUnPuestoDtm, RolesDeUnPuestoDto>()
+                CreateMap<RolesDeUnPuestoDtm, PuestosDeUnRolDto>()
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
                     .ForMember(dto => dto.Rol, dtm => dtm.MapFrom(dtm => dtm.Rol.Nombre));
 
-                CreateMap<RolesDeUnPuestoDto, RolesDeUnPuestoDtm>();
+                CreateMap<PuestosDeUnRolDto, RolesDeUnPuestoDtm>();
             }
         }
 
-        public GestorDeRolesDeUnPuesto(ContextoSe contexto, IMapper mapeador)
+        public GestorDePuestosDeUnRol(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
-
-
+            invertirMapeoDeRelacion = true;
         }
 
         internal static GestorDePuestosDeUnUsuario Gestor(ContextoSe contexto, IMapper mapeador)
@@ -94,7 +93,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarJoins(registros, joins, parametros);
 
-            return registros.JoinDeRolesDeUnPuesto(joins, parametros);
+            return registros.JoinDePuestosDeUnRol(joins, parametros);
         }
 
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarFiltros(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -104,13 +103,13 @@ namespace GestoresDeNegocio.Seguridad
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros.RolesDeUnPuesto(filtros);
+            return registros.PuestosDeUnRol(filtros);
         }
 
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.Orden(ordenacion);
+            return registros.OrdenarPuestosDeUnRol(ordenacion);
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
