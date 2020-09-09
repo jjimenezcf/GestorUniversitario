@@ -43,7 +43,7 @@ namespace GestoresDeNegocio.Seguridad
                     registros = registros.Where(x => x.IdUsuario == filtro.Valor.Entero());
                 }
 
-                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDto.Puesto).ToLower() && !filtro.Valor.IsNullOrEmpty())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
                         registros = registros.Where(x => x.Puesto.Nombre.Contains(filtro.Valor));
