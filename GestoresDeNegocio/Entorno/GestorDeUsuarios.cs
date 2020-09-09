@@ -9,6 +9,7 @@ using ServicioDeDatos.Archivos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using Gestor.Errores;
+using System;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -22,44 +23,6 @@ namespace GestoresDeNegocio.Entorno
                 if (join.Dtm == typeof(ArchivoDtm))
                     registros = registros.Include(p => p.Archivo);
             }
-
-            return registros;
-        }
-    }
-
-
-    static class FiltrosDeUsuario
-    {
-        public static IQueryable<T> FiltrarPorNombreCompleto<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == UsuariosPor.NombreCompleto)
-                {
-                    var partesDelNombre = filtro.Valor.Split('(', ')',',');
-                    if (partesDelNombre.Length == 4)
-                        registros = registros.Where(x => x.Login == partesDelNombre[1].Trim()
-                                                      && x.Apellido == partesDelNombre[2].Trim()
-                                                      && x.Nombre == partesDelNombre[3].Trim());
-                    else
-                        registros = registros.Where(x => x.Apellido.Contains(filtro.Valor)
-                                                      || x.Nombre.Contains(filtro.Valor)
-                                                      || x.Login.Contains(filtro.Valor));
-                }
-
-            return registros;
-        }
-
-        public static IQueryable<T> FiltrarPorRelacion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : UsuarioDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == UsuariosPor.Permisos)
-                {
-                    var listaIds = filtro.Valor.ListaEnteros();
-                    foreach (int id in listaIds)
-                    {
-                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua == u.Id));
-                    }
-                }
 
             return registros;
         }
@@ -139,10 +102,39 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (!hayFiltroPorId)
+                registros = FiltrarUsuarios(registros, filtros);
 
-            return registros.FiltrarPorNombreCompleto(filtros).FiltrarPorRelacion(filtros);
+            return registros;
+        }
+
+        private IQueryable<UsuarioDtm> FiltrarUsuarios(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == UsuariosPor.NombreCompleto)
+                {
+                    var partesDelNombre = filtro.Valor.Split('(', ')', ',');
+                    if (partesDelNombre.Length == 4)
+                        registros = registros.Where(x => x.Login == partesDelNombre[1].Trim()
+                                                      && x.Apellido == partesDelNombre[2].Trim()
+                                                      && x.Nombre == partesDelNombre[3].Trim());
+                    else
+                        registros = registros.Where(x => x.Apellido.Contains(filtro.Valor)
+                                                      || x.Nombre.Contains(filtro.Valor)
+                                                      || x.Login.Contains(filtro.Valor));
+                }
+                if (filtro.Clausula.ToLower() == UsuariosPor.Permisos)
+                {
+                    var listaIds = filtro.Valor.ListaEnteros();
+                    foreach (int id in listaIds)
+                    {
+                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua == u.Id));
+                    }
+                }
+            }
+
+            return registros;
         }
 
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)

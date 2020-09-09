@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
@@ -7,26 +8,6 @@ using Utilidades;
 
 namespace ServicioDeDatos.Seguridad
 {
-    static class FiltrosPuestosDeTrabajo
-    {
-        public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
-        where T : PuestoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() &&
-                    filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Usuarios.Any(r => r.IdUsuario == filtro.Valor.Entero()));
-
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() &&
-                    filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
-            }
-
-            return registros;
-        }
-    }
-
     public class GestorDePuestosDeTrabajo : GestorDeElementos<ContextoSe, PuestoDtm, PuestoDto>
     {
         public class MapearPuestoDeTrabajo : Profile
@@ -63,11 +44,26 @@ namespace ServicioDeDatos.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (!hayFiltroPorId)
+                registros = FiltrarPuestosDeTrabajo(registros,filtros);
 
-            return registros.AnadirFiltros(filtros);
+            return registros;
         }
 
+        private IQueryable<PuestoDtm> FiltrarPuestosDeTrabajo(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Usuarios.Any(r => r.IdUsuario == filtro.Valor.Entero()));
+
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
+            }
+
+            return registros;
+        }
     }
 }

@@ -28,37 +28,7 @@ namespace GestoresDeNegocio.Entorno
         }
     }
 
-    public static partial class Filtros
-    {
-        public static IQueryable<T> FiltraPorControlador<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        where T : VistaMvcDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        registros = registros.Where(x => x.Controlador == filtro.Valor);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        registros = registros.Where(x => x.Controlador.Contains(filtro.Valor));
-                }
-
-            return registros;
-        }
-        public static IQueryable<T> FiltraPorAccion<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros) where T : VistaMvcDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Accion).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        registros = registros.Where(x => x.Accion == filtro.Valor);
-                }
-
-            return registros;
-        }
-    }
-
-
+    
     public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
@@ -104,10 +74,32 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (hayFiltroPorId)
+                registros = FiltrarVistasMvc(registros,filtros);
 
-            return registros.FiltraPorControlador(filtros, parametros).FiltraPorAccion(filtros, parametros);
+            return registros;
+        }
+
+        private IQueryable<VistaMvcDtm> FiltrarVistasMvc(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Controlador == filtro.Valor);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        registros = registros.Where(x => x.Controlador.Contains(filtro.Valor));
+                }
+                if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Accion).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Accion == filtro.Valor);
+                }
+            }
+
+            return registros;
         }
 
         public VistaMvcDtm LeerVistaMvc(string vistaMvc)

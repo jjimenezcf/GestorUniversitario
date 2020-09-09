@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
@@ -27,25 +28,6 @@ namespace GestoresDeNegocio.Seguridad
         }
     }
 
-    static class FiltrosDePuestosDeUnRol
-    {
-        public static IQueryable<T> PuestosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
-        where T : RolesDeUnPuestoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
-                    registros = registros.Where(x => x.idPuesto == filtro.Valor.Entero());
-
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
-                    registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
-            }
-
-            return registros;
-        }
-    }
     static class OrdenacionDePuestosDeUnRol
     {
         public static IQueryable<RolesDeUnPuestoDtm> OrdenarPuestosDeUnRol(this IQueryable<RolesDeUnPuestoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
@@ -100,10 +82,26 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (!hayFiltroPorId)
+                registros = FiltrarPuestosDeUnRol(registros,filtros);
 
-            return registros.PuestosDeUnRol(filtros);
+            return registros;
+        }
+
+        private IQueryable<RolesDeUnPuestoDtm> FiltrarPuestosDeUnRol(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
+                    registros = registros.Where(x => x.idPuesto == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() ||
+                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
+                    registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
+            }
+
+            return registros;
         }
 
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)

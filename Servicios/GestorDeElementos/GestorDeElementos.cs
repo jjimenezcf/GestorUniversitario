@@ -46,36 +46,6 @@ namespace GestorDeElementos
         }
     }
 
-    public static partial class Filtros
-    {
-        public static IQueryable<TRegistro> FiltrarPorId<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
-                    return registros.Where(x => x.Id == filtro.Valor.Entero());
-            }
-            return registros;
-        }
-
-        public static IQueryable<TRegistro> FiltrarPorNombre<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return registros.Where(x => x.Nombre.Contains(filtro.Valor));
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return registros.Where(x => x.Nombre == filtro.Valor);
-                }
-            }
-            return registros;
-        }
-
-    }
-
     public static partial class Ordenaciones
     {
         public static IQueryable<TRegistro> OrdenBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion) where TRegistro : Registro
@@ -148,6 +118,7 @@ namespace GestorDeElementos
         public TRegistro RegistroEnBD { get; private set; }
 
         protected bool invertirMapeoDeRelacion { get; set; } = false;
+        public bool hayFiltroPorId { get; private set; } = false;
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
@@ -501,12 +472,36 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            registros = registros.FiltrarPorId(filtros);
+            return FiltrosBasicos(registros, filtros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            //if (HayFiltroPorId(registros))
+            //    return registros;
 
-            return registros; //.FiltrarPorNombre(filtros);
+            //return registros; //.FiltrarPorNombre(filtros);
+        }
+
+        private IQueryable<TRegistro> FiltrosBasicos(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
+                {
+                    hayFiltroPorId = true;
+                    registros.Where(x => x.Id == filtro.Valor.Entero());
+                    break;
+                }
+
+                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return registros.Where(x => x.Nombre.Contains(filtro.Valor));
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return registros.Where(x => x.Nombre == filtro.Valor);
+                }
+
+            }
+            return registros;
         }
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -514,10 +509,10 @@ namespace GestorDeElementos
             return registros.JoinBase(joins, parametros);
         }
 
-        protected bool HayFiltroPorId(IQueryable<TRegistro> registros)
-        {
-            return registros.Expression.ToString().Contains(".Where(x => x.Id");
-        }
+        //protected bool HayFiltroPorId(IQueryable<TRegistro> registros)
+        //{
+        //    return registros.Expression.ToString().Contains(".Where(x => x.Id");
+        //}
 
         #endregion
 

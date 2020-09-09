@@ -9,6 +9,7 @@ using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Seguridad;
+using System;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -26,48 +27,6 @@ namespace GestoresDeNegocio.Entorno
                 //    registros = registros.Include(p => p.Permiso);
 
             }
-
-            return registros;
-        }
-    }
-
-    public static partial class Filtros
-    {
-        public static IQueryable<T> FiltrarMenus<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
-                        registros = registros.Where(x => x.IdPadre == null);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.noEsNulo)
-                        registros = registros.Where(x => x.IdPadre != null);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual && filtro.Valor.Entero() > 0)
-                        registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
-                }
-
-            return registros;
-        }
-
-        public static IQueryable<T> FiltrarPorMenuPadre<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Padre).ToLower())
-                {
-                    registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
-                }
-
-            return registros;
-        }
-        public static IQueryable<T> FiltrarPorActivo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : MenuDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Activo).ToLower())
-                {
-                    registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
-                }
 
             return registros;
         }
@@ -99,7 +58,7 @@ namespace GestoresDeNegocio.Entorno
                 if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x=>x.Nombre)
+                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre)
                     : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Orden).ThenBy(x => x.Nombre);
                     break;
                 }
@@ -151,13 +110,33 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (!hayFiltroPorId)
+                registros = FiltrarMenus(registros, filtros);
 
-            registros = registros
-                .FiltrarMenus(filtros)
-                .FiltrarPorMenuPadre(filtros)
-                .FiltrarPorActivo(filtros);
+            return registros;
+        }
+
+        private IQueryable<MenuDtm> FiltrarMenus(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
+                        registros = registros.Where(x => x.IdPadre == null);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.noEsNulo)
+                        registros = registros.Where(x => x.IdPadre != null);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual && filtro.Valor.Entero() > 0)
+                        registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
+                }
+
+                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Activo).ToLower())
+                {
+                    registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
+                }
+            }
 
             return registros;
         }

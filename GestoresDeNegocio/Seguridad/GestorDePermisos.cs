@@ -29,49 +29,7 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
     }
-    static class FiltrosPermiso
-    {
-        public static IQueryable<T> Permisos<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
-                {
-                    var listaIds = filtro.Valor.ListaEnteros();
-                    foreach (int id in listaIds)
-                    {
-                        registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsua == id && up.IdPermiso == p.Id));
-                    }
-                }
 
-                if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
-                {
-                    var listaIds = filtro.Valor.ListaEnteros();
-                    foreach (int id in listaIds)
-                    {
-                        registros = registros.Where(x => x.Roles.Any(i => i.IdPermiso == id));
-                    }
-                }
-
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() &&
-                    filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
-
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Clase).ToLower())
-                {
-                    registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
-                }
-
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
-                {
-                    registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
-                }
-            }
-
-            return registros;
-        }
-
-    }
     static class PermisosRegOrd
     {
         public static IQueryable<PermisoDtm> Orden(this IQueryable<PermisoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
@@ -198,10 +156,42 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (hayFiltroPorId)
+                registros = FiltrarPermisos(registros, filtros);
 
-            return registros.Permisos(filtros);
+            return registros;
+        }
+
+        private IQueryable<PermisoDtm> FiltrarPermisos(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
+                {
+                    var listaIds = filtro.Valor.ListaEnteros();
+                    foreach (int id in listaIds)
+                        registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsua == id && up.IdPermiso == p.Id));
+                }
+
+                if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
+                {
+                    var listaIds = filtro.Valor.ListaEnteros();
+                    foreach (int id in listaIds)
+                        registros = registros.Where(x => x.Roles.Any(i => i.IdPermiso == id));
+                }
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
+
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Clase).ToLower())
+                    registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
+                    registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
+            }
+
+            return registros;
         }
 
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)

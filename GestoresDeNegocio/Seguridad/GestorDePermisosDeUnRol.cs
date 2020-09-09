@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
@@ -29,25 +30,6 @@ namespace GestoresDeNegocio.Seguridad
     }
 
 
-    static class FiltrosDePermisosDeUnRol
-    {
-        internal static IQueryable<T> PermisosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
-        where T : PermisosDeUnRolDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
-                    registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
-
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
-                    registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
-            }
-            return registros;
-        }
-
-    }
     static class OrdenacionDePermisosDeUnRol
     {
         public static IQueryable<PermisosDeUnRolDtm> Orden(this IQueryable<PermisosDeUnRolDtm> set, List<ClausulaDeOrdenacion> ordenacion)
@@ -103,10 +85,24 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (HayFiltroPorId(registros))
-                return registros;
+            if (!hayFiltroPorId)
+                registros = FiltrarPermisosDeUnRol(registros,filtros);
 
-            return registros.PermisosDeUnRol(filtros);
+            return registros;
+        }
+
+        private IQueryable<PermisosDeUnRolDtm> FiltrarPermisosDeUnRol(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeFiltrado> filtros)
+        {
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower())
+                    registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower())
+                    registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
+            }
+            return registros;
+
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
