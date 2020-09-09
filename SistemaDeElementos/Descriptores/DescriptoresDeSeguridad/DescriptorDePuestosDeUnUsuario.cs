@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , new Posicion { fila = 0, columna = 0 });
 
             var modalDePuestos = new ModalDeRelacionarElementos<PuestosDeUnUsuarioDto, PuestoDto>(mantenimiento: Mnt
-                              , tituloModal: "Seleccione los roles a relacionar"
+                              , tituloModal: "Seleccione los puestos a relacionar"
                               , crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
             var relacionarPuestos = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl());

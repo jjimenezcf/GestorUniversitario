@@ -12,7 +12,7 @@ namespace GestoresDeNegocio.Seguridad
 {
     public static partial class Joins
     {
-        public static IQueryable<T> JoinDePermisosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        public static IQueryable<T> JoinDeRolesDeUnPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) 
         where T : PermisosDeUnRolDtm
         {
             foreach (ClausulaDeJoin join in joins)
@@ -29,9 +29,9 @@ namespace GestoresDeNegocio.Seguridad
     }
 
 
-    static class FiltrosDePermisosDeUnRol
+    static class FiltrosDeRolesDeUnPermiso
     {
-        internal static IQueryable<T> PermisosDeUnRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        internal static IQueryable<T> RolesDeUnPermiso<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) 
         where T : PermisosDeUnRolDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -48,7 +48,7 @@ namespace GestoresDeNegocio.Seguridad
         }
 
     }
-    static class OrdenacionDePermisosDeUnRol
+    static class OrdenacionDeRolesDeUnPermiso
     {
         public static IQueryable<PermisosDeUnRolDtm> Orden(this IQueryable<PermisosDeUnRolDtm> set, List<ClausulaDeOrdenacion> ordenacion)
         {
@@ -59,30 +59,31 @@ namespace GestoresDeNegocio.Seguridad
     }
 
 
-    public class GestorDePermisosDeUnRol : GestorDeElementos<ContextoSe, PermisosDeUnRolDtm, PermisosDeUnRolDto>
+    public class GestorDeRolesDeUnPermiso : GestorDeElementos<ContextoSe, PermisosDeUnRolDtm, RolesDeUnPermisoDto>
     {
 
-        public class MapearPermisosDeUnRol : Profile
+        public class MapearRolesDeUnPermiso : Profile
         {
-            public MapearPermisosDeUnRol()
+            public MapearRolesDeUnPermiso()
             {
-                CreateMap<PermisosDeUnRolDtm, PermisosDeUnRolDto>()
+                CreateMap<PermisosDeUnRolDtm, RolesDeUnPermisoDto>()
                     .ForMember(dto => dto.Rol, dtm => dtm.MapFrom(dtm => dtm.Rol.Nombre))
                     .ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(dtm => dtm.Permiso.Nombre));
-
-                CreateMap<PermisosDeUnRolDto, PermisosDeUnRolDtm>();
+                
+                CreateMap<RolesDeUnPermisoDto, PermisosDeUnRolDtm>();
             }
         }
 
-        public GestorDePermisosDeUnRol(ContextoSe contexto, IMapper mapeador)
+        public GestorDeRolesDeUnPermiso(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
+            invertirMapeoDeRelacion = true;
         }
 
 
-        internal static GestorDePermisosDeUnRol Gestor(ContextoSe contexto, IMapper mapeador)
+        internal static GestorDeRolesDeUnPermiso Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            return new GestorDePermisosDeUnRol(contexto, mapeador);
+            return new GestorDeRolesDeUnPermiso(contexto, mapeador);
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -95,7 +96,7 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<PermisosDeUnRolDtm> AplicarJoins(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            registros = registros.JoinDePermisosDeUnRol(joins, parametros);
+            registros = registros.JoinDeRolesDeUnPermiso(joins, parametros);
             return registros;
         }
 
@@ -105,8 +106,8 @@ namespace GestoresDeNegocio.Seguridad
 
             if (HayFiltroPorId(registros))
                 return registros;
-
-            return registros.PermisosDeUnRol(filtros);
+                        
+            return registros.RolesDeUnPermiso(filtros);
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
@@ -121,7 +122,7 @@ namespace GestoresDeNegocio.Seguridad
             return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        //protected override void MapearDatosDeRelacion(PermisosDeUnRolDtm registro, int idElemento1, int idElemento2)
+        //protected override void MapearDatosDeRelacion(RolesDeUnPermisoDtm registro, int idElemento1, int idElemento2)
         //{
         //    registro.IdRol = idElemento1;
         //    registro.IdPermiso = idElemento2;

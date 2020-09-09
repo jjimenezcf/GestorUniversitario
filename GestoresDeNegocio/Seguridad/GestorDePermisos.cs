@@ -31,9 +31,10 @@ namespace GestoresDeNegocio.Seguridad
     }
     static class FiltrosPermiso
     {
-        public static IQueryable<T> FiltrarPorUsuario<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
+        public static IQueryable<T> Permisos<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
+            {
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
@@ -43,13 +44,6 @@ namespace GestoresDeNegocio.Seguridad
                     }
                 }
 
-            return registros;
-        }
-
-        public static IQueryable<T> FiltroPorRol<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
@@ -62,31 +56,20 @@ namespace GestoresDeNegocio.Seguridad
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() &&
                     filtro.Criterio == CriteriosDeFiltrado.diferente)
                     registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
-            }
 
-            return registros;
-        }
-        public static IQueryable<T> FiltroPorClase<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Clase).ToLower())
                 {
                     registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
                 }
 
-            return registros;
-        }
-        public static IQueryable<T> FiltroPorTipo<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
                 if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
                 {
                     registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
                 }
+            }
 
             return registros;
         }
-
 
     }
     static class PermisosRegOrd
@@ -218,11 +201,7 @@ namespace GestoresDeNegocio.Seguridad
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros
-                .FiltrarPorUsuario(filtros)
-                .FiltroPorRol(filtros)
-                .FiltroPorTipo(filtros)
-                .FiltroPorClase(filtros);
+            return registros.Permisos(filtros);
         }
 
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)

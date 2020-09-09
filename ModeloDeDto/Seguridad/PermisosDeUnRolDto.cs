@@ -1,5 +1,4 @@
 ﻿
-using ServicioDeDatos.Seguridad;
 
 namespace ModeloDeDto.Seguridad
 {

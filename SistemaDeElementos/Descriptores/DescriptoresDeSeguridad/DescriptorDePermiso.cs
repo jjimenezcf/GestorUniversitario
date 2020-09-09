@@ -3,6 +3,7 @@ using UtilidadesParaIu;
 using ServicioDeDatos.Entorno;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto.Entorno;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -35,8 +36,18 @@ namespace MVCSistemaDeElementos.Descriptores
                 new ListaDeElemento<PermisoDto>(padre: fltEspecificos,
                                         propiedad: nameof(PermisoDto.Tipo),
                                         posicion: new Posicion() { fila = 0, columna = 1 });
+
+                AnadirOpciondeRelacion(Mnt
+                    , controlador: nameof(RolesDeUnPermisoController)
+                    , vista: nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso)
+                    , relacionarCon: nameof(RolDto)
+                    , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPermisoDto>.NombreMnt
+                    , nombreOpcion: "Roles"
+                    , propiedadQueRestringe: nameof(PermisoDtm.Id)
+                    , propiedadRestrictora: nameof(PermisosDeUnRolDtm.IdPermiso));
+
             }
-            
+
             RutaVista = "Seguridad";
         }
 

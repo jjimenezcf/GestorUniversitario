@@ -11,7 +11,7 @@ namespace GestoresDeNegocio.Seguridad
 {
     static class FiltrosRoles
     {
-        public static IQueryable<T> AnadirFiltros<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
+        public static IQueryable<T> Roles<T>(this IQueryable<T> registros, List<ClausulaDeFiltrado> filtros)
         where T : RolDtm
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -19,8 +19,13 @@ namespace GestoresDeNegocio.Seguridad
                 if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() &&
                     filtro.Criterio == CriteriosDeFiltrado.diferente)
                     registros = registros.Where(i => !i.Puestos.Any(r => r.idPuesto == filtro.Valor.Entero()));
-            }
 
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Permisos.Any(r => r.IdPermiso == filtro.Valor.Entero()));
+            }
+            
             return registros;
         }
     }
@@ -64,7 +69,7 @@ namespace GestoresDeNegocio.Seguridad
             if (HayFiltroPorId(registros))
                 return registros;
 
-            return registros.AnadirFiltros(filtros);
+            return registros.Roles(filtros);
         }
 
     }

@@ -147,6 +147,8 @@ namespace GestorDeElementos
 
         public TRegistro RegistroEnBD { get; private set; }
 
+        protected bool invertirMapeoDeRelacion { get; set; } = false;
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
@@ -271,9 +273,9 @@ namespace GestorDeElementos
             foreach (var prop in props)
             {
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
-                    prop.SetValue(registro, idElemento1);
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
-                    prop.SetValue(registro, idElemento2);
+                    prop.SetValue(registro, invertirMapeoDeRelacion ? idElemento2 : idElemento1);
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2 )
+                    prop.SetValue(registro, invertirMapeoDeRelacion ? idElemento1 : idElemento2);
             }
 
             //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");

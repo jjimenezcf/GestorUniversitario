@@ -26,6 +26,9 @@ namespace ServicioDeDatos
         public DbSet<RolDtm> Roles { get; set; }
         public DbSet<PuestoDtm> Puestos { get; set; }
         public DbSet<PermisosDeUnRolDtm> PermisosDeUnRol { get; set; }
+
+        //public DbSet<RolesDeUnPermisoDtm> RolesDeUnPermiso { get; set; }
+
         public DbSet<RolesDeUnPuestoDtm> PuestosDeUnRol { get; set; }
         public DbSet<PuestosDeUnUsuarioDtm> PuestosDeUnUsuario { get; set; }
 
@@ -65,6 +68,8 @@ namespace ServicioDeDatos
             TablaRol.Definir(modelBuilder);
 
             TablaRolPermiso.Definir(modelBuilder);
+
+            //TablaPermisoRol.Definir(modelBuilder);
 
             TablaRolPuesto.Definir(modelBuilder);
 

@@ -73,7 +73,7 @@ namespace GestoresDeNegocio.Entorno
                                      LEFT JOIN ENTORNO.VISTA_MVC T3 ON T3.ID = T1.IDVISTA_MVC
                                      order by t1.IDPADRE, T1.ORDEN, T1.NOMBRE").ToList();
                 
-                //List<ArbolDeMenuDtm> arbolDeMenu = LeerRegistros(0, -1);
+                arbolDeMenu = LeerRegistros(0, -1);
                 var resultadoDto = new List<ArbolDeMenuDto>();
                 ProcesarSubMenus(resultadoDto, arbolDeMenu, padre: null);
                 CacheArbolDeMenu = resultadoDto;

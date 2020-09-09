@@ -112,6 +112,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\Rol.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Seguridad\RolesDeUnPermiso.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\RolesDeUnPuesto.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -65,6 +65,18 @@
     <Compile Remove="Migrations\20200609192010_anadir.Designer.cs" />
     <Compile Remove="Migrations\20200905110520_permisoFueraEnMenuObligatorioEnVistas.cs" />
     <Compile Remove="Migrations\20200905110520_permisoFueraEnMenuObligatorioEnVistas.Designer.cs" />
+    <Compile Remove="Migrations\20200908161859_añadir roles de un permiso.cs" />
+    <Compile Remove="Migrations\20200908161859_añadir roles de un permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200908174621_añadir roles de un permiso.cs" />
+    <Compile Remove="Migrations\20200908174621_añadir roles de un permiso.Designer.cs" />
+    <Compile Remove="Migrations\20200908202823_permiso_rol 4.cs" />
+    <Compile Remove="Migrations\20200908202823_permiso_rol 4.Designer.cs" />
+    <Compile Remove="Migrations\20200908205154_permiso_rol 5.cs" />
+    <Compile Remove="Migrations\20200908205154_permiso_rol 5.Designer.cs" />
+    <Compile Remove="Migrations\20200908205355_permiso_rol 5.cs" />
+    <Compile Remove="Migrations\20200908205355_permiso_rol 5.Designer.cs" />
+    <Compile Remove="Migrations\20200908210015_permiso_rol 5.cs" />
+    <Compile Remove="Migrations\20200908210015_permiso_rol 5.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
