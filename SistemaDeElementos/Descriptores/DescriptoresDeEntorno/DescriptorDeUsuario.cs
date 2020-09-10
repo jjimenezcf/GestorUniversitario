@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
             
-            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos(UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             RutaVista = "Entorno";
 
             AnadirOpciondeRelacion(Mnt

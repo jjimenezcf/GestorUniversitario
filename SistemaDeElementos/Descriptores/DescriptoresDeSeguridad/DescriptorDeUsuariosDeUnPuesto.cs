@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Entorno;
+﻿using ModeloDeDto;
+using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
@@ -18,6 +19,8 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad:nameof(UsuariosDeUnPuestoDto.IdPuesto)
                   , ayuda: "buscar por puesto"
                   , new Posicion { fila = 0, columna = 0 });
+
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Usuario", nameof(UsuariosDeUnPuestoDto.Usuario), "Buscar por 'usuario'");
 
             var modalDePuestos = new ModalDeRelacionarElementos<UsuariosDeUnPuestoDto, UsuarioDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los usuarios a relacionar"

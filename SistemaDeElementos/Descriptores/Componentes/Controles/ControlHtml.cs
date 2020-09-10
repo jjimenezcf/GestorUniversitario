@@ -45,8 +45,9 @@
             return atributos;
         }
 
-        public void CambiarAtributos(string propiedad, string ayuda)
+        public void CambiarAtributos(string etiqueta, string propiedad, string ayuda)
         {
+            Etiqueta = etiqueta;
             Id = $"{Padre.Id}_{Tipo}_{propiedad}";
             Propiedad = propiedad;
             Ayuda = ayuda;

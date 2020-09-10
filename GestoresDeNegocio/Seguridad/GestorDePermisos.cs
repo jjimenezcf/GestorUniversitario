@@ -156,7 +156,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (!hayFiltroPorId)
                 registros = FiltrarPermisos(registros, filtros);
 
             return registros;

@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Seguridad;
+﻿using ModeloDeDto;
+using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
@@ -16,6 +17,8 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad: nameof(PermisosDeUnRolDto.IdRol)
                   , ayuda: "buscar por rol"
                   , new Posicion { fila = 0, columna = 0 });
+
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Permiso", nameof(PermisosDeUnRolDto.Permiso), "Buscar por 'permiso'");
 
             //Añade una opcion de menú, para relacionar permisos
             //- Abre una modal de selección

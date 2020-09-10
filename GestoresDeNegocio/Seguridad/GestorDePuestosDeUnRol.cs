@@ -92,13 +92,14 @@ namespace GestoresDeNegocio.Seguridad
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento1".ToLower())
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower())
                     registros = registros.Where(x => x.idPuesto == filtro.Valor.Entero());
 
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower() ||
-                    filtro.Clausula.ToLower() == "idElemento2".ToLower())
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdRol).ToLower())
                     registros = registros.Where(x => x.IdRol == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnRolDto.Puesto).ToLower())
+                    registros = registros.Where(x => x.Puesto.Nombre.Contains(filtro.Valor));
             }
 
             return registros;

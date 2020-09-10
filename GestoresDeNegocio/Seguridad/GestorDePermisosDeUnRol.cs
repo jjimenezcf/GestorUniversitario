@@ -100,6 +100,9 @@ namespace GestoresDeNegocio.Seguridad
 
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower())
                     registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.Permiso).ToLower())
+                    registros = registros.Where(x => x.Permiso.Nombre.Contains(filtro.Valor));
             }
             return registros;
 

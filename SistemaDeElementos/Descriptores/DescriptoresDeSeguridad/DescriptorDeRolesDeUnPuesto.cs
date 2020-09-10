@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Seguridad;
+﻿using ModeloDeDto;
+using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
@@ -16,6 +17,8 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedad:nameof(RolesDeUnPuestoDto.IdPuesto)
                   , ayuda: "buscar por puesto"
                   , new Posicion { fila = 0, columna = 0 });
+
+            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Rol", nameof(RolesDeUnPuestoDto.Rol), "Buscar por 'rol'");
 
             var modalDeRoles = new ModalDeRelacionarElementos<RolesDeUnPuestoDto, RolDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los roles a relacionar"

@@ -74,7 +74,7 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (!hayFiltroPorId)
                 registros = FiltrarVistasMvc(registros,filtros);
 
             return registros;

@@ -14,6 +14,41 @@ namespace Utilidades
             return string.IsNullOrEmpty(quitarBlancos ? str.Trim() : str);
         }
 
+        public static bool Evaluar(this string str, string cadena)
+        {
+            if (str.IsNullOrEmpty() || cadena.IsNullOrEmpty())
+                return false;
+
+            if (cadena.StartsWith("=") && cadena.Length > 1)
+            {
+                cadena = cadena.Substring(0, cadena.Length - 1);
+                if (str.Length < cadena.Length)
+                    return false;
+
+                return str.Equals(cadena);
+            }
+
+            if (cadena.StartsWith("|") && cadena.Length>1)
+            {
+                cadena = cadena.Substring(1);
+                if (str.Length < cadena.Length)
+                    return false;
+
+                return str.StartsWith(cadena);
+            }
+
+            if (cadena.EndsWith("|") && cadena.Length > 1)
+            {
+                cadena = cadena.Substring(0, cadena.Length -1);
+                if (str.Length < cadena.Length)
+                    return false;
+
+                return str.EndsWith(cadena);
+            }
+
+            return str.Contains(cadena);
+        }
+
         public static List<int> ListaEnteros(this string str, string separador=";",  bool quitarCeros = true)
         {
             var l = new List<int>();

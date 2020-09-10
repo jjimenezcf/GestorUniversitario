@@ -50,7 +50,7 @@ namespace GestoresDeNegocio.Seguridad
             {
                 CreateMap<PuestosDeUnUsuarioDtm, UsuariosDeUnPuestoDto>()
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
-                    .ForMember(dto => dto.Usuario, dtm => dtm.MapFrom(dtm => dtm.Usuario.Login));
+                    .ForMember(dto => dto.Usuario, dtm => dtm.MapFrom(dtm => $"({dtm.Usuario.Login}) {dtm.Usuario.Apellido}, {dtm.Usuario.Nombre}"));
 
                 CreateMap<UsuariosDeUnPuestoDto, PuestosDeUnUsuarioDtm>();
             }
@@ -85,7 +85,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (!hayFiltroPorId)
                 registros = FiltrarUsuariosDeUnPuesto(registros,filtros);
 
             return registros;
@@ -100,6 +100,11 @@ namespace GestoresDeNegocio.Seguridad
 
                 if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower())
                     registros = registros.Where(x => x.IdPuesto == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == nameof(UsuariosDeUnPuestoDto.Usuario).ToLower())
+                    registros = registros.Where(x => x.Usuario.Apellido.Contains(filtro.Valor)
+                                                  || x.Usuario.Nombre.Contains(filtro.Valor)
+                                                  || x.Usuario.Login.Contains(filtro.Valor));
             }
 
             return registros;
