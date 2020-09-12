@@ -32,19 +32,25 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
-        : base(gestorErrores)
+        : this(gestorDeElementos, gestorErrores)
         {
-            GestorDeElementos = gestorDeElementos;
-            GestorDeElementos.Contexto.IniciarTraza();
             GestorDelCrud = new GestorCrud<TElemento>(descriptor);
-            DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
 
-            var gestorDeVista = new GestoresDeNegocio.Entorno.GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
+            var gestorDeVista = new GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
 
             var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");
 
             descriptor.Creador.AbrirEnModal = vista != null && vista.MostrarEnModal;
             descriptor.Editor.AbrirEnModal = vista != null && vista.MostrarEnModal;
+        }
+
+
+        public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
+        : base(gestorErrores)
+        {
+            GestorDeElementos = gestorDeElementos;
+            GestorDeElementos.Contexto.IniciarTraza();
+            DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
 
@@ -100,7 +106,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                     if (!System.IO.File.Exists($@"{rutaDestino}\{fichero.FileName}"))
                         System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{fichero.FileName}");
-                    
+
                     r.Datos = fichero.FileName;
                 }
 
@@ -124,7 +130,7 @@ namespace MVCSistemaDeElementos.Controllers
             if (extensiones.IsNullOrEmpty() || extensiones.EndsWith("*"))
                 return;
 
-            if (EsImagen(fichero) && (extensiones.Contains("png") 
+            if (EsImagen(fichero) && (extensiones.Contains("png")
                                    || extensiones.Contains("jpg")
                                    || extensiones.Contains("svg")
                                    ))
@@ -251,52 +257,10 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde CrudMantenimiento.ts (Obsoleto)
-        public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
-        {
-            var r = new ResultadoHtml();
-            int pos = posicion.Entero();
-            int can = cantidad.Entero();
-            try
-            {
-                //si me pide leer los últimos registros
-                if (pos == -1)
-                {
-                    var total = Contar();
-                    pos = total - can;
-                    if (pos < 0) pos = 0;
-                    posicion = pos.ToString();
-                }
-
-                var elementos = Leer(pos, can, filtro, orden);
-                //si no he leido nada por estar al final, vuelvo a leer los últimos
-                if (pos > 0 && elementos.ToList().Count() == 0)
-                {
-                    pos -= can;
-                    if (pos < 0) pos = 0;
-                    elementos = Leer(pos, can, filtro, orden);
-                    r.Mensaje = "No hay más elementos";
-                }
-
-                GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
-                r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
-                r.Datos = elementos.Count();
-                r.Estado = EstadoPeticion.Ok;
-            }
-            catch (Exception e)
-            {
-                r.Estado = EstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido recuperar datos para el grid";
-            }
-
-            return new JsonResult(r);
-        }
-
         public class ResultadoDeLectura
         {
-           public List<Dictionary<string, object>> registros { get; set; }
-           public int total { get; set; }
+            public List<Dictionary<string, object>> registros { get; set; }
+            public int total { get; set; }
         }
 
         //END-POINT: Desde GridDeDatos.ts
@@ -320,7 +284,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var infoObtenida = new ResultadoDeLectura();
 
                 infoObtenida.registros = ElementosLeidos(elementos.ToList());
-                infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro): Recontar(filtro);
+                infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
 
                 r.Datos = infoObtenida;
                 r.Estado = EstadoPeticion.Ok;
@@ -380,7 +344,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-    
+
         /// <summary>
         /// END-POINT: Desde CrudBase.ts
         /// llama al metodo del controlador CargarLista y en función de la claseElemento obtiene que elementos ha de cargar
@@ -484,11 +448,11 @@ namespace MVCSistemaDeElementos.Controllers
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            return base.View($"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty()? "": $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}", GestorDelCrud.Descriptor);
+            return base.View($"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}", GestorDelCrud.Descriptor);
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)
-        where T: ElementoDto
+        where T : ElementoDto
         {
             ViewBag.DatosDeConexion = DatosDeConexion;
             return base.View(descriptor.Vista, descriptor);
@@ -583,6 +547,50 @@ namespace MVCSistemaDeElementos.Controllers
 
         //    return new JsonResult(r);
         //}
+
+
+        //END-POINT: Desde CrudMantenimiento.ts (Obsoleto)
+        //public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
+        //{
+        //    var r = new ResultadoHtml();
+        //    int pos = posicion.Entero();
+        //    int can = cantidad.Entero();
+        //    try
+        //    {
+        //        //si me pide leer los últimos registros
+        //        if (pos == -1)
+        //        {
+        //            var total = Contar();
+        //            pos = total - can;
+        //            if (pos < 0) pos = 0;
+        //            posicion = pos.ToString();
+        //        }
+
+        //        var elementos = Leer(pos, can, filtro, orden);
+        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
+        //        if (pos > 0 && elementos.ToList().Count() == 0)
+        //        {
+        //            pos -= can;
+        //            if (pos < 0) pos = 0;
+        //            elementos = Leer(pos, can, filtro, orden);
+        //            r.Mensaje = "No hay más elementos";
+        //        }
+
+        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
+        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
+        //        r.Datos = elementos.Count();
+        //        r.Estado = EstadoPeticion.Ok;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        r.Estado = EstadoPeticion.Error;
+        //        r.consola = GestorDeErrores.Concatenar(e);
+        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
+        //    }
+
+        //    return new JsonResult(r);
+        //}
+
 
     }
 

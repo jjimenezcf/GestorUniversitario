@@ -180,47 +180,6 @@ namespace GestoresDeNegocio.Entorno
             return elementos;
         }
 
-        public static List<ArbolDeMenuDto> LeerArbolDeMenu(int idUsuario, IMapper mapeador)
-        {
-            var gestor = GestorDeArbolDeMenu.Gestor(mapeador);
-
-            return gestor.LeerArbolDeMenu(idUsuario);
-        }
-
-        //protected override void AntesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
-        //{
-        //    base.AntesDePersistir(registro, parametros);
-        //    if (parametros.Tipo == TipoOperacion.Insertar)
-        //    {
-        //        var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
-        //        registro.IdPermiso = permiso.Id;
-        //    }
-        //    if (parametros.Tipo == TipoOperacion.Modificar && registro.IdPermiso == null)
-        //    {
-        //        if (RegistroEnBD.IdPermiso != null)
-        //            registro.IdPermiso = RegistroEnBD.IdPermiso;
-        //        else
-        //        {
-        //            var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
-        //            registro.IdPermiso = permiso.Id;
-        //            parametros.Parametros[enumParametro.Creado] = true;
-        //        }
-        //    }
-        //    if (parametros.Tipo == TipoOperacion.Eliminar && RegistroEnBD.IdPermiso != null)
-        //        GestorDePermisos.Eliminar(Contexto, Mapeador, (int)RegistroEnBD.IdPermiso);
-        //}
-
-        //protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
-        //{
-        //    base.DespuesDePersistir(registro, parametros);
-
-        //    if (parametros.Tipo == TipoOperacion.Modificar && !parametros.Parametros.ContainsKey(enumParametro.Creado) && RegistroEnBD.Nombre != registro.Nombre)
-        //        GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Menu, enumTipoDePermiso.Acceso);
-
-        //    var gestor = GestorDeArbolDeMenu.Gestor(Mapeador);
-        //    gestor.LimpiarCacheDeArbolDeMenu();
-        //}
-
         public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
         {
             var gestor = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
@@ -231,8 +190,6 @@ namespace GestoresDeNegocio.Entorno
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
         }
-
-
 
     }
 

@@ -44,6 +44,7 @@ namespace MVCSistemaDeElementos
             services.AddDbContext<ContextoSe>(options => options.UseSqlServer(cadenaDeConexion));
 
             services.AddScoped<Gestor.Errores.GestorDeErrores>();
+            services.AddScoped<GestorDeArbolDeMenu>();
             services.AddScoped<GestorDeUsuarios>();
             services.AddScoped<GestorDePermisos>();
             services.AddScoped<GestorDeVistaMvc>();
