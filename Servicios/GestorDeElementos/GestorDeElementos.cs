@@ -487,8 +487,7 @@ namespace GestorDeElementos
                 if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
                 {
                     hayFiltroPorId = true;
-                    registros.Where(x => x.Id == filtro.Valor.Entero());
-                    break;
+                    return registros.Where(x => x.Id == filtro.Valor.Entero());
                 }
 
                 if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
