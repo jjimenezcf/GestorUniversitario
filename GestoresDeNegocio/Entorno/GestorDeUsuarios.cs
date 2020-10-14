@@ -9,7 +9,9 @@ using ServicioDeDatos.Archivos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using Gestor.Errores;
-using System;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -57,7 +59,7 @@ namespace GestoresDeNegocio.Entorno
         }
     }
 
-    public class GestorDeUsuarios : GestorDeElementos<ContextoSe, UsuarioDtm, UsuarioDto>
+    public class GestorDeUsuarios : GestorDeElementos<ContextoSe, UsuarioDtm, UsuarioDto>, IUserStore<UsuarioDtm>
     {
 
         public class MapearUsuario : Profile
@@ -181,7 +183,60 @@ namespace GestoresDeNegocio.Entorno
             }
         }
 
+        public Task<string> GetUserIdAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
 
+        public Task<string> GetUserNameAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task SetUserNameAsync(UsuarioDtm user, string userName, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<string> GetNormalizedUserNameAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task SetNormalizedUserNameAsync(UsuarioDtm user, string normalizedName, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IdentityResult> CreateAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IdentityResult> UpdateAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IdentityResult> DeleteAsync(UsuarioDtm user, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<UsuarioDtm> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<UsuarioDtm> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 

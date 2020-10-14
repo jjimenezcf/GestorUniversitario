@@ -12,6 +12,8 @@ using ServicioDeDatos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Seguridad;
 using ServicioDeDatos.Seguridad;
+using Microsoft.AspNetCore.Identity;
+using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos
 {
@@ -35,7 +37,11 @@ namespace MVCSistemaDeElementos
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddIdentity<UsuarioDtm, RolDtm>().AddDefaultTokenProviders();
 
+            // Identity Services
+            services.AddTransient<IUserStore<UsuarioDtm>, GestorDeUsuarios>();
+            services.AddTransient<IRoleStore<RolDtm>, GestorDeRoles>();
 
             services.AddRazorPages();
 
