@@ -235,7 +235,7 @@ namespace GestoresDeNegocio.Entorno
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 

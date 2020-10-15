@@ -4,6 +4,7 @@ using MVCSistemaDeElementos.Models;
 using Gestor.Errores;
 using System;
 using ServicioDeDatos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -16,7 +17,7 @@ namespace MVCSistemaDeElementos.Controllers
             DatosDeConexion = contexto.DatosDeConexion;
         }
 
-
+        [Authorize]
         public IActionResult Index()
         {
             ViewBag.DatosDeConexion = DatosDeConexion;

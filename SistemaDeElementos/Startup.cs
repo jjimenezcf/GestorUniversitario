@@ -49,7 +49,40 @@ namespace MVCSistemaDeElementos
 
             services.AddDbContext<ContextoSe>(options => options.UseSqlServer(cadenaDeConexion));
 
-            services.AddScoped<Gestor.Errores.GestorDeErrores>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Acceso/Login.html";
+                options.AccessDeniedPath = "/Acceso/Denegado.html";
+                options.SlidingExpiration = true;
+            });
+        
+
+        services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeArbolDeMenu>();
             services.AddScoped<GestorDeUsuarios>();
             services.AddScoped<GestorDePermisos>();
@@ -89,7 +122,13 @@ namespace MVCSistemaDeElementos
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            
+            
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

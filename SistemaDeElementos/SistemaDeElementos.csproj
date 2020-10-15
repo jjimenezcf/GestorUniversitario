@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\AccesoDenegado.html" />
     <Content Remove="wwwroot\Extensiones\HtmlRender.cs" />
     <Content Remove="wwwroot\Extensiones\Selectores.cs" />
     <Content Remove="wwwroot\js\selectores.js" />
@@ -63,6 +64,8 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\Controles.css" />
+    <None Include="wwwroot\Acceso\Denegado.html" />
+    <None Include="wwwroot\Acceso\Login.html" />
   </ItemGroup>
 
   <ItemGroup>
