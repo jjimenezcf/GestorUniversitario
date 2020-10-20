@@ -24,6 +24,14 @@ namespace MVCSistemaDeElementos.Controllers
             return View();
         }
 
+
+        //[Authorize]
+        public IActionResult PanelDeControl()
+        {
+            ViewBag.DatosDeConexion = DatosDeConexion;
+            return View("PanelDeControl");
+        }
+
         public IActionResult About()
         {
             try

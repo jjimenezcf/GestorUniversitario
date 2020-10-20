@@ -16,6 +16,7 @@ using ServicioDeDatos.Elemento;
 using System.Reflection;
 using ModeloDeDto;
 using GestoresDeNegocio.Entorno;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -151,7 +152,6 @@ namespace MVCSistemaDeElementos.Controllers
                 || fichero.ContentType == "image/vnd.djvu"
                 || fichero.ContentType == "image/svg+xml";
         }
-
         //END-POINT: Desde CrudCreacion.ts
         public JsonResult epCrearElemento(string elementoJson)
         {
