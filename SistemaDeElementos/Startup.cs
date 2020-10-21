@@ -12,8 +12,8 @@ using ServicioDeDatos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Seguridad;
 using ServicioDeDatos.Seguridad;
-using Microsoft.AspNetCore.Identity;
-using ServicioDeDatos.Entorno;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace MVCSistemaDeElementos
 {
@@ -37,11 +37,12 @@ namespace MVCSistemaDeElementos
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddIdentity<UsuarioDtm, RolDtm>().AddDefaultTokenProviders();
+            //services.AddIdentity<UsuarioDtm, RolDtm>().AddDefaultTokenProviders();
+
 
             // Identity Services
-            services.AddTransient<IUserStore<UsuarioDtm>, GestorDeUsuarios>();
-            services.AddTransient<IRoleStore<RolDtm>, GestorDeRoles>();
+            //services.AddTransient<IUserStore<UsuarioDtm>, GestorDeUsuarios>();
+            //services.AddTransient<IRoleStore<RolDtm>, GestorDeRoles>();
 
             services.AddRazorPages();
 
@@ -49,40 +50,56 @@ namespace MVCSistemaDeElementos
 
             services.AddDbContext<ContextoSe>(options => options.UseSqlServer(cadenaDeConexion));
 
-            services.Configure<IdentityOptions>(options =>
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    // Password settings.
+            //    options.Password.RequireDigit = true;
+            //    options.Password.RequireLowercase = true;
+            //    options.Password.RequireNonAlphanumeric = true;
+            //    options.Password.RequireUppercase = true;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequiredUniqueChars = 1;
+
+            //    // Lockout settings.
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Lockout.MaxFailedAccessAttempts = 5;
+            //    options.Lockout.AllowedForNewUsers = true;
+
+            //    // User settings.
+            //    options.User.AllowedUserNameCharacters =
+            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            //    options.User.RequireUniqueEmail = false;
+            //});
+
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    // Cookie settings
+            //    options.Cookie.HttpOnly = true;
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+            //    options.LoginPath = "/Acceso/Login.html";
+            //    options.AccessDeniedPath = "/Acceso/Denegado.html";
+            //    options.SlidingExpiration = true;
+            //});
+
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = "AutenticacionSE";
+                    options.LoginPath = "/Acceso/Login.html";
+                    options.AccessDeniedPath = "/Acceso/Denegado.html";
+                });
+
+            services.AddAuthorization(o =>
             {
-                // Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
-
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-
-                // User settings.
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
+                o.AddPolicy("SoloAdmin", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "admin");
+                });
             });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                options.LoginPath = "/Acceso/Login.html";
-                options.AccessDeniedPath = "/Acceso/Denegado.html";
-                options.SlidingExpiration = true;
-            });
-        
-
-        services.AddScoped<Gestor.Errores.GestorDeErrores>();
+            services.AddScoped<Gestor.Errores.GestorDeErrores>();
             services.AddScoped<GestorDeArbolDeMenu>();
             services.AddScoped<GestorDeUsuarios>();
             services.AddScoped<GestorDePermisos>();

@@ -174,6 +174,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        [Authorize("SoloAdmin")]
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epModificarPorId(string elementoJson)
         {
