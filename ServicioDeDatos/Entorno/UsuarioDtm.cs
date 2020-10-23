@@ -24,6 +24,10 @@ namespace ServicioDeDatos.Entorno
         [Column("F_ALTA", TypeName = "DATE")]
         public DateTime Alta { get; set; }
 
+        [Required]
+        [Column("PASSWORD", TypeName ="VARCHAR(250)")]
+        public string password { get; set; }
+
         public int? IdArchivo { get; set; }
 
         public virtual ArchivoDtm Archivo { get; set; }

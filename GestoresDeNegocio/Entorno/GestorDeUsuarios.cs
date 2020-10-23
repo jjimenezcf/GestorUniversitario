@@ -12,6 +12,11 @@ using Gestor.Errores;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System;
+using ServicioDeDatos.Elemento;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -134,6 +139,10 @@ namespace GestoresDeNegocio.Entorno
                         registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua == u.Id));
                     }
                 }
+                if (filtro.Clausula.ToLower() == nameof(UsuarioDtm.Login).ToLower())
+                {
+                    registros = registros.Where(x => x.Login == filtro.Valor);
+                }
             }
 
             return registros;
@@ -166,7 +175,7 @@ namespace GestoresDeNegocio.Entorno
 
         private void ValidarDatos(UsuarioDto usuarioDto)
         {
-            if (usuarioDto.Login.IsNullOrEmpty())
+            if (usuarioDto.email.IsNullOrEmpty())
                 GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
             if (usuarioDto.Apellido.IsNullOrEmpty())
                 GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");
@@ -183,12 +192,52 @@ namespace GestoresDeNegocio.Entorno
             }
         }
 
-        public void Conectar(string login, string password)
+        public UsuarioDto Conectar(string login, string password)
         {
-            //var gestorConexion = new SignInManager<UsuarioDtm, string>();
+            var usuariodtm = LeerRegistro(nameof(UsuarioDtm.Login), login, true, true);
+
+            if (new ObtenerPassword(Contexto, usuariodtm.Login).Password == password)
+                return MapearElemento(usuariodtm);
+
+            throw new Exception("Login/password incorrecto");
+        }
+
+        private static string AESDatabaseDecrypt(string encryptedString)
+        {
+            var passphrase = "S0meFakePassPhrase01234!";
+            encryptedString = "sistemaSe"; // temporarily hard coded
+
+
+            // setup encryption settings to match decryptbypassphrase
+            TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
+            provider.Key = UTF8Encoding.UTF8.GetBytes(passphrase).Take(16).ToArray(); // stuck on getting key from passphrase
+            provider.KeySize = 128;
+            provider.Padding = PaddingMode.Zeros;
+            // setup data to be decrypted
+            byte[] encryptedStringAsByteArray = Convert.FromBase64String(encryptedString);
+
+            // hack some extra bytes up to a multiple of 8
+            encryptedStringAsByteArray = encryptedStringAsByteArray.Concat(new byte[] { byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue }).ToArray(); // add 4 empty bytes to make 32 bytes
+            MemoryStream encryptedStringAsMemoryStream = new MemoryStream(encryptedStringAsByteArray);
+            // decrypt
+            CryptoStream cryptoStream = new CryptoStream(encryptedStringAsMemoryStream, provider.CreateDecryptor(), CryptoStreamMode.Read);
+            // return the result
+            StreamReader cryptoStreamReader = new StreamReader(cryptoStream);
+            string decryptedString = cryptoStreamReader.ReadToEnd();
+            return decryptedString;
         }
 
     }
 
+    public class ObtenerPassword : ConsultaSql
+    {
+        public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
 
+
+        public ObtenerPassword(ContextoSe contexto, string login)
+        : base(contexto, $"SELECT CONVERT(VARCHAR , DECRYPTBYPASSPHRASE('sistemaSe', password)) FROM entorno.usuario where login like '{login}'")
+        {
+            Ejecutar();
+        }
+    }
 }

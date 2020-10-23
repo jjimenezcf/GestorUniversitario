@@ -24,19 +24,12 @@ namespace SistemaDeElementos.Controllers.Seguridad
 
         public async Task<IActionResult> Logout()
         {
-            //_gestordeUsuarios.
-            try
-            {
-                await HttpContext
-                  .SignOutAsync(
-                  CookieAuthenticationDefaults.AuthenticationScheme);
-            }
-            catch { }
+            await AnularLaCookie();
             return LocalRedirect("~/Acceso/Login.html");
         }
-        public async Task<IActionResult> Login(string email, string password)
+
+        private async Task AnularLaCookie()
         {
-            //_gestordeUsuarios.
             try
             {
                 await HttpContext
@@ -44,14 +37,18 @@ namespace SistemaDeElementos.Controllers.Seguridad
                   CookieAuthenticationDefaults.AuthenticationScheme);
             }
             catch { }
+        }
 
-            var user = ("jjimenez", false);
+        public async Task<IActionResult> Login(string email, string password)
+        {
+
+            await AnularLaCookie();
+            var usuario = _gestordeUsuarios.Conectar(email, password);
 
             var claims = new List<Claim>
             {
-                  new Claim(ClaimTypes.Name, user.Item1),
-                  new Claim(ClaimTypes.Role, user.Item2 ? "admin" : "user"),
-                  new Claim("email", email)
+                  new Claim(ClaimTypes.Email, usuario.Nombre),
+                  new Claim(ClaimTypes.Name, usuario.NombreCompleto)
             };
 
             var claimsIdentity = new ClaimsIdentity(
