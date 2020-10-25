@@ -25,7 +25,7 @@ namespace SistemaDeElementos.Controllers.Seguridad
         public async Task<IActionResult> Logout()
         {
             await AnularLaCookie();
-            return LocalRedirect("~/Acceso/Login.html");
+            return LocalRedirect("~/Acceso/Conectar.html");
         }
 
         private async Task AnularLaCookie()
@@ -39,9 +39,9 @@ namespace SistemaDeElementos.Controllers.Seguridad
             catch { }
         }
 
-        public async Task<IActionResult> Login(string email, string password)
+        [HttpPost]
+        public async Task<IActionResult> Conectar(string email, string password)
         {
-
             await AnularLaCookie();
             var usuario = _gestordeUsuarios.Conectar(email, password);
 
@@ -68,7 +68,7 @@ namespace SistemaDeElementos.Controllers.Seguridad
                 authProperties
             );
 
-            return PanelDeControl();
+            return PanelDeControl(usuario);
         }
     }
 }

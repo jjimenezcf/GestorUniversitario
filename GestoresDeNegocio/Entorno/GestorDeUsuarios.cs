@@ -194,37 +194,20 @@ namespace GestoresDeNegocio.Entorno
 
         public UsuarioDto Conectar(string login, string password)
         {
-            var usuariodtm = LeerRegistro(nameof(UsuarioDtm.Login), login, true, true);
+            UsuarioDtm usuariodtm = null;
+            try
+            {
+                usuariodtm = LeerRegistro(nameof(UsuarioDtm.Login), login, true, true);
+                
+                if (new ObtenerPassword(Contexto, usuariodtm.Login).Password != password)
+                    throw new Exception("Login/password incorrecto");
+            }
+            catch(Exception exc)
+            {
+                GestorDeErrores.Emitir($"Conexión no validada {login}", exc);    
+            }
 
-            if (new ObtenerPassword(Contexto, usuariodtm.Login).Password == password)
-                return MapearElemento(usuariodtm);
-
-            throw new Exception("Login/password incorrecto");
-        }
-
-        private static string AESDatabaseDecrypt(string encryptedString)
-        {
-            var passphrase = "S0meFakePassPhrase01234!";
-            encryptedString = "sistemaSe"; // temporarily hard coded
-
-
-            // setup encryption settings to match decryptbypassphrase
-            TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
-            provider.Key = UTF8Encoding.UTF8.GetBytes(passphrase).Take(16).ToArray(); // stuck on getting key from passphrase
-            provider.KeySize = 128;
-            provider.Padding = PaddingMode.Zeros;
-            // setup data to be decrypted
-            byte[] encryptedStringAsByteArray = Convert.FromBase64String(encryptedString);
-
-            // hack some extra bytes up to a multiple of 8
-            encryptedStringAsByteArray = encryptedStringAsByteArray.Concat(new byte[] { byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue }).ToArray(); // add 4 empty bytes to make 32 bytes
-            MemoryStream encryptedStringAsMemoryStream = new MemoryStream(encryptedStringAsByteArray);
-            // decrypt
-            CryptoStream cryptoStream = new CryptoStream(encryptedStringAsMemoryStream, provider.CreateDecryptor(), CryptoStreamMode.Read);
-            // return the result
-            StreamReader cryptoStreamReader = new StreamReader(cryptoStream);
-            string decryptedString = cryptoStreamReader.ReadToEnd();
-            return decryptedString;
+            return MapearElemento(usuariodtm);
         }
 
     }

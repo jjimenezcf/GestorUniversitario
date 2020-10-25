@@ -27,8 +27,11 @@ namespace Gestor.Errores
             retorno = retorno + Environment.NewLine + s;
             return retorno;
         }
-        public static void Emitir(string error)
+        public static void Emitir(string error, Exception e = null)
         {
+            if (e != null)
+                error = $"{error}{Environment.NewLine}{e.Message}";
+
             new GestorDeErrores().LanzarExcepcion(error);
         }
 

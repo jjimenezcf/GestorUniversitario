@@ -23,6 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
 
     enum epAcciones { buscar, siguiente, anterior, ultima, ordenar }
 
+    [Authorize]
     public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
         where TContexto : ContextoSe
         where TRegistro : Registro
@@ -174,7 +175,6 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        [Authorize("SoloAdmin")]
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epModificarPorId(string elementoJson)
         {

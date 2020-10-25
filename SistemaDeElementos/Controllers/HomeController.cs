@@ -5,6 +5,7 @@ using Gestor.Errores;
 using System;
 using ServicioDeDatos;
 using Microsoft.AspNetCore.Authorization;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -25,9 +26,9 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        //[Authorize]
-        public IActionResult PanelDeControl()
+        protected IActionResult PanelDeControl(UsuarioDto usuario)
         {
+            DatosDeConexion.Usuario = usuario.Nombre;
             ViewBag.DatosDeConexion = DatosDeConexion;
             return View("PanelDeControl");
         }

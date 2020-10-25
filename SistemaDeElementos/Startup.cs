@@ -87,7 +87,7 @@ namespace MVCSistemaDeElementos
                 .AddCookie(options =>
                 {
                     options.Cookie.Name = "AutenticacionSE";
-                    options.LoginPath = "/Acceso/Login.html";
+                    options.LoginPath = "/Acceso/Conectar.html";
                     options.AccessDeniedPath = "/Acceso/Denegado.html";
                 });
 
