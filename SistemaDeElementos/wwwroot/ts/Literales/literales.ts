@@ -153,6 +153,9 @@ const Ajax = {
         SubirArchivo: "epSubirArchivo",
         CrearRelaciones: "epCrearRelaciones"
     },
+    EpDeAcceso: {
+        ReferenciarFoto: "epReferenciarFoto"
+    },
     Param: {
         elementoJson: "elementoJson",
         idModal: "idModal",

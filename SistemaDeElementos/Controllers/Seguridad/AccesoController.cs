@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Gestor.Errores;
+using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Controllers;
+using Newtonsoft.Json;
 using ServicioDeDatos;
 
 namespace SistemaDeElementos.Controllers.Seguridad
@@ -70,5 +72,42 @@ namespace SistemaDeElementos.Controllers.Seguridad
 
             return PanelDeControl(usuario);
         }
+
+
+
+        //END-POINT: Desde Conectar.ts
+        public JsonResult epReferenciarFoto(string restrictor)
+        {
+            var r = new Resultado();
+
+            try
+            {
+
+                List<ClausulaDeFiltrado> filtros =  JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(restrictor);                
+
+                var elementos = _gestordeUsuarios.LeerElementos(0, -1, filtros, null).ToList();
+
+                if (elementos.Count == 0)
+                    throw new Exception($"No se ha localizado el usuario {filtros[0].Valor}");
+
+                if (elementos.Count > 1)
+                    throw new Exception($"Hay más de un usuario con el mail {filtros[0].Valor}");
+
+                r.Datos = elementos[0].Foto;
+                r.Estado = EstadoPeticion.Ok;
+                r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
+            }
+            catch (Exception e)
+            {
+                r.Estado = EstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = "Error al leer";
+            }
+
+            return new JsonResult(r);
+
+        }
+
+
     }
 }

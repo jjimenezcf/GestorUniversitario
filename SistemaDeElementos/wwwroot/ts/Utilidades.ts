@@ -163,6 +163,14 @@ class ClausulaDeFiltrado {
     }
 }
 
+
+function DefinirRestrictorCadena(propiedad: string, valor: string): string {
+    var clausulas = new Array<ClausulaDeFiltrado>();
+    var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, Literal.filtro.criterio.igual, `${valor}`);
+    clausulas.push(clausula);
+    return JSON.stringify(clausulas);
+}
+
 class ResultadoJson {
     estado: number;
     mensaje: string;

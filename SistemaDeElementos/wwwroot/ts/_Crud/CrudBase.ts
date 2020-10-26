@@ -239,7 +239,7 @@
 
         public NavegarARelacionar(idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: DatosRestrictor) {
 
-            let filtroJson: string = this.DefinirFiltroPorRestrictor(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+            let filtroJson: string = this.DefinirRestrictorNumerico(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
 
             let form: HTMLFormElement = document.getElementById(idOpcionDeMenu) as HTMLFormElement;
 
@@ -413,13 +413,13 @@
                 if (valor !== null) {
                     let visorVinculado: string = selector.getAttribute(atArchivo.imagen);
                     selector.setAttribute(atArchivo.id, valor.toString());
-                    this.MapearImagenes(panel, elementoJson, visorVinculado);
+                    this.MapearImagenes(elementoJson, visorVinculado);
                 }
             }
 
         }
 
-        private MapearImagenes(panel: HTMLDivElement, elementoJson: JSON, visorVinculado: string) {
+        private MapearImagenes(elementoJson: JSON, visorVinculado: string) {
             let visor: HTMLImageElement = document.getElementById(visorVinculado) as HTMLImageElement;
             let propiedadDelVisor: string = visor.getAttribute(atControl.propiedad);
             let url: string = this.BuscarValorEnJson(propiedadDelVisor, elementoJson) as string;
@@ -804,10 +804,10 @@
         }
 
         protected DefinirFiltroPorId(id: number): string {
-            return this.DefinirFiltroPorRestrictor(Literal.filtro.clausulaId, id);
+            return this.DefinirRestrictorNumerico(Literal.filtro.clausulaId, id);
         }
 
-        protected DefinirFiltroPorRestrictor(propiedad: string, valor: number): string {
+        protected DefinirRestrictorNumerico(propiedad: string, valor: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
             var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, Literal.filtro.criterio.igual, `${valor}`);
             clausulas.push(clausula);

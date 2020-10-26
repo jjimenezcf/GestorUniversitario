@@ -3,29 +3,40 @@
 <head>
     <title>sistema de login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <!-- vinculo a bootstrap -->
+
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Temas-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- se vincula al hoja de estilo para definir el aspecto del formulario de login-->
-    <link rel="stylesheet" type="text/css" href="Conectar.css">
+    <link rel="stylesheet" type="text/css" href="/css/Acceso/Conectar.css">
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script src="/ts/Literales/Literales.js"></script>
+    <script src="/ts/Utilidades.js"></script>
+    <script src="/ts/_Api/ApiDeAjax.js"></script>
+    <script src="/ts/Acceso/Conectar.js"></script>
 </head>
 <body>
     <div id="Contenedor">
-        <div class="Icon">
-            <!--Icono de usuario-->
+        <div id="div-icono-usuario" style="display: block;" class="div-Icono">
             <span class="glyphicon glyphicon-user"></span>
+        </div>
+        <div  id="div-canvas-usuario" style="display: none;" class="div-Canvas">
+            <canvas id="canvas-usuario"></canvas>
+        </div>
+        <div style="display: none;">
+            <img id="img-usuario" src="">
         </div>
         <div class="ContentForm">
             <form action="https://localhost:44396/Acceso/Conectar" method="post" name="FormEntrar">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-envelope"></i></span>
-                    <input id="email" type="email" class="form-control" name="email" placeholder="Correo" aria-describedby="sizing-addon1" required>
+                    <input id="email" type="email" class="form-control" name="email" placeholder="Correo" aria-describedby="sizing-addon1" onblur="Acceso.AlSalirDelEMail()">
                 </div>
                 <br>
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input id ="password" type="password" name="password" class="form-control" placeholder="******" aria-describedby="sizing-addon1" required>
+                    <input id="password" type="password" name="password" class="form-control" placeholder="******" aria-describedby="sizing-addon1" required>
                 </div>
                 <br>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" id="IngresoLog" type="submit">Entrar</button>
@@ -33,7 +44,5 @@
             </form>
         </div>
     </div>
-    <!-- Libreria java scritp de bootstrap -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>
