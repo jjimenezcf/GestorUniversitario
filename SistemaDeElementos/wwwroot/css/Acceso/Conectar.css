@@ -25,11 +25,21 @@ body {
  * rellenado de 20px y un redondeado de 120px en forma
  * de un circulo
  */
-.div-Icono span {
+.div-Icono i {
     background: #A8A6A6;
     padding: 20px;
     border-radius: 120px;
+    height: 90px;
+    width: 90px
 }
+
+
+.label-icono {
+    color: #A8A6A6;
+    font-size: 30px;
+    width: 35px;
+}
+
 
 .div-Canvas canvas {
     background: #A8A6A6;

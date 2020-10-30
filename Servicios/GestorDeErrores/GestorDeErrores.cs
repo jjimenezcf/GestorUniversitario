@@ -32,7 +32,7 @@ namespace Gestor.Errores
             if (e != null)
                 error = $"{error}{Environment.NewLine}{e.Message}";
 
-            new GestorDeErrores().LanzarExcepcion(error);
+            throw MostrarExcepcion(error);
         }
 
         public void Enviar(string asunto, Exception e)
@@ -50,14 +50,9 @@ namespace Gestor.Errores
 
         public static void EnviaError(string asunto, Exception error)
         {
-            Gestor.Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
+            Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
         }
 
-
-        public void LanzarExcepcion(string error)
-        {
-            throw new Exception(error);
-        }
 
         public static Exception MostrarExcepcion(string excepcioMostrar)
         {

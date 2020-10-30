@@ -151,10 +151,9 @@
                 }
 
                 if (this.Request.status === 404) {
-
                     this.resultado = new ResultadoJson();
-                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición no definida`;
-                    console.error(`No está definida la petición con los parámetros indicados: ${this.Url}`);
+                    this.resultado.mensaje = `Error al acceder al servidor`;
+                    console.error(`Error al ejecutar la peticion '${this.nombre}'. Petición no definida. No está definida la petición con los parámetros indicados: ${this.Url}`);
                 }
                 else if (this.Request.status === 500) {
 
@@ -164,9 +163,12 @@
                 }
                 else {
                     this.resultado = JSON.parse(this.Request.response);
+
+                    if (IsNullOrEmpty(this.resultado.consola)) {
+                        this.resultado.consola = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
+                    }
+
                     console.error(this.resultado.consola);
-                    if (!IsNullOrEmpty(this.resultado.mensaje))
-                        this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
                 }
 
                 if (this.ProcesarError)

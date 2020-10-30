@@ -171,6 +171,10 @@ function DefinirRestrictorCadena(propiedad: string, valor: string): string {
     return JSON.stringify(clausulas);
 }
 
+function Encriptar(clave: string, textoParaEncriptar: string) {
+    return textoParaEncriptar;
+}
+
 class ResultadoJson {
     estado: number;
     mensaje: string;

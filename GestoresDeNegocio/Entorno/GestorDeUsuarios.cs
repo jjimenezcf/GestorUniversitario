@@ -192,7 +192,7 @@ namespace GestoresDeNegocio.Entorno
             }
         }
 
-        public UsuarioDto Conectar(string login, string password)
+        public UsuarioDto ValidarUsuario(string login, string password)
         {
             UsuarioDtm usuariodtm = null;
             try

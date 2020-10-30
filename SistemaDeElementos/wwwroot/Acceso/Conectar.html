@@ -4,8 +4,9 @@
     <title>sistema de login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
     <link rel="stylesheet" type="text/css" href="/css/Acceso/Conectar.css">
 
     <script src="/js/jquery.min.js"></script>
@@ -19,30 +20,39 @@
 <body>
     <div id="Contenedor">
         <div id="div-icono-usuario" style="display: block;" class="div-Icono">
-            <span class="glyphicon glyphicon-user"></span>
+            <i class="fas fa-user"></i>
         </div>
-        <div  id="div-canvas-usuario" style="display: none;" class="div-Canvas">
+        <div id="div-canvas-usuario" style="display: none;" class="div-Canvas">
             <canvas id="canvas-usuario"></canvas>
         </div>
         <div style="display: none;">
             <img id="img-usuario" src="">
         </div>
         <div class="ContentForm">
-            <form action="https://localhost:44396/Acceso/Conectar" method="post" name="FormEntrar">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-envelope"></i></span>
-                    <input id="email" type="email" class="form-control" name="email" placeholder="Correo" aria-describedby="sizing-addon1" onblur="Acceso.AlSalirDelEMail()">
-                </div>
-                <br>
-                <div class="input-group input-group-lg">
-                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input id="password" type="password" name="password" class="form-control" placeholder="******" aria-describedby="sizing-addon1" required>
-                </div>
-                <br>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" id="IngresoLog" type="submit">Entrar</button>
-                <div class="opcioncontra"><a href="">Olvidaste tu contraseña?</a></div>
-            </form>
+            <div class="input-group input-group-lg">
+                <span class="label-icono"><i class="fas fa-address-card"></i></span>
+                <input id="login" type="text" class="form-control" name="login" placeholder="usuario" aria-describedby="sizing-addon1" onblur="Acceso.AlSalirDeLogin()">
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <span class="label-icono"><i class="fas fa-key"></i></span>
+                <input id="password" type="password" name="password" class="form-control" placeholder="******" aria-describedby="sizing-addon1" required>
+            </div>
+            <br>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" id="IngresoLog" onclick="Acceso.AlPulsarConectar()">Conectar</button>
+            <div class="opcioncontra"><a href="">Olvidaste tu contraseña?</a></div>
+        </div>
+
+        <div class="input-group input-group-lg" id="div-info-conexion" style="display: none; margin-top: 10px;">
+            <span class="label-icono"><i class="fas fa-info"></i></span>
+            <input id="info-conexion" type="text" class="form-control" aria-describedby="sizing-addon1">
         </div>
     </div>
+
+    <form name="FormEntrar" action="https://localhost:44396/Acceso/Conectar" method="post">
+        <input id="p" type="text" style="visibility:hidden">
+        <input id="l" type="text" style="visibility:hidden">
+    </form>
+
 </body>
 </html>

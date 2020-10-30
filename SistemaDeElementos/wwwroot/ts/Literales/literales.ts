@@ -67,7 +67,7 @@ const atGrid = {
         ultima: "ultima",
         ordenar: "ordenar"
     },
-    selector: "selector",    
+    selector: "selector",
     idCtrlCantidad: "nav_2_reg",
     idInfo: "info"
 };
@@ -154,7 +154,8 @@ const Ajax = {
         CrearRelaciones: "epCrearRelaciones"
     },
     EpDeAcceso: {
-        ReferenciarFoto: "epReferenciarFoto"
+        ReferenciarFoto: "epReferenciarFoto",
+        ValidarAcceso: "epValidarAcceso"
     },
     Param: {
         elementoJson: "elementoJson",
@@ -172,7 +173,9 @@ const Ajax = {
         claseElemento: "claseElemento",
         fichero: "fichero",
         rutaDestino: "rutaDestino",
-        extensiones: "extensionesValidas"
+        extensiones: "extensionesValidas",
+        login: "login",
+        password: "password"
     },
     jsonResultError: 1,
     jsonResultOk: 0,
