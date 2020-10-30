@@ -94,7 +94,7 @@
 
 
         public ValidarAcceso(password: string) {
-           
+
             let url: string = `/Acceso/${Ajax.EpDeAcceso.ValidarAcceso}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
@@ -103,7 +103,7 @@
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Post
-                , null
+                , this.Conectar
                 , this.SiHayErrorTrasPeticionAjax
             );
 
@@ -118,6 +118,16 @@
             a.Ejecutar();
         }
 
+        private Conectar(peticion: ApiDeAjax.DescriptorAjax) {
+            let l: HTMLInputElement = document.getElementById('l') as HTMLInputElement;
+            l.value = (peticion.llamador as GestorDeAcceso)._login
+            let password: HTMLInputElement = document.getElementById('password') as HTMLInputElement;
+            let p: HTMLInputElement = document.getElementById('p') as HTMLInputElement;
+            p.value = Encriptar(l.value, password.value);
+
+            let f: HTMLFormElement = document.getElementById('FormDeConexion') as HTMLFormElement;
+            f.submit();
+        }
 
         private SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {
             MostrarMensaje(peticion.resultado.mensaje);
