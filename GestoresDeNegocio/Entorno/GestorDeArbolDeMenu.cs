@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Gestor.Errores;
 using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Entorno;
@@ -46,11 +48,19 @@ namespace GestoresDeNegocio.Entorno
             };
         }
 
-        private static List<ArbolDeMenuDto> CacheArbolDeMenu;
+        private static ConcurrentDictionary<int, List<ArbolDeMenuDto>> CacheArbolDeMenu = new ConcurrentDictionary<int, List<ArbolDeMenuDto>>();
 
-        public List<ArbolDeMenuDto> LeerArbolDeMenu(int idUsuario)
+        public List<ArbolDeMenuDto> LeerArbolDeMenu(string usuario)
         {
-            if (CacheArbolDeMenu == null)
+
+            var gestor = GestorDeUsuarios.Gestor(Contexto, Mapeador);
+            var filtro = new ClausulaDeFiltrado { Clausula = nameof(UsuarioDtm.Login), Criterio = CriteriosDeFiltrado.igual, Valor = usuario };
+            var filtros = new List<ClausulaDeFiltrado> { filtro };
+            var r = gestor.LeerRegistros(0, 1, filtros);
+            if (r.Count == 0 || r.Count > 1)
+                GestorDeErrores.Emitir($"Usuario {usuario} no válido");
+
+            if (!CacheArbolDeMenu.ContainsKey(r[0].Id))
             {
                 var arbolDeMenu = Contexto
                 .MenuSe
@@ -68,17 +78,17 @@ namespace GestoresDeNegocio.Entorno
                                             T3.CONTROLADOR, 
                                             T3.ACCION, 
                                             T3.PARAMETROS
-                                     FROM ENTORNO.ARBOL_MENU_POR_USUARIO({idUsuario}) AS T1
+                                     FROM ENTORNO.ARBOL_MENU_POR_USUARIO({r[0].Id}) AS T1
                                      LEFT JOIN ENTORNO.MENU T2 ON T2.ID = T1.IDPADRE
                                      LEFT JOIN ENTORNO.VISTA_MVC T3 ON T3.ID = T1.IDVISTA_MVC
                                      order by t1.IDPADRE, T1.ORDEN, T1.NOMBRE").ToList();
                 
-                arbolDeMenu = LeerRegistros(0, -1);
+                //arbolDeMenu = LeerRegistros(0, -1);
                 var resultadoDto = new List<ArbolDeMenuDto>();
                 ProcesarSubMenus(resultadoDto, arbolDeMenu, padre: null);
-                CacheArbolDeMenu = resultadoDto;
+                CacheArbolDeMenu[r[0].Id] = resultadoDto;
             }
-            return CacheArbolDeMenu;
+            return CacheArbolDeMenu[r[0].Id];
         }
 
 

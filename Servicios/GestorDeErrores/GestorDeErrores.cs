@@ -27,38 +27,34 @@ namespace Gestor.Errores
             retorno = retorno + Environment.NewLine + s;
             return retorno;
         }
+
         public static void Emitir(string error, Exception e = null)
         {
             if (e != null)
-                error = $"{error}{Environment.NewLine}{e.Message}";
+                RegistrarExcepcion(error,e);
 
-            throw MostrarExcepcion(error);
-        }
-
-        public void Enviar(string asunto, Exception e)
-        {
-            var error = Concatenar(e);
-            Enviar($"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", error);
-
-        }
-
-        public void Enviar(string asunto, string error)
-        {
-            Gestor.Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, error);
-        }
-
-
-        public static void EnviaError(string asunto, Exception error)
-        {
-            Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", asunto, Concatenar(error));
-        }
-
-
-        public static Exception MostrarExcepcion(string excepcioMostrar)
-        {
-            var exc = new Exception(excepcioMostrar);
+            var exc = new Exception(error);
             exc.Data[Datos.Mostrar] = true;
-            return exc;
+            throw exc;
+        }
+
+        private static void RegistrarExcepcion(string error, Exception e)
+        {
+            /* registrar en el logger de excepciones 
+             
+            - Fecha Hora
+            - Usuario
+            - error
+            - Excepción            
+             
+             */
+            
+        }
+
+        public static void EnviarExcepcionPorCorreo(string asunto, Exception e)
+        {
+            var mensajeDeError = Concatenar(e);
+            Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
         }
 
         public bool Mostrar(Exception excepcion)

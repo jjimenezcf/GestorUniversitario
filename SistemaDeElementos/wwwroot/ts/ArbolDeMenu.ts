@@ -1,7 +1,7 @@
 ﻿module ArbolDeMenu {
 
     export function MostrarMenu() {
-        let idProductoHtml: HTMLElement = document.getElementById('id_menu');
+        let idProductoHtml: HTMLElement = document.getElementById('id-menu');
         let idModalMenu: string = idProductoHtml.getAttribute('modal-menu');
         let idModalHtml: HTMLElement = document.getElementById(idModalMenu);
 

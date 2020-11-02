@@ -6,6 +6,8 @@ using System;
 using ServicioDeDatos;
 using Microsoft.AspNetCore.Authorization;
 using ModeloDeDto.Entorno;
+using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -28,7 +30,12 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IActionResult PanelDeControl(UsuarioDto usuario)
         {
-            DatosDeConexion.Usuario = usuario.Nombre;
+            DatosDeConexion.Login = usuario.Login;
+
+            var claimsDeUsuario = HttpContext.User; //new ClaimsPrincipal(claimsIdentity);
+
+            var login =  claimsDeUsuario.FindFirstValue(nameof(UsuarioDto.Login));
+            DatosDeConexion.Login = login;
             ViewBag.DatosDeConexion = DatosDeConexion;
             return View("PanelDeControl");
         }
@@ -70,7 +77,7 @@ namespace MVCSistemaDeElementos.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(Exception e)
         {
-            GestorDeErrores.Enviar($"Error al ejecutar la petición",e);
+            Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo($"Error al ejecutar la petición",e);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

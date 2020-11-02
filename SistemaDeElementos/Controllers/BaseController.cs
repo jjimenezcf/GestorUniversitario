@@ -1,5 +1,6 @@
 ﻿using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Controllers
@@ -22,13 +23,12 @@ namespace MVCSistemaDeElementos.Controllers
     public class BaseController : Controller
     {
         protected GestorDeErrores GestorDeErrores { get; }
-
+        public ILogger Logger { get; set; }
         protected DatosDeConexion DatosDeConexion { get; set; }
-        
+
         public BaseController(GestorDeErrores gestorDeErrores)
         {
             GestorDeErrores = gestorDeErrores;
         }
-
     }
 }

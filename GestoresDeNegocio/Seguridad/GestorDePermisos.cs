@@ -258,8 +258,7 @@ namespace GestoresDeNegocio.Seguridad
                 foreach (var r1 in r)
                     roles = $"{(roles == "" ? "" : $"{roles},")} {r1.Rol.Nombre}";
 
-                Exception exc = GestorDeErrores.MostrarExcepcion(excepcioMostrar: $"El permiso está incluido en {(r.Count == 1 ? "el rol" : "los roles") }: '{roles}'");
-                throw exc;
+                GestorDeErrores.Emitir($"El permiso está incluido en {(r.Count == 1 ? "el rol" : "los roles") }: '{roles}'");
             }
         }
 

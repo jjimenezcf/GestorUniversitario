@@ -151,7 +151,7 @@ namespace GestoresDeNegocio.Entorno
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)
         {
             base.AntesMapearRegistroParaInsertar(usuarioDto, opciones);
-            usuarioDto.Alta = System.DateTime.Now;
+            usuarioDto.Alta = DateTime.Now;
             ValidarDatos(usuarioDto);
         }
 
@@ -175,7 +175,7 @@ namespace GestoresDeNegocio.Entorno
 
         private void ValidarDatos(UsuarioDto usuarioDto)
         {
-            if (usuarioDto.email.IsNullOrEmpty())
+            if (usuarioDto.Login.IsNullOrEmpty())
                 GestorDeErrores.Emitir("Es necesario indicar el login del usuario");
             if (usuarioDto.Apellido.IsNullOrEmpty())
                 GestorDeErrores.Emitir("Es necesario indicar el apellido del usuario");

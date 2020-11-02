@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Gestor.Errores;
 using GestoresDeNegocio.Entorno;
@@ -16,7 +17,7 @@ namespace SistemaDeElementos.Controllers.Entorno
     {
 
         public ArbolDeMenuController(GestorDeArbolDeMenu gestor, GestorDeErrores gestorDeErrores)
-        : base( gestor, gestorDeErrores)
+        : base(gestor, gestorDeErrores)
         {
         }
         
@@ -24,10 +25,18 @@ namespace SistemaDeElementos.Controllers.Entorno
         public JsonResult epSolicitarMenuHtml(string usuario)
         {
             var r = new ResultadoHtml();
+
+
+            var claimsDeUsuario = HttpContext.User; //new ClaimsPrincipal(claimsIdentity);
+
+            var login = claimsDeUsuario.FindFirstValue(nameof(UsuarioDto.Login));
+            DatosDeConexion.Login = login;
+
+
             try
             {
                 var procesadas = new List<int>();
-                List<ArbolDeMenuDto> menu = ((GestorDeArbolDeMenu)GestorDeElementos).LeerArbolDeMenu(10);
+                List<ArbolDeMenuDto> menu = ((GestorDeArbolDeMenu)GestorDeElementos).LeerArbolDeMenu(usuario);
                 var menuHtml =
                 @$"
                 <ul id='id_menuraiz' class=¨menu-contenido¨>

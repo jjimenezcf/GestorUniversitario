@@ -16,7 +16,7 @@ namespace ModeloDeDto.Entorno
     public class UsuarioDto : ElementoDto
     {
         [IUPropiedad(Visible = false)]
-        public string NombreCompleto => $"({email}) {Apellido}, {Nombre}";
+        public string NombreCompleto => $"({Login}) {Apellido}, {Nombre}";
 
         [IUPropiedad(
             Etiqueta = "Usuario",
@@ -28,7 +28,7 @@ namespace ModeloDeDto.Entorno
             PorAnchoMnt=25
             )
         ]
-        public string email { get; set; }
+        public string Login { get; set; }
 
 
         [IUPropiedad(

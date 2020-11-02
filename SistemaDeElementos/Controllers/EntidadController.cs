@@ -17,6 +17,8 @@ using System.Reflection;
 using ModeloDeDto;
 using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authorization;
+using ModeloDeDto.Entorno;
+using Microsoft.Extensions.Logging;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -443,13 +445,27 @@ namespace MVCSistemaDeElementos.Controllers
             throw new NotImplementedException();
         }
 
-
-
         public ViewResult ViewCrud()
         {
-            ViewBag.DatosDeConexion = DatosDeConexion;
+            if (HttpContext == null || HttpContext.User == null)
+                GestorDeErrores.Emitir("Conexión no establecidad");
 
-            return base.View($"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}", GestorDelCrud.Descriptor);
+            var caracter = HttpContext.User.FindFirst(nameof(UsuarioDto.Login));
+            if (caracter == null)
+                GestorDeErrores.Emitir("Usuario no definido");
+
+            var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
+            try
+            {
+                DatosDeConexion.Login = HttpContext.User.FindFirst(nameof(UsuarioDto.Login)).Value;
+                ViewBag.DatosDeConexion = DatosDeConexion;
+            }
+            catch(Exception e)
+            {
+                GestorDeErrores.Emitir($"Error al acceder a {destino}", e);
+            }
+
+            return base.View(destino, GestorDelCrud.Descriptor);
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

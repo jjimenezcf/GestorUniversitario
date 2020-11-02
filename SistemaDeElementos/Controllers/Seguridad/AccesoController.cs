@@ -120,28 +120,23 @@ namespace SistemaDeElementos.Controllers.Seguridad
 
         private async Task registrarLaCookie(UsuarioDto usuario)
         {
-            var claims = new List<Claim>
+            var caracteres = new List<Claim>
                 {
-                      new Claim(ClaimTypes.Email, usuario.Nombre),
+                      new Claim(nameof(UsuarioDto.Id), usuario.Id.ToString()),
+                      new Claim(nameof(UsuarioDto.Login), usuario.Login),
                       new Claim(ClaimTypes.Name, usuario.NombreCompleto)
                 };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme
-                );
-            var authProperties = new AuthenticationProperties
+            var caracteresIdentitarios = new ClaimsIdentity(caracteres, CookieAuthenticationDefaults.AuthenticationScheme);
+            var propiedadesDeAutentificacion = new AuthenticationProperties
             {
                 IsPersistent = true,
                 RedirectUri = Request.Host.Value,
                 ExpiresUtc = DateTime.Now.AddMinutes(8 * 60)
             };
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties
-            );
+            HttpContext.User = new ClaimsPrincipal(caracteresIdentitarios);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext.User, propiedadesDeAutentificacion);
         }
 
         private async Task AnularLaCookie()

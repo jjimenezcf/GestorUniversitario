@@ -32,7 +32,7 @@ namespace ServicioDeDatos
         public string ServidorWeb { get; set; }
         public string ServidorBd { get; set; }
         public string Bd { get; set; }
-        public string Usuario { get; set; }
+        public string Login { get; set; }
         public int IdUsuario { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
@@ -163,8 +163,8 @@ namespace ServicioDeDatos
             DatosDeConexion.ServidorWeb = Environment.MachineName;
             DatosDeConexion.ServidorBd = Database.GetDbConnection().DataSource;
             DatosDeConexion.Bd = Database.GetDbConnection().Database;
-            DatosDeConexion.Usuario = Literal.usuario;
-            DatosDeConexion.IdUsuario = 11;
+            DatosDeConexion.Login = null;
+            DatosDeConexion.IdUsuario = 0;
             DatosDeConexion.Version = ObtenerVersion;
 
         }
@@ -194,7 +194,7 @@ namespace ServicioDeDatos
 
         private void CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
         {
-            Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Usuario}");
+            Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Login}");
             _interceptadorDeConsultas.Traza = Traza;
         }
 

@@ -56,14 +56,14 @@
             <table id="tablaCabecera" class="table">
                 <tr>
                     <td class="celdaCabeceraIzquierda">
-                        <img id="id_menu"
+                        <img id="id-menu"
                              src="~/images/menu/bars-solid.svg"
                              class="btn-menu fa-icono"
                              modal-menu="id-modal-menu"
                              onclick="ArbolDeMenu.MostrarMenu()"
                              menu-abierto="false" />
 
-                        <input id="id_producto"
+                        <input id="id-producto"
                                type="button"
                                class="etiquetaIzquierda"
                                value="Sitema de elementos" />
@@ -71,13 +71,13 @@
                     <td class="celdaSeparador">
                     </td>
                     <td class="celdaCabecera">
-                        <input id="idConsultas" type="text" class="estiloCeldaCabecera" value="Consultas" readonly />
+                        <input id="id-Consultas" type="text" class="estiloCeldaCabecera" value="Consultas" readonly />
                     </td>
                     <td class="celdaCabecera">
-                        <input id="idFavoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
+                        <input id="id-Favoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
                     </td>
                     <td class="celdaCabeceraDerecha">
-                        <input id="idusuario" type="text" class="estiloCeldaDerecha" value="@datosDeConexion.Usuario" readonly />
+                        <input id="id-Login" type="text" class="estiloCeldaDerecha" value="@datosDeConexion.Login" readonly />
                         <div>
                             <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
                                 <button value=Submit type=submit>Logout</button>
@@ -88,7 +88,7 @@
             </table>
 
             <div id="id-modal-menu" class="modal-menu">
-                <div id="id_contenedormenu" class="menu-contenedor">
+                <div id="id-contenedor-menu" class="menu-contenedor">
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                     &copy;@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd
                 </div>
                 <div style="float: right">
-                    Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Usuario
+                    Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login
                     <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
             </div>
@@ -129,7 +129,7 @@
         @RenderSection("Scripts", required: false)
 
         <script>
-            window.onload = EntornoSe.IniciarEntorno('@datosDeConexion.Usuario');
+            window.onload = EntornoSe.IniciarEntorno('@datosDeConexion.Login');
         </script>
 
 
