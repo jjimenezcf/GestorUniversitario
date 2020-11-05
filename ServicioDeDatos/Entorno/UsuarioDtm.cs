@@ -30,6 +30,9 @@ namespace ServicioDeDatos.Entorno
 
         public int? IdArchivo { get; set; }
 
+        [Column("ADMINISTRADOR", TypeName = "BIT")]
+        public bool EsAdministrador { get; set; }
+
         public virtual ArchivoDtm Archivo { get; set; }
         
         public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
@@ -42,6 +45,8 @@ namespace ServicioDeDatos.Entorno
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsuarioDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(50)").IsRequired();
+
+            modelBuilder.Entity<UsuarioDtm>().Property(p => p.EsAdministrador).IsRequired(true).HasDefaultValue(false);
 
             modelBuilder.Entity<UsuarioDtm>()
             .HasIndex(v => new { v.Login })
