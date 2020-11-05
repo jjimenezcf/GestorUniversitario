@@ -19,6 +19,7 @@ using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authorization;
 using ModeloDeDto.Entorno;
 using Microsoft.Extensions.Logging;
+using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -35,17 +36,15 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
         protected GestorCrud<TElemento> GestorDelCrud { get; }
 
+
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : this(gestorDeElementos, gestorErrores)
         {
             GestorDelCrud = new GestorCrud<TElemento>(descriptor);
+            var vista = ValidarExisteVista(descriptor.Controlador, descriptor.Vista);
 
-            var gestorDeVista = new GestorDeVistaMvc(gestorDeElementos.Contexto, gestorDeElementos.Mapeador);
-
-            var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");
-
-            descriptor.Creador.AbrirEnModal = vista != null && vista.MostrarEnModal;
-            descriptor.Editor.AbrirEnModal = vista != null && vista.MostrarEnModal;
+            descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
+            descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
         }
 
 
@@ -447,25 +446,49 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
-            if (HttpContext == null || HttpContext.User == null)
-                GestorDeErrores.Emitir("Conexión no establecidad");
-
-            var caracter = HttpContext.User.FindFirst(nameof(UsuarioDto.Login));
-            if (caracter == null)
-                GestorDeErrores.Emitir("Usuario no definido");
+            var login =  ObtenerUsuarioDeLaRequest();
 
             var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
             try
             {
-                DatosDeConexion.Login = HttpContext.User.FindFirst(nameof(UsuarioDto.Login)).Value;
+                DatosDeConexion.Login = login;
                 ViewBag.DatosDeConexion = DatosDeConexion;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 GestorDeErrores.Emitir($"Error al acceder a {destino}", e);
             }
 
+            string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
+            string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
+            ValidarAcceso(nombreDelControlador, nombreDeLaVista, DatosDeConexion.Login);
+
             return base.View(destino, GestorDelCrud.Descriptor);
+        }
+
+
+        private void ValidarAcceso(string nombreDelControlador, string nombreDeLaVista, string login)
+        {
+            var vista = ValidarExisteVista(nombreDelControlador, nombreDeLaVista);
+            ValidarPermiso(vista, login);
+        }
+
+        private void ValidarPermiso(VistaMvcDtm vista, string login)
+        {
+            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            gestorDeVista.ValidarAcceso(vista, login);
+
+        }
+
+        private VistaMvcDtm ValidarExisteVista(string nombreDelControlador, string nombreDeLaVista)
+        {
+            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+
+            var vista = gestorDeVista.LeerVistaMvc($"{nombreDelControlador}.{nombreDeLaVista}");
+            if (vista == null)
+                GestorDeErrores.Emitir($"Defina la vista {nombreDelControlador}.{nombreDeLaVista} en BD");
+
+            return vista;
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

@@ -1,6 +1,7 @@
 ﻿using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModeloDeDto.Entorno;
 using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Controllers
@@ -29,6 +30,18 @@ namespace MVCSistemaDeElementos.Controllers
         public BaseController(GestorDeErrores gestorDeErrores)
         {
             GestorDeErrores = gestorDeErrores;
+        }
+
+        protected string ObtenerUsuarioDeLaRequest()
+        {
+            if (HttpContext == null || HttpContext.User == null)
+                GestorDeErrores.Emitir("Conexión no establecidad");
+
+            var caracter = HttpContext.User.FindFirst(nameof(UsuarioDto.Login));
+            if (caracter == null)
+                GestorDeErrores.Emitir("Usuario no definido");
+
+            return HttpContext.User.FindFirst(nameof(UsuarioDto.Login)).Value;
         }
     }
 }

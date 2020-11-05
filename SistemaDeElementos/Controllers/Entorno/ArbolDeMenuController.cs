@@ -22,7 +22,7 @@ namespace SistemaDeElementos.Controllers.Entorno
         }
         
         //END-POINT: Desde ArbolDeMenu.ts
-        public JsonResult epSolicitarMenuHtml(string usuario)
+        public JsonResult epSolicitarMenuHtml()
         {
             var r = new ResultadoHtml();
 
@@ -32,11 +32,10 @@ namespace SistemaDeElementos.Controllers.Entorno
             var login = claimsDeUsuario.FindFirstValue(nameof(UsuarioDto.Login));
             DatosDeConexion.Login = login;
 
-
             try
             {
                 var procesadas = new List<int>();
-                List<ArbolDeMenuDto> menu = ((GestorDeArbolDeMenu)GestorDeElementos).LeerArbolDeMenu(usuario);
+                List<ArbolDeMenuDto> menu = ((GestorDeArbolDeMenu)GestorDeElementos).LeerArbolDeMenu(login);
                 var menuHtml =
                 @$"
                 <ul id='id_menuraiz' class=¨menu-contenido¨>
@@ -45,6 +44,7 @@ namespace SistemaDeElementos.Controllers.Entorno
                 ";
                 r.Html = menuHtml.Replace("¨", "\"");
                 r.Estado = EstadoPeticion.Ok;
+                r.Datos = login;
             }
             catch (Exception e)
             {

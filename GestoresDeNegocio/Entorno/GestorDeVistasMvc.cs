@@ -11,6 +11,9 @@ using ServicioDeDatos.Seguridad;
 using GestorDeElementos;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using Microsoft.Data.SqlClient;
+using System.Collections.Concurrent;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -100,6 +103,36 @@ namespace GestoresDeNegocio.Entorno
             }
 
             return registros;
+        }
+
+        public void ValidarAcceso(VistaMvcDtm vista, string login)
+        {
+            var cache = ServicioDeCaches.Obtener(nameof(this.ValidarAcceso));
+
+            if (cache.ContainsKey($"{vista.Id}-{login}") && (bool)cache[$"{vista.Id}-{login}"])
+                return;
+
+            var sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@login", login));
+            sqlParameters.Add(new SqlParameter("@idVista", vista.Id));
+
+            var a = Contexto.UsuPermisos.FromSqlRaw($@"           
+            select *
+            from ENTORNO.USU_PERMISO t1
+            where EXISTS(
+                  select id from ENTORNO.USUARIO where id = t1.IDUSUA and LOGIN like @login
+              )
+              and EXISTS(
+                select 1 from ENTORNO.VISTA_MVC where id = @idVista AND IDPERMISO = t1.IDPERMISO
+              )
+            union
+            select 1,1,1 from entorno.USUARIO u where login like @login and ADMINISTRADOR = 1
+            ", sqlParameters.ToArray());
+
+            if (a.Count() == 0)
+                GestorDeErrores.Emitir($"El usuario {login} no tiene acceso a la vista {vista.Controlador}.{vista.Accion}");
+
+            cache[$"{vista.Id}-{login}"] = true;
         }
 
         public VistaMvcDtm LeerVistaMvc(string vistaMvc)

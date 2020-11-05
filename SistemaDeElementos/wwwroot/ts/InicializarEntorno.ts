@@ -2,8 +2,8 @@
 
     export let Historial: HistorialSe.HistorialDeNavegacion = undefined;
 
-    export function IniciarEntorno(usuario: string) {
-        ArbolDeMenu.ReqSolicitarMenu(usuario, 'id-contenedor-menu');
+    export function IniciarEntorno() {
+        ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
         window.onpopstate = function (e) {
             console.log(e.state);
         }

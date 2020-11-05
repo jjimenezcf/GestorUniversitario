@@ -48,7 +48,19 @@ namespace GestoresDeNegocio.Entorno
             };
         }
 
-        private static ConcurrentDictionary<int, List<ArbolDeMenuDto>> CacheArbolDeMenu = new ConcurrentDictionary<int, List<ArbolDeMenuDto>>();
+
+        /*
+         SELECT distinct T1.ID, T1.NOMBRE, T1.DESCRIPCION, T1.ICONO, T1.ACTIVO, T1.IDPADRE,  T1.IDVISTA_MVC, T1.ORDEN, t4.NOMBRE as permiso, t5.NOMBRE as tipo, t6.NOMBRE as clase
+         from ENTORNO.MENU t1
+         inner join ENTORNO.VISTA_MVC t2 on t2.id = t1.IDVISTA_MVC
+         inner join ENTORNO.USU_PERMISO t3 on t3.IDUSUA = 11 and t2.IDPERMISO = t3.IDPERMISO
+         inner join SEGURIDAD.PERMISO t4 on t4.ID = t3.IDPERMISO
+         inner join SEGURIDAD.TIPO_PERMISO t5 on t5.ID = t4.IDTIPO
+         inner join SEGURIDAD.CLASE_PERMISO t6 on t6.ID = t4.IDCLASE
+         where t1.IDVISTA_MVC is not null
+           and t1.ACTIVO = 1
+         */
+
 
         public List<ArbolDeMenuDto> LeerArbolDeMenu(string usuario)
         {
@@ -60,7 +72,9 @@ namespace GestoresDeNegocio.Entorno
             if (r.Count == 0 || r.Count > 1)
                 GestorDeErrores.Emitir($"Usuario {usuario} no válido");
 
-            if (!CacheArbolDeMenu.ContainsKey(r[0].Id))
+            var  CacheArbolDeMenu = ServicioDeCaches.Obtener(nameof(this.LeerArbolDeMenu));
+
+            if (!CacheArbolDeMenu.ContainsKey(r[0].Id.ToString()))
             {
                 var arbolDeMenu = Contexto
                 .MenuSe
@@ -86,15 +100,15 @@ namespace GestoresDeNegocio.Entorno
                 //arbolDeMenu = LeerRegistros(0, -1);
                 var resultadoDto = new List<ArbolDeMenuDto>();
                 ProcesarSubMenus(resultadoDto, arbolDeMenu, padre: null);
-                CacheArbolDeMenu[r[0].Id] = resultadoDto;
+                CacheArbolDeMenu[r[0].Id.ToString()] = resultadoDto;
             }
-            return CacheArbolDeMenu[r[0].Id];
+            return (List<ArbolDeMenuDto>)CacheArbolDeMenu[r[0].Id.ToString()];
         }
 
 
         internal void LimpiarCacheDeArbolDeMenu()
         {
-            CacheArbolDeMenu = null;
+            ServicioDeCaches.Eliminar(nameof(this.LeerArbolDeMenu));
         }
 
         private void ProcesarSubMenus(List<ArbolDeMenuDto> resultadoDto, List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)
