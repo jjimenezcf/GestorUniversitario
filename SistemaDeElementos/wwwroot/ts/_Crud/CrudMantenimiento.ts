@@ -18,6 +18,7 @@
 
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
+        public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
 
         public get Controlador() {
             return this.PanelMnt.getAttribute(Literal.controlador);
@@ -81,12 +82,38 @@
             return modal;
         }
 
+
+        public ObtenerModalParaConsultarRelaciones(idModal: string): ModalParaConsultarRelaciones {
+            for (let i: number = 0; i < this.ModalesParaConsultarRelaciones.length; i++) {
+                let modal: ModalParaConsultarRelaciones = this.ModalesParaConsultarRelaciones[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+
+            let modal: ModalParaConsultarRelaciones = new ModalParaConsultarRelaciones(this, idModal);
+            this.ModalesParaConsultarRelaciones.push(modal);
+            return modal;
+        }
+
         public AbrirModalParaRelacionar(idModalParaRelacionar: string) {
             let modal: ModalParaRelacionar = this.ObtenerModalParaRelacionar(idModalParaRelacionar);
             if (modal === undefined)
                 throw new Error(`Modal ${idModalParaRelacionar} no definida`);
 
             modal.AbrirModalDeRelacion();
+        }
+
+        public AbrirModalParaConsultarRelaciones(idModalParaConsultar: string) {
+
+            if (this.InfoSelector.Cantidad != 1)
+                throw new Error("Debe seleccionar un elemento para poder relacionarlo");
+
+
+            let modal: ModalParaConsultarRelaciones = this.ObtenerModalParaConsultarRelaciones(idModalParaConsultar);
+            if (modal === undefined)
+                throw new Error(`Modal ${idModalParaConsultar} no definida`);
+
+            modal.AbrirModalParaConsultarRelaciones(this.InfoSelector.LeerElemento(0));
         }
 
         public AbrirModalBorrarElemento() {

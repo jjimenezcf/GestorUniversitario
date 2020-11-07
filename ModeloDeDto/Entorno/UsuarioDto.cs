@@ -55,6 +55,17 @@ namespace ModeloDeDto.Entorno
         ]
         public string Nombre { get; set; }
 
+        [IUPropiedad(
+            Etiqueta = "eMail",
+            Ayuda = "eMail",
+            Tipo = typeof(string),
+            Fila = 1,
+            Columna = 1,
+            Posicion = 0
+            )
+        ]
+        public string eMail { get; set; }
+
 
         [IUPropiedad(
             Etiqueta = "Fecha de alta",

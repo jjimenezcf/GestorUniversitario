@@ -170,7 +170,7 @@ namespace GestoresDeNegocio.Seguridad
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
-                        registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsua == id && up.IdPermiso == p.Id));
+                        registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsuario == id && up.IdPermiso == p.Id));
                 }
 
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)

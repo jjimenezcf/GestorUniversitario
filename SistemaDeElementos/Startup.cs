@@ -116,6 +116,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeRoles>();
             services.AddScoped<GestorDePermisosDeUnRol>();
             services.AddScoped<GestorDeRolesDeUnPermiso>();
+            services.AddScoped<GestorDePermisosDeUnUsuario>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

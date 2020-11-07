@@ -58,6 +58,12 @@ namespace MVCSistemaDeElementos.Descriptores
                     var renderModal = ((RelacionarElementos)o.Accion).RenderDeLaModal();
                     htmContenedorMnt = htmContenedorMnt + Environment.NewLine + renderModal;
                 }
+
+                if (o.Accion.TipoDeAccion == TipoDeAccionDeMnt.AbrirModalParaConsultarRelaciones)
+                {
+                    var renderModal = ((ConsultarRelaciones)o.Accion).RenderDeLaModal();
+                    htmContenedorMnt = htmContenedorMnt + Environment.NewLine + renderModal;
+                }
             }
 
             htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderModalesFiltro();

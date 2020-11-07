@@ -14,6 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
         public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
+        public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
     }
 
     public static class TipoDeAccionDeCreacion
@@ -32,6 +33,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string Cerrar = "cerrar-relacionar";
     }
 
+    public static class TipoDeAccionDeConsulta
+    {
+        public const string Cerrar = "cerrar-consulta";
+    }
     public class AccionDeMenu
     {
 
@@ -47,6 +52,8 @@ namespace MVCSistemaDeElementos.Descriptores
             return "";
         }
     }
+
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion }
 
     /**********************************************************/
     // Acciones de menú de para navegar
@@ -131,6 +138,24 @@ namespace MVCSistemaDeElementos.Descriptores
         public Func<string> RenderDeLaModal { get; private set; }
         public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
         : base(TipoDeAccionDeMnt.AbrirModalParaRelacionar)
+        {
+            IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
+            Parametros.Add(idHtmlDeLaModalAsociada);
+            RenderDeLaModal = renderDeLaModal;
+        }
+
+        public override string RenderAccion()
+        {
+            return base.RenderAccion();
+        }
+    }
+
+    public class ConsultarRelaciones : AccionDeMenuMnt
+    {
+        public string IdHtmlDeLaModalAsociada { get; private set; }
+        public Func<string> RenderDeLaModal { get; private set; }
+        public ConsultarRelaciones(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
+        : base(TipoDeAccionDeMnt.AbrirModalParaConsultarRelaciones)
         {
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);

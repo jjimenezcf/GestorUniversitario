@@ -39,6 +39,7 @@ namespace ModeloDeDto
         public const string pnlEditor = "panel-editor";
         public const string pnlBorrado = "panel-borrado";
         public const string ModalDeRelacion = "modal-de-relacion";
+        public const string ModalDeConsulta = "modal-de-consulta";
     }
 
     public enum LadoDeRenderizacion { izquierdo, derecho }

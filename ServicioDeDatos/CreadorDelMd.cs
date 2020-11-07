@@ -14,7 +14,7 @@ namespace ServicioDeDatos
         public DbSet<VistaMvcDtm> VistaMvc { get; set; }
         public DbSet<VariableDtm> Variables { get; set; }
         public DbSet<UsuarioDtm> Usuarios { get; set; }
-        public DbSet<UsuariosDeUnPermisoDtm> UsuPermisos { get; set; }
+        public DbSet<PermisosDeUnUsuarioDtm> UsuPermisos { get; set; }
 
         #endregion
 

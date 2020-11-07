@@ -22,7 +22,7 @@ namespace ServicioDeDatos.Seguridad
         public virtual TipoPermisoDtm Tipo { get; set; }
 
         public ICollection<PermisosDeUnRolDtm> Roles { get; set; }
-        public ICollection<UsuariosDeUnPermisoDtm> Usuarios { get; set; }
+        public ICollection<PermisosDeUnUsuarioDtm> Usuarios { get; set; }
     }
 
     public static class TablaPermiso
@@ -67,7 +67,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PermisoDtm>()
                 .HasMany(p => p.Usuarios)
                 .WithOne(p => p.Permiso)
-                .HasForeignKey(p => p.IdUsua);
+                .HasForeignKey(p => p.IdPermiso);
         }
     }
 }

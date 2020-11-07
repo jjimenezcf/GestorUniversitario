@@ -24,8 +24,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                               filtrarPor: PermisoPor.PermisosDeUnUsuario,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 1 },
-                                              paraFiltrar: nameof(UsuarioDtm.Id),
-                                              paraMostrar: nameof(UsuarioDtm.Apellido),
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.Apellido),
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
@@ -43,8 +43,8 @@ namespace MVCSistemaDeElementos.Descriptores
                     , relacionarCon: nameof(RolDto)
                     , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPermisoDto>.NombreMnt
                     , nombreOpcion: "Roles"
-                    , propiedadQueRestringe: nameof(PermisoDtm.Id)
-                    , propiedadRestrictora: nameof(PermisosDeUnRolDtm.IdPermiso));
+                    , propiedadQueRestringe: nameof(PermisoDto.Id)
+                    , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdPermiso));
 
             }
 

@@ -62,6 +62,7 @@ namespace UtilidadesParaIu
         {
             var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
                           || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion
+                          || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta
                 ? columna.PorAnchoSel
                 : columna.PorAnchoMnt;
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss}";
@@ -91,7 +92,8 @@ namespace UtilidadesParaIu
 
             var parametros = $"{columna.IdHtml}";
             if (columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion ||
-                columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion)
+                columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion ||
+                columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta)
             {
                 parametros = $"{columna.ZonaDeDatos.IdHtmlModal}#{parametros}";
             }
@@ -108,11 +110,9 @@ namespace UtilidadesParaIu
             var getorDeEventos = RenderGestorDeEventos(celda.Fila.Datos.Mnt.Crud.Modo);
 
             var parametros = $"{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}";
-            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion)
-            {
-                parametros = $"{celda.Fila.Datos.IdHtmlModal}#{parametros}";
-            }
-            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Relacion)
+            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion ||
+                celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Relacion ||
+                celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Consulta)
             {
                 parametros = $"{celda.Fila.Datos.IdHtmlModal}#{parametros}";
             }
@@ -122,14 +122,18 @@ namespace UtilidadesParaIu
 
         private static string RenderGestorDeEventos(ModoDescriptor modo)
         {
-            var getorDeEventos = "EventosDelMantenimiento";
+            var getorDeEventos = $"{GestorDeEventos.EventosDelMantenimiento}"; 
             if (modo == ModoDescriptor.Seleccion)
             {
-                getorDeEventos = "EventosModalDeSeleccion";
+                getorDeEventos = $"{GestorDeEventos.EventosModalDeSeleccion}";
             }
             if (modo == ModoDescriptor.Relacion)
             {
-                getorDeEventos = "EventosModalDeCrearRelaciones";
+                getorDeEventos = $"{GestorDeEventos.EventosModalDeCrearRelaciones}";
+            }
+            if (modo == ModoDescriptor.Consulta)
+            {
+                getorDeEventos = $"{GestorDeEventos.EventosModalDeConsultaDeRelaciones}";
             }
             return getorDeEventos;
         }

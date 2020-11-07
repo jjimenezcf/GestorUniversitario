@@ -39,6 +39,15 @@ namespace MVCSistemaDeElementos.Descriptores
                 , propiedadQueRestringe: nameof(UsuarioDto.Id)
                 , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
 
+            var modalDePermisos = new ModalDeConsultaDeRelaciones<UsuarioDto, PermisosDeUnUsuarioDto>(mantenimiento: Mnt
+                              , tituloModal: "Permisos de un usuario"
+                              , crudModal: new DescriptorDePermisosDeUnUsuario(ModoDescriptor.Consulta)
+                              , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
+
+            var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
+            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos");
+            Mnt.ZonaMenu.Menu.Add(opcion);
+
         }
 
         public override string RenderControl()

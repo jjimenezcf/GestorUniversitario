@@ -25,6 +25,11 @@
                     crudMnt.AbrirModalParaRelacionar(idModal);
                     break;
                 }
+                case Evento.Mnt.AbrirModalParaConsultarRelaciones: {
+                    let idModal: string = parametros;
+                    crudMnt.AbrirModalParaConsultarRelaciones(idModal);
+                    break;
+                }
                 case Evento.Mnt.Buscar: {
                     crudMnt.Buscar(atGrid.accion.buscar, 0);
                     break;
@@ -167,6 +172,61 @@
                     break;
                 }
                 case Evento.ModalParaRelacionar.FilaPulsada: {
+                    let idCheck: string = parIn[1];
+                    let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
+                    modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
+    }
+
+
+
+    export function EventosModalDeConsultaDeRelaciones(accion: string, parametros: string): void {
+
+        let parIn: Array<string> = parametros.split("#");
+        let modal: ModalParaConsultarRelaciones = crudMnt.ObtenerModalParaConsultarRelaciones(parIn[0]);
+        if (modal === undefined) {
+            Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            return;
+        }
+
+        try {
+            switch (accion) {
+                case Evento.ModalParaConsultaDeRelaciones.Cerrar: {
+                    modal.CerrarModalParaConsultarRelaciones();
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.Buscar: {
+                    modal.RecargarGrid();
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.ObtenerSiguientes: {
+                    modal.ObtenerSiguientes();
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.ObtenerAnteriores: {
+                    modal.ObtenerAnteriores();
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.ObtenerUltimos: {
+                    modal.ObtenerUltimos();
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.OrdenarPor: {
+                    let columna: string = parIn[1];
+                    modal.OrdenarPor(columna);
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.FilaPulsada: {
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);

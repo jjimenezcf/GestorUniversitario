@@ -33,9 +33,11 @@ namespace ServicioDeDatos.Entorno
         [Column("ADMINISTRADOR", TypeName = "BIT")]
         public bool EsAdministrador { get; set; }
 
+        public string eMail { get; set; }
+
         public virtual ArchivoDtm Archivo { get; set; }
         
-        public virtual ICollection<UsuariosDeUnPermisoDtm> Permisos { get; private set; }
+        public virtual ICollection<PermisosDeUnUsuarioDtm> Permisos { get; private set; }
 
         public virtual ICollection<PuestosDeUnUsuarioDtm> Puestos { get; private set; }
 
@@ -45,7 +47,7 @@ namespace ServicioDeDatos.Entorno
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsuarioDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(50)").IsRequired();
-
+            modelBuilder.Entity<UsuarioDtm>().Property(p => p.eMail).HasColumnName("EMAIL").HasColumnType("VARCHAR(50)").IsRequired().HasDefaultValue("pendiente@se.com");
             modelBuilder.Entity<UsuarioDtm>().Property(p => p.EsAdministrador).IsRequired(true).HasDefaultValue(false);
 
             modelBuilder.Entity<UsuarioDtm>()
@@ -61,7 +63,7 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<UsuarioDtm>()
                     .HasMany(tu => tu.Permisos)
                     .WithOne(p => p.Usuario)
-                    .HasForeignKey(p => p.IdUsua);
+                    .HasForeignKey(p => p.IdUsuario);
 
             GeneradorMd.DefinirCampoArchivo<UsuarioDtm>(modelBuilder);            
 

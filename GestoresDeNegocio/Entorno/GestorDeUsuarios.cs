@@ -87,6 +87,16 @@ namespace GestoresDeNegocio.Entorno
             return new GestorDeUsuarios(contexto, mapeador);
         }
 
+        internal static List<UsuarioDto> Leer(GestorDeUsuarios gestor, int posicion, int cantidad, string filtro)
+        {
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!filtro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(UsuarioDto.Nombre), Valor = filtro });
+
+            var usuariosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(usuariosDtm).ToList();
+        }
+
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             base.DefinirJoins(filtros, joins, parametros);
@@ -136,7 +146,7 @@ namespace GestoresDeNegocio.Entorno
                     var listaIds = filtro.Valor.ListaEnteros();
                     foreach (int id in listaIds)
                     {
-                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsua == u.Id));
+                        registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsuario == u.Id));
                     }
                 }
                 if (filtro.Clausula.ToLower() == nameof(UsuarioDtm.Login).ToLower())

@@ -103,6 +103,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Update="wwwroot\ts\Entorno\PermisosDeUnUsuario.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Usuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -125,6 +128,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\UsuariosDeUnPuesto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\_Crud\ModalParaConsultarRelaciones.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
