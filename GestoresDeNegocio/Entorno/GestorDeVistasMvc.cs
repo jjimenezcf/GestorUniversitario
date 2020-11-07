@@ -117,7 +117,7 @@ namespace GestoresDeNegocio.Entorno
             sqlParameters.Add(new SqlParameter("@idVista", vista.Id));
 
             var a = Contexto.UsuPermisos.FromSqlRaw($@"           
-            select *
+            select id, idusua, idpermiso
             from ENTORNO.USU_PERMISO t1
             where EXISTS(
                   select id from ENTORNO.USUARIO where id = t1.IDUSUA and LOGIN like @login

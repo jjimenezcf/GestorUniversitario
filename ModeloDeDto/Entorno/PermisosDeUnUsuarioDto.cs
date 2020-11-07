@@ -40,10 +40,19 @@ namespace ModeloDeDto.Seguridad
             Fila = 1,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15
+            PorAnchoMnt = 30
             )
         ]
         public string Permiso { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Origen",
+            Ayuda = "Origen del permiso",
+            TipoDeControl = TipoControl.Editor,
+            PorAnchoMnt = 60
+            )
+        ]
+        public string Origen { get; set; }
     }
 
 
