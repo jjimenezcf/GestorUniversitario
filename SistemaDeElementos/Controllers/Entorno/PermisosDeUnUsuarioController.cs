@@ -6,6 +6,7 @@ using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Seguridad;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos.Entorno;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {

@@ -1,5 +1,7 @@
 ﻿
 
+using ModeloDeDto.Seguridad;
+
 namespace ModeloDeDto.Entorno
 {
     [IUDto(ExpresionNombre = "[Permiso]")]
