@@ -229,8 +229,7 @@ namespace UtilidadesParaIu
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
             var getorDeEventos = RenderGestorDeEventos(grid.ZonaDeDatos.Mnt.Crud.Modo);
-            var parametros = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento ||
-                             grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta
+            var parametros = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento
                 ? ""
                 : $"{grid.ZonaDeDatos.IdHtmlModal}";
 

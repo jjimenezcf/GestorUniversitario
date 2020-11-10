@@ -149,6 +149,8 @@ namespace MVCSistemaDeElementos.Descriptores
                     return ModoDescriptor.Mantenimiento;
                 case nameof(ModoDescriptor.Consulta):
                     return ModoDescriptor.Consulta;
+                case nameof(ModoDescriptor.Relacion):
+                    return ModoDescriptor.Relacion;
             }
             throw new Exception($"El modo {modo} no está definido");
         }

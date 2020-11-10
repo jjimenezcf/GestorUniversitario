@@ -281,12 +281,15 @@
             return this.constructor.name === ModalSeleccion.name ;
         }
 
+        protected get EsModalParaConsultarRelaciones(): boolean {
+            return this.constructor.name === ModalParaConsultarRelaciones.name;
+        }
         protected get EsModalParaRelacionar(): boolean {
             return this.constructor.name === ModalParaRelacionar.name;
         }
 
         protected get EsModalConGrid(): boolean {
-            return this.EsModalParaRelacionar || this.EsModalDeSeleccion 
+            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones
         }
 
         private idHtmlFiltro: string;
