@@ -24,6 +24,7 @@
         padding: 20px;
         border: 10px solid #888;
         width: 60%;
+        overflow-y: auto;
     }
 
 .contenido-cabecera {

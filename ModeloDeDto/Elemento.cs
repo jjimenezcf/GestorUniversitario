@@ -51,7 +51,14 @@ namespace ModeloDeDto
     {
         private string etiquetaGrid;
 
+
         private bool _visibleEnGrid = true;
+
+        private bool _visibleAlCrear = true;
+
+        private bool _visibleAlEditar = true;
+
+        private bool _visibleAlConsultar = true;
 
         public string EtiquetaGrid
         {
@@ -66,11 +73,12 @@ namespace ModeloDeDto
 
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
-        public bool Visible { get; set; } = true;
-        public bool VisibleEnGrid { get { return _visibleEnGrid && Visible && TipoDeControl != TipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
-        public bool VisibleAlCrear { get; set; } = true;
-        public bool VisibleAlEditar { get; set; } = true;
-        public bool VisibleAlConsultar { get; set; } = true;
+        public bool SiempreVisible { get { return _visibleAlCrear && _visibleAlEditar && _visibleAlConsultar && _visibleEnGrid; } set { _visibleAlCrear = _visibleAlEditar = _visibleAlConsultar = _visibleEnGrid = value; } }
+        public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != TipoControl.UrlDeArchivo; } set { if (!value) SiempreVisible = false;  _visibleEnGrid = value; } }
+        public bool VisibleEnEdicion { get { return _visibleAlCrear && _visibleAlEditar && _visibleAlConsultar; } set { if (!value)  SiempreVisible = false; _visibleAlCrear = _visibleAlEditar = _visibleAlConsultar = value; } }
+        public bool VisibleAlCrear { get { return _visibleAlCrear; } set { if (!value) SiempreVisible = VisibleEnEdicion  = false;  _visibleAlCrear = value; } }
+        public bool VisibleAlEditar { get { return _visibleAlEditar; } set { if (!value) SiempreVisible = VisibleEnEdicion = false; _visibleAlEditar = value; } }
+        public bool VisibleAlConsultar { get { return _visibleAlConsultar; } set { if (!value) SiempreVisible = VisibleEnEdicion = false; _visibleAlConsultar = value; } }
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
@@ -117,21 +125,20 @@ namespace ModeloDeDto
             if (TipoControl.ImagenDelCanvas == TipoDeControl)
                 return false;
 
-            if (Visible)
-            {
-                if (modo == ModoDeTrabajo.Edicion)
-                    return VisibleAlEditar;
-                else
-                if (modo == ModoDeTrabajo.Nuevo)
-                    return VisibleAlCrear;
-                else
-                if (modo == ModoDeTrabajo.Consulta)
-                    return VisibleAlConsultar;
-                else
-                if (modo == ModoDeTrabajo.Mantenimiento)
-                    return VisibleEnGrid;
-            }
+            if (SiempreVisible)
+                return true;
 
+            if (modo == ModoDeTrabajo.Edicion)
+                return VisibleAlEditar;
+            
+            if (modo == ModoDeTrabajo.Nuevo)
+                return VisibleAlCrear;
+            
+            if (modo == ModoDeTrabajo.Consulta)
+                return VisibleAlConsultar;
+            
+            if (modo == ModoDeTrabajo.Mantenimiento)
+                return VisibleEnGrid;
 
             return false;
         }
@@ -162,7 +169,7 @@ namespace ModeloDeDto
         /// Ancho que se les da a las etiquetas en la iu
         /// </summary>
         public short AnchoEtiqueta { get; set; } = 15;
-       
+
         /// <summary>
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
@@ -188,7 +195,7 @@ namespace ModeloDeDto
             Etiqueta = "Id",
             Ayuda = "id del elemento",
             Tipo = typeof(int),
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int Id { get; set; }
@@ -200,7 +207,7 @@ namespace ModeloDeDto
             if (iEnumerableAtrb == null || iEnumerableAtrb.ToList().Count == 0)
                 Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por no tener definidas los atributos {typeof(IUPropiedadAttribute)}");
 
-            var listaAtrb = iEnumerableAtrb.ToList();            
+            var listaAtrb = iEnumerableAtrb.ToList();
 
             if (listaAtrb.Count != 1)
                 Gestor.Errores.GestorDeErrores.Emitir($"No se puede definir el descriptor para el tipo {propiedad.DeclaringType} por tener mas de una definición para {typeof(IUPropiedadAttribute)}");

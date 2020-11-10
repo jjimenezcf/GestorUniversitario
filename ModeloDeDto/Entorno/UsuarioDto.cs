@@ -15,7 +15,7 @@ namespace ModeloDeDto.Entorno
            , ExpresionNombre = "([Login]) [Apellido], [Nombre]")]
     public class UsuarioDto : ElementoDto
     {
-        [IUPropiedad(Visible = false)]
+        [IUPropiedad(SiempreVisible = false)]
         public string NombreCompleto => $"({Login}) {Apellido}, {Nombre}";
 
         [IUPropiedad(

@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderModalDeConsultaDeRelaciones()
         {
             string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨ propiedad-restrictora=¨{PropiedadRestrictora}¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
+                              		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	titulo
                                         </div>

@@ -18,14 +18,14 @@
 
         [IUPropiedad(
             Etiqueta = "usuario",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string Usuario { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Id del puesto de trabajo",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int IdPuesto { get; set; }
@@ -44,6 +44,12 @@
             )
         ]
         public string Puesto { get; set; }
+
+        [IUPropiedad(
+            Etiqueta ="Roles del puesto",
+            SiempreVisible = false,
+            VisibleEnGrid = true)]
+        public string RolesDeUnPuesto { get; set; }
 
     }
 }

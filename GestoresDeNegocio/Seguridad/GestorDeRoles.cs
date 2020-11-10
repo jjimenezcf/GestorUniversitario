@@ -14,7 +14,7 @@ using Utilidades;
 namespace GestoresDeNegocio.Seguridad
 {
    
-    public class GestorDeRoles : GestorDeElementos<ContextoSe, RolDtm, RolDto>, IRoleStore<RolDtm>
+    public class GestorDeRoles : GestorDeElementos<ContextoSe, RolDtm, RolDto>
     {
         public class MapearPuestoDeTrabajo : Profile
         {
@@ -73,59 +73,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-        public Task<IdentityResult> CreateAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IdentityResult> UpdateAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResult> DeleteAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetRoleIdAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetRoleNameAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetRoleNameAsync(RolDtm role, string roleName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetNormalizedRoleNameAsync(RolDtm role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetNormalizedRoleNameAsync(RolDtm role, string normalizedName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RolDtm> FindByIdAsync(string roleId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RolDtm> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

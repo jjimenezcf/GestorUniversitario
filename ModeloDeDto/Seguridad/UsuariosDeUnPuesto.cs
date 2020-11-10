@@ -20,14 +20,14 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Puesto",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string Puesto { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Id del usuario",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int IdUsuario { get; set; }

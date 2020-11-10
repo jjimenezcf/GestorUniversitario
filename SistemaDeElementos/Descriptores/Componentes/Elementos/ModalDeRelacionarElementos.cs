@@ -26,19 +26,19 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderModalDeRelacionarElementos()
         {
             string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨ propiedad-restrictora=¨{PropiedadRestrictora}¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal modal-seleccion¨ >
-                              		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
-                              		    	titulo
+                              		    <div id=¨{IdHtml}_contenido¨ class=¨contenido-modal¨ >
+                              		       <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
+                              		       	titulo
+                                           </div>
+                              		       <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
+                              		 	       crudDeSeleccion
+                                           </div>
+                                           <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
+                                              <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
+                                              <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Cerrar}','{IdHtml}')¨ />
+                                           </div>
                                         </div>
-                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
-                              			    crudDeSeleccion
-                                        </div>
-                                        <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Cerrar}','{IdHtml}')¨ />
-                                        </div>
-                                      </div>
-                              </div>";
+                                     </div>";
 
             return _htmlMiModal
                 .Replace("titulo", Etiqueta)

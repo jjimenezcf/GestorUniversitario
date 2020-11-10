@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20201110174943_Añadir columna roles de un puesto a puestos de un usuario")]
+    partial class Añadircolumnarolesdeunpuestoapuestosdeunusuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -455,12 +457,6 @@ namespace Migraciones.Migrations
                         .IsRequired()
                         .HasColumnName("NOMBRE")
                         .HasColumnType("VARCHAR(250)");
-
-                    b.Property<string>("RolesDeUnPuesto")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("ROLES")
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasComputedColumnSql("SEGURIDAD.OBTENER_ROLES_DE_UN_PUESTO(id)");
 
                     b.HasKey("Id");
 

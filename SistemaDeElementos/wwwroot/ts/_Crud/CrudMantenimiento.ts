@@ -106,7 +106,7 @@
         public AbrirModalParaConsultarRelaciones(idModalParaConsultar: string) {
 
             if (this.InfoSelector.Cantidad != 1)
-                throw new Error("Debe seleccionar un elemento para poder relacionarlo");
+                throw new Error("Debe seleccionar un elemento para poder consultar las relaciones");
 
 
             let modal: ModalParaConsultarRelaciones = this.ObtenerModalParaConsultarRelaciones(idModalParaConsultar);

@@ -11,7 +11,7 @@ namespace ModeloDeDto.Entorno
 
         [IUPropiedad(
             Etiqueta = "Id del menú padre",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int? idPadre { get; set; }
@@ -71,7 +71,7 @@ namespace ModeloDeDto.Entorno
         public string Descripcion { get; set; }
 
         [IUPropiedad(
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public List<MenuDto> Submenus { get; set; }
@@ -91,7 +91,7 @@ namespace ModeloDeDto.Entorno
         ]
         public string VistaMvc { get; set; }
         [IUPropiedad(Etiqueta = "Id de la vista",
-            Visible = false)]
+            SiempreVisible = false)]
         public int? idVistaMvc { get; set; }
 
 

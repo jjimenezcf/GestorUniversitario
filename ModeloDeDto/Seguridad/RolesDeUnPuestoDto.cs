@@ -15,14 +15,14 @@
 
         [IUPropiedad(
             Etiqueta = "Puesto de trabajo",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string Puesto { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Id del rol",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int IdRol { get; set; }

@@ -16,14 +16,14 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "permiso",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string Permiso { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Id del rol",
-            Visible = false
+            SiempreVisible = false
                      )]
         public int IdRol { get; set; }
 

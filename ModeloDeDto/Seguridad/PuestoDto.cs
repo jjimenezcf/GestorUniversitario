@@ -20,13 +20,21 @@
         [IUPropiedad(
             Etiqueta = "Descripción",
             Ayuda = "Descripción del puesto de trabajo",
+            SiempreVisible = false,
+            VisibleEnEdicion = true,
             Tipo = typeof(string),
-            Fila = 0,
+            Fila = 1,
             Columna = 0,
             Ordenar = true,
             PorAnchoMnt = 50
             )
         ]
         public string Descripcion { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Roles del puesto",
+            SiempreVisible = false,
+            VisibleEnGrid = true)]
+        public string RolesDeUnPuesto { get; set; }
     }
 }

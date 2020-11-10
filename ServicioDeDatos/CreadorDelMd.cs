@@ -31,6 +31,7 @@ namespace ServicioDeDatos
 
         public DbSet<RolesDeUnPuestoDtm> PuestosDeUnRol { get; set; }
         public DbSet<PuestosDeUnUsuarioDtm> PuestosDeUnUsuario { get; set; }
+        public DbSet<PermisosDeUnPuestoDtm> PermisosDeUnPuesto { get; set; }
 
         #endregion
 
@@ -76,6 +77,8 @@ namespace ServicioDeDatos
             TablaPermisoTipo.Definir(modelBuilder);
 
             TablaUsuPuesto.Definir(modelBuilder);
+
+            VistaDePermisosDeUnPuesto.Definir(modelBuilder);
         }
 
         private static void DefinirTablasDelEsquemaDeEntorno(ModelBuilder modelBuilder)

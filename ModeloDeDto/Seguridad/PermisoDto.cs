@@ -25,7 +25,7 @@
 
         [IUPropiedad(
             Etiqueta = "Id de la clase de permiso",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string IdClase { get; set; }
@@ -47,7 +47,7 @@
 
         [IUPropiedad(
             Etiqueta = "Id del tipo de permiso",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string IdTipo { get; set; }

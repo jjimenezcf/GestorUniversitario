@@ -17,6 +17,8 @@ namespace ServicioDeDatos.Seguridad
         [Column("IDPUESTO", TypeName = "INT")]
         public int IdPuesto { get; set; }
 
+        public string RolesDeUnPuesto { get; }
+
         public virtual PuestoDtm Puesto { get; set; }
 
         public PuestosDeUnUsuarioDtm()
@@ -38,6 +40,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.IdUsuario).HasColumnName("IDUSUA");
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.IdPuesto).HasColumnName("IDPUESTO");
 
+            modelBuilder.Entity<PuestosDeUnUsuarioDtm>().Property(p => p.RolesDeUnPuesto).HasColumnName("ROLES").HasColumnType("VARCHAR(MAX)").HasComputedColumnSql("SEGURIDAD.OBTENER_ROLES_DE_UN_PUESTO(idPuesto)");
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                         .HasIndex(p => new { p.IdPuesto, p.IdUsuario })

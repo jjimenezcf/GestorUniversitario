@@ -1,11 +1,11 @@
 ﻿
 
-namespace ModeloDeDto.Entorno
+namespace ModeloDeDto.Seguridad
 {
     [IUDto(ExpresionNombre = "[Permiso]")]
-    public class PermisosDeUnUsuarioDto : ElementoDto
+    public class PermisosDeUnPuestoDto : ElementoDto
     {
-        [IUPropiedad(Etiqueta = "Usuario",
+        [IUPropiedad(Etiqueta = "Puesto",
             Ayuda = "permisos de un usuario",
             TipoDeControl = TipoControl.RestrictorDeEdicion,
             Fila = 0,
@@ -13,14 +13,14 @@ namespace ModeloDeDto.Entorno
             VisibleEnGrid = false
             )
         ]
-        public int IdUsuario { get; set; }
+        public int IdPuesto { get; set; }
 
         [IUPropiedad(
-            Etiqueta = "Usuario",
+            Etiqueta = "Puesto",
             SiempreVisible = false
             )
         ]
-        public string Usuario { get; set; }
+        public string Puesto { get; set; }
 
 
         [IUPropiedad(
@@ -40,7 +40,9 @@ namespace ModeloDeDto.Entorno
             Fila = 1,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 30
+            PorAnchoMnt = 30,
+            VisibleEnGrid = true,
+            VisibleEnEdicion = false
             )
         ]
         public string Permiso { get; set; }
@@ -48,6 +50,8 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Origen",
             Ayuda = "Origen del permiso",
+            VisibleEnGrid = true,
+            VisibleEnEdicion = false,
             TipoDeControl = TipoControl.Editor,
             PorAnchoMnt = 60
             )

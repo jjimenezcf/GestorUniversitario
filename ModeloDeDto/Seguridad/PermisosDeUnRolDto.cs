@@ -17,7 +17,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "rol",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public string Rol { get; set; }
@@ -25,7 +25,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Id del permiso",
-            Visible = false
+            SiempreVisible = false
             )
         ]
         public int IdPermiso { get; set; }
