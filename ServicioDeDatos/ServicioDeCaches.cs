@@ -18,10 +18,23 @@ namespace ServicioDeDatos
             return CachesDeSe[nombreCache];
         }
 
-        public static void Eliminar(string nombreCache)
+        public static void EliminarCache(string nombreCache)
         {
             if (CachesDeSe.ContainsKey(nombreCache))
                 CachesDeSe[nombreCache].Clear();
+        }
+
+        public static void EliminarElemento(string cache, string clave)
+        {
+            var cacheDeRegistros = Obtener(cache);
+
+            foreach (var indice in cacheDeRegistros.Keys)
+            {
+                if (clave == indice)
+                {
+                    cacheDeRegistros.TryRemove(clave, out _);
+                }
+            }
         }
     }
 }

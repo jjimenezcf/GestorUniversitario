@@ -101,7 +101,7 @@ namespace GestoresDeNegocio.Entorno
 
         internal void LimpiarCacheDeArbolDeMenu()
         {
-            ServicioDeCaches.Eliminar(nameof(this.LeerArbolDeMenu));
+            ServicioDeCaches.EliminarCache(nameof(this.LeerArbolDeMenu));
         }
 
         private void ProcesarSubMenus(List<ArbolDeMenuDto> resultadoDto, List<ArbolDeMenuDtm> arbolDeMenu, ArbolDeMenuDto padre)

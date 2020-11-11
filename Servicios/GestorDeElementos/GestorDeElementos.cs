@@ -72,7 +72,6 @@ namespace GestorDeElementos
         public TContexto Contexto;
         public IMapper Mapeador;
 
-        private static readonly ConcurrentDictionary<string, TRegistro> _CacheDeRegistros = new ConcurrentDictionary<string, TRegistro>();
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
         private static readonly ConcurrentDictionary<Type, object> _CacheDeGestores = new ConcurrentDictionary<Type, object>();
 
@@ -184,6 +183,7 @@ namespace GestorDeElementos
             var registro = Registro.RegistroVacio<TRegistro>();
             if (!registro.RegistroDeRelacion)
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
+
             var filtros = new List<ClausulaDeFiltrado>();
             DefinirFiltroDeRelacion(registro, filtros, idElemento1, idElemento2);
             var registros = LeerRegistros(filtros).ToList();
@@ -274,14 +274,18 @@ namespace GestorDeElementos
         {
             _CacheDeRecuentos[typeof(TRegistro).FullName] = true;
 
-            foreach (var clave in _CacheDeRegistros.Keys)
+            Type t = registro.GetType();
+            PropertyInfo[] props = t.GetProperties();
+            foreach (var prop in props)
             {
-                if (clave.StartsWith(typeof(TRegistro).FullName))
-                {
-                    _CacheDeRegistros.TryRemove(clave, out _);
-                }
+                if (prop.Name == nameof(registro.Nombre))
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Nombre)}-{registro.Nombre}");
+                if (prop.Name == nameof(registro.Id))
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}");
             }
+
         }
+
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
@@ -335,16 +339,17 @@ namespace GestorDeElementos
 
         public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
         {
-            var indice = $"{typeof(TRegistro).FullName}-{propiedad}-{valor}";
-            if (!_CacheDeRegistros.ContainsKey(indice))
+            var indice = $"{propiedad}-{valor}";
+            var cache = ServicioDeCaches.Obtener(typeof(TRegistro).FullName);
+            if (!cache.ContainsKey(indice))
             {
                 var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno);
                 if (a == null)
                     return null;
 
-                _CacheDeRegistros[indice] = a;
+                cache[indice] = a;
             }
-            return _CacheDeRegistros[indice];
+            return (TRegistro)cache[indice];
         }
 
         public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno)
