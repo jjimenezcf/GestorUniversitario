@@ -23,6 +23,7 @@ namespace ServicioDeDatos.Seguridad
 
         public ICollection<PermisosDeUnRolDtm> Roles { get; set; }
         public ICollection<PermisosDeUnUsuarioDtm> Usuarios { get; set; }
+        public ICollection<PermisosDeUnPuestoDtm> Puestos { get; set; }
     }
 
     public static class TablaPermiso

@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
@@ -12,7 +13,7 @@ using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using Utilidades;
 
-namespace GestoresDeNegocio.Seguridad
+namespace GestoresDeNegocio.Entorno
 {
 
     public class GestorDePermisosDeUnUsuario : GestorDeElementos<ContextoSe, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>

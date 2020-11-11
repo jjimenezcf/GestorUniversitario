@@ -28,12 +28,23 @@ namespace ServicioDeDatos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PermisosDeUnPuestoDtm>()
-                .ToView("PUESTO_PERMISO", "ENTORNO")
+                .ToView("PUESTO_PERMISO", "SEGURIDAD")
                 .HasKey(x => new { x.Id });
 
 
-            modelBuilder.Entity<PermisosDeUnPuestoDtm>().Property(p => p.Id).HasColumnName("ID").HasColumnType("VARCHAR(MAX)").HasComputedColumnSql("CAST(ROW_NUMBER() OVER(ORDER BY t2.IDUSUA ASC) as int)");
+            modelBuilder.Entity<PermisosDeUnPuestoDtm>().Property(p => p.Id).HasColumnName("ID").HasColumnType("INT").HasComputedColumnSql("CAST(ROW_NUMBER() OVER(ORDER BY t2.IDUSUA ASC) as int)");
             modelBuilder.Entity<PermisosDeUnPuestoDtm>().Property(p => p.Roles).HasColumnName("ROLES").HasColumnType("VARCHAR(MAX)").HasComputedColumnSql("SEGURIDAD.OBTENER_ORIGEN_PUESTO_PERMISO(IDPUESTO, IDPERMISO)");
+
+
+            modelBuilder.Entity<PermisosDeUnPuestoDtm>()
+                .HasOne(x => x.Puesto)
+                .WithMany(x => x.Permisos)
+                .HasForeignKey(x => x.IdPuesto);
+
+            modelBuilder.Entity<PermisosDeUnPuestoDtm>()
+                .HasOne(x => x.Permiso)
+                .WithMany(x => x.Puestos)
+                .HasForeignKey(x => x.IdPermiso);
 
         }
     }

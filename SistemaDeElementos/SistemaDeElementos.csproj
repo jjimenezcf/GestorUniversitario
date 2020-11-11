@@ -112,6 +112,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Variables.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Seguridad\PermisosDeUnPuesto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\PuestosDeUnRol.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

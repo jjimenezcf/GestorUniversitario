@@ -184,18 +184,36 @@ namespace GestorDeElementos
             var registro = Registro.RegistroVacio<TRegistro>();
             if (!registro.RegistroDeRelacion)
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
-
-            MapearDatosDeRelacion(registro, idElemento1, idElemento2);
             var filtros = new List<ClausulaDeFiltrado>();
-            filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento1), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento1.ToString() });
-            filtros.Add(new ClausulaDeFiltrado() { Clausula = nameof(idElemento2), Criterio = CriteriosDeFiltrado.igual, Valor = idElemento2.ToString() });
+            DefinirFiltroDeRelacion(registro, filtros, idElemento1, idElemento2);
             var registros = LeerRegistros(filtros).ToList();
             if (registros.Count != 0)
                 return $"El registro {registro} ya existe";
 
+            MapearDatosDeRelacion(registro, idElemento1, idElemento2);
             PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
 
             return "";
+        }
+
+        private void DefinirFiltroDeRelacion(TRegistro registro, List<ClausulaDeFiltrado> filtros, int idElemento1, int idElemento2)
+        {
+            Type t = registro.GetType();
+            PropertyInfo[] props = t.GetProperties();
+            foreach (var prop in props)
+            {
+                var c = new ClausulaDeFiltrado();
+               
+                c.Clausula = prop.Name;
+                c.Criterio = CriteriosDeFiltrado.igual;
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                    c.Valor = invertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+                    c.Valor = invertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
+
+                if (c.Valor.Entero()>0)
+                    filtros.Add(c);
+            }
         }
 
         private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)

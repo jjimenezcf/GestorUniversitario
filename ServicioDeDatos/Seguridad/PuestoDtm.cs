@@ -15,6 +15,8 @@ namespace ServicioDeDatos.Seguridad
 
         public virtual ICollection<RolesDeUnPuestoDtm> Roles { get; set; }
         public virtual ICollection<PuestosDeUnUsuarioDtm> Usuarios { get; set; }
+
+        public virtual ICollection<PermisosDeUnPuestoDtm> Permisos { get; private set; }
     }
 
     public static class TablaPuesto
