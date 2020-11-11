@@ -13,52 +13,6 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> AplicarJoinsDePermisos<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : PermisoDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(ClasePermisoDtm))
-                    registros = registros.Include(p => p.Clase);
-
-                if (join.Dtm == typeof(TipoPermisoDtm))
-                    registros = registros.Include(p => p.Tipo);
-            }
-
-            return registros;
-        }
-    }
-
-    static class PermisosRegOrd
-    {
-        public static IQueryable<PermisoDtm> Orden(this IQueryable<PermisoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Nombre);
-
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Propiedad == nameof(PermisoDtm.Nombre).ToLower())
-                    set = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Nombre)
-                        : set.OrderByDescending(x => x.Nombre);
-
-                if (orden.Propiedad == nameof(PermisoDtm.Clase).ToLower())
-                    set = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Clase)
-                        : set.OrderByDescending(x => x.Clase);
-
-                if (orden.Propiedad == nameof(PermisoDtm.Tipo).ToLower())
-                    set = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Tipo)
-                        : set.OrderByDescending(x => x.Tipo);
-            }
-
-            return set;
-        }
-    }
-
     public class GestorDePermisos : GestorDeElementos<ContextoSe, PermisoDtm, PermisoDto>
     {
         public class MapearPermiso : Profile
@@ -156,14 +110,9 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarPermisos(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<PermisoDtm> FiltrarPermisos(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
@@ -192,12 +141,35 @@ namespace GestoresDeNegocio.Seguridad
             }
 
             return registros;
+
         }
 
         protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.Orden(ordenacion);
+
+            if (ordenacion.Count == 0)
+                return registros.OrderBy(x => x.Nombre);
+
+            foreach (var orden in ordenacion)
+            {
+                if (orden.Propiedad == nameof(PermisoDtm.Nombre).ToLower())
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Nombre)
+                        : registros.OrderByDescending(x => x.Nombre);
+
+                if (orden.Propiedad == nameof(PermisoDtm.Clase).ToLower())
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Clase)
+                        : registros.OrderByDescending(x => x.Clase);
+
+                if (orden.Propiedad == nameof(PermisoDtm.Tipo).ToLower())
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Tipo)
+                        : registros.OrderByDescending(x => x.Tipo);
+            }
+
+            return registros;
         }
 
         protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -207,9 +179,21 @@ namespace GestoresDeNegocio.Seguridad
             joins.Add(new ClausulaDeJoin { Dtm = typeof(ClasePermisoDtm) });
             joins.Add(new ClausulaDeJoin { Dtm = typeof(TipoPermisoDtm) });
         }
+
         protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            return registros.AplicarJoinsDePermisos(joins, parametros);
+            registros = base.AplicarJoins(registros, joins, parametros);
+
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(ClasePermisoDtm))
+                    registros = registros.Include(p => p.Clase);
+
+                if (join.Dtm == typeof(TipoPermisoDtm))
+                    registros = registros.Include(p => p.Tipo);
+            }
+
+            return registros;
         }
 
         public List<ClasePermisoDto> LeerClases()

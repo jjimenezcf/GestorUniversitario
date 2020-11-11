@@ -44,14 +44,9 @@ namespace ServicioDeDatos.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarPuestosDeTrabajo(registros,filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<PuestoDtm> FiltrarPuestosDeTrabajo(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower() &&

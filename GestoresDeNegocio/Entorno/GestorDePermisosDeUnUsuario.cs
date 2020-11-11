@@ -14,35 +14,6 @@ using Utilidades;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinDePermisosDeUnUsuario<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        where T : PermisosDeUnUsuarioDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(PermisoDtm))
-                    registros = registros.Include(rp => rp.Permiso);
-
-                if (join.Dtm == typeof(UsuarioDtm))
-                    registros = registros.Include(rp => rp.Usuario);
-            }
-
-            return registros;
-        }
-    }
-
-
-    static class OrdenacionDePermisosDeUnUsuario
-    {
-        public static IQueryable<PermisosDeUnUsuarioDtm> Orden(this IQueryable<PermisosDeUnUsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Permiso.Nombre);
-            return set;
-        }
-    }
-
 
     public class GestorDePermisosDeUnUsuario : GestorDeElementos<ContextoSe, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>
     {
@@ -80,7 +51,16 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<PermisosDeUnUsuarioDtm> AplicarJoins(IQueryable<PermisosDeUnUsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            registros = registros.JoinDePermisosDeUnUsuario(joins, parametros);
+
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(PermisoDtm))
+                    registros = registros.Include(rp => rp.Permiso);
+
+                if (join.Dtm == typeof(UsuarioDtm))
+                    registros = registros.Include(rp => rp.Usuario);
+            }
+
             return registros;
         }
 
@@ -88,14 +68,9 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarPermisosDeUnUsuario(registros,filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<PermisosDeUnUsuarioDtm> FiltrarPermisosDeUnUsuario(IQueryable<PermisosDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdUsuario).ToLower())
@@ -109,6 +84,16 @@ namespace GestoresDeNegocio.Seguridad
             }
             return registros;
 
+        }
+
+        protected override IQueryable<PermisosDeUnUsuarioDtm> AplicarOrden(IQueryable<PermisosDeUnUsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
+        {
+            registros = base.AplicarOrden(registros, ordenacion);
+
+            if (ordenacion.Count == 0)
+                return registros.OrderBy(x => x.Permiso.Nombre);
+
+            return registros;
         }
 
         public List<UsuarioDto> LeerUsuarios(int posicion, int cantidad, string filtro)

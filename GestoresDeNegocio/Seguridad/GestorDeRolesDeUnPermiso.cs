@@ -11,35 +11,6 @@ using Utilidades;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinDeRolesDeUnPermiso<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) 
-        where T : PermisosDeUnRolDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(PermisoDtm))
-                    registros = registros.Include(rp => rp.Permiso);
-
-                if (join.Dtm == typeof(RolDtm))
-                    registros = registros.Include(rp => rp.Rol);
-            }
-
-            return registros;
-        }
-    }
-
-
-    static class OrdenacionDeRolesDeUnPermiso
-    {
-        public static IQueryable<PermisosDeUnRolDtm> Orden(this IQueryable<PermisosDeUnRolDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Permiso.Nombre);
-            return set;
-        }
-    }
-
 
     public class GestorDeRolesDeUnPermiso : GestorDeElementos<ContextoSe, PermisosDeUnRolDtm, RolesDeUnPermisoDto>
     {
@@ -78,7 +49,14 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<PermisosDeUnRolDtm> AplicarJoins(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            registros = registros.JoinDeRolesDeUnPermiso(joins, parametros);
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(PermisoDtm))
+                    registros = registros.Include(rp => rp.Permiso);
+
+                if (join.Dtm == typeof(RolDtm))
+                    registros = registros.Include(rp => rp.Rol);
+            }
             return registros;
         }
 
@@ -86,14 +64,9 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarRolesDeUnPermiso(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<PermisosDeUnRolDtm> FiltrarRolesDeUnPermiso(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower())
@@ -105,8 +78,8 @@ namespace GestoresDeNegocio.Seguridad
                 if (filtro.Clausula.ToLower() == nameof(RolesDeUnPermisoDto.Rol).ToLower())
                     registros = registros.Where(x => x.Rol.Nombre.Contains(filtro.Valor));
             }
-            return registros;
 
+            return registros;
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)

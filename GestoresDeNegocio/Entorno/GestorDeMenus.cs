@@ -8,66 +8,9 @@ using ServicioDeDatos.Entorno;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Seguridad;
-using GestoresDeNegocio.Seguridad;
-using System;
 
 namespace GestoresDeNegocio.Entorno
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinConMenus<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : MenuDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(MenuDtm))
-                    registros = registros.Include(p => p.Padre);
-                if (join.Dtm == typeof(VistaMvcDtm))
-                    registros = registros.Include(p => p.VistaMvc);
-                //if (join.Dtm == typeof(PermisoDtm))
-                //    registros = registros.Include(p => p.Permiso);
-
-            }
-
-            return registros;
-        }
-    }
-
-    public static partial class Ordenaciones
-    {
-        public static IQueryable<T> OrdenarMenus<T>(this IQueryable<T> registros, List<ClausulaDeOrdenacion> ordenacion) where T : MenuDtm
-        {
-            foreach (ClausulaDeOrdenacion orden in ordenacion)
-            {
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
-                {
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Padre.Orden)
-                    : registros.OrderByDescending(x => x.Padre.Orden);
-
-                    break;
-                }
-
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Nombre).ToLower())
-                {
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Nombre)
-                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Nombre);
-                    break;
-                }
-
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
-                {
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre)
-                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Orden).ThenBy(x => x.Nombre);
-                    break;
-                }
-            }
-
-            return registros;
-        }
-    }
-
     public class GestorDeMenus : GestorDeElementos<ContextoSe, MenuDtm, MenuDto>
     {
         public class MapearMenus : Profile
@@ -110,14 +53,9 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarMenus(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<MenuDtm> FiltrarMenus(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
@@ -144,13 +82,51 @@ namespace GestoresDeNegocio.Entorno
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.OrdenarMenus(ordenacion);
+
+            foreach (ClausulaDeOrdenacion orden in ordenacion)
+            {
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                {
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Padre.Orden)
+                    : registros.OrderByDescending(x => x.Padre.Orden);
+
+                    break;
+                }
+
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Nombre).ToLower())
+                {
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Nombre)
+                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Nombre);
+                    break;
+                }
+
+                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
+                {
+                    registros = orden.Modo == ModoDeOrdenancion.ascendente
+                    ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre)
+                    : registros.OrderBy(x => x.Padre).ThenByDescending(x => x.Orden).ThenBy(x => x.Nombre);
+                    break;
+                }
+            }
+
+            return registros;
         }
 
         protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            return registros.JoinConMenus(joins, parametros);
+
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(MenuDtm))
+                    registros = registros.Include(p => p.Padre);
+                if (join.Dtm == typeof(VistaMvcDtm))
+                    registros = registros.Include(p => p.VistaMvc);
+            }
+
+            return registros;
         }
 
         public List<MenuDto> LeerPadres()

@@ -50,14 +50,9 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarRoles(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<RolDtm> FiltrarRoles(IQueryable<RolDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() &&
@@ -71,8 +66,8 @@ namespace GestoresDeNegocio.Seguridad
             }
 
             return registros;
-        }
 
+        }
 
     }
 }

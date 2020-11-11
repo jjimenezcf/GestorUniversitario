@@ -21,49 +21,6 @@ using ServicioDeDatos.Elemento;
 namespace GestoresDeNegocio.Entorno
 {
 
-    public static partial class Joins
-    {
-        public static IQueryable<T> AplicarJoinDeArchivo<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : UsuarioDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(ArchivoDtm))
-                    registros = registros.Include(p => p.Archivo);
-            }
-
-            return registros;
-        }
-    }
-
-    static class OrdenacioDeUsuarios
-    {
-        public static IQueryable<UsuarioDtm> Orden(this IQueryable<UsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Apellido);
-
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Propiedad == nameof(UsuarioDtm.Apellido).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Apellido)
-                        : set.OrderByDescending(x => x.Apellido);
-
-                if (orden.Propiedad == nameof(UsuarioDtm.Login).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Login)
-                        : set.OrderByDescending(x => x.Login);
-
-                if (orden.Propiedad == nameof(UsuarioDtm.Alta).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? set.OrderBy(x => x.Alta)
-                        : set.OrderByDescending(x => x.Alta);
-            }
-
-            return set;
-        }
-    }
-
     public class GestorDeUsuarios : GestorDeElementos<ContextoSe, UsuarioDtm, UsuarioDto>
     {
 
@@ -106,27 +63,52 @@ namespace GestoresDeNegocio.Entorno
         protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            return Joins.AplicarJoinDeArchivo(registros, joins, parametros);
+
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(ArchivoDtm))
+                    registros = registros.Include(p => p.Archivo);
+            }
+
+            return registros;
         }
 
         protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.Orden(ordenacion);
+
+            if (ordenacion.Count == 0)
+                return registros.OrderBy(x => x.Apellido);
+
+            foreach (var orden in ordenacion)
+            {
+                if (orden.Propiedad == nameof(UsuarioDtm.Apellido).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Apellido)
+                        : registros.OrderByDescending(x => x.Apellido);
+
+                if (orden.Propiedad == nameof(UsuarioDtm.Login).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Login)
+                        : registros.OrderByDescending(x => x.Login);
+
+                if (orden.Propiedad == nameof(UsuarioDtm.Alta).ToLower())
+                    return orden.Modo == ModoDeOrdenancion.ascendente
+                        ? registros.OrderBy(x => x.Alta)
+                        : registros.OrderByDescending(x => x.Alta);
+            }
+
+            return registros;
+
         }
 
         protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarUsuarios(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<UsuarioDtm> FiltrarUsuarios(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == UsuariosPor.NombreCompleto)
@@ -156,6 +138,7 @@ namespace GestoresDeNegocio.Entorno
             }
 
             return registros;
+
         }
 
         protected override void AntesMapearRegistroParaInsertar(UsuarioDto usuarioDto, ParametrosDeNegocio opciones)

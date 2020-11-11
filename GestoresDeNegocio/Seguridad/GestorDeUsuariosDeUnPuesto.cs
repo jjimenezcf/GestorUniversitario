@@ -14,33 +14,6 @@ using System;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinDeUsuariosDeUnPuesto<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        where T : PuestosDeUnUsuarioDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(UsuarioDtm))
-                    registros = registros.Include(p => p.Usuario);
-                if (join.Dtm == typeof(PuestoDtm))
-                    registros = registros.Include(p => p.Puesto);
-            }
-
-            return registros;
-        }
-    }
-
-    static class OrdenacionDeUsuariosDeUnPuesto
-    {
-        public static IQueryable<PuestosDeUnUsuarioDtm> OrdenarUsuariosDeUnPuesto(this IQueryable<PuestosDeUnUsuarioDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Puesto.Nombre);
-            return set;
-        }
-    }
-
 
     public class GestorDeUsuariosDeUnPuesto : GestorDeElementos<ContextoSe, PuestosDeUnUsuarioDtm, UsuariosDeUnPuestoDto>
     {
@@ -77,22 +50,23 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarJoins(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-
-            return registros.JoinDeUsuariosDeUnPuesto(joins, parametros);
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(UsuarioDtm))
+                    registros = registros.Include(p => p.Usuario);
+                if (join.Dtm == typeof(PuestoDtm))
+                    registros = registros.Include(p => p.Puesto);
+            }
+            return registros;
         }
 
         protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarFiltros(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarUsuariosDeUnPuesto(registros,filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<PuestosDeUnUsuarioDtm> FiltrarUsuariosDeUnPuesto(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdUsuario).ToLower())
@@ -113,7 +87,10 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarOrden(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.OrdenarUsuariosDeUnPuesto(ordenacion);
+
+            if (ordenacion.Count == 0)
+                return registros.OrderBy(x => x.Puesto.Nombre);
+            return registros;
         }
 
 

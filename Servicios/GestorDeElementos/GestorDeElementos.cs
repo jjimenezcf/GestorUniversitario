@@ -38,46 +38,7 @@ namespace GestorDeElementos
         public ModoDeOrdenancion Modo { get; set; }
     }
 
-    public static partial class Joins
-    {
-        public static IQueryable<TRegistro> JoinBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros = null) where TRegistro : Registro
-        {
-            return registros;
-        }
-    }
-
-    public static partial class Ordenaciones
-    {
-        public static IQueryable<TRegistro> OrdenBase<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion) where TRegistro : Registro
-        {
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
-                    return registros.OrdenPorId(orden);
-
-                if (orden.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower())
-                    return registros.OrdenPorNombre(orden);
-
-            }
-
-            return registros;
-        }
-
-        public static IQueryable<TRegistro> OrdenPorId<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden) where TRegistro : Registro
-        {
-            return orden.Modo == ModoDeOrdenancion.ascendente
-                ? registros.OrderBy(x => x.Id)
-                : registros.OrderByDescending(x => x.Id);
-        }
-
-        public static IQueryable<TRegistro> OrdenPorNombre<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden) where TRegistro : Registro
-        {
-            return orden.Modo == ModoDeOrdenancion.ascendente
-                ? registros.OrderBy(x => x.Nombre)
-                : registros.OrderByDescending(x => x.Nombre);
-        }
-    }
-    #endregion
+     #endregion
 
     #region Extensiones a pasar a las operaciones a realizar
 
@@ -467,7 +428,28 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
-            return registros.OrdenBase(ordenacion);
+            foreach (var orden in ordenacion)
+            {
+                if (orden.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
+                    return registros = OrdenPorId(registros, orden);
+
+                if (orden.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower())
+                    return registros = OrdenPorNombre(registros, orden);
+            }
+
+            return registros;
+        }
+        private IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        {
+            return orden.Modo == ModoDeOrdenancion.ascendente
+                ? registros.OrderBy(x => x.Id)
+                : registros.OrderByDescending(x => x.Id);
+        }
+        private IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        {
+            return orden.Modo == ModoDeOrdenancion.ascendente
+                ? registros.OrderBy(x => x.Nombre)
+                : registros.OrderByDescending(x => x.Nombre);
         }
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -505,8 +487,9 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            return registros.JoinBase(joins, parametros);
+            return registros;
         }
+
 
         //protected bool HayFiltroPorId(IQueryable<TRegistro> registros)
         //{

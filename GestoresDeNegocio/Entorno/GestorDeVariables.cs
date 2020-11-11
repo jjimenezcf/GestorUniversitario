@@ -9,27 +9,6 @@ using GestorDeElementos;
 namespace GestoresDeNegocio.Entorno
 {
 
-    public static class FiltrosDeVariables
-    {
-        public static IQueryable<T> FiltrarPorValor<T>(this IQueryable<T> regristros, List<ClausulaDeFiltrado> filtros) where T : VariableDtm
-        {
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(VariableDto.Valor).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return regristros.Where(x => x.Valor == filtro.Valor);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return regristros.Where(x => x.Valor.Contains(filtro.Valor));
-                }
-            }
-
-            return regristros;
-        }
-    }
-
-
     public class GestorDeVariables : GestorDeElementos<ContextoSe, VariableDtm, VariableDto>
     {
 
@@ -63,5 +42,28 @@ namespace GestoresDeNegocio.Entorno
             base.AntesMapearRegistroParaEliminar(elemento, opciones);
             new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
         }
+
+        protected override IQueryable<VariableDtm> AplicarFiltros(IQueryable<VariableDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (hayFiltroPorId)
+                return registros;
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(VariableDto.Valor).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return registros.Where(x => x.Valor == filtro.Valor);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return registros.Where(x => x.Valor.Contains(filtro.Valor));
+                }
+            }
+
+            return registros;
+        }
+
     }
 }

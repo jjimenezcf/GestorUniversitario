@@ -5,33 +5,16 @@ using Utilidades;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
-using System;
 using Gestor.Errores;
 using ServicioDeDatos.Seguridad;
 using GestorDeElementos;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
 using Microsoft.Data.SqlClient;
-using System.Collections.Concurrent;
 
 namespace GestoresDeNegocio.Entorno
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinConPermisos<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros) where T : VistaMvcDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(PermisoDtm))
-                    registros = registros.Include(p => p.Permiso);                   
-            }
 
-            return registros;
-        }
-    }
-
-    
     public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
@@ -41,7 +24,7 @@ namespace GestoresDeNegocio.Entorno
             {
                 CreateMap<VistaMvcDtm, VistaMvcDto>()
                 .ForMember(dto => dto.Menus, dtm => dtm.MapFrom(x => x.Menus))
-                .ForMember(dto => dto.Permiso , dtm => dtm.MapFrom(x => x.Permiso.Nombre));
+                .ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(x => x.Permiso.Nombre));
 
                 CreateMap<VistaMvcDto, VistaMvcDtm>()
                 .ForMember(dtm => dtm.Permiso, dto => dto.Ignore())
@@ -70,21 +53,23 @@ namespace GestoresDeNegocio.Entorno
         protected override IQueryable<VistaMvcDtm> AplicarJoins(IQueryable<VistaMvcDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-            return registros.JoinConPermisos(joins, parametros);
+
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(PermisoDtm))
+                    registros = registros.Include(p => p.Permiso);
+            }
+
+            return registros;
         }
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarVistasMvc(registros,filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<VistaMvcDtm> FiltrarVistasMvc(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(VistaMvcDtm.Controlador).ToLower())
@@ -170,13 +155,13 @@ namespace GestoresDeNegocio.Entorno
             base.AntesDePersistir(registro, parametros);
             if (parametros.Tipo == TipoOperacion.Insertar)
             {
-                var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista,enumTipoDePermiso.Acceso);
+                var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
                 registro.IdPermiso = permiso.Id;
             }
             if (parametros.Tipo == TipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
             {
-               //if (RegistroEnBD.IdPermiso != null)
-                    registro.IdPermiso = RegistroEnBD.IdPermiso;
+                //if (RegistroEnBD.IdPermiso != null)
+                registro.IdPermiso = RegistroEnBD.IdPermiso;
                 //else
                 //{
                 //    var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
@@ -185,14 +170,14 @@ namespace GestoresDeNegocio.Entorno
                 //}
             }
             if (parametros.Tipo == TipoOperacion.Eliminar /*&& RegistroEnBD.IdPermiso != null*/)
-                    GestorDePermisos.Eliminar(Contexto, Mapeador, (int) RegistroEnBD.IdPermiso);
+                GestorDePermisos.Eliminar(Contexto, Mapeador, (int)RegistroEnBD.IdPermiso);
         }
 
         protected override void DespuesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Tipo == TipoOperacion.Modificar 
+            if (parametros.Tipo == TipoOperacion.Modificar
                 //&& !parametros.Parametros.ContainsKey(enumParametro.Creado) 
                 && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);

@@ -11,32 +11,6 @@ using Utilidades;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public static partial class Joins
-    {
-        public static IQueryable<T> JoinDeRolesDeUnPuesto<T>(this IQueryable<T> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        where T : RolesDeUnPuestoDtm
-        {
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(RolDtm))
-                    registros = registros.Include(p => p.Rol);
-                if (join.Dtm == typeof(PuestoDtm))
-                    registros = registros.Include(p => p.Puesto);
-            }
-
-            return registros;
-        }
-    }
-
-    static class OrdenacionDeRolesDeUnPuesto
-    {
-        public static IQueryable<RolesDeUnPuestoDtm> Orden(this IQueryable<RolesDeUnPuestoDtm> set, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            if (ordenacion.Count == 0)
-                return set.OrderBy(x => x.Rol.Nombre);
-            return set;
-        }
-    }
 
     public class GestorDeRolesDeUnPuesto : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
     {
@@ -75,22 +49,23 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarJoins(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, joins, parametros);
-
-            return registros.JoinDeRolesDeUnPuesto(joins, parametros);
+            foreach (ClausulaDeJoin join in joins)
+            {
+                if (join.Dtm == typeof(RolDtm))
+                    registros = registros.Include(p => p.Rol);
+                if (join.Dtm == typeof(PuestoDtm))
+                    registros = registros.Include(p => p.Puesto);
+            }
+            return registros;
         }
 
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarFiltros(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (!hayFiltroPorId)
-                registros = FiltrarRolesDeUnPuesto(registros, filtros);
+            if (hayFiltroPorId)
+                return registros;
 
-            return registros;
-        }
-
-        private IQueryable<RolesDeUnPuestoDtm> FiltrarRolesDeUnPuesto(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower())
@@ -109,7 +84,11 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            return registros.Orden(ordenacion);
+
+            if (ordenacion.Count == 0)
+                return registros.OrderBy(x => x.Puesto.Nombre);
+
+            return registros;
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)

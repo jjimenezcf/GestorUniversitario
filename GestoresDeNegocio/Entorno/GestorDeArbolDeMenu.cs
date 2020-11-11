@@ -27,13 +27,6 @@ namespace GestoresDeNegocio.Entorno
 
         }
 
-        //internal static GestorDeArbolDeMenu Gestor(IMapper mapeador)
-        //{
-        //    var contexto = ContextoSe.ObtenerContexto();
-        //    return new GestorDeArbolDeMenu(contexto, mapeador);
-        //}
-
-
         protected override void DespuesDeMapearElemento(ArbolDeMenuDtm registro, ArbolDeMenuDto elemento, ParametrosDeMapeo parametros)
         {
             base.DespuesDeMapearElemento(registro, elemento, parametros);
