@@ -55,12 +55,12 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.IdPermiso})
                .IsUnique(true)
-               .HasName("IX_VISTA_MVC_IDPERMISO");
+               .HasDatabaseName("IX_VISTA_MVC_IDPERMISO");
 
             modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.Controlador, vista.Accion, vista.Parametros })
                .IsUnique(true)
-               .HasName("IX_VISTA_MVC");
+               .HasDatabaseName("IX_VISTA_MVC");
 
             modelBuilder.Entity<VistaMvcDtm>()
                 .HasMany(vista => vista.Menus)

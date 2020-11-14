@@ -64,7 +64,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)

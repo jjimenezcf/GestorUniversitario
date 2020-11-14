@@ -62,10 +62,10 @@ namespace GestoresDeNegocio.Archivos
                 File.Move(rutaConFichero, $@"{archivo.AlmacenadoEn}\{archivo.Id}.se", true);
                 Contexto.Commit(tran);
             }
-            catch(Exception exc)
+            catch (Exception)
             {
                 Contexto.Rollback(tran);
-                throw exc;
+                throw;
             }
 
             return archivo.Id;

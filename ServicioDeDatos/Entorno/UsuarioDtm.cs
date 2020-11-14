@@ -53,7 +53,7 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<UsuarioDtm>()
             .HasIndex(v => new { v.Login })
             .IsUnique(true)
-            .HasName("IX_USUARIO");
+            .HasDatabaseName("IX_USUARIO");
 
             modelBuilder.Entity<UsuarioDtm>()
                     .HasMany(tu => tu.Puestos)

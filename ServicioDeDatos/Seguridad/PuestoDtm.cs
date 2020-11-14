@@ -26,7 +26,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PuestoDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
             modelBuilder.Entity<PuestoDtm>()
             .HasIndex(p => p.Nombre)
-            .HasName("I_PUESTO_NOMBRE")
+            .HasDatabaseName("I_PUESTO_NOMBRE")
             .IsUnique();
 
             modelBuilder.Entity<PuestoDtm>().Property(p => p.RolesDeUnPuesto).HasColumnName("ROLES").HasColumnType("VARCHAR(MAX)").HasComputedColumnSql("SEGURIDAD.OBTENER_ROLES_DE_UN_PUESTO(id)");

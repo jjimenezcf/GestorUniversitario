@@ -9,12 +9,6 @@ using ServicioDeDatos.Archivos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using Gestor.Errores;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System;
 using ServicioDeDatos.Elemento;
 
@@ -106,7 +100,7 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)

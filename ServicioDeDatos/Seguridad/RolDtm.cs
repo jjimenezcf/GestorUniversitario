@@ -24,7 +24,7 @@ namespace ServicioDeDatos.Seguridad
 
             modelBuilder.Entity<RolDtm>()
                         .HasIndex(p => p.Nombre)
-                        .HasName("I_ROL_NOMBRE")
+                        .HasDatabaseName("I_ROL_NOMBRE")
                         .IsUnique();
 
             modelBuilder.Entity<RolDtm>()

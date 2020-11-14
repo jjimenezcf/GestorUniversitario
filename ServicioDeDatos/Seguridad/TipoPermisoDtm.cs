@@ -20,7 +20,7 @@ namespace ServicioDeDatos.Seguridad
 
             modelBuilder.Entity<TipoPermisoDtm>()
                         .HasIndex(tp => tp.Nombre)
-                        .HasName("I_TIPO_PERMISO_NOMBRE")
+                        .HasDatabaseName("I_TIPO_PERMISO_NOMBRE")
                         .IsUnique();
 
             modelBuilder.Entity<TipoPermisoDtm>()

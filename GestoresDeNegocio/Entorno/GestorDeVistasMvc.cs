@@ -18,6 +18,8 @@ namespace GestoresDeNegocio.Entorno
     public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
 
+        public static readonly string CacheDeValidarVista = nameof(CacheDeValidarVista);
+
         public class MapearVistaMvc : Profile
         {
             public MapearVistaMvc()
@@ -67,7 +69,7 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)
@@ -181,6 +183,8 @@ namespace GestoresDeNegocio.Entorno
                 //&& !parametros.Parametros.ContainsKey(enumParametro.Creado) 
                 && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
+
+            ServicioDeCaches.EliminarElemento(CacheDeValidarVista, $"{ registro.Controlador}.{ registro.Accion}");
         }
 
 

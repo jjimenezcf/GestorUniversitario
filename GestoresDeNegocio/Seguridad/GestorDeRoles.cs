@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using GestorDeElementos;
-using Microsoft.AspNetCore.Identity;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
@@ -50,7 +49,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)

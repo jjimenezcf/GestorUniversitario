@@ -33,7 +33,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<PermisoDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
             modelBuilder.Entity<PermisoDtm>()
                         .HasIndex(p => p.Nombre)
-                        .HasName("I_PERMISO_NOMBRE")
+                        .HasDatabaseName("I_PERMISO_NOMBRE")
                         .IsUnique();
 
             modelBuilder.Entity<PermisoDtm>().Property(p => p.IdTipo).IsRequired();
@@ -44,7 +44,7 @@ namespace ServicioDeDatos.Seguridad
 
             modelBuilder.Entity<PermisoDtm>()
                         .HasIndex(p => new {p.IdClase, p.IdTipo})
-                        .HasName("I_PERMISO_IDCLASE_IDTIPO");
+                        .HasDatabaseName("I_PERMISO_IDCLASE_IDTIPO");
 
             modelBuilder.Entity<PermisoDtm>()
                         .HasOne(p => p.Clase)

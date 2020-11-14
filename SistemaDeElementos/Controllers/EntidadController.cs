@@ -17,8 +17,6 @@ using System.Reflection;
 using ModeloDeDto;
 using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authorization;
-using ModeloDeDto.Entorno;
-using Microsoft.Extensions.Logging;
 using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
@@ -482,13 +480,20 @@ namespace MVCSistemaDeElementos.Controllers
 
         private VistaMvcDtm ValidarExisteVista(string nombreDelControlador, string nombreDeLaVista)
         {
-            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            var cache = ServicioDeCaches.Obtener(GestorDeVistaMvc.CacheDeValidarVista);
+            if (!cache.ContainsKey($"{nombreDelControlador}.{nombreDeLaVista}"))
+            {
 
-            var vista = gestorDeVista.LeerVistaMvc($"{nombreDelControlador}.{nombreDeLaVista}");
-            if (vista == null)
-                GestorDeErrores.Emitir($"Defina la vista {nombreDelControlador}.{nombreDeLaVista} en BD");
+                var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
 
-            return vista;
+                var vista = gestorDeVista.LeerVistaMvc($"{nombreDelControlador}.{nombreDeLaVista}");
+                if (vista == null)
+                    GestorDeErrores.Emitir($"Defina la vista {nombreDelControlador}.{nombreDeLaVista} en BD");
+
+                cache[$"{nombreDelControlador}.{nombreDeLaVista}"] = vista;
+            }
+
+            return (VistaMvcDtm)cache[$"{nombreDelControlador}.{nombreDeLaVista}"];
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

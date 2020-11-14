@@ -53,12 +53,12 @@ namespace GestoresDeNegocio.Entorno
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(MenuDtm.IdPadre).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(MenuDto.Padre).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
                         registros = registros.Where(x => x.IdPadre == null);
@@ -85,6 +85,12 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (ClausulaDeOrdenacion orden in ordenacion)
             {
+                if (orden.Propiedad == ClausulaDeOrdenacion.PorDefecto)
+                {
+                    registros = registros.OrderBy(x => x.IdPadre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre);
+                    break;
+                }
+
                 if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
@@ -145,7 +151,7 @@ namespace GestoresDeNegocio.Entorno
                                                     , t1.IDPADRE
                                                     , t1.IDVISTA_MVC
                                                     , T1.ORDEN
-                                                    , T1.IDPERMISO
+                                                    --, T1.IDPERMISO
                                                     from entorno.MENU_SE t1
                                                     left join entorno.menu t2 on t2.id = t1.IDPADRE
                                                     where vista is null

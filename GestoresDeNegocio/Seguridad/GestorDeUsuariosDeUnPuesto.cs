@@ -32,7 +32,7 @@ namespace GestoresDeNegocio.Seguridad
         public GestorDeUsuariosDeUnPuesto(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
-            invertirMapeoDeRelacion = true;
+            InvertirMapeoDeRelacion = true;
         }
 
         internal static GestorDeUsuariosDeUnPuesto Gestor(ContextoSe contexto, IMapper mapeador)
@@ -64,7 +64,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)

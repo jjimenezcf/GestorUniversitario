@@ -44,18 +44,18 @@ namespace ServicioDeDatos.Seguridad
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                         .HasIndex(p => new { p.IdPuesto, p.IdUsuario })
-                        .HasName("I_USU_PUESTO_IDPUESTO_IDUSUA")
+                        .HasDatabaseName("I_USU_PUESTO_IDPUESTO_IDUSUA")
                         .IsUnique();
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasIndex(p => p.IdUsuario)
                 .IsUnique(false)
-                .HasName("I_USU_PUESTO_IDUSUA");
+                .HasDatabaseName("I_USU_PUESTO_IDUSUA");
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasIndex(p => p.IdPuesto)
                 .IsUnique(false)
-                .HasName("I_USU_PUESTO_IDPUESTO");
+                .HasDatabaseName("I_USU_PUESTO_IDPUESTO");
 
             modelBuilder.Entity<PuestosDeUnUsuarioDtm>()
                 .HasOne(x => x.Puesto)

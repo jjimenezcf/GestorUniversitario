@@ -30,7 +30,7 @@ namespace GestoresDeNegocio.Seguridad
         public GestorDeRolesDeUnPermiso(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
-            invertirMapeoDeRelacion = true;
+            InvertirMapeoDeRelacion = true;
         }
 
 
@@ -64,7 +64,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            if (hayFiltroPorId)
+            if (HayFiltroPorId)
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)

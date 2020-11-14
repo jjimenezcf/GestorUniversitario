@@ -16,7 +16,7 @@ namespace GestorDeElementos
 {
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente }
     public enum ModoDeOrdenancion { ascendente, descendente }
-    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar };
+    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -34,6 +34,8 @@ namespace GestorDeElementos
 
     public class ClausulaDeOrdenacion
     {
+        public static string PorDefecto = nameof(PorDefecto);
+
         public string Propiedad { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
     }
@@ -42,13 +44,13 @@ namespace GestorDeElementos
 
     #region Extensiones a pasar a las operaciones a realizar
 
-    public enum enumParametro { Creado }
+    public enum EnumParametro { Creado }
 
 
     public class ParametrosDeNegocio
     {
         public TipoOperacion Tipo { get; private set; }
-        public Dictionary<enumParametro, object> Parametros = new Dictionary<enumParametro, object>();
+        public Dictionary<EnumParametro, object> Parametros = new Dictionary<EnumParametro, object>();
 
         public ParametrosDeNegocio(TipoOperacion tipo)
         {
@@ -77,8 +79,8 @@ namespace GestorDeElementos
 
         public TRegistro RegistroEnBD { get; private set; }
 
-        protected bool invertirMapeoDeRelacion { get; set; } = false;
-        public bool hayFiltroPorId { get; private set; } = false;
+        protected bool InvertirMapeoDeRelacion { get; set; } = false;
+        public bool HayFiltroPorId { get; private set; } = false;
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
@@ -202,14 +204,15 @@ namespace GestorDeElementos
             PropertyInfo[] props = t.GetProperties();
             foreach (var prop in props)
             {
-                var c = new ClausulaDeFiltrado();
-               
-                c.Clausula = prop.Name;
-                c.Criterio = CriteriosDeFiltrado.igual;
+                var c = new ClausulaDeFiltrado
+                {
+                    Clausula = prop.Name,
+                    Criterio = CriteriosDeFiltrado.igual
+                };
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
-                    c.Valor = invertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
+                    c.Valor = InvertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
-                    c.Valor = invertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
+                    c.Valor = InvertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
 
                 if (c.Valor.Entero()>0)
                     filtros.Add(c);
@@ -223,9 +226,9 @@ namespace GestorDeElementos
             foreach (var prop in props)
             {
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
-                    prop.SetValue(registro, invertirMapeoDeRelacion ? idElemento2 : idElemento1);
+                    prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2 )
-                    prop.SetValue(registro, invertirMapeoDeRelacion ? idElemento1 : idElemento2);
+                    prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
             }
 
             //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
@@ -263,10 +266,10 @@ namespace GestorDeElementos
 
                 Contexto.Commit(transaccion);
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 Contexto.Rollback(transaccion);
-                throw exc;
+                throw;
             }
         }
 
@@ -425,14 +428,19 @@ namespace GestorDeElementos
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
 
-            if (orden != null && orden.Count > 0)
-                registros = AplicarOrden(registros, orden);
-
             registros = registros.Skip(posicion);
 
             if (cantidad > 0)
             {
                 registros = registros.Take(cantidad);
+            }
+
+            if (parametros.Tipo == TipoOperacion.Leer)
+            {
+                if (orden == null || orden.Count == 0)
+                    orden = new List<ClausulaDeOrdenacion> { new ClausulaDeOrdenacion { Propiedad = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente } };
+
+                registros = AplicarOrden(registros, orden);
             }
 
             return registros;
@@ -462,13 +470,13 @@ namespace GestorDeElementos
 
             return registros;
         }
-        private IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        private static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {
             return orden.Modo == ModoDeOrdenancion.ascendente
                 ? registros.OrderBy(x => x.Id)
                 : registros.OrderByDescending(x => x.Id);
         }
-        private IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        private static IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {
             return orden.Modo == ModoDeOrdenancion.ascendente
                 ? registros.OrderBy(x => x.Nombre)
@@ -491,7 +499,7 @@ namespace GestorDeElementos
             {
                 if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
                 {
-                    hayFiltroPorId = true;
+                    HayFiltroPorId = true;
                     return registros.Where(x => x.Id == filtro.Valor.Entero());
                 }
 
@@ -529,6 +537,10 @@ namespace GestorDeElementos
 
         public int Contar(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
+
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(TipoOperacion.Contar);
+
             var registros = DefinirConsulta(0, -1, filtros, null, joins, parametros);
             var total = registros.Count();
 

@@ -35,7 +35,7 @@ namespace ServicioDeDatos.Elemento
 
             modelBuilder.Entity<TEntity>()
                         .HasIndex(p => p.Nombre)
-                        .HasName($"I_{nombreDeTabla}_NOMBRE");
+                        .HasDatabaseName($"I_{nombreDeTabla}_NOMBRE");
 
             DefinirRegistroAuditado<TEntity>(modelBuilder, nombreDeTabla);
 
@@ -60,11 +60,11 @@ namespace ServicioDeDatos.Elemento
 
             modelBuilder.Entity<TEntity>()
                         .HasIndex(p => p.IdUsuaCrea)
-                        .HasName($"I_{nombreDeTabla}_IDUSUCREA");
+                        .HasDatabaseName($"I_{nombreDeTabla}_IDUSUCREA");
 
             modelBuilder.Entity<TEntity>()
                         .HasIndex(p => p.IdUsuaModi)
-                        .HasName($"I_{nombreDeTabla}_IDUSUMODI");
+                        .HasDatabaseName($"I_{nombreDeTabla}_IDUSUMODI");
 
         }
 
@@ -81,7 +81,7 @@ namespace ServicioDeDatos.Elemento
 
             modelBuilder.Entity<TEntity>()
                         .HasIndex("IdArchivo")
-                        .HasName($"I_{nombreDeTabla}_IDARCHIVO");
+                        .HasDatabaseName($"I_{nombreDeTabla}_IDARCHIVO");
 
             modelBuilder.Entity<TEntity>()
                         .HasOne("Archivo")

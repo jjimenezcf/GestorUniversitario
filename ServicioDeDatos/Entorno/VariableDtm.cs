@@ -25,7 +25,7 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<VistaMvcDtm>()
             .HasIndex(v => new { v.Nombre })
             .IsUnique(true)
-            .HasName("IX_VARIABLE");
+            .HasDatabaseName("IX_VARIABLE");
 
         }
     }

@@ -19,7 +19,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<ClasePermisoDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(30)").IsRequired();
             modelBuilder.Entity<ClasePermisoDtm>()
                         .HasIndex(cp => cp.Nombre)
-                        .HasName("I_CLASE_PERMISO_NOMBRE")
+                        .HasDatabaseName("I_CLASE_PERMISO_NOMBRE")
                         .IsUnique();
 
             modelBuilder.Entity<ClasePermisoDtm>()
