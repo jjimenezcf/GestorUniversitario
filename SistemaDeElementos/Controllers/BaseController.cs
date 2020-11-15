@@ -25,16 +25,20 @@ namespace MVCSistemaDeElementos.Controllers
     {
         protected GestorDeErrores GestorDeErrores { get; }
         public ILogger Logger { get; set; }
-        protected DatosDeConexion DatosDeConexion { get; set; }
+        protected DatosDeConexion DatosDeConexion { get; private set; }
 
-        public BaseController(GestorDeErrores gestorDeErrores)
+        public BaseController(GestorDeErrores gestorDeErrores, DatosDeConexion datosDeConexion)
         {
             GestorDeErrores = gestorDeErrores;
+            DatosDeConexion = datosDeConexion;
         }
 
         protected string ObtenerUsuarioDeLaRequest()
         {
-            if (HttpContext == null || HttpContext.User == null)
+            if (HttpContext == null)
+                return null;
+
+            if (HttpContext.User == null)
                 GestorDeErrores.Emitir("Conexión no establecidad");
 
             var caracter = HttpContext.User.FindFirst(nameof(UsuarioDto.Login));

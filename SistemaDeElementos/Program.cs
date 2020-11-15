@@ -12,7 +12,7 @@ namespace MVCSistemaDeElementos
         public static void Main(string[] args)
         {
             var servidorWeb = CreateWebHostBuilder(args).Build();
-            CrearBdSiNoExiste(servidorWeb);
+            //CrearBdSiNoExiste(servidorWeb);
             servidorWeb.Run();
         }
 
@@ -20,8 +20,8 @@ namespace MVCSistemaDeElementos
         {
             var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
-            IniciarContextoDeEntorno(services);
-            IniciarContextoDeSeguro(services);
+            //IniciarContextoDeEntorno(services);
+            //IniciarContextoDeSeguro(services);
         }
 
         private static void IniciarContextoDeSeguro(IServiceProvider services)
@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos
             try
             {
                 ctoPermisos.Database.Migrate();
-                ctoPermisos.IniciarTraza();
+               // ctoPermisos.IniciarTraza();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace MVCSistemaDeElementos
             try
             {
                // contexto.Database.Migrate();
-                contexto.IniciarTraza();
+                //contexto.IniciarTraza();
             }
             catch (Exception ex)
             {

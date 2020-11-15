@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos.UtilidadesIu
                     else
                     {
                         var clausula = new ClausulaDeOrdenacion();
-                        clausula.Propiedad = ordenes[i];
+                        clausula.Criterio = ordenes[i];
                         clausula.Modo = ModoDeOrdenancion.ascendente;
 
                         if (i + 1 < ordenes.Length && ordenes[i + 1] == ModoDeOrdenancion.descendente.ToString())

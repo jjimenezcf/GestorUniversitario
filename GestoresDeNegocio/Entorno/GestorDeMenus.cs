@@ -85,13 +85,13 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (ClausulaDeOrdenacion orden in ordenacion)
             {
-                if (orden.Propiedad == ClausulaDeOrdenacion.PorDefecto)
+                if (orden.Criterio == ClausulaDeOrdenacion.PorDefecto)
                 {
                     registros = registros.OrderBy(x => x.IdPadre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre);
                     break;
                 }
 
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                if (orden.Criterio.ToLower() == nameof(MenuDtm.Padre).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre.Orden)
@@ -100,7 +100,7 @@ namespace GestoresDeNegocio.Entorno
                     break;
                 }
 
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Nombre).ToLower())
+                if (orden.Criterio.ToLower() == nameof(MenuDtm.Nombre).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Nombre)
@@ -108,7 +108,7 @@ namespace GestoresDeNegocio.Entorno
                     break;
                 }
 
-                if (orden.Propiedad.ToLower() == nameof(MenuDtm.Orden).ToLower())
+                if (orden.Criterio.ToLower() == nameof(MenuDtm.Orden).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre)

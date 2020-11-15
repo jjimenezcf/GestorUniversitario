@@ -15,15 +15,15 @@ namespace MVCSistemaDeElementos.Controllers
     {
 
         public HomeController(ContextoSe contexto, GestorDeErrores gestorDeErrores):
-        base(gestorDeErrores)
+        base(gestorDeErrores, contexto.DatosDeConexion)
         {
-            DatosDeConexion = contexto.DatosDeConexion;
         }
 
         [Authorize]
         public IActionResult Index()
         {
-            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
+
+            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest(); 
             ViewBag.DatosDeConexion = DatosDeConexion;
             return View();
         }

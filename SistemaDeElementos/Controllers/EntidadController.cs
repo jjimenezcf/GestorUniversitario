@@ -47,11 +47,10 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
-        : base(gestorErrores)
+        : base(gestorErrores, gestorDeElementos.Contexto.DatosDeConexion)
         {
             GestorDeElementos = gestorDeElementos;
             GestorDeElementos.Contexto.IniciarTraza();
-            DatosDeConexion = GestorDeElementos.Contexto.DatosDeConexion;
         }
 
 
@@ -444,12 +443,11 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
-            var login =  ObtenerUsuarioDeLaRequest();
 
+            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
             var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
             try
             {
-                DatosDeConexion.Login = login;
                 ViewBag.DatosDeConexion = DatosDeConexion;
             }
             catch (Exception e)

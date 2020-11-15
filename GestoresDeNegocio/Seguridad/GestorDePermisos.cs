@@ -153,17 +153,17 @@ namespace GestoresDeNegocio.Seguridad
 
             foreach (var orden in ordenacion)
             {
-                if (orden.Propiedad == nameof(PermisoDtm.Nombre).ToLower())
+                if (orden.Criterio == nameof(PermisoDtm.Nombre).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Nombre)
                         : registros.OrderByDescending(x => x.Nombre);
 
-                if (orden.Propiedad == nameof(PermisoDtm.Clase).ToLower())
+                if (orden.Criterio == nameof(PermisoDtm.Clase).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Clase)
                         : registros.OrderByDescending(x => x.Clase);
 
-                if (orden.Propiedad == nameof(PermisoDtm.Tipo).ToLower())
+                if (orden.Criterio == nameof(PermisoDtm.Tipo).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Tipo)
                         : registros.OrderByDescending(x => x.Tipo);

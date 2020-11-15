@@ -15,160 +15,160 @@ namespace Migraciones.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "3.1.8");
 
             modelBuilder.Entity("ServicioDeDatos.Archivos.ArchivoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("AlmacenadoEn")
                         .IsRequired()
-                        .HasColumnName("RUTA")
-                        .HasColumnType("VARCHAR(2000)");
+                        .HasColumnType("VARCHAR(2000)")
+                        .HasColumnName("RUTA");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnName("FECCRE")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("FECCRE");
 
                     b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnName("FECMOD")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("FECMOD");
 
                     b.Property<int>("IdUsuaCrea")
-                        .HasColumnName("IDUSUCREA")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDUSUCREA");
 
                     b.Property<int?>("IdUsuaModi")
-                        .HasColumnName("IDUSUMODI")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDUSUMODI");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdUsuaCrea")
-                        .HasName("I_ARCHIVO_IDUSUCREA");
+                        .HasDatabaseName("I_ARCHIVO_IDUSUCREA");
 
                     b.HasIndex("IdUsuaModi")
-                        .HasName("I_ARCHIVO_IDUSUMODI");
+                        .HasDatabaseName("I_ARCHIVO_IDUSUMODI");
 
                     b.HasIndex("Nombre")
-                        .HasName("I_ARCHIVO_NOMBRE");
+                        .HasDatabaseName("I_ARCHIVO_NOMBRE");
 
-                    b.ToTable("ARCHIVO","SISDOC");
+                    b.ToTable("ARCHIVO", "SISDOC");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.ArbolDeMenuDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<bool>("Activo")
-                        .HasColumnName("ACTIVO")
-                        .HasColumnType("BIT");
+                        .HasColumnType("BIT")
+                        .HasColumnName("ACTIVO");
 
                     b.Property<string>("Controlador")
-                        .HasColumnName("CONTROLADOR")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("CONTROLADOR");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("DESCRIPCION");
 
                     b.Property<string>("Icono")
                         .IsRequired()
-                        .HasColumnName("ICONO")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("ICONO");
 
                     b.Property<int?>("IdPadre")
-                        .HasColumnName("IDPADRE")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPADRE");
 
                     b.Property<int?>("IdVistaMvc")
-                        .HasColumnName("IDVISTA_MVC")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDVISTA_MVC");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<int>("Orden")
-                        .HasColumnName("ORDEN")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("ORDEN");
 
                     b.Property<string>("Padre")
-                        .HasColumnName("PADRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("PADRE");
 
                     b.Property<string>("Vista")
-                        .HasColumnName("VISTA")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("VISTA");
 
                     b.Property<string>("accion")
-                        .HasColumnName("ACCION")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("ACCION");
 
                     b.Property<string>("parametros")
-                        .HasColumnName("PARAMETROS")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("PARAMETROS");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MENU_SE","ENTORNO");
+                    b.ToTable("MENU_SE", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.MenuDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<bool>("Activo")
-                        .HasColumnName("ACTIVO")
-                        .HasColumnType("BIT");
+                        .HasColumnType("BIT")
+                        .HasColumnName("ACTIVO");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("DESCRIPCION");
 
                     b.Property<string>("Icono")
                         .IsRequired()
-                        .HasColumnName("ICONO")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("ICONO");
 
                     b.Property<int?>("IdPadre")
-                        .HasColumnName("IDPADRE")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPADRE");
 
                     b.Property<int?>("IdVistaMvc")
-                        .HasColumnName("IDVISTA_MVC")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDVISTA_MVC");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<int>("Orden")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ORDEN")
                         .HasColumnType("INT")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("ORDEN");
 
                     b.HasKey("Id");
 
@@ -179,29 +179,29 @@ namespace Migraciones.Migrations
                     b.HasIndex("Nombre")
                         .IsUnique();
 
-                    b.ToTable("MENU","ENTORNO");
+                    b.ToTable("MENU", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.PermisosDeUnUsuarioDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdPermiso")
-                        .HasColumnName("IDPERMISO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPERMISO");
 
                     b.Property<int>("IdUsuario")
-                        .HasColumnName("IDUSUA")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDUSUA");
 
                     b.Property<string>("Origen")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("ORIGEN")
                         .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("ORIGEN")
                         .HasComputedColumnSql("SEGURIDAD.OBTENER_ORIGEN(idusua,idpermiso)");
 
                     b.HasKey("Id");
@@ -210,194 +210,194 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("IdUsuario");
 
-                    b.ToTable("USU_PERMISO","ENTORNO");
+                    b.ToTable("USU_PERMISO", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.UsuarioDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<DateTime>("Alta")
-                        .HasColumnName("F_ALTA")
-                        .HasColumnType("DATE");
+                        .HasColumnType("DATE")
+                        .HasColumnName("F_ALTA");
 
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnName("APELLIDO")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("APELLIDO");
 
                     b.Property<bool>("EsAdministrador")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ADMINISTRADOR")
                         .HasColumnType("BIT")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(false)
+                        .HasColumnName("ADMINISTRADOR");
 
                     b.Property<int?>("IdArchivo")
-                        .HasColumnName("IDARCHIVO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDARCHIVO");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnName("LOGIN")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(50)")
+                        .HasColumnName("LOGIN");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(50)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<string>("eMail")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EMAIL")
                         .HasColumnType("VARCHAR(50)")
-                        .HasDefaultValue("pendiente@se.com");
+                        .HasDefaultValue("pendiente@se.com")
+                        .HasColumnName("EMAIL");
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasColumnName("PASSWORD")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("PASSWORD");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdArchivo")
-                        .HasName("I_USUARIO_IDARCHIVO");
+                        .HasDatabaseName("I_USUARIO_IDARCHIVO");
 
                     b.HasIndex("Login")
                         .IsUnique()
-                        .HasName("IX_USUARIO");
+                        .HasDatabaseName("IX_USUARIO");
 
-                    b.ToTable("USUARIO","ENTORNO");
+                    b.ToTable("USUARIO", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.VariableDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("DESCRIPCION");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(50)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<string>("Valor")
                         .IsRequired()
-                        .HasColumnName("VALOR")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("VALOR");
 
                     b.HasKey("Id");
 
-                    b.ToTable("VARIABLE","ENTORNO");
+                    b.ToTable("VARIABLE", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.VistaMvcDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Accion")
                         .IsRequired()
-                        .HasColumnName("ACCION")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("ACCION");
 
                     b.Property<string>("Controlador")
                         .IsRequired()
-                        .HasColumnName("CONTROLADOR")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("CONTROLADOR");
 
                     b.Property<int>("IdPermiso")
-                        .HasColumnName("IDPERMISO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPERMISO");
 
                     b.Property<bool>("MostrarEnModal")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MODAL")
                         .HasColumnType("BIT")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(false)
+                        .HasColumnName("MODAL");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<string>("Parametros")
-                        .HasColumnName("PARAMETROS")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("PARAMETROS");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdPermiso")
                         .IsUnique()
-                        .HasName("IX_VISTA_MVC_IDPERMISO");
+                        .HasDatabaseName("IX_VISTA_MVC_IDPERMISO");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("IX_VARIABLE");
+                        .HasDatabaseName("IX_VARIABLE");
 
                     b.HasIndex("Controlador", "Accion", "Parametros")
                         .IsUnique()
-                        .HasName("IX_VISTA_MVC")
+                        .HasDatabaseName("IX_VISTA_MVC")
                         .HasFilter("[PARAMETROS] IS NOT NULL");
 
-                    b.ToTable("VISTA_MVC","ENTORNO");
+                    b.ToTable("VISTA_MVC", "ENTORNO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.ClasePermisoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(30)");
+                        .HasColumnType("VARCHAR(30)")
+                        .HasColumnName("NOMBRE");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("I_CLASE_PERMISO_NOMBRE");
+                        .HasDatabaseName("I_CLASE_PERMISO_NOMBRE");
 
-                    b.ToTable("CLASE_PERMISO","SEGURIDAD");
+                    b.ToTable("CLASE_PERMISO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PermisoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdClase")
-                        .HasColumnName("IDCLASE")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDCLASE");
 
                     b.Property<int>("IdTipo")
-                        .HasColumnName("IDTIPO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDTIPO");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.HasKey("Id");
 
@@ -405,29 +405,29 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("I_PERMISO_NOMBRE");
+                        .HasDatabaseName("I_PERMISO_NOMBRE");
 
                     b.HasIndex("IdClase", "IdTipo")
-                        .HasName("I_PERMISO_IDCLASE_IDTIPO");
+                        .HasDatabaseName("I_PERMISO_IDCLASE_IDTIPO");
 
-                    b.ToTable("PERMISO","SEGURIDAD");
+                    b.ToTable("PERMISO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PermisosDeUnRolDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdPermiso")
-                        .HasColumnName("IDPERMISO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPERMISO");
 
                     b.Property<int>("IdRol")
-                        .HasColumnName("IDROL")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDROL");
 
                     b.HasKey("Id");
 
@@ -436,119 +436,119 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("IdPermiso");
 
-                    b.ToTable("ROL_PERMISO","SEGURIDAD");
+                    b.ToTable("ROL_PERMISO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PuestoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("DESCRIPCION");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.Property<string>("RolesDeUnPuesto")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("ROLES")
                         .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("ROLES")
                         .HasComputedColumnSql("SEGURIDAD.OBTENER_ROLES_DE_UN_PUESTO(id)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("I_PUESTO_NOMBRE");
+                        .HasDatabaseName("I_PUESTO_NOMBRE");
 
-                    b.ToTable("PUESTO","SEGURIDAD");
+                    b.ToTable("PUESTO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PuestosDeUnUsuarioDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdPuesto")
-                        .HasColumnName("IDPUESTO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPUESTO");
 
                     b.Property<int>("IdUsuario")
-                        .HasColumnName("IDUSUA")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDUSUA");
 
                     b.Property<string>("RolesDeUnPuesto")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("ROLES")
                         .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("ROLES")
                         .HasComputedColumnSql("SEGURIDAD.OBTENER_ROLES_DE_UN_PUESTO(idPuesto)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdPuesto")
-                        .HasName("I_USU_PUESTO_IDPUESTO");
+                        .HasDatabaseName("I_USU_PUESTO_IDPUESTO");
 
                     b.HasIndex("IdUsuario")
-                        .HasName("I_USU_PUESTO_IDUSUA");
+                        .HasDatabaseName("I_USU_PUESTO_IDUSUA");
 
                     b.HasIndex("IdPuesto", "IdUsuario")
                         .IsUnique()
-                        .HasName("I_USU_PUESTO_IDPUESTO_IDUSUA");
+                        .HasDatabaseName("I_USU_PUESTO_IDPUESTO_IDUSUA");
 
-                    b.ToTable("USU_PUESTO","SEGURIDAD");
+                    b.ToTable("USU_PUESTO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.RolDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("DESCRIPCION")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("DESCRIPCION");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(250)");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("NOMBRE");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("I_ROL_NOMBRE");
+                        .HasDatabaseName("I_ROL_NOMBRE");
 
-                    b.ToTable("ROL","SEGURIDAD");
+                    b.ToTable("ROL", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.RolesDeUnPuestoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdRol")
-                        .HasColumnName("IDROL")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDROL");
 
                     b.Property<int>("idPuesto")
-                        .HasColumnName("IDPUESTO")
-                        .HasColumnType("INT");
+                        .HasColumnType("INT")
+                        .HasColumnName("IDPUESTO");
 
                     b.HasKey("Id");
 
@@ -557,29 +557,29 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("idPuesto");
 
-                    b.ToTable("ROL_PUESTO","SEGURIDAD");
+                    b.ToTable("ROL_PUESTO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.TipoPermisoDtm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("INT")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ID")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnName("NOMBRE")
-                        .HasColumnType("VARCHAR(30)");
+                        .HasColumnType("VARCHAR(30)")
+                        .HasColumnName("NOMBRE");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasName("I_TIPO_PERMISO_NOMBRE");
+                        .HasDatabaseName("I_TIPO_PERMISO_NOMBRE");
 
-                    b.ToTable("TIPO_PERMISO","SEGURIDAD");
+                    b.ToTable("TIPO_PERMISO", "SEGURIDAD");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Archivos.ArchivoDtm", b =>
@@ -596,6 +596,10 @@ namespace Migraciones.Migrations
                         .HasForeignKey("IdUsuaModi")
                         .HasConstraintName("FK_ARCHIVO_IDUSUMODI")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("UsuarioCreador");
+
+                    b.Navigation("UsuarioModificador");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.MenuDtm", b =>
@@ -609,6 +613,10 @@ namespace Migraciones.Migrations
                         .WithMany("Menus")
                         .HasForeignKey("IdVistaMvc")
                         .HasConstraintName("FK_MENU_IDVISTA_MVC");
+
+                    b.Navigation("Padre");
+
+                    b.Navigation("VistaMvc");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.PermisosDeUnUsuarioDtm", b =>
@@ -624,6 +632,10 @@ namespace Migraciones.Migrations
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Permiso");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.UsuarioDtm", b =>
@@ -633,6 +645,8 @@ namespace Migraciones.Migrations
                         .HasForeignKey("IdArchivo")
                         .HasConstraintName("FK_USUARIO_IDARCHIVO")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Archivo");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.VistaMvcDtm", b =>
@@ -642,6 +656,8 @@ namespace Migraciones.Migrations
                         .HasForeignKey("IdPermiso")
                         .HasConstraintName("FK_VISTA_MVC_IDPERMISO")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Permiso");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PermisoDtm", b =>
@@ -659,6 +675,10 @@ namespace Migraciones.Migrations
                         .HasConstraintName("FK_PERMISO_IDTIPO")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Clase");
+
+                    b.Navigation("Tipo");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PermisosDeUnRolDtm", b =>
@@ -676,6 +696,10 @@ namespace Migraciones.Migrations
                         .HasConstraintName("FK_ROL_PERMISO_IDROL")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Permiso");
+
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.PuestosDeUnUsuarioDtm", b =>
@@ -693,6 +717,10 @@ namespace Migraciones.Migrations
                         .HasConstraintName("FK_USU_PUESTO_IDUSUA")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Puesto");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Seguridad.RolesDeUnPuestoDtm", b =>
@@ -710,6 +738,58 @@ namespace Migraciones.Migrations
                         .HasConstraintName("FK_ROL_PUESTO_IDPUESTO")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Puesto");
+
+                    b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Entorno.MenuDtm", b =>
+                {
+                    b.Navigation("Submenus");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Entorno.UsuarioDtm", b =>
+                {
+                    b.Navigation("Permisos");
+
+                    b.Navigation("Puestos");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Entorno.VistaMvcDtm", b =>
+                {
+                    b.Navigation("Menus");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Seguridad.ClasePermisoDtm", b =>
+                {
+                    b.Navigation("Permisos");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Seguridad.PermisoDtm", b =>
+                {
+                    b.Navigation("Roles");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Seguridad.PuestoDtm", b =>
+                {
+                    b.Navigation("Roles");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Seguridad.RolDtm", b =>
+                {
+                    b.Navigation("Permisos");
+
+                    b.Navigation("Puestos");
+                });
+
+            modelBuilder.Entity("ServicioDeDatos.Seguridad.TipoPermisoDtm", b =>
+                {
+                    b.Navigation("Permisos");
                 });
 #pragma warning restore 612, 618
         }

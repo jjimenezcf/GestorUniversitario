@@ -76,17 +76,17 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (var orden in ordenacion)
             {
-                if (orden.Propiedad == nameof(UsuarioDtm.Apellido).ToLower())
+                if (orden.Criterio == nameof(UsuarioDtm.Apellido).ToLower())
                     return orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Apellido)
                         : registros.OrderByDescending(x => x.Apellido);
 
-                if (orden.Propiedad == nameof(UsuarioDtm.Login).ToLower())
+                if (orden.Criterio == nameof(UsuarioDtm.Login).ToLower())
                     return orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Login)
                         : registros.OrderByDescending(x => x.Login);
 
-                if (orden.Propiedad == nameof(UsuarioDtm.Alta).ToLower())
+                if (orden.Criterio == nameof(UsuarioDtm.Alta).ToLower())
                     return orden.Modo == ModoDeOrdenancion.ascendente
                         ? registros.OrderBy(x => x.Alta)
                         : registros.OrderByDescending(x => x.Alta);

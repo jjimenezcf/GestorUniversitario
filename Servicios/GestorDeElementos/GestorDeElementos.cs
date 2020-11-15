@@ -36,11 +36,12 @@ namespace GestorDeElementos
     {
         public static string PorDefecto = nameof(PorDefecto);
 
-        public string Propiedad { get; set; }
+        public string Criterio { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
+        public bool TablaPrincipal { get; set; } = true;
     }
 
-     #endregion
+    #endregion
 
     #region Extensiones a pasar a las operaciones a realizar
 
@@ -181,7 +182,7 @@ namespace GestorDeElementos
         }
 
         public string CrearRelacion(int idElemento1, int idElemento2)
-        {     
+        {
             var registro = Registro.RegistroVacio<TRegistro>();
             if (!registro.RegistroDeRelacion)
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
@@ -214,7 +215,7 @@ namespace GestorDeElementos
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
                     c.Valor = InvertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
 
-                if (c.Valor.Entero()>0)
+                if (c.Valor.Entero() > 0)
                     filtros.Add(c);
             }
         }
@@ -227,7 +228,7 @@ namespace GestorDeElementos
             {
                 if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
                     prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2 )
+                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
                     prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
             }
 
@@ -393,7 +394,7 @@ namespace GestorDeElementos
 
         public List<TRegistro> LeerRegistros(List<ClausulaDeFiltrado> filtros)
         {
-            return LeerRegistros(0,0,filtros);
+            return LeerRegistros(0, 0, filtros);
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
@@ -422,6 +423,9 @@ namespace GestorDeElementos
 
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
+            if (parametros.Tipo == TipoOperacion.Leer)
+                AplicarOrdenTablaPrincipal(ref orden, ref registros);
+
             if (joins.Count > 0)
                 registros = AplicarJoins(registros, joins, parametros);
 
@@ -435,15 +439,32 @@ namespace GestorDeElementos
                 registros = registros.Take(cantidad);
             }
 
-            if (parametros.Tipo == TipoOperacion.Leer)
-            {
-                if (orden == null || orden.Count == 0)
-                    orden = new List<ClausulaDeOrdenacion> { new ClausulaDeOrdenacion { Propiedad = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente } };
-
-                registros = AplicarOrden(registros, orden);
-            }
+            if (parametros.Tipo == TipoOperacion.Leer && orden.Count > 0)
+                AplicarOrden(registros, orden);
 
             return registros;
+        }
+
+        private void AplicarOrdenTablaPrincipal(ref List<ClausulaDeOrdenacion> orden, ref IQueryable<TRegistro> registros)
+        {
+            if (orden == null || orden.Count == 0)
+            {
+                orden = new List<ClausulaDeOrdenacion>();
+                orden.Add(new ClausulaDeOrdenacion { TablaPrincipal = true, Criterio = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente });
+            }
+
+            List<ClausulaDeOrdenacion> ordenAntesDeJoin = new List<ClausulaDeOrdenacion>();
+            for (var i = orden.Count - 1; i >= 0; i--)
+            {
+                var c = orden[i];
+                if (c.TablaPrincipal)
+                {
+                    ordenAntesDeJoin.Add(new ClausulaDeOrdenacion { Criterio = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente });
+                    orden.RemoveAt(i);
+                }
+            }
+
+            registros = AplicarOrden(registros, ordenAntesDeJoin);
         }
 
         /// <summary>
@@ -461,10 +482,10 @@ namespace GestorDeElementos
         {
             foreach (var orden in ordenacion)
             {
-                if (orden.Propiedad.ToLower() == nameof(Registro.Id).ToLower())
+                if (orden.Criterio.ToLower() == nameof(Registro.Id).ToLower())
                     return registros = OrdenPorId(registros, orden);
 
-                if (orden.Propiedad.ToLower() == nameof(Registro.Nombre).ToLower())
+                if (orden.Criterio.ToLower() == nameof(Registro.Nombre).ToLower())
                     return registros = OrdenPorNombre(registros, orden);
             }
 
