@@ -123,14 +123,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return Mnt.RenderControl() +
-                   (
-                    ModoDescriptor.Mantenimiento == Modo
-                    ? $@"{Environment.NewLine}{Creador.RenderControl()}
-                         {Environment.NewLine}{Editor.RenderControl()}
-                         {Environment.NewLine}{Borrado.RenderControl()}"
-                    : ""
-                   );
+            var renderMnt = Mnt.RenderControl();
+            if (ModoDescriptor.Mantenimiento == Modo)
+                  return $@"{renderMnt}{Environment.NewLine}{Creador.RenderControl()}
+                          {Environment.NewLine}{Editor.RenderControl()}
+                          {Environment.NewLine}{Borrado.RenderControl()}";
+                 
+            if (ModoDescriptor.Consulta == Modo)
+                return $@"{renderMnt}{Environment.NewLine}{Editor.RenderControl()}";
+
+            return renderMnt;
         }
 
 

@@ -1,11 +1,11 @@
 ﻿namespace Crud {
 
     class ClausulaDeOrdenacion {
-        propiedad: string;
+        criterio: string;
         modo: string;
 
         constructor(propiedad: string, modo: string) {
-            this.propiedad = propiedad;
+            this.criterio = propiedad;
             this.modo = modo;
         }
     }

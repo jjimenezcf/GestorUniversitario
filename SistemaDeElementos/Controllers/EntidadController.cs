@@ -443,21 +443,16 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
-
             DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
-            var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
-            try
-            {
-                ViewBag.DatosDeConexion = DatosDeConexion;
-            }
-            catch (Exception e)
-            {
-                GestorDeErrores.Emitir($"Error al acceder a {destino}", e);
-            }
 
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             ValidarAcceso(nombreDelControlador, nombreDeLaVista, DatosDeConexion.Login);
+
+            GestorDelCrud.Descriptor.CambiarModo(ModoDescriptor.Consulta);
+
+            var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
+            ViewBag.DatosDeConexion = DatosDeConexion;
 
             return base.View(destino, GestorDelCrud.Descriptor);
         }

@@ -459,7 +459,7 @@ namespace GestorDeElementos
                 var c = orden[i];
                 if (c.TablaPrincipal)
                 {
-                    ordenAntesDeJoin.Add(new ClausulaDeOrdenacion { Criterio = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente });
+                    ordenAntesDeJoin.Add(new ClausulaDeOrdenacion { Criterio = c.Criterio, TablaPrincipal = true, Modo = ModoDeOrdenancion.ascendente });
                     orden.RemoveAt(i);
                 }
             }
