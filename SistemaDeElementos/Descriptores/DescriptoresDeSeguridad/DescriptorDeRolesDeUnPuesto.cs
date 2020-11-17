@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
 
             var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl());
-            var opcion = new OpcionDeMenu<RolesDeUnPuestoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles");
+            var opcion = new OpcionDeMenu<RolesDeUnPuestoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", GestorDeElementos.TipoPermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt

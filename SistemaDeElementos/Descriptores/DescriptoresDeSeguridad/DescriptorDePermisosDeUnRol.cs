@@ -31,7 +31,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   ,propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
 
             var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos");
+            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos", GestorDeElementos.TipoPermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

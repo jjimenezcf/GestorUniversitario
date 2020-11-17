@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GestorDeElementos;
 using ModeloDeDto;
 using ServicioDeDatos.Utilidades;
 
@@ -246,12 +247,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public AccionDeMenu Accion { get; private set; }
         public TipoDeLlamada TipoDeLLamada { get; private set; } = TipoDeLlamada.Get;
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo)
-        : this(menu, accion, TipoDeLlamada.Get, titulo)
+        public TipoPermiso PermisosNecesarios { get; private set; }
+
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, TipoPermiso permisosNecesarios)
+        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, TipoPermiso permisosNecesarios)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcioneDeMenu.Count}",
@@ -264,6 +267,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.Opcion;
             TipoDeLLamada = tipoAccion;
             Accion = accion;
+            PermisosNecesarios = permisosNecesarios;
         }
 
         public override string RenderControl()

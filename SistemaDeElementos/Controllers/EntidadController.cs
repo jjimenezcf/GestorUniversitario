@@ -32,13 +32,15 @@ namespace MVCSistemaDeElementos.Controllers
     {
 
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
-        protected GestorCrud<TElemento> GestorDelCrud { get; }
+
+        private DescriptorDeCrud<TElemento> Descriptor { get; set; }
 
 
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : this(gestorDeElementos, gestorErrores)
         {
-            GestorDelCrud = new GestorCrud<TElemento>(descriptor);
+            Descriptor = descriptor;
+
             var vista = ValidarExisteVista(descriptor.Controlador, descriptor.Vista);
 
             descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
@@ -63,7 +65,7 @@ namespace MVCSistemaDeElementos.Controllers
         //Llamada desde opciones de menu (Menu.Ts)
         public IActionResult Index()
         {
-            return RedirectToAction(GestorDelCrud.Descriptor.Vista);
+            return RedirectToAction(Descriptor.Vista);
         }
 
         /// <summary>
@@ -448,13 +450,14 @@ namespace MVCSistemaDeElementos.Controllers
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             ValidarAcceso(nombreDelControlador, nombreDeLaVista, DatosDeConexion.Login);
+            
+            GestorDeUsuarios gestorDeUsuarios = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            Descriptor.UsuarioConectado = gestorDeUsuarios.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
-            GestorDelCrud.Descriptor.CambiarModo(ModoDescriptor.Consulta);
-
-            var destino = $"{(GestorDelCrud.Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{GestorDelCrud.Descriptor.RutaVista}/")}{GestorDelCrud.Descriptor.Vista}";
+            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            return base.View(destino, GestorDelCrud.Descriptor);
+            return base.View(destino, Descriptor);
         }
 
 
@@ -505,8 +508,8 @@ namespace MVCSistemaDeElementos.Controllers
                                                : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
 
-            var elementos = GestorDeElementos.LeerElementos(GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial
-                                                          , GestorDelCrud.Descriptor.Mnt.Datos.CantidadPorLeer
+            var elementos = GestorDeElementos.LeerElementos(Descriptor.Mnt.Datos.PosicionInicial
+                                                          , Descriptor.Mnt.Datos.CantidadPorLeer
                                                           , filtros
                                                           , orden.ParsearOrdenacion());
 
@@ -534,8 +537,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
-            GestorDelCrud.Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
-            GestorDelCrud.Descriptor.Mnt.Datos.PosicionInicial = posicion;
+            Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
+            Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);

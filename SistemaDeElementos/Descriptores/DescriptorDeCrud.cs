@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using GestorDeElementos;
 using ModeloDeDto;
+using ServicioDeDatos.Entorno;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -24,6 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
         public string RutaVista { get; set; }
+        public UsuarioDtm UsuarioConectado { get; internal set; }
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(
@@ -166,7 +169,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}");
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", TipoPermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }
