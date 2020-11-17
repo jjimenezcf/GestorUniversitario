@@ -43,8 +43,8 @@ namespace MVCSistemaDeElementos.Controllers
 
             var vista = ValidarExisteVista(descriptor.Controlador, descriptor.Vista);
 
-            descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
-            descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
+            Descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
+            Descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
         }
 
 
@@ -451,8 +451,8 @@ namespace MVCSistemaDeElementos.Controllers
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             ValidarAcceso(nombreDelControlador, nombreDeLaVista, DatosDeConexion.Login);
             
-            GestorDeUsuarios gestorDeUsuarios = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            Descriptor.UsuarioConectado = gestorDeUsuarios.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
             var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;

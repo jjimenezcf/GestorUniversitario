@@ -61,7 +61,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Mostrar en modal",
             Ayuda = "indica si se ha de mostrar en modal la creación o edición",
-            VisibleEnGrid = false,
+            VisibleEnEdicion = true,
             Obligatorio = true,
             TipoDeControl = TipoControl.Check,
             ValorPorDefecto = false,

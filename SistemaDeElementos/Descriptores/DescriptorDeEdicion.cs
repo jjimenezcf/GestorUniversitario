@@ -7,6 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeEdicion<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
+        public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
         public ZonaDeMenu<TElemento> MenuDeEdicion { get; private set; }
         public bool AbrirEnModal { set; get; }
 

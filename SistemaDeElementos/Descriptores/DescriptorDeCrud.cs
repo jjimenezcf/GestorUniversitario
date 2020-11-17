@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
 using ModeloDeDto;
 using ServicioDeDatos.Entorno;
 using UtilidadesParaIu;
@@ -27,6 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ModoDescriptor Modo { get; private set; }
         public string RutaVista { get; set; }
         public UsuarioDtm UsuarioConectado { get; internal set; }
+        public GestorDeUsuarios GestorDeUsuario { get; internal set; }
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(

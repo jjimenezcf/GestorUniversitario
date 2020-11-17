@@ -272,6 +272,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
+            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, PermisosNecesarios, typeof(TElemento).Name))
+                return ""; 
+
             if (TipoDeLLamada == TipoDeLlamada.Post)
             {
                 var htmlFormPost = $@"

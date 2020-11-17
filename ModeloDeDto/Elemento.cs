@@ -54,12 +54,6 @@ namespace ModeloDeDto
 
         private bool _visibleEnGrid = true;
 
-        private bool _visibleAlCrear = true;
-
-        private bool _visibleAlEditar = true;
-
-        private bool _visibleAlConsultar = true;
-
         public string EtiquetaGrid
         {
             get
@@ -73,12 +67,12 @@ namespace ModeloDeDto
 
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get; set; } = "";
-        public bool SiempreVisible { get { return _visibleAlCrear && _visibleAlEditar && _visibleAlConsultar && _visibleEnGrid; } set { _visibleAlCrear = _visibleAlEditar = _visibleAlConsultar = _visibleEnGrid = value; } }
-        public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != TipoControl.UrlDeArchivo; } set { if (!value) SiempreVisible = false;  _visibleEnGrid = value; } }
-        public bool VisibleEnEdicion { get { return _visibleAlCrear && _visibleAlEditar && _visibleAlConsultar; } set { if (!value)  SiempreVisible = false; _visibleAlCrear = _visibleAlEditar = _visibleAlConsultar = value; } }
-        public bool VisibleAlCrear { get { return _visibleAlCrear; } set { if (!value) SiempreVisible = VisibleEnEdicion  = false;  _visibleAlCrear = value; } }
-        public bool VisibleAlEditar { get { return _visibleAlEditar; } set { if (!value) SiempreVisible = VisibleEnEdicion = false; _visibleAlEditar = value; } }
-        public bool VisibleAlConsultar { get { return _visibleAlConsultar; } set { if (!value) SiempreVisible = VisibleEnEdicion = false; _visibleAlConsultar = value; } }
+        public bool SiempreVisible { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar && _visibleEnGrid; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = _visibleEnGrid = value; } }
+        public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != TipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
+        public bool VisibleEnEdicion { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = value; } }
+        public bool VisibleAlCrear { get; set; } = true;
+        public bool VisibleAlEditar { get; set; } = true;
+        public bool VisibleAlConsultar { get; set; } = true;
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
         public bool Obligatorio { get; set; } = true;

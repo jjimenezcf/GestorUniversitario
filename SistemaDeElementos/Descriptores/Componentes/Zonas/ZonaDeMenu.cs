@@ -6,7 +6,19 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class ZonaDeMenu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public DescriptorDeMantenimiento<TElemento> Mnt => (DescriptorDeMantenimiento<TElemento>)Padre;
+        public DescriptorDeMantenimiento<TElemento> Mnt
+        {
+            get
+            {
+                if (Padre is DescriptorDeMantenimiento<TElemento>)
+                    return (DescriptorDeMantenimiento<TElemento>)Padre;
+
+                if (Padre is DescriptorDeCreacion<TElemento>)
+                    return Creador.Mnt;
+
+                return Editor.Mnt;
+            }
+        }
         public DescriptorDeCreacion<TElemento> Creador => (DescriptorDeCreacion<TElemento>)Padre;
         public DescriptorDeEdicion<TElemento> Editor => (DescriptorDeEdicion<TElemento>)Padre;
 
@@ -71,7 +83,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeCreacion()
         {
             var crearElemento = new CrearElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", TipoPermiso.Gestor); 
+            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", TipoPermiso.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeEditarElemento()

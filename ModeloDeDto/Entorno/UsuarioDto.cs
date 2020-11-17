@@ -70,7 +70,10 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Fecha de alta",
             EtiquetaGrid = "Alta",
+            VisibleEnGrid = false,
             VisibleAlCrear = false,
+            VisibleEnEdicion = true,
+            VisibleAlConsultar = true,
             Tipo = typeof(DateTime),
             EditableAlEditar = false,
             Fila = 3,
@@ -81,7 +84,7 @@ namespace ModeloDeDto.Entorno
         public DateTime Alta { get; set; }
 
         [IUPropiedad(
-            VisibleEnGrid = false,
+            VisibleEnEdicion = true,
             Etiqueta = "Fotografía",
             Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),

@@ -197,6 +197,17 @@ namespace GestoresDeNegocio.Entorno
             return MapearElemento(usuariodtm);
         }
 
+        public bool TienePermisos(UsuarioDtm usuarioConectado, TipoPermiso permisosNecesarios, string elemento)
+        {
+            if (usuarioConectado.EsAdministrador)
+                return true;
+
+            switch (elemento)
+            {
+                case "UsuarioDto": return true;
+            }
+            return false;
+        }
     }
 
     public class ObtenerPassword : ConsultaSql
