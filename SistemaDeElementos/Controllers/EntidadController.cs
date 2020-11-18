@@ -18,6 +18,7 @@ using ModeloDeDto;
 using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authorization;
 using ServicioDeDatos.Entorno;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -41,7 +42,8 @@ namespace MVCSistemaDeElementos.Controllers
         {
             Descriptor = descriptor;
 
-            var vista = ValidarExisteVista(descriptor.Controlador, descriptor.Vista);
+            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            var vista = gestorDeVista.LeerVistaMvc($"{Descriptor.Controlador}.{Descriptor.Vista}");
 
             Descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
             Descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
@@ -449,47 +451,17 @@ namespace MVCSistemaDeElementos.Controllers
 
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
-            ValidarAcceso(nombreDelControlador, nombreDeLaVista, DatosDeConexion.Login);
-            
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+
+            var hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumTipoDePermiso.Acceso, enumClaseDePermiso.Vista, $"{nombreDelControlador}.{nombreDeLaVista}");
+            if (!hayPermisos)
+                throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
 
             var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;
 
             return base.View(destino, Descriptor);
-        }
-
-
-        private void ValidarAcceso(string nombreDelControlador, string nombreDeLaVista, string login)
-        {
-            var vista = ValidarExisteVista(nombreDelControlador, nombreDeLaVista);
-            ValidarPermiso(vista, login);
-        }
-
-        private void ValidarPermiso(VistaMvcDtm vista, string login)
-        {
-            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            gestorDeVista.ValidarAcceso(vista, login);
-
-        }
-
-        private VistaMvcDtm ValidarExisteVista(string nombreDelControlador, string nombreDeLaVista)
-        {
-            var cache = ServicioDeCaches.Obtener(GestorDeVistaMvc.CacheDeValidarVista);
-            if (!cache.ContainsKey($"{nombreDelControlador}.{nombreDeLaVista}"))
-            {
-
-                var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-
-                var vista = gestorDeVista.LeerVistaMvc($"{nombreDelControlador}.{nombreDeLaVista}");
-                if (vista == null)
-                    GestorDeErrores.Emitir($"Defina la vista {nombreDelControlador}.{nombreDeLaVista} en BD");
-
-                cache[$"{nombreDelControlador}.{nombreDeLaVista}"] = vista;
-            }
-
-            return (VistaMvcDtm)cache[$"{nombreDelControlador}.{nombreDeLaVista}"];
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

@@ -1,5 +1,6 @@
 ﻿using GestorDeElementos;
 using ModeloDeDto;
+using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -83,13 +84,13 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeCreacion()
         {
             var crearElemento = new CrearElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", enumTipoDePermiso.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeEditarElemento()
         {
             var editarElemento = new EditarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", TipoPermiso.Consultor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", enumTipoDePermiso.Consultor);
             Menu.Add(opcion);
         }
         #endregion
@@ -99,21 +100,21 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeNuevoElemento()
         {
             var nuevoElemento = new NuevoElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, nuevoElemento, $"Crear", TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, nuevoElemento, $"Crear", enumTipoDePermiso.Gestor);
             Menu.Add(opcion);
         }
 
         internal void AnadirOpcionDeBorrarElemento()
         {
             var BorrarElemento = new BorrarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumTipoDePermiso.Gestor);
             Menu.Add(opcion);
         }
 
         internal void AnadirOpcionDeCerrarCreacion()
         {
             var cerrarCreacion = new CerrarCreacion();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cerrarCreacion, $"Cerrar", TipoPermiso.Consultor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cerrarCreacion, $"Cerrar", enumTipoDePermiso.Consultor);
             Menu.Add(opcion);
         }
         #endregion
@@ -122,13 +123,13 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeModificarElemento()
         {
             var modificarElemento = new ModificarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, modificarElemento, $"Modificar", TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, modificarElemento, $"Modificar", enumTipoDePermiso.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeCancelarEdicion()
         {
             var cancelarEdicion = new CancelarEdicion();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", TipoPermiso.Consultor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumTipoDePermiso.Consultor);
             Menu.Add(opcion);
         }
         #endregion

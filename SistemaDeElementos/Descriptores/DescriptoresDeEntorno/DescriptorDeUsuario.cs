@@ -4,6 +4,7 @@ using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto;
 using GestorDeElementos;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -46,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", TipoPermiso.Consultor);
+            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumTipoDePermiso.Consultor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
         }

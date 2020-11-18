@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GestorDeElementos;
 using ModeloDeDto;
+using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -247,14 +248,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public AccionDeMenu Accion { get; private set; }
         public TipoDeLlamada TipoDeLLamada { get; private set; } = TipoDeLlamada.Get;
 
-        public TipoPermiso PermisosNecesarios { get; private set; }
+        public enumTipoDePermiso PermisosNecesarios { get; private set; }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, TipoPermiso permisosNecesarios)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumTipoDePermiso permisosNecesarios)
         : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, TipoPermiso permisosNecesarios)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumTipoDePermiso permisosNecesarios)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcioneDeMenu.Count}",
@@ -272,7 +273,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, PermisosNecesarios, typeof(TElemento).Name))
+            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, PermisosNecesarios, enumClaseDePermiso.Negocio, typeof(TElemento).Name))
                 return ""; 
 
             if (TipoDeLLamada == TipoDeLlamada.Post)

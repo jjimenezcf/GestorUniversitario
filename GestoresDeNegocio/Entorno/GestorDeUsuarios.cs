@@ -11,6 +11,7 @@ using GestorDeElementos;
 using Gestor.Errores;
 using System;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Seguridad;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -197,10 +198,28 @@ namespace GestoresDeNegocio.Entorno
             return MapearElemento(usuariodtm);
         }
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, TipoPermiso permisosNecesarios, string elemento)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumClaseDePermiso claseDePermiso, string elemento)
         {
             if (usuarioConectado.EsAdministrador)
                 return true;
+            /*
+             * Si estoy validando el acceso a datos de un negocio, 
+             * - construir un gestorDeNegocio
+             * - llamar a tiene permisos que valida si en PermisosSobreNegocioDtm 
+             * 
+            if (claseDePermiso == enumClaseDePermiso.Negocio)
+            {
+                var gestorDeNegocio = GestorDeNegocios.Gestor(...)
+                return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, elemento)
+            }
+            */
+
+            if (claseDePermiso == enumClaseDePermiso.Vista)
+            {
+                var gestorDeVista = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
+                return gestorDeVista.TienePermisos(usuarioConectado, permisosNecesarios, elemento);
+            }
+
 
             switch (elemento)
             {

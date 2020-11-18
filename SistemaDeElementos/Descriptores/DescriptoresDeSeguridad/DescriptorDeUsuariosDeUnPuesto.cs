@@ -2,6 +2,7 @@
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -27,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDeUsuario(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto));
             var relacionarPuestos = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl());
-            var opcion = new OpcionDeMenu<UsuariosDeUnPuestoDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Usuarios", GestorDeElementos.TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<UsuariosDeUnPuestoDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Usuarios", enumTipoDePermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             //AnadirOpciondeRelacion(Mnt

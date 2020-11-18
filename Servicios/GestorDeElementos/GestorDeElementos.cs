@@ -18,8 +18,6 @@ namespace GestorDeElementos
     public enum ModoDeOrdenancion { ascendente, descendente }
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 
-    public enum TipoPermiso { Gestor, Consultor, Administrador }
-
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
     {

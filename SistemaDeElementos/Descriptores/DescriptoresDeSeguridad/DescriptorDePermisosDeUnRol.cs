@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -31,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   ,propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
 
             var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos", GestorDeElementos.TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos", enumTipoDePermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

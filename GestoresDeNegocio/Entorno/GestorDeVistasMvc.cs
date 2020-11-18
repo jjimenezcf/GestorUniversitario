@@ -17,9 +17,6 @@ namespace GestoresDeNegocio.Entorno
 
     public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
-
-        public static readonly string CacheDeValidarVista = nameof(CacheDeValidarVista);
-
         public class MapearVistaMvc : Profile
         {
             public MapearVistaMvc()
@@ -92,64 +89,75 @@ namespace GestoresDeNegocio.Entorno
             return registros;
         }
 
-        public void ValidarAcceso(VistaMvcDtm vista, string login)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string vista)
         {
-            var cache = ServicioDeCaches.Obtener(nameof(this.ValidarAcceso));
+            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeVistaMvc)}.{nameof(TienePermisos)}");
+            var indice = $"{vista}-{usuarioConectado.Id}";
 
-            if (cache.ContainsKey($"{vista.Id}-{login}") && (bool)cache[$"{vista.Id}-{login}"])
-                return;
+            if (!cache.ContainsKey(indice))
+            {
+                var vistaDtm = LeerVistaMvc(vista);
 
-            var sqlParameters = new List<SqlParameter>();
-            sqlParameters.Add(new SqlParameter("@login", login));
-            sqlParameters.Add(new SqlParameter("@idVista", vista.Id));
+                var gestor = GestorDePermisosDeUnUsuario.Gestor(Contexto, Mapeador);
 
-            var a = Contexto.UsuPermisos.FromSqlRaw($@"           
-            select id, idusua, idpermiso
-            from ENTORNO.USU_PERMISO t1
-            where EXISTS(
-                  select id from ENTORNO.USUARIO where id = t1.IDUSUA and LOGIN like @login
-              )
-              and EXISTS(
-                select 1 from ENTORNO.VISTA_MVC where id = @idVista AND IDPERMISO = t1.IDPERMISO
-              )
-            union
-            select 1,1,1 from entorno.USUARIO u where login like @login and ADMINISTRADOR = 1
-            ", sqlParameters.ToArray());
+                var filtros = new List<ClausulaDeFiltrado>
+                {
+                    new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = usuarioConectado.Id.ToString()},
+                    new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = vistaDtm.IdPermiso.ToString() }
+                };
 
-            if (a.Count() == 0)
-                GestorDeErrores.Emitir($"El usuario {login} no tiene acceso a la vista {vista.Controlador}.{vista.Accion}");
+                cache[indice] = gestor.Contar(filtros) > 0;
+            }
+            return (bool)cache[indice];
 
-            cache[$"{vista.Id}-{login}"] = true;
         }
 
         public VistaMvcDtm LeerVistaMvc(string vistaMvc)
         {
+            var vista = ValidarParametroAntesDeLeerVistaMvc(vistaMvc);
+
+            var cache = ServicioDeCaches.Obtener(nameof(LeerVistaMvc));
+            if (!cache.ContainsKey(vista))
+            {
+                var filtros = new List<ClausulaDeFiltrado>
+                {
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = vista.Split(".")[0]},
+                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = vista.Split(".")[1] }
+                };
+                var vistas = LeerRegistros(0, -1, filtros);
+                if (vistas.Count != 1)
+                {
+                    if (vistas.Count == 0)
+                        GestorDeErrores.Emitir($"No se ha localizado la vistaMvc {vista}");
+                    else
+                        GestorDeErrores.Emitir($"Se han localizado {vistas.Count} vistasMvc para {vista}");
+                }
+
+                if (vistas == null)
+                    GestorDeErrores.Emitir($"Defina la vista {vista} en BD");
+
+                cache[$"{vista}"] = vistas[0];
+            }
+
+            return (VistaMvcDtm)cache[$"{vista}"];
+        }
+
+        private static string ValidarParametroAntesDeLeerVistaMvc(string vistaMvc)
+        {
             if (vistaMvc.IsNullOrEmpty())
-                return null;
+                GestorDeErrores.Emitir($"Debe indicar el nombre del controlador y vista a buscar");
 
             var partes = vistaMvc.Split(".");
 
             if (partes.Length != 2)
                 GestorDeErrores.Emitir($"El valor proporcionado {vistaMvc} no es válido, ha de seguir el patrón Controlador.Vista");
 
+            var nombreDelControlador = partes[0];
+            var nombreDeLaVista = partes[1];
+            if (nombreDelControlador.IsNullOrEmpty() || nombreDeLaVista.IsNullOrEmpty())
+                GestorDeErrores.Emitir($"falta información del controlador o la vista a buscar, usted ha proporcionado, controlado: {nombreDelControlador}, vista: {nombreDeLaVista}");
 
-            var filtros = new List<ClausulaDeFiltrado>
-                {
-                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = partes[0] },
-                    new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = partes[1] }
-                };
-
-            var vistas = LeerRegistros(0, -1, filtros);
-            if (vistas.Count != 1)
-            {
-                //if (vistas.Count == 0)
-                //    GestorDeErrores.Emitir($"No se ha localizado la vistaMvc {partes[0]}.{partes[1]}");
-                //else
-                //    GestorDeErrores.Emitir($"Se han localizado {vistas.Count} vistasMvc para {partes[0]}.{partes[1]}");
-                return null;
-            }
-
-            return vistas[0];
+            return $"{nombreDelControlador}.{nombreDeLaVista}";
         }
 
         protected override void AntesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
@@ -184,7 +192,7 @@ namespace GestoresDeNegocio.Entorno
                 && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
 
-            ServicioDeCaches.EliminarElemento(CacheDeValidarVista, $"{ registro.Controlador}.{ registro.Accion}");
+            ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{ registro.Controlador}.{ registro.Accion}");
         }
 
 

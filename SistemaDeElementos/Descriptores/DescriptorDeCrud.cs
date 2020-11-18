@@ -4,6 +4,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using ModeloDeDto;
 using ServicioDeDatos.Entorno;
+using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -171,7 +172,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", TipoPermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumTipoDePermiso.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }
