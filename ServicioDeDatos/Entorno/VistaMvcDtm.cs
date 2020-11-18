@@ -50,7 +50,7 @@ namespace ServicioDeDatos.Entorno
                 .IsRequired(false)
                 .HasForeignKey(p => p.IdPermiso)
                 .HasConstraintName("FK_VISTA_MVC_IDPERMISO")
-                .OnDelete(DeleteBehavior.Restrict); ;
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<VistaMvcDtm>()
                .HasIndex(vista => new { vista.IdPermiso})

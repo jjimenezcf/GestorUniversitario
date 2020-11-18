@@ -3,6 +3,7 @@ using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Archivos;
+using ServicioDeDatos.Negocio;
 
 namespace ServicioDeDatos
 {
@@ -42,6 +43,13 @@ namespace ServicioDeDatos
 
         #endregion
 
+
+        #region dbSets del esquema de NEGOCIO
+
+        public DbSet<NegocioDtm> Negocio { get; set; }
+
+        #endregion
+
         public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,6 +63,8 @@ namespace ServicioDeDatos
             DefinirEsquemaDeSeguridad(modelBuilder);
 
             DefinirTablasDelEsquemaSisDoc(modelBuilder);
+
+            DefinirTablasDelEsquemaDeNegocio(modelBuilder);
 
         }
 
@@ -99,6 +109,12 @@ namespace ServicioDeDatos
         private static void DefinirTablasDelEsquemaSisDoc(ModelBuilder modelBuilder)
         {
             TablaArchivo.Definir(modelBuilder);
+        }
+
+
+        private static void DefinirTablasDelEsquemaDeNegocio(ModelBuilder modelBuilder)
+        {
+            TablaNegocio.Definir(modelBuilder);
         }
 
     }
