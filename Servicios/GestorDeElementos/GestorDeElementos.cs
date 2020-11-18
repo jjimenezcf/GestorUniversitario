@@ -713,11 +713,9 @@ namespace GestorDeElementos
 
         public TRegistro LeerRegistroPorId(int? id)
         {
-            if (id == null)
-                return null;
-
-            return Contexto.Set<TRegistro>().AsNoTracking().FirstOrDefault(m => m.Id == id);
+            return LeerRegistroCacheado(nameof(Registro.Id), id.ToString(), false);
         }
+
 
 
         #endregion

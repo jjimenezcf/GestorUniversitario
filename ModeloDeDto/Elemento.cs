@@ -54,6 +54,8 @@ namespace ModeloDeDto
 
         private bool _visibleEnGrid = true;
 
+        private string _ayuda = "";
+
         public string EtiquetaGrid
         {
             get
@@ -66,7 +68,7 @@ namespace ModeloDeDto
         }
 
         public string Etiqueta { get; set; } = "";
-        public string Ayuda { get; set; } = "";
+        public string Ayuda { get { return _ayuda.IsNullOrEmpty() ? Etiqueta : _ayuda;} set { _ayuda = value; } } 
         public bool SiempreVisible { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar && _visibleEnGrid; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = _visibleEnGrid = value; } }
         public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != TipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
         public bool VisibleEnEdicion { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = value; } }
