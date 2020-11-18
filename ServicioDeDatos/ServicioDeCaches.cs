@@ -32,7 +32,20 @@ namespace ServicioDeDatos
             {
                 if (clave == indice)
                 {
-                    cacheDeRegistros.TryRemove(clave, out _);
+                    cacheDeRegistros.TryRemove(indice, out _);
+                }
+            }
+        }
+
+        public static void EliminarElementos(string cache, string clave)
+        {
+            var cacheDeRegistros = Obtener(cache);
+
+            foreach (var indice in cacheDeRegistros.Keys)
+            {
+                if (indice.Contains(clave))
+                {
+                    cacheDeRegistros.TryRemove(indice, out _);
                 }
             }
         }

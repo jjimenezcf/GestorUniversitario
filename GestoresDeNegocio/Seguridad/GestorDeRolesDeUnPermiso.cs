@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
@@ -94,10 +95,10 @@ namespace GestoresDeNegocio.Seguridad
             return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        //protected override void MapearDatosDeRelacion(RolesDeUnPermisoDtm registro, int idElemento1, int idElemento2)
-        //{
-        //    registro.IdRol = idElemento1;
-        //    registro.IdPermiso = idElemento2;
-        //}
+        protected override void DespuesDePersistir(PermisosDeUnRolDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", $"{registro.IdPermiso}.");
+        }
     }
 }

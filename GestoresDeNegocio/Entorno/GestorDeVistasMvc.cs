@@ -91,13 +91,13 @@ namespace GestoresDeNegocio.Entorno
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string vista)
         {
+
+            var vistaDtm = LeerVistaMvc(vista);
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeVistaMvc)}.{nameof(TienePermisos)}");
-            var indice = $"{vista}-{usuarioConectado.Id}";
+            var indice = $"{vistaDtm.IdPermiso}.{usuarioConectado.Id}";
 
             if (!cache.ContainsKey(indice))
             {
-                var vistaDtm = LeerVistaMvc(vista);
-
                 var gestor = GestorDePermisosDeUnUsuario.Gestor(Contexto, Mapeador);
 
                 var filtros = new List<ClausulaDeFiltrado>
@@ -192,7 +192,7 @@ namespace GestoresDeNegocio.Entorno
                 && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
 
-            ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{ registro.Controlador}.{ registro.Accion}");
+            ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");
         }
 
 
