@@ -4,6 +4,7 @@
     <title>@ViewData["Title"]</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/css/PanelDeControl.css" type="text/css">
     <link rel="stylesheet" href="~/css/Controles.css" type="text/css">
     <link rel="stylesheet" href="~/css/Grid.css" type="text/css">
     <link rel="stylesheet" href="~/css/ApiDeArchivos.css" type="text/css">
@@ -78,7 +79,7 @@
                         <input id="id-Favoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
                     </td>
                     <td class="celdaCabeceraDerecha">
-                        <input id="id-Login" type="text" class="estiloCeldaDerecha" value="@datosDeConexion.Login" readonly />
+                        @*<input id="id-Login" type="text" class="estiloCeldaDerecha" value="@datosDeConexion.Login" readonly />*@
                         <div>
                             <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
                                 <button value=Submit type=submit>Logout</button>
@@ -112,18 +113,13 @@
         <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
         </div>
 
-        <footer class="border-top footer text-muted">
+        <footer>
             <div class="text-info" width="100%">
                 <input id="Mensaje" style="width:100%" readonly value="" />
             </div>
-            <div class="text-center">
-                <div style="float: left">
-                    &copy;@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd
-                </div>
-                <div style="float: right">
-                    Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </div>
+            <div>
+                <div style="float: left; width: 80%; background-color: #00b9ff;">@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd</div>
+                <div style="float: right;width: 20%;background-color: #00b9ff;text-align: right;">Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login</div>
             </div>
         </footer>
 
