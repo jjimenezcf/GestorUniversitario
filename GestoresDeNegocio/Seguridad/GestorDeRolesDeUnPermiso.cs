@@ -23,7 +23,7 @@ namespace GestoresDeNegocio.Seguridad
                 CreateMap<PermisosDeUnRolDtm, RolesDeUnPermisoDto>()
                     .ForMember(dto => dto.Rol, dtm => dtm.MapFrom(dtm => dtm.Rol.Nombre))
                     .ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(dtm => dtm.Permiso.Nombre));
-                
+
                 CreateMap<RolesDeUnPermisoDto, PermisosDeUnRolDtm>();
             }
         }
@@ -40,24 +40,11 @@ namespace GestoresDeNegocio.Seguridad
             return new GestorDeRolesDeUnPermiso(contexto, mapeador);
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<PermisosDeUnRolDtm> AplicarJoins(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins, parametros);
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(PermisoDtm) });
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(RolDtm) });
-        }
-
-        protected override IQueryable<PermisosDeUnRolDtm> AplicarJoins(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, joins, parametros);
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(PermisoDtm))
-                    registros = registros.Include(rp => rp.Permiso);
-
-                if (join.Dtm == typeof(RolDtm))
-                    registros = registros.Include(rp => rp.Rol);
-            }
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(rp => rp.Permiso);
+            registros = registros.Include(rp => rp.Rol);
             return registros;
         }
 

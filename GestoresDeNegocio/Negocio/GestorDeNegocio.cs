@@ -8,6 +8,8 @@ using GestorDeElementos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Seguridad;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestoresDeNegocio.Negocio
 {
@@ -20,9 +22,9 @@ namespace GestoresDeNegocio.Negocio
             public MapearNegocio()
             {
                 CreateMap<NegocioDtm, NegocioDto>()
-                .ForMember(dto => dto.PermisodeGestor, dtm => dtm.MapFrom(x => x.PermisoDeGestor.Nombre))
+                .ForMember(dto => dto.PermisoDeGestor, dtm => dtm.MapFrom(x => x.PermisoDeGestor.Nombre))
                 .ForMember(dto => dto.PermisoDeAdministrador, dtm => dtm.MapFrom(x => x.PermisoDeAdministrador.Nombre))
-                .ForMember(dto => dto.PermisoDeConsultor, dtm => dtm.MapFrom(x => x.PermisoDeConsultor.Nombre)); 
+                .ForMember(dto => dto.PermisoDeConsultor, dtm => dtm.MapFrom(x => x.PermisoDeConsultor.Nombre));
 
                 CreateMap<NegocioDto, NegocioDtm>()
                 .ForMember(dtm => dtm.PermisoDeGestor, dto => dto.Ignore())
@@ -64,6 +66,15 @@ namespace GestoresDeNegocio.Negocio
             return registros;
         }
 
+        protected override IQueryable<NegocioDtm> AplicarJoins(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.PermisoDeAdministrador);
+            registros = registros.Include(p => p.PermisoDeConsultor);
+            registros = registros.Include(p => p.PermisoDeGestor);
+            return registros;
+        }
+
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string negocio)
         {
@@ -93,6 +104,17 @@ namespace GestoresDeNegocio.Negocio
                 cache[indice] = gestor.Contar(filtros) > 0;
             }
             return (bool)cache[indice];
+        }
+
+        protected override void AntesDePersistir(NegocioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+            if (parametros.Tipo == TipoOperacion.Insertar)
+            {
+                registro.IdPermisoDeAdministrador = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
+            }
         }
 
     }

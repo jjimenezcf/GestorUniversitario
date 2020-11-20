@@ -36,18 +36,6 @@ namespace GestoresDeNegocio.Entorno
 
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            base.DefinirJoins(filtros, joins, parametros);
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(PermisoDtm) });
-
-            foreach (var filtro in filtros)
-                if (filtro.Clausula == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
-                    return;
-
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(MenuDtm) });
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(VistaMvcDtm) });
-        }
 
         protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
@@ -120,17 +108,16 @@ namespace GestoresDeNegocio.Entorno
             return registros;
         }
 
-        protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<MenuDtm> AplicarJoins(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            registros = base.AplicarJoins(registros, joins, parametros);
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
 
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(MenuDtm))
-                    registros = registros.Include(p => p.Padre);
-                if (join.Dtm == typeof(VistaMvcDtm))
-                    registros = registros.Include(p => p.VistaMvc);
-            }
+            foreach (var filtro in filtros)
+                if (filtro.Clausula == nameof(MenuDtm.IdPadre) && filtro.Criterio == CriteriosDeFiltrado.esNulo)
+                    return registros;
+
+            registros = registros.Include(p => p.Padre);
+            registros = registros.Include(p => p.VistaMvc);
 
             return registros;
         }
@@ -171,6 +158,12 @@ namespace GestoresDeNegocio.Entorno
 
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
+        }
+
+        protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
         }
 
     }

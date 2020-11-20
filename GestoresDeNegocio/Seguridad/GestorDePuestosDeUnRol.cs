@@ -37,25 +37,11 @@ namespace GestoresDeNegocio.Seguridad
             return new GestorDePuestosDeUnUsuario(contexto, mapeador);
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<RolesDeUnPuestoDtm> AplicarJoins(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins, parametros);
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(RolDtm) });
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(PuestoDtm) });
-        }
-
-        protected override IQueryable<RolesDeUnPuestoDtm> AplicarJoins(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, joins, parametros);
-
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(RolDtm))
-                    registros = registros.Include(p => p.Rol);
-                if (join.Dtm == typeof(PuestoDtm))
-                    registros = registros.Include(p => p.Puesto);
-            }
-
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Rol);
+            registros = registros.Include(p => p.Puesto);
             return registros;
         }
 
@@ -84,7 +70,7 @@ namespace GestoresDeNegocio.Seguridad
         protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);
-            
+
             if (ordenacion.Count == 0)
                 return registros.OrderBy(x => x.Rol.Nombre);
 

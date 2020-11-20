@@ -293,6 +293,8 @@ namespace GestorDeElementos
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
+            if (parametros.Tipo == TipoOperacion.Insertar)
+                return;
             RegistroEnBD = LeerRegistroPorId(registro.Id);
         }
 
@@ -419,15 +421,12 @@ namespace GestorDeElementos
             if (filtros == null)
                 filtros = new List<ClausulaDeFiltrado>();
 
-            DefinirJoins(filtros, joins, parametros);
-
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
             if (parametros.Tipo == TipoOperacion.Leer)
                 AplicarOrdenTablaPrincipal(ref orden, ref registros);
 
-            if (joins.Count > 0)
-                registros = AplicarJoins(registros, joins, parametros);
+            registros = AplicarJoins(registros, filtros, joins, parametros);
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
@@ -473,11 +472,6 @@ namespace GestorDeElementos
         /// <param name="filtros">filtros que se van a aplicar</param>
         /// <param name="joins">join a incluir</param>
         /// <param name="parametros">parámetros de negocio que modifican el comportamiento</param>
-        protected virtual void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-
-        }
-
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             foreach (var orden in ordenacion)
@@ -537,16 +531,11 @@ namespace GestorDeElementos
             return registros;
         }
 
-        protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             return registros;
         }
 
-
-        //protected bool HayFiltroPorId(IQueryable<TRegistro> registros)
-        //{
-        //    return registros.Expression.ToString().Contains(".Where(x => x.Id");
-        //}
 
         #endregion
 

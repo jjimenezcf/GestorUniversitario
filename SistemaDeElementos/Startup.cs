@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using AutoMapper;
 using System;
+using GestoresDeNegocio.Negocio;
 
 namespace MVCSistemaDeElementos
 {
@@ -85,6 +86,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeRolesDeUnPermiso>();
             services.AddScoped<GestorDePermisosDeUnUsuario>();
             services.AddScoped<GestorDePermisosDeUnPuesto>();
+            services.AddScoped<GestorDeNegocio>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

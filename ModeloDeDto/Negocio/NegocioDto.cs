@@ -42,7 +42,8 @@
 
 
         [IUPropiedad(
-            Etiqueta = "Permiso de administrador",
+            Etiqueta = "Administrador",
+            Ayuda = "Permiso de administrador",
             EditableAlEditar = false,
             Tipo = typeof(string),
             Fila = 2,
@@ -58,7 +59,8 @@
 
 
         [IUPropiedad(
-            Etiqueta = "Permiso de gestión",
+            Etiqueta = "Gestión",
+            Ayuda = "Permiso de gestión",
             EditableAlEditar = false,
             Tipo = typeof(string),
             Fila = 3,
@@ -70,10 +72,11 @@
             VisibleAlCrear = false
             )
         ]
-        public string PermisodeGestor { get; set; }
+        public string PermisoDeGestor { get; set; }
 
         [IUPropiedad(
-            Etiqueta = "Permiso de consulta",
+            Etiqueta = "Consulta",
+            Ayuda = "Permiso de consulta",
             EditableAlEditar = false,
             Tipo = typeof(string),
             Fila = 4,

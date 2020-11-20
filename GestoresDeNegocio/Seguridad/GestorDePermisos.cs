@@ -92,13 +92,13 @@ namespace GestoresDeNegocio.Seguridad
         {
             PermisoDtm permiso;
             var gestorDeClase = GestorDeClaseDePermisos.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var claseDePermiso = gestorDeClase.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), enumClaseDePermiso.Vista.ToString(), false, false);
+            var claseDePermiso = gestorDeClase.LeerRegistroCacheado(nameof(ClasePermisoDtm.Nombre), clase.ToString(), false, false);
             if (claseDePermiso == null)
                 claseDePermiso = gestorDeClase.Crear(clase);
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistroCacheado(nameof(TipoPermisoDtm.Nombre), enumTipoDePermiso.Acceso.ToString(), false, false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistroCacheado(nameof(TipoPermisoDtm.Nombre), tipo.ToString(), false, false);
             if (tipoDePermiso == null)
                 tipoDePermiso = gestorDeTipo.Crear(tipo);
 
@@ -172,27 +172,11 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins, parametros);
-
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(ClasePermisoDtm) });
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(TipoPermisoDtm) });
-        }
-
-        protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, joins, parametros);
-
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(ClasePermisoDtm))
-                    registros = registros.Include(p => p.Clase);
-
-                if (join.Dtm == typeof(TipoPermisoDtm))
-                    registros = registros.Include(p => p.Tipo);
-            }
-
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Clase);
+            registros = registros.Include(p => p.Tipo);
             return registros;
         }
 

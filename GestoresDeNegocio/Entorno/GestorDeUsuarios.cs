@@ -50,22 +50,10 @@ namespace GestoresDeNegocio.Entorno
             return gestor.MapearElementos(usuariosDtm).ToList();
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins, parametros);
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(ArchivoDtm) });
-        }
-
-        protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, joins, parametros);
-
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(ArchivoDtm))
-                    registros = registros.Include(p => p.Archivo);
-            }
-
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Archivo);
             return registros;
         }
 

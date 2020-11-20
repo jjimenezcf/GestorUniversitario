@@ -43,23 +43,11 @@ namespace GestoresDeNegocio.Seguridad
             return new GestorDePuestosDeUnUsuario(contexto, mapeador);
         }
 
-        protected override void DefinirJoins(List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarJoins(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            base.DefinirJoins(filtros, joins, parametros);
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(UsuarioDtm) });
-            joins.Add(new ClausulaDeJoin { Dtm = typeof(PuestoDtm) });
-        }
-
-        protected override IQueryable<PuestosDeUnUsuarioDtm> AplicarJoins(IQueryable<PuestosDeUnUsuarioDtm> registros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, joins, parametros);
-            foreach (ClausulaDeJoin join in joins)
-            {
-                if (join.Dtm == typeof(UsuarioDtm))
-                    registros = registros.Include(p => p.Usuario);
-                if (join.Dtm == typeof(PuestoDtm))
-                    registros = registros.Include(p => p.Puesto);
-            }
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Usuario);
+            registros = registros.Include(p => p.Puesto);
             return registros;
         }
 
