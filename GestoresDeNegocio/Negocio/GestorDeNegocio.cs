@@ -10,6 +10,11 @@ using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
+using Utilidades;
+using Gestor.Errores;
+using System;
+using System.Security.Policy;
+using System.Reflection;
 
 namespace GestoresDeNegocio.Negocio
 {
@@ -109,6 +114,7 @@ namespace GestoresDeNegocio.Negocio
         protected override void AntesDePersistir(NegocioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
+
             if (parametros.Tipo == TipoOperacion.Insertar)
             {
                 registro.IdPermisoDeAdministrador = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
@@ -117,5 +123,45 @@ namespace GestoresDeNegocio.Negocio
             }
         }
 
+        protected override void AntesDePersistirValidarRegistro(NegocioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistirValidarRegistro(registro, parametros);
+            if (registro.Elemento.IsNullOrEmpty())
+                GestorDeErrores.Emitir($"Ha de indicar la clase del objeto {registro.Nombre} es obligatorio");
+
+            var encontrado = false;
+            var ensamblado = Assembly.Load(nameof(ServicioDeDatos));
+            foreach (var clase in ensamblado.DefinedTypes)
+            {
+                if (clase.Name == registro.Elemento)
+                {
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado)
+                GestorDeErrores.Emitir($"La clase del elemento {registro.Elemento} del negocio {registro.Nombre} debe existir");
+
+        }
     }
 }
+
+/*  Recorrer todos los assembly del dominio de la aplicación por reflexión y ver si hay una clase
+ *
+            //AppDomain currentDomain = AppDomain.CurrentDomain;
+            //var a = currentDomain.GetAssemblies();
+            //foreach (var ensamblado in a)
+            //{
+            //    foreach (var t in ensamblado.GetTypes())
+            //    {
+            //        if (t.Name == registro.Elemento)
+            //        {
+            //            encontrado = true;
+            //            break;
+            //        }
+            //    }
+            //    if (encontrado)
+            //        break;
+            //}
+ * */

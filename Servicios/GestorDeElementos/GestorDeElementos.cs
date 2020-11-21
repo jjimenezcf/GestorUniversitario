@@ -201,18 +201,17 @@ namespace GestorDeElementos
 
         private void DefinirFiltroDeRelacion(TRegistro registro, List<ClausulaDeFiltrado> filtros, int idElemento1, int idElemento2)
         {
-            Type t = registro.GetType();
-            PropertyInfo[] props = t.GetProperties();
-            foreach (var prop in props)
+            var propiedades = PropiedadesDelObjeto(registro);
+            foreach (var propiedad in propiedades)
             {
                 var c = new ClausulaDeFiltrado
                 {
-                    Clausula = prop.Name,
+                    Clausula = propiedad.Name,
                     Criterio = CriteriosDeFiltrado.igual
                 };
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
                     c.Valor = InvertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
                     c.Valor = InvertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
 
                 if (c.Valor.Entero() > 0)
@@ -222,14 +221,13 @@ namespace GestorDeElementos
 
         private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
         {
-            Type t = registro.GetType();
-            PropertyInfo[] props = t.GetProperties();
-            foreach (var prop in props)
+            var propiedades = PropiedadesDelObjeto(registro);
+            foreach (var propiedad in propiedades)
             {
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento1)
-                    prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
-                if (prop.Name == registro.NombreDeLaPropiedadDelIdElemento2)
-                    prop.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
             }
 
             //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
@@ -276,28 +274,53 @@ namespace GestorDeElementos
 
         protected virtual void DespuesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            _CacheDeRecuentos[typeof(TRegistro).FullName] = true;
+            var indice = typeof(TRegistro).FullName;
+            _CacheDeRecuentos[indice] = true;
 
-            Type t = registro.GetType();
-            PropertyInfo[] props = t.GetProperties();
-            foreach (var prop in props)
+            var propiedades = PropiedadesDelObjeto(registro);
+            foreach (var propiedad in propiedades)
             {
-                if (prop.Name == nameof(registro.Nombre))
+                if (propiedad.Name == nameof(registro.Nombre))
                     ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Nombre)}-{registro.Nombre}");
-                if (prop.Name == nameof(registro.Id))
+                if (propiedad.Name == nameof(registro.Id))
                     ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}");
             }
 
         }
 
+        private static PropertyInfo[] PropiedadesDelObjeto(TRegistro registro)
+        {
+            var indice = typeof(TRegistro).FullName;
+            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
+            if (!cache.ContainsKey(indice))
+            {
+                Type t = registro.GetType();
+                cache[indice] = t.GetProperties();
+            }
+            PropertyInfo[] props = (PropertyInfo[])cache[indice];
+            return props;
+        }
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            if (parametros.Tipo == TipoOperacion.Insertar)
-                return;
-            RegistroEnBD = LeerRegistroPorId(registro.Id);
-        }
+            AntesDePersistirValidarRegistro(registro, parametros);
 
+            if (parametros.Tipo != TipoOperacion.Insertar)
+                RegistroEnBD = LeerRegistroPorId(registro.Id);
+        }
+        protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
+        {
+            var propiedades = PropiedadesDelObjeto(registro); 
+            foreach (var propiedad in propiedades)
+            {
+                if (propiedad.Name == nameof(registro.Nombre))
+                {
+                    if (((string)propiedad.GetValue(registro)).IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El nombre del objeto {typeof(TRegistro).Name} es obligatorio");
+                    break;
+                }
+            }
+        }
         protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);
 
         protected void PersistirElementosDtm(List<ElementoDtm> elementosDtm, ParametrosDeNegocio parametros)
