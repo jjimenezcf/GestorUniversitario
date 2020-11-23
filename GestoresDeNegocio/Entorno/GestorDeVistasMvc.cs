@@ -175,9 +175,7 @@ namespace GestoresDeNegocio.Entorno
         {
             base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Tipo == TipoOperacion.Modificar
-                //&& !parametros.Parametros.ContainsKey(enumParametro.Creado) 
-                && RegistroEnBD.Nombre != registro.Nombre)
+            if (parametros.Tipo == TipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.Modificar(Contexto, Mapeador, (int)registro.IdPermiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
 
             ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");

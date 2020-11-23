@@ -121,6 +121,14 @@ namespace GestoresDeNegocio.Negocio
                 registro.IdPermisoDeGestor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
                 registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
             }
+
+            if (parametros.Tipo == TipoOperacion.Modificar)
+            {
+                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto,Mapeador,RegistroEnBD.IdPermisoDeAdministrador, registro.Nombre,enumClaseDePermiso.Negocio,enumTipoDePermiso.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.IdPermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.IdPermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
+            }
+
         }
 
         protected override void AntesDePersistirValidarRegistro(NegocioDtm registro, ParametrosDeNegocio parametros)
