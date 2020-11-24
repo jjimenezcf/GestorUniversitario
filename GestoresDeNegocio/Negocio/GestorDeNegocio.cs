@@ -124,9 +124,9 @@ namespace GestoresDeNegocio.Negocio
 
             if (parametros.Tipo == TipoOperacion.Modificar)
             {
-                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto,Mapeador,RegistroEnBD.IdPermisoDeAdministrador, registro.Nombre,enumClaseDePermiso.Negocio,enumTipoDePermiso.Administrador).Id;
-                registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.IdPermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
-                registro.IdPermisoDeConsultor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.IdPermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
+                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto,Mapeador,RegistroEnBD.PermisoDeAdministrador, registro.Nombre,enumClaseDePermiso.Negocio,enumTipoDePermiso.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
             }
 
         }
