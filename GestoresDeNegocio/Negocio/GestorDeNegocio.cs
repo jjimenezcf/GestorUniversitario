@@ -65,6 +65,20 @@ namespace GestoresDeNegocio.Negocio
 
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
                         return registros.Where(x => x.Elemento.Contains(filtro.Valor));
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
+                    {
+                        var ids = filtro.Valor.Split(',');
+                        int[] lista = Array.Empty<int>();
+                        int i = 0;
+                        foreach (string s in ids)
+                        {
+                            lista[i] = s.Entero();
+                            i++;
+                        }
+
+                        return registros.Where(x => lista.Contains(x.Id));
+                    }
                 }
             }
 
@@ -81,9 +95,9 @@ namespace GestoresDeNegocio.Negocio
         }
 
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string negocio)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumNegocio negocio)
         {
-            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio);
+            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.Parsear(negocio));
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocio)}.{nameof(TienePermisos)}");
             var indice = $"{negocioDtm.Id}.{permisosNecesarios}";
 
@@ -100,10 +114,10 @@ namespace GestoresDeNegocio.Negocio
                     filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = negocioDtm.IdPermisoDeAdministrador.ToString() });
 
                 if (permisosNecesarios == enumTipoDePermiso.Gestor)
-                    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.contiene, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
+                    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
 
                 if (permisosNecesarios == enumTipoDePermiso.Consultor)
-                    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = $"{negocioDtm.IdPermisoDeConsultor},{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
+                    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeConsultor},{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
 
 
                 cache[indice] = gestor.Contar(filtros) > 0;
@@ -124,7 +138,7 @@ namespace GestoresDeNegocio.Negocio
 
             if (parametros.Tipo == TipoOperacion.Modificar)
             {
-                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto,Mapeador,RegistroEnBD.PermisoDeAdministrador, registro.Nombre,enumClaseDePermiso.Negocio,enumTipoDePermiso.Administrador).Id;
+                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
                 registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
                 registro.IdPermisoDeConsultor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
             }

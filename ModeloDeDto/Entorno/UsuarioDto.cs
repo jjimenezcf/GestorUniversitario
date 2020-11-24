@@ -84,6 +84,7 @@ namespace ModeloDeDto.Entorno
         public DateTime Alta { get; set; }
 
         [IUPropiedad(
+            VisibleEnGrid = false,
             VisibleEnEdicion = true,
             Etiqueta = "Fotografía",
             Ayuda = "Seleccione un fichero",

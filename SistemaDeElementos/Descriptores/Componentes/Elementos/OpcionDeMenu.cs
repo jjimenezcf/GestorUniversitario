@@ -273,7 +273,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, PermisosNecesarios, enumClaseDePermiso.Negocio, typeof(TElemento).Name))
+            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, enumClaseDePermiso.Negocio, PermisosNecesarios, Menu.ZonaMenu.Mnt.Crud.Negocio))
                 return ""; 
 
             if (TipoDeLLamada == TipoDeLlamada.Post)

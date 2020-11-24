@@ -5,6 +5,7 @@ using ModeloDeDto.Seguridad;
 using ModeloDeDto;
 using GestorDeElementos;
 using ServicioDeDatos.Seguridad;
+using GestoresDeNegocio.Negocio;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -15,7 +16,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeUsuario(ModoDescriptor modo)
         : base(controlador: nameof(UsuariosController)
                , vista: $"{nameof(UsuariosController.CrudUsuario)}"
-               , modo: modo)
+               , modo: modo
+               , enumNegocio.Usuarios)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new SelectorDeFiltro<UsuarioDto, PermisoDto>(

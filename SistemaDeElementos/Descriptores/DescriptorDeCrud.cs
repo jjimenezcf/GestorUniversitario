@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
@@ -15,7 +16,19 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         internal static string NombreCrud = $"Crud_{typeof(TElemento).Name}".ToLower();
 
-        public string NombreElemento => Etiqueta.ToLower();
+        private enumNegocio _negocio = enumNegocio.No_Definido;
+        public enumNegocio Negocio
+        {
+            get
+            {
+                if (_negocio == enumNegocio.No_Definido)
+                {
+                    _negocio = NegociosDeSe.Parsear(typeof(TElemento).Name.Substring(0, typeof(TElemento).Name.Length - 3));
+                }
+                return _negocio;
+            }
+            private set { _negocio = value; }
+        }
 
         public string Vista { get; private set; }
 
@@ -31,11 +44,20 @@ namespace MVCSistemaDeElementos.Descriptores
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }
 
+
+        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, enumNegocio negocio)
+        : this(controlador, vista, modo)
+        {
+            Negocio = negocio;
+        }
+
+
+
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(
           padre: null,
           id: $"Crud_{typeof(TElemento).Name}",
-          etiqueta: typeof(TElemento).Name.Replace("Dto",""),
+          etiqueta: typeof(TElemento).Name.Replace("Dto", ""),
           propiedad: null,
           ayuda: null,
           posicion: null
@@ -44,7 +66,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var elemento = typeof(TElemento).Name.Replace("Dto", "");
             Tipo = TipoControl.DescriptorDeCrud;
             Mnt = new DescriptorDeMantenimiento<TElemento>(crud: this, etiqueta: elemento);
-            Controlador = controlador.Replace("Controller",""); 
+            Controlador = controlador.Replace("Controller", "");
             Vista = $@"{vista}";
             Modo = modo;
 
@@ -131,10 +153,10 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var renderMnt = Mnt.RenderControl();
             if (ModoDescriptor.Mantenimiento == Modo)
-                  return $@"{renderMnt}{Environment.NewLine}{Creador.RenderControl()}
+                return $@"{renderMnt}{Environment.NewLine}{Creador.RenderControl()}
                           {Environment.NewLine}{Editor.RenderControl()}
                           {Environment.NewLine}{Borrado.RenderControl()}";
-                 
+
             if (ModoDescriptor.Consulta == Modo)
                 return $@"{renderMnt}{Environment.NewLine}{Editor.RenderControl()}";
 

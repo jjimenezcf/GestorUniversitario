@@ -149,6 +149,12 @@ namespace GestoresDeNegocio.Entorno
             }
         }
 
+        protected override void DespuesDePersistir(UsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            if (parametros.Tipo != TipoOperacion.Insertar)
+                ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}");
+        }
 
         private void ValidarDatos(UsuarioDto usuarioDto)
         {
@@ -174,7 +180,7 @@ namespace GestoresDeNegocio.Entorno
             UsuarioDtm usuariodtm = null;
             try
             {
-                usuariodtm = LeerRegistro(nameof(UsuarioDtm.Login), login, true, true);
+                usuariodtm = LeerRegistroCacheado(nameof(UsuarioDtm.Login), login, true, true);
                 
                 if (new ObtenerPassword(Contexto, usuariodtm.Login).Password != password)
                     throw new Exception("Login/password incorrecto");
@@ -187,7 +193,7 @@ namespace GestoresDeNegocio.Entorno
             return MapearElemento(usuariodtm);
         }
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumClaseDePermiso claseDePermiso, string elemento)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, enumClaseDePermiso claseDePermiso, enumTipoDePermiso permisosNecesarios, object elemento)
         {
             if (usuarioConectado.EsAdministrador)
                 return true;
@@ -195,13 +201,13 @@ namespace GestoresDeNegocio.Entorno
             if (claseDePermiso == enumClaseDePermiso.Negocio)
             {
                 var gestorDeNegocio = GestorDeNegocio.Gestor(Contexto, Mapeador);
-                return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, elemento);
+                return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, (enumNegocio)elemento);
             }
             
             if (claseDePermiso == enumClaseDePermiso.Vista)
             {
                 var gestorDeVista = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
-                return gestorDeVista.TienePermisos(usuarioConectado, permisosNecesarios, elemento);
+                return gestorDeVista.TienePermisos(usuarioConectado, permisosNecesarios, (string)elemento);
             }
 
             switch (elemento)

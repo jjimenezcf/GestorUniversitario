@@ -453,10 +453,17 @@ namespace MVCSistemaDeElementos.Controllers
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            
+            if (!Descriptor.UsuarioConectado.EsAdministrador)
+            {
+                var hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso, $"{nombreDelControlador}.{nombreDeLaVista}");
+                if (!hayPermisos)
+                    throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
 
-            var hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumTipoDePermiso.Acceso, enumClaseDePermiso.Vista, $"{nombreDelControlador}.{nombreDeLaVista}");
-            if (!hayPermisos)
-                throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
+                hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor, Descriptor.Negocio);
+                if (!hayPermisos)
+                    throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de consulta sobre el negocio {Descriptor.Negocio}");
+            }
 
             var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;

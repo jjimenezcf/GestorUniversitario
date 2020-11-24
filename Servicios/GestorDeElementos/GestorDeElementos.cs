@@ -14,7 +14,7 @@ using Utilidades;
 
 namespace GestorDeElementos
 {
-    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente }
+    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
     public enum ModoDeOrdenancion { ascendente, descendente }
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 
@@ -369,7 +369,7 @@ namespace GestorDeElementos
         public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true)
         {
             if (!usarLaCache)
-                return LeerRegistro(nameof(Registro.Id), id.ToString(), true, true);
+                return LeerRegistro(nameof(Registro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache);
 
             return LeerRegistroCacheado(nameof(Registro.Id), id.ToString());
         }
