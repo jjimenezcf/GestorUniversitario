@@ -310,7 +310,7 @@ namespace GestorDeElementos
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            var propiedades = PropiedadesDelObjeto(registro); 
+            var propiedades = PropiedadesDelObjeto(registro);
             foreach (var propiedad in propiedades)
             {
                 if (propiedad.Name == nameof(registro.Nombre))
@@ -364,6 +364,14 @@ namespace GestorDeElementos
             IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, null, parametros);
 
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
+        }
+
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true)
+        {
+            if (!usarLaCache)
+                return LeerRegistro(nameof(Registro.Id), id.ToString(), true, true);
+
+            return LeerRegistroCacheado(nameof(Registro.Id), id.ToString());
         }
 
         public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
@@ -717,16 +725,19 @@ namespace GestorDeElementos
 
         public TElemento LeerElementoPorId(int id)
         {
-            var elementoDeBd = LeerRegistroPorId(id);
-            if (elementoDeBd == null)
-                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}");
+            TRegistro elementoDeBd;
+            try
+            {
+                elementoDeBd = LeerRegistroPorId(id);
+            }
+            catch(Exception e)
+            {
+                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}", e);                
+            }
+
             return MapearElemento(elementoDeBd);
         }
 
-        public TRegistro LeerRegistroPorId(int? id)
-        {
-            return LeerRegistroCacheado(nameof(Registro.Id), id.ToString(), false);
-        }
 
 
 

@@ -62,20 +62,19 @@ namespace GestoresDeNegocio.Seguridad
             return permiso;
         }
 
-        public static PermisoDtm Modificar(ContextoSe contexto, IMapper mapeador, int idPermiso, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
+        public static PermisoDtm Modificar(ContextoSe contexto, IMapper mapeador, PermisoDtm permiso, string nombre, enumClaseDePermiso clase, enumTipoDePermiso tipo)
         {
             var gestorDePermiso = Gestor(contexto, mapeador);
-            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
             var nuevoNombre = ComponerNombre(nombre, clase, tipo);
             if (nuevoNombre == permiso.Nombre)
                 return permiso;
             permiso.Nombre = nuevoNombre;
             return gestorDePermiso.Modificar(permiso);
         }
-        public static PermisoDtm Eliminar(ContextoSe contexto, IMapper mapeador, int idPermiso)
+
+        public static PermisoDtm Eliminar(ContextoSe contexto, IMapper mapeador, PermisoDtm permiso)
         {
             var gestorDePermiso = Gestor(contexto, mapeador);
-            var permiso = gestorDePermiso.LeerRegistroPorId(idPermiso);
             return gestorDePermiso.Eliminar(permiso);
         }
 
