@@ -372,7 +372,7 @@ namespace GestorDeElementos
             var cache = ServicioDeCaches.Obtener(typeof(TRegistro).FullName);
             if (!cache.ContainsKey(indice))
             {
-                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno);
+                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno, traqueado: false);
                 if (a == null)
                     return null;
 
@@ -381,9 +381,9 @@ namespace GestorDeElementos
             return (TRegistro)cache[indice];
         }
 
-        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno)
+        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool traqueado)
         {
-            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor);
+            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor, traqueado);
 
             if (errorSiNoHay && registros.Count == 0)
                 GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
@@ -394,17 +394,7 @@ namespace GestorDeElementos
             return registros.Count == 1 ? registros[0] : null;
         }
 
-        public (int resultado, TRegistro registro) ExisteRegistro(string propiedad, string valor)
-        {
-            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor);
-
-            if (registros.Count == 0)
-                return (0, null);
-
-            return (registros.Count, registros[0]);
-        }
-
-        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor)
+        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado)
         {
             var filtro = new ClausulaDeFiltrado()
             {
@@ -414,7 +404,9 @@ namespace GestorDeElementos
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
-            return registros.AsNoTracking().ToList();
+            if (!traqueado) 
+                registros = registros.AsNoTracking();
+            return registros.ToList();
         }
 
         public List<TRegistro> LeerRegistros(List<ClausulaDeFiltrado> filtros)
