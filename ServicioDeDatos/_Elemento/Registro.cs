@@ -111,6 +111,11 @@ namespace ServicioDeDatos.Elemento
 
         [IgnoreDataMember]
         [NotMapped]
+        public bool NombreObligatorio { get; set; } = true;
+
+
+        [IgnoreDataMember]
+        [NotMapped]
         public bool RegistroConAuditoria { get; set; } = false;
 
         [IgnoreDataMember]
@@ -166,6 +171,7 @@ namespace ServicioDeDatos.Elemento
         public RegistroDeRelacion()
         {
             RegistroDeRelacion = true;
+            NombreObligatorio = false;
         }
     }
 

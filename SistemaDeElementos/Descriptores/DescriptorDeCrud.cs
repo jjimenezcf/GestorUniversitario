@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 if (_negocio == enumNegocio.No_Definido)
                 {
-                    _negocio = NegociosDeSe.Parsear(typeof(TElemento).Name.Substring(0, typeof(TElemento).Name.Length - 3));
+                    _negocio = NegociosDeSe.ParsearDto(typeof(TElemento).Name);
                 }
                 return _negocio;
             }
@@ -43,15 +43,6 @@ namespace MVCSistemaDeElementos.Descriptores
         public string RutaVista { get; set; }
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }
-
-
-        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, enumNegocio negocio)
-        : this(controlador, vista, modo)
-        {
-            Negocio = negocio;
-        }
-
-
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(

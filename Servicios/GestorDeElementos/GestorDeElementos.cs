@@ -50,12 +50,12 @@ namespace GestorDeElementos
 
     public class ParametrosDeNegocio
     {
-        public TipoOperacion Tipo { get; private set; }
+        public TipoOperacion Operacion { get; private set; }
         public Dictionary<EnumParametro, object> Parametros = new Dictionary<EnumParametro, object>();
 
         public ParametrosDeNegocio(TipoOperacion tipo)
         {
-            Tipo = tipo;
+            Operacion = tipo;
         }
     }
 
@@ -248,13 +248,13 @@ namespace GestorDeElementos
                 {
                     AntesDePersistir(registro, parametros);
 
-                    if (parametros.Tipo == TipoOperacion.Insertar)
+                    if (parametros.Operacion == TipoOperacion.Insertar)
                         Contexto.Add(registro);
                     else
-                    if (parametros.Tipo == TipoOperacion.Modificar)
+                    if (parametros.Operacion == TipoOperacion.Modificar)
                         Contexto.Update(registro);
                     else
-                    if (parametros.Tipo == TipoOperacion.Eliminar)
+                    if (parametros.Operacion == TipoOperacion.Eliminar)
                         Contexto.Remove(registro);
                     else
                         throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
@@ -305,19 +305,22 @@ namespace GestorDeElementos
         {
             AntesDePersistirValidarRegistro(registro, parametros);
 
-            if (parametros.Tipo != TipoOperacion.Insertar)
+            if (parametros.Operacion != TipoOperacion.Insertar)
                 RegistroEnBD = LeerRegistroPorId(registro.Id);
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            var propiedades = PropiedadesDelObjeto(registro);
-            foreach (var propiedad in propiedades)
+            if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.NombreObligatorio)
             {
-                if (propiedad.Name == nameof(registro.Nombre))
+                var propiedades = PropiedadesDelObjeto(registro);
+                foreach (var propiedad in propiedades)
                 {
-                    if (((string)propiedad.GetValue(registro)).IsNullOrEmpty())
-                        GestorDeErrores.Emitir($"El nombre del objeto {typeof(TRegistro).Name} es obligatorio");
-                    break;
+                    if (propiedad.Name == nameof(registro.Nombre))
+                    {
+                        if (((string)propiedad.GetValue(registro)).IsNullOrEmpty())
+                            GestorDeErrores.Emitir($"El nombre del objeto {typeof(TRegistro).Name} es obligatorio");
+                        break;
+                    }
                 }
             }
         }
@@ -328,13 +331,13 @@ namespace GestorDeElementos
 
             foreach (var elementoDtm in elementosDtm)
             {
-                if (parametros.Tipo == TipoOperacion.Insertar)
+                if (parametros.Operacion == TipoOperacion.Insertar)
                 {
                     elementoDtm.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
                     elementoDtm.FechaCreacion = DateTime.Now;
                 }
                 else
-                if (parametros.Tipo == TipoOperacion.Modificar)
+                if (parametros.Operacion == TipoOperacion.Modificar)
                 {
                     elementoDtm.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
                     elementoDtm.FechaModificacion = DateTime.Now;
@@ -446,7 +449,7 @@ namespace GestorDeElementos
 
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
-            if (parametros.Tipo == TipoOperacion.Leer)
+            if (parametros.Operacion == TipoOperacion.Leer)
                 AplicarOrdenTablaPrincipal(ref orden, ref registros);
 
             registros = AplicarJoins(registros, filtros, joins, parametros);
@@ -461,7 +464,7 @@ namespace GestorDeElementos
                 registros = registros.Take(cantidad);
             }
 
-            if (parametros.Tipo == TipoOperacion.Leer && orden.Count > 0)
+            if (parametros.Operacion == TipoOperacion.Leer && orden.Count > 0)
                 AplicarOrden(registros, orden);
 
             return registros;
@@ -622,20 +625,20 @@ namespace GestorDeElementos
 
         protected virtual void DespuesDeMapearRegistro(TElemento elemento, TRegistro registro, ParametrosDeNegocio opciones)
         {
-            if (TipoOperacion.Insertar == opciones.Tipo)
+            if (TipoOperacion.Insertar == opciones.Operacion)
                 registro.Id = 0;
         }
 
         private void AntesMapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
         {
 
-            if (opciones.Tipo == TipoOperacion.Insertar)
+            if (opciones.Operacion == TipoOperacion.Insertar)
                 AntesMapearRegistroParaInsertar(elemento, opciones);
             else
-            if (opciones.Tipo == TipoOperacion.Modificar)
+            if (opciones.Operacion == TipoOperacion.Modificar)
                 AntesMapearRegistroParaModificar(elemento, opciones);
             else
-            if (opciones.Tipo == TipoOperacion.Eliminar)
+            if (opciones.Operacion == TipoOperacion.Eliminar)
                 AntesMapearRegistroParaEliminar(elemento, opciones);
         }
 

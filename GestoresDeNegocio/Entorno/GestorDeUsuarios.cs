@@ -152,7 +152,7 @@ namespace GestoresDeNegocio.Entorno
         protected override void DespuesDePersistir(UsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
-            if (parametros.Tipo != TipoOperacion.Insertar)
+            if (parametros.Operacion != TipoOperacion.Insertar)
                 ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}");
         }
 

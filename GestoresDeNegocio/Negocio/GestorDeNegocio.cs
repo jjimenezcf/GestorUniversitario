@@ -129,14 +129,14 @@ namespace GestoresDeNegocio.Negocio
         {
             base.AntesDePersistir(registro, parametros);
 
-            if (parametros.Tipo == TipoOperacion.Insertar)
+            if (parametros.Operacion == TipoOperacion.Insertar)
             {
                 registro.IdPermisoDeAdministrador = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
                 registro.IdPermisoDeGestor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
                 registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
             }
 
-            if (parametros.Tipo == TipoOperacion.Modificar)
+            if (parametros.Operacion == TipoOperacion.Modificar)
             {
                 registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
                 registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;

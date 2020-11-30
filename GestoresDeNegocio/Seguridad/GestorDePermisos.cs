@@ -255,7 +255,7 @@ namespace GestoresDeNegocio.Seguridad
             base.AntesDePersistir(registro, parametros);
 
             //validamos que el permiso no esté en un rol
-            if (parametros.Tipo == TipoOperacion.Eliminar)
+            if (parametros.Operacion == TipoOperacion.Eliminar)
             {
                 var gestor = new GestorDePermisosDeUnRol(Contexto, Mapeador);
                 var filtro = new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnRolDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = registro.Id.ToString() };

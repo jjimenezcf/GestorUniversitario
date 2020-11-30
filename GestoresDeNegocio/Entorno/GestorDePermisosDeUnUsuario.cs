@@ -60,14 +60,20 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdUsuario).ToLower())
+                if (string.Equals(filtro.Clausula, nameof(PermisosDeUnUsuarioDtm.IdUsuario), StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.igual)
                     registros = registros.Where(x => x.IdUsuario == filtro.Valor.Entero());
 
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
                     registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
 
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.Permiso).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.Permiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.contiene)
                     registros = registros.Where(x => x.Permiso.Nombre.Contains(filtro.Valor));
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
+                {
+                    var lista = filtro.Valor.Split(',').Select(s => s.Entero()).ToArray();
+                    return registros.Where(x => lista.Contains(x.Id));
+                }
             }
             return registros;
 

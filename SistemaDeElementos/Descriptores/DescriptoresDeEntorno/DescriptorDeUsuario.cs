@@ -16,8 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeUsuario(ModoDescriptor modo)
         : base(controlador: nameof(UsuariosController)
                , vista: $"{nameof(UsuariosController.CrudUsuario)}"
-               , modo: modo
-               , enumNegocio.Usuarios)
+               , modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
                 new SelectorDeFiltro<UsuarioDto, PermisoDto>(
