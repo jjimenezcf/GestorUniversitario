@@ -160,8 +160,7 @@
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             mantenimiento.CerrarModalDeBorrado();
             mantenimiento.BlanquearTodosLosCheck();
-            mantenimiento.Buscar(atGrid.accion.buscar, 0);
-            this.SiHayErrorTrasPeticionAjax(peticion);
+            mantenimiento.SiHayErrorTrasPeticionAjax(peticion);
         }
 
         public CerrarModalDeBorrado() {

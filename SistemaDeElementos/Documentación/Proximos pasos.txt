@@ -1,4 +1,34 @@
-﻿1. Que el grid modal pase por el nuevo ep
+﻿
+- Añadir filtros a usuarios (selector de puesto) y órdenes
+- Añadir filtro a puestos (selector de rol) y órdenes
+- Añadir filtro a roles (selector de permiso) y órdenes
+- Añadir ordenación a los grid de roles-permisos, roles-puestos y usuarios-puestos 
+- Al grabar un usuario que asigne a la clave el valor actual
+- Crud de Paises
+- Ocultar o mostrar el filtro en modal
+- Crud de provincia
+- Crud de municipio
+- Crud de barrio
+- Crud de C.Postales
+- Relación de C.Postales por municipio
+- Relación de C.Postales por barrios
+- Crud de tipos de vías
+- Crud de calle 
+- Relación de calle con municipio
+- Relación de calle con barrios
+- Relación de calle con códigos postales
+
+- Definición de Trabajos sometidos
+- Trabajos sometidos de un usuario
+- Proceso de envío de mensajes
+- Proceso de exportación a excel
+- Proceso de importación de callejero
+
+Realizado
+---------------------------------------------
+
+
+1. Que el grid modal pase por el nuevo ep
 2. Que al navegar, se almacene el estado del grid para reposicionarse a la vuelta
 3. Pasar la CacheDeVariables a la CacheDeRegistro
 4. Implementar seguridad
@@ -22,14 +52,9 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 - Poder relacionar un rol con múltiples permisos
 - Obtener el árbol de menú de un usuario
 
-pendiente
 - Montar sistema de caches
 - Montar ventana de login
 - Crear usuario administrador
 	- permiso de administrador asociado a variable 
 	- se lee al entrar (de BD o cache) en el controlador base
 
-- Añadir filtros a usuarios (selector de puesto)
-- Añadir filtro a puestos (selector de rol)
-- Añadir filtro a roles (selector de permiso)
-- Crud de Paises

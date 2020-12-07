@@ -198,10 +198,9 @@
 
         private SiHayErrorAlLeerElemento(peticion: ApiDeAjax.DescriptorAjax) {
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
-            edicion.SiHayErrorTrasPeticionAjax(peticion);
             edicion.CerrarEdicion();
             edicion.CrudDeMnt.BlanquearTodosLosCheck();
-            this.SiHayErrorTrasPeticionAjax(peticion);
+            edicion.SiHayErrorTrasPeticionAjax(peticion);
         }
 
         protected Modificar() {

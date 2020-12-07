@@ -234,7 +234,6 @@
             body.style.position = "inherit";
             body.style.height = "auto";
             body.style.overflow = "visible";
-
         }
 
         public NavegarARelacionar(idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: DatosRestrictor) {
