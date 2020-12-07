@@ -144,7 +144,7 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.DespuesDeBorrar
-                , this.SiHayErrorTrasPeticionAjax
+                , this.SiHayErrorTrasPeticionDeBorrar
             );
             a.Ejecutar();
         }
@@ -156,6 +156,13 @@
             mantenimiento.Buscar(atGrid.accion.buscar, 0);
         }
 
+        private SiHayErrorTrasPeticionDeBorrar(peticion: ApiDeAjax.DescriptorAjax) {
+            let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
+            mantenimiento.CerrarModalDeBorrado();
+            mantenimiento.BlanquearTodosLosCheck();
+            mantenimiento.Buscar(atGrid.accion.buscar, 0);
+            this.SiHayErrorTrasPeticionAjax(peticion);
+        }
 
         public CerrarModalDeBorrado() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;

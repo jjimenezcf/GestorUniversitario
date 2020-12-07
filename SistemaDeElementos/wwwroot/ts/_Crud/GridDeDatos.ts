@@ -278,7 +278,7 @@
         }
 
         protected get EsModalDeSeleccion(): boolean {
-            return this.constructor.name === ModalSeleccion.name ;
+            return this.constructor.name === ModalSeleccion.name;
         }
 
         protected get EsModalParaConsultarRelaciones(): boolean {
@@ -289,7 +289,7 @@
         }
 
         protected get EsModalConGrid(): boolean {
-            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones
+            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones;
         }
 
         private idHtmlFiltro: string;
@@ -581,6 +581,17 @@
             }
         }
 
+        public BlanquearTodosLosCheck() {
+            var celdasId = document.getElementsByName(`${Literal.id}.${this.IdGrid}`);
+            var len = celdasId.length;
+            for (var j = 0; j < len; j++) {
+                var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                var check = document.getElementById(idCheck);
+                (<HTMLInputElement>check).checked = false;
+            }
+            this.InfoSelector.QuitarTodos();
+        }
+
         protected ActualizarInformacionDelGrid(contenedorGrid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
             contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
 
@@ -685,7 +696,7 @@
             let PropiedadQueRestringe: string = partes[2].split('==')[1];
             let PropiedadRestrictora: string = partes[3].split('==')[1];
             let idSeleccionado: number = infoSelector.LeerElemento(0).Id;
-            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(idSeleccionado, PropiedadQueRestringe)
+            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(idSeleccionado, PropiedadQueRestringe);
             let idRestrictor: number = Numero(valorDeLaColumna);
             let elemento: Elemento = infoSelector.LeerElemento(0);
             datos.idSeleccionado = elemento.Id;
@@ -741,17 +752,17 @@
         protected CargarGrid(accion: string, posicion: number) {
             let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
             var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
-                let a = new ApiDeAjax.DescriptorAjax(this
-                    , Ajax.EndPoint.LeerDatosParaElGrid
-                    , datosDePeticion
-                    , url
-                    , ApiDeAjax.TipoPeticion.Asincrona
-                    , ApiDeAjax.ModoPeticion.Get
-                    , this.CrearFilasEnElGrid
-                    , null
-                );
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerDatosParaElGrid
+                , datosDePeticion
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.CrearFilasEnElGrid
+                , null
+            );
 
-                a.Ejecutar();
+            a.Ejecutar();
         }
 
         private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
@@ -919,7 +930,7 @@
             return "";
         }
 
-        public FilaPulsada(infoSelector: InfoSelector,  idCheck: string, idDelInput: string) {
+        public FilaPulsada(infoSelector: InfoSelector, idCheck: string, idDelInput: string) {
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);

@@ -184,7 +184,7 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.MapearElementoDevuelto
-                , this.SiHayErrorTrasPeticionAjax
+                , this.SiHayErrorAlLeerElemento
             );
 
             a.Ejecutar();
@@ -194,6 +194,14 @@
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos[0]);
+        }
+
+        private SiHayErrorAlLeerElemento(peticion: ApiDeAjax.DescriptorAjax) {
+            let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
+            edicion.SiHayErrorTrasPeticionAjax(peticion);
+            edicion.CerrarEdicion();
+            edicion.CrudDeMnt.BlanquearTodosLosCheck();
+            this.SiHayErrorTrasPeticionAjax(peticion);
         }
 
         protected Modificar() {

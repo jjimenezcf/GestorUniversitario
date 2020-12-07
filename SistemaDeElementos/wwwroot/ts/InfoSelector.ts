@@ -96,7 +96,7 @@ class InfoSelector {
         return 0;
     }
 
-    LeerElemento(pos: number): Elemento {
+    public LeerElemento(pos: number): Elemento {
         var id = this.LeerId(pos);
         if (id > 0) {
             var texto = this.paraMostrarEnSelector[pos];
