@@ -147,6 +147,13 @@ namespace GestoresDeNegocio.Entorno
                 registro.IdArchivo = null;
                 registro.Archivo = null;
             }
+
+            if (parametros.Operacion == TipoOperacion.Insertar)
+                registro.password = new GenerarPassword(Contexto).Password;
+
+            if (parametros.Operacion == TipoOperacion.Modificar)
+                registro.password = RegistroEnBD.password;
+
         }
 
         protected override void DespuesDePersistir(UsuarioDtm registro, ParametrosDeNegocio parametros)
@@ -225,6 +232,19 @@ namespace GestoresDeNegocio.Entorno
 
         public ObtenerPassword(ContextoSe contexto, string login)
         : base(contexto, $"SELECT CONVERT(VARCHAR , DECRYPTBYPASSPHRASE('sistemaSe', password)) FROM entorno.usuario where login like '{login}'")
+        {
+            Ejecutar();
+        }
+    }
+
+
+    public class GenerarPassword : ConsultaSql
+    {
+        public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
+
+
+        public GenerarPassword(ContextoSe contexto)
+        : base(contexto, $"SELECT CONVERT(VARCHAR , ENCRYPTBYPASSPHRASE('sistemaSe', '12345678'))")
         {
             Ejecutar();
         }
