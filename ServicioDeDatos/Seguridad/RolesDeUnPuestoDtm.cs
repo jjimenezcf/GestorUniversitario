@@ -12,14 +12,14 @@ namespace ServicioDeDatos.Seguridad
         public int IdRol { get; set; }
 
         [Column("IDPUESTO", TypeName = "INT")]
-        public int idPuesto { get; set; }
+        public int IdPuesto { get; set; }
 
         public RolDtm Rol { get; set; }
         public PuestoDtm Puesto { get; set; }
 
         public RolesDeUnPuestoDtm()
         {
-            NombreDeLaPropiedadDelIdElemento1 = nameof(idPuesto);
+            NombreDeLaPropiedadDelIdElemento1 = nameof(IdPuesto);
             NombreDeLaPropiedadDelIdElemento2 = nameof(IdRol);
         }
 
@@ -31,7 +31,7 @@ namespace ServicioDeDatos.Seguridad
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RolesDeUnPuestoDtm>()
-                .HasAlternateKey(p => new { p.IdRol, p.idPuesto })
+                .HasAlternateKey(p => new { p.IdRol, p.IdPuesto })
                 .HasName("AK_ROL_PUESTO");
 
             modelBuilder.Entity<RolesDeUnPuestoDtm>()
@@ -44,7 +44,7 @@ namespace ServicioDeDatos.Seguridad
             modelBuilder.Entity<RolesDeUnPuestoDtm>()
                 .HasOne(x => x.Puesto)
                 .WithMany(p => p.Roles)
-                .HasForeignKey(x => x.idPuesto)
+                .HasForeignKey(x => x.IdPuesto)
                 .HasConstraintName("FK_ROL_PUESTO_IDPUESTO")
                 .OnDelete(DeleteBehavior.Restrict);
         }

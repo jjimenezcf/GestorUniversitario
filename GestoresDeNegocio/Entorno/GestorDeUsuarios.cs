@@ -107,6 +107,7 @@ namespace GestoresDeNegocio.Entorno
                                                       || x.Nombre.Contains(filtro.Valor)
                                                       || x.Login.Contains(filtro.Valor));
                 }
+
                 if (filtro.Clausula.ToLower() == UsuariosPor.Permisos)
                 {
                     var listaIds = filtro.Valor.ListaEnteros();
@@ -115,10 +116,16 @@ namespace GestoresDeNegocio.Entorno
                         registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsuario == u.Id));
                     }
                 }
+
                 if (filtro.Clausula.ToLower() == nameof(UsuarioDtm.Login).ToLower())
                 {
                     registros = registros.Where(x => x.Login == filtro.Valor);
                 }
+
+                if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower() &&
+                    filtro.Criterio == CriteriosDeFiltrado.diferente)
+                    registros = registros.Where(i => !i.Puestos.Any(r => r.IdPuesto == filtro.Valor.Entero()));
+
             }
 
             return registros;

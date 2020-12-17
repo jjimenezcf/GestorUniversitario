@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Seguridad;
+﻿using ModeloDeDto.Entorno;
+using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
@@ -21,6 +22,14 @@ namespace MVCSistemaDeElementos.Descriptores
                 , propiedadQueRestringe: nameof(PuestoDto.Id)
                 , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
 
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(UsuariosDeUnPuestoController)
+                , vista: nameof(UsuariosDeUnPuestoController.CrudUsuariosDeUnPuesto)
+                , relacionarCon: nameof(UsuarioDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<UsuariosDeUnPuestoDto>.NombreMnt
+                , nombreOpcion: "Usuarios"
+                , propiedadQueRestringe: nameof(PuestoDto.Id)
+                , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto));
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<PuestoDto, PermisosDeUnPuestoDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un Puesto"

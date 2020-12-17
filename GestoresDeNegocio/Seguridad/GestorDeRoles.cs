@@ -54,9 +54,9 @@ namespace GestoresDeNegocio.Seguridad
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.idPuesto).ToLower() &&
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDtm.IdPuesto).ToLower() &&
                     filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Puestos.Any(r => r.idPuesto == filtro.Valor.Entero()));
+                    registros = registros.Where(i => !i.Puestos.Any(r => r.IdPuesto == filtro.Valor.Entero()));
 
 
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower() &&
