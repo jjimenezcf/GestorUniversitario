@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
@@ -93,11 +94,15 @@ namespace GestoresDeNegocio.Seguridad
             return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
         }
 
-        //protected override void MapearDatosDeRelacion(RolesDeUnPuestoDtm registro, int idElemento1, int idElemento2)
-        //{
-        //    registro.idPuesto = idElemento1;
-        //    registro.IdRol = idElemento2;
-        //}
+        protected override void DespuesDePersistir(RolesDeUnPuestoDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
+            {
+                ServicioDeCaches.EliminarCache($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}");
+                ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+            }
+        }
     }
 }
 

@@ -104,6 +104,18 @@ namespace GestoresDeNegocio.Seguridad
             var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(clasesDtm).ToList();
         }
+
+        protected override void DespuesDePersistir(PuestosDeUnUsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
+            {
+                var parteDeLaClave = $"Usuario:{registro.IdUsuario}";
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", parteDeLaClave);
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}", parteDeLaClave);
+            }
+        }
+
     }
 }
 

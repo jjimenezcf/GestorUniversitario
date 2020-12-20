@@ -2,11 +2,16 @@
 using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
+using ModeloDeDto.Entorno;
+using ModeloDeDto.Negocio;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Entorno;
+using ServicioDeDatos.Negocio;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -17,6 +22,7 @@ namespace GestorDeElementos
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
     public enum ModoDeOrdenancion { ascendente, descendente }
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
+
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -67,7 +73,7 @@ namespace GestorDeElementos
 
     #endregion
 
-    public abstract class GestorDeElementos<TContexto, TRegistro, TElemento>
+    public class GestorDeElementos<TContexto, TRegistro, TElemento>
         where TRegistro : Registro
         where TElemento : ElementoDto
         where TContexto : ContextoSe
@@ -76,7 +82,6 @@ namespace GestorDeElementos
         public IMapper Mapeador;
 
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
-        private static readonly ConcurrentDictionary<Type, object> _CacheDeGestores = new ConcurrentDictionary<Type, object>();
 
         public TRegistro RegistroEnBD { get; private set; }
 
@@ -95,17 +100,6 @@ namespace GestorDeElementos
         : this(generadorDeContexto(), mapeador)
         {
         }
-
-        protected T CrearGestor<T>(Func<T> constructor)
-        {
-            if (!_CacheDeGestores.ContainsKey(typeof(T)))
-            {
-                _CacheDeGestores.TryAdd(typeof(T), constructor());
-            }
-
-            return (T)_CacheDeGestores[typeof(T)];
-        }
-
 
         protected virtual void IniciarClase(TContexto contexto)
         {
@@ -310,6 +304,8 @@ namespace GestorDeElementos
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
+            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, NegociosDeSe.ParsearDto(registro.GetType().Name.Replace("Dtm", "Dto")));
+
             if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.NombreObligatorio)
             {
                 var propiedades = PropiedadesDelObjeto(registro);
@@ -322,6 +318,10 @@ namespace GestorDeElementos
                         break;
                     }
                 }
+            }
+
+            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
+            {
             }
         }
         protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);
@@ -346,6 +346,29 @@ namespace GestorDeElementos
                 PersistirRegistro(elementoDtm as TRegistro, parametros);
             }
         }
+
+        public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
+        {
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+            var indice = $"Usuario:{idUsuario} Permiso:{negocioDtm.IdPermisoDeGestor}";
+
+            if (!cache.ContainsKey(indice))
+            {
+                var gestorDePermisosDeUnUsuario = Gestores<TContexto, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>.Obtener(Contexto, Mapeador, "Entorno.GestorDePermisosDeUnUsuario");
+                var filtros = new List<ClausulaDeFiltrado>();
+                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = idUsuario.ToString() });
+                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
+
+                if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
+                    throw new Exception($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
+
+                cache[indice] = true;
+            }
+            return (bool)cache[indice];
+        }
+
 
 
         #endregion
@@ -415,7 +438,7 @@ namespace GestorDeElementos
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
-            if (!traqueado) 
+            if (!traqueado)
                 registros = registros.AsNoTracking();
             return registros.ToList();
         }
@@ -725,9 +748,9 @@ namespace GestorDeElementos
             {
                 elementoDeBd = LeerRegistroPorId(id);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}", e);                
+                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}", e);
             }
 
             return MapearElemento(elementoDeBd);

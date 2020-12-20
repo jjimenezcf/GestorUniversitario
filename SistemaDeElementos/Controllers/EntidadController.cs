@@ -84,6 +84,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 if (fichero == null)
                     throw new Exception("No se ha identificado el fichero");
 
@@ -162,6 +163,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
                 r.Estado = EstadoPeticion.Ok;
@@ -184,6 +186,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
                 r.Estado = EstadoPeticion.Ok;
@@ -207,6 +210,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 var elementos = Leer(0, -1, idsJson, null).ToList();
 
                 if (elementos.Count == 0)
@@ -239,6 +243,7 @@ namespace MVCSistemaDeElementos.Controllers
             var tran = GestorDeElementos.IniciarTransaccion();
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 foreach (var id in listaIds)
                 {
@@ -274,6 +279,7 @@ namespace MVCSistemaDeElementos.Controllers
             int can = cantidad.Entero();
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 var elementos = Leer(pos, can, filtro, orden);
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.Count() == 0)
@@ -333,6 +339,7 @@ namespace MVCSistemaDeElementos.Controllers
             List<TElemento> elementos;
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 elementos = Leer(0, -1, filtro, null).ToList();
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
@@ -360,6 +367,7 @@ namespace MVCSistemaDeElementos.Controllers
             dynamic elementos;
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 elementos = CargarLista(claseElemento);
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
@@ -381,6 +389,7 @@ namespace MVCSistemaDeElementos.Controllers
             dynamic elementos;
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 elementos = CargaDinamica(claseElemento, posicion, cantidad, filtro);
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
@@ -408,6 +417,7 @@ namespace MVCSistemaDeElementos.Controllers
             var r = new Resultado();
             try
             {
+                CumplimentarDatosDeUsuarioDeConexion();
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 var relacionados = 0;
                 var mensajeInformativo = "";
@@ -447,8 +457,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
-            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
-
+            CumplimentarDatosDeUsuarioDeConexion();
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
@@ -523,6 +532,13 @@ namespace MVCSistemaDeElementos.Controllers
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes);
+        }
+
+        private void CumplimentarDatosDeUsuarioDeConexion()
+        {
+            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
+            var gestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            DatosDeConexion.IdUsuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login).Id;
         }
 
 

@@ -28,6 +28,7 @@ namespace MVCSistemaDeElementos.Controllers
             return View();
         }
 
+        
 
         protected IActionResult PanelDeControl(UsuarioDto usuario)
         {

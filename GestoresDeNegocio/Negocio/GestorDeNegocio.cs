@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Utilidades;
 using Gestor.Errores;
 using System;
-using System.Security.Policy;
 using System.Reflection;
 
 namespace GestoresDeNegocio.Negocio
@@ -97,9 +96,9 @@ namespace GestoresDeNegocio.Negocio
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumNegocio negocio)
         {
-            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.Parsear(negocio));
+            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocio)}.{nameof(TienePermisos)}");
-            var indice = $"{negocioDtm.Id}.{permisosNecesarios}";
+            var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
 
             if (!cache.ContainsKey(indice))
             {

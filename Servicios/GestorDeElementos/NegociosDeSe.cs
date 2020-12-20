@@ -8,7 +8,7 @@ using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Seguridad;
 
-namespace GestoresDeNegocio.Negocio
+namespace GestorDeElementos
 {
     public enum enumNegocio
     {
@@ -37,7 +37,7 @@ namespace GestoresDeNegocio.Negocio
 
     public static class NegociosDeSe
     {
-        public static string Parsear(enumNegocio negocio)
+        public static string ToString(enumNegocio negocio)
         {
             switch (negocio)
             {
@@ -47,8 +47,7 @@ namespace GestoresDeNegocio.Negocio
                 case enumNegocio.Menu: return "Menus";
                 case enumNegocio.Puesto: return "Puestos";
             }
-
-            return negocio.ToString();
+            throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
 
         public static enumNegocio ParsearDto(string negocio)
@@ -76,7 +75,7 @@ namespace GestoresDeNegocio.Negocio
                 case nameof(ArchivosDto): return enumNegocio.Archivos;
             }
 
-            throw new Exception($"No está definido el negocio {negocio}");
+            throw new Exception($"No está definido el dto {negocio}, no se puede parsear");
         }
     }
 }

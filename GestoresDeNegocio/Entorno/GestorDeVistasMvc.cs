@@ -82,7 +82,7 @@ namespace GestoresDeNegocio.Entorno
 
             var vistaDtm = LeerVistaMvc(vista);
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeVistaMvc)}.{nameof(TienePermisos)}");
-            var indice = $"{vistaDtm.IdPermiso}.{usuarioConectado.Id}";
+            var indice = $"Usuario:{usuarioConectado.Id} Permiso:{vistaDtm.IdPermiso}";
 
             if (!cache.ContainsKey(indice))
             {

@@ -86,8 +86,13 @@ namespace GestoresDeNegocio.Seguridad
 
         protected override void DespuesDePersistir(PermisosDeUnRolDtm registro, ParametrosDeNegocio parametros)
         {
-            base.DespuesDePersistir(registro, parametros);
-            ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", $"{registro.IdPermiso}.");
+            base.DespuesDePersistir(registro, parametros); 
+            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
+            {
+                var parteDeLaClave = $"Permiso:{registro.IdPermiso}";
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", parteDeLaClave);
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}", parteDeLaClave);
+            }
         }
     }
 }

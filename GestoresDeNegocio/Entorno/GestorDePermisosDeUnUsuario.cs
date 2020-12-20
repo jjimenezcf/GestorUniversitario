@@ -10,7 +10,6 @@ using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
-using ServicioDeDatos.Seguridad;
 using Utilidades;
 
 namespace GestoresDeNegocio.Entorno
@@ -72,7 +71,7 @@ namespace GestoresDeNegocio.Entorno
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
                 {
                     var lista = filtro.Valor.Split(',').Select(s => s.Entero()).ToArray();
-                    return registros.Where(x => lista.Contains(x.Id));
+                    return registros.Where(x => lista.Contains(x.IdPermiso));
                 }
             }
             return registros;
