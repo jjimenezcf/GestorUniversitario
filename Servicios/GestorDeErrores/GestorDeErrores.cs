@@ -57,14 +57,5 @@ namespace Gestor.Errores
             Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
         }
 
-        public bool Mostrar(Exception excepcion)
-        {
-            if (excepcion.Data.Contains(Datos.Mostrar))
-            {
-                return (bool)excepcion.Data[Datos.Mostrar];
-            }
-
-            return false;
-        }
     }
 }

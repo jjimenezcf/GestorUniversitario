@@ -15,7 +15,6 @@ namespace GestorDeElementos
         No_Definido,
         Usuario,
         VistasMvc,
-        Permisos,
         Menu,
         PermisosDeUnUsuario,
         Variable,
@@ -46,6 +45,9 @@ namespace GestorDeElementos
                 case enumNegocio.Variable: return "Variables";
                 case enumNegocio.Menu: return "Menus";
                 case enumNegocio.Puesto: return "Puestos";
+                case enumNegocio.UsuariosDeUnPuesto: return "Usuarios de un puesto";
+                case enumNegocio.Negocio: return "Negocios";
+                case enumNegocio.Permiso: return "Permisos";
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }

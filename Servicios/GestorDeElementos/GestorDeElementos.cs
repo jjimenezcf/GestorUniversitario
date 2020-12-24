@@ -349,6 +349,9 @@ namespace GestorDeElementos
 
         public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
         {
+            if (Contexto.DatosDeConexion.EsAdministrador)
+                return true;
+
             var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
             var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");

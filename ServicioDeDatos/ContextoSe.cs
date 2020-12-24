@@ -34,6 +34,7 @@ namespace ServicioDeDatos
         public string Bd { get; set; }
         public string Login { get; set; }
         public int IdUsuario { get; set; }
+        public bool EsAdministrador { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
 

@@ -84,10 +84,10 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
                 if (fichero == null)
-                    throw new Exception("No se ha identificado el fichero");
+                    GestorDeErrores.Emitir("No se ha identificado el fichero");
 
+                CumplimentarDatosDeUsuarioDeConexion();
                 ValidarExtension(fichero, extensionesValidas);
                 var rutaBase = @"..\SistemaDeElementos\wwwroot";
                 var rutaDeDescarga = $@"{rutaBase}\Archivos";
@@ -122,7 +122,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido subir el fichero";
+                r.Mensaje = $"No se ha podido subir el fichero. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
 
@@ -173,7 +173,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido crear";
+                r.Mensaje = $"No se ha podido crear. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -196,7 +196,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido modificar";
+                r.Mensaje = $"No se ha podido modificar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -214,10 +214,10 @@ namespace MVCSistemaDeElementos.Controllers
                 var elementos = Leer(0, -1, idsJson, null).ToList();
 
                 if (elementos.Count == 0)
-                    throw new Exception($"No se ha localizado el registro con el filtro {idsJson}");
+                    GestorDeErrores.Emitir($"No se ha localizado el registro con el filtro {idsJson}");
 
                 if (elementos.Count > 1)
-                    throw new Exception($"Hay más de un registro para el filtro {idsJson}");
+                    GestorDeErrores.Emitir($"Hay más de un registro para el filtro {idsJson}");
 
                 r.Datos = elementos;
                 r.Estado = EstadoPeticion.Ok;
@@ -227,7 +227,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "Error al leer";
+                r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar]==true ? e.Message: "")}" ;
             }
 
             return new JsonResult(r);
@@ -259,7 +259,7 @@ namespace MVCSistemaDeElementos.Controllers
                 GestorDeElementos.Rollback(tran);
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = GestorDeErrores.Mostrar(excepcion: e) ? e.Message : "No se ha podido eliminar";
+                r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
 
             return new JsonResult(r);
@@ -302,7 +302,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido recuperar datos para el grid";
+                r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
 
             var a = new JsonResult(r);
@@ -348,7 +348,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido leer los datos";
+                r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -376,7 +376,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido leer los datos";
+                r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
 
             return new JsonResult(r);
@@ -398,7 +398,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "No se ha podido leer los datos";
+                r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -438,7 +438,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = EstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = "Error en el proceso de relación";
+                r.Mensaje = $"Error en el proceso de relación. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -538,7 +538,9 @@ namespace MVCSistemaDeElementos.Controllers
         {
             DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
             var gestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            DatosDeConexion.IdUsuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login).Id;
+            var usuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            DatosDeConexion.IdUsuario = usuario.Id;
+            DatosDeConexion.EsAdministrador = usuario.EsAdministrador;
         }
 
 
