@@ -349,7 +349,7 @@ namespace GestorDeElementos
 
         public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
         {
-            if (Contexto.DatosDeConexion.EsAdministrador || NegociosDeSe.UsaSeguridad(negocio))
+            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
             var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
@@ -365,7 +365,7 @@ namespace GestorDeElementos
                 filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
 
                 if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
-                    throw new Exception($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
+                    GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
 
                 cache[indice] = true;
             }
