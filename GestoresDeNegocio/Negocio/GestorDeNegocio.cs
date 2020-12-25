@@ -165,6 +165,26 @@ namespace GestoresDeNegocio.Negocio
                 GestorDeErrores.Emitir($"La clase del elemento {registro.Elemento} del negocio {registro.Nombre} debe existir");
 
         }
+
+        public List<ModoDeAccesoAlNegocioDtm> LeerModoDeAccesoAlNegocio(enumNegocio negocio, int idUsuario)
+        {
+            var nombreNegocio = NegociosDeSe.ToString(negocio);
+
+            var modosDeAcceso = Contexto
+               .ModoAccesoAlNegocio
+               .FromSqlInterpolated($@"
+                                       SELECT ID
+                                       , ADMINISTRADOR
+                                       , GESTOR
+                                       , CONSULTOR
+                                       , IDUSUA
+                                       , IDPERMISO
+                                       , ORIGEN
+                                       FROM NEGOCIO.MODO_ACCESO_AL_NEGOCIO_POR_USUARIO({nombreNegocio},{idUsuario})
+                                      "
+                                    ).ToList();
+            return modosDeAcceso;
+        }
     }
 }
 

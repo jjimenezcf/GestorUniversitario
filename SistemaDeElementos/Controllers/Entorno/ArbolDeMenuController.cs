@@ -43,12 +43,12 @@ namespace SistemaDeElementos.Controllers.Entorno
                 </ul>
                 ";
                 r.Html = menuHtml.Replace("¨", "\"");
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Datos = login;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = "No se ha podido leer el menú";
             }

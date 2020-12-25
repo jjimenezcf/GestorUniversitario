@@ -56,12 +56,12 @@ namespace SistemaDeElementos.Controllers.Seguridad
                     throw new Exception($"Hay más de un usuario identificado como: {filtros[0].Valor}");
 
                 r.Datos = elementos[0].Foto;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = Concatenar(e);
 
                 if (e.Data.Contains(Datos.Mostrar) && (bool)e.Data[Datos.Mostrar])
@@ -85,12 +85,12 @@ namespace SistemaDeElementos.Controllers.Seguridad
             {
                 _gestordeUsuarios.ValidarUsuario(login, password);
                 r.Datos = null;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"usuario validado";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = Concatenar(e);
                 r.Mensaje = "Error al validar usuario";
             }

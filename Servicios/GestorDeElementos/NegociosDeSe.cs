@@ -34,6 +34,8 @@ namespace GestorDeElementos
         Archivos
     }
 
+    public enum enumModoDeAcceso { Administrador, Gestor, Consultor, SinAcceso }
+
     public static class NegociosDeSe
     {
 

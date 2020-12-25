@@ -372,6 +372,40 @@ namespace GestorDeElementos
             return (bool)cache[indice];
         }
 
+        public enumModoDeAcceso LeerModoDeAcceso(TElemento elemento)
+        {
+          var m = ModoDeAcceso(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
+          return m;
+        }
+
+        private enumModoDeAcceso ModoDeAcceso(int idUsuario, enumNegocio negocio)
+        {
+            enumModoDeAcceso modo = enumModoDeAcceso.SinAcceso;
+
+            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
+                return enumModoDeAcceso.Administrador;
+
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            var metodo = gestorDeNegocio.GetType().GetMethod("LeerModoDeAccesoAlNegocio");
+            var modosDeAcceso =(List<ModoDeAccesoAlNegocioDtm>)metodo.Invoke(gestorDeNegocio, new object[] {negocio,idUsuario });
+
+            foreach (var modoDeAcceso in modosDeAcceso)
+            {
+                if (modoDeAcceso.Administrador)
+                {
+                    modo = enumModoDeAcceso.Administrador;
+                    break;
+                }
+
+                if (modo != enumModoDeAcceso.Gestor && modoDeAcceso.Gestor)
+                    modo = enumModoDeAcceso.Gestor;
+                else 
+                if (modoDeAcceso.Consultor)
+                    modo = enumModoDeAcceso.Consultor;
+            }
+            return modo;
+        }
+
 
 
         #endregion

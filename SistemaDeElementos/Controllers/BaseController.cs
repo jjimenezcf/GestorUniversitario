@@ -1,4 +1,5 @@
 ﻿using Gestor.Errores;
+using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,14 +8,16 @@ using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public enum EstadoPeticion { Ok, Error }
+    public enum enumEstadoPeticion { Ok, Error }
+
     public class Resultado
     {
-        public EstadoPeticion Estado { get; set; }
+        public enumEstadoPeticion Estado { get; set; }
         public string Mensaje { get; set; }
         public string consola { get; set; }
         public int Total { get; set; } = 0;
         public dynamic Datos { get; set; }
+        public enumModoDeAcceso ModoDeAcceso { get; set; }
     }
 
     public class ResultadoHtml : Resultado

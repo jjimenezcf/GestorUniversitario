@@ -115,12 +115,12 @@ namespace MVCSistemaDeElementos.Controllers
                     r.Datos = fichero.FileName;
                 }
 
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "fichero subido";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido subir el fichero. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
@@ -166,12 +166,12 @@ namespace MVCSistemaDeElementos.Controllers
                 CumplimentarDatosDeUsuarioDeConexion();
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido crear. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
@@ -189,12 +189,12 @@ namespace MVCSistemaDeElementos.Controllers
                 CumplimentarDatosDeUsuarioDeConexion();
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro modificado";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido modificar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
@@ -218,14 +218,20 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (elementos.Count > 1)
                     GestorDeErrores.Emitir($"Hay más de un registro para el filtro {idsJson}");
+                
+                var m = GestorDeElementos.LeerModoDeAcceso(elementos[0]);
+                
+                if (m == enumModoDeAcceso.SinAcceso)
+                    GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
                 r.Datos = elementos;
-                r.Estado = EstadoPeticion.Ok;
+                r.ModoDeAcceso = m;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar]==true ? e.Message: "")}" ;
             }
@@ -250,14 +256,14 @@ namespace MVCSistemaDeElementos.Controllers
                     var elemento = GestorDeElementos.LeerElementoPorId(id);
                     GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Eliminar));
                 }
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = listaIds.Count > 1 ? "Registros eliminados" : "Registro eliminado";
                 GestorDeElementos.Commit(tran);
             }
             catch (Exception e)
             {
                 GestorDeElementos.Rollback(tran);
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
@@ -296,11 +302,11 @@ namespace MVCSistemaDeElementos.Controllers
                 infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
 
                 r.Datos = infoObtenida;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
@@ -342,11 +348,11 @@ namespace MVCSistemaDeElementos.Controllers
                 CumplimentarDatosDeUsuarioDeConexion();
                 elementos = Leer(0, -1, filtro, null).ToList();
                 r.Datos = elementos;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
@@ -370,11 +376,11 @@ namespace MVCSistemaDeElementos.Controllers
                 CumplimentarDatosDeUsuarioDeConexion();
                 elementos = CargarLista(claseElemento);
                 r.Datos = elementos;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
             }
@@ -392,11 +398,11 @@ namespace MVCSistemaDeElementos.Controllers
                 CumplimentarDatosDeUsuarioDeConexion();
                 elementos = CargaDinamica(claseElemento, posicion, cantidad, filtro);
                 r.Datos = elementos;
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
@@ -432,11 +438,11 @@ namespace MVCSistemaDeElementos.Controllers
                 r.Total = relacionados;
                 r.consola = mensajeInformativo;
                 r.Mensaje = $"Se han relacionado {relacionados} de los {listaIds.Count} marcados";
-                r.Estado = EstadoPeticion.Ok;
+                r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = EstadoPeticion.Error;
+                r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"Error en el proceso de relación. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }

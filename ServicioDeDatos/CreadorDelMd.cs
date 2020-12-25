@@ -47,6 +47,7 @@ namespace ServicioDeDatos
         #region dbSets del esquema de NEGOCIO
 
         public DbSet<NegocioDtm> Negocio { get; set; }
+        public DbSet<ModoDeAccesoAlNegocioDtm> ModoAccesoAlNegocio { get; set; }
 
         #endregion
 
@@ -115,6 +116,7 @@ namespace ServicioDeDatos
         private static void DefinirTablasDelEsquemaDeNegocio(ModelBuilder modelBuilder)
         {
             TablaNegocio.Definir(modelBuilder);
+            VistaModoDeAccesoAlNegocio.Definir(modelBuilder);
         }
 
     }
