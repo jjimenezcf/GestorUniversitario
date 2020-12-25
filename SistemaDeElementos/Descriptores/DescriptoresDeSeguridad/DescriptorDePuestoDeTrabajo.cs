@@ -14,15 +14,6 @@ namespace MVCSistemaDeElementos.Descriptores
             RutaVista = "Seguridad";
 
             AnadirOpciondeRelacion(Mnt
-                , controlador: nameof(RolesDeUnPuestoController)
-                , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
-                , relacionarCon: nameof(RolDto)
-                , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
-                , nombreOpcion: "Roles"
-                , propiedadQueRestringe: nameof(PuestoDto.Id)
-                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
-
-            AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(UsuariosDeUnPuestoController)
                 , vista: nameof(UsuariosDeUnPuestoController.CrudUsuariosDeUnPuesto)
                 , relacionarCon: nameof(UsuarioDto)
@@ -30,6 +21,15 @@ namespace MVCSistemaDeElementos.Descriptores
                 , nombreOpcion: "Usuarios"
                 , propiedadQueRestringe: nameof(PuestoDto.Id)
                 , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto));
+
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(RolesDeUnPuestoController)
+                , vista: nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto)
+                , relacionarCon: nameof(RolDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
+                , nombreOpcion: "Roles"
+                , propiedadQueRestringe: nameof(PuestoDto.Id)
+                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<PuestoDto, PermisosDeUnPuestoDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un Puesto"

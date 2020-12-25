@@ -12,6 +12,15 @@ namespace MVCSistemaDeElementos.Descriptores
             RutaVista = "Seguridad";
 
             AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(PuestosDeUnRolController)
+                , vista: nameof(PuestosDeUnRolController.CrudPuestosDeUnRol)
+                , relacionarCon: nameof(PuestoDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<PuestosDeUnRolDto>.NombreMnt
+                , nombreOpcion: "Puestos"
+                , propiedadQueRestringe: nameof(RolDto.Id)
+                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol));
+
+            AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PermisosDeUnRolController)
                 , vista: nameof(PermisosDeUnRolController.CrudPermisosDeUnRol)
                 , relacionarCon: nameof(PermisoDto)
