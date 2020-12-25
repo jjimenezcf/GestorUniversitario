@@ -20,6 +20,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 return Editor.Mnt;
             }
         }
+
+        public bool EsZonaDeMenuDeMantenimiento {get{ return  Padre is DescriptorDeMantenimiento<TElemento>;}
+}
+
         public DescriptorDeCreacion<TElemento> Creador => (DescriptorDeCreacion<TElemento>)Padre;
         public DescriptorDeEdicion<TElemento> Editor => (DescriptorDeEdicion<TElemento>)Padre;
 
@@ -132,6 +136,18 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumTipoDePermiso.Consultor);
             Menu.Add(opcion);
         }
+        internal void QuitarOpcionDeModificarElemento()
+        {
+            foreach(var opcion in Menu.OpcionesDeMenu)
+            {
+                if (opcion.Accion.TipoDeAccion == TipoDeAccionDeEdicion.ModificarElemento)
+                {
+                    Menu.OpcionesDeMenu.Remove(opcion);
+                    break;
+                }
+            }
+        }
+
         #endregion
     }
 }

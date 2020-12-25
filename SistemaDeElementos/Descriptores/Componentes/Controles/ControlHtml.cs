@@ -1,4 +1,6 @@
-﻿namespace MVCSistemaDeElementos.Descriptores
+﻿using Utilidades;
+
+namespace MVCSistemaDeElementos.Descriptores
 {
 
     public class Posicion
@@ -55,6 +57,12 @@
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador)
         {
+            var htmlOpcion = "";
+            if (!opcion.IsNullOrEmpty() && !accion.IsNullOrEmpty())
+            {
+                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
+            }
+
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
                               		<div id=¨{idHtml}_contenido¨ class=¨contenido-modal¨>
                               		    <div id=¨{idHtml}_cabecera¨ class=¨contenido-cabecera¨>
@@ -64,7 +72,7 @@
                                         {cuerpo}
                                         </div>
                                         <div id=¨{idHtml}_pie¨ class=¨contenido-pie¨>
-                                           <input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />
+                                           {htmlOpcion}
                                            <input type=¨text¨ id=¨{idHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨{cerrar}¨ />
                                            {navegador}
                                         </div>

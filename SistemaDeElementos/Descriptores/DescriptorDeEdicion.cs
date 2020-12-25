@@ -1,5 +1,6 @@
 ﻿using System;
 using ModeloDeDto;
+using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -23,6 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = TipoControl.pnlEditor;
+
             MenuDeEdicion = new ZonaDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
@@ -33,12 +35,15 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion, Crud.Controlador);
             string htmContenedorEdt;
-            if (this.AbrirEnModal)
+            if (AbrirEnModal)
             {
                 htmContenedorEdt = RendelModal(tabla);
             }
             else
             {
+                if (!Crud.HayPermisosDeEdicion)
+                    MenuDeEdicion.QuitarOpcionDeModificarElemento();
+
                 htmContenedorEdt =
                 $@"
                    <div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
@@ -60,8 +65,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , tituloH2: "Edición"
                 , cuerpo: RendelDivDeEdicion(tabla)
                 , idOpcion: $"{IdHtml}-modificar"
-                , opcion: "Modificar"
-                , accion: "Crud.EventosModalDeEdicion('modificar-elemento')"
+                , opcion: Crud.HayPermisosDeEdicion ? "Modificar" : ""
+                , accion: Crud.HayPermisosDeEdicion ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
                 , navegador: HtmlRenderNavegadorDeSeleccionados());
 

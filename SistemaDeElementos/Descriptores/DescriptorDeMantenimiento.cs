@@ -51,7 +51,7 @@ namespace MVCSistemaDeElementos.Descriptores
                    </Div>
                 ";
 
-            foreach (var o in ZonaMenu.Menu.OpcioneDeMenu)
+            foreach (var o in ZonaMenu.Menu.OpcionesDeMenu)
             {
                 if (o.Accion.TipoDeAccion == TipoDeAccionDeMnt.AbrirModalParaRelacionar)
                 {

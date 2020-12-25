@@ -7,7 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class Menu<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         public ZonaDeMenu<TElemento> ZonaMenu => (ZonaDeMenu<TElemento>)Padre;
-        public ICollection<OpcionDeMenu<TElemento>> OpcioneDeMenu { get; private set; } = new List<OpcionDeMenu<TElemento>>();
+        public ICollection<OpcionDeMenu<TElemento>> OpcionesDeMenu { get; private set; } = new List<OpcionDeMenu<TElemento>>();
 
         public Menu(ZonaDeMenu<TElemento> padre)
         : base(
@@ -24,16 +24,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal void Add(OpcionDeMenu<TElemento> opcion)
         {
-            OpcioneDeMenu.Add(opcion);
+            OpcionesDeMenu.Add(opcion);
         }
 
         private string RenderOpcionesMenu()
         {
             var htmlMenu = "<div id=¨{idMenu}¨>{hmlOpciones}</div>";
             var htmlOpciones = "";
-            foreach (OpcionDeMenu<TElemento> opcioDeMenu in OpcioneDeMenu)
+            foreach (OpcionDeMenu<TElemento> opcion in OpcionesDeMenu)
             {
-                htmlOpciones = htmlOpciones + opcioDeMenu.RenderControl() + Environment.NewLine;
+                if (ZonaMenu.EsZonaDeMenuDeMantenimiento && opcion.Accion.TipoDeAccion == TipoDeAccionDeMnt.EditarElemento && !ZonaMenu.Mnt.Crud.HayPermisosDeEdicion)
+                    opcion.Etiqueta = "Consultar";
+
+                htmlOpciones = htmlOpciones + opcion.RenderControl() + Environment.NewLine;
             }
 
             return htmlMenu.Replace("{idMenu}", IdHtml).Replace("{hmlOpciones}", $"{Environment.NewLine}{htmlOpciones}");

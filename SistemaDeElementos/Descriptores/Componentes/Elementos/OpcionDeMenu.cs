@@ -258,7 +258,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumTipoDePermiso permisosNecesarios)
         : base(
           padre: menu,
-          id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcioneDeMenu.Count}",
+          id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcionesDeMenu.Count}",
           etiqueta: titulo,
           propiedad: null,
           ayuda: null,
@@ -273,7 +273,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(Menu.ZonaMenu.Mnt.Crud.UsuarioConectado, enumClaseDePermiso.Negocio, PermisosNecesarios, Menu.ZonaMenu.Mnt.Crud.Negocio))
+            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(usuarioConectado: Menu.ZonaMenu.Mnt.Crud.UsuarioConectado
+                                                                    , claseDePermiso: enumClaseDePermiso.Negocio
+                                                                    , permisosNecesarios: PermisosNecesarios
+                                                                    , elemento: Menu.ZonaMenu.Mnt.Crud.Negocio))
                 return ""; 
 
             if (TipoDeLLamada == TipoDeLlamada.Post)
