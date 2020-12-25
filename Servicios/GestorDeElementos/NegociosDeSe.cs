@@ -36,6 +36,24 @@ namespace GestorDeElementos
 
     public static class NegociosDeSe
     {
+
+        private static List<enumNegocio> _negociosConSeguridad = new List<enumNegocio>
+        {
+           enumNegocio.Usuario,
+           enumNegocio.VistasMvc,
+           enumNegocio.Menu,
+           enumNegocio.Variable,
+           enumNegocio.Negocio,
+           enumNegocio.Permiso,
+           enumNegocio.Puesto,
+           enumNegocio.Rol
+        };
+
+        public static bool UsaSeguridad(enumNegocio negocio)
+        {
+            return _negociosConSeguridad.Contains(negocio);
+        }
+
         public static string ToString(enumNegocio negocio)
         {
             switch (negocio)
@@ -52,9 +70,9 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
 
-        public static enumNegocio ParsearDto(string negocio)
+        public static enumNegocio ParsearDto(string registroDto)
         {
-            switch (negocio)
+            switch (registroDto)
             {
                 case nameof(UsuarioDto): return enumNegocio.Usuario;
                 case nameof(VistaMvcDto): return enumNegocio.VistasMvc;
@@ -77,7 +95,7 @@ namespace GestorDeElementos
                 case nameof(ArchivosDto): return enumNegocio.Archivos;
             }
 
-            throw new Exception($"No está definido el dto {negocio}, no se puede parsear");
+            throw new Exception($"No está definido el dto {registroDto}, no se puede parsear");
         }
     }
 }

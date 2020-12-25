@@ -349,7 +349,7 @@ namespace GestorDeElementos
 
         public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
         {
-            if (Contexto.DatosDeConexion.EsAdministrador)
+            if (Contexto.DatosDeConexion.EsAdministrador || NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
             var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
