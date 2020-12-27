@@ -42,7 +42,7 @@ namespace GestoresDeNegocio.Negocio
         {
 
         }
-        internal static GestorDeNegocio Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeNegocio Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeNegocio(contexto, mapeador);
         }
@@ -96,6 +96,14 @@ namespace GestoresDeNegocio.Negocio
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumNegocio negocio)
         {
+            var estaActivo = NegocioActivo(negocio);
+
+            if (!estaActivo && (permisosNecesarios == enumTipoDePermiso.Administrador || permisosNecesarios == enumTipoDePermiso.Gestor))
+                return false;
+
+            if (usuarioConectado.EsAdministrador)
+                return true;
+
             var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocio)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
@@ -117,7 +125,6 @@ namespace GestoresDeNegocio.Negocio
 
                 if (permisosNecesarios == enumTipoDePermiso.Consultor)
                     filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeConsultor},{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
-
 
                 cache[indice] = gestor.Contar(filtros) > 0;
             }
@@ -184,6 +191,12 @@ namespace GestoresDeNegocio.Negocio
                                       "
                                     ).ToList();
             return modosDeAcceso;
+        }
+
+        public bool NegocioActivo(enumNegocio negocio)
+        {
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            return registro.Activo;
         }
     }
 }

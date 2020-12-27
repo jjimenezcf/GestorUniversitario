@@ -131,7 +131,7 @@
         }
 
         public set Estado(valor: HistorialSe.EstadoPagina) {
-                this._estado = valor;
+            this._estado = valor;
         }
 
         constructor() {
@@ -279,14 +279,14 @@
 
         // funciones para mapear un elemento Json a los controles de un panel
 
-        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
-            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
-            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson);
-            this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number) {
+            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
+            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
+            this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
         }
 
-        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
+        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number) {
             let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
                 var selector = select[i] as HTMLSelectElement;
@@ -301,10 +301,16 @@
                             break;
                         }
                     }
+
+                selector.classList.remove(ClaseCss.soloLectura);
+                if (modoDeAcceso === ModoDeAcceso.consultor) {
+                    selector.disabled = true;
+                    selector.classList.add(ClaseCss.soloLectura);
+                }
             }
         }
 
-        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON) {
+        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number)  {
 
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
 
@@ -323,23 +329,29 @@
                     input.value = valor;
                 }
 
+                input.classList.remove(ClaseCss.soloLectura);
+                if (modoDeAcceso === ModoDeAcceso.consultor) {
+                    input.disabled = true;
+                    input.classList.add(ClaseCss.soloLectura);
+                }
+
             }
         }
 
-        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
+        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any, modoDeAcceso: number) {
 
             if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
-                this.MapearPropiedad(panel, propiedad, "");
+                this.MapearPropiedad(panel, propiedad, "", modoDeAcceso);
                 return;
             }
 
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad]);
+                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad], modoDeAcceso);
                 }
             } else {
-                this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
+                this.MapearPropiedad(panel, propiedad, valorPropiedadJson, modoDeAcceso);
             }
         }
 
@@ -355,34 +367,42 @@
         }
 
 
-        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
+        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number) {
 
-            if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
+            if (this.MapearPropiedaAlEditor(panel, propiedad, valor, modoDeAcceso))
                 return;
 
             //if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
             //    return;
 
-            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor))
+            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor, modoDeAcceso))
                 return;
 
-            if (this.MapearPropiedadAlCheck(panel, propiedad, valor))
+            if (this.MapearPropiedadAlCheck(panel, propiedad, valor, modoDeAcceso))
                 return;
         }
 
-        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
+        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
             let editor: HTMLInputElement = this.BuscarEditor(panel, propiedad);
 
             if (editor === null)
                 return false;
 
             editor.classList.remove(ClaseCss.crtlNoValido);
-            editor.classList.add(ClaseCss.crtlValido);
+            editor.classList.remove(ClaseCss.soloLectura);
+
+            if (modoDeAcceso === ModoDeAcceso.consultor) {
+                editor.readOnly = true;
+                editor.classList.add(ClaseCss.soloLectura);
+            }
+            else
+                editor.classList.add(ClaseCss.crtlValido);
+
             editor.value = valor;
             return true;
         }
 
-        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
+        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
             let check: HTMLInputElement = this.BuscarCheck(panel, propiedad);
 
             if (check === null)
@@ -396,6 +416,10 @@
             else
                 if (IsString(valor))
                     check.checked = valor.toLowerCase() === 'true';
+
+            if (modoDeAcceso === ModoDeAcceso.consultor) {
+                check.disabled = true;
+            }
 
             return true;
         }
@@ -426,12 +450,16 @@
         }
 
 
-        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
+        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
             let selector: HTMLInputElement = this.BuscarUrlDelArchivo(panel, propiedad);
 
             if (selector === null)
                 return false;
             let ruta: string = selector.getAttribute(atArchivo.rutaDestino);
+            if (modoDeAcceso === ModoDeAcceso.consultor) {
+                let ref = document.getElementById(`${selector.id}.ref`);
+                ref.style.visibility = "hidden";
+            }
 
             selector.classList.remove(ClaseCss.crtlNoValido);
             selector.classList.add(ClaseCss.crtlValido);

@@ -79,6 +79,8 @@ namespace GestoresDeNegocio.Entorno
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string vista)
         {
+            if (usuarioConectado.EsAdministrador)
+                return true;
 
             var vistaDtm = LeerVistaMvc(vista);
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeVistaMvc)}.{nameof(TienePermisos)}");

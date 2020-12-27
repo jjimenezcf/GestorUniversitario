@@ -36,6 +36,21 @@ namespace GestorDeElementos
 
     public enum enumModoDeAcceso { Administrador, Gestor, Consultor, SinAcceso }
 
+    public static class ModoDeAccesoDeSe
+    {
+        public static string ToString(enumModoDeAcceso modoDeAcceso)
+        {
+            switch (modoDeAcceso)
+            {
+                case enumModoDeAcceso.Administrador: return "Administrador";
+                case enumModoDeAcceso.Gestor: return "Gestor";
+                case enumModoDeAcceso.Consultor: return "Consultor";
+                case enumModoDeAcceso.SinAcceso: return "SinAcceso";
+            }
+            throw new Exception($"El modo de acceso '{modoDeAcceso}' no está definido, no se puede parsear");
+        }
+    }
+
     public static class NegociosDeSe
     {
 

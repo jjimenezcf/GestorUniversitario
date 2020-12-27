@@ -22,6 +22,13 @@ const ModoOrdenacion = {
     sinOrden: "sin-orden"
 };
 
+const ModoDeAcceso = {
+    administrador: 0,
+    gestor: 1,
+    consultor: 2,
+    sinAcceso: 3
+};
+
 const atControl = {
     propiedad: "propiedad",
     nombre: "name",
@@ -134,7 +141,8 @@ const ClaseCss = {
     barraVerde: "barra-verde",
     barraRoja: "barra-roja",
     barraAzul: "barra-azul",
-    contenedorModal: "contenedor-modal"
+    contenedorModal: "contenedor-modal",
+    soloLectura: "solo-lectura"
 };
 
 const Ajax = {

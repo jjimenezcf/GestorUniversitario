@@ -193,7 +193,7 @@
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
-            edicion.MapearElementoLeido(panel, peticion.resultado.datos[0]);
+            edicion.MapearElementoLeido(panel, peticion.resultado.datos[0], peticion.resultado.modoDeAcceso);
         }
 
         private SiHayErrorAlLeerElemento(peticion: ApiDeAjax.DescriptorAjax) {

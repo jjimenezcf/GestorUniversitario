@@ -146,6 +146,23 @@ namespace GestorDeElementos
 
         #endregion
 
+        #region Métodos de ayuda
+
+        private static PropertyInfo[] PropiedadesDelObjeto(TRegistro registro)
+        {
+            var indice = typeof(TRegistro).FullName;
+            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
+            if (!cache.ContainsKey(indice))
+            {
+                Type t = registro.GetType();
+                cache[indice] = t.GetProperties();
+            }
+            PropertyInfo[] props = (PropertyInfo[])cache[indice];
+            return props;
+        }
+
+        #endregion
+
         #region Métodos de persistencia
 
         public bool IniciarTransaccion()
@@ -213,20 +230,6 @@ namespace GestorDeElementos
             }
         }
 
-        private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
-        {
-            var propiedades = PropiedadesDelObjeto(registro);
-            foreach (var propiedad in propiedades)
-            {
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
-                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
-                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
-            }
-
-            //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
-        }
-
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var registros = new List<TRegistro> { registro };
@@ -282,19 +285,6 @@ namespace GestorDeElementos
 
         }
 
-        private static PropertyInfo[] PropiedadesDelObjeto(TRegistro registro)
-        {
-            var indice = typeof(TRegistro).FullName;
-            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
-            if (!cache.ContainsKey(indice))
-            {
-                Type t = registro.GetType();
-                cache[indice] = t.GetProperties();
-            }
-            PropertyInfo[] props = (PropertyInfo[])cache[indice];
-            return props;
-        }
-
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
             AntesDePersistirValidarRegistro(registro, parametros);
@@ -347,69 +337,7 @@ namespace GestorDeElementos
             }
         }
 
-        public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
-        {
-            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
-                return true;
-
-            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
-            var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
-            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
-            var indice = $"Usuario:{idUsuario} Permiso:{negocioDtm.IdPermisoDeGestor}";
-
-            if (!cache.ContainsKey(indice))
-            {
-                var gestorDePermisosDeUnUsuario = Gestores<TContexto, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>.Obtener(Contexto, Mapeador, "Entorno.GestorDePermisosDeUnUsuario");
-                var filtros = new List<ClausulaDeFiltrado>();
-                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = idUsuario.ToString() });
-                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
-
-                if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
-                    GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
-
-                cache[indice] = true;
-            }
-            return (bool)cache[indice];
-        }
-
-        public enumModoDeAcceso LeerModoDeAcceso(TElemento elemento)
-        {
-          var m = ModoDeAcceso(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
-          return m;
-        }
-
-        private enumModoDeAcceso ModoDeAcceso(int idUsuario, enumNegocio negocio)
-        {
-            enumModoDeAcceso modo = enumModoDeAcceso.SinAcceso;
-
-            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
-                return enumModoDeAcceso.Administrador;
-
-            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
-            var metodo = gestorDeNegocio.GetType().GetMethod("LeerModoDeAccesoAlNegocio");
-            var modosDeAcceso =(List<ModoDeAccesoAlNegocioDtm>)metodo.Invoke(gestorDeNegocio, new object[] {negocio,idUsuario });
-
-            foreach (var modoDeAcceso in modosDeAcceso)
-            {
-                if (modoDeAcceso.Administrador)
-                {
-                    modo = enumModoDeAcceso.Administrador;
-                    break;
-                }
-
-                if (modo != enumModoDeAcceso.Gestor && modoDeAcceso.Gestor)
-                    modo = enumModoDeAcceso.Gestor;
-                else 
-                if (modoDeAcceso.Consultor)
-                    modo = enumModoDeAcceso.Consultor;
-            }
-            return modo;
-        }
-
-
-
         #endregion
-
 
         #region Métodos de lectura
 
@@ -764,6 +692,95 @@ namespace GestorDeElementos
         {
 
         }
+
+        private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
+        {
+            var propiedades = PropiedadesDelObjeto(registro);
+            foreach (var propiedad in propiedades)
+            {
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
+                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
+            }
+
+            //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
+        }
+
+        #endregion
+
+        #region  Métodos de seguridad
+
+        public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
+        {
+            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
+                return true;
+
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+            var indice = $"Usuario:{idUsuario} Permiso:{negocioDtm.IdPermisoDeGestor}";
+
+            if (!cache.ContainsKey(indice))
+            {
+                var gestorDePermisosDeUnUsuario = Gestores<TContexto, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>.Obtener(Contexto, Mapeador, "Entorno.GestorDePermisosDeUnUsuario");
+                var filtros = new List<ClausulaDeFiltrado>();
+                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = idUsuario.ToString() });
+                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
+
+                if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
+                    GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
+
+                cache[indice] = true;
+            }
+            return (bool)cache[indice];
+        }
+
+        public enumModoDeAcceso LeerModoDeAcceso(TElemento elemento)
+        {
+            var m = ModoDeAcceso(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
+            return m;
+        }
+
+        private enumModoDeAcceso ModoDeAcceso(int idUsuario, enumNegocio negocio)
+        {
+            enumModoDeAcceso modo = enumModoDeAcceso.SinAcceso;
+
+            if (!NegociosDeSe.UsaSeguridad(negocio))
+                return enumModoDeAcceso.Administrador;
+
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+
+            var negocioActivo = gestorDeNegocio.GetType().GetMethod("NegocioActivo");
+            var estaActivo = (bool)negocioActivo.Invoke(gestorDeNegocio, new object[] { negocio });
+
+            if (Contexto.DatosDeConexion.EsAdministrador)
+                return estaActivo ?
+                    enumModoDeAcceso.Administrador :
+                    enumModoDeAcceso.Consultor;
+
+            var leerModoDeAccesoAlNegocio = gestorDeNegocio.GetType().GetMethod("LeerModoDeAccesoAlNegocio");
+            var modosDeAcceso = (List<ModoDeAccesoAlNegocioDtm>)leerModoDeAccesoAlNegocio.Invoke(gestorDeNegocio, new object[] { negocio, idUsuario });
+
+            foreach (var modoDeAcceso in modosDeAcceso)
+            {
+                if (modoDeAcceso.Administrador)
+                {
+                    modo = enumModoDeAcceso.Administrador;
+                    break;
+                }
+
+                if (modo != enumModoDeAcceso.Gestor && modoDeAcceso.Gestor)
+                    modo = enumModoDeAcceso.Gestor;
+                else
+                if (modoDeAcceso.Consultor)
+                    modo = enumModoDeAcceso.Consultor;
+            }
+            return modo;
+        }
+
+
+
 
         #endregion
 

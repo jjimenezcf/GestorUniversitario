@@ -136,18 +136,18 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumTipoDePermiso.Consultor);
             Menu.Add(opcion);
         }
-        internal void QuitarOpcionDeModificarElemento()
+        #endregion
+
+        internal void QuitarOpcionDeMenu(string tipoDeAccion)
         {
-            foreach(var opcion in Menu.OpcionesDeMenu)
+            foreach (var opcion in Menu.OpcionesDeMenu)
             {
-                if (opcion.Accion.TipoDeAccion == TipoDeAccionDeEdicion.ModificarElemento)
+                if (opcion.Accion.TipoDeAccion == tipoDeAccion)
                 {
                     Menu.OpcionesDeMenu.Remove(opcion);
                     break;
                 }
             }
         }
-
-        #endregion
     }
 }

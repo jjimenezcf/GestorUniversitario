@@ -195,13 +195,13 @@ namespace GestoresDeNegocio.Entorno
             try
             {
                 usuariodtm = LeerRegistroCacheado(nameof(UsuarioDtm.Login), login, true, true);
-                
+
                 if (new ObtenerPassword(Contexto, usuariodtm.Login).Password != password)
                     throw new Exception("Login/password incorrecto");
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                GestorDeErrores.Emitir($"Conexión no validada {login}", exc);    
+                GestorDeErrores.Emitir($"Conexión no validada {login}", exc);
             }
 
             return MapearElemento(usuariodtm);
@@ -209,15 +209,12 @@ namespace GestoresDeNegocio.Entorno
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumClaseDePermiso claseDePermiso, enumTipoDePermiso permisosNecesarios, object elemento)
         {
-            if (usuarioConectado.EsAdministrador)
-                return true;
-
             if (claseDePermiso == enumClaseDePermiso.Negocio)
             {
                 var gestorDeNegocio = GestorDeNegocio.Gestor(Contexto, Mapeador);
                 return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, (enumNegocio)elemento);
             }
-            
+
             if (claseDePermiso == enumClaseDePermiso.Vista)
             {
                 var gestorDeVista = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
@@ -230,8 +227,8 @@ namespace GestoresDeNegocio.Entorno
             }
             return false;
         }
-    }
 
+    }
     public class ObtenerPassword : ConsultaSql
     {
         public string Password => Leidos == 0 ? "" : (string)Registros[0][0];

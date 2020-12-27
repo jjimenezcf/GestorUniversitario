@@ -229,7 +229,7 @@ namespace MVCSistemaDeElementos.Descriptores
               <table class=¨tabla-archivo-subir¨>
                  <tr>
                    <td class=¨td-archivo-subir¨>        
-                      <a href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
+                      <a id=¨{descriptorControl.IdHtml}.ref¨ href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
                       <input  {RenderAtributosComunes(tabla, descriptorControl)}
                               type=¨file¨ 
                               name=¨fichero¨  

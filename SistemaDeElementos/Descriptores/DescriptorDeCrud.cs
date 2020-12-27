@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
@@ -42,7 +43,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public string RutaVista { get; set; }
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }
-        public bool HayPermisosDeEdicion { get; set; }
+        public GestorDeNegocio GestorDeNegocio { get; internal set; }
+        public bool NegocioActivo => GestorDeNegocio.NegocioActivo(Negocio);
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
         : base(
@@ -142,12 +144,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-
-            HayPermisosDeEdicion = GestorDeUsuario.TienePermisos(usuarioConectado: UsuarioConectado
-                                                                    , claseDePermiso: enumClaseDePermiso.Negocio
-                                                                    , permisosNecesarios: enumTipoDePermiso.Gestor
-                                                                    , elemento: Negocio);
-
             var renderMnt = Mnt.RenderControl();
             if (ModoDescriptor.Mantenimiento == Modo)
                 return $@"{renderMnt}{Environment.NewLine}{Creador.RenderControl()}

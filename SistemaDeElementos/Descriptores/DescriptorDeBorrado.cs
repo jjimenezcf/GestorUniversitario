@@ -28,8 +28,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , tituloH2: "Confirmación de borrado"
                 , cuerpo: cuerpoHtml
                 , idOpcion: $"{IdHtml}-aceptar"
-                , opcion: "Aceptar"
-                , accion: "Crud.EventosModalDeBorrar('borrar-elemento')"
+                , opcion: Crud.NegocioActivo ? "Aceptar": ""
+                , accion: Crud.NegocioActivo ? "Crud.EventosModalDeBorrar('borrar-elemento')": ""
                 , cerrar: "Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')"
                 , navegador: "");
 

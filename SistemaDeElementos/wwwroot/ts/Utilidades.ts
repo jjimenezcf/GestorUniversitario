@@ -181,6 +181,7 @@ class ResultadoJson {
     consola: string;
     total: number;
     datos: any;
+    modoDeAcceso: number;
     error: boolean;
 }
 

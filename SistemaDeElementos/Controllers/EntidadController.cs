@@ -19,6 +19,7 @@ using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Authorization;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
+using GestoresDeNegocio.Negocio;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -480,6 +481,7 @@ namespace MVCSistemaDeElementos.Controllers
                     throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de consulta sobre el negocio {Descriptor.Negocio}");
             }
 
+            Descriptor.GestorDeNegocio = GestorDeNegocio.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;
 

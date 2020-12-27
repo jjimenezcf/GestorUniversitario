@@ -42,6 +42,9 @@ namespace MVCSistemaDeElementos.Descriptores
             }
             else
             {
+                if (!Crud.NegocioActivo)
+                    MenuCreacion.QuitarOpcionDeMenu(TipoDeAccionDeCreacion.NuevoElemento);
+
                 htmContenedorCreacion = 
                 $@"
                    <div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
@@ -64,8 +67,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , tituloH2: "Creación"
                 , cuerpo: RendelDivDeCreacion()
                 , idOpcion: $"{IdHtml}-crear"
-                , opcion: "Crear"
-                , accion: "Crud.EventosModalDeCreacion('crear-elemento')"
+                , opcion: Crud.NegocioActivo ? "Crear": ""
+                , accion: Crud.NegocioActivo ? "Crud.EventosModalDeCreacion('crear-elemento')": ""
                 , cerrar: "Crud.EventosModalDeCreacion('cerrar-modal')"
                 , navegador: htmlRenderOpciones());
 

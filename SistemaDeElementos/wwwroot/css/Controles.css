@@ -183,6 +183,10 @@ a {
             background: #dcd6d6;
         }
 
+        .contenedor-editor > input.solo-lectura {
+            background: #ffd800;
+        }
+
 .contenedor-selector {
     position: relative;
     border-color: aqua;
@@ -211,6 +215,10 @@ a {
 
         .contenedor-selector > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
             background: #dcd6d6;
+        }
+
+        .contenedor-selector > select.lista-de-elemento.solo-lectura, input.lista-dinamica.solo-lectura {
+            background: #ffd800;
         }
 
 

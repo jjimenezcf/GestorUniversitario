@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlOpciones = "";
             foreach (OpcionDeMenu<TElemento> opcion in OpcionesDeMenu)
             {
-                if (ZonaMenu.EsZonaDeMenuDeMantenimiento && opcion.Accion.TipoDeAccion == TipoDeAccionDeMnt.EditarElemento && !ZonaMenu.Mnt.Crud.HayPermisosDeEdicion)
+                if (ZonaMenu.EsZonaDeMenuDeMantenimiento && opcion.Accion.TipoDeAccion == TipoDeAccionDeMnt.EditarElemento && !ZonaMenu.Mnt.Crud.NegocioActivo)
                     opcion.Etiqueta = "Consultar";
 
                 htmlOpciones = htmlOpciones + opcion.RenderControl() + Environment.NewLine;

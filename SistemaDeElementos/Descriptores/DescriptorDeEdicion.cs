@@ -41,8 +41,8 @@ namespace MVCSistemaDeElementos.Descriptores
             }
             else
             {
-                if (!Crud.HayPermisosDeEdicion)
-                    MenuDeEdicion.QuitarOpcionDeModificarElemento();
+                if (!Crud.NegocioActivo)
+                    MenuDeEdicion.QuitarOpcionDeMenu(TipoDeAccionDeEdicion.ModificarElemento);
 
                 htmContenedorEdt =
                 $@"
@@ -65,8 +65,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , tituloH2: "Edición"
                 , cuerpo: RendelDivDeEdicion(tabla)
                 , idOpcion: $"{IdHtml}-modificar"
-                , opcion: Crud.HayPermisosDeEdicion ? "Modificar" : ""
-                , accion: Crud.HayPermisosDeEdicion ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
+                , opcion: Crud.NegocioActivo ? "Modificar" : ""
+                , accion: Crud.NegocioActivo ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
                 , navegador: HtmlRenderNavegadorDeSeleccionados());
 
