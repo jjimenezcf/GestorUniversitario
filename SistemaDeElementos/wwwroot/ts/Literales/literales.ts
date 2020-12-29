@@ -5,6 +5,7 @@ const TipoMensaje = { Info: "informativo", Error: "Error", Warning: "Revision" }
 
 const Literal = {
     controlador: "controlador",
+    negocio: "negocio",
     id: "id",
     filtro: {
         clausulaId: 'id',
@@ -13,20 +14,6 @@ const Literal = {
             diferente: 'diferente'
         }
     }
-
-};
-
-const ModoOrdenacion = {
-    ascedente: "ascendente",
-    descendente: "descendente",
-    sinOrden: "sin-orden"
-};
-
-const ModoDeAcceso = {
-    administrador: 0,
-    gestor: 1,
-    consultor: 2,
-    sinAcceso: 3
 };
 
 const atControl = {
@@ -53,8 +40,23 @@ const atControl = {
     }
 };
 
+const atMantenimniento = {
+    zonaDeFiltro: atControl.zonaDeFiltro,
+    controlador: Literal.controlador,
+    negocio: Literal.negocio,
+    zonaMenu: "zona-de-menu",
+    gridDelMnt: "grid-del-mnt"
+}
+
+const ModoOrdenacion = {
+    ascedente: "ascendente",
+    descendente: "descendente",
+    sinOrden: "sin-orden"
+};
+
+
 const atGrid = {
-    id: 'grid-del-mnt',
+    id: atMantenimniento.gridDelMnt,
     idSeleccionado: 'id-seleccionado',
     nombreSeleccionado: 'nombre-Seleccionado',
     navegador: {
@@ -89,6 +91,11 @@ const atArchivo = {
     extensionesValidas: "accept",
     url: "src"
 };
+
+const atOpcionDeMenu = {
+    permisosNecesarios: "permisos-necesarios",
+    clase: "clase"
+}
 
 const atSelector = {
     popiedadBuscar: "propiedadBuscar",
@@ -151,7 +158,7 @@ const Ajax = {
         LeerGridEnHtml: "epLeerGridHtml",
         LeerDatosParaElGrid: "epLeerDatosParaElGrid",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
-        LeerPorIds: "epLeerPorIds",
+        LeerPorId: "epLeerPorId",
         Modificar: "epModificarPorId",
         Borrar: "epBorrarPorId",
         RecargarModalEnHtml: "epRecargarModalEnHtml",
@@ -159,7 +166,8 @@ const Ajax = {
         CargarLista: "epCargarLista",
         CargaDinamica: "epCargaDinamica",
         SubirArchivo: "epSubirArchivo",
-        CrearRelaciones: "epCrearRelaciones"
+        CrearRelaciones: "epCrearRelaciones",
+        LeerModoDeAccesoAlNegocio: "epLeerModoDeAccesoAlNegocio"
     },
     EpDeAcceso: {
         ReferenciarFoto: "epReferenciarFoto",
@@ -183,7 +191,8 @@ const Ajax = {
         rutaDestino: "rutaDestino",
         extensiones: "extensionesValidas",
         login: "login",
-        password: "password"
+        password: "password",
+        negocio: "negocio"
     },
     jsonResultError: 1,
     jsonResultOk: 0,
@@ -291,6 +300,19 @@ const TipoControl = {
     restrictorDeFiltro: "restrictor-filtro",
     restrictorDeEdicion: "restrictor-edicion"
 };
+
+const ClaseDeOpcioDeMenu = {
+    DeElemento: "de-elemento",
+    DeVista: "de-vista",
+    Basico: "basico"
+}
+
+const ModoDeAccesoDeDatos = {
+    Administrador: "Administrador",
+    Gestor: "gestor",
+    Consultor: "Consultor",
+    SinPermiso: "SinPermiso"
+}
 
 const ModoTrabajo = {
     creando: "creando",

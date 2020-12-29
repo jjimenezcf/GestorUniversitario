@@ -14,7 +14,7 @@ namespace GestorDeElementos
     {
         No_Definido,
         Usuario,
-        VistasMvc,
+        VistaMvc,
         Menu,
         PermisosDeUnUsuario,
         Variable,
@@ -34,30 +34,13 @@ namespace GestorDeElementos
         Archivos
     }
 
-    public enum enumModoDeAcceso { Administrador, Gestor, Consultor, SinAcceso }
-
-    public static class ModoDeAccesoDeSe
-    {
-        public static string ToString(enumModoDeAcceso modoDeAcceso)
-        {
-            switch (modoDeAcceso)
-            {
-                case enumModoDeAcceso.Administrador: return "Administrador";
-                case enumModoDeAcceso.Gestor: return "Gestor";
-                case enumModoDeAcceso.Consultor: return "Consultor";
-                case enumModoDeAcceso.SinAcceso: return "SinAcceso";
-            }
-            throw new Exception($"El modo de acceso '{modoDeAcceso}' no está definido, no se puede parsear");
-        }
-    }
-
     public static class NegociosDeSe
     {
 
         private static List<enumNegocio> _negociosConSeguridad = new List<enumNegocio>
         {
            enumNegocio.Usuario,
-           enumNegocio.VistasMvc,
+           enumNegocio.VistaMvc,
            enumNegocio.Menu,
            enumNegocio.Variable,
            enumNegocio.Negocio,
@@ -76,7 +59,7 @@ namespace GestorDeElementos
             switch (negocio)
             {
                 case enumNegocio.Usuario: return "Usuarios de SE";
-                case enumNegocio.VistasMvc: return "Vistas";
+                case enumNegocio.VistaMvc: return "Vistas";
                 case enumNegocio.Variable: return "Variables";
                 case enumNegocio.Menu: return "Menus";
                 case enumNegocio.Puesto: return "Puestos";
@@ -93,7 +76,7 @@ namespace GestorDeElementos
             switch (registroDto)
             {
                 case nameof(UsuarioDto): return enumNegocio.Usuario;
-                case nameof(VistaMvcDto): return enumNegocio.VistasMvc;
+                case nameof(VistaMvcDto): return enumNegocio.VistaMvc;
                 case nameof(PermisoDto): return enumNegocio.Permiso;
                 case nameof(MenuDto): return enumNegocio.Menu;
                 case nameof(PermisosDeUnUsuarioDto): return enumNegocio.PermisosDeUnUsuario;
@@ -113,7 +96,36 @@ namespace GestorDeElementos
                 case nameof(ArchivosDto): return enumNegocio.Archivos;
             }
 
-            throw new Exception($"No está definido el dto {registroDto}, no se puede parsear");
+            throw new Exception($"No está definido el dto '{registroDto}', no se puede parsear");
+        }
+
+
+        public static enumNegocio ParsearNegocio(string negocio)
+        {
+            switch (negocio)
+            {
+                case "Usuario": return enumNegocio.Usuario;
+                case "VistaMvc": return enumNegocio.VistaMvc;
+                case "Permiso": return enumNegocio.Permiso;
+                case "Menu": return enumNegocio.Menu;
+                case "PermisosDeUnUsuario": return enumNegocio.PermisosDeUnUsuario;
+                case "Variable": return enumNegocio.Variable;
+                case "Negocio": return enumNegocio.Negocio;
+                case "ClasePermiso": return enumNegocio.ClasePermiso;
+                case "PermisosDeUnPuesto": return enumNegocio.PermisosDeUnPuesto;
+                case "PermisosDeUnRol": return enumNegocio.PermisosDeUnRol;
+                case "Puesto": return enumNegocio.Puesto;
+                case "PuestosDeUnRol": return enumNegocio.PuestosDeUnRol;
+                case "PuestosDeUnUsuario": return enumNegocio.PuestosDeUnUsuario;
+                case "Rol": return enumNegocio.Rol;
+                case "RolesDeUnPermiso": return enumNegocio.RolesDeUnPermiso;
+                case "RolesDeUnPuesto": return enumNegocio.RolesDeUnPuesto;
+                case "TipoPermiso": return enumNegocio.TipoPermiso;
+                case "UsuariosDeUnPuesto": return enumNegocio.UsuariosDeUnPuesto;
+                case "Archivos": return enumNegocio.Archivos;
+            }
+
+            throw new Exception($"No está definido el negocio '{negocio}', no se puede parsear");
         }
     }
 }

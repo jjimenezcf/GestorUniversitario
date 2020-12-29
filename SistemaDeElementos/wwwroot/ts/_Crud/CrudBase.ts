@@ -279,14 +279,14 @@
 
         // funciones para mapear un elemento Json a los controles de un panel
 
-        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number) {
+        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
         }
 
-        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number) {
+        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
             let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
                 var selector = select[i] as HTMLSelectElement;
@@ -303,14 +303,14 @@
                     }
 
                 selector.classList.remove(ClaseCss.soloLectura);
-                if (modoDeAcceso === ModoDeAcceso.consultor) {
+                if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
                     selector.disabled = true;
                     selector.classList.add(ClaseCss.soloLectura);
                 }
             }
         }
 
-        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: number)  {
+        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string)  {
 
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
 
@@ -330,7 +330,7 @@
                 }
 
                 input.classList.remove(ClaseCss.soloLectura);
-                if (modoDeAcceso === ModoDeAcceso.consultor) {
+                if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
                     input.disabled = true;
                     input.classList.add(ClaseCss.soloLectura);
                 }
@@ -338,7 +338,7 @@
             }
         }
 
-        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any, modoDeAcceso: number) {
+        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any, modoDeAcceso: string) {
 
             if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
                 this.MapearPropiedad(panel, propiedad, "", modoDeAcceso);
@@ -367,7 +367,7 @@
         }
 
 
-        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number) {
+        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string) {
 
             if (this.MapearPropiedaAlEditor(panel, propiedad, valor, modoDeAcceso))
                 return;
@@ -382,7 +382,7 @@
                 return;
         }
 
-        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
+        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
             let editor: HTMLInputElement = this.BuscarEditor(panel, propiedad);
 
             if (editor === null)
@@ -391,7 +391,7 @@
             editor.classList.remove(ClaseCss.crtlNoValido);
             editor.classList.remove(ClaseCss.soloLectura);
 
-            if (modoDeAcceso === ModoDeAcceso.consultor) {
+            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
                 editor.readOnly = true;
                 editor.classList.add(ClaseCss.soloLectura);
             }
@@ -402,7 +402,7 @@
             return true;
         }
 
-        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
+        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
             let check: HTMLInputElement = this.BuscarCheck(panel, propiedad);
 
             if (check === null)
@@ -417,7 +417,7 @@
                 if (IsString(valor))
                     check.checked = valor.toLowerCase() === 'true';
 
-            if (modoDeAcceso === ModoDeAcceso.consultor) {
+            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
                 check.disabled = true;
             }
 
@@ -450,13 +450,13 @@
         }
 
 
-        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: number): boolean {
+        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
             let selector: HTMLInputElement = this.BuscarUrlDelArchivo(panel, propiedad);
 
             if (selector === null)
                 return false;
             let ruta: string = selector.getAttribute(atArchivo.rutaDestino);
-            if (modoDeAcceso === ModoDeAcceso.consultor) {
+            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
                 let ref = document.getElementById(`${selector.id}.ref`);
                 ref.style.visibility = "hidden";
             }
@@ -787,9 +787,9 @@
         }
 
         private AnadirOpciones(peticion: ApiDeAjax.DescriptorAjax) {
-            let datos: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
+            let datosDeEntrada: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
 
-            let listaDinamica: ListaDinamica = new ListaDinamica(document.getElementById(datos.IdInput) as HTMLInputElement);
+            let listaDinamica: ListaDinamica = new ListaDinamica(document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement);
             for (var i = 0; i < peticion.resultado.datos.length; i++) {
                 listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
             }

@@ -207,25 +207,16 @@ namespace GestoresDeNegocio.Entorno
             return MapearElemento(usuariodtm);
         }
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, enumClaseDePermiso claseDePermiso, enumTipoDePermiso permisosNecesarios, object elemento)
+        public bool TienePermisoDeDatos(UsuarioDtm usuarioConectado, enumModoDeAccesoDeDatos permisosNecesarios, object elemento)
         {
-            if (claseDePermiso == enumClaseDePermiso.Negocio)
-            {
-                var gestorDeNegocio = GestorDeNegocio.Gestor(Contexto, Mapeador);
-                return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, (enumNegocio)elemento);
-            }
+            var gestorDeNegocio = GestorDeNegocio.Gestor(Contexto, Mapeador);
+            return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, (enumNegocio)elemento);
+        }
 
-            if (claseDePermiso == enumClaseDePermiso.Vista)
-            {
-                var gestorDeVista = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
-                return gestorDeVista.TienePermisos(usuarioConectado, permisosNecesarios, (string)elemento);
-            }
-
-            switch (elemento)
-            {
-                case "UsuarioDto": return true;
-            }
-            return false;
+        public bool TienePermisoFuncional(UsuarioDtm usuarioConectado, object elemento)
+        {
+            var gestorDeVista = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
+            return gestorDeVista.TienePermisos(usuarioConectado, (string)elemento);
         }
 
     }

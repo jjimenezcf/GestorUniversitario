@@ -248,14 +248,16 @@ namespace MVCSistemaDeElementos.Descriptores
         public AccionDeMenu Accion { get; private set; }
         public TipoDeLlamada TipoDeLLamada { get; private set; } = TipoDeLlamada.Get;
 
-        public enumTipoDePermiso PermisosNecesarios { get; private set; }
+        public enumModoDeAccesoDeDatos PermisosNecesarios { get; private set; }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumTipoDePermiso permisosNecesarios)
-        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios)
+        public enumClaseOpcionMenu ClaseBoton { get; private set; }
+
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumClaseOpcionMenu clase)
+        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios,clase)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumTipoDePermiso permisosNecesarios)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumClaseOpcionMenu clase)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcionesDeMenu.Count}",
@@ -269,15 +271,16 @@ namespace MVCSistemaDeElementos.Descriptores
             TipoDeLLamada = tipoAccion;
             Accion = accion;
             PermisosNecesarios = permisosNecesarios;
+            ClaseBoton = clase;
         }
 
         public override string RenderControl()
         {
-            if (!Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisos(usuarioConectado: Menu.ZonaMenu.Mnt.Crud.UsuarioConectado
-                                                                    , claseDePermiso: enumClaseDePermiso.Negocio
+            var disbled = !Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisoDeDatos(usuarioConectado: Menu.ZonaMenu.Mnt.Crud.UsuarioConectado
                                                                     , permisosNecesarios: PermisosNecesarios
-                                                                    , elemento: Menu.ZonaMenu.Mnt.Crud.Negocio))
-                return ""; 
+                                                                    , elemento: Menu.ZonaMenu.Mnt.Crud.Negocio) 
+                ? "disabled"
+                : "";
 
             if (TipoDeLLamada == TipoDeLlamada.Post)
             {
@@ -285,13 +288,13 @@ namespace MVCSistemaDeElementos.Descriptores
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ />
+                        <input type=¨button¨ clase=¨{ClaseOpcionMenu.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
                     </form>
                 ";
                 return htmlFormPost;
             }
 
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ />";
+            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{ClaseOpcionMenu.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
             return htmlOpcionMenu;
         }
     }

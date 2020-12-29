@@ -31,7 +31,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 , opcion: Crud.NegocioActivo ? "Aceptar": ""
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeBorrar('borrar-elemento')": ""
                 , cerrar: "Crud.EventosModalDeBorrar('cerrar-modal-de-borrado')"
-                , navegador: "");
+                , navegador: ""
+                , claseBoton: enumClaseOpcionMenu.DeElemento
+                , permisosNecesarios: ServicioDeDatos.Seguridad.enumModoDeAccesoDeDatos.Gestor);
 
             return htmlModal;
         }

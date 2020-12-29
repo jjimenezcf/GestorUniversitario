@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
             var relacionarPuestos = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestosDeUnUsuarioDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Puestos", enumTipoDePermiso.Gestor);
+            var opcion = new OpcionDeMenu<PuestosDeUnUsuarioDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Puestos", enumModoDeAccesoDeDatos.Gestor, enumClaseOpcionMenu.DeVista);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt

@@ -68,7 +68,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 , opcion: Crud.NegocioActivo ? "Modificar" : ""
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
-                , navegador: HtmlRenderNavegadorDeSeleccionados());
+                , navegador: HtmlRenderNavegadorDeSeleccionados()
+                , claseBoton: enumClaseOpcionMenu.DeElemento
+                , permisosNecesarios: enumModoDeAccesoDeDatos.Gestor);
 
             return htmlModal;
         }

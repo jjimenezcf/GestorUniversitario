@@ -8,6 +8,7 @@ using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
+using ServicioDeDatos.Seguridad;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -736,50 +737,69 @@ namespace GestorDeElementos
             return (bool)cache[indice];
         }
 
-        public enumModoDeAcceso LeerModoDeAcceso(TElemento elemento)
+        public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, TElemento elemento)
         {
-            var m = ModoDeAcceso(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
+            var m = LeerModoDeAccesoAlNegocio(idUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
             return m;
         }
 
-        private enumModoDeAcceso ModoDeAcceso(int idUsuario, enumNegocio negocio)
+        public enumModoDeAccesoDeDatos LeerModoDeAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
-            enumModoDeAcceso modo = enumModoDeAcceso.SinAcceso;
+            enumModoDeAccesoDeDatos modoDelUsuario = enumModoDeAccesoDeDatos.SinPermiso;
 
             if (!NegociosDeSe.UsaSeguridad(negocio))
-                return enumModoDeAcceso.Administrador;
-
-            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
-
-            var negocioActivo = gestorDeNegocio.GetType().GetMethod("NegocioActivo");
-            var estaActivo = (bool)negocioActivo.Invoke(gestorDeNegocio, new object[] { negocio });
+                return enumModoDeAccesoDeDatos.Administrador;
 
             if (Contexto.DatosDeConexion.EsAdministrador)
-                return estaActivo ?
-                    enumModoDeAcceso.Administrador :
-                    enumModoDeAcceso.Consultor;
-
-            var leerModoDeAccesoAlNegocio = gestorDeNegocio.GetType().GetMethod("LeerModoDeAccesoAlNegocio");
-            var modosDeAcceso = (List<ModoDeAccesoAlNegocioDtm>)leerModoDeAccesoAlNegocio.Invoke(gestorDeNegocio, new object[] { negocio, idUsuario });
-
-            foreach (var modoDeAcceso in modosDeAcceso)
+                modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
+            else
             {
-                if (modoDeAcceso.Administrador)
+                var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
+                foreach (var modoLeido in modosLeidos)
                 {
-                    modo = enumModoDeAcceso.Administrador;
-                    break;
-                }
+                    if (modoLeido.Administrador)
+                    {
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
+                        break;
+                    }
 
-                if (modo != enumModoDeAcceso.Gestor && modoDeAcceso.Gestor)
-                    modo = enumModoDeAcceso.Gestor;
-                else
-                if (modoDeAcceso.Consultor)
-                    modo = enumModoDeAcceso.Consultor;
+                    if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
+                    else
+                    if (modoLeido.Consultor)
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+                }
             }
-            return modo;
+            return NegocioActivo(negocio) ? modoDelUsuario : enumModoDeAccesoDeDatos.Consultor;
         }
 
+        private bool NegocioActivo(enumNegocio negocio)
+        {
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            var negocioActivo = gestorDeNegocio.GetType().GetMethod("NegocioActivo");
+            var estaActivo = (bool)negocioActivo.Invoke(gestorDeNegocio, new object[] { negocio });
+            return estaActivo;
+        }
 
+        private List<ModoDeAccesoAlNegocioDtm> ModosDeAccesoAlNegocio(int idUsuario, enumNegocio negocio)
+        {
+            var nombreNegocio = NegociosDeSe.ToString(negocio);
+
+            var modosDeAcceso = Contexto
+               .ModoAccesoAlNegocio
+               .FromSqlInterpolated($@"
+                                       SELECT ID
+                                       , ADMINISTRADOR
+                                       , GESTOR
+                                       , CONSULTOR
+                                       , IDUSUA
+                                       , IDPERMISO
+                                       , ORIGEN
+                                       FROM NEGOCIO.MODO_ACCESO_AL_NEGOCIO_POR_USUARIO({nombreNegocio},{idUsuario})
+                                      "
+                                    ).ToList();
+            return modosDeAcceso;
+        }
 
 
         #endregion

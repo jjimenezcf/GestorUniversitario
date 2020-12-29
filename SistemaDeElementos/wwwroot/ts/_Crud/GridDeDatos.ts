@@ -308,7 +308,7 @@
 
         constructor(idPanelMnt: string) {
             super();
-            this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atGrid.id);
+            this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atMantenimniento.gridDelMnt);
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);

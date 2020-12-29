@@ -1,4 +1,5 @@
-﻿using Utilidades;
+﻿using ServicioDeDatos.Seguridad;
+using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -55,12 +56,12 @@ namespace MVCSistemaDeElementos.Descriptores
             Ayuda = ayuda;
         }
 
-        internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador)
+        internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumClaseOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)
         {
             var htmlOpcion = "";
             if (!opcion.IsNullOrEmpty() && !accion.IsNullOrEmpty())
             {
-                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
+                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ clase=¨{ClaseOpcionMenu.Render(claseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(permisosNecesarios)}¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
             }
 
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
@@ -73,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                         </div>
                                         <div id=¨{idHtml}_pie¨ class=¨contenido-pie¨>
                                            {htmlOpcion}
-                                           <input type=¨text¨ id=¨{idHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨  readonly onclick=¨{cerrar}¨ />
+                                           <input type=¨text¨ id=¨{idHtml}-cerrar¨  class=¨boton-modal¨ clase=¨{ClaseOpcionMenu.Render(enumClaseOpcionMenu.Basico)}¨ value=¨Cerrar¨  readonly onclick=¨{cerrar}¨ />
                                            {navegador}
                                         </div>
                                       </div>

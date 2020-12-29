@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -17,7 +18,7 @@ namespace MVCSistemaDeElementos.Controllers
         public string consola { get; set; }
         public int Total { get; set; } = 0;
         public dynamic Datos { get; set; }
-        public enumModoDeAcceso ModoDeAcceso { get; set; }
+        public string ModoDeAcceso { get; set; }
     }
 
     public class ResultadoHtml : Resultado

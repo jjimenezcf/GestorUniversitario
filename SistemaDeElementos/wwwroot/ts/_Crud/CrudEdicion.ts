@@ -175,10 +175,10 @@
 
         private LeerElemento(id: number) {
             let idJson: string = this.DefinirFiltroPorId(id);
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorIds}?${Ajax.Param.idsJson}=${idJson}`;
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.idsJson}=${idJson}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.LeerPorIds
+                , Ajax.EndPoint.LeerPorId
                 , null
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona

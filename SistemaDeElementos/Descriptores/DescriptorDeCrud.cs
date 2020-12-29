@@ -71,8 +71,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
                 Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
 
-                Mnt.ZonaMenu.AnadirOpcionDeCreacion();
-                Mnt.ZonaMenu.AnadirOpcionDeEditarElemento();
+                Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
+                Mnt.ZonaMenu.AnadirOpcionDeIrAEditarFilasSeleccionadas();
                 Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
             }
         }
@@ -187,7 +187,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumTipoDePermiso.Gestor);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor,enumClaseOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }

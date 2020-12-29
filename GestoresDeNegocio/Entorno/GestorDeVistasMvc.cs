@@ -77,7 +77,7 @@ namespace GestoresDeNegocio.Entorno
             return registros;
         }
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, string vista)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, string vista)
         {
             if (usuarioConectado.EsAdministrador)
                 return true;
@@ -155,7 +155,7 @@ namespace GestoresDeNegocio.Entorno
             base.AntesDePersistir(registro, parametros);
             if (parametros.Operacion == TipoOperacion.Insertar)
             {
-                var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
+                var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista);
                 registro.IdPermiso = permiso.Id;
             }
             if (parametros.Operacion == TipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
@@ -169,7 +169,7 @@ namespace GestoresDeNegocio.Entorno
             base.DespuesDePersistir(registro, parametros);
 
             if (parametros.Operacion == TipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
-                GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.Permiso, registro.Nombre, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso);
+                GestorDePermisos.ModificarPermisoFuncional(Contexto, Mapeador, RegistroEnBD.Permiso, registro.Nombre, enumClaseDePermiso.Vista);
 
             if (parametros.Operacion == TipoOperacion.Eliminar)
                 GestorDePermisos.Eliminar(Contexto, Mapeador, RegistroEnBD.Permiso);

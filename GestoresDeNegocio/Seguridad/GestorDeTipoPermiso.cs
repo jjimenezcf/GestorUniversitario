@@ -28,10 +28,18 @@ namespace GestoresDeNegocio.Seguridad
             return new GestorDeTipoPermiso(contexto, mapeador);
         }
 
-        internal TipoPermisoDtm Crear(enumTipoDePermiso acceso)
+        internal TipoPermisoDtm CrearTipoPermisoDeDatos(enumModoDeAccesoDeDatos acceso)
         {
             var registro = new TipoPermisoDtm();
-            registro.Nombre = acceso.ToString();
+            registro.Nombre = ModoDeAcceso.ToString(acceso);
+            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return registro;
+        }
+
+        internal TipoPermisoDtm CrearTipoPermisoFuncional(enumModoDeAccesoFuncional acceso)
+        {
+            var registro = new TipoPermisoDtm();
+            registro.Nombre = ModoDeAcceso.ToString(acceso);
             PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
             return registro;
         }

@@ -205,7 +205,7 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde CrudEdicion.ts
-        public JsonResult epLeerPorIds(string idsJson)
+        public JsonResult epLeerPorId(string idsJson)
         {
             var r = new Resultado();
 
@@ -219,14 +219,14 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (elementos.Count > 1)
                     GestorDeErrores.Emitir($"Hay más de un registro para el filtro {idsJson}");
-                
-                var m = GestorDeElementos.LeerModoDeAcceso(elementos[0]);
-                
-                if (m == enumModoDeAcceso.SinAcceso)
+
+                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, elementos[0]);
+
+                if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
                 r.Datos = elementos;
-                r.ModoDeAcceso = m;
+                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
             }
@@ -234,7 +234,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar]==true ? e.Message: "")}" ;
+                r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -266,7 +266,7 @@ namespace MVCSistemaDeElementos.Controllers
                 GestorDeElementos.Rollback(tran);
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
+                r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -309,7 +309,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
+                r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             var a = new JsonResult(r);
@@ -383,7 +383,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}"; 
+                r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -451,6 +451,36 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        //END-POINT: Desde CrudMantenimiento.ts
+        /// <summary>
+        /// Devuelve el modo de acceso a los datos del negocio del usuario conectado
+        /// </summary>
+        /// <param name="negocio">negocio del que se quiere saber el modo de acceso del usuario conectado</param>
+        /// <returns>modo de acceso a los datos del negocio</returns>
+        public JsonResult epLeerModoDeAccesoAlNegocio(string negocio)
+        {
+            var r = new Resultado();
+            try
+            {
+                var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
+                CumplimentarDatosDeUsuarioDeConexion();
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio));
+
+                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
+                r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
+                r.Estado = enumEstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+
+
+        }
 
         protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
         {
@@ -465,18 +495,18 @@ namespace MVCSistemaDeElementos.Controllers
         public ViewResult ViewCrud()
         {
             CumplimentarDatosDeUsuarioDeConexion();
-            string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
-            string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
-            
+
             if (!Descriptor.UsuarioConectado.EsAdministrador)
             {
-                var hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumClaseDePermiso.Vista, enumTipoDePermiso.Acceso, $"{nombreDelControlador}.{nombreDeLaVista}");
+                string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
+                string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
+                var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
                     throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
 
-                hayPermisos = Descriptor.GestorDeUsuario.TienePermisos(Descriptor.UsuarioConectado, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor, Descriptor.Negocio);
+                hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
                 if (!hayPermisos)
                     throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de consulta sobre el negocio {Descriptor.Negocio}");
             }

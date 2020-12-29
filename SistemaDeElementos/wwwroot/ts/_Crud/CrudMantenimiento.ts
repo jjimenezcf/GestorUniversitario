@@ -11,9 +11,9 @@
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };
 
-        private _idPanelMnt
+        private _idPanelMnt;
         public get PanelMnt(): HTMLDivElement {
-            return  document.getElementById(this._idPanelMnt) as HTMLDivElement;
+            return document.getElementById(this._idPanelMnt) as HTMLDivElement;
         }
 
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
@@ -21,19 +21,31 @@
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
 
         public get Controlador() {
-            return this.PanelMnt.getAttribute(Literal.controlador);
+            return this.PanelMnt.getAttribute(atMantenimniento.controlador);
+        }
+
+        public get Negocio() {
+            return this.PanelMnt.getAttribute(atMantenimniento.negocio);
+        }
+
+
+        private _idHtmlZonaMenu: string;
+        public get ZonaDeMenu(): HTMLDivElement {
+            return document.getElementById(this._idHtmlZonaMenu) as HTMLDivElement;
         }
 
         constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
             this._idPanelMnt = idPanelMnt;
             this._idModalBorrar = idModalDeBorrado;
+            this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
         }
 
         public Inicializar() {
             super.Inicializar(this._idPanelMnt);
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
+            this.InicializarMenus();
 
             this.AplicarRestrictores();
 
@@ -52,13 +64,64 @@
         }
 
         private InicializarSelectores() {
-            let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;;
+            let selectores: NodeListOf<HTMLSelector> = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`) as NodeListOf<HTMLSelector>;
             selectores.forEach((selector) => {
                 let idModal: string = selector.getAttribute(atSelector.idModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal);
                 this.ModalesDeSeleccion.push(modal);
 
             });
+        }
+
+        private InicializarMenus() {
+
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion: HTMLButtonElement = opcionesDeElemento[i];
+                opcion.disabled = true;
+            }   
+
+            let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlNegocio();
+            let datosDeEntrada = `{"negocio":"${this.Negocio}"}`;
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerModoDeAccesoAlNegocio
+                , datosDeEntrada
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.AplicarModoDeAccesoAlNegocio
+                , this.SiHayErrorTrasPeticionAjax
+            );
+
+            a.Ejecutar();
+        }
+
+        private AplicarModoDeAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax) {
+            let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
+            let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
+            let opcionesGenerales: NodeListOf<HTMLButtonElement> = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
+            for (var i = 0; i < opcionesGenerales.length; i++) {
+                let opcion: HTMLButtonElement = opcionesGenerales[i];
+                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else
+                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                        opcion.disabled = true;
+                    else
+                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                            opcion.disabled = true;
+                        else
+                            opcion.disabled = false;
+            }            
+        }
+
+
+        private DefinirPeticionDeLeerModoDeAccesoAlNegocio(): string {
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerModoDeAccesoAlNegocio}`;
+            let parametros: string = `${Ajax.Param.negocio}=${this.Negocio}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
         }
 
         public ObtenerModalDeSeleccion(idModal: string): ModalSeleccion {
@@ -76,7 +139,7 @@
                 if (modal.IdModal === idModal)
                     return modal;
             }
-            
+
             let modal: ModalParaRelacionar = new ModalParaRelacionar(this, idModal);
             this.ModalesParaRelacionar.push(modal);
             return modal;
@@ -219,14 +282,14 @@
             let peticion: string = url + '?' + parametros;
             return peticion;
         }
-                
+
         public Buscar(accion: string, posicion: number) {
 
             if (this.Navegador.EsRestauracion) {
                 this.RestaurarPagina();
             }
             else {
-              this.CargarGrid(accion, posicion);
+                this.CargarGrid(accion, posicion);
             }
         }
 

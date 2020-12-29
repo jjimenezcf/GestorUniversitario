@@ -70,7 +70,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 , opcion: Crud.NegocioActivo ? "Crear": ""
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeCreacion('crear-elemento')": ""
                 , cerrar: "Crud.EventosModalDeCreacion('cerrar-modal')"
-                , navegador: htmlRenderOpciones());
+                , navegador: htmlRenderOpciones()
+                , claseBoton: enumClaseOpcionMenu.DeElemento
+                , permisosNecesarios: ServicioDeDatos.Seguridad.enumModoDeAccesoDeDatos.Gestor);
 
             return htmlModal;
         }

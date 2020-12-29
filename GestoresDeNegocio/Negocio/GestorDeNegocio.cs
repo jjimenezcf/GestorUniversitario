@@ -94,11 +94,11 @@ namespace GestoresDeNegocio.Negocio
         }
 
 
-        public bool TienePermisos(UsuarioDtm usuarioConectado, enumTipoDePermiso permisosNecesarios, enumNegocio negocio)
+        public bool TienePermisos(UsuarioDtm usuarioConectado, enumModoDeAccesoDeDatos permisosNecesarios, enumNegocio negocio)
         {
             var estaActivo = NegocioActivo(negocio);
 
-            if (!estaActivo && (permisosNecesarios == enumTipoDePermiso.Administrador || permisosNecesarios == enumTipoDePermiso.Gestor))
+            if (!estaActivo && (permisosNecesarios == enumModoDeAccesoDeDatos.Administrador || permisosNecesarios == enumModoDeAccesoDeDatos.Gestor))
                 return false;
 
             if (usuarioConectado.EsAdministrador)
@@ -117,13 +117,13 @@ namespace GestoresDeNegocio.Negocio
                     new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = usuarioConectado.Id.ToString()}
                 };
 
-                if (permisosNecesarios == enumTipoDePermiso.Administrador)
+                if (permisosNecesarios == enumModoDeAccesoDeDatos.Administrador)
                     filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = negocioDtm.IdPermisoDeAdministrador.ToString() });
 
-                if (permisosNecesarios == enumTipoDePermiso.Gestor)
+                if (permisosNecesarios == enumModoDeAccesoDeDatos.Gestor)
                     filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
 
-                if (permisosNecesarios == enumTipoDePermiso.Consultor)
+                if (permisosNecesarios == enumModoDeAccesoDeDatos.Consultor)
                     filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeConsultor},{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
 
                 cache[indice] = gestor.Contar(filtros) > 0;
@@ -137,16 +137,16 @@ namespace GestoresDeNegocio.Negocio
 
             if (parametros.Operacion == TipoOperacion.Insertar)
             {
-                registro.IdPermisoDeAdministrador = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
-                registro.IdPermisoDeGestor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
-                registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
+                registro.IdPermisoDeAdministrador = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
             }
 
             if (parametros.Operacion == TipoOperacion.Modificar)
             {
-                registro.IdPermisoDeAdministrador = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Administrador).Id;
-                registro.IdPermisoDeGestor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Gestor).Id;
-                registro.IdPermisoDeConsultor = GestorDePermisos.Modificar(Contexto, Mapeador, RegistroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumTipoDePermiso.Consultor).Id;
+                registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, RegistroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, RegistroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, RegistroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
             }
 
         }
@@ -171,26 +171,6 @@ namespace GestoresDeNegocio.Negocio
             if (!encontrado)
                 GestorDeErrores.Emitir($"La clase del elemento {registro.Elemento} del negocio {registro.Nombre} debe existir");
 
-        }
-
-        public List<ModoDeAccesoAlNegocioDtm> LeerModoDeAccesoAlNegocio(enumNegocio negocio, int idUsuario)
-        {
-            var nombreNegocio = NegociosDeSe.ToString(negocio);
-
-            var modosDeAcceso = Contexto
-               .ModoAccesoAlNegocio
-               .FromSqlInterpolated($@"
-                                       SELECT ID
-                                       , ADMINISTRADOR
-                                       , GESTOR
-                                       , CONSULTOR
-                                       , IDUSUA
-                                       , IDPERMISO
-                                       , ORIGEN
-                                       FROM NEGOCIO.MODO_ACCESO_AL_NEGOCIO_POR_USUARIO({nombreNegocio},{idUsuario})
-                                      "
-                                    ).ToList();
-            return modosDeAcceso;
         }
 
         public bool NegocioActivo(enumNegocio negocio)
