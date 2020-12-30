@@ -67,6 +67,7 @@ namespace GestorDeElementos
                 case enumNegocio.Negocio: return "Negocios";
                 case enumNegocio.Permiso: return "Permisos";
                 case enumNegocio.Rol: return "Roles";
+                case enumNegocio.PermisosDeUnRol: return "Permisos de un rol";
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }

@@ -96,6 +96,9 @@ namespace GestoresDeNegocio.Negocio
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumModoDeAccesoDeDatos permisosNecesarios, enumNegocio negocio)
         {
+            if (!NegociosDeSe.UsaSeguridad(negocio))
+                return true;
+
             var estaActivo = NegocioActivo(negocio);
 
             if (!estaActivo && (permisosNecesarios == enumModoDeAccesoDeDatos.Administrador || permisosNecesarios == enumModoDeAccesoDeDatos.Gestor))
@@ -175,6 +178,9 @@ namespace GestoresDeNegocio.Negocio
 
         public bool NegocioActivo(enumNegocio negocio)
         {
+            if (!NegociosDeSe.UsaSeguridad(negocio))
+                return true;
+
             var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
             return registro.Activo;
         }

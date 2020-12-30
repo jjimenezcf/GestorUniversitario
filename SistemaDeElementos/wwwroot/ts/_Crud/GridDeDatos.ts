@@ -292,6 +292,23 @@
             return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones;
         }
 
+
+        private _idPanelMnt: string;
+        public get IdPanelMnt(): string {
+            return this._idPanelMnt
+        }
+        public get PanelMnt(): HTMLDivElement {
+            return document.getElementById(this._idPanelMnt) as HTMLDivElement;
+        }
+
+        public get Controlador() {
+            return this.PanelMnt.getAttribute(atMantenimniento.controlador);
+        }
+
+        public get Negocio() {
+            return this.PanelMnt.getAttribute(atMantenimniento.negocio);
+        }
+
         private idHtmlFiltro: string;
         public get ZonaDeFiltro(): HTMLDivElement {
             return document.getElementById(this.idHtmlFiltro) as HTMLDivElement;
@@ -306,17 +323,26 @@
             return document.getElementById(idTabla) as HTMLTableElement;
         }
 
+        private _idHtmlZonaMenu: string;
+        public get ZonaDeMenu(): HTMLDivElement {
+            return document.getElementById(this._idHtmlZonaMenu) as HTMLDivElement;
+        }
+
         constructor(idPanelMnt: string) {
             super();
+
+            this._idPanelMnt = idPanelMnt;
             this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atMantenimniento.gridDelMnt);
+            this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
+            
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
         }
 
-        public Inicializar(pagina: string) {
-            super.Inicializar(pagina);
+        public Inicializar(idPanelMnt: string) {
+            super.Inicializar(idPanelMnt);
             this.InicializarNavegador();
         }
 
@@ -534,18 +560,19 @@
             return clausula;
         }
 
-        private ObtenerlaFila(idCheck: string) {
+        private ObtenerlaFila(idCheck: string): HTMLTableRowElement  {
             let idFila: string = idCheck.replace(".chksel", "");
             let fila: HTMLTableRowElement = document.getElementById(idFila) as HTMLTableRowElement;
             return fila;
         }
 
-        protected AnadirAlInfoSelector(infoSelector: InfoSelector, idCheck: string, expresionElemento: string) {
+        protected AnadirAlInfoSelector(infoSelector: InfoSelector, idCheck: string, expresionElemento: string): number {
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             infoSelector.InsertarElemento(id, expresionElemento);
+            return id;
         }
 
-        protected QuitarDelSelector(infoSelector: InfoSelector, idCheck: string) {
+        protected QuitarDelSelector(infoSelector: InfoSelector, idCheck: string): void {
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             infoSelector.Quitar(id);
         }
@@ -562,7 +589,7 @@
             return Numero(id);
         }
 
-        protected MarcarElementos() {
+        protected MarcarElementos(): void {
             if (this.InfoSelector.Cantidad === 0)
                 return;
 
@@ -939,10 +966,70 @@
                 check.checked = !check.checked;
             }
 
-            if (check.checked)
-                this.AnadirAlInfoSelector(infoSelector, idCheck, expresionElemento);
-            else
+            if (check.checked) {
+                let id: number = this.AnadirAlInfoSelector(infoSelector, idCheck, expresionElemento);
+                this.AjustarOpcionesDeMenu(id);
+            }
+            else {
                 this.QuitarDelSelector(infoSelector, idCheck);
+                if (this.InfoSelector.Cantidad == 0)
+                   this.DeshabilitarOpcionesDeMenuDeElemento();
+            }
+        }
+
+
+        protected DeshabilitarOpcionesDeMenuDeElemento() {
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion: HTMLButtonElement = opcionesDeElemento[i];
+                opcion.disabled = true;
+            }
+        }
+
+        private AjustarOpcionesDeMenu(id: number): void {
+            let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlElemento(id);
+            let datosDeEntrada = `{"Negocio":"${this.Negocio}","id":"${id}"}`;
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerModoDeAccesoAlElemento
+                , datosDeEntrada
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.AplicarModoDeAccesoAlElemento
+                , this.SiHayErrorTrasPeticionAjax
+            );
+
+            a.Ejecutar();
+        }
+
+        private AplicarModoDeAccesoAlElemento(peticion: ApiDeAjax.DescriptorAjax) {
+            let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
+            let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
+            let opcionesGenerales: NodeListOf<HTMLButtonElement> = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            let hacerLaInterseccion: boolean = mantenimiento.InfoSelector.Cantidad > 1;
+            for (var i = 0; i < opcionesGenerales.length; i++) {
+                let opcion: HTMLButtonElement = opcionesGenerales[i];
+                let estaDeshabilitado = opcion.disabled;
+                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else
+                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                        opcion.disabled = true;
+                    else
+                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                            opcion.disabled = true;
+                        else
+                            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            }
+        }
+
+
+        private DefinirPeticionDeLeerModoDeAccesoAlElemento(id: number): string {
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerModoDeAccesoAlElemento}`;
+            let parametros: string = `${Ajax.Param.negocio}=${this.Negocio}&${Ajax.Param.id}=${id}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
         }
 
         public OrdenarPor(columna: string) {

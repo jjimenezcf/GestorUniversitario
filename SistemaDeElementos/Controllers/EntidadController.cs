@@ -205,30 +205,23 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde CrudEdicion.ts
-        public JsonResult epLeerPorId(string idsJson)
+        public JsonResult epLeerPorId(int id)
         {
             var r = new Resultado();
 
             try
             {
                 CumplimentarDatosDeUsuarioDeConexion();
-                var elementos = Leer(0, -1, idsJson, null).ToList();
-
-                if (elementos.Count == 0)
-                    GestorDeErrores.Emitir($"No se ha localizado el registro con el filtro {idsJson}");
-
-                if (elementos.Count > 1)
-                    GestorDeErrores.Emitir($"Hay más de un registro para el filtro {idsJson}");
-
-                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, elementos[0]);
-
+                var elemento = GestorDeElementos.LeerElementoPorId(id);
+                
+                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, elemento);
                 if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
-                r.Datos = elementos;
+                r.Datos = elemento;
                 r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
                 r.Estado = enumEstadoPeticion.Ok;
-                r.Mensaje = $"se han leido 1 {(1 > 1 ? "registros" : "registro")}";
+                r.Mensaje = $"registro leido";
             }
             catch (Exception e)
             {
@@ -478,8 +471,29 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             return new JsonResult(r);
+        }
 
+        public JsonResult epLeerModoDeAccesoAlElemento(string negocio,int id)
+        {
+            var r = new Resultado();
+            try
+            {
+                var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
+                CumplimentarDatosDeUsuarioDeConexion();
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio), id);
 
+                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
+                r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso} sobre el elemento seleccionado";
+                r.Estado = enumEstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al obtener los permisos sobre el elemento {id} del {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
         }
 
         protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)

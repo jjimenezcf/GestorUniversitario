@@ -11,38 +11,17 @@
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };
 
-        private _idPanelMnt;
-        public get PanelMnt(): HTMLDivElement {
-            return document.getElementById(this._idPanelMnt) as HTMLDivElement;
-        }
-
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
 
-        public get Controlador() {
-            return this.PanelMnt.getAttribute(atMantenimniento.controlador);
-        }
-
-        public get Negocio() {
-            return this.PanelMnt.getAttribute(atMantenimniento.negocio);
-        }
-
-
-        private _idHtmlZonaMenu: string;
-        public get ZonaDeMenu(): HTMLDivElement {
-            return document.getElementById(this._idHtmlZonaMenu) as HTMLDivElement;
-        }
-
         constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
-            this._idPanelMnt = idPanelMnt;
             this._idModalBorrar = idModalDeBorrado;
-            this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
         }
 
         public Inicializar() {
-            super.Inicializar(this._idPanelMnt);
+            super.Inicializar(this.IdPanelMnt);
             this.InicializarSelectores();
             this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
             this.InicializarMenus();
@@ -75,11 +54,7 @@
 
         private InicializarMenus() {
 
-            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
-            for (var i = 0; i < opcionesDeElemento.length; i++) {
-                let opcion: HTMLButtonElement = opcionesDeElemento[i];
-                opcion.disabled = true;
-            }   
+            this.DeshabilitarOpcionesDeMenuDeElemento();   
 
             let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlNegocio();
             let datosDeEntrada = `{"negocio":"${this.Negocio}"}`;

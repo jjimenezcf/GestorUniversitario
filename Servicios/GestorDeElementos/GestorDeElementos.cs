@@ -342,6 +342,14 @@ namespace GestorDeElementos
 
         #region Métodos de lectura
 
+        public TElemento LeerElementoPorId(int id)
+        {
+            TRegistro elementoDtm;
+
+            elementoDtm = LeerRegistroPorId(id);
+            return MapearElemento(elementoDtm);
+        }
+
         public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden)
         {
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
@@ -739,7 +747,16 @@ namespace GestorDeElementos
 
         public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, TElemento elemento)
         {
-            var m = LeerModoDeAccesoAlNegocio(idUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name));
+            var m = LeerModoDeAccesoAlElemento(idUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), elemento.Id);
+            return m;
+        }
+
+        public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, enumNegocio negocio, int id)
+        {
+            var m = LeerModoDeAccesoAlNegocio(idUsuario, negocio);
+
+            //analizar modo de acceso al elemento (por ahora sólo negocio)
+
             return m;
         }
 
@@ -815,20 +832,6 @@ namespace GestorDeElementos
 
         #region codigo creo que obsoleto
 
-        public TElemento LeerElementoPorId(int id)
-        {
-            TRegistro elementoDeBd;
-            try
-            {
-                elementoDeBd = LeerRegistroPorId(id);
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"No existe en la base de datos un registro de {typeof(TRegistro).Name} con Id {id}", e);
-            }
-
-            return MapearElemento(elementoDeBd);
-        }
 
 
 

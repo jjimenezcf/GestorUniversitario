@@ -174,8 +174,8 @@
         }
 
         private LeerElemento(id: number) {
-            let idJson: string = this.DefinirFiltroPorId(id);
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.idsJson}=${idJson}`;
+            //let idJson: string = this.DefinirFiltroPorId(id);
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerPorId
@@ -193,7 +193,7 @@
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
-            edicion.MapearElementoLeido(panel, peticion.resultado.datos[0], peticion.resultado.modoDeAcceso);
+            edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
         }
 
         private SiHayErrorAlLeerElemento(peticion: ApiDeAjax.DescriptorAjax) {

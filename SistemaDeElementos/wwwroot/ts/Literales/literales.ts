@@ -167,7 +167,8 @@ const Ajax = {
         CargaDinamica: "epCargaDinamica",
         SubirArchivo: "epSubirArchivo",
         CrearRelaciones: "epCrearRelaciones",
-        LeerModoDeAccesoAlNegocio: "epLeerModoDeAccesoAlNegocio"
+        LeerModoDeAccesoAlNegocio: "epLeerModoDeAccesoAlNegocio",
+        LeerModoDeAccesoAlElemento: "epLeerModoDeAccesoAlElemento"
     },
     EpDeAcceso: {
         ReferenciarFoto: "epReferenciarFoto",
