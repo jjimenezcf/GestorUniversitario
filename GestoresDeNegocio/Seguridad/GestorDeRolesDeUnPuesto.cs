@@ -97,11 +97,7 @@ namespace GestoresDeNegocio.Seguridad
         protected override void DespuesDePersistir(RolesDeUnPuestoDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
-            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
-            {
-                ServicioDeCaches.EliminarCache($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}");
-                ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
-            }
+            GestorDePermisos.ActualizarCachesDePermisos(Contexto, Mapeador, 0);
         }
     }
 }

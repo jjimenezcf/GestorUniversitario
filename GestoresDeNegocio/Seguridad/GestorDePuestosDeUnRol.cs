@@ -25,7 +25,7 @@ namespace GestoresDeNegocio.Seguridad
 
                 CreateMap<PuestosDeUnRolDto, RolesDeUnPuestoDtm>()
                     .ForMember(dtm => dtm.Rol, dto => dto.Ignore())
-                    .ForMember(dtm => dtm.Puesto, dto => dto.Ignore()); 
+                    .ForMember(dtm => dtm.Puesto, dto => dto.Ignore());
             }
         }
 
@@ -96,11 +96,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
-            {
-                ServicioDeCaches.EliminarCache($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}");
-                ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
-            }
+            GestorDePermisos.ActualizarCachesDePermisos(Contexto, Mapeador, 0);
         }
 
     }

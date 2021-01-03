@@ -59,15 +59,13 @@ namespace GestoresDeNegocio.Entorno
         {
 
             var gestor = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            var filtro = new ClausulaDeFiltrado { Clausula = nameof(UsuarioDtm.Login), Criterio = CriteriosDeFiltrado.igual, Valor = usuario };
-            var filtros = new List<ClausulaDeFiltrado> { filtro };
-            var r = gestor.LeerRegistros(0, 1, filtros);
-            if (r.Count == 0 || r.Count > 1)
+            var usuarioDtm = gestor.LeerRegistro(nameof(UsuarioDtm.Login),usuario,false,false,false);
+            if (usuarioDtm == null)
                 GestorDeErrores.Emitir($"Usuario {usuario} no válido");
 
             var  CacheArbolDeMenu = ServicioDeCaches.Obtener(nameof(this.LeerArbolDeMenu));
 
-            if (!CacheArbolDeMenu.ContainsKey(r[0].Id.ToString()))
+            if (!CacheArbolDeMenu.ContainsKey(usuarioDtm.Id.ToString()))
             {
                 var arbolDeMenu = Contexto
                 .MenuSe
@@ -85,7 +83,7 @@ namespace GestoresDeNegocio.Entorno
                                             T3.CONTROLADOR, 
                                             T3.ACCION, 
                                             T3.PARAMETROS
-                                     FROM ENTORNO.ARBOL_MENU_POR_USUARIO({r[0].Id}) AS T1
+                                     FROM ENTORNO.ARBOL_MENU_POR_USUARIO({usuarioDtm.Id}) AS T1
                                      LEFT JOIN ENTORNO.MENU T2 ON T2.ID = T1.IDPADRE
                                      LEFT JOIN ENTORNO.VISTA_MVC T3 ON T3.ID = T1.IDVISTA_MVC
                                      order by t1.IDPADRE, T1.ORDEN, T1.NOMBRE").ToList();
@@ -93,9 +91,9 @@ namespace GestoresDeNegocio.Entorno
                 //arbolDeMenu = LeerRegistros(0, -1);
                 var resultadoDto = new List<ArbolDeMenuDto>();
                 ProcesarSubMenus(resultadoDto, arbolDeMenu, padre: null);
-                CacheArbolDeMenu[r[0].Id.ToString()] = resultadoDto;
+                CacheArbolDeMenu[usuarioDtm.Id.ToString()] = resultadoDto;
             }
-            return (List<ArbolDeMenuDto>)CacheArbolDeMenu[r[0].Id.ToString()];
+            return (List<ArbolDeMenuDto>)CacheArbolDeMenu[usuarioDtm.Id.ToString()];
         }
 
 

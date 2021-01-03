@@ -10,6 +10,7 @@ using ServicioDeDatos;
 using ModeloDeDto.Seguridad;
 using GestorDeElementos;
 using Microsoft.EntityFrameworkCore.Internal;
+using GestoresDeNegocio.Entorno;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -39,6 +40,28 @@ namespace GestoresDeNegocio.Seguridad
         internal static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePermisos(contexto, mapeador);
+        }
+
+        public static void ActualizarCachesDePermisos(ContextoSe contexto, IMapper mapeador, int idPermiso)
+        {
+            var gestorDePermisos = Gestor(contexto, mapeador);
+
+            if (idPermiso == 0)
+            {
+                ServicioDeCaches.EliminarCache($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}");
+                ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+                ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
+            }
+            else
+            {
+                var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso);
+                if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Vista))
+                    ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
+
+                var parteDeLaClave = $"Permiso:{idPermiso}";
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", parteDeLaClave);
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}", parteDeLaClave);
+            }
         }
 
 
@@ -102,15 +125,15 @@ namespace GestoresDeNegocio.Seguridad
 
         private static string ComponerNombreDelPermisoDeDatos(string nombre, enumClaseDePermiso clase, enumModoDeAccesoDeDatos modoAcceso)
         {
-                return $"{clase.ToString().ToUpper()} ({modoAcceso}): {nombre}";
+                return $"{ClaseDePermiso.ToString(clase).ToUpper()} ({ModoDeAcceso.ToString(modoAcceso)}): {nombre}";
         }
 
         private static string ComponerNombrePermisoFuncional(string nombre, enumClaseDePermiso clase)
         {
-                return $"{clase.ToString().ToUpper()}: {nombre}";
+                return $"{ClaseDePermiso.ToString(clase).ToUpper()}: {nombre}";
         }
 
-        private static PermisoDtm CrearPermisoDeDatos(GestorDePermisos gestorDePermiso, string nombreDelPermiso, enumClaseDePermiso clase, enumModoDeAccesoDeDatos tipo)
+        private static PermisoDtm CrearPermisoDeDatos(GestorDePermisos gestorDePermiso, string nombreDelPermiso, enumClaseDePermiso clase, enumModoDeAccesoDeDatos modoDeAcceso)
         {
             PermisoDtm permiso;
             var gestorDeClase = GestorDeClaseDePermisos.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
@@ -120,9 +143,9 @@ namespace GestoresDeNegocio.Seguridad
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(tipo), false, false,false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(modoDeAcceso), false, false,false);
             if (tipoDePermiso == null)
-                tipoDePermiso = gestorDeTipo.CrearTipoPermisoDeDatos(tipo);
+                tipoDePermiso = gestorDeTipo.CrearTipoPermisoDeDatos(modoDeAcceso);
 
             permiso = gestorDePermiso.Crear(nombreDelPermiso, tipoDePermiso, claseDePermiso);
             return permiso;

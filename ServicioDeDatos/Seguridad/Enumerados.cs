@@ -15,6 +15,14 @@ namespace ServicioDeDatos.Seguridad
         Menu
     }
 
+    public static class ClaseDePermiso
+    {
+        public static string ToString(enumClaseDePermiso claseDePermiso)
+        {
+            return claseDePermiso.ToString();
+        }
+    }
+
     public enum enumModoDeAccesoDeDatos
     {
         Administrador,
