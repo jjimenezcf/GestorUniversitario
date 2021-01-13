@@ -109,7 +109,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderMenuDelMnt()
         {
-            var htmlParteSuperiror = $@"<div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{ClaseCss.Render(enumClaseCcsMnt.MntMenuContenedor)}¨>  
+            var htmlParteSuperiror = $@"
+                                <!--  ******************* menú ******************* -->
+                                <div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{ClaseCss.Render(enumClaseCcsMnt.MntMenuContenedor)}¨>  
                                    <div id = ¨{IdHtml}¨  class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntMenuZona)}¨>     
                                      {ZonaMenu.RenderControl()} 
                                     </div>

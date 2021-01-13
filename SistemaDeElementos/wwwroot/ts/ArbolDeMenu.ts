@@ -10,14 +10,14 @@
     export function MostrarMenu() {
         let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ObtenerDatosMenu();
 
-        var menuAbierto = estadoMenu.getAttribute("menu-abierto");
-        if (menuAbierto === undefined || menuAbierto === "false") {
-            estadoMenu.setAttribute("menu-abierto", "true");
+        var menuAbierto = estadoMenu.getAttribute(atMenu.abierto);
+        if (menuAbierto === undefined || menuAbierto === literal.false) {
+            estadoMenu.setAttribute(atMenu.abierto, literal.true);
             modalMenu.style.display = "block";
             modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
         }
         else {
-            estadoMenu.setAttribute("menu-abierto", "false");
+            estadoMenu.setAttribute(atMenu.abierto, literal.false);
             modalMenu.style.display = "none";
         }
 
@@ -30,17 +30,13 @@
     }
 
     export function MenuPulsado(id_menu_pulsado: string) {
-        let elementosHtml: NodeListOf<HTMLElement> = document.getElementsByName("menu");
         let menuHtmlPulsado: HTMLMenuElement = document.getElementById(id_menu_pulsado) as HTMLMenuElement;
 
 
-        if (menuHtmlPulsado.getAttribute("menu-plegado") == "false") {
+        if (menuHtmlPulsado.getAttribute(atMenu.plegado) == literal.false) {
             plegarMenu(menuHtmlPulsado);
             return;
         }
-
-        //for (let i = 0; i < elementosHtml.length; i++)
-        //    plegarMenu(elementosHtml[i] as HTMLMenuElement);
 
         desplegarMenu(menuHtmlPulsado);
 
@@ -126,13 +122,13 @@
     function desplegarMenu(menuHtml: HTMLMenuElement) {
         menuHtml.style.display = "block";
         menuHtml.compact = false;
-        menuHtml.setAttribute("menu-plegado", "false");
+        menuHtml.setAttribute(atMenu.plegado, literal.false);
     }
 
     function plegarMenu(menuHtml: HTMLMenuElement) {
         menuHtml.style.display = "none";
         menuHtml.compact = true;
-        menuHtml.setAttribute("menu-plegado", "true");
+        menuHtml.setAttribute(atMenu.plegado, literal.true);
     }
 
 }

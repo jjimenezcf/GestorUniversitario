@@ -46,7 +46,7 @@
         }
 
         private get IdEditor(): HTMLInputElement {
-            var control = this.BuscarEditor(this.PanelDeEditar, Literal.id);
+            var control = this.BuscarEditor(this.PanelDeEditar, literal.id);
 
             if (control == null) {
                 Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
@@ -58,7 +58,7 @@
         }
 
         private get Controlador(): string {
-            return this.PanelDeEditar.getAttribute(Literal.controlador);
+            return this.PanelDeEditar.getAttribute(literal.controlador);
         }
 
         constructor(crud: CrudMnt, idPanelEdicion: string) {
@@ -209,7 +209,7 @@
         }
 
         private ModificarElemento(json: JSON) {
-            let controlador = this.PanelDeEditar.getAttribute(Literal.controlador);
+            let controlador = this.PanelDeEditar.getAttribute(literal.controlador);
             let url: string = `/${controlador}/${Ajax.EndPoint.Modificar}?${Ajax.Param.elementoJson}=${JSON.stringify(json)}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this

@@ -3,10 +3,12 @@
 const TipoMensaje = { Info: "informativo", Error: "Error", Warning: "Revision" };
 
 
-const Literal = {
+const literal = {
     controlador: "controlador",
     negocio: "negocio",
     id: "id",
+    true: "true",
+    false: "false",
     filtro: {
         clausulaId: 'id',
         criterio: {
@@ -16,6 +18,11 @@ const Literal = {
     }
 };
 
+const atMenu = {
+    abierto: "menu-abierto",
+    plegado: "menu-plegado",
+}
+
 const atControl = {
     propiedad: "propiedad",
     nombre: "name",
@@ -23,7 +30,7 @@ const atControl = {
     zonaDeFiltro: "zona-de-filtro",
     filtro: "control-de-filtro",
     tablaDeDatos: "tabla-de-datos",
-    id: Literal.id,
+    id: literal.id,
     crudModal: 'crud-modal',
     propiedadRestrictora: 'propiedad-restrictora',
     controlador: "controlador",
@@ -42,8 +49,8 @@ const atControl = {
 
 const atMantenimniento = {
     zonaDeFiltro: atControl.zonaDeFiltro,
-    controlador: Literal.controlador,
-    negocio: Literal.negocio,
+    controlador: literal.controlador,
+    negocio: literal.negocio,
     zonaMenu: "zona-de-menu",
     gridDelMnt: "grid-del-mnt"
 }

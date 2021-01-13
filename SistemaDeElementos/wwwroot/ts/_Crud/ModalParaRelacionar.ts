@@ -86,7 +86,7 @@
         protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]): ClausulaDeFiltrado[] {
             clausulas = super.FiltrosExcluyentes(clausulas);
             let propiedad: string = this.PropiedadRestrictora;
-            let criterio: string = Literal.filtro.criterio.diferente;
+            let criterio: string = literal.filtro.criterio.diferente;
             let valor = this.IdRestrictor;
             let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
             clausulas.push(clausula);

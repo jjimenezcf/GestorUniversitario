@@ -16,7 +16,7 @@
         }
 
         private get Controlador(): string {
-            return this.PanelDeCrear.getAttribute(Literal.controlador);
+            return this.PanelDeCrear.getAttribute(literal.controlador);
         }
 
         private get SeguirCreando(): boolean {

@@ -584,13 +584,13 @@
 
         protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {
             if (this.ModoTrabajo === ModoTrabajo.creando)
-                return JSON.parse(`{"${Literal.id}":"0"}`);
+                return JSON.parse(`{"${literal.id}":"0"}`);
 
             if (this.ModoTrabajo === ModoTrabajo.editando) {
-                let input: HTMLInputElement = this.BuscarEditor(panel, Literal.id);
+                let input: HTMLInputElement = this.BuscarEditor(panel, literal.id);
                 if (Number(input.value) <= 0)
                     throw new Error(`El valor del id ${Number(input.value)} debe ser mayor a 0`);
-                return JSON.parse(`{"${Literal.id}":"${Number(input.value)}"}`);
+                return JSON.parse(`{"${literal.id}":"${Number(input.value)}"}`);
             }
         }
 
@@ -831,12 +831,12 @@
         }
 
         protected DefinirFiltroPorId(id: number): string {
-            return this.DefinirRestrictorNumerico(Literal.filtro.clausulaId, id);
+            return this.DefinirRestrictorNumerico(literal.filtro.clausulaId, id);
         }
 
         protected DefinirRestrictorNumerico(propiedad: string, valor: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
-            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, Literal.filtro.criterio.igual, `${valor}`);
+            var clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, literal.filtro.criterio.igual, `${valor}`);
             clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }

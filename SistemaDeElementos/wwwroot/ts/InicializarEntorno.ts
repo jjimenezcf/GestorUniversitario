@@ -15,7 +15,7 @@
         cuerpo.style.height = `${alturaDelCuerpo.toString()}px`;
 
         let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ArbolDeMenu.ObtenerDatosMenu();
-        if (estadoMenu.getAttribute("menu-abierto") === "true")
+        if (estadoMenu.getAttribute(atMenu.abierto) === literal.true)
             modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
     }
 

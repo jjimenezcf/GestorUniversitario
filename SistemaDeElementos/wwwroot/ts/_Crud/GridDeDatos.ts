@@ -503,7 +503,7 @@
 
         private ObtenerClausulaRestrictor(restrictor: HTMLInputElement): ClausulaDeFiltrado {
             let propiedad: string = restrictor.getAttribute(atControl.propiedad);
-            let criterio: string = Literal.filtro.criterio.igual;
+            let criterio: string = literal.filtro.criterio.igual;
             let valor = restrictor.getAttribute(atControl.restrictor);
             let clausula: ClausulaDeFiltrado = null;
             if (!IsNullOrEmpty(valor))
@@ -589,7 +589,7 @@
         }
 
         private ObtenerElIdDelElementoDelaFila(idCheck: string): number {
-            let columnaId: string = idCheck.replace(".chksel", `.${Literal.id}`);
+            let columnaId: string = idCheck.replace(".chksel", `.${literal.id}`);
             let inputId: HTMLInputElement = document.getElementById(columnaId) as HTMLInputElement;
             let id: string = inputId.value;
             return Numero(id);
@@ -599,7 +599,7 @@
             if (this.InfoSelector.Cantidad === 0)
                 return;
 
-            var celdasId = document.getElementsByName(`${Literal.id}.${this.IdGrid}`);
+            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
             var len = celdasId.length;
             for (var i = 0; i < this.InfoSelector.Cantidad; i++) {
                 for (var j = 0; j < len; j++) {
@@ -615,7 +615,7 @@
         }
 
         public BlanquearTodosLosCheck() {
-            var celdasId = document.getElementsByName(`${Literal.id}.${this.IdGrid}`);
+            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
             var len = celdasId.length;
             for (var j = 0; j < len; j++) {
                 var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
@@ -934,7 +934,7 @@
             let eventoOnClick: string = this.definirPulsarCheck(checkbox.id, checkbox.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
 
-            checkbox.value = "false";
+            checkbox.value = literal.false;
             celdaDelTd.append(checkbox);
         }
 
