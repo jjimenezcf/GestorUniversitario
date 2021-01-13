@@ -39,6 +39,7 @@ a {
         text-decoration: none;
     }
 
+
 #tablaCabecera {
     width: 100%;
 }
@@ -122,9 +123,6 @@ a {
     display: inline
 }
 
-.bloque-filtro-vacio {
-    height: 0px;
-}
 
 .ZonaDeDatos {
     height: 400px;

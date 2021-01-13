@@ -313,6 +313,12 @@
         public get ZonaDeFiltro(): HTMLDivElement {
             return document.getElementById(this.idHtmlFiltro) as HTMLDivElement;
         }
+        public get EtiquetaMostrarOcultarFiltro(): HTMLElement {
+            return document.getElementById(`mostrar.${this.IdPanelMnt}.ref`) as HTMLElement;
+        }
+        public get ExpandirFiltro(): HTMLInputElement {
+            return document.getElementById(`expandir.${this.IdPanelMnt}`) as HTMLInputElement;
+        }
 
         protected get Grid(): HTMLDivElement {
             return document.getElementById(this.IdGrid) as HTMLDivElement;

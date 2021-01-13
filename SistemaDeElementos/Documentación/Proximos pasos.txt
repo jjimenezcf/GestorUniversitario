@@ -1,5 +1,4 @@
-﻿
-- Añadir filtros a usuarios (selector de puesto) y órdenes
+﻿- Añadir filtros a usuarios (selector de puesto) y órdenes
 - Añadir filtro a puestos (selector de rol) y órdenes
 - Añadir filtro a roles (selector de permiso) y órdenes
 - Añadir ordenación a los grid de roles-permisos, roles-puestos y usuarios-puestos 
@@ -57,4 +56,5 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 - Crear usuario administrador
 	- permiso de administrador asociado a variable 
 	- se lee al entrar (de BD o cache) en el controlador base
+- Poder comprimir la zona de filtrado y cada uno de sus bloques de manera independiente
 

@@ -53,82 +53,76 @@
         var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
     }
 
-    <div class="container-fluid">
-        <header>
-            <table id="tablaCabecera" class="table">
-                <tr>
-                    <td class="celdaCabeceraIzquierda">
-                        <img id="id-menu"
-                             src="~/images/menu/bars-solid.svg"
-                             class="btn-menu fa-icono"
-                             modal-menu="id-modal-menu"
-                             onclick="ArbolDeMenu.MostrarMenu()"
-                             menu-abierto="false" />
+    <div id ="div-formulario" class="formulario">
 
-                        <input id="id-producto"
-                               type="button"
-                               class="etiquetaIzquierda"
-                               value="Sitema de elementos" />
-                    </td>
-                    <td class="celdaSeparador">
-                    </td>
-                    <td class="celdaCabecera">
-                        <input id="id-Consultas" type="text" class="estiloCeldaCabecera" value="Consultas" readonly />
-                    </td>
-                    <td class="celdaCabecera">
-                        <input id="id-Favoritos" type="text" class="estiloCeldaCabecera" value="Favoritos" readonly />
-                    </td>
-                    <td class="celdaCabeceraDerecha">
-                        @*<input id="id-Login" type="text" class="estiloCeldaDerecha" value="@datosDeConexion.Login" readonly />*@
-                        <div>
-                            <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
-                                <button value=Submit type=submit>Logout</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        <!--  Cabecera del formulario -->
+        <div id="div-cabecera" class="cabecera">
+            <div class="cabecera-menu">
+                <img id="id-menu"
+                     src="~/images/menu/bars-solid.svg"
+                     class="btn-menu fa-icono"
+                     modal-menu="id-modal-menu"
+                     onclick="ArbolDeMenu.MostrarMenu()"
+                     menu-abierto="false" />
 
-            <div id="id-modal-menu" class="modal-menu">
-                <div id="id-contenedor-menu" class="menu-contenedor">
-                </div>
+                <input id="id-producto" type="text" value="Sitema de elementos" readonly/>
             </div>
-
-        </header>
-
-        <div class="table">
-            <div class="row">
-                <div class="col">
-                    <div id="contenido" style="width: 100%" ;>
-                        <main role="main" class="pb-3">
-                            @RenderBody()
-                            <br />
-                            <br />
-                        </main>
-                    </div>
-                </div>
+            <div class="cabecera-separador"></div>
+            <div class="cabecera-consultas">
+                <input id="id-Consultas" type="text" value="Consultas" readonly />
+            </div>
+            <div class="cabecera-favoritos">
+                <input id="id-Favoritos" type="text" value="Favoritos" readonly />
+            </div>
+            <div class="cabecera-opciones">
+                <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
+                    <button value=Submit type=submit>Logout</button>
+                </form>
             </div>
         </div>
 
-        <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
+        <!--  cuerpo del formulario -->
+        <div id="div-cuerpo" class="cuerpo">
+            @RenderBody()
+            <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
+            </div>
         </div>
 
-        <footer>
-            <div class="text-info" width="100%">
-                <input id="Mensaje" style="width:100%" readonly value="" />
+        <!--  Pie del formulario -->
+        <div id="div-pie" class="pie">
+            <div class="pie-mensaje">
+                <input id="Mensaje" readonly value="" />
             </div>
-            <div>
-                <div style="float: left; width: 80%; background-color: #00b9ff;">@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd</div>
-                <div style="float: right;width: 20%;background-color: #00b9ff;text-align: right;">Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login</div>
+            <div class="pie-conexion">
+                <div class="pie-conexion-datos">
+                    <input id="i-pie-conexion-datos" readonly value="@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd" />
+                </div>
+                <div class="pie-conexion-usuario">
+                    <input id="i-pie-conexion-usuario" readonly value="Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login" />
+                </div>
             </div>
-        </footer>
-
-        @RenderSection("Scripts", required: false)
-
-        <script>
-            window.onload = EntornoSe.IniciarEntorno();
-        </script>
+        </div>
     </div>
+
+    <div id="id-modal-menu" class="modal-menu">
+        <div id="id-contenedor-menu" class="menu-contenedor">
+        </div>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+
+        function Ajustar() {
+            EntornoSe.AjustarDivs();
+        }
+
+        window.onload = EntornoSe.IniciarEntorno;
+        window.onresize = Ajustar;
+        Ajustar();
+    </script>
+
+
 </body>
 </html>
 

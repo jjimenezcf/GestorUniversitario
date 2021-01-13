@@ -288,13 +288,13 @@ namespace MVCSistemaDeElementos.Descriptores
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ clase=¨{ClaseOpcionMenu.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
+                        <input type=¨button¨ clase=¨{ClaseCss.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
                     </form>
                 ";
                 return htmlFormPost;
             }
 
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{ClaseOpcionMenu.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
+            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{ClaseCss.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
             return htmlOpcionMenu;
         }
     }

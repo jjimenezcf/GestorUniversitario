@@ -54,7 +54,7 @@
 
         private InicializarMenus() {
 
-            this.DeshabilitarOpcionesDeMenuDeElemento();   
+            this.DeshabilitarOpcionesDeMenuDeElemento();
 
             let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlNegocio();
             let datosDeEntrada = `{"negocio":"${this.Negocio}"}`;
@@ -88,7 +88,7 @@
                             opcion.disabled = true;
                         else
                             opcion.disabled = false;
-            }            
+            }
         }
 
 
@@ -291,5 +291,34 @@
             this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 
+        public OcultarMostrarFiltro(): void {
+            if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
+                this.OcultarPanel(this.ZonaDeFiltro);
+                this.ExpandirFiltro.value = "0";
+                this.EtiquetaMostrarOcultarFiltro.innerText = "Mostrar filtro";
+            }
+            else {
+                this.ExpandirFiltro.value = "1";
+                this.MostrarPanel(this.ZonaDeFiltro);
+                this.EtiquetaMostrarOcultarFiltro.innerText = "Ocultar filtro";
+            }
+        }
+
+        public OcultarMostrarBloque(idHtmlBloque: string) {
+            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}`) as HTMLInputElement
+            if (NumeroMayorDeCero(extensor.value)) {
+                extensor.value = "0";
+                this.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+                (document.getElementById(`mostrar.${idHtmlBloque}.ref`) as HTMLElement).innerText = "Mostrar";
+            }
+            else {
+                extensor.value = "1";
+                this.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+                (document.getElementById(`mostrar.${idHtmlBloque}.ref`) as HTMLElement).innerText = "Ocultar";
+            }
+
+        }
+
     }
+
 }

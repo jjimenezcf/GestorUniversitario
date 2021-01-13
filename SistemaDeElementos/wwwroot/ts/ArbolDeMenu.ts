@@ -1,25 +1,26 @@
 ﻿module ArbolDeMenu {
 
-    export function MostrarMenu() {
-        let idProductoHtml: HTMLElement = document.getElementById('id-menu');
-        let idModalMenu: string = idProductoHtml.getAttribute('modal-menu');
-        let idModalHtml: HTMLElement = document.getElementById(idModalMenu);
+    export function ObtenerDatosMenu(): { modalMenu: HTMLDivElement; estadoMenu: HTMLElement} {
+        let estadoMenu: HTMLImageElement = document.getElementById('id-menu') as HTMLImageElement;
+        let idModalMenu: string = estadoMenu.getAttribute('modal-menu');
+        let modalMenu: HTMLDivElement = document.getElementById(idModalMenu) as HTMLDivElement;
+        return { modalMenu, estadoMenu };
+    }
 
-        if (idModalHtml === undefined) {
-            console.log(`No se ha definido el contenedor del menú ${idModalMenu}`);
+    export function MostrarMenu() {
+        let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ObtenerDatosMenu();
+
+        var menuAbierto = estadoMenu.getAttribute("menu-abierto");
+        if (menuAbierto === undefined || menuAbierto === "false") {
+            estadoMenu.setAttribute("menu-abierto", "true");
+            modalMenu.style.display = "block";
+            modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
         }
         else {
-            var menuAbierto = idProductoHtml.getAttribute("menu-abierto");
-            if (menuAbierto === undefined || menuAbierto === "false") {
-                idProductoHtml.setAttribute("menu-abierto", "true");
-                idModalHtml.style.display = "block";
-                idModalHtml.style.height = `${document.documentElement.clientHeight - 60}px`;
-            }
-            else {
-                idProductoHtml.setAttribute("menu-abierto", "false");
-                idModalHtml.style.display = "none";
-            }
+            estadoMenu.setAttribute("menu-abierto", "false");
+            modalMenu.style.display = "none";
         }
+
     }
 
     export function OpcionSeleccionada(idVistaMvc: string, controlador: string, accion) {

@@ -146,12 +146,20 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var renderMnt = Mnt.RenderControl();
             if (ModoDescriptor.Mantenimiento == Modo)
-                return $@"{renderMnt}{Environment.NewLine}{Creador.RenderControl()}
-                          {Environment.NewLine}{Editor.RenderControl()}
-                          {Environment.NewLine}{Borrado.RenderControl()}";
+                return $@"
+                  {renderMnt}
+                  <!--  ******************* div de creacion ******************* -->
+                  {Creador.RenderControl()}
+                  <!--  *******************  div de edición ******************* -->
+                  {Editor.RenderControl()}
+                  <!--  *******************  div de borrado ******************* -->
+                  {Borrado.RenderControl()}";
 
             if (ModoDescriptor.Consulta == Modo)
-                return $@"{renderMnt}{Environment.NewLine}{Editor.RenderControl()}";
+                return $@"
+                 {renderMnt}
+                 <!--  *******************  div de borrado -->
+                 {Editor.RenderControl()}";
 
             return renderMnt;
         }

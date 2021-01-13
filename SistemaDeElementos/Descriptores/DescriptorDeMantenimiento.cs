@@ -34,21 +34,20 @@ namespace MVCSistemaDeElementos.Descriptores
         public override string RenderControl()
         {
 
-            var htmlMnt = ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo
-                   ?
-                   RenderTitulo() + Environment.NewLine +
-                   ZonaMenu.RenderControl() + Environment.NewLine +
-                   Filtro.RenderControl() + Environment.NewLine +
-                   Datos.RenderControl() + Environment.NewLine
-                   :
-                   Filtro.RenderControl() + Environment.NewLine +
-                   Datos.RenderControl() + Environment.NewLine;
+            var htmlCuerpoCabecera = RenderCuerpoCabecera(RenderTitulo(), RenderMenuDelMnt());
+            var htmlCuerpoDatos = RenderCuerpoDatos(Filtro.RenderControl(), Datos.RenderControl());
+            var htmlCuerpoPie = RenderCuerpoPie();
 
             var htmContenedorMnt =
-                $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ zona-de-filtro=¨{Filtro.IdHtml}¨ zona-de-menu=¨{ZonaMenu.IdHtml}¨ controlador=¨{Crud.Controlador}¨ negocio=¨{Crud.Negocio}¨>
-                     {htmlMnt}
-                   </Div>
+                $@"  
+                  <!--  ******************* título y menú ******************* -->
+                     {htmlCuerpoCabecera}
+
+                  <!--  ******************* zona de navegación ******************* -->
+                     {htmlCuerpoPie}
+
+                  <!--  ******************* filtro y grid de datos ******************* -->
+                     {htmlCuerpoDatos}
                 ";
 
             foreach (var o in ZonaMenu.Menu.OpcionesDeMenu)
@@ -70,6 +69,59 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return htmContenedorMnt.Render();
         }
+        private string RenderCuerpoCabecera(string htmlTitulo, string htmlMenu)
+        {
+            var propiedades = $@" id=¨{IdHtml}¨ 
+                        class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoCabecera)}¨ 
+                        grid-del-mnt=¨{Datos.IdHtml}¨ 
+                        zona-de-filtro=¨{Filtro.IdHtml}¨ 
+                        zona-de-menu=¨{ZonaMenu.IdHtml}¨ 
+                        controlador=¨{Crud.Controlador}¨ 
+                        negocio=¨{Crud.Negocio}¨>
+                     ";
+
+            return ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo ?
+            $@"<div {propiedades}
+                    {htmlTitulo}
+                    {htmlMenu}
+               </div>
+                " :
+            $@"<div {propiedades}>
+               </div>";
+        }
+
+        private object RenderCuerpoDatos(string htmlFiltro, string htmlDatos)
+        {
+            return
+            $@"<div id=¨cuerpo.datos.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatos)}¨>
+                     {htmlFiltro}
+                     {htmlDatos}
+               </div>";
+        }
+
+        private object RenderCuerpoPie()
+        {
+           return $@"<div id=¨cuerpo.pie.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoPie)}¨>
+                       <h2>{Etiqueta}</h2>
+                     </div>";
+        }
+
+
+        private string RenderMenuDelMnt()
+        {
+            var htmlParteSuperiror = $@"<div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{ClaseCss.Render(enumClaseCcsMnt.MntMenuContenedor)}¨>  
+                                   <div id = ¨{IdHtml}¨  class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntMenuZona)}¨>     
+                                     {ZonaMenu.RenderControl()} 
+                                    </div>
+                                    <div id = ¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
+                                      <a id = ¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('ocultar-mostrar-filtro', '{("")}');¨>Ocultar filtro</a>
+                                      <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨ >  
+                                    </div>
+                                </div>";
+
+
+            return htmlParteSuperiror;
+        }
 
         public string RenderMntModal(string idModal)
         {
@@ -81,9 +133,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <Div id=¨{IdHtml}¨ class=¨div-visible¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
+                   <div id=¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)}¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
                      {htmlMnt}
-                   </Div>
+                   </div>
                 ";
 
             return htmContenedorMnt.Render();

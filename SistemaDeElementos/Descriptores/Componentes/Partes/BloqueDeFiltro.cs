@@ -12,6 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public ICollection<ControlFiltroHtml> Controles => Tabla.Controles;
 
+        public bool HayExpansor { get; private set; } = false;
 
         public BloqueDeFitro(ZonaDeFiltro<TElemento> filtro, string titulo, Dimension dimension)
         : base(
@@ -77,7 +78,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderBloque()
         {
-            string cssClaseBloque = Tabla.Controles.Count == 0 ? "bloque-filtro-vacio" : "";
+            string cssClaseBloque = Tabla.Controles.Count == 0 ? ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueVacio) : "";
             string htmlBloque = $@"<div id = ¨{IdHtml}¨ class = {cssClaseBloque}>     
                                      tabla 
                                     </div>";
@@ -102,7 +103,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderBloque();
+            var htmlDivExtensor = Tabla.Controles.Count == 0 || !HayExpansor ?
+                RenderBloque() :
+                $@"<div id=¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueContenedor)}¨> 
+                        <a id=¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.EventosDelMantenimiento('ocultar-mostrar-bloque', '{IdHtml}');¨>Ocultar</a>
+                        <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨> 
+                        {RenderBloque()}
+                   </div>";
+
+            return htmlDivExtensor;
         }
 
         internal ControlFiltroHtml BuscarControl(string propiedad)

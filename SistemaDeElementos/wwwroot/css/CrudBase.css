@@ -1,10 +1,4 @@
 ﻿
-body {
-    background: #ffffff;
-    line-height: 18px;
-}
-
-
 .div-visible {
     display: block;
 }
@@ -13,8 +7,30 @@ body {
     display: none;
 }
 
-
-/*.propiedad {
+.div-mnt-menu-contenedor {
+    width: 100%;
+    display: flex;
+    margin-bottom: 10px;
 }
-    .propiedad:read-only {
-    }*/
+.div-mnt-menu-zona {
+    width: 90%;
+}
+.div-mnt-filtro-expansor {
+    width: 10%;
+    text-align: right;
+    align-content: end;
+}
+
+.div-mnt-filtro-zona {
+    width: 100%;
+}
+.div-mnt-bloque-contenedor {
+    width: 100%;
+    text-align: left;
+    align-content: start;
+}
+
+.div-mnt-bloque-vacio {
+    height: 0px;
+}
+

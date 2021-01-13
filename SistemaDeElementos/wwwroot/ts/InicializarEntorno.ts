@@ -9,6 +9,16 @@
         }
     }
 
+    export function AjustarDivs() {
+        let alturaDelCuerpo: number =AlturaDelCuerpo();
+        let cuerpo: HTMLDivElement = document.getElementById("div-cuerpo") as HTMLDivElement;
+        cuerpo.style.height = `${alturaDelCuerpo.toString()}px`;
+
+        let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ArbolDeMenu.ObtenerDatosMenu();
+        if (estadoMenu.getAttribute("menu-abierto") === "true")
+            modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
+    }
+
     export function InicializarHistorial() {
             Historial = new HistorialSe.HistorialDeNavegacion();
     }

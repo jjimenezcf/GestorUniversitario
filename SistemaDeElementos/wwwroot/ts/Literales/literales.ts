@@ -272,7 +272,9 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
         FilaPulsada: "fila-pulsada",
-        CambiarSelector: "cambiar-selector"
+        CambiarSelector: "cambiar-selector",
+        OcultarMostrarFiltro: "ocultar-mostrar-filtro",
+        OcultarMostrarBloque: "ocultar-mostrar-bloque"
     },
     Creacion: {
         Crear: "nuevo-elemento",

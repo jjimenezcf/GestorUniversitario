@@ -46,7 +46,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 htmContenedorEdt =
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨div-no-visible¨ controlador=¨{Crud.Controlador}¨>
+                   <div id=¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
                          <h2>Edición</h2> 
                          {MenuDeEdicion.RenderControl()}
                          {RendelDivDeEdicion(tabla)}

@@ -2,27 +2,27 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 0px; /* Location of the box */
-    left: 15px;
-    top: 50px;
-    width: 300px; /* Full width */
-    /*height: 100%;*/ /* Full height */
+    margin-top: 0px; /* Location of the box */
+    margin-left: 3px;
+    top:52px;
+    width: 300px;
+    height: 90%;
     overflow: auto; /* Enable scroll if needed */
     border: 1px solid #888;
     background-color: #ffff;
 }
 
 .menu-contenedor {
-    width: 100%;
+    width: 95%;
     display: inline-block;
-    /*font-family: scans-serif;*/
     line-height: 18px;
 }
 
 .menu-contenido {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 1px;
     width: 100%;
+    height: -webkit-fill-available;
 }
 
 .modal-menu .menu-contenido {

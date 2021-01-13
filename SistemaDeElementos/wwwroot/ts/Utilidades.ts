@@ -10,6 +10,16 @@
         console.log(mensaje)
 }
 
+function AlturaDelCuerpo(): number {
+    var altura = document.defaultView.innerHeight;
+    let cabecera: HTMLDivElement = document.getElementById("div-cabecera") as HTMLDivElement;
+    let pie: HTMLDivElement = document.getElementById("div-pie") as HTMLDivElement;
+    return altura - cabecera.clientHeight - pie.clientHeight;
+}
+
+function AlturaDelMenu(): number {
+    return AlturaDelCuerpo() - 4;
+}
 
 function PonerCapa() {
     var capa = document.getElementById("CapaDeBloqueo");

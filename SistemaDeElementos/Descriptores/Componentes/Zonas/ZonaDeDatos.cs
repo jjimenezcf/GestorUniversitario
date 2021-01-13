@@ -118,7 +118,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var idHtmlZonaFiltro = ((DescriptorDeMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             var htmlDiv = @$"<div id = ¨{IdHtml}¨ 
-                                  class=¨ZonaDeDatos¨ 
+                                  class=¨{enumClaseCcsCuerpo.CuerpoDatosGrid}¨ 
                                   seleccionables = ¨-1¨ 
                                   seleccionados =¨¨ 
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 

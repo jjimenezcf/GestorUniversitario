@@ -79,17 +79,13 @@ namespace MVCSistemaDeElementos.Descriptores
             return false;
         }
 
-        private string RenderFiltro()
+        private string RenderZonaDeFiltrado()
         {
-            var htmlFiltro = $@"<div id = ¨{IdHtml}¨ style=¨width:100%¨>     
-                                     bloques 
-                                </div>";
-
             var htmlBloques = "";
-            foreach (BloqueDeFitro<TElemento> b in Bloques)
-                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderControl()}";
+            foreach (BloqueDeFitro<TElemento> bloque in Bloques)
+                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{bloque.RenderControl()}";
 
-            return htmlFiltro.Replace("bloques", htmlBloques);
+            return htmlBloques;
         }
 
         public string RenderModalesFiltro()
@@ -103,7 +99,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderFiltro();
+            return $@"<div id = ¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosFiltro)}¨> {RenderZonaDeFiltrado()} </div> ";
         }
     }
 

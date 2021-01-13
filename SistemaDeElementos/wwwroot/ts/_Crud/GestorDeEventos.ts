@@ -59,6 +59,15 @@
                     crudMnt.CambiarSelector(parametros);
                     break;
                 }
+                case Evento.Mnt.OcultarMostrarFiltro: {
+                    crudMnt.OcultarMostrarFiltro();
+                    break;
+                }
+                case Evento.Mnt.OcultarMostrarBloque: {
+                    let idHtmlBloque: string = parametros;
+                    crudMnt.OcultarMostrarBloque(idHtmlBloque);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;
