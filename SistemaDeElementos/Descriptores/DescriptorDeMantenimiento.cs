@@ -40,14 +40,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"  
-                  <!--  ******************* título y menú ******************* -->
+                  <!--  ******************* Cabecera del cuerpo: título y menú ******************* -->
                      {htmlCuerpoCabecera}
 
-                  <!--  ******************* zona de navegación ******************* -->
-                     {htmlCuerpoPie}
-
-                  <!--  ******************* filtro y grid de datos ******************* -->
+                  <!--  ******************* Datos del cuerpo: filtro y grid de datos ******************* -->
                      {htmlCuerpoDatos}
+
+                  <!--  ******************* Pié del cuerpo: zona de navegación ******************* -->
+                     {htmlCuerpoPie}
                 ";
 
             foreach (var o in ZonaMenu.Menu.OpcionesDeMenu)
@@ -102,7 +102,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private object RenderCuerpoPie()
         {
            return $@"<div id=¨cuerpo.pie.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoPie)}¨>
-                       <h2>{Etiqueta}</h2>
+                       {Datos.Grid.NavegadorToHtml()}
                      </div>";
         }
 

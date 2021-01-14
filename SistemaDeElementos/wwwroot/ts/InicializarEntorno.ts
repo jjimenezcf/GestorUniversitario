@@ -17,6 +17,13 @@
         let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ArbolDeMenu.ObtenerDatosMenu();
         if (estadoMenu.getAttribute(atMenu.abierto) === literal.true)
             modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
+
+        if (Crud.crudMnt !== null) {
+            Mensaje(TipoMensaje.Info, "hay crud");
+        }
+        else {
+            Mensaje(TipoMensaje.Info, "No hay crud");
+        }
     }
 
     export function InicializarHistorial() {

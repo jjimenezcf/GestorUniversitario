@@ -5,9 +5,11 @@
 
 .formulario {
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 5% 90% 5%;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr 50px;
+    gap: 0px 0px;
     grid-template-areas: "cabecera" "cuerpo" "pie";
+    overflow-y: hidden;
 }
 
 
@@ -18,9 +20,9 @@
     grid-template-columns: 40% 10% 20% 20% 10%;
     grid-template-rows: 100%;
     grid-template-areas: "cabecera-menu cabecera-separador cabecera-consultas cabecera-favoritos cabecera-opciones";
-    align-items: center;
+/*    align-items: center;
     height: 50px;
-    align-self:self-start
+    align-self:self-start*/
 }
 
 .cabecera-menu {
@@ -79,30 +81,27 @@
 
 .cuerpo {
     display: grid;
-    grid-area: cuerpo;
-    grid-template-columns: 100%;
-    /*grid-template-rows: 10% 70% 10%;*/
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 2.6fr 0.2fr;
+    gap: 0px 0px;
     grid-template-areas: "cuerpo-cabecera" "cuerpo-datos" "cuerpo-pie";
-    align-items: center;
-    background-color: beige;
-    border:double;
-    align-self: center;
+    grid-area: cuerpo;
+/*    background-color: beige;
+    border: double;*/
+/*    align-self: center;*/
 }
 
 .cuerpo-cabecera {
     grid-area: cuerpo-cabecera;
-    background-color: burlywood;
-    align-self: start;
-    border: dotted;
 }
 
 .cuerpo-datos {
     display: grid;
-    grid-area: cuerpo-datos;
-    grid-template-columns: 100%;
-    /*grid-template-rows: 20% 80%;*/
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.4fr 1.6fr;
+    gap: 0px 0px;
     grid-template-areas: "cuerpo-datos-filtro" "cuerpo-datos-grid";
-    background-color: bisque;
+    grid-area: cuerpo-datos;
 }
 
 .cuerpo-datos-filtro {
@@ -111,13 +110,11 @@
 
 .cuerpo-datos-grid {
     grid-area: cuerpo-datos-grid;
+    width:100%;
 }
 
 .cuerpo-pie {
     grid-area: cuerpo-pie;
-    background-color: cadetblue;
-    align-self: flex-end;
-    border: dotted;
 }
 
 .pie {
@@ -127,8 +124,6 @@
     grid-template-columns: 100%;
     grid-template-rows: 50% 50%;
     grid-template-areas: "pie-mensaje" "pie-conexion";
-    height: 50px;
-    align-self: self-end;
 }
 
 .pie-mensaje {

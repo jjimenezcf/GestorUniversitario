@@ -40,6 +40,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
+
+        public bool EsModal => Modo != ModoDescriptor.Mantenimiento;
+
         public string RutaVista { get; set; }
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }

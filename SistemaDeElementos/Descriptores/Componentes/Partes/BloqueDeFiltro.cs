@@ -78,13 +78,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderBloque()
         {
-            string cssClaseBloque = Tabla.Controles.Count == 0 ? ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueVacio) : "";
-            string htmlBloque = $@"<div id = ¨{IdHtml}¨ class = {cssClaseBloque}>     
-                                     tabla 
-                                    </div>";
-            string htmlTabla = Tabla.RenderControl();
+            return Tabla.RenderControl();
+            //string cssClaseBloque = Tabla.Controles.Count == 0 ? ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueVacio) : "";
+            //string htmlBloque = $@"<div id = ¨{IdHtml}¨ class = {cssClaseBloque}>     
+            //                         tabla 
+            //                        </div>";
+            //string htmlTabla = Tabla.RenderControl();
 
-            return htmlBloque.Replace("tabla", htmlTabla);
+            //return htmlBloque.Replace("tabla", htmlTabla);
         }
 
         public string RenderModalesBloque()
@@ -105,7 +106,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlDivExtensor = Tabla.Controles.Count == 0 || !HayExpansor ?
                 RenderBloque() :
-                $@"<div id=¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueContenedor)}¨> 
+                $@"<div id=¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)}¨> 
                         <a id=¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.EventosDelMantenimiento('ocultar-mostrar-bloque', '{IdHtml}');¨>Ocultar</a>
                         <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨> 
                         {RenderBloque()}

@@ -1,4 +1,37 @@
-﻿.div-grid {
+﻿
+cuerpo-datos > thead, tbody, tr, td, th {
+    display: block;
+}
+
+cuerpo-datos > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+cuerpo-datos > thead th {
+    height: 30px;
+    /*text-align: left;*/
+}
+
+cuerpo-datos > tbody {
+    height: 500px;
+    overflow-y: auto;
+    display: block;
+}
+
+tcuerpo-datos > head {
+    /* fallback */
+}
+
+
+    tbody td, thead th {
+        width: 19.2%;
+        float: left;
+    }
+
+.div-grid {
     width: 100%;
     overflow: auto;
 }

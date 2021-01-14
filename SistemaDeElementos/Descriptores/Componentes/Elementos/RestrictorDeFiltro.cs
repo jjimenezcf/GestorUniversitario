@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderEditor()
         {
-            return $@"<div class=¨input-group mb-3¨>
+            return $@"<div¨>
                          <input id=¨{IdHtml}¨ type = ¨text¨ class=¨form-control¨ {base.RenderAtributos()} readonly placeholder=¨{Ayuda}¨>
                       </div>
                   ";

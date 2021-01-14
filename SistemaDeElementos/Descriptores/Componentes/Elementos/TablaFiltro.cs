@@ -54,15 +54,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderTabla();
+            return RenderTablaDeZonaDeFiltrado();
         }
 
-        private string RenderTabla()
+        private string RenderTablaDeZonaDeFiltrado()
         {
-
-            var htmlTabla = $@"<table id=¨{IdHtml}¨ class=¨tabla-filtro¨ width=¨100%¨>
-                                  filas
-                               </table>";
+            //class=¨tabla-filtro¨
+            var htmlTabla = $@" 
+                <!--  ******************* Zona de filtrado ******************* -->
+                <table id=¨{IdHtml}¨ class=¨tabla-filtro¨>
+                    filas
+                </table>";
             var htmlFilas = "";
             for (var i = 0; i < Dimension.Filas; i++)
                 htmlFilas = $"{htmlFilas}{(htmlFilas.IsNullOrEmpty() ? "" : Environment.NewLine)}{RenderFila(i)}";
@@ -93,7 +95,6 @@ namespace MVCSistemaDeElementos.Descriptores
             double porColumnas = 100 / Dimension.Columnas;
             double porColEtiq = (double) 7.5;
             double porColCtrl = porColumnas - porColEtiq;
-
 
             var idColumna = $"{idFila}_{j}";
             var htmlColumnaEtiqueta = $@"<td id=¨{idColumna}_e¨ style=¨width:{porColEtiq.ToString().Replace(',','.')}%¨>

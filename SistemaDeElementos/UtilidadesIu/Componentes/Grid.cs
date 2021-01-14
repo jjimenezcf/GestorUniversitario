@@ -12,7 +12,7 @@ namespace UtilidadesParaIu
     {
         public string Id { get; private set; }
 
-        public ZonaDeDatos<TElemento> ZonaDeDatos { get; set; }
+        public ZonaDeDatos<TElemento> ZonaDeDatos { get; private set; }
 
         public string IdHtml => Id.ToLower();
 
@@ -37,8 +37,6 @@ namespace UtilidadesParaIu
         public int Seleccionables { get; set; }
         public int Ultimo_Leido => PosicionInicial + filas.Count;
 
-        public bool ConNavegador { get; set; } = true;
-
         public Grid(ZonaDeDatos<TElemento> zonaDeDatos)
         {
             ZonaDeDatos = zonaDeDatos;
@@ -55,7 +53,12 @@ namespace UtilidadesParaIu
         public string ToHtml()
         {
             ZonaDeDatos.CalcularAnchosColumnas();
-            return RenderizarGrid(this).Render();
+            return RenderizarGrid(this);
+        }
+
+        public string NavegadorToHtml()
+        {
+           return RenderNavegadorGrid(this) + RenderOpcionesGrid();
         }
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
@@ -65,7 +68,8 @@ namespace UtilidadesParaIu
                           || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta
                 ? columna.PorAnchoSel
                 : columna.PorAnchoMnt;
-            var atributosDelEstilo = $"text-align: {columna.AlineacionCss}";
+
+            var atributosDelEstilo = $"text-align: {columna.AlineacionCss};";
             if (columna.Visible)
                 atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
             string htmlRef = columna.Ordenar ? RenderAccionOrdenar(columna) : columna.Visible ? columna.Titulo : "";
@@ -239,6 +243,7 @@ namespace UtilidadesParaIu
             var accionSiguiente = $"Crud.{getorDeEventos}('obtener-siguientes','{parametros}')";
 
             var htmlNavegadorGrid = $@"
+            {(grid.ZonaDeDatos.Mnt.Crud.EsModal? " <!-- ***************** Navegador del grid ****************** -->" : "")}
             <div id= ¨{grid.IdHtml}_pie¨ class=¨pie-grid¨>
                 <div id=¨{grid.IdHtmlNavegador}¨ class = ¨navegador-grid¨>
                     <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
@@ -278,13 +283,14 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid<TElemento> grid)
         {
-            var htmlTabla = $@"<div class=¨div-grid¨> 
-                                  <table id=¨{grid.IdHtmlTabla}¨ class=¨tabla-grid¨ >
+            var htmlTabla = $@" <table id=¨{grid.IdHtmlTabla}¨ class=¨table table-striped¨ >
                                     {RenderCabecera(grid)}
                                   </table>
-                               </div> ";
-            var htmlNavegador = grid.ConNavegador ? RenderNavegadorGrid(grid) : "";
-            return (htmlTabla + htmlNavegador + RenderOpcionesGrid());
+                             ";
+
+            var htmlGrid = grid.ZonaDeDatos.Mnt.Crud.EsModal ? htmlTabla + RenderNavegadorGrid(grid) + RenderOpcionesGrid() : htmlTabla;
+
+            return htmlGrid;
         }
 
 

@@ -28,7 +28,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderModalDeSeleccionDeFiltro()
         {
-            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
+            string _htmlMiModal = $@"
+                                    <!--  ******************  Modal de selección de filtro para {CrudModal.Negocio} ********************************* -->
+                                    <div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	titulo

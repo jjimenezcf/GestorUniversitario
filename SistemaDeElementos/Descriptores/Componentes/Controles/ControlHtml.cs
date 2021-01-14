@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderLabel()
         {
-            return $@"<div class=¨input-group mb-3¨>
+            return $@"<div¨>
                          {Etiqueta}
                       </div>
                   ";

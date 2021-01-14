@@ -295,7 +295,7 @@
 
         private _idPanelMnt: string;
         public get IdPanelMnt(): string {
-            return this._idPanelMnt
+            return this._idPanelMnt;
         }
         public get PanelMnt(): HTMLDivElement {
             return document.getElementById(this._idPanelMnt) as HTMLDivElement;
@@ -340,7 +340,7 @@
             this._idPanelMnt = idPanelMnt;
             this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
-            
+
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
@@ -566,7 +566,7 @@
             return clausula;
         }
 
-        private ObtenerlaFila(idCheck: string): HTMLTableRowElement  {
+        private ObtenerlaFila(idCheck: string): HTMLTableRowElement {
             let idFila: string = idCheck.replace(".chksel", "");
             let fila: HTMLTableRowElement = document.getElementById(idFila) as HTMLTableRowElement;
             return fila;
@@ -825,19 +825,22 @@
                 grid.Navegador.Total = infoObtenida.total;
 
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
-            var datosDelGrid = document.createElement("tbody");
+            var bodyDeLaTabla = document.createElement("tbody");
+            bodyDeLaTabla.style.overflowY = "scroll";
+            bodyDeLaTabla.style.height = "500px";
+            bodyDeLaTabla.style.borderBottom = "solid";
             for (let i = 0; i < registros.length; i++) {
                 let fila = grid.crearFila(filaCabecera, registros[i], i);
-                datosDelGrid.append(fila);
+                bodyDeLaTabla.append(fila);
             }
 
             var tabla = grid.Grid.querySelector("table");
             var tbody = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
-                tabla.append(datosDelGrid);
+                tabla.append(bodyDeLaTabla);
             else {
                 tabla.removeChild(tbody);
-                tabla.append(datosDelGrid);
+                tabla.append(bodyDeLaTabla);
             }
 
             grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
@@ -907,6 +910,7 @@
             input.style.border = "0px";
             input.style.textAlign = columnaCabecera.estilo.textAlign;
             input.style.width = "100%";
+            input.style.backgroundColor = "inherit";
 
             let idCheckBox = `${idFila}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckBox, input.id);
@@ -930,6 +934,7 @@
             checkbox.style.border = "0px";
             checkbox.style.textAlign = "center";
             checkbox.style.width = "100%";
+            checkbox.style.backgroundColor = "inherit";
 
             let eventoOnClick: string = this.definirPulsarCheck(checkbox.id, checkbox.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
@@ -974,12 +979,13 @@
 
             if (check.checked) {
                 let id: number = this.AnadirAlInfoSelector(infoSelector, idCheck, expresionElemento);
-                this.AjustarOpcionesDeMenu(id);
+                if (!(this instanceof ModalConGrid))
+                    this.AjustarOpcionesDeMenu(id);
             }
             else {
                 this.QuitarDelSelector(infoSelector, idCheck);
-                if (this.InfoSelector.Cantidad == 0)
-                   this.DeshabilitarOpcionesDeMenuDeElemento();
+                if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
+                        this.DeshabilitarOpcionesDeMenuDeElemento();
             }
         }
 

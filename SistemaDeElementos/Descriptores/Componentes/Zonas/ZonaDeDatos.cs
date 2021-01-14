@@ -117,25 +117,25 @@ namespace MVCSistemaDeElementos.Descriptores
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
             var idHtmlZonaFiltro = ((DescriptorDeMantenimiento<TElemento>)Padre).Filtro.IdHtml;
-            var htmlDiv = @$"<div id = ¨{IdHtml}¨ 
-                                  class=¨{enumClaseCcsCuerpo.CuerpoDatosGrid}¨ 
+            var htmlDiv = @$" <!-- ********************  grid de datos ******************** -->
+                              <div id = ¨{IdHtml}¨ 
+                                  class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGrid)}¨ 
                                   seleccionables = ¨-1¨ 
-                                  seleccionados =¨¨ 
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
                                   expresion-elemento = ¨{ExpresionElemento}¨ 
                                   tabla-de-datos = ¨{Grid.IdHtmlTabla}¨ 
-                                  id-modal=¨{IdHtmlModal}¨>     
+                                  {(IdHtmlModal.IsNullOrEmpty() ? "" :$"id-modal=¨{IdHtmlModal}¨")}>     
                                   {Grid.ToHtml()}
                              </div>";
             return htmlDiv;
         }
-        public string RenderDelGrid(ModoDescriptor modo)
-        {
-            var mnt = (DescriptorDeMantenimiento<TElemento>)Padre;
-            var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
-            crud.CambiarModo(modo);
-            return Grid.ToHtml();
-        }
+        //public string RenderDelGrid(ModoDescriptor modo)
+        //{
+        //    var mnt = (DescriptorDeMantenimiento<TElemento>)Padre;
+        //    var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
+        //    crud.CambiarModo(modo);
+        //    return Grid.ToHtml();
+        //}
 
         public override string RenderControl()
         {
