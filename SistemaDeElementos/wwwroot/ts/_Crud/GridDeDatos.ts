@@ -309,9 +309,9 @@
             return this.PanelMnt.getAttribute(atMantenimniento.negocio);
         }
 
-        private idHtmlFiltro: string;
+        private _idHtmlFiltro: string;
         public get ZonaDeFiltro(): HTMLDivElement {
-            return document.getElementById(this.idHtmlFiltro) as HTMLDivElement;
+            return document.getElementById(this._idHtmlFiltro) as HTMLDivElement;
         }
         public get EtiquetaMostrarOcultarFiltro(): HTMLElement {
             return document.getElementById(`mostrar.${this.IdPanelMnt}.ref`) as HTMLElement;
@@ -338,12 +338,12 @@
             super();
 
             this._idPanelMnt = idPanelMnt;
-            this._idGrid = (document.getElementById(idPanelMnt) as HTMLDivElement).getAttribute(atMantenimniento.gridDelMnt);
+            this._idGrid = this.PanelMnt.getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
+            this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
 
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
-            this.idHtmlFiltro = this.Grid.getAttribute(atControl.zonaDeFiltro);
             this.Ordenacion = new Ordenacion();
         }
 

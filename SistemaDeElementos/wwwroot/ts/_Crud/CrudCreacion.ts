@@ -4,7 +4,6 @@
 
         private _idPanelCreacion: string;
 
-        protected PanelDeMnt: HTMLDivElement;
         protected CrudDeMnt: CrudMnt;
 
         protected get PanelDeCrear(): HTMLDivElement {
@@ -31,7 +30,6 @@
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this._idPanelCreacion = idPanelCreacion;
-            this.PanelDeMnt = crud.PanelMnt;
             this.CrudDeMnt = crud;
         }
 
@@ -80,7 +78,7 @@
                 this.CerrarModal(this.PanelDeCrear);
             }
             else {
-                this.Cerrar(this.PanelDeMnt, this.PanelDeCrear);
+                this.Cerrar(this.CrudDeMnt.PanelMnt, this.PanelDeCrear);
             }
             this.CrudDeMnt.Buscar(atGrid.accion.buscar,0);
         }
