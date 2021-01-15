@@ -74,7 +74,7 @@ namespace UtilidadesParaIu
                 atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
             string htmlRef = columna.Ordenar ? RenderAccionOrdenar(columna) : columna.Visible ? columna.Titulo : "";
 
-            string claseCss = columna.Visible ? "columna-cabecera" : "columna-cabecera-oculta";
+            string claseCss = columna.Visible ? ClaseCss.Render(enumClaseCcsGrid.ColumnaCabecera) : ClaseCss.Render(enumClaseCcsGrid.ColumnaOculta);
 
             var htmlTh = $@"{Environment.NewLine}
                           <th id = ¨{columna.IdHtml}¨ 
@@ -222,7 +222,7 @@ namespace UtilidadesParaIu
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
 
-            return $@"<thead id='{grid.IdHtml}_cabecera'>{Environment.NewLine}
+            return $@"<thead id='{grid.IdHtml}_cabecera' class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGridThead)}¨ >{Environment.NewLine}
                          <tr id=¨{grid.IdHtmlCabecera}¨>
                             {cabeceraHtml}{Environment.NewLine}
                          </tr>{Environment.NewLine}
@@ -283,9 +283,9 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid<TElemento> grid)
         {
-            var htmlTabla = $@" <table id=¨{grid.IdHtmlTabla}¨ class=¨table table-striped¨ >
+            var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ class=¨cuerpo-datos-tabla table table-striped¨ style=¨margin-bottom: 0px¨;>
                                     {RenderCabecera(grid)}
-                                  </table>
+                               </table>
                              ";
 
             var htmlGrid = grid.ZonaDeDatos.Mnt.Crud.EsModal ? htmlTabla + RenderNavegadorGrid(grid) + RenderOpcionesGrid() : htmlTabla;

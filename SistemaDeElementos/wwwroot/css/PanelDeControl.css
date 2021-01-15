@@ -121,7 +121,7 @@
     display: grid;
     grid-area: pie;
     background: #00b9ff;
-    grid-template-columns: 100%;
+    grid-template-columns: 1fr;
     grid-template-rows: 50% 50%;
     grid-template-areas: "pie-mensaje" "pie-conexion";
 }

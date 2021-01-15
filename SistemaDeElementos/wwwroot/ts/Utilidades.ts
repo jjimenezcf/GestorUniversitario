@@ -24,16 +24,16 @@ function AlturaDelMenu(): number {
 function PonerCapa() {
     var capa = document.getElementById("CapaDeBloqueo");
     if (capa != null) {
-        capa.classList.remove("sin-capa-de-bloqueo");
-        capa.classList.add("con-capa-de-bloqueo");
+        capa.classList.remove(ClaseCss.sinCapaDeBloqueo);
+        capa.classList.add(ClaseCss.conCapaDeBloqueo);
     }
 }
 
 function QuitarCapa() {
     var capa = document.getElementById("CapaDeBloqueo");
     if (capa != null) {
-        capa.classList.remove("con-capa-de-bloqueo");
-        capa.classList.add("sin-capa-de-bloqueo");
+        capa.classList.remove(ClaseCss.conCapaDeBloqueo);
+        capa.classList.add(ClaseCss.sinCapaDeBloqueo);
     }
 }
 

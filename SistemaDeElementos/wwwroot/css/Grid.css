@@ -1,5 +1,5 @@
 ﻿
-cuerpo-datos > thead, tbody, tr, td, th {
+/*cuerpo-datos > thead, tbody th td{
     display: block;
 }
 
@@ -11,71 +11,56 @@ cuerpo-datos > tr:after {
 }
 
 cuerpo-datos > thead th {
-    height: 30px;
-    /*text-align: left;*/
+    height: 30px;*/
+/*text-align: left;*/
+/*}
+
+.cuerpo-datos-body {
+    height: 120px;
+    overflow-y: auto;
+    display: block;
+}*/
+
+
+.cuerpo-datos-tabla {
+    border-bottom: inset;
+    display: block;
+    width:1fr;
 }
 
-cuerpo-datos > tbody {
+.cuerpo-datos-tbody {
     height: 500px;
-    overflow-y: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: block;
 }
 
-tcuerpo-datos > head {
-    /* fallback */
+.cuerpo-datos-tbody-tr {
+    width: 101%;
+    display: inline-flex;
 }
 
-
-    tbody td, thead th {
-        width: 19.2%;
-        float: left;
-    }
-
-.div-grid {
+.cuerpo-datos-thead {
     width: 100%;
-    overflow: auto;
+    display: inline-table;
 }
 
-    .div-grid > .tabla-grid {
-        width: 100%;
+cuerpo-datos > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.columna-cabecera {
+}
+
+    .columna-cabecera > a {
+        font-weight: bold;
+        display: block;
     }
 
-        .div-grid > .tabla-grid > thead {
-            border-collapse: collapse;
-            height: 35px;
-            width: 100%;
-            border-spacing: 2px;
-            border-color: grey;
-            background-color: #dcd6d6;
-        }
-
-        .div-grid > .tabla-grid > tbody > tr {
-            height: 35px;
-        }
-
-        .div-grid > .tabla-grid > th {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 2px solid #ddd;
-            border-top: 2px solid #ddd;
-        }
-
-        .div-grid > .tabla-grid tr:hover td {
-            background-color: gainsboro;
-        }
-
-        .div-grid > .tabla-grid > td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            border-top: 1px solid #ddd;
-        }
-
-.columna-cabecera > a {
-    font-weight: bold;
-}
-
-.columna-cabecera-oculta {
+.columna-oculta {
     width: 0px;
     display: none;
     visibility: hidden;

@@ -11,6 +11,8 @@ namespace MVCSistemaDeElementos.Descriptores
         CuerpoDatos,
         CuerpoDatosFiltro,
         CuerpoDatosGrid,
+        CuerpoDatosGridThead,
+        CuerpoDatosGridTboby,
         CuerpoPie
     }
 
@@ -35,6 +37,12 @@ namespace MVCSistemaDeElementos.Descriptores
         Basico
     }
 
+    public enum enumClaseCcsGrid
+    {
+        ColumnaOculta,
+        ColumnaCabecera
+    }
+
     public static class ClaseCss
     {
         public static string Render(enumClaseCcsMnt clase)
@@ -51,6 +59,16 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
+        public static string Render(enumClaseCcsGrid clase)
+        {
+            switch (clase)
+            {
+                case enumClaseCcsGrid.ColumnaCabecera: return "columna-cabecera";
+                case enumClaseCcsGrid.ColumnaOculta: return "columna-oculta";
+            }
+            return "";
+        }
+
         public static string Render(enumClaseCcsCuerpo clase)
         {
             switch (clase)
@@ -60,6 +78,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumClaseCcsCuerpo.CuerpoDatos: return "cuerpo-datos";
                 case enumClaseCcsCuerpo.CuerpoDatosFiltro: return "cuerpo-datos-filtro";
                 case enumClaseCcsCuerpo.CuerpoDatosGrid: return "cuerpo-datos-grid";
+                case enumClaseCcsCuerpo.CuerpoDatosGridTboby: return "cuerpo-datos-tbody";
+                case enumClaseCcsCuerpo.CuerpoDatosGridThead: return "cuerpo-datos-thead";
                 case enumClaseCcsCuerpo.CuerpoPie: return "cuerpo-pie";
             }
             return "";

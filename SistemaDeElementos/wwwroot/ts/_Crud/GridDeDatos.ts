@@ -90,7 +90,7 @@
         claseCss: string;
         editable: boolean;
         tipo: string;
-
+        anchoEnPixel: number;
         constructor() {
 
         }
@@ -825,32 +825,32 @@
                 grid.Navegador.Total = infoObtenida.total;
 
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
-            var bodyDeLaTabla = document.createElement("tbody");
-            bodyDeLaTabla.style.overflowY = "scroll";
-            bodyDeLaTabla.style.height = "500px";
-            bodyDeLaTabla.style.borderBottom = "solid";
+            var cuerpoDeLaTabla = document.createElement("tbody");
+
+            cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
             for (let i = 0; i < registros.length; i++) {
                 let fila = grid.crearFila(filaCabecera, registros[i], i);
-                bodyDeLaTabla.append(fila);
+                cuerpoDeLaTabla.append(fila);
             }
 
             var tabla = grid.Grid.querySelector("table");
             var tbody = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
-                tabla.append(bodyDeLaTabla);
+                tabla.append(cuerpoDeLaTabla);
             else {
                 tabla.removeChild(tbody);
-                tabla.append(bodyDeLaTabla);
+                tabla.append(cuerpoDeLaTabla);
             }
 
             grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
         }
 
-        private crearFila(columnaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
+        private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
             let fila = document.createElement("tr");
             fila.id = `${this.IdGrid}_d_tr_${numeroDeFila}`;
-            for (let j = 0; j < columnaCabecera.length; j++) {
-                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, columnaCabecera[j], j);
+            fila.classList.add(ClaseCss.filaDelGrid);
+            for (let j = 0; j < filaCabecera.length; j++) {
+                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, filaCabecera[j], j);
                 fila.append(celdaDelTd);
             }
 
@@ -865,14 +865,16 @@
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
+            celdaDelTd.style.width = `${columnaCabecera.anchoEnPixel}px`;        
+            celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
+            celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;  
 
             let idCheckDeSeleccion: string = `${fila.id}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
-
-            if (columnaCabecera.claseCss === "columna-cabecera-oculta") {
-                celdaDelTd.style.visibility = "none";
-                celdaDelTd.hidden = true;
+            
+            if (columnaCabecera.claseCss === ClaseCss.columnaOculta) {
+                celdaDelTd.classList.add(ClaseCss.columnaOculta); 
             }
 
             if (columnaCabecera.propiedad === 'chksel')
@@ -953,6 +955,7 @@
                 p.visible = !ths[i].hidden;
                 p.claseCss = ths[i].className;
                 p.estilo = ths[i].style;
+                p.anchoEnPixel = ths[i].getBoundingClientRect().width;
                 p.editable = false;
                 p.propiedad = ths[i].getAttribute('propiedad');
                 filaCabecera.push(p);

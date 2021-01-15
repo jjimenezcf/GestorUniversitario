@@ -156,7 +156,12 @@ const ClaseCss = {
     barraRoja: "barra-roja",
     barraAzul: "barra-azul",
     contenedorModal: "contenedor-modal",
-    soloLectura: "solo-lectura"
+    soloLectura: "solo-lectura",
+    columnaOculta: "columna-oculta",
+    filaDelGrid: "cuerpo-datos-tbody-tr",
+    cuerpoDeLaTabla: 'cuerpo-datos-tbody',
+    sinCapaDeBloqueo: "sin-capa-de-bloqueo",
+    conCapaDeBloqueo: "con-capa-de-bloqueo"
 };
 
 const Ajax = {
