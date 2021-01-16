@@ -119,7 +119,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var idHtmlZonaFiltro = ((DescriptorDeMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             var htmlDiv = @$" <!-- ********************  grid de datos ******************** -->
                               <div id = ¨{IdHtml}¨ 
-                                  class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGrid)}¨ 
+                                  class=¨{Css.Render(enumCssCuerpo.CuerpoDatosGrid)}¨ 
                                   seleccionables = ¨-1¨ 
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
                                   expresion-elemento = ¨{ExpresionElemento}¨ 

@@ -46,7 +46,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 htmContenedorEdt =
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
+                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
                          <h2>Edición</h2> 
                          {MenuDeEdicion.RenderControl()}
                          {RendelDivDeEdicion(tabla)}
@@ -69,7 +69,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
                 , navegador: HtmlRenderNavegadorDeSeleccionados()
-                , claseBoton: enumClaseOpcionMenu.DeElemento
+                , claseBoton: enumCssOpcionMenu.DeElemento
                 , permisosNecesarios: enumModoDeAccesoDeDatos.Gestor);
 
             return htmlModal;

@@ -99,7 +99,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return $@"<div id = ¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosFiltro)}¨> {RenderZonaDeFiltrado()} </div> ";
+            return $@"<div id = ¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssCuerpo.CuerpoDatosFiltro)}¨> {RenderZonaDeFiltrado()} </div> ";
         }
     }
 

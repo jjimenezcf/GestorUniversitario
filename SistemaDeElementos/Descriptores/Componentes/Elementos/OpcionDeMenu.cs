@@ -254,14 +254,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public enumModoDeAccesoDeDatos PermisosNecesarios { get; private set; }
 
-        public enumClaseOpcionMenu ClaseBoton { get; private set; }
+        public enumCssOpcionMenu ClaseBoton { get; private set; }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumClaseOpcionMenu clase)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
         : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios,clase)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumClaseOpcionMenu clase)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
         : base(
           padre: menu,
           id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcionesDeMenu.Count}",
@@ -292,13 +292,13 @@ namespace MVCSistemaDeElementos.Descriptores
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ clase=¨{ClaseCss.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
+                        <input type=¨button¨ clase=¨{Css.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
                     </form>
                 ";
                 return htmlFormPost;
             }
 
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{ClaseCss.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
+            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{Css.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
             return htmlOpcionMenu;
         }
     }

@@ -47,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 htmContenedorCreacion = 
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
+                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
                          <h2>Creación</h2> 
                          {MenuCreacion.RenderControl()}
                          {RendelDivDeCreacion()}
@@ -71,7 +71,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeCreacion('crear-elemento')": ""
                 , cerrar: "Crud.EventosModalDeCreacion('cerrar-modal')"
                 , navegador: htmlRenderOpciones()
-                , claseBoton: enumClaseOpcionMenu.DeElemento
+                , claseBoton: enumCssOpcionMenu.DeElemento
                 , permisosNecesarios: ServicioDeDatos.Seguridad.enumModoDeAccesoDeDatos.Gestor);
 
             return htmlModal;

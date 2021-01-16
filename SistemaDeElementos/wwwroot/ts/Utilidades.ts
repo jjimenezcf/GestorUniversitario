@@ -168,6 +168,15 @@ function Numero(valor: any): number {
     return 0;
 }
 
+function EsObjetoDe(objeto, constructor) {
+    while (objeto != null) {
+        if (objeto == constructor.prototype)
+            return true;
+        objeto = Object.getPrototypeOf(objeto);
+    }
+    return false;
+}
+
 
 class ClausulaDeFiltrado {
     clausula: string;

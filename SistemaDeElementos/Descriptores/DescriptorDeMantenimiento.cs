@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderCuerpoCabecera(string htmlTitulo, string htmlMenu)
         {
             var propiedades = $@" id=¨{IdHtml}¨ 
-                        class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoCabecera)}¨ 
+                        class=¨{Css.Render(enumCssCuerpo.CuerpoCabecera)}¨ 
                         grid-del-mnt=¨{Datos.IdHtml}¨ 
                         zona-de-filtro=¨{Filtro.IdHtml}¨ 
                         zona-de-menu=¨{ZonaMenu.IdHtml}¨ 
@@ -95,7 +95,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private object RenderCuerpoDatos(string htmlFiltro, string htmlDatos)
         {
             return
-            $@"<div id=¨cuerpo.datos.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatos)}¨>
+            $@"<div id=¨cuerpo.datos.{IdHtml}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatos)}¨>
                      {htmlFiltro}
                      {htmlDatos}
                </div>";
@@ -103,7 +103,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private object RenderCuerpoPie()
         {
-            return $@"<div id=¨{IdHtmlZonaNavegador}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoPie)}¨>
+            return $@"<div id=¨{IdHtmlZonaNavegador}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoPie)}¨>
                        {Datos.Grid.NavegadorToHtml()}
                      </div>";
         }
@@ -113,17 +113,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlParteSuperiror = $@"
                                 <!--  ******************* menú ******************* -->
-                                <div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{ClaseCss.Render(enumClaseCcsMnt.MntMenuContenedor)}¨>  
-                                   <div id = ¨{IdHtml}¨  class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntMenuZona)}¨>     
+                                <div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{Css.Render(enumCssMnt.MntMenuContenedor)}¨>  
+                                   <div id = ¨{IdHtml}¨  class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssMnt.MntMenuZona)}¨>     
                                      {ZonaMenu.RenderControl()} 
                                     </div>
-                                    <div id = ¨div.mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
+                                    <div id = ¨div.mostrar.{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssMnt.MntFiltroExpansor)}¨>     
                                       <a id = ¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarFiltro}', '{("")}');¨>Ocultar filtro</a>
                                       <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨ >  
-                                    </div>
-                                    <div id = ¨div.seleccion.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
-                                      <a id = ¨seleccion.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{("")}');¨>Seleccionadas</a>
-                                      <input id=¨seleccion.{IdHtml}¨ type=¨hidden¨ value=¨0¨ >  
                                     </div>
                                 </div>";
 
@@ -141,7 +137,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)}¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
+                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)}¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
                      {htmlMnt}
                    </div>
                 ";

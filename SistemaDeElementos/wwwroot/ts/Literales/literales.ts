@@ -369,3 +369,10 @@ const Sesion = {
     urlActual: "url-actual"
 };
 
+const GestorDeEventos = {
+    deSeleccion: "Crud.EventosModalDeSeleccion",
+    deCrearRelaciones: "Crud.EventosModalDeCrearRelaciones",
+    deConsultaDeRelaciones: "Crud.EventosModalDeConsultaDeRelaciones",
+    delMantenimiento: "Crud.EventosDelMantenimiento"
+}
+

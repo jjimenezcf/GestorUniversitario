@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , propiedadRestrictora: nameof(PermisosDeUnPuestoDto.IdPuesto));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumClaseOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

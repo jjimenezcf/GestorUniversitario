@@ -2,7 +2,7 @@
 .cuerpo-datos-tabla {
     border-bottom: inset;
     display: block;
-    width:1fr;
+    width: 1fr;
 }
 
 .cuerpo-datos-tbody {
@@ -70,11 +70,22 @@ cuerpo-datos > tr:after {
     margin-left: 10px;
     margin-right: 10px;
 }
+
 .navegador-cantidad-grid {
     width: 50px;
     margin-top: 5px;
     align-content: center;
     border-radius: 10px
+}
+
+.navegador-opcion-grid
+{
+    width: 50px;
+    text-align: right;
+    align-content: end;
+    margin-right: 10px;
+}
+
 }
 
 .navegador-grid {

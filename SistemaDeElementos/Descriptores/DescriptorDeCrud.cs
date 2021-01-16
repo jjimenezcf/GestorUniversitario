@@ -198,7 +198,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor,enumClaseOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor,enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }

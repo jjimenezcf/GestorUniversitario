@@ -39,8 +39,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               			    crudDeSeleccion
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Seleccionar¨ clase=¨{ClaseCss.Render(enumClaseOpcionMenu.Basico)}¨ readonly onclick=¨Crud.EventosModalDeSeleccion('seleccionar-elementos','{IdHtml}')¨       />
-                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ clase=¨{ClaseCss.Render(enumClaseOpcionMenu.Basico)}¨ readonly onclick=¨Crud.EventosModalDeSeleccion('cerrar-modal-seleccion','{IdHtml}')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}_Aceptar¨ class=¨boton-modal¨ value=¨Seleccionar¨ clase=¨{Css.Render(enumCssOpcionMenu.Basico)}¨ readonly onclick=¨Crud.EventosModalDeSeleccion('seleccionar-elementos','{IdHtml}')¨       />
+                                           <input type=¨text¨ id=¨{IdHtml}_Cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ clase=¨{Css.Render(enumCssOpcionMenu.Basico)}¨ readonly onclick=¨Crud.EventosModalDeSeleccion('cerrar-modal-seleccion','{IdHtml}')¨ />
                                         </div>
                                       </div>
                               </div>";

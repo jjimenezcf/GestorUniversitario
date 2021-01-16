@@ -76,7 +76,7 @@ namespace UtilidadesParaIu
                 atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
             string htmlRef = columna.Ordenar ? RenderAccionOrdenar(columna) : columna.Visible ? columna.Titulo : "";
 
-            string claseCss = columna.Visible ? ClaseCss.Render(enumClaseCcsGrid.ColumnaCabecera) : ClaseCss.Render(enumClaseCcsGrid.ColumnaOculta);
+            string claseCss = columna.Visible ? Css.Render(enumCssGrid.ColumnaCabecera) : Css.Render(enumCssGrid.ColumnaOculta);
 
             var htmlTh = $@"{Environment.NewLine}
                           <th id = ¨{columna.IdHtml}¨ 
@@ -224,7 +224,7 @@ namespace UtilidadesParaIu
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
 
-            return $@"<thead id='{grid.IdHtmlCabeceraDeTabla}' class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGridThead)}¨ >{Environment.NewLine}
+            return $@"<thead id='{grid.IdHtmlCabeceraDeTabla}' class=¨{Css.Render(enumCssCuerpo.CuerpoDatosGridThead)}¨ >{Environment.NewLine}
                          <tr id=¨{grid.IdHtmlFilaCabecera}¨>
                             {cabeceraHtml}
                          </tr>
@@ -232,29 +232,51 @@ namespace UtilidadesParaIu
 
         }
 
+        private static string AplicarCss(bool esModal,enumCssNavegador claseCss)
+        {
+            if (esModal)
+            {
+                return Css.Render(claseCss);
+            }
+            else
+            {
+                switch (claseCss)
+                {
+                    case enumCssNavegador.ContenedorModal: return Css.Render(enumCssNavegador.ContenedorMnt);
+                    case enumCssNavegador.InfoGridModal: return Css.Render(enumCssNavegador.InfoGridMnt);
+                    case enumCssNavegador.MensajeModal: return Css.Render(enumCssNavegador.MensajeMnt);
+                    case enumCssNavegador.CantidadModal: return Css.Render(enumCssNavegador.CantidadMnt);
+                    case enumCssNavegador.OpcionModal: return Css.Render(enumCssNavegador.OpcionMnt);
+                    case enumCssNavegador.NavegadorModal: return Css.Render(enumCssNavegador.NavegadorMnt);
+                }
+
+            }
+            throw new Exception($"No se ha definido la clase a aplicar a para {claseCss} del enumerado del navegador");
+        }
+
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
-            var getorDeEventos = RenderGestorDeEventos(grid.ZonaDeDatos.Mnt.Crud.Modo);
+            var gestorDeEventos = RenderGestorDeEventos(grid.ZonaDeDatos.Mnt.Crud.Modo);
             var parametros = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento
                 ? ""
                 : $"{grid.ZonaDeDatos.IdHtmlModal}";
 
-            var accionUltimos = $"Crud.{getorDeEventos}('obtener-ultimos','{parametros}')";
-            var accionBuscar = $"Crud.{getorDeEventos}('buscar-elementos','{parametros}')";
-            var accionAnterior = $"Crud.{getorDeEventos}('obtener-anteriores','{parametros}')";
-            var accionSiguiente = $"Crud.{getorDeEventos}('obtener-siguientes','{parametros}')";
-
+            var accionUltimos = $"Crud.{gestorDeEventos}('obtener-ultimos','{parametros}')";
+            var accionBuscar = $"Crud.{gestorDeEventos}('buscar-elementos','{parametros}')";
+            var accionAnterior = $"Crud.{gestorDeEventos}('obtener-anteriores','{parametros}')";
+            var accionSiguiente = $"Crud.{gestorDeEventos}('obtener-siguientes','{parametros}')";
+            var esModal = grid.ZonaDeDatos.Mnt.Crud.EsModal;
             var htmlNavegadorGrid = $@"
-            {(grid.ZonaDeDatos.Mnt.Crud.EsModal? " <!-- ***************** Navegador del grid ****************** -->" : "")}
-            <div id= ¨{grid.IdHtml}_pie¨ class=¨pie-grid¨>
-                <div id=¨{grid.IdHtmlNavegador}¨ class = ¨navegador-grid¨>
+            {(esModal ? " <!-- ***************** Navegador del grid ****************** -->" : "")}
+            <div id= ¨{grid.IdHtml}_pie¨ class=¨{AplicarCss(esModal,enumCssNavegador.ContenedorModal)}¨>
+                <div id=¨{grid.IdHtmlNavegador}¨ class = ¨{AplicarCss(esModal, enumCssNavegador.NavegadorModal)}¨>
                     <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨{accionBuscar}¨>
                     </div>
                     <div id=¨{grid.IdHtmlNavegador_2}¨>
                         <input type=¨number¨ 
                                id=¨{grid.IdHtmlPorLeer}¨ 
-                               class = ¨{ClaseCss.Render(enumClaseCcsNavegador.Cantidad)}¨
+                               class = ¨{AplicarCss(esModal, enumCssNavegador.CantidadModal)}¨
                                value=¨{grid.CantidadPorLeer}¨ 
                                min=¨1¨ step=¨1¨ max=¨999¨ 
                                pagina=¨1¨  
@@ -269,12 +291,16 @@ namespace UtilidadesParaIu
                         <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨{accionUltimos}¨>
                     </div>
                 </div>
-                <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{ClaseCss.Render(enumClaseCcsNavegador.Mensaje)}¨>
-                   Seleccionadas: 0 de {grid.TotalEnBd}
-                </div>
-                <div id= ¨{grid.IdHtml}_info¨ class=¨{ClaseCss.Render(enumClaseCcsNavegador.InfoGrid)}¨>
-                   Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}
-                </div>
+            </div>
+            <div id = ¨div.seleccion.{grid.IdHtml}¨ class=¨{AplicarCss(esModal, enumCssNavegador.OpcionModal)}¨>     
+              <a id = ¨seleccion.{grid.IdHtml}.ref¨ href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{("")}');¨>Seleccionadas</a>
+              <input id=¨seleccion.{grid.IdHtml}¨ type=¨hidden¨ value=¨0¨ >  
+            </div>
+            <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{AplicarCss(esModal, enumCssNavegador.MensajeModal)}¨>
+               Seleccionadas: 0 de {grid.TotalEnBd}
+            </div>
+            <div id= ¨{grid.IdHtml}_info¨ class=¨{AplicarCss(esModal, enumCssNavegador.InfoGridModal)}¨>
+               Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}
             </div>
             ";
             return htmlNavegadorGrid;

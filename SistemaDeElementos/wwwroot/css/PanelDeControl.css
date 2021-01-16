@@ -115,6 +115,40 @@
 
 .cuerpo-pie {
     grid-area: cuerpo-pie;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 100%;
+    grid-template-areas: "cuerpo-pie-navegador cuerpo-pie-opciones cuerpo-pie-mensaje cuerpo-pie-info";
+    /*align-self: center;*/
+    margin: 0px;
+}
+
+.cuerpo-pie-navegador {
+    grid-area: cuerpo-pie-navegador;
+    align-self: center;
+    margin-left: 20px;
+}
+
+.cuerpo-pie-opciones {
+    grid-area: cuerpo-pie-opciones;
+    text-align: center;
+    margin-right: 10px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+.cuerpo-pie-mensaje {
+    grid-area: cuerpo-pie-mensaje;
+    text-align: end;
+    margin-right: 20px;
+    align-self: center;
+}
+
+.cuerpo-pie-info {
+    grid-area: cuerpo-pie-info;
+    text-align: end;
+    margin-right: 20px;
+    align-self: center;
 }
 
 .pie {

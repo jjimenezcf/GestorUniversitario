@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   ,propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
 
             var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Gestor, enumClaseOpcionMenu.DeVista);
+            var opcion = new OpcionDeMenu<PermisosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeVista);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

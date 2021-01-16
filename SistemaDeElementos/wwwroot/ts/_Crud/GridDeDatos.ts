@@ -177,9 +177,6 @@
         public set Pagina(valor: number) {
             this.Navegador.setAttribute(atGrid.navegador.pagina, valor.toString());
         }
-        public set Titulo(valor: string) {
-            this.Navegador.setAttribute(atGrid.navegador.titulo, valor);
-        }
         public set Info(valor: string) {
             let div: HTMLDivElement = document.getElementById(this.idInfo) as HTMLDivElement;
             div.innerHTML = valor;
@@ -263,12 +260,12 @@
                             paginaNueva = (this.Cantidad >= this.Total) ? 1 : paginasTotales;
                         }
             this.Pagina = paginaNueva <= 0 ? 1 : paginaNueva;
-            this.Titulo = `Pagina ${this.Pagina} de ${paginasTotales}`;
-            this.ActualizarMensaje(seleccionados)
+            this.Info = `Pagina ${this.Pagina} de ${paginasTotales}`;
+            this.ActualizarMensaje(seleccionados);
         }
 
-        public ActualizarMensaje(seleccionados: number) : void {
-            this.Mensaje = `Seleccionados ${seleccionados} de ${this.Total}`
+        public ActualizarMensaje(seleccionados: number): void {
+            this.Mensaje = `Seleccionados ${seleccionados} de ${this.Total}`;
         }
     }
 
@@ -294,12 +291,17 @@
         protected get EsModalParaConsultarRelaciones(): boolean {
             return this.constructor.name === ModalParaConsultarRelaciones.name;
         }
+
         protected get EsModalParaRelacionar(): boolean {
             return this.constructor.name === ModalParaRelacionar.name;
         }
 
         protected get EsModalConGrid(): boolean {
             return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones;
+        }
+
+        protected get EsCrud(): boolean {
+            return EsObjetoDe(this, CrudMnt);
         }
 
 
@@ -330,10 +332,10 @@
             return document.getElementById(`expandir.${this.IdPanelMnt}`) as HTMLInputElement;
         }
         public get SoloSeleccionadas(): HTMLInputElement {
-            return document.getElementById(`seleccion.${this.IdPanelMnt}`) as HTMLInputElement;
+            return document.getElementById(`seleccion.${this.IdGrid}`) as HTMLInputElement;
         }
         public get EtiquetaMostrarSeleccionadas(): HTMLElement {
-            return document.getElementById(`seleccion.${this.IdPanelMnt}.ref`) as HTMLElement;
+            return document.getElementById(`seleccion.${this.IdGrid}.ref`) as HTMLElement;
         }
 
         protected get Grid(): HTMLDivElement {
@@ -405,7 +407,7 @@
 
         public AlturaDelGrid(posicionGrid: number): number {
             let alturaPiePnlControl: number = AlturaPiePnlControl();
-            let alturaZonaNavegador: number = this.ZonaNavegador.getBoundingClientRect().height;
+            let alturaZonaNavegador: number = this.ZonaNavegador.getBoundingClientRect().height ;
             return AlturaFormulario() - posicionGrid - alturaPiePnlControl - alturaZonaNavegador;
         }
 
@@ -951,14 +953,21 @@
             let a: string = '';
             if (this.EsModalDeSeleccion) {
                 let idModal: string = this.Grid.getAttribute(atSelector.idModal);
-                a = `Crud.EventosModalDeSeleccion('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                a = `${GestorDeEventos.deSeleccion}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else if (this.EsModalParaRelacionar) {
                 let idModal: string = this.Grid.getAttribute(atSelector.idModal);
-                a = `Crud.EventosModalDeCrearRelaciones('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else {
-                a = `Crud.EventosDelMantenimiento('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+                if (this.EsModalParaConsultarRelaciones) {
+                    let idModal: string = this.Grid.getAttribute(atSelector.idModal);
+                    a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                }
+                if (this.EsCrud)
+                    a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+                else
+                    throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
             }
             return a;
         }
