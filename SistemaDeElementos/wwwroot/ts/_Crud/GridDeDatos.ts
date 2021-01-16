@@ -149,19 +149,19 @@
         }
 
         public get Cantidad(): number {
-            return this.Navegador.value.Numero();
+            return Numero(this.Navegador.value);
         }
         public get Posicion(): number {
-            return this.Navegador.getAttribute(atGrid.navegador.posicion).Numero();
+            return Numero(this.Navegador.getAttribute(atGrid.navegador.posicion));
         }
         public get Pagina(): number {
-            return this.Navegador.getAttribute(atGrid.navegador.pagina).Numero();
+            return Numero(this.Navegador.getAttribute(atGrid.navegador.pagina));
         }
         public get Leidos(): number {
-            return this.Navegador.getAttribute(atGrid.navegador.leidos).Numero();
+            return Numero(this.Navegador.getAttribute(atGrid.navegador.leidos));
         }
         public get Total(): number {
-            return this.Navegador.getAttribute(atGrid.navegador.total).Numero();
+            return Numero(this.Navegador.getAttribute(atGrid.navegador.total));
         }
         public get Id(): string {
             return this.id;
@@ -319,6 +319,12 @@
         public get ExpandirFiltro(): HTMLInputElement {
             return document.getElementById(`expandir.${this.IdPanelMnt}`) as HTMLInputElement;
         }
+        public get SoloSeleccionadas(): HTMLInputElement {
+            return document.getElementById(`seleccion.${this.IdPanelMnt}`) as HTMLInputElement;
+        }
+        public get EtiquetaMostrarSeleccionadas(): HTMLElement {
+            return document.getElementById(`seleccion.${this.IdPanelMnt}.ref`) as HTMLElement;
+        }
 
         protected get Grid(): HTMLDivElement {
             return document.getElementById(this.IdGrid) as HTMLDivElement;
@@ -330,11 +336,11 @@
         }
 
         protected get CuerpoTablaGrid(): HTMLTableSectionElement {
-            return document.getElementById(`${this.Grid.id}_body`) as HTMLTableSectionElement;
+            return document.getElementById(`${this.Grid.id}_tbody`) as HTMLTableSectionElement;
         }
 
         protected get ZonaNavegador(): HTMLDivElement {
-            let idNavegador = this.Grid.getAttribute(atGrid.zonaNavegador)
+            let idNavegador = this.Grid.getAttribute(atGrid.zonaNavegador);
             return document.getElementById(idNavegador) as HTMLDivElement;
         }
 
@@ -435,9 +441,9 @@
 
             if (!IsNullOrEmpty(expresion)) {
                 let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
-                let tds: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
-                for (let j = 0; j < tds.length; j++) {
-                    let input: HTMLInputElement = tds[j].getElementsByTagName('input')[0] as HTMLInputElement;
+                let columnas: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
+                for (let j = 0; j < columnas.length; j++) {
+                    let input: HTMLInputElement = columnas[j].getElementsByTagName('input')[0] as HTMLInputElement;
                     if (input !== undefined) {
                         let propiedad: string = input.getAttribute(atControl.propiedad).toLowerCase();
                         if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
@@ -567,7 +573,7 @@
             var clausula = null;
             if (selector.hasAttribute(atSelector.ListaDeSeleccionados)) {
                 var ids = selector.getAttribute(atSelector.ListaDeSeleccionados);
-                if (!ids.NoDefinida()) {
+                if (!NoDefinida(ids)) {
                     valor = ids;
                     clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
                 }
@@ -639,7 +645,7 @@
             for (var i = 0; i < this.InfoSelector.Cantidad; i++) {
                 for (var j = 0; j < len; j++) {
                     let id: number = this.InfoSelector.LeerId(i);
-                    if ((<HTMLInputElement>celdasId[j]).value.Numero() == id) {
+                    if (Numero((<HTMLInputElement>celdasId[j]).value) == id) {
                         var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                         var check = document.getElementById(idCheck);
                         (<HTMLInputElement>check).checked = true;
@@ -695,7 +701,7 @@
                         let propiedad: string = input.getAttribute(atControl.propiedad);
                         if (propiedad.toLocaleLowerCase() === atControl.id) {
                             let valor: string = input.value;
-                            if (valor.Numero() == id)
+                            if (Numero(valor) == id)
                                 return fila;
                         }
                     }
@@ -861,7 +867,7 @@
 
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
             var cuerpoDeLaTabla = document.createElement("tbody");
-            cuerpoDeLaTabla.id = `${grid.Grid.id}_body`;
+            cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
             for (let i = 0; i < registros.length; i++) {
                 let fila = grid.crearFila(filaCabecera, registros[i], i);
@@ -880,44 +886,53 @@
             let posicion: number = grid.PosicionGrid();
             let altura: number = grid.AlturaDelGrid(posicion);
             grid.FijarAlturaCuerpoDeLaTabla(altura);
+            grid.AplicarQueFilasMostrar();
         }
 
         private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
             let fila = document.createElement("tr");
             fila.id = `${this.IdGrid}_d_tr_${numeroDeFila}`;
             fila.classList.add(ClaseCss.filaDelGrid);
+            let idDelElemento: number = 0;
             for (let j = 0; j < filaCabecera.length; j++) {
-                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, filaCabecera[j], j);
+
+                let columnaCabecera: PropiedadesDeLaFila = filaCabecera[j];
+                let valor: any = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
+                if (columnaCabecera.propiedad === atControl.id) {
+                    if (!IsNumber(valor))
+                        throw new Error("El id del elemento leido debe ser numérico");
+                    idDelElemento = Numero(valor);
+                }
+
+                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, columnaCabecera, j, valor);
                 fila.append(celdaDelTd);
             }
 
-            let valor = this.BuscarValorDeColumnaRegistro(registro, atControl.id);
-            fila.setAttribute(atControl.valor, valor);
-
+            fila.setAttribute(atControl.valorTr, idDelElemento.toString());
             return fila;
         }
 
-        private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number): HTMLTableCellElement {
+        private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number, valor: string): HTMLTableCellElement {
             let celdaDelTd: HTMLTableCellElement = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
-            celdaDelTd.style.width = `${columnaCabecera.anchoEnPixel}px`;        
+            celdaDelTd.style.width = `${columnaCabecera.anchoEnPixel}px`;
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
-            celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;  
+            celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;
 
             let idCheckDeSeleccion: string = `${fila.id}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
-            
+
             if (columnaCabecera.claseCss === ClaseCss.columnaOculta) {
-                celdaDelTd.classList.add(ClaseCss.columnaOculta); 
+                celdaDelTd.classList.add(ClaseCss.columnaOculta);
             }
 
             if (columnaCabecera.propiedad === 'chksel')
                 this.insertarCheckEnElTd(fila.id, celdaDelTd, columnaCabecera.propiedad);
             else {
-                this.insertarInputEnElTd(fila.id, registro, columnaCabecera, celdaDelTd);
+                this.insertarInputEnElTd(fila.id, registro, columnaCabecera, celdaDelTd, valor);
             }
             return celdaDelTd;
         }
@@ -938,8 +953,7 @@
             return a;
         }
 
-        private insertarInputEnElTd(idFila: string, registro: any, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement) {
-            let valor = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
+        private insertarInputEnElTd(idFila: string, registro: any, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement, valor: string) {
             let input = document.createElement("input");
             input.type = "text";
             input.id = `${idFila}.${columnaCabecera.propiedad}`;
@@ -1000,7 +1014,7 @@
             return filaCabecera;
         }
 
-        private BuscarValorDeColumnaRegistro(registro, propiedadDeLaFila: string): string {
+        private BuscarValorDeColumnaRegistro(registro, propiedadDeLaFila: string): any {
             for (const propiedad in registro) {
                 if (propiedad.toLowerCase() === propiedadDeLaFila)
                     return registro[propiedad];
@@ -1025,7 +1039,7 @@
             else {
                 this.QuitarDelSelector(infoSelector, idCheck);
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
-                        this.DeshabilitarOpcionesDeMenuDeElemento();
+                    this.DeshabilitarOpcionesDeMenuDeElemento();
             }
         }
 
@@ -1089,7 +1103,46 @@
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
 
+        public MostrarSoloSeleccionadas(): void {
+            if (NumeroMayorDeCero(this.SoloSeleccionadas.value)) {
+                this.SoloSeleccionadas.value = "0";
+                this.EtiquetaMostrarSeleccionadas.innerText = "Seleccionadas";
+            }
+            else {
+                this.SoloSeleccionadas.value = "1";
+                this.EtiquetaMostrarSeleccionadas.innerText = "Todas las filas";
+            }
+            this.AplicarQueFilasMostrar();
+        }
 
+        public AplicarQueFilasMostrar() {
+            if (NumeroMayorDeCero(this.SoloSeleccionadas.value)) {
+                this.MostrarFilasSeleccionadas();
+            }
+            else {
+                this.MostrarTodasLasFilas();
+            }
+        }
+
+        private MostrarTodasLasFilas(): void {
+            let trs: NodeListOf<HTMLTableRowElement> = this.CuerpoTablaGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
+            let i: number = 0;
+            for (i = 0; i < trs.length; i++) {
+                let tr: HTMLTableRowElement = trs[i];
+                tr.hidden = false;
+            }
+
+        }
+
+        private MostrarFilasSeleccionadas(): void {
+            let trs: NodeListOf<HTMLTableRowElement> = this.CuerpoTablaGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
+            let i: number = 0;
+            for (i = 0; i < trs.length; i++) {
+                let tr: HTMLTableRowElement = trs[i];
+                let idDelElemento = Numero(tr.getAttribute(atControl.valorTr));
+                tr.hidden = !this.InfoSelector.Contiene(idDelElemento);
+            }
+        }
     }
 
 }

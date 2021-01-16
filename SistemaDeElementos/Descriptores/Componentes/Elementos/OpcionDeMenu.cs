@@ -17,6 +17,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string RelacionarElementos = "relacionar-elementos";
         public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
         public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
+        public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
+        public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
+        public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
+        public const string FilaPulsada = "fila-pulsada";
     }
 
     public static class TipoDeAccionDeCreacion

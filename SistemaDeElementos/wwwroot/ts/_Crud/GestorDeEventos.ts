@@ -68,6 +68,10 @@
                     crudMnt.OcultarMostrarBloque(idHtmlBloque);
                     break;
                 }
+                case Evento.Mnt.MostrarSoloSeleccionadas: {
+                    crudMnt.MostrarSoloSeleccionadas();
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;

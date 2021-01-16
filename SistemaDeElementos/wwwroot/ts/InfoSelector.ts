@@ -48,12 +48,12 @@ class InfoSelector {
     public get Id() { return this.idGrid; }
     public get Cantidad() { return this.seleccionados.length; }
     public get Seleccionados() { return this.seleccionados; }
-
+   
 
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
-        this.Seleccionables = this.htmlGrid.getAttribute("seleccionables").Numero();
+        this.Seleccionables = Numero(this.htmlGrid.getAttribute("seleccionables"));
         this.seleccionados = new Array();
         this.paraMostrarEnSelector = new Array();
     }
@@ -86,6 +86,14 @@ class InfoSelector {
             }
             );
         }
+    }
+
+    public Contiene(id: number): boolean
+    {
+        if (this.Buscar(id) < 0)
+            return false;
+        else
+            return true;
     }
 
     public LeerId(pos: number): number {

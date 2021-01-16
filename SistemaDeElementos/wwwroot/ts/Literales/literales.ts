@@ -39,7 +39,8 @@ const atControl = {
     expresionElemento: "expresion-elemento",
     tipo: "tipo",
     imagenVinculada: "imagen-vinculada",
-    valor: "value",
+    valorInput: "value",
+    valorTr: "idDelElemento",
     restrictor: "restrictor",
     nombreModal: "idModal",
     eventoJs: {
@@ -288,7 +289,8 @@ const Evento = {
         FilaPulsada: "fila-pulsada",
         CambiarSelector: "cambiar-selector",
         OcultarMostrarFiltro: "ocultar-mostrar-filtro",
-        OcultarMostrarBloque: "ocultar-mostrar-bloque"
+        OcultarMostrarBloque: "ocultar-mostrar-bloque",
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
     },
     Creacion: {
         Crear: "nuevo-elemento",

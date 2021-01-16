@@ -191,7 +191,12 @@
             }
 
             if (this.TrasLaPeticion)
-                this.TrasLaPeticion(this);
+                try {
+                    this.TrasLaPeticion(this);
+                }
+                catch (error) {
+                    Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`,error);
+                }
         }
     }
 

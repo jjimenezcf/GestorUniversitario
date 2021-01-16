@@ -1,13 +1,16 @@
-﻿function Mensaje(tipo: string, mensaje: string) {
+﻿function Mensaje(tipo: string, mensaje: string, mensajeDeConsola?: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
     var mensaje = `(${tipo}) ${mensaje}`;
     if (control)
         control.value = `${mensaje}`;
 
-    if (TipoMensaje.Error === tipo)
-        console.error(mensaje);
+    if (IsNullOrEmpty(mensajeDeConsola))
+        mensajeDeConsola = mensaje;
+
+    if (TipoMensaje.Error === tipo) 
+        console.error(mensajeDeConsola);
     else
-        console.log(mensaje);
+        console.log(mensajeDeConsola);
 }
 
 function AlturaCabeceraPnlControl(): number {
@@ -90,12 +93,6 @@ function obtenerValorDeLaColumnaChequeada(idCheck, columna) {
     return inputId.value;
 }
 
-interface String {
-    NoDefinida(): boolean;
-    Numero(): number;
-}
-
-
 function IsString(obj: any): boolean {
     try {
         var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'string';
@@ -126,10 +123,10 @@ function IsNumber(obj: any): boolean {
 
 function IsNullOrEmpty(valor: string): boolean {
 
-    if (valor == null || valor.NoDefinida())
+    if (valor == null || NoDefinida(valor))
         return true;
 
-    return valor.NoDefinida();
+    return NoDefinida(valor);
 }
 
 function NumeroMayorDeCero(valor: string): boolean {
@@ -137,34 +134,38 @@ function NumeroMayorDeCero(valor: string): boolean {
     if (valor === null || valor === undefined)
         return false;
 
-    return valor.Numero() > 0;
+    return Numero(valor) > 0;
 }
 
-String.prototype.NoDefinida = function () {
-    var str: String = this;
-    if (str !== undefined)
-        return str.length === 0 || str.trim() === '';
-    return true;
+
+function NoDefinida(valor: any) {
+
+    if (valor === null || valor === undefined)
+        return true;
+    return false;
 };
 
-String.prototype.Numero = function () {
-    if (this === undefined || this === null)
-        return 0;
 
-    if (this.NoDefinida())
-        return 0;
-
-    if (isNaN(this))
-        return 0;
-
-    return Number(this);
-};
-
-function Numero(valor: string): number {
+function Numero(valor: any): number {
     if (valor === undefined || valor === null)
         return 0;
 
-    return valor.Numero();
+    if (IsString(valor))
+        return Number(valor) ;
+
+    if (IsBool(valor))
+        if (valor)
+            return 1;
+        else
+            return 0;
+
+    if (IsNumber(valor))
+        return valor;
+
+    if (isNaN(valor))
+        valor;
+
+    return 0;
 }
 
 
@@ -180,7 +181,7 @@ class ClausulaDeFiltrado {
     }
 
     EsVacia(): boolean {
-        return this.clausula.NoDefinida() || this.valor.NoDefinida() || this.criterio.NoDefinida();
+        return NoDefinida(this.clausula) || NoDefinida(this.valor) || NoDefinida(this.criterio);
     }
 }
 

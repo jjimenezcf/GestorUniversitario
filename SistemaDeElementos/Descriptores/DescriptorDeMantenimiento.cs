@@ -117,9 +117,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                    <div id = ¨{IdHtml}¨  class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntMenuZona)}¨>     
                                      {ZonaMenu.RenderControl()} 
                                     </div>
-                                    <div id = ¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
-                                      <a id = ¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('ocultar-mostrar-filtro', '{("")}');¨>Ocultar filtro</a>
+                                    <div id = ¨div.mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
+                                      <a id = ¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarFiltro}', '{("")}');¨>Ocultar filtro</a>
                                       <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨ >  
+                                    </div>
+                                    <div id = ¨div.seleccion.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)} {ClaseCss.Render(enumClaseCcsMnt.MntFiltroExpansor)}¨>     
+                                      <a id = ¨seleccion.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{("")}');¨>Seleccionadas</a>
+                                      <input id=¨seleccion.{IdHtml}¨ type=¨hidden¨ value=¨0¨ >  
                                     </div>
                                 </div>";
 

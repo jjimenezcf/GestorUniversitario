@@ -21,15 +21,19 @@
         }
 
         public Inicializar() {
-            super.Inicializar(this.IdPanelMnt);
-            this.InicializarSelectores();
-            this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
-            this.InicializarMenus();
+            try {
+                super.Inicializar(this.IdPanelMnt);
+                this.InicializarSelectores();
+                this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
+                this.InicializarMenus();
 
-            this.AplicarRestrictores();
+                this.AplicarRestrictores();
 
-            this.Buscar(atGrid.accion.buscar, 0);
-
+                this.Buscar(atGrid.accion.buscar, 0);
+            }
+            catch (error) {
+                Mensaje(TipoMensaje.Error, error);
+            }
         }
 
         public PosicionarGrid(): void {
@@ -321,7 +325,7 @@
 
         public OcultarMostrarBloque(idHtmlBloque: string) {
             let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}`) as HTMLInputElement;
-            if (NumeroMayorDeCero(extensor.value)) {
+            if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
                 extensor.value = "0";
                 this.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
                 (document.getElementById(`mostrar.${idHtmlBloque}.ref`) as HTMLElement).innerText = "Mostrar";

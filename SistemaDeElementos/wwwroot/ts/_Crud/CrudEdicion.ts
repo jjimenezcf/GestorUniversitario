@@ -28,7 +28,7 @@
 
         private get Posicionador(): number {
             let control: HTMLInputElement = document.getElementById(`${this._idPanelEdicion}-posicionador`) as HTMLInputElement;
-            return control.value.Numero();
+            return Numero(control.value);
         }
 
         private set Posicionador(posicionador: number) {

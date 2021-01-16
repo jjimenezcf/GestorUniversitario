@@ -50,7 +50,7 @@
         public AgregarOpcion(valor: number, texto: string): void {
 
             for (var i = 0; i < this.Lista.children.length; i++)
-                if (this.Lista.children[i].getAttribute(atListas.identificador).Numero() === valor)
+                if (Numero(this.Lista.children[i].getAttribute(atListas.identificador)) === valor)
                     return;
 
             let opcion: HTMLOptionElement = document.createElement("option");
@@ -65,7 +65,7 @@
                 if (this.Lista.children[i] instanceof HTMLOptionElement) {
                     let opcion: HTMLOptionElement = this.Lista.children[i] as HTMLOptionElement;
                     if (opcion.value === valor)
-                        return opcion.getAttribute(atListas.identificador).Numero();
+                        return Numero(opcion.getAttribute(atListas.identificador));
                 }
             }
             return 0;
@@ -296,7 +296,7 @@
                     selector.selectedIndex = 0;
                 else
                     for (var j = 0; j < selector.options.length; j++) {
-                        if (selector.options[j].value.Numero() == id) {
+                        if (Numero(selector.options[j].value) == id) {
                             selector.selectedIndex = j;
                             break;
                         }
@@ -481,7 +481,7 @@
         protected MapearRestrictor(restrictores: NodeListOf<HTMLInputElement>, porpiedadRestrictora: string, valorMostrar: string, valorRestrictor: number) {
             for (let i = 0; i < restrictores.length; i++) {
                 if (restrictores[i].getAttribute(atControl.propiedad) === porpiedadRestrictora) {
-                    restrictores[i].setAttribute(atControl.valor, valorMostrar);
+                    restrictores[i].setAttribute(atControl.valorInput, valorMostrar);
                     restrictores[i].setAttribute(atControl.restrictor, valorRestrictor.toString());
                 }
             }
@@ -620,7 +620,7 @@
             let valor: string = (input as HTMLInputElement).value;
             let obligatorio: string = input.getAttribute(atControl.obligatorio);
 
-            if (obligatorio === "S" && valor.NoDefinida()) {
+            if (obligatorio === "S" && NoDefinida(valor)) {
                 input.classList.remove(ClaseCss.crtlValido);
                 input.classList.add(ClaseCss.crtlNoValido);
                 throw new Error(`El campo ${propiedadDto} es obligatorio`);

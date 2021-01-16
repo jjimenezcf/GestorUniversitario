@@ -107,7 +107,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlDivExtensor = Tabla.Controles.Count == 0 || !HayExpansor ?
                 RenderBloque() :
                 $@"<div id=¨mostrar.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsDiv.DivVisible)}¨> 
-                        <a id=¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.EventosDelMantenimiento('ocultar-mostrar-bloque', '{IdHtml}');¨>Ocultar</a>
+                        <a id=¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', '{IdHtml}');¨>Ocultar</a>
                         <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨> 
                         {RenderBloque()}
                    </div>";

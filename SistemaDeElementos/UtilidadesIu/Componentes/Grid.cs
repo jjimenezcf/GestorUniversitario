@@ -123,7 +123,7 @@ namespace UtilidadesParaIu
                 parametros = $"{celda.Fila.Datos.IdHtmlModal}#{parametros}";
             }
 
-            return $"Crud.{getorDeEventos}('fila-pulsada', '{parametros}');";
+            return $"Crud.{getorDeEventos}('{TipoDeAccionDeMnt.FilaPulsada}', '{parametros}');";
         }
 
         private static string RenderGestorDeEventos(ModoDescriptor modo)
