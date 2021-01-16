@@ -16,7 +16,9 @@ namespace UtilidadesParaIu
 
         public string IdHtml => Id.ToLower();
 
-        public string IdHtmlCabecera => $"{IdHtml}_c_tr_0";
+        public string IdHtmlCabeceraDeTabla => $"{IdHtml}_cabecera";
+
+        public string IdHtmlFilaCabecera => $"{IdHtml}_c_tr_0";
 
         public string IdHtmlTabla => $"{IdHtml}_table";
         public string IdHtmlNavegador => $"{IdHtml}_nav";
@@ -222,10 +224,10 @@ namespace UtilidadesParaIu
                 cabeceraHtml.Append(RenderColumnaCabecera(columna));
             }
 
-            return $@"<thead id='{grid.IdHtml}_cabecera' class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGridThead)}¨ >{Environment.NewLine}
-                         <tr id=¨{grid.IdHtmlCabecera}¨>
-                            {cabeceraHtml}{Environment.NewLine}
-                         </tr>{Environment.NewLine}
+            return $@"<thead id='{grid.IdHtmlCabeceraDeTabla}' class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoDatosGridThead)}¨ >{Environment.NewLine}
+                         <tr id=¨{grid.IdHtmlFilaCabecera}¨>
+                            {cabeceraHtml}
+                         </tr>
                       </thead>";
 
         }

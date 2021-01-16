@@ -1,27 +1,4 @@
 ﻿
-/*cuerpo-datos > thead, tbody th td{
-    display: block;
-}
-
-cuerpo-datos > tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-
-cuerpo-datos > thead th {
-    height: 30px;*/
-/*text-align: left;*/
-/*}
-
-.cuerpo-datos-body {
-    height: 120px;
-    overflow-y: auto;
-    display: block;
-}*/
-
-
 .cuerpo-datos-tabla {
     border-bottom: inset;
     display: block;

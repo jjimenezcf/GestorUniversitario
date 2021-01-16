@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string ExpresionElemento { get; private set; } = (string) ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ExpresionNombre)); 
 
-        public int CantidadPorLeer { get; set; } = 5;
+        public int CantidadPorLeer { get; set; } = 10;
         public int PosicionInicial { get; set; } = 0;
 
         public string IdHtmlModal { get; set; }
@@ -124,18 +124,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
                                   expresion-elemento = ¨{ExpresionElemento}¨ 
                                   tabla-de-datos = ¨{Grid.IdHtmlTabla}¨ 
+                                  zona-de-navegador = ¨{Mnt.IdHtmlZonaNavegador}¨
+                                  cabecera-de-tabla = ¨{Grid.IdHtmlCabeceraDeTabla}¨
                                   {(IdHtmlModal.IsNullOrEmpty() ? "" :$"id-modal=¨{IdHtmlModal}¨")}>     
                                   {Grid.ToHtml()}
                              </div>";
             return htmlDiv;
         }
-        //public string RenderDelGrid(ModoDescriptor modo)
-        //{
-        //    var mnt = (DescriptorDeMantenimiento<TElemento>)Padre;
-        //    var crud = (DescriptorDeCrud<TElemento>)mnt.Padre;
-        //    crud.CambiarModo(modo);
-        //    return Grid.ToHtml();
-        //}
 
         public override string RenderControl()
         {

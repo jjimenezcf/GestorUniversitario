@@ -14,7 +14,7 @@
         if (menuAbierto === undefined || menuAbierto === literal.false) {
             estadoMenu.setAttribute(atMenu.abierto, literal.true);
             modalMenu.style.display = "block";
-            modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
+            modalMenu.style.height = `${AlturaDelMenu(AlturaFormulario()).toString()}px`;
         }
         else {
             estadoMenu.setAttribute(atMenu.abierto, literal.false);

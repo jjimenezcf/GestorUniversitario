@@ -10,16 +10,18 @@
     }
 
     export function AjustarDivs() {
-        let alturaDelCuerpo: number =AlturaDelCuerpo();
+        let altura: number = AlturaFormulario();
+
+        let alturaDelCuerpo: number = AlturaDelCuerpo(altura);
         let cuerpo: HTMLDivElement = document.getElementById("div-cuerpo") as HTMLDivElement;
         cuerpo.style.height = `${alturaDelCuerpo.toString()}px`;
 
         let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ArbolDeMenu.ObtenerDatosMenu();
         if (estadoMenu.getAttribute(atMenu.abierto) === literal.true)
-            modalMenu.style.height = `${AlturaDelMenu().toString()}px`;
+            modalMenu.style.height = `${AlturaDelMenu(altura).toString()}px`;
 
         if (Crud.crudMnt !== null) {
-            Mensaje(TipoMensaje.Info, "hay crud");
+            Crud.crudMnt.PosicionarGrid()
         }
         else {
             Mensaje(TipoMensaje.Info, "No hay crud");

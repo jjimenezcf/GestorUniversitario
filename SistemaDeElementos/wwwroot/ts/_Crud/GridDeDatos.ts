@@ -227,7 +227,7 @@
                 this.EsRestauracion = true;
             }
             else {
-                this.Cantidad = 5;
+                this.Cantidad = 10;
                 this.Leidos = 0;
                 this.Pagina = 1;
                 this.Posicion = 0;
@@ -324,6 +324,20 @@
             return document.getElementById(this.IdGrid) as HTMLDivElement;
         }
 
+        protected get CabeceraTablaGrid(): HTMLTableSectionElement {
+            let idCabecera = this.Grid.getAttribute(atGrid.cabeceraTabla);
+            return document.getElementById(idCabecera) as HTMLTableSectionElement;
+        }
+
+        protected get CuerpoTablaGrid(): HTMLTableSectionElement {
+            return document.getElementById(`${this.Grid.id}_body`) as HTMLTableSectionElement;
+        }
+
+        protected get ZonaNavegador(): HTMLDivElement {
+            let idNavegador = this.Grid.getAttribute(atGrid.zonaNavegador)
+            return document.getElementById(idNavegador) as HTMLDivElement;
+        }
+
         protected get Tabla(): HTMLTableElement {
             let idTabla: string = this.Grid.getAttribute(atControl.tablaDeDatos);
             return document.getElementById(idTabla) as HTMLTableElement;
@@ -361,6 +375,27 @@
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
                 a.setAttribute("class", orden.ccsClase);
             }
+        }
+
+        public PosicionGrid(): number {
+            let alturaCabeceraPnlControl: number = AlturaCabeceraPnlControl();
+            let alturaCabeceraMnt: number = this.PanelMnt.getBoundingClientRect().height;
+            let alturaFiltro: number = 0;
+            if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
+                alturaFiltro = this.ZonaDeFiltro.getBoundingClientRect().height;
+            }
+            return alturaCabeceraPnlControl + alturaCabeceraMnt + alturaFiltro;
+        }
+
+        public AlturaDelGrid(posicionGrid: number): number {
+            let alturaPiePnlControl: number = AlturaPiePnlControl();
+            let alturaZonaNavegador: number = this.ZonaNavegador.getBoundingClientRect().height;
+            return AlturaFormulario() - posicionGrid - alturaPiePnlControl - alturaZonaNavegador;
+        }
+
+        public FijarAlturaCuerpoDeLaTabla(alturaDelGrid: number): void {
+            let alturaCabecera = this.CabeceraTablaGrid.getBoundingClientRect().height;
+            this.CuerpoTablaGrid.style.height = `${alturaDelGrid - alturaCabecera}px`;
         }
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
@@ -826,7 +861,7 @@
 
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
             var cuerpoDeLaTabla = document.createElement("tbody");
-
+            cuerpoDeLaTabla.id = `${grid.Grid.id}_body`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
             for (let i = 0; i < registros.length; i++) {
                 let fila = grid.crearFila(filaCabecera, registros[i], i);
@@ -841,8 +876,10 @@
                 tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
-
             grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+            let posicion: number = grid.PosicionGrid();
+            let altura: number = grid.AlturaDelGrid(posicion);
+            grid.FijarAlturaCuerpoDeLaTabla(altura);
         }
 
         private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {

@@ -7,18 +7,29 @@
     if (TipoMensaje.Error === tipo)
         console.error(mensaje);
     else
-        console.log(mensaje)
+        console.log(mensaje);
 }
 
-function AlturaDelCuerpo(): number {
-    var altura = document.defaultView.innerHeight;
+function AlturaCabeceraPnlControl(): number {
     let cabecera: HTMLDivElement = document.getElementById("div-cabecera") as HTMLDivElement;
-    let pie: HTMLDivElement = document.getElementById("div-pie") as HTMLDivElement;
-    return altura - cabecera.clientHeight - pie.clientHeight;
+    return cabecera.getBoundingClientRect().height;
 }
 
-function AlturaDelMenu(): number {
-    return AlturaDelCuerpo() - 4;
+function AlturaPiePnlControl(): number {
+    let pie: HTMLDivElement = document.getElementById("div-pie") as HTMLDivElement;
+    return pie.getBoundingClientRect().height;
+}
+
+function AlturaFormulario() {
+    return document.defaultView.innerHeight;
+}
+
+function AlturaDelCuerpo(alturaFormulario: number): number {
+    return alturaFormulario - AlturaCabeceraPnlControl() - AlturaPiePnlControl();
+}
+
+function AlturaDelMenu(alturaFormulario: number): number {
+    return AlturaDelCuerpo(alturaFormulario) - 4;
 }
 
 function PonerCapa() {
@@ -90,7 +101,7 @@ function IsString(obj: any): boolean {
         var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'string';
         return a;
     }
-    catch{
+    catch {
         return false;
     }
 }
@@ -99,7 +110,7 @@ function IsBool(obj: any): boolean {
         var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'boolean';
         return a;
     }
-    catch{
+    catch {
         return false;
     }
 }
@@ -108,7 +119,7 @@ function IsNumber(obj: any): boolean {
         var a = Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() === 'number';
         return a;
     }
-    catch{
+    catch {
         return false;
     }
 }
@@ -123,7 +134,7 @@ function IsNullOrEmpty(valor: string): boolean {
 
 function NumeroMayorDeCero(valor: string): boolean {
 
-    if ( valor === null || valor === undefined )
+    if (valor === null || valor === undefined)
         return false;
 
     return valor.Numero() > 0;

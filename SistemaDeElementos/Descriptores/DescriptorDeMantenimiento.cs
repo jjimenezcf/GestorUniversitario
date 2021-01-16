@@ -15,15 +15,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public new string IdHtml => NombreMnt;
 
+        public string IdHtmlZonaNavegador => $"cuerpo.pie.{IdHtml}";
+
         public DescriptorDeMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
-        : base(
-          padre: crud,
-          id: $"{crud.Id}_{TipoControl.Mantenimiento}",
-          etiqueta: etiqueta,
-          propiedad: null,
-          ayuda: null,
-          posicion: null
-        )
+            : base(
+              padre: crud,
+              id: $"{crud.Id}_{TipoControl.Mantenimiento}",
+              etiqueta: etiqueta,
+              propiedad: null,
+              ayuda: null,
+              posicion: null
+            )
         {
             Tipo = TipoControl.Mantenimiento;
             ZonaMenu = new ZonaDeMenu<TElemento>(mnt: this);
@@ -101,7 +103,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private object RenderCuerpoPie()
         {
-           return $@"<div id=¨cuerpo.pie.{IdHtml}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoPie)}¨>
+            return $@"<div id=¨{IdHtmlZonaNavegador}¨ class=¨{ClaseCss.Render(enumClaseCcsCuerpo.CuerpoPie)}¨>
                        {Datos.Grid.NavegadorToHtml()}
                      </div>";
         }

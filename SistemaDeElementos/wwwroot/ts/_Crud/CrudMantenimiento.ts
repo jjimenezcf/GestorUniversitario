@@ -32,6 +32,20 @@
 
         }
 
+        public PosicionarGrid(): void {
+            this.Grid.style.position = 'fixed';
+            let posicionGrid: number = this.PosicionGrid();
+            this.Grid.style.top = `${posicionGrid}px`;
+
+            let alturaDelGrid: number = this.AlturaDelGrid(posicionGrid);
+            this.Grid.style.height = `${alturaDelGrid}px`;
+
+            let cuerpoDeLaTabla: HTMLTableSectionElement = this.CuerpoTablaGrid;
+            if (cuerpoDeLaTabla !== null && cuerpoDeLaTabla !== undefined) {
+                this.FijarAlturaCuerpoDeLaTabla(alturaDelGrid);
+            }
+        }
+
 
         public AplicarRestrictores() {
             if (this.Estado.Contiene(Sesion.restrictor)) {
@@ -302,10 +316,11 @@
                 this.MostrarPanel(this.ZonaDeFiltro);
                 this.EtiquetaMostrarOcultarFiltro.innerText = "Ocultar filtro";
             }
+            this.PosicionarGrid();
         }
 
         public OcultarMostrarBloque(idHtmlBloque: string) {
-            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}`) as HTMLInputElement
+            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}`) as HTMLInputElement;
             if (NumeroMayorDeCero(extensor.value)) {
                 extensor.value = "0";
                 this.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
