@@ -331,11 +331,17 @@
         public get ExpandirFiltro(): HTMLInputElement {
             return document.getElementById(`expandir.${this.IdPanelMnt}`) as HTMLInputElement;
         }
-        public get SoloSeleccionadas(): HTMLInputElement {
-            return document.getElementById(`seleccion.${this.IdGrid}`) as HTMLInputElement;
+        public get InputSeleccionadas(): HTMLInputElement {
+            let idInput = this.EsCrud
+                ? `div.seleccion.${this.IdGrid}.input`
+                : `div.seleccion.${this.IdGrid}.input`
+            return document.getElementById(idInput) as HTMLInputElement;
         }
-        public get EtiquetaMostrarSeleccionadas(): HTMLElement {
-            return document.getElementById(`seleccion.${this.IdGrid}.ref`) as HTMLElement;
+        public get EtiquetasSeleccionadas(): HTMLElement {
+            let idRef = this.EsCrud
+                ? `div.seleccion.${this.IdGrid}.ref`
+                : `div.seleccion.${this.IdGrid}.ref`
+            return document.getElementById(idRef) as HTMLElement;
         }
 
         protected get Grid(): HTMLDivElement {
@@ -347,7 +353,7 @@
             return document.getElementById(idCabecera) as HTMLTableSectionElement;
         }
 
-        protected get CuerpoTablaGrid(): HTMLTableSectionElement {
+        public get CuerpoTablaGrid(): HTMLTableSectionElement {
             return document.getElementById(`${this.Grid.id}_tbody`) as HTMLTableSectionElement;
         }
 
@@ -895,10 +901,13 @@
                 tabla.append(cuerpoDeLaTabla);
             }
             grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-            let posicion: number = grid.PosicionGrid();
-            let altura: number = grid.AlturaDelGrid(posicion);
-            grid.FijarAlturaCuerpoDeLaTabla(altura);
-            grid.AplicarQueFilasMostrar();
+
+            if (this.EsCrud) {
+                let posicion: number = grid.PosicionGrid();
+                let altura: number = grid.AlturaDelGrid(posicion);
+                grid.FijarAlturaCuerpoDeLaTabla(altura);
+            }
+            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
         }
 
         private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
@@ -1124,29 +1133,29 @@
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
 
-        public MostrarSoloSeleccionadas(): void {
-            if (NumeroMayorDeCero(this.SoloSeleccionadas.value)) {
-                this.SoloSeleccionadas.value = "0";
-                this.EtiquetaMostrarSeleccionadas.innerText = "Seleccionadas";
+        public MostrarSoloSeleccionadas(inputDeSeleccionadas: HTMLInputElement, etiquetaSeleccionadas: HTMLElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector): void {
+            if (NumeroMayorDeCero(inputDeSeleccionadas.value)) {
+                inputDeSeleccionadas.value = "0";
+                etiquetaSeleccionadas.innerText = "Seleccionadas";
             }
             else {
-                this.SoloSeleccionadas.value = "1";
-                this.EtiquetaMostrarSeleccionadas.innerText = "Todas las filas";
+                inputDeSeleccionadas.value = "1";
+                etiquetaSeleccionadas.innerText = "Todas las filas";
             }
-            this.AplicarQueFilasMostrar();
+            this.AplicarQueFilasMostrar(inputDeSeleccionadas, tbodyDelGrid, seleccionadas);
         }
 
-        public AplicarQueFilasMostrar() {
-            if (NumeroMayorDeCero(this.SoloSeleccionadas.value)) {
-                this.MostrarFilasSeleccionadas();
+        public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector) {
+            if (NumeroMayorDeCero(inputDeSeleccionadas.value)) {
+                this.MostrarFilasSeleccionadas(tbodyDelGrid, seleccionadas);
             }
             else {
-                this.MostrarTodasLasFilas();
+                this.MostrarTodasLasFilas(tbodyDelGrid);
             }
         }
 
-        private MostrarTodasLasFilas(): void {
-            let trs: NodeListOf<HTMLTableRowElement> = this.CuerpoTablaGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
+        private MostrarTodasLasFilas(tbodyDelGrid: HTMLTableSectionElement): void {
+            let trs: NodeListOf<HTMLTableRowElement> = tbodyDelGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
             let i: number = 0;
             for (i = 0; i < trs.length; i++) {
                 let tr: HTMLTableRowElement = trs[i];
@@ -1155,13 +1164,13 @@
 
         }
 
-        private MostrarFilasSeleccionadas(): void {
-            let trs: NodeListOf<HTMLTableRowElement> = this.CuerpoTablaGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
+        private MostrarFilasSeleccionadas(tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector): void {
+            let trs: NodeListOf<HTMLTableRowElement> = tbodyDelGrid.querySelectorAll("tr") as NodeListOf<HTMLTableRowElement>;
             let i: number = 0;
             for (i = 0; i < trs.length; i++) {
                 let tr: HTMLTableRowElement = trs[i];
                 let idDelElemento = Numero(tr.getAttribute(atControl.valorTr));
-                tr.hidden = !this.InfoSelector.Contiene(idDelElemento);
+                tr.hidden = !seleccionadas.Contiene(idDelElemento);
             }
         }
     }

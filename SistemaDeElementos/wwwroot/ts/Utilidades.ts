@@ -139,9 +139,12 @@ function NumeroMayorDeCero(valor: string): boolean {
 
 
 function NoDefinida(valor: any) {
-
     if (valor === null || valor === undefined)
         return true;
+
+    if (IsString(valor) && valor === '')
+        return true;
+
     return false;
 };
 

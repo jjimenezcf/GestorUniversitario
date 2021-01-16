@@ -238,7 +238,8 @@ const Evento = {
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
-        OrdenarPor: "ordenar-por"
+        OrdenarPor: "ordenar-por",
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
     },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",

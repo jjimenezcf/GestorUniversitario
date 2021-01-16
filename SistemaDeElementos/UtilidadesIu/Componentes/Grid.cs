@@ -232,7 +232,7 @@ namespace UtilidadesParaIu
 
         }
 
-        private static string AplicarCss(bool esModal,enumCssNavegador claseCss)
+        private static string AplicarCss(bool esModal,enumCssNavegadorEnModal claseCss)
         {
             if (esModal)
             {
@@ -242,12 +242,11 @@ namespace UtilidadesParaIu
             {
                 switch (claseCss)
                 {
-                    case enumCssNavegador.ContenedorModal: return Css.Render(enumCssNavegador.ContenedorMnt);
-                    case enumCssNavegador.InfoGridModal: return Css.Render(enumCssNavegador.InfoGridMnt);
-                    case enumCssNavegador.MensajeModal: return Css.Render(enumCssNavegador.MensajeMnt);
-                    case enumCssNavegador.CantidadModal: return Css.Render(enumCssNavegador.CantidadMnt);
-                    case enumCssNavegador.OpcionModal: return Css.Render(enumCssNavegador.OpcionMnt);
-                    case enumCssNavegador.NavegadorModal: return Css.Render(enumCssNavegador.NavegadorMnt);
+                    case enumCssNavegadorEnModal.InfoGrid: return Css.Render(enumCssNavegadorEnMnt.InfoGrid);
+                    case enumCssNavegadorEnModal.Mensaje: return Css.Render(enumCssNavegadorEnMnt.Mensaje);
+                    case enumCssNavegadorEnModal.Cantidad: return Css.Render(enumCssNavegadorEnMnt.Cantidad);
+                    case enumCssNavegadorEnModal.Opcion: return Css.Render(enumCssNavegadorEnMnt.Opcion);
+                    case enumCssNavegadorEnModal.Navegador: return Css.Render(enumCssNavegadorEnMnt.Navegador);
                 }
 
             }
@@ -266,17 +265,26 @@ namespace UtilidadesParaIu
             var accionAnterior = $"Crud.{gestorDeEventos}('obtener-anteriores','{parametros}')";
             var accionSiguiente = $"Crud.{gestorDeEventos}('obtener-siguientes','{parametros}')";
             var esModal = grid.ZonaDeDatos.Mnt.Crud.EsModal;
+
+            var htmlContenedorNavegador = esModal
+                ?$@"
+                   <!-- ***************** Navegador del grid ****************** -->
+                   <div id= ¨{grid.IdHtml}_pie¨ class=¨{Css.Render(enumCssNavegadorEnModal.Contenedor)}¨>
+                     htmlNavegadorGrid
+                   </div>
+                 "
+                 :"htmlNavegadorGrid" ;
+
+
             var htmlNavegadorGrid = $@"
-            {(esModal ? " <!-- ***************** Navegador del grid ****************** -->" : "")}
-            <div id= ¨{grid.IdHtml}_pie¨ class=¨{AplicarCss(esModal,enumCssNavegador.ContenedorModal)}¨>
-                <div id=¨{grid.IdHtmlNavegador}¨ class = ¨{AplicarCss(esModal, enumCssNavegador.NavegadorModal)}¨>
-                    <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
+            <div id=¨{grid.IdHtmlNavegador}¨ class=¨{AplicarCss(esModal,enumCssNavegadorEnModal.Navegador)}¨>
+                 <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨{accionBuscar}¨>
-                    </div>
-                    <div id=¨{grid.IdHtmlNavegador_2}¨>
+                 </div>
+                 <div id=¨{grid.IdHtmlNavegador_2}¨>
                         <input type=¨number¨ 
                                id=¨{grid.IdHtmlPorLeer}¨ 
-                               class = ¨{AplicarCss(esModal, enumCssNavegador.CantidadModal)}¨
+                               class = ¨{AplicarCss(esModal, enumCssNavegadorEnModal.Cantidad)}¨
                                value=¨{grid.CantidadPorLeer}¨ 
                                min=¨1¨ step=¨1¨ max=¨999¨ 
                                pagina=¨1¨  
@@ -284,26 +292,25 @@ namespace UtilidadesParaIu
                                controlador=¨{grid.Controlador}¨  
                                total-en-bd=¨{grid.TotalEnBd}¨ 
                                title=¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}¨ />
-                    </div>
-                    <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
+                 </div>
+                 <div id=¨id=¨{grid.IdHtmlNavegador_3}¨ data-type=¨img¨ >
                         <img src=¨/images/paginaAnterior.png¨ alt=¨Primera página¨ title=¨Página anterior¨ onclick=¨{accionAnterior}¨>
                         <img src=¨/images/paginaSiguiente.png¨ alt=¨Siguiente página¨ title=¨Página siguiente¨ onclick=¨{accionSiguiente}¨>
                         <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨{accionUltimos}¨>
-                    </div>
-                </div>
+                 </div>
             </div>
-            <div id = ¨div.seleccion.{grid.IdHtml}¨ class=¨{AplicarCss(esModal, enumCssNavegador.OpcionModal)}¨>     
-              <a id = ¨seleccion.{grid.IdHtml}.ref¨ href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{("")}');¨>Seleccionadas</a>
-              <input id=¨seleccion.{grid.IdHtml}¨ type=¨hidden¨ value=¨0¨ >  
+            <div id = ¨div.seleccion.{grid.IdHtml}¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Opcion)}¨>     
+              <a id = ¨div.seleccion.{grid.IdHtml}.ref¨ href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{parametros}');¨>Seleccionadas</a>
+              <input id=¨div.seleccion.{grid.IdHtml}.input¨ type=¨hidden¨ value=¨0¨ >  
             </div>
-            <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{AplicarCss(esModal, enumCssNavegador.MensajeModal)}¨>
+            <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Mensaje)}¨>
                Seleccionadas: 0 de {grid.TotalEnBd}
             </div>
-            <div id= ¨{grid.IdHtml}_info¨ class=¨{AplicarCss(esModal, enumCssNavegador.InfoGridModal)}¨>
+            <div id= ¨{grid.IdHtml}_info¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.InfoGrid)}¨>
                Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}
             </div>
             ";
-            return htmlNavegadorGrid;
+            return htmlContenedorNavegador.Replace("htmlNavegadorGrid", htmlNavegadorGrid);
         }
 
         private static string RenderOpcionesGrid()

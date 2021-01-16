@@ -69,7 +69,7 @@
                     break;
                 }
                 case Evento.Mnt.MostrarSoloSeleccionadas: {
-                    crudMnt.MostrarSoloSeleccionadas();
+                    crudMnt.MostrarSoloSeleccionadas(crudMnt.InputSeleccionadas, crudMnt.EtiquetasSeleccionadas, crudMnt.CuerpoTablaGrid, crudMnt.InfoSelector);
                     break;
                 }
                 default: {
@@ -131,6 +131,13 @@
                 case Evento.ModalSeleccion.OrdenarPor: {
                     let columna: string = parIn[1];
                     modal.OrdenarPor(columna);
+                    break;
+                }
+                case Evento.ModalSeleccion.MostrarSoloSeleccionadas: {
+                    var input = modal.InputSeleccionadas;
+                    var etiqueta = modal.EtiquetasSeleccionadas;
+                    var tbodyDelGrid = modal.CuerpoTablaGrid;
+                    crudMnt.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
                 default: {

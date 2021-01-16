@@ -24,20 +24,24 @@ namespace MVCSistemaDeElementos.Descriptores
         MntFiltroBloqueVacio
     }
 
-    public enum enumCssNavegador
+    public enum enumCssNavegadorEnModal
     {
-        InfoGridModal,
-        MensajeModal,
-        CantidadModal,
-        OpcionModal,
-        NavegadorModal,
-        ContenedorModal,
-        InfoGridMnt,
-        MensajeMnt,
-        CantidadMnt,
-        OpcionMnt,
-        NavegadorMnt,
-        ContenedorMnt
+        InfoGrid,
+        Mensaje,
+        Cantidad,
+        Opcion,
+        Contenedor,
+        Navegador
+    }
+
+
+    public enum enumCssNavegadorEnMnt
+    {
+        InfoGrid,
+        Mensaje,
+        Cantidad,
+        Opcion,
+        Navegador
     }
 
     public enum enumCssDiv
@@ -73,27 +77,33 @@ namespace MVCSistemaDeElementos.Descriptores
             }
             return "";
         }
-        public static string Render(enumCssNavegador clase)
+        public static string Render(enumCssNavegadorEnModal clase)
         {
             switch (clase)
             {
-                case enumCssNavegador.InfoGridModal: return "navegador-info-grid";
-                case enumCssNavegador.MensajeModal: return "navegador-mensaje";
-                case enumCssNavegador.CantidadModal: return "navegador-cantidad-grid";
-                case enumCssNavegador.OpcionModal: return "navegador-opcion-grid";
-                case enumCssNavegador.ContenedorModal: return "pie-grid";
-                case enumCssNavegador.NavegadorModal: return "navegador-grid";
-
-                case enumCssNavegador.InfoGridMnt: return "cuerpo-pie-info";
-                case enumCssNavegador.MensajeMnt: return "cuerpo-pie-mensaje";
-                case enumCssNavegador.CantidadMnt: return "navegador-cantidad-grid";
-                case enumCssNavegador.OpcionMnt: return "cuerpo-pie-opciones";
-                case enumCssNavegador.ContenedorMnt: return "cuerpo-pie-navegador";
-                case enumCssNavegador.NavegadorMnt: return "navegador-grid";
+                case enumCssNavegadorEnModal.Contenedor: return "pie-grid";
+                case enumCssNavegadorEnModal.Cantidad: return "navegador-cantidad-grid";
+                case enumCssNavegadorEnModal.Opcion: return "pie-grid-opciones";
+                case enumCssNavegadorEnModal.Mensaje: return "pie-grid-mensaje";
+                case enumCssNavegadorEnModal.InfoGrid: return "pie-grid-info";
+                case enumCssNavegadorEnModal.Navegador: return "pie-grid-navegador";
             }
             return "";
         }
-        
+
+
+        public static string Render(enumCssNavegadorEnMnt clase)
+        {
+            switch (clase)
+            {
+                case enumCssNavegadorEnMnt.Cantidad: return "navegador-cantidad-grid";
+                case enumCssNavegadorEnMnt.Opcion: return "cuerpo-pie-opciones";
+                case enumCssNavegadorEnMnt.Mensaje: return "cuerpo-pie-mensaje";
+                case enumCssNavegadorEnMnt.InfoGrid: return "cuerpo-pie-info";
+                case enumCssNavegadorEnMnt.Navegador: return "cuerpo-pie-navegador";
+            }
+            return "";
+        }
 
         public static string Render(enumCssGrid clase)
         {
