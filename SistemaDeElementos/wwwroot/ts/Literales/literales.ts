@@ -249,7 +249,8 @@ const Evento = {
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
-        OrdenarPor: "ordenar-por"
+        OrdenarPor: "ordenar-por",
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
     },
     ModalParaConsultaDeRelaciones: {
         Cerrar: "cerrar-consulta",
@@ -258,7 +259,8 @@ const Evento = {
         ObtenerAnteriores: "obtener-anteriores",
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
-        OrdenarPor: "ordenar-por"
+        OrdenarPor: "ordenar-por",
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
     },
     ModalCreacion: {
         Crear: "crear-elemento",

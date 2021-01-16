@@ -197,6 +197,13 @@
                     modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
                     break;
                 }
+                case Evento.ModalParaRelacionar.MostrarSoloSeleccionadas: {
+                    var input = modal.InputSeleccionadas;
+                    var etiqueta = modal.EtiquetasSeleccionadas;
+                    var tbodyDelGrid = modal.CuerpoTablaGrid;
+                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
@@ -250,6 +257,13 @@
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.MostrarSoloSeleccionadas: {
+                    var input = modal.InputSeleccionadas;
+                    var etiqueta = modal.EtiquetasSeleccionadas;
+                    var tbodyDelGrid = modal.CuerpoTablaGrid;
+                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
                 default: {

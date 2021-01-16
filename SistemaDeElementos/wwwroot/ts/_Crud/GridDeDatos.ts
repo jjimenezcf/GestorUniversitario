@@ -334,13 +334,13 @@
         public get InputSeleccionadas(): HTMLInputElement {
             let idInput = this.EsCrud
                 ? `div.seleccion.${this.IdGrid}.input`
-                : `div.seleccion.${this.IdGrid}.input`
+                : `div.seleccion.${this.IdGrid}.input`;
             return document.getElementById(idInput) as HTMLInputElement;
         }
         public get EtiquetasSeleccionadas(): HTMLElement {
             let idRef = this.EsCrud
                 ? `div.seleccion.${this.IdGrid}.ref`
-                : `div.seleccion.${this.IdGrid}.ref`
+                : `div.seleccion.${this.IdGrid}.ref`;
             return document.getElementById(idRef) as HTMLElement;
         }
 
@@ -413,7 +413,7 @@
 
         public AlturaDelGrid(posicionGrid: number): number {
             let alturaPiePnlControl: number = AlturaPiePnlControl();
-            let alturaZonaNavegador: number = this.ZonaNavegador.getBoundingClientRect().height ;
+            let alturaZonaNavegador: number = this.ZonaNavegador.getBoundingClientRect().height;
             return AlturaFormulario() - posicionGrid - alturaPiePnlControl - alturaZonaNavegador;
         }
 
@@ -973,10 +973,11 @@
                     let idModal: string = this.Grid.getAttribute(atSelector.idModal);
                     a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
                 }
-                if (this.EsCrud)
-                    a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
                 else
-                    throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
+                    if (this.EsCrud)
+                        a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+                    else
+                        throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
             }
             return a;
         }
