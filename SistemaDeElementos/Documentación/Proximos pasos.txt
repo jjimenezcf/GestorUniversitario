@@ -1,9 +1,5 @@
-﻿- modificar el layout
-- ajustar el cuerpo de datos del grid al tamaño del layout y del filtro
-- si se oculta el filtro ajustar el tamaño del grid
-- al modificar el tamaño del browser, ajustar el tamaño del grid
-
-- ver error de al navegar, no pasa el restrictor, y es por que he quitado html elementos
+﻿
+- Ajustar controles de input en los filtros y en las modales de edición y selección
 
 - Añadir filtros a usuarios (selector de puesto) y órdenes
 - Añadir filtro a puestos (selector de rol) y órdenes
@@ -64,5 +60,13 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 	- permiso de administrador asociado a variable 
 	- se lee al entrar (de BD o cache) en el controlador base
 - Poder comprimir la zona de filtrado y cada uno de sus bloques de manera independiente
+- ver error de al navegar, no pasa el restrictor, y es por que he quitado html elementos
 
+
+Cosas del Layout
+------------------------------------------------------------------------------
+- modificar el layout
 - presentar los datos en el grid de manera correcta
+- ajustar el cuerpo de datos del grid al tamaño del layout y del filtro
+- si se oculta el filtro ajustar el tamaño del grid
+- al modificar el tamaño del browser, ajustar el tamaño del grid
