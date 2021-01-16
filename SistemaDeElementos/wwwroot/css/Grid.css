@@ -61,11 +61,16 @@ cuerpo-datos > tr:after {
     margin-top: 10px;
 }
 
-.info-grid {
+.navegador-info-grid {
     float: right;
 }
 
-.cantidad-grid {
+.navegador-mensaje {
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.navegador-cantidad-grid {
     width: 50px;
     margin-top: 5px;
     align-content: center;

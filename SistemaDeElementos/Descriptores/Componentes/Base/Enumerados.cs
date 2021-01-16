@@ -24,6 +24,13 @@ namespace MVCSistemaDeElementos.Descriptores
         MntFiltroBloqueVacio
     }
 
+    public enum enumClaseCcsNavegador
+    {
+        InfoGrid,
+        Mensaje,
+        Cantidad
+    }
+
     public enum enumClaseCcsDiv
     {
         DivVisible,
@@ -57,7 +64,17 @@ namespace MVCSistemaDeElementos.Descriptores
             }
             return "";
         }
-
+        public static string Render(enumClaseCcsNavegador clase)
+        {
+            switch (clase)
+            {
+                case enumClaseCcsNavegador.InfoGrid: return "navegador-info-grid";
+                case enumClaseCcsNavegador.Mensaje: return "navegador-mensaje";
+                case enumClaseCcsNavegador.Cantidad: return "navegador-cantidad-grid";
+            }
+            return "";
+        }
+        
 
         public static string Render(enumClaseCcsGrid clase)
         {

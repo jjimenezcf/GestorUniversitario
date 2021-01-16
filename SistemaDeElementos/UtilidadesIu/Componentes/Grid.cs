@@ -254,7 +254,7 @@ namespace UtilidadesParaIu
                     <div id=¨{grid.IdHtmlNavegador_2}¨>
                         <input type=¨number¨ 
                                id=¨{grid.IdHtmlPorLeer}¨ 
-                               class = ¨cantidad-grid¨
+                               class = ¨{ClaseCss.Render(enumClaseCcsNavegador.Cantidad)}¨
                                value=¨{grid.CantidadPorLeer}¨ 
                                min=¨1¨ step=¨1¨ max=¨999¨ 
                                pagina=¨1¨  
@@ -269,8 +269,11 @@ namespace UtilidadesParaIu
                         <img src=¨/images/paginaUltima.png¨ alt=¨Última página¨ title=¨Última página¨ onclick=¨{accionUltimos}¨>
                     </div>
                 </div>
-                <div id= ¨{grid.IdHtml}_info¨ class=¨info-grid¨>
-                   ¨Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}¨
+                <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{ClaseCss.Render(enumClaseCcsNavegador.Mensaje)}¨>
+                   Seleccionadas: 0 de {grid.TotalEnBd}
+                </div>
+                <div id= ¨{grid.IdHtml}_info¨ class=¨{ClaseCss.Render(enumClaseCcsNavegador.InfoGrid)}¨>
+                   Pagina: 1 de un total de {Math.Ceiling((decimal)(grid.TotalEnBd / grid.CantidadPorLeer))}
                 </div>
             </div>
             ";

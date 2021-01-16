@@ -138,6 +138,7 @@
 
         private id: string;
         private idInfo: string;
+        private idMensaje: string;
 
         private esRestauracion: boolean;
 
@@ -183,6 +184,10 @@
             let div: HTMLDivElement = document.getElementById(this.idInfo) as HTMLDivElement;
             div.innerHTML = valor;
         }
+        public set Mensaje(valor: string) {
+            let div: HTMLDivElement = document.getElementById(this.idMensaje) as HTMLDivElement;
+            div.innerHTML = valor;
+        }
         public set Leidos(valor: number) {
             this.Navegador.setAttribute(atGrid.navegador.leidos, valor.toString());
         }
@@ -196,6 +201,7 @@
         constructor(idGrid: string) {
             this.id = `${idGrid}_${atGrid.idCtrlCantidad}`;
             this.idInfo = `${idGrid}_${atGrid.idInfo}`;
+            this.idMensaje = `${idGrid}_${atGrid.idMensaje}`;
         }
 
         public get Navegador(): HTMLInputElement {
@@ -236,7 +242,7 @@
             }
         }
 
-        public Actualizar(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+        public Actualizar(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number, seleccionados: number): void {
             this.Leidos = registrosLeidos;
             this.Posicion = accion == atGrid.accion.ultima ? this.Total - registrosLeidos : posicionDesdeLaQueSeLeyo + registrosLeidos;
             let paginasTotales: number = Math.ceil(this.Total / this.Cantidad);
@@ -258,7 +264,11 @@
                         }
             this.Pagina = paginaNueva <= 0 ? 1 : paginaNueva;
             this.Titulo = `Pagina ${this.Pagina} de ${paginasTotales}`;
-            this.Info = `Pagina ${this.Pagina} de ${paginasTotales}`;
+            this.ActualizarMensaje(seleccionados)
+        }
+
+        public ActualizarMensaje(seleccionados: number) : void {
+            this.Mensaje = `Seleccionados ${seleccionados} de ${this.Total}`
         }
     }
 
@@ -406,7 +416,7 @@
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
 
-            this.Navegador.Actualizar(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
+            this.Navegador.Actualizar(accion, posicionDesdeLaQueSeLeyo, registrosLeidos, this.InfoSelector.Cantidad);
 
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Orden = this.Ordenacion.Leer(i);
@@ -1041,6 +1051,8 @@
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
                     this.DeshabilitarOpcionesDeMenuDeElemento();
             }
+
+            this.Navegador.ActualizarMensaje(infoSelector.Cantidad);
         }
 
 

@@ -88,7 +88,8 @@ const atGrid = {
     },
     selector: "selector",
     idCtrlCantidad: "nav_2_reg",
-    idInfo: "info"
+    idInfo: "info",
+    idMensaje: "mensaje"
 };
 
 const atArchivo = {

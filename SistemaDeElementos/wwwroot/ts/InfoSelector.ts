@@ -45,9 +45,9 @@ class InfoSelector {
         this._Seleccionables = seleccionables;
     }
 
-    public get Id() { return this.idGrid; }
-    public get Cantidad() { return this.seleccionados.length; }
-    public get Seleccionados() { return this.seleccionados; }
+    public get Id(): string { return this.idGrid; }
+    public get Cantidad(): number { return this.seleccionados.length; }
+    public get Seleccionados(): number[] { return this.seleccionados; }
    
 
     iniciarClase(idGrid) {
