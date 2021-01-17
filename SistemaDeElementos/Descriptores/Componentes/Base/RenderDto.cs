@@ -93,7 +93,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, short i, short j, double ancho)
+        private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, short i, short j, double ancho)
         {
             if (descriptorControl.atributos.TipoDeControl == TipoControl.Check)
                 return "";
@@ -109,7 +109,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         //
 
-        private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderDescriptorControlDto(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = "";
@@ -143,7 +143,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmdDescriptorControl;
         }
 
-        private static string RenderCheck(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderCheck(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-check");
@@ -156,7 +156,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
         }
 
-        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
@@ -173,7 +173,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         }
 
-        private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
@@ -195,7 +195,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         }
 
-        private static string RenderEditor(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
@@ -208,7 +208,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
         }
 
-        private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
@@ -219,7 +219,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                 </input>";
             return htmlContenedor.Replace("controlParaRenderizar", htmlRestrictor);
         }
-        private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorControl descriptorControl, double ancho)
+        private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-archivo");
@@ -270,7 +270,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
 
 
-        private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)
+        private static string RenderContenedorDto(DescriptorDeControlDeLaTabla descriptorControl, double ancho, string cssClaseContenedor)
         {
             //17.01.2021 --> Al usar css no me hace flata, y mostrar en bloques style=¨width: {ancho}%
             return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ ¨ >
@@ -278,7 +278,7 @@ namespace MVCSistemaDeElementos.Descriptores
                       </div>";
         }
 
-        private static string RenderAtributosComunes(DescriptorDeTabla tabla, DescriptorControl descriptorControl)
+        private static string RenderAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
         {
             var atributos = descriptorControl.atributos;
             var atributosHtml = $@"id=¨{descriptorControl.IdHtml}¨ 

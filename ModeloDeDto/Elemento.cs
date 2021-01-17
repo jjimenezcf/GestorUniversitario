@@ -18,7 +18,7 @@ namespace ModeloDeDto
         public const string UrlDeArchivo = "url-archivo";
         public const string VisorDeArchivo = "visor-archivo";
         public const string ImagenDelCanvas = "imagen-de-canva";
-        public const string Desplegable = "desplegable";
+        public const string DesplegableDeFiltro = "desplegable-de-filtro";
         public const string GridModal = "grid-modal";
         public const string TablaBloque = "tabla-bloque";
         public const string Bloque = "bloque";

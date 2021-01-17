@@ -71,3 +71,4 @@ Cosas del Layout
 - si se oculta el filtro ajustar el tamaño del grid
 - al modificar el tamaño del browser, ajustar el tamaño del grid
 - Ajustar controles de input en los filtros y en las modales de edición y selección
+- ajustar edición y creación sin ser modal

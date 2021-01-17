@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
@@ -37,6 +38,11 @@ namespace ServicioDeDatos.Seguridad
 
             var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(puestosDtm).ToList();
+        }
+
+        public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
+        {
+            return Leer(this, posicion, cantidad, filtro);
         }
 
         protected override IQueryable<PuestoDtm> AplicarFiltros(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)

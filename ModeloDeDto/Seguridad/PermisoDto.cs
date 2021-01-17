@@ -28,6 +28,8 @@
             SiempreVisible = false
             )
         ]
+
+        //Definimos como montar una lista con los valores de la clase de permisos en edición y filtrado
         public string IdClase { get; set; }
 
         [IUPropiedad(
@@ -50,6 +52,8 @@
             SiempreVisible = false
             )
         ]
+
+        //montamos una lista para seleccionar el tipo en la edición y en el filtro
         public string IdTipo { get; set; }
 
         [IUPropiedad(

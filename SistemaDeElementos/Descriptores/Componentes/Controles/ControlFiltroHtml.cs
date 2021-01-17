@@ -1,6 +1,6 @@
 ﻿namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoCriterio { igual, contiene }
+    public enum TipoCriterio { igual, contiene, comienza}
 
     public class ControlFiltroHtml : ControlHtml
     {

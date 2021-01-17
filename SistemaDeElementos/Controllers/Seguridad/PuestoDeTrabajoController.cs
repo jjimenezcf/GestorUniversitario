@@ -25,5 +25,11 @@ namespace MVCSistemaDeElementos.Controllers
         {
             return ViewCrud();
         }
+
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        {
+            return ((GestorDePuestosDeTrabajo)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+        }
+
     }
 }

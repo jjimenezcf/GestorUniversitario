@@ -6,7 +6,7 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorControl
+    public class DescriptorDeControlDeLaTabla
     {
         internal PropertyInfo Descriptor { get; set; }
 
@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class DescriptorDeColumna
     {
-        private Dictionary<short, DescriptorControl> Controles = new Dictionary<short, DescriptorControl>();
+        private Dictionary<short, DescriptorDeControlDeLaTabla> Controles = new Dictionary<short, DescriptorDeControlDeLaTabla>();
 
         public DescriptorDeFila Fila { get; private set; }
         public DescriptorDeTabla Tabla => Fila.Tabla;
@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (!Controles.ContainsKey(pos))
             {
-                Controles[pos] = new DescriptorControl { Descriptor = descriptor, Fila = Fila, NumeroColumna  = NumeroColumna };
+                Controles[pos] = new DescriptorDeControlDeLaTabla { Descriptor = descriptor, Fila = Fila, NumeroColumna  = NumeroColumna };
 
                 if (PosicionMaxima < pos)
                     PosicionMaxima = pos;
@@ -86,7 +86,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         }
 
-        public DescriptorControl ObtenerControlEnLaPosicion(short pos)
+        public DescriptorDeControlDeLaTabla ObtenerControlEnLaPosicion(short pos)
         {
             if (Controles.ContainsKey(pos))
                 return Controles[pos];

@@ -19,8 +19,10 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo)
         {
             if (modo == ModoDescriptor.Mantenimiento)
+            {
+                var bloque = new BloqueDeFitro<UsuarioDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(3,2));
                 new SelectorDeFiltro<UsuarioDto, PermisoDto>(
-                       padre: new BloqueDeFitro<UsuarioDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2)),
+                       padre: bloque,
                        etiqueta: "Permiso",
                        filtrarPor: UsuariosPor.Permisos,
                        ayuda: "Seleccionar Permiso",
@@ -29,7 +31,10 @@ namespace MVCSistemaDeElementos.Descriptores
                        paraMostrar: nameof(PermisoDto.Nombre),
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
-            
+
+                new DesplegableDeFiltro<UsuarioDto>(bloque, "Puesto de trabajo", "idPuesto", "usuarios de este puesto", new Posicion(1, 0));
+                new DesplegableDeFiltro<UsuarioDto>(bloque, "Permiso", "idPermiso", "usuarios con este permiso", new Posicion(2, 0));
+            }
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             RutaVista = "Entorno";
 
@@ -50,7 +55,6 @@ namespace MVCSistemaDeElementos.Descriptores
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
             var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
-
         }
 
         public override string RenderControl()

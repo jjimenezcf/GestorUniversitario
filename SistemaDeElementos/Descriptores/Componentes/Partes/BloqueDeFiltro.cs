@@ -33,6 +33,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public void AnadirControl(ControlFiltroHtml c)
         {
             Controles.Add(c);
+            AjustarDimensionDeLaTabla();
+        }
+
+        private void AjustarDimensionDeLaTabla()
+        {
+            foreach (var control in Controles)
+                if (control.Tipo != TipoControl.GridModal && control.Posicion.fila >= Tabla.Dimension.Filas)
+                    Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
         }
 
         public void AnadirControlEn(ControlFiltroHtml c)
@@ -43,23 +51,21 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (control.Id == c.Id)
                     continue;
 
-                if (control.Posicion.fila >= c.Posicion.fila)
+                if (control.Tipo != TipoControl.GridModal && control.Posicion.fila >= c.Posicion.fila)
                 {
                     if (control.Posicion.fila == c.Posicion.fila && control.Posicion.columna == c.Posicion.columna)
-                       control.Posicion.fila++;
+                        control.Posicion.fila++;
                 }
-
-                if (control.Posicion.fila >= Tabla.Dimension.Filas)
-                    Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
             }
+            AjustarDimensionDeLaTabla();
         }
 
-        public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto 
+        public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto
         {
             AnadirControl(s);
         }
 
-        public void AnadirSelector<t1,t2>(SelectorDeFiltro<t1, t2> s) where t1:ElementoDto where t2:ElementoDto
+        public void AnadirSelector<t1, t2>(SelectorDeFiltro<t1, t2> s) where t1 : ElementoDto where t2 : ElementoDto
         {
             AnadirControl(s);
             AnadirControl(s.Modal);
@@ -110,7 +116,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             foreach (ControlFiltroHtml c in Controles)
             {
-                
+
                 if (c.Id == $"{Id}_{c.Tipo}_{propiedad}")
                     return c;
             }

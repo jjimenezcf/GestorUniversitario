@@ -8,6 +8,15 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public int fila { get; set; }
         public int columna { get; set; }
+        public Posicion()
+        {
+        }
+        public Posicion(int f, int c)
+        : this()
+        {
+            fila = f;
+            columna = c;
+        }
     }
 
     public abstract class ControlHtml

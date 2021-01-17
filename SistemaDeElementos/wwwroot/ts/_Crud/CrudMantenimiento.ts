@@ -29,6 +29,7 @@
         public Inicializar() {
             try {
                 super.Inicializar(this.IdCuerpoCabecera);
+                this.ModoTrabajo = ModoTrabajo.mantenimiento;
                 this.InicializarSelectores();
                 this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
                 this.InicializarMenus();
