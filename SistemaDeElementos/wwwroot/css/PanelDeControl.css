@@ -3,6 +3,10 @@
     width: -webkit-fill-available;
 }
 
+.body-formulario {
+    overflow-y: hidden;
+}
+
 .formulario {
     display: grid;
     grid-template-columns: 1fr;
@@ -112,17 +116,24 @@
 
 .cuerpo-datos {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.4fr 1.6fr;
-    gap: 0px 0px;
+/*    grid-template-columns: 1fr;
+    grid-template-rows: 25% 75%;
+    gap: 0px 0px;*/
     grid-template-areas: "cuerpo-datos-filtro" "cuerpo-datos-grid";
     grid-area: cuerpo-datos;
 }
 
 .cuerpo-datos-filtro {
     grid-area: cuerpo-datos-filtro;
-    margin-left: 20px;
-    margin-right: 20px
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.cuerpo-datos-filtro-bloque {
+    grid-area: cuerpo-datos-filtro-bloque;
+    padding-bottom: 5px;
+    border: ridge;
 }
 
 .cuerpo-datos-grid {

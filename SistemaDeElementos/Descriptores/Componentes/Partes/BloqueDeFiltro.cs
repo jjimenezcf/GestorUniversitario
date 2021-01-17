@@ -76,18 +76,6 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"El control {id} no está en la zona de filtrado");
         }
 
-        private string RenderBloque()
-        {
-            return Tabla.RenderControl();
-            //string cssClaseBloque = Tabla.Controles.Count == 0 ? ClaseCss.Render(enumClaseCcsMnt.MntFiltroBloqueVacio) : "";
-            //string htmlBloque = $@"<div id = ¨{IdHtml}¨ class = {cssClaseBloque}>     
-            //                         tabla 
-            //                        </div>";
-            //string htmlTabla = Tabla.RenderControl();
-
-            //return htmlBloque.Replace("tabla", htmlTabla);
-        }
-
         public string RenderModalesBloque()
         {
             var htmlModalesEnBloque = "";
@@ -104,15 +92,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var htmlDivExtensor = Tabla.Controles.Count == 0 || !HayExpansor ?
-                RenderBloque() :
-                $@"<div id=¨mostrar.{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)}¨> 
-                        <a id=¨mostrar.{IdHtml}.ref¨ href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', '{IdHtml}');¨>Ocultar</a>
-                        <input id=¨expandir.{IdHtml}¨ type=¨hidden¨ value=¨1¨> 
-                        {RenderBloque()}
+            return $@"
+                  <div id=¨mostrar.{IdHtml}¨ class=¨cuerpo-datos-filtro-bloque¨> 
+                        <a id=¨mostrar.{IdHtml}.ref¨ 
+                           style=¨margin-left: 10px;¨
+                           href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', '{IdHtml}');¨>                           
+                        bloque: {Etiqueta}
+                        </a>
+                        <input id=¨expandir.{IdHtml}.input¨ type=¨hidden¨ value=¨1¨> 
+                        <div id=¨{IdHtml}¨  class=¨{Css.Render(enumCssDiv.DivVisible)}¨>
+                          {Tabla.RenderControl()}
+                        </div>
                    </div>";
-
-            return htmlDivExtensor;
         }
 
         internal ControlFiltroHtml BuscarControl(string propiedad)

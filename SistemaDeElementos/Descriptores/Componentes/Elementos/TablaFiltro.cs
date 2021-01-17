@@ -54,14 +54,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderTablaDeZonaDeFiltrado();
-        }
-
-        private string RenderTablaDeZonaDeFiltrado()
-        {
-            //class=¨tabla-filtro¨
             var htmlTabla = $@" 
-                <!--  ******************* Zona de filtrado ******************* -->
+                <!--  ***************** tabla de filtrado: {Padre.Etiqueta} ******************* -->
                 <table id=¨{IdHtml}¨ class=¨tabla-filtro¨>
                     filas
                 </table>";

@@ -43,13 +43,15 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmContenedorMnt =
                 $@"  
                   <!--  ******************* Cabecera del cuerpo: título y menú ******************* -->
-                     {htmlCuerpoCabecera}
+                     {htmlCuerpoCabecera} 
+                  
+                 <!--  ******************* Pié del cuerpo: zona de navegación ******************* -->
+                     {htmlCuerpoPie}
 
                   <!--  ******************* Datos del cuerpo: filtro y grid de datos ******************* -->
                      {htmlCuerpoDatos}
 
-                  <!--  ******************* Pié del cuerpo: zona de navegación ******************* -->
-                     {htmlCuerpoPie}
+                 
                 ";
 
             foreach (var o in ZonaMenu.Menu.OpcionesDeMenu)

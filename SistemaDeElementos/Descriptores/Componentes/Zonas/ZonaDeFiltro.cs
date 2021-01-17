@@ -9,7 +9,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
 
-        public ICollection<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
+        public List<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
 
         public ZonaDeFiltro(ControlHtml mnt)
         : base(
@@ -43,7 +43,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public void AnadirBloque(BloqueDeFitro<TElemento> bloque)
         {
             if (!EstaElBloqueAnadido(bloque.Etiqueta))
-              Bloques.Add(bloque);
+                Bloques.Add(bloque);
         }
 
         public BloqueDeFitro<TElemento> ObtenerBloque(string identificador)
@@ -79,14 +79,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return false;
         }
 
-        private string RenderZonaDeFiltrado()
-        {
-            var htmlBloques = "";
-            foreach (BloqueDeFitro<TElemento> bloque in Bloques)
-                htmlBloques = $"{htmlBloques}{(htmlBloques.IsNullOrEmpty() ? "" : Environment.NewLine)}{bloque.RenderControl()}";
-
-            return htmlBloques;
-        }
 
         public string RenderModalesFiltro()
         {
@@ -99,7 +91,62 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return $@"<div id = ¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssCuerpo.CuerpoDatosFiltro)}¨> {RenderZonaDeFiltrado()} </div> ";
+
+            var numeroBloques = 0;
+            var areas = "";
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
+                if (b.Tabla.Controles.Count > 0)
+                    numeroBloques = numeroBloques + 1;
+            var tamano = 1.00 / numeroBloques;
+            var tamanos = "";
+
+            foreach (BloqueDeFitro<TElemento> b in Bloques)
+            {
+                if (b.Tabla.Controles.Count > 0)
+                {
+                    numeroBloques = numeroBloques + 1;
+                    if (areas.IsNullOrEmpty())
+                    {
+                        areas = $"'cuerpo-datos-filtro-bloque'";
+                        tamanos = $"{tamano}fr";
+                    }
+                    else
+                    {
+                        areas = $"{areas} 'cuerpo-datos-filtro-bloque'";
+                        tamanos = $"{tamanos} {tamano}fr";
+                    }
+                }
+            }
+
+            var estilo =
+            $@"
+                 style = ¨
+                     grid-template-columns: 1fr;
+                     grid-template-rows: {tamanos};
+                     grid-template-areas: {areas};
+                     ¨
+                ";
+
+            return $@"<!-- ******************* Filtro ******************* -->
+                      <div id = ¨{IdHtml}¨
+                           class=¨{Css.Render(enumCssCuerpo.CuerpoDatosFiltro)}¨ 
+                           {estilo}>
+                           {RenderZonaDeFiltrado()} 
+                      </div> ";
+        }
+
+        private string RenderZonaDeFiltrado()
+        {
+            var htmlBloques = "";
+
+            for (var i = 0; i < Bloques.Count; i++)
+            {
+                var bloque = Bloques[i];
+                if (bloque.Tabla.Controles.Count > 0)
+                    htmlBloques = $"{htmlBloques}{Environment.NewLine}{bloque.RenderControl()}";
+            }
+
+            return htmlBloques;
         }
     }
 

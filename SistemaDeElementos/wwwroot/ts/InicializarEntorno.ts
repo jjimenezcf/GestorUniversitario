@@ -7,6 +7,7 @@
         window.onpopstate = function (e) {
             console.log(e.state);
         }
+        AjustarDivs();
     }
 
     export function AjustarDivs() {
@@ -21,7 +22,7 @@
             modalMenu.style.height = `${AlturaDelMenu(altura).toString()}px`;
 
         if (Crud.crudMnt !== null) {
-            Crud.crudMnt.PosicionarGrid()
+            Crud.crudMnt.PosicionarPanelesDelCuerpo()
         }
         else {
             Mensaje(TipoMensaje.Info, "No hay crud");

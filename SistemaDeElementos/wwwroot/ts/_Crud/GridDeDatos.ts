@@ -401,6 +401,20 @@
             }
         }
 
+        protected PosicionarGrid(): void {
+            this.Grid.style.position = 'fixed';
+            let posicionGrid: number = this.PosicionGrid();
+            this.Grid.style.top = `${posicionGrid}px`;
+
+            let alturaDelGrid: number = this.AlturaDelGrid(posicionGrid);
+            this.Grid.style.height = `${alturaDelGrid}px`;
+
+            let cuerpoDeLaTabla: HTMLTableSectionElement = this.CuerpoTablaGrid;
+            if (cuerpoDeLaTabla !== null && cuerpoDeLaTabla !== undefined) {
+                this.FijarAlturaCuerpoDeLaTabla(alturaDelGrid);
+            }
+        }
+
         public PosicionGrid(): number {
             let alturaCabeceraPnlControl: number = AlturaCabeceraPnlControl();
             let alturaCabeceraMnt: number = this.PanelMnt.getBoundingClientRect().height;
@@ -902,7 +916,7 @@
             }
             grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
 
-            if (this.EsCrud) {
+            if (grid.EsCrud) {
                 let posicion: number = grid.PosicionGrid();
                 let altura: number = grid.AlturaDelGrid(posicion);
                 grid.FijarAlturaCuerpoDeLaTabla(altura);

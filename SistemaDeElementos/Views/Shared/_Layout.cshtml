@@ -47,7 +47,7 @@
 
 @using ServicioDeDatos
 
-<body>
+<body class="body-formulario">
 
     @{
         var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
@@ -118,8 +118,7 @@
         }
 
         window.onload = EntornoSe.IniciarEntorno;
-        window.onresize = Ajustar;
-        Ajustar();
+        window.onresize = Ajustar;        
     </script>
 
 

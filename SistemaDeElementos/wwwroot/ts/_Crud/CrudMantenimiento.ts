@@ -36,20 +36,32 @@
             }
         }
 
-        public PosicionarGrid(): void {
-            this.Grid.style.position = 'fixed';
-            let posicionGrid: number = this.PosicionGrid();
-            this.Grid.style.top = `${posicionGrid}px`;
-
-            let alturaDelGrid: number = this.AlturaDelGrid(posicionGrid);
-            this.Grid.style.height = `${alturaDelGrid}px`;
-
-            let cuerpoDeLaTabla: HTMLTableSectionElement = this.CuerpoTablaGrid;
-            if (cuerpoDeLaTabla !== null && cuerpoDeLaTabla !== undefined) {
-                this.FijarAlturaCuerpoDeLaTabla(alturaDelGrid);
-            }
+        public PosicionarPanelesDelCuerpo(): void {
+            this.PosicionarFiltro();
+            this.PosicionarGrid();
         }
 
+        public PosicionarFiltro(): void {
+            this.ZonaDeFiltro.style.position = 'fixed';
+            let posicionFiltro: number = this.PosicionFiltro();
+            this.ZonaDeFiltro.style.top = `${posicionFiltro}px`;
+
+            let bloques = this.ZonaDeFiltro.getElementsByClassName('cuerpo-datos-filtro-bloque') as HTMLCollectionOf<HTMLDivElement>;
+            let alturaDeBloques = 0;
+            for (let i = 0; i < bloques.length; i++) {
+                alturaDeBloques = alturaDeBloques + bloques[i].getBoundingClientRect().height;
+            }
+            let alturaCalculada: number = AlturaFormulario() * 20 / 100;
+            this.ZonaDeFiltro.style.height = alturaDeBloques < alturaCalculada
+                ? `${alturaDeBloques}px`
+                : `${alturaCalculada}px`;
+        }
+
+        private PosicionFiltro(): number {
+            let alturaCabeceraPnlControl: number = AlturaCabeceraPnlControl();
+            let alturaCabeceraMnt: number = this.PanelMnt.getBoundingClientRect().height;
+            return alturaCabeceraPnlControl + alturaCabeceraMnt;
+        }
 
         public AplicarRestrictores() {
             if (this.Estado.Contiene(Sesion.restrictor)) {
@@ -320,22 +332,20 @@
                 this.MostrarPanel(this.ZonaDeFiltro);
                 this.EtiquetaMostrarOcultarFiltro.innerText = "Ocultar filtro";
             }
-            this.PosicionarGrid();
+            this.PosicionarPanelesDelCuerpo();
         }
 
         public OcultarMostrarBloque(idHtmlBloque: string) {
-            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}`) as HTMLInputElement;
-            if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
+            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}.input`) as HTMLInputElement;
+            if (NumeroMayorDeCero(extensor.value)) {
                 extensor.value = "0";
                 this.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
-                (document.getElementById(`mostrar.${idHtmlBloque}.ref`) as HTMLElement).innerText = "Mostrar";
             }
             else {
                 extensor.value = "1";
                 this.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
-                (document.getElementById(`mostrar.${idHtmlBloque}.ref`) as HTMLElement).innerText = "Ocultar";
             }
-
+            this.PosicionarPanelesDelCuerpo();
         }
 
     }
