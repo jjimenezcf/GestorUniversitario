@@ -46,10 +46,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 htmContenedorEdt =
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
-                         <h2>Edición</h2> 
-                         {MenuDeEdicion.RenderControl()}
-                         {RendelDivDeEdicion(tabla)}
+                   <div id=¨{IdHtml}¨ 
+                        class=¨{Css.Render(enumCssDiv.DivOculto)} {Css.Render(enumCssEdicion.CuerpoDeEdicion)}¨
+                        controlador=¨{Crud.Controlador}¨>
+                           <h2>Edición</h2> 
+                           {MenuDeEdicion.RenderControl()}
+                           {RendelDivDeEdicion(tabla)}
                    </div>
                 ";
             }
@@ -137,7 +139,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual string htmlRenderObjetoVacio(DescriptorDeTabla tabla)
         {
-            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-edicion-creacion¨>
+            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨{Css.Render(enumCssEdicion.TablaDeEdicion)}¨>
                                   htmlFilas
                                 </table>
                                ";

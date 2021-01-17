@@ -7,6 +7,12 @@
         public crudDeCreacion: CrudCreacion;
         public crudDeEdicion: CrudEdicion;
         private _idModalBorrar: string;
+
+
+        public get Cuerpo(): HTMLDivElement {
+            return document.getElementById("div-cuerpo") as HTMLDivElement;
+        };
+
         protected get ModalDeBorrado(): HTMLDivElement {
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };
@@ -22,7 +28,7 @@
 
         public Inicializar() {
             try {
-                super.Inicializar(this.IdPanelMnt);
+                super.Inicializar(this.IdCuerpoCabecera);
                 this.InicializarSelectores();
                 this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
                 this.InicializarMenus();
@@ -37,8 +43,14 @@
         }
 
         public PosicionarPanelesDelCuerpo(): void {
-            this.PosicionarFiltro();
-            this.PosicionarGrid();
+            if (this.ModoTrabajo === ModoTrabajo.mantenimiento) {
+                this.PosicionarFiltro();
+                this.PosicionarGrid();
+            }
+            if ((this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) && !this.crudDeEdicion.EsModal) 
+                this.crudDeEdicion.PosicionarEdicion();
+            if ((this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) && !this.crudDeCreacion.EsModal)
+                this.crudDeCreacion.PosicionarCreacion();
         }
 
         public PosicionarFiltro(): void {
@@ -59,7 +71,7 @@
 
         private PosicionFiltro(): number {
             let alturaCabeceraPnlControl: number = AlturaCabeceraPnlControl();
-            let alturaCabeceraMnt: number = this.PanelMnt.getBoundingClientRect().height;
+            let alturaCabeceraMnt: number = this.CuerpoCabecera.getBoundingClientRect().height;
             return alturaCabeceraPnlControl + alturaCabeceraMnt;
         }
 
@@ -242,7 +254,7 @@
                 return;
             }
 
-            this.crudDeEdicion.ComenzarEdicion(crudMnt.PanelMnt, this.InfoSelector);
+            this.crudDeEdicion.ComenzarEdicion(this.InfoSelector);
         }
 
         public CerrarModalDeEdicion() {
@@ -254,7 +266,7 @@
         }
 
         public IraCrear() {
-            this.crudDeCreacion.ComenzarCreacion(crudMnt.PanelMnt);
+            this.crudDeCreacion.ComenzarCreacion();
         }
 
         public CrearElemento() {

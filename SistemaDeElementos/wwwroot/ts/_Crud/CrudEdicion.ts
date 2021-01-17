@@ -12,7 +12,7 @@
             return document.getElementById(this._idPanelEdicion) as HTMLDivElement;
         }
 
-        private get EsModal(): boolean {
+        public get EsModal(): boolean {
             return this.PanelDeEditar.className === ClaseCss.contenedorModal;
         }
 
@@ -68,7 +68,7 @@
                 throw Error("No se puede construir un objeto del tipo CrudEdicion sin indica el panel de edición");
 
             this._idPanelEdicion = idPanelEdicion;
-            this.PanelDeMnt = crud.PanelMnt;
+            this.PanelDeMnt = crud.CuerpoCabecera;
             this.CrudDeMnt = crud;
         }
 
@@ -114,8 +114,8 @@
                 this.CerrarEdicion();
         }
 
-        public ComenzarEdicion(panelAnterior: HTMLDivElement, infSel: InfoSelector) {
-            this.ModoTrabajo = ModoTrabajo.editando;
+        public ComenzarEdicion(infSel: InfoSelector) {
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.editando;
 
             this.InfoSelectorEdicion = infSel;
 
@@ -124,11 +124,19 @@
                 ventana.style.display = 'block';
             }
             else {
-
-                this.OcultarPanel(panelAnterior);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoPie);
+                this.PosicionarEdicion()
                 this.MostrarPanel(this.PanelDeEditar);
             }
             this.EditarSeleccionado(1);
+        }
+
+        public PosicionarEdicion(): void {
+            this.PanelDeEditar.style.position = 'fixed';
+            this.PanelDeEditar.style.top = `${AlturaCabeceraPnlControl()}px`;
+            this.PanelDeEditar.style.height = `${AlturaFormulario() - AlturaPiePnlControl() - AlturaCabeceraPnlControl()}px`;
         }
 
         private EditarSeleccionado(seleccionado: number) {
@@ -161,8 +169,13 @@
                 this.CerrarModal(this.PanelDeEditar);
             }
             else {
-                this.Cerrar(this.PanelDeMnt, this.PanelDeEditar);
+                this.OcultarPanel(this.PanelDeEditar);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoPie);
+                BlanquearMensaje();
             }
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CrudDeMnt.Buscar(atGrid.accion.buscar, 0);
         }
 

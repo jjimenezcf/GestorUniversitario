@@ -68,7 +68,16 @@ namespace MVCSistemaDeElementos.Descriptores
     public enum enumCssCreacion
     {
         TablaDeCreacion,
+        CuerpoDeCrearcion
     }
+
+    public enum enumCssEdicion
+    {
+        TablaDeEdicion,
+        CuerpoDeEdicion
+    }
+
+    
 
     public static class Css
     {
@@ -76,7 +85,18 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (clase)
             {
-                case enumCssCreacion.TablaDeCreacion: return "tabla-edicion-creacion";
+                case enumCssCreacion.TablaDeCreacion: return "tabla-creacion";
+                case enumCssCreacion.CuerpoDeCrearcion: return "cuerpo-creacion";
+            }
+            return "";
+        }
+
+        public static string Render(enumCssEdicion clase)
+        {
+            switch (clase)
+            {
+                case enumCssEdicion.TablaDeEdicion: return "tabla-edicion";
+                case enumCssEdicion.CuerpoDeEdicion: return "cuerpo-edicion";
             }
             return "";
         }

@@ -1,4 +1,14 @@
-﻿
+﻿.cuerpo-edicion {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: fixed;
+    width: 100%;
+    padding: 10px;
+}
+
+.tabla-edicion {
+    width: inherit;
+}
 
 .contenido-pie-navegador {
     text-align: right;

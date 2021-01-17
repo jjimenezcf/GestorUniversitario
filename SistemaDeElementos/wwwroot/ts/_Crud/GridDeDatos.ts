@@ -305,20 +305,26 @@
         }
 
 
-        private _idPanelMnt: string;
-        public get IdPanelMnt(): string {
-            return this._idPanelMnt;
+        private _idCuerpoCabecera: string;
+        public get IdCuerpoCabecera(): string {
+            return this._idCuerpoCabecera;
         }
-        public get PanelMnt(): HTMLDivElement {
-            return document.getElementById(this._idPanelMnt) as HTMLDivElement;
+        public get CuerpoCabecera(): HTMLDivElement {
+            return document.getElementById(this._idCuerpoCabecera) as HTMLDivElement;
+        }
+        public get CuerpoDatos(): HTMLDivElement {
+            return document.getElementById(`cuerpo.datos.${this._idCuerpoCabecera}`) as HTMLDivElement;
+        }
+        public get CuerpoPie(): HTMLDivElement {
+            return document.getElementById(`cuerpo.pie.${this._idCuerpoCabecera}`) as HTMLDivElement;
         }
 
         public get Controlador() {
-            return this.PanelMnt.getAttribute(atMantenimniento.controlador);
+            return this.CuerpoCabecera.getAttribute(atMantenimniento.controlador);
         }
 
         public get Negocio() {
-            return this.PanelMnt.getAttribute(atMantenimniento.negocio);
+            return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);
         }
 
         private _idHtmlFiltro: string;
@@ -326,10 +332,10 @@
             return document.getElementById(this._idHtmlFiltro) as HTMLDivElement;
         }
         public get EtiquetaMostrarOcultarFiltro(): HTMLElement {
-            return document.getElementById(`mostrar.${this.IdPanelMnt}.ref`) as HTMLElement;
+            return document.getElementById(`mostrar.${this.IdCuerpoCabecera}.ref`) as HTMLElement;
         }
         public get ExpandirFiltro(): HTMLInputElement {
-            return document.getElementById(`expandir.${this.IdPanelMnt}`) as HTMLInputElement;
+            return document.getElementById(`expandir.${this.IdCuerpoCabecera}`) as HTMLInputElement;
         }
         public get InputSeleccionadas(): HTMLInputElement {
             let idInput = this.EsCrud
@@ -375,9 +381,9 @@
         constructor(idPanelMnt: string) {
             super();
 
-            this._idPanelMnt = idPanelMnt;
-            this._idGrid = this.PanelMnt.getAttribute(atMantenimniento.gridDelMnt);
-            this._idHtmlZonaMenu = this.PanelMnt.getAttribute(atMantenimniento.zonaMenu);
+            this._idCuerpoCabecera = idPanelMnt;
+            this._idGrid = this.CuerpoCabecera.getAttribute(atMantenimniento.gridDelMnt);
+            this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
             this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
 
             this._infoSelector = new InfoSelector(this.IdGrid);
@@ -417,7 +423,7 @@
 
         public PosicionGrid(): number {
             let alturaCabeceraPnlControl: number = AlturaCabeceraPnlControl();
-            let alturaCabeceraMnt: number = this.PanelMnt.getBoundingClientRect().height;
+            let alturaCabeceraMnt: number = this.CuerpoCabecera.getBoundingClientRect().height;
             let alturaFiltro: number = 0;
             if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
                 alturaFiltro = this.ZonaDeFiltro.getBoundingClientRect().height;

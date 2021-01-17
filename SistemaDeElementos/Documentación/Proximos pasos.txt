@@ -1,5 +1,5 @@
 ﻿
-- Ajustar controles de input en los filtros y en las modales de edición y selección
+
 
 - Añadir filtros a usuarios (selector de puesto) y órdenes
 - Añadir filtro a puestos (selector de rol) y órdenes
@@ -70,3 +70,4 @@ Cosas del Layout
 - ajustar el cuerpo de datos del grid al tamaño del layout y del filtro
 - si se oculta el filtro ajustar el tamaño del grid
 - al modificar el tamaño del browser, ajustar el tamaño del grid
+- Ajustar controles de input en los filtros y en las modales de edición y selección

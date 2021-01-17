@@ -1,4 +1,12 @@
 ﻿
+.cuerpo-creacion {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: fixed;
+    width: 100%;
+    padding: 10px;
+}
+
 .contenedor-opciones-creacion {
     float: right;
     /*padding-top: 15px;*/
@@ -7,7 +15,7 @@
     text-align: right;
 }
 
-.tabla-edicion-creacion {
+.tabla-creacion {
     width: inherit;
 }
 

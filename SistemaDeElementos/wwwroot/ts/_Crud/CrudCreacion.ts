@@ -10,7 +10,7 @@
             return document.getElementById(this._idPanelCreacion) as HTMLDivElement;
         }
 
-        private get EsModal(): boolean {
+        public get EsModal(): boolean {
             return this.PanelDeCrear.className === ClaseCss.contenedorModal;
         }
 
@@ -46,19 +46,27 @@
 
         }
 
-        public ComenzarCreacion(panelAnterior: HTMLDivElement) {
-            this.ModoTrabajo = ModoTrabajo.creando;
+        public ComenzarCreacion() {
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.creando;
 
             if (this.EsModal) {
                 var ventana = document.getElementById(this._idPanelCreacion);
                 ventana.style.display = 'block';
             }
             else {
-
-                this.OcultarPanel(panelAnterior);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
+                this.OcultarPanel(this.CrudDeMnt.CuerpoPie);
+                this.PosicionarCreacion();
                 this.MostrarPanel(this.PanelDeCrear);
             }
             this.InicializarPanel();
+        }
+
+        public PosicionarCreacion(): void {
+            this.PanelDeCrear.style.position = 'fixed';
+            this.PanelDeCrear.style.top = `${AlturaCabeceraPnlControl()}px`;
+            this.PanelDeCrear.style.height = `${AlturaFormulario() - AlturaPiePnlControl() - AlturaCabeceraPnlControl()}px`;
         }
 
         private InicializarPanel() {
@@ -78,8 +86,14 @@
                 this.CerrarModal(this.PanelDeCrear);
             }
             else {
-                this.Cerrar(this.CrudDeMnt.PanelMnt, this.PanelDeCrear);
+                this.OcultarPanel(this.PanelDeCrear);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoPie);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
+                this.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
+                BlanquearMensaje();
             }
+
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CrudDeMnt.Buscar(atGrid.accion.buscar,0);
         }
 

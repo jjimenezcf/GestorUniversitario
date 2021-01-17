@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 htmContenedorCreacion = 
                 $@"
                    <div id=¨{IdHtml}¨ 
-                         class=¨{Css.Render(enumCssDiv.DivOculto)}¨ 
+                         class=¨{Css.Render(enumCssDiv.DivOculto)} {Css.Render(enumCssCreacion.CuerpoDeCrearcion)}¨
                          controlador=¨{Crud.Controlador}¨>
                          <h2>Creación</h2> 
                          {MenuCreacion.RenderControl()}

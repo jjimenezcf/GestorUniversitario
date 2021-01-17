@@ -113,11 +113,11 @@
     export class CrudBase {
 
         private modoTrabajo: string;
-        protected get ModoTrabajo(): string {
+        public get ModoTrabajo(): string {
             return this.modoTrabajo;
         }
 
-        protected set ModoTrabajo(modo: string) {
+        public set ModoTrabajo(modo: string) {
             this.modoTrabajo = modo;
         }
 
@@ -174,13 +174,6 @@
             canvases.forEach((canvas) => { canvas.width = canvas.width; });
         }
 
-        protected Cerrar(panelMostrar: HTMLDivElement, panelCerrar: HTMLDivElement) {
-            this.OcultarPanel(panelCerrar);
-            this.MostrarPanel(panelMostrar);
-
-            BlanquearMensaje();
-        }
-
         protected BlanquearControlesDeIU(panel: HTMLDivElement) {
             this.BlanquearEditores(panel);
             this.BlanquearSelectores(panel);
@@ -223,7 +216,7 @@
         }
 
         protected MostrarPanel(panel: HTMLDivElement) {
-            panel.classList.add(ClaseCss.divVisible);
+            //panel.classList.add(ClaseCss.divVisible);
             panel.classList.remove(ClaseCss.divNoVisible);
         }
 
