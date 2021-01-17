@@ -99,9 +99,13 @@
         public idOpcionDeMenu: string;
         public RelacionarCon: string;
         public idSeleccionado: number;
+        public PropiedadQueRestringe: string;
+        public PropiedadRestrictora: string;
+        public MostrarEnElRestrictor: string;
         public FiltroRestrictor: DatosRestrictor;
 
         constructor() {
+            this.FiltroRestrictor = null;
         }
     }
 

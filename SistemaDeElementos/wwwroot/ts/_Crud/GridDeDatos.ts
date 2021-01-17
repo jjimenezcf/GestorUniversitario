@@ -716,8 +716,10 @@
         }
 
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
-
             let fila: HTMLTableRowElement = this.ObtenerFila(id);
+            if (fila === null)
+                return null;
+
             let celda: HTMLTableDataCellElement = this.ObtenerCelda(fila, propiedad);
             let input: HTMLInputElement = celda.querySelector("input");
             if (input === null)
@@ -743,7 +745,9 @@
                     }
                 }
             }
-            throw new Error(`No se ha localizado una fila con la propiedad Id definida`);
+            return null;
+
+            //throw new Error(`No se ha localizado una fila con la propiedad Id definida`);
         }
 
         private ObtenerCelda(fila: HTMLTableRowElement, propiedadBuscada: string): HTMLTableDataCellElement {
@@ -781,7 +785,8 @@
         public RelacionarCon(parametrosDeEntrada: string): void {
             try {
                 let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
-                super.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+                if (datos.FiltroRestrictor !== null)
+                   this.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
@@ -793,28 +798,56 @@
 
             if (infoSelector.Cantidad != 1)
                 throw new Error("Debe seleccionar un elemento para poder relacionarlo");
-
-            let datos: DatosParaRelacionar = new DatosParaRelacionar();
-
             let partes = parametros.split('#');
-
             if (partes.length != 4)
                 throw new Error("Los parámetros de relación están mal definidos");
 
+
+            let elemento: Elemento = infoSelector.LeerElemento(0);
+            let datos: DatosParaRelacionar = new DatosParaRelacionar();
             datos.idOpcionDeMenu = partes[0].split('==')[1];
             datos.RelacionarCon = partes[1].split('==')[1];
-            let PropiedadQueRestringe: string = partes[2].split('==')[1];
-            let PropiedadRestrictora: string = partes[3].split('==')[1];
-            let idSeleccionado: number = infoSelector.LeerElemento(0).Id;
-            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(idSeleccionado, PropiedadQueRestringe);
-            let idRestrictor: number = Numero(valorDeLaColumna);
-            let elemento: Elemento = infoSelector.LeerElemento(0);
+            datos.PropiedadQueRestringe = partes[2].split('==')[1];
+            datos.PropiedadRestrictora = partes[3].split('==')[1];
             datos.idSeleccionado = elemento.Id;
-            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(PropiedadRestrictora, idRestrictor, elemento.Texto);
+            datos.MostrarEnElRestrictor = elemento.Texto;
+            
+            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(datos.idSeleccionado, datos.PropiedadQueRestringe);
 
-            datos.FiltroRestrictor = filtro;
+            if (valorDeLaColumna === null)
+                this.LeerElementoParaRelacionar(datos);
+            else {
+                let idRestrictor: number = Numero(valorDeLaColumna);
+                let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+                datos.FiltroRestrictor = filtro;
+            }
             return datos;
         }
+
+        private LeerElementoParaRelacionar(datos: DatosParaRelacionar) {
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${datos.idSeleccionado}`;
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerPorId
+                , datos
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasLeerNavegarParaRelacionar
+                , null
+            );
+
+            a.Ejecutar();
+        }
+
+        private TrasLeerNavegarParaRelacionar(peticion: ApiDeAjax.DescriptorAjax) {
+            let grid: GridDeDatos = peticion.llamador as GridDeDatos;
+            let datos: DatosParaRelacionar = peticion.DatosDeEntrada as DatosParaRelacionar;
+            let idRestrictor: number = Numero(peticion.resultado.datos[datos.PropiedadQueRestringe]);
+            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+            datos.FiltroRestrictor = filtro;
+            grid.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+        }
+
 
         /*
          * 
