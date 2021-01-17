@@ -123,24 +123,6 @@
     grid-area: cuerpo-datos;
 }
 
-.cuerpo-datos-filtro {
-    grid-area: cuerpo-datos-filtro;
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-
-.cuerpo-datos-filtro-bloque {
-    grid-area: cuerpo-datos-filtro-bloque;
-    padding-bottom: 5px;
-    border: ridge;
-}
-
-.cuerpo-datos-grid {
-    grid-area: cuerpo-datos-grid;
-    width: 100%;
-}
-
 .cuerpo-pie {
     grid-area: cuerpo-pie;
     display: grid;

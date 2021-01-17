@@ -94,10 +94,12 @@ a {
 }
 
 .div-propiedad {
-    display: flex;
+    display: block;
 }
 
 .div-lbl-propiedad {
+    width: 100%;
+    padding-left: 10px;
 }
 
 .div-separardor-propiedad {
@@ -122,15 +124,6 @@ a {
 .ZonaDeDatos {
     height: 400px;
 }
-
-.tabla-filtro {
-    border-collapse: collapse;
-    width: 100%;
-    border-spacing: 0px;
-    border-top-width: 1px;
-    margin-left: 10px    
-}
-
 
 .modal-seleccion {
     height: 650px;
@@ -157,6 +150,7 @@ a {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         text-align: left;
+        margin: 5px;
         padding: .375rem .75rem;
         font-size: 1rem;
         font-weight: 400;
@@ -174,12 +168,17 @@ a {
         }
 
         .contenedor-editor > input.propiedad-valida {
-            background: #dcd6d6;
+            /*background: #dcd6d6;*/
         }
 
         .contenedor-editor > input.solo-lectura {
             background: #ffd800;
         }
+
+.contenedor-check {
+    margin-top: 20px;
+    margin-left: 20px;
+}
 
 .contenedor-selector {
     position: relative;

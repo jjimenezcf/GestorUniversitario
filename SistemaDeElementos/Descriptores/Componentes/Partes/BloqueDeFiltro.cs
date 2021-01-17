@@ -93,7 +93,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public override string RenderControl()
         {
             return $@"
-                  <div id=¨mostrar.{IdHtml}¨ class=¨cuerpo-datos-filtro-bloque¨> 
+                  <div id=¨mostrar.{IdHtml}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatosFiltroBloque)}¨> 
                         <a id=¨mostrar.{IdHtml}.ref¨ 
                            style=¨margin-left: 10px;¨
                            href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', '{IdHtml}');¨>                           

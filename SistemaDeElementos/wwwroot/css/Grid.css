@@ -1,4 +1,23 @@
 ﻿
+.cuerpo-datos-filtro {
+    grid-area: cuerpo-datos-filtro;
+    grid-template-columns: 1fr;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.cuerpo-datos-filtro-bloque {
+    grid-area: cuerpo-datos-filtro-bloque;
+    padding-bottom: 10px;
+    border: ridge;
+}
+
+.cuerpo-datos-grid {
+    grid-area: cuerpo-datos-grid;
+    width: 100%;
+}
+
 .cuerpo-datos-tabla {
     border-bottom: inset;
     display: block;
@@ -106,11 +125,10 @@ cuerpo-datos > tr:after {
             height: 22px;
         }
 
-
-
 .navegador-cantidad-grid {
     width: 50px;
     margin-top: 5px;
     align-content: center;
     border-radius: 10px
 }
+

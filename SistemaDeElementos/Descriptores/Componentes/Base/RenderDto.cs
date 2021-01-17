@@ -97,11 +97,11 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (descriptorControl.atributos.TipoDeControl == TipoControl.Check)
                 return "";
-
+            //17.01.2021 --> al poner el display en bloqk no hace falta width: {ancho}%
             return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
                            name=¨lbl_propiedad¨
                            class=¨div-lbl-propiedad¨ 
-                           style=¨width: {ancho}% { (descriptorControl.atributos.TipoDeControl == TipoControl.Archivo ? "; margin-top: 11px":"")}¨>
+                           style=¨{ (descriptorControl.atributos.TipoDeControl == TipoControl.Archivo ? "; margin-top: 11px":"")}¨>
                            <label for=¨{descriptorControl.IdHtml}¨>{descriptorControl.atributos.Etiqueta}:</label>
                        </div>
                       ";
@@ -272,7 +272,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderContenedorDto(DescriptorControl descriptorControl, double ancho, string cssClaseContenedor)
         {
-            return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ style=¨width: {ancho}%¨ >
+            //17.01.2021 --> Al usar css no me hace flata, y mostrar en bloques style=¨width: {ancho}%
+            return $@"<div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ ¨ >
                         controlParaRenderizar
                       </div>";
         }

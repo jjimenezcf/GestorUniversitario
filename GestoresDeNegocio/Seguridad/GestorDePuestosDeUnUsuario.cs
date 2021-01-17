@@ -27,7 +27,9 @@ namespace GestoresDeNegocio.Seguridad
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
                     .ForMember(dto => dto.Usuario, dtm => dtm.MapFrom(dtm => dtm.Usuario.Login));
 
-                CreateMap<PuestosDeUnUsuarioDto, PuestosDeUnUsuarioDtm>();
+                CreateMap<PuestosDeUnUsuarioDto, PuestosDeUnUsuarioDtm>()
+                    .ForMember(dtm => dtm.Usuario, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.Puesto, dto => dto.Ignore());
             }
         }
 

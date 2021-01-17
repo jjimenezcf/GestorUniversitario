@@ -35,3 +35,11 @@
     height: 0px;
 }
 
+.tabla-filtro {
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0px;
+    border-top-width: 1px;
+    margin-left: 10px
+}
+

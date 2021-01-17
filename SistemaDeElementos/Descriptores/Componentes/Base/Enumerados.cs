@@ -13,7 +13,8 @@ namespace MVCSistemaDeElementos.Descriptores
         CuerpoDatosGrid,
         CuerpoDatosGridThead,
         CuerpoDatosGridTboby,
-        CuerpoPie
+        CuerpoPie,
+        CuerpoDatosFiltroBloque,
     }
 
     public enum enumCssMnt {
@@ -21,7 +22,8 @@ namespace MVCSistemaDeElementos.Descriptores
         MntMenuZona,
         MntFiltroExpansor,
         MntFiltroBloqueContenedor,
-        MntFiltroBloqueVacio
+        MntFiltroBloqueVacio,
+        MntTablaDeFiltro
     }
 
     public enum enumCssNavegadorEnModal
@@ -63,8 +65,22 @@ namespace MVCSistemaDeElementos.Descriptores
         ColumnaCabecera
     }
 
+    public enum enumCssCreacion
+    {
+        TablaDeCreacion,
+    }
+
     public static class Css
     {
+        public static string Render(enumCssCreacion clase)
+        {
+            switch (clase)
+            {
+                case enumCssCreacion.TablaDeCreacion: return "tabla-edicion-creacion";
+            }
+            return "";
+        }
+
         public static string Render(enumCssMnt clase)
         {
             switch (clase)
@@ -74,6 +90,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssMnt.MntFiltroExpansor: return "div-mnt-filtro-expansor";
                 case enumCssMnt.MntFiltroBloqueContenedor: return "div-mnt-bloque-contenedor";
                 case enumCssMnt.MntFiltroBloqueVacio: return "div-mnt-bloque-vacio";
+                case enumCssMnt.MntTablaDeFiltro: return "tabla-filtro";
             }
             return "";
         }
@@ -123,6 +140,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssCuerpo.CuerpoCabecera: return "cuerpo-cabecera";
                 case enumCssCuerpo.CuerpoDatos: return "cuerpo-datos";
                 case enumCssCuerpo.CuerpoDatosFiltro: return "cuerpo-datos-filtro";
+                case enumCssCuerpo.CuerpoDatosFiltroBloque: return "cuerpo-datos-filtro-bloque";
                 case enumCssCuerpo.CuerpoDatosGrid: return "cuerpo-datos-grid";
                 case enumCssCuerpo.CuerpoDatosGridTboby: return "cuerpo-datos-tbody";
                 case enumCssCuerpo.CuerpoDatosGridThead: return "cuerpo-datos-thead";

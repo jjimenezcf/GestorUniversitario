@@ -121,7 +121,6 @@ namespace MVCSistemaDeElementos.Descriptores
             var estilo =
             $@"
                  style = ¨
-                     grid-template-columns: 1fr;
                      grid-template-rows: {tamanos};
                      grid-template-areas: {areas};
                      ¨

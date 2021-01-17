@@ -135,7 +135,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorMnt =
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)}¨ grid-del-mnt=¨{Datos.IdHtml}¨ filtro =¨{Filtro.IdHtml}¨ >
+                   <div id=¨{IdHtml}¨ 
+                     class=¨{Css.Render(enumCssDiv.DivVisible)}¨ 
+                     grid-del-mnt=¨{Datos.IdHtml}¨ 
+                     filtro =¨{Filtro.IdHtml}¨ >
                      {htmlMnt}
                    </div>
                 ";

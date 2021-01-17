@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlTabla = $@" 
                 <!--  ***************** tabla de filtrado: {Padre.Etiqueta} ******************* -->
-                <table id=¨{IdHtml}¨ class=¨tabla-filtro¨>
+                <table id=¨{IdHtml}¨ class=¨{Css.Render(enumCssMnt.MntTablaDeFiltro)}¨>
                     filas
                 </table>";
             var htmlFilas = "";

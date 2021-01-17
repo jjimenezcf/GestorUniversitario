@@ -47,7 +47,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 htmContenedorCreacion = 
                 $@"
-                   <div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivOculto)}¨ controlador=¨{Crud.Controlador}¨>
+                   <div id=¨{IdHtml}¨ 
+                         class=¨{Css.Render(enumCssDiv.DivOculto)}¨ 
+                         controlador=¨{Crud.Controlador}¨>
                          <h2>Creación</h2> 
                          {MenuCreacion.RenderControl()}
                          {RendelDivDeCreacion()}
@@ -108,7 +110,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Nuevo, Crud.Controlador);
 
-            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨tabla-edicion-creacion¨>
+            var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ 
+                                  name=¨table_propiedad¨  
+                                  class=¨{Css.Render(enumCssCreacion.TablaDeCreacion)}¨>
                                   htmlFilas
                                 </table>
                                ";
