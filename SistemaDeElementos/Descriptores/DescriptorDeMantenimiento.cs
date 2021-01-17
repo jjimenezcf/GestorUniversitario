@@ -44,14 +44,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 $@"  
                   <!--  ******************* Cabecera del cuerpo: título y menú ******************* -->
                      {htmlCuerpoCabecera} 
-                  
-                 <!--  ******************* Pié del cuerpo: zona de navegación ******************* -->
-                     {htmlCuerpoPie}
-
                   <!--  ******************* Datos del cuerpo: filtro y grid de datos ******************* -->
-                     {htmlCuerpoDatos}
-
-                 
+                     {htmlCuerpoDatos}                  
+                  <!--  ******************* Pié del cuerpo: zona de navegación ******************* -->
+                     {htmlCuerpoPie}
                 ";
 
             foreach (var o in ZonaMenu.Menu.OpcionesDeMenu)

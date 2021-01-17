@@ -83,7 +83,7 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 if (c.Tipo == TipoControl.GridModal)
                     htmlModalesEnBloque =
-                        $"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
+                        $@"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
                         $"{c.RenderControl()}";
 
             }

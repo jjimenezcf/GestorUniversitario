@@ -84,7 +84,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlModalesEnFiltro = "";
             foreach (BloqueDeFitro<TElemento> b in Bloques)
-                htmlModalesEnFiltro = $"{htmlModalesEnFiltro}{(htmlModalesEnFiltro.IsNullOrEmpty() ? "" : Environment.NewLine)}{b.RenderModalesBloque()}";
+                htmlModalesEnFiltro = $"{htmlModalesEnFiltro}{b.RenderModalesBloque()}";
 
             return htmlModalesEnFiltro;
         }

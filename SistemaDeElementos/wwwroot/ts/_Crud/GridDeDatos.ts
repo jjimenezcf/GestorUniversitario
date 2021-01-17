@@ -645,15 +645,14 @@
             return fila;
         }
 
-        protected AnadirAlInfoSelector(infoSelector: InfoSelector, idCheck: string, expresionElemento: string): number {
-            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
-            infoSelector.InsertarElemento(id, expresionElemento);
-            return id;
+        protected AnadirAlInfoSelector(grid: GridDeDatos, id: number, expresionElemento: string): void {
+            grid.InfoSelector.InsertarElemento(id, expresionElemento);
+            grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
         }
 
-        protected QuitarDelSelector(infoSelector: InfoSelector, idCheck: string): void {
-            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
-            infoSelector.Quitar(id);
+        protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
+            grid.InfoSelector.Quitar(id);
+            grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
         }
 
         protected EstaMarcado(idCheck: string): boolean {
@@ -698,17 +697,22 @@
             this.InfoSelector.QuitarTodos();
         }
 
-        protected ActualizarInformacionDelGrid(contenedorGrid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
-            contenedorGrid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
+        protected ActualizarInformacionDelGrid(grid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
+            grid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
 
-            if (!this.EsModalConGrid && this.Estado.Contiene(atGrid.idSeleccionado)) {
-                let idSeleccionado: number = this.Estado.Obtener(atGrid.idSeleccionado);
-                let nombreSeleccionado: string = this.Estado.Obtener(atGrid.nombreSeleccionado);
-                this.InfoSelector.InsertarElemento(idSeleccionado, nombreSeleccionado);
+            if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
+                let idSeleccionado: number = grid.Estado.Obtener(atGrid.idSeleccionado);
+                let nombreSeleccionado: string = grid.Estado.Obtener(atGrid.nombreSeleccionado);
+                grid.AnadirAlInfoSelector(grid, idSeleccionado, nombreSeleccionado);
+                grid.Estado.Quitar(atGrid.idSeleccionado);
+                grid.Estado.Quitar(atGrid.nombreSeleccionado);
             }
 
-            contenedorGrid.MarcarElementos();
-            contenedorGrid.InfoSelector.SincronizarCheck();
+            grid.MarcarElementos();
+            grid.InfoSelector.SincronizarCheck();
+
+            if (grid.InfoSelector.Cantidad > 0)
+                grid.AjustarOpcionesDeMenu(this.InfoSelector.LeerElemento(0).Id);
         }
 
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
@@ -897,6 +901,14 @@
             if (datosDeEntrada.Accion == atGrid.accion.buscar)
                 grid.Navegador.Total = infoObtenida.total;
 
+            var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
+            grid.AnadirCuerpoALaTabla(grid, cuerpo);
+            grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+            grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
+            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+        }
+
+        private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
             var cuerpoDeLaTabla = document.createElement("tbody");
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
@@ -905,7 +917,10 @@
                 let fila = grid.crearFila(filaCabecera, registros[i], i);
                 cuerpoDeLaTabla.append(fila);
             }
+            return cuerpoDeLaTabla;
+        }
 
+        private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
             var tabla = grid.Grid.querySelector("table");
             var tbody = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
@@ -914,14 +929,17 @@
                 tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
-            grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+        }
 
+        private RecalcularTamanoDelCuerpoDeLaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
             if (grid.EsCrud) {
                 let posicion: number = grid.PosicionGrid();
                 let altura: number = grid.AlturaDelGrid(posicion);
                 grid.FijarAlturaCuerpoDeLaTabla(altura);
             }
-            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+            else {
+                cuerpoDeLaTabla.style.height = `${AlturaFormulario() / 3}px`;
+            }
         }
 
         private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
@@ -1074,18 +1092,18 @@
                 check.checked = !check.checked;
             }
 
+            let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             if (check.checked) {
-                let id: number = this.AnadirAlInfoSelector(infoSelector, idCheck, expresionElemento);
+                this.AnadirAlInfoSelector(this, id, expresionElemento);
                 if (!(this instanceof ModalConGrid))
                     this.AjustarOpcionesDeMenu(id);
             }
             else {
-                this.QuitarDelSelector(infoSelector, idCheck);
+                this.QuitarDelSelector(this, id);
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
                     this.DeshabilitarOpcionesDeMenuDeElemento();
             }
 
-            this.Navegador.ActualizarMensaje(infoSelector.Cantidad);
         }
 
 
@@ -1097,7 +1115,7 @@
             }
         }
 
-        private AjustarOpcionesDeMenu(id: number): void {
+        protected AjustarOpcionesDeMenu(id: number): void {
             let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlElemento(id);
             let datosDeEntrada = `{"Negocio":"${this.Negocio}","id":"${id}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
