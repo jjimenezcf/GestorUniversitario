@@ -13,6 +13,14 @@
             return document.getElementById("div-cuerpo") as HTMLDivElement;
         };
 
+        private modoTrabajo: string;
+        public get ModoTrabajo(): string {
+            return this.modoTrabajo;
+        }
+
+        public set ModoTrabajo(modo: string) {
+            this.modoTrabajo = modo;
+        }
         protected get ModalDeBorrado(): HTMLDivElement {
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };

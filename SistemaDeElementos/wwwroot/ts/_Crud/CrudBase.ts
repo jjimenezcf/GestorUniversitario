@@ -112,15 +112,6 @@
 
     export class CrudBase {
 
-        private modoTrabajo: string;
-        public get ModoTrabajo(): string {
-            return this.modoTrabajo;
-        }
-
-        public set ModoTrabajo(modo: string) {
-            this.modoTrabajo = modo;
-        }
-
         protected get Pagina(): string {
             return this.Estado.Obtener(Sesion.paginaActual);
         }
@@ -579,20 +570,22 @@
             return null;
         }
 
-        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement): JSON {
-            if (this.ModoTrabajo === ModoTrabajo.creando)
+        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement, modoDeTrabajo: string): JSON {
+            if (modoDeTrabajo === ModoTrabajo.creando)
                 return JSON.parse(`{"${literal.id}":"0"}`);
 
-            if (this.ModoTrabajo === ModoTrabajo.editando) {
+            if (modoDeTrabajo === ModoTrabajo.editando) {
                 let input: HTMLInputElement = this.BuscarEditor(panel, literal.id);
                 if (Number(input.value) <= 0)
                     throw new Error(`El valor del id ${Number(input.value)} debe ser mayor a 0`);
                 return JSON.parse(`{"${literal.id}":"${Number(input.value)}"}`);
             }
+
+            throw new Error(`No se ha indicado que hacer para el modo de trabajo ${modoDeTrabajo} antes de mapear los datos de la IU`);
         }
 
-        protected MapearControlesDeIU(panel: HTMLDivElement): JSON {
-            let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel);
+        protected MapearControlesDeIU(panel: HTMLDivElement, modoDeTrabajo: string): JSON {
+            let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel, modoDeTrabajo);
 
             this.MapearSelectoresDeElementosAlJson(panel, elementoJson);
             this.MapearSelectoresDinamicosAlJson(panel, elementoJson);
@@ -602,7 +595,7 @@
             this.MapearUrlArchivosAlJson(panel, elementoJson);
             this.MapearCheckesAlJson(panel, elementoJson);
 
-            return this.DespuesDeMapearDatosDeIU(panel, elementoJson);
+            return this.DespuesDeMapearDatosDeIU(panel, elementoJson, modoDeTrabajo);
         }
 
         protected MapearEditoresAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
@@ -758,7 +751,7 @@
             elementoJson[propiedadDto] = valor;
         }
 
-        protected DespuesDeMapearDatosDeIU(panel: HTMLDivElement, elementoJson: JSON): JSON {
+        protected DespuesDeMapearDatosDeIU(panel: HTMLDivElement, elementoJson: JSON, modoDeTrabajo: string): JSON {
             return elementoJson;
         }
 

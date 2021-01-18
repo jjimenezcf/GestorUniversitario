@@ -536,7 +536,7 @@
                         break;
                     }
                     default: {
-                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${TipoControl}`);
+                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
                 }
 

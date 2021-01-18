@@ -76,12 +76,12 @@
         }
 
         private Crear() {
-            let json: JSON = this.MapearControlesDeIU(this.PanelDeCrear);
+            let json: JSON = this.MapearControlesDeIU(this.PanelDeCrear, ModoTrabajo.creando);
             this.CrearElemento(json);
         }
 
         public CerrarCreacion() {
-            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
                 this.CerrarModal(this.PanelDeCrear);
             }

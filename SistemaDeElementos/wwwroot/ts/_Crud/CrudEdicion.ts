@@ -115,7 +115,7 @@
         }
 
         public ComenzarEdicion(infSel: InfoSelector) {
-            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.editando;
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.editando;            
 
             this.InfoSelectorEdicion = infSel;
 
@@ -164,7 +164,7 @@
 
         protected CerrarEdicion() {
 
-            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
                 this.CerrarModal(this.PanelDeEditar);
             }
@@ -217,7 +217,7 @@
         }
 
         protected Modificar() {
-            let json: JSON = this.MapearControlesDeIU(this.PanelDeEditar);
+            let json: JSON = this.MapearControlesDeIU(this.PanelDeEditar, ModoTrabajo.editando);
             this.ModificarElemento(json);
         }
 
