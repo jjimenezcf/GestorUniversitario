@@ -12,7 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
               , modo: modo)
         {
 
-            var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 4));
+            var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
 
             new ListaDeElemento<MenuDto>(padre: fltEspecificos,
                                           propiedad: nameof(MenuDto.Padre),

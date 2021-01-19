@@ -19,7 +19,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Padre",
             Ayuda = "Indique el menú padre",
-            TipoDeControl = TipoControl.ListaDeElemento,
+            TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
             MostrarPropiedad = nameof(Nombre),

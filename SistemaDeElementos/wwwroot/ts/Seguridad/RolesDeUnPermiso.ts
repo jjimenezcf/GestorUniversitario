@@ -2,7 +2,7 @@
 
     export function CrearCrudDeRolesDeUnPermiso(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDeRolesDeUnPermiso(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
     export class CrudDeRolesDeUnPermiso extends Crud.CrudMnt {

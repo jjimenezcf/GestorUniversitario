@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GestorDeElementos;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -23,7 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
               )
         {
             Tipo = TipoControl.DesplegableDeFiltro;
-            Criterio = TipoCriterio.comienza.ToString();
+            Criterio = CriteriosDeFiltrado.comienza;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);
         }

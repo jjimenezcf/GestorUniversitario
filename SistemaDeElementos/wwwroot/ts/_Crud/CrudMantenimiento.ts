@@ -34,8 +34,12 @@
             this._idModalBorrar = idModalDeBorrado;
         }
 
-        public Inicializar() {
+        public Inicializar(idPanelMnt: string) {
             try {
+
+                if (IsNullOrEmpty(idPanelMnt))
+                    idPanelMnt = this.IdCuerpoCabecera;
+
                 super.Inicializar(this.IdCuerpoCabecera);
                 this.ModoTrabajo = ModoTrabajo.mantenimiento;
                 this.InicializarSelectores();
@@ -47,7 +51,7 @@
                 this.Buscar(atGrid.accion.buscar, 0);
             }
             catch (error) {
-                Mensaje(TipoMensaje.Error, error);
+                Mensaje(TipoMensaje.Error, `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
             }
         }
 
@@ -334,7 +338,11 @@
         }
 
         public SeleccionarListaDinamica(selector: HTMLInputElement) {
-            super.CargarListaDinamica(selector, this.Navegador.Controlador);
+            let lista: ListaDinamica = new ListaDinamica(selector);
+            let valor: number = lista.BuscarSeleccionado(selector.value);
+            selector.setAttribute(atListas.idSeleccionado, valor.toString());
+            if (valor === 0)
+                selector.value = "";
         }
 
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {

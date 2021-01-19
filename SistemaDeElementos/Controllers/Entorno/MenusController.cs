@@ -45,6 +45,9 @@ namespace MVCSistemaDeElementos.Controllers
             if (claseElemento == nameof(VistaMvcDto))
                 return ((GestorDeMenus)GestorDeElementos).LeerVistas(posicion, cantidad, filtro);
 
+            if (claseElemento == nameof(MenuDto))
+                return ((GestorDeMenus)GestorDeElementos).LeerMenus(posicion, cantidad, filtro);
+
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
 
         }

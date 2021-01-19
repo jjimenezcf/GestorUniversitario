@@ -2,7 +2,7 @@
 
     export function CrearCrudDePuestosDeUnRol(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDePuestosDeUnRol(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
       export class CrudDePuestosDeUnRol extends Crud.CrudMnt {

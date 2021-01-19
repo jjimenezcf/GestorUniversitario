@@ -2,7 +2,7 @@
 
     export function CrearCrudDeClasesDePermiso(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDeClasesDePermiso(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
     export class CrudDeClasesDePermiso extends Crud.CrudMnt {

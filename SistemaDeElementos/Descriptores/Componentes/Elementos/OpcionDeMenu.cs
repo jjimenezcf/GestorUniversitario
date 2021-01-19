@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion }
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion, EventosDeListaDinamica}
 
     /**********************************************************/
     // Acciones de menú de para navegar

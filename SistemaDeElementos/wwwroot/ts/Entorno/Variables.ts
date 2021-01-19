@@ -2,7 +2,7 @@
 
     export function CrearCrudDeVariables(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudDeVariables(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
     export class CrudDeVariables extends Crud.CrudMnt {

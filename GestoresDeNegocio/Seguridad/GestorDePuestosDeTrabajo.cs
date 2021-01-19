@@ -34,7 +34,7 @@ namespace ServicioDeDatos.Seguridad
         {
             var filtros = new List<ClausulaDeFiltrado>();
             if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDto.Nombre), Valor = filtro });
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDtm.Nombre), Valor = filtro });
 
             var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(puestosDtm).ToList();

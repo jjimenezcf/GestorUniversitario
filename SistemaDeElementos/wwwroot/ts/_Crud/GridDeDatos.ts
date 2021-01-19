@@ -509,18 +509,17 @@
         protected ObtenerFiltros(): string {
             let arrayIds: Array<string> = this.ObtenerControlesDeFiltro();
             var clausulas = new Array<ClausulaDeFiltrado>();
-            for (let id of arrayIds) {
+            for (let i = 0; i < arrayIds.length; i++) {
                 var clausula: ClausulaDeFiltrado = null;
-                var control: HTMLElement = document.getElementById(`${id}`);
+                var control: HTMLElement = document.getElementById(`${arrayIds[i]}`);
                 var tipo: string = control.getAttribute(TipoControl.Tipo);
-
                 switch (tipo) {
                     case TipoControl.restrictorDeFiltro: {
                         clausula = this.ObtenerClausulaRestrictor(control as HTMLInputElement);;
                         break;
                     }
                     case TipoControl.Editor: {
-                        clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);;
+                        clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);
                         break;
                     }
                     case TipoControl.Selector: {
@@ -538,13 +537,14 @@
                     default: {
                         Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
+
                 }
 
                 if (clausula !== null)
                     clausulas.push(clausula);
-            }
 
-            this.FiltrosExcluyentes(clausulas);
+                this.FiltrosExcluyentes(clausulas);
+            }
 
             return JSON.stringify(clausulas);
         }
@@ -621,11 +621,8 @@
 
         private ObtenerClausulaListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad = input.getAttribute(atControl.propiedad);
-            var criterio = input.getAttribute(atControl.criterio);
-
-            let lista: ListaDinamica = new ListaDinamica(input);
-            let valor: number = lista.BuscarSeleccionado(input.value);
-
+            var criterio = literal.filtro.criterio.igual;
+            let valor: number = Numero(input.getAttribute(atListas.idSeleccionado));
 
             var clausula = null;
             if (Number(valor) > 0) {
@@ -792,7 +789,7 @@
             try {
                 let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
                 if (datos.FiltroRestrictor !== null)
-                   this.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+                    this.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
@@ -817,7 +814,7 @@
             datos.PropiedadRestrictora = partes[3].split('==')[1];
             datos.idSeleccionado = elemento.Id;
             datos.MostrarEnElRestrictor = elemento.Texto;
-            
+
             let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(datos.idSeleccionado, datos.PropiedadQueRestringe);
 
             if (valorDeLaColumna === null)

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Gestor.Errores;
+using GestorDeElementos;
 using ModeloDeDto;
 using Utilidades;
 
@@ -13,13 +14,26 @@ namespace MVCSistemaDeElementos.Descriptores
         public string MostrarPropiedad { get; private set; }
         public bool CargaDinamica { get; private set; }
 
+        public ListaDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string propiedad,  string ayuda, string  seleccionarDe,  string guardarEn, string mostrarPropiedad , bool cargaDinamica, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
+        : base(
+            padre: padre
+          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{propiedad}" 
+          , etiqueta
+          , propiedad
+          , ayuda
+          , posicion
+        )
+        {
+            IniciarClase(padre, seleccionarDe, guardarEn, mostrarPropiedad, cargaDinamica, criterioDeBusqueda);
+        }
+
         public ListaDeElemento(BloqueDeFitro<TElemento> padre, string propiedad, Posicion posicion)
         : base(
             padre: padre
           , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{propiedad}" 
-          , ""
+          , etiqueta: ""
           , propiedad
-          , ""
+          , ayuda: ""
           , posicion
           )
         {
@@ -42,15 +56,27 @@ namespace MVCSistemaDeElementos.Descriptores
 
             Etiqueta = atributos.Etiqueta;
             Ayuda = atributos.Ayuda;
-            SeleccionarDe = atributos.SeleccionarDe;
-            GuardarEn = atributos.GuardarEn;
-            CargaDinamica = atributos.CargaDinamica;
-            MostrarPropiedad = atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad;
 
-            Tipo = atributos.TipoDeControl;
-            Criterio = TipoCriterio.igual.ToString();
+            IniciarClase(padre, 
+                atributos.SeleccionarDe, 
+                atributos.GuardarEn, 
+                atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad, 
+                atributos.CargaDinamica,
+                CriteriosDeFiltrado.contiene);
+        }
+
+        private void IniciarClase(BloqueDeFitro<TElemento> padre, string seleccionarDe, string guardarEn, string mostrarPropiedad, bool cargaDinamica, CriteriosDeFiltrado criterio)
+        {
+            SeleccionarDe = seleccionarDe;
+            GuardarEn = guardarEn;
+            CargaDinamica = cargaDinamica;
+            MostrarPropiedad = mostrarPropiedad;
+
+            Tipo = TipoControl.ListaDinamica;
+            Criterio = criterio;
             padre.AnadirSelectorElemento(this);
         }
+
 
         public override string RenderControl()
         {
@@ -63,39 +89,36 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderListaDinamica()
         {
             var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨contenedor-selector¨>
-                                    <input id=¨{IdHtml}¨ class=¨{TipoControl.ListaDinamica}¨ {RenderAtributos()} />
+                                    <input id=¨{IdHtml}¨
+                                           propiedad=¨{Propiedad.ToLower()}¨ 
+                                           class=¨{Css.Render(enumCssFiltro.ListaDinamica)}¨ 
+                                           tipo=¨{Tipo}¨
+                                           clase-elemento=¨{SeleccionarDe}¨
+                                           guardar-en=¨{GuardarEn}¨ 
+                                           carga-dinamica='S'
+                                           oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
+                                           onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
+                                           placeholder=¨Seleccionar ({Criterio}) ...¨ 
+                                           list=¨{IdHtml}-lista¨
+                                           control-de-filtro=¨S¨
+                                           criterio-de-filtro=¨{Criterio}¨ />
                                     <datalist id=¨{IdHtml}-lista¨>
                                     </datalist>
                                 </div>";
-            
-            //var htmlSelect2 = $@"<div id=¨div-{IdHtml}-select2¨  class=¨contenedor-selector¨>
-            //                        <select class=¨select2¨ data-width=¨100%¨ data-minimum-results-for-search=¨Infinity¨ />
-            //                    </div>";
-            //var scriptSelect2 = $@"<script>$(document).ready(function() {{$(¨.select2¨).select2();}}); </script>";
 
             return htmlSelect;
         }
 
         
-        public override string RenderAtributos(string atributos = "")
-        {
-            atributos = base.RenderAtributos(atributos);
-            atributos = $@"{atributos} clase-elemento=¨{SeleccionarDe}¨ 
-                                       guardar-en=¨{GuardarEn}¨ 
-                                       mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨ ";
-            if (CargaDinamica)
-                atributos += $@"carga-dinamica=¨{(CargaDinamica ? 'S' : 'N')}¨ 
-                                oninput=¨Crud.ListaDeElementos('cargar',this)¨ 
-                                placeholder=¨Seleccionar ...¨ 
-                                list=¨{IdHtml}-lista¨
-                               ";
-            return atributos;
-        }
-
         private string RenderListaDeElementos()
         {
             var htmlSelect = $@"<div id=¨div_{IdHtml}¨  class=¨contenedor-selector¨>
-                                    <select id=¨{IdHtml}¨ class=¨{TipoControl.ListaDeElemento}¨ {RenderAtributos()} >
+                                    <select id=¨{IdHtml}¨ 
+                                         class=¨{TipoControl.ListaDeElemento}¨ 
+                                          {RenderAtributos()}
+                                          clase-elemento=¨{SeleccionarDe}¨ 
+                                          guardar-en=¨{GuardarEn}¨ 
+                                          mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨  >
                                          <option value=¨0¨>Seleccionar ...</option>
                                     </select>
                                 </div>";

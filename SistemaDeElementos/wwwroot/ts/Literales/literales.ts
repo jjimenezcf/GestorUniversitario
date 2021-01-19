@@ -128,7 +128,8 @@ const atListas = {
     mostrarPropiedad: 'mostrar-propiedad',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
-    identificador: 'identificador'
+    identificador: 'identificador',
+    idSeleccionado: 'idseleccionado'
 };
 
 
@@ -376,6 +377,7 @@ const GestorDeEventos = {
     deSeleccion: "Crud.EventosModalDeSeleccion",
     deCrearRelaciones: "Crud.EventosModalDeCrearRelaciones",
     deConsultaDeRelaciones: "Crud.EventosModalDeConsultaDeRelaciones",
-    delMantenimiento: "Crud.EventosDelMantenimiento"
+    delMantenimiento: "Crud.EventosDelMantenimiento",
+    deListaDinamica: "Crud.EventosDeListaDinamica"
 }
 

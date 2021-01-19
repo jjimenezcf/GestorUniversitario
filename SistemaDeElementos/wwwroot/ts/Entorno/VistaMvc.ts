@@ -2,7 +2,7 @@
 
     export function CrearCrudVistaMvc(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudMntVistaMvc(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
     export class CrudMntVistaMvc extends Crud.CrudMnt {

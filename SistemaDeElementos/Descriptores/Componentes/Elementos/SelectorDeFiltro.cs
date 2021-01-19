@@ -1,4 +1,5 @@
-﻿using ModeloDeDto;
+﻿using GestorDeElementos;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -30,7 +31,7 @@ namespace MVCSistemaDeElementos.Descriptores
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new ModalDeSeleccionDeFiltro<TElemento, TSeleccionado>(this, crudModal);
-            Criterio = TipoCriterio.igual.ToString();
+            Criterio = CriteriosDeFiltrado.igual;
             CrudModal = crudModal;
             PropiedadDondeMapear = propiedadDondeMapear;
             padre.AnadirSelector(this);
@@ -47,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               class=¨form-control¨ 
                               placeholder=¨{Ayuda}¨
                               {base.RenderAtributos()} 
-                              criterioBuscar=¨{TipoCriterio.contiene}¨
+                              criterioBuscar=¨{CriteriosDeFiltrado.contiene}¨
                               propiedadBuscar=¨{FiltroPor.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨

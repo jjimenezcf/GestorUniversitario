@@ -2,7 +2,7 @@
 
     export function CrearCrudDePuestosDeTrabajo(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Seguridad.CrudDePuestosDeTrabajo(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
     export class CrudDePuestosDeTrabajo extends Crud.CrudMnt {

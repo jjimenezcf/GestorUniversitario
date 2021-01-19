@@ -370,12 +370,16 @@
         }
     }
 
-    export function ListaDeElementos(accion: string, selector: HTMLInputElement) {
+    export function EventosDeListaDinamica(accion: string, selector: HTMLInputElement) {
 
         try {
             switch (accion) {
                 case Evento.ListaDinamica.Cargar: {
                     crudMnt.CargarListaDinamica(selector);
+                    break;
+                }
+                case Evento.ListaDinamica.Seleccionar: {
+                    crudMnt.SeleccionarListaDinamica(selector);
                     break;
                 }
                 default: {

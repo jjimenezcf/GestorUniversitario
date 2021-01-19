@@ -182,7 +182,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 
                                        guardar-en=¨{atributos.GuardarEn}¨ 
                                        carga-dinamica=¨S¨ 
-                                       oninput=¨Crud.ListaDeElementos('cargar',this)¨ 
+                                       oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
                                        placeholder=¨Seleccionar ...¨ 
                                        list=¨{descriptorControl.IdHtml}-lista¨
                                 />

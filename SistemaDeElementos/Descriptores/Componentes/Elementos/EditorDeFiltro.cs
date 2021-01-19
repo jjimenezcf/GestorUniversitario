@@ -1,4 +1,5 @@
-﻿using ModeloDeDto;
+﻿using GestorDeElementos;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -14,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
               )
         {
             Tipo = TipoControl.Editor;
-            Criterio = TipoCriterio.contiene.ToString();
+            Criterio = CriteriosDeFiltrado.contiene;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);
         }

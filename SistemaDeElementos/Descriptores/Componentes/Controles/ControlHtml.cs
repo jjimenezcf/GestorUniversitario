@@ -53,7 +53,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public virtual string RenderAtributos(string atributos = "")
         {
-            atributos += $"tipo=¨{Tipo}¨ propiedad=¨{Propiedad.ToLower()}¨ ";
+            atributos += $@"tipo=¨{Tipo}¨
+                            propiedad=¨{Propiedad.ToLower()}¨ ";
             return atributos;
         }
 

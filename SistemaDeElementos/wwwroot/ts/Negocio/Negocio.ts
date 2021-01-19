@@ -2,7 +2,7 @@
 
     export function CrearCrudDeNegocios(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Negocio.CrudDeNegocios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
-        Crud.crudMnt.Inicializar();
+        window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
        export class CrudDeNegocios extends Crud.CrudMnt {

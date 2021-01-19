@@ -32,9 +32,21 @@ namespace MVCSistemaDeElementos.Descriptores
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
                        propiedadDondeMapear: FiltroPor.Nombre.ToString());
 
-                new DesplegableDeFiltro<UsuarioDto>(bloque, "Puesto de trabajo", "idPuesto", "usuarios de este puesto", new Posicion(1, 0));
-                new DesplegableDeFiltro<UsuarioDto>(bloque, "Rol", "idRol", "usuarios con este rol", new Posicion(2, 0));
-                new DesplegableDeFiltro<UsuarioDto>(bloque, "Permiso", "idPermiso", "usuarios con este permiso", new Posicion(3, 0));
+                
+
+                new ListaDeElemento<UsuarioDto>(padre: bloque, 
+                                                etiqueta:"Puesto de trabajo", 
+                                                propiedad: nameof(PuestosDeUnUsuarioDto.IdPuesto), 
+                                                ayuda:"usuarios de este puesto", 
+                                                seleccionarDe: nameof(PuestoDto), 
+                                                guardarEn: nameof(PuestosDeUnUsuarioDto.IdPuesto),
+                                                mostrarPropiedad: nameof(PuestoDto.Nombre),
+                                                cargaDinamica: true, 
+                                                criterioDeBusqueda: CriteriosDeFiltrado.comienza,
+                                                posicion: new Posicion(1, 0));
+
+                //new DesplegableDeFiltro<UsuarioDto>(bloque, "Rol", "idRol", "usuarios con este rol", new Posicion(2, 0));
+                //new DesplegableDeFiltro<UsuarioDto>(bloque, "Permiso", "idPermiso", "usuarios con este permiso", new Posicion(3, 0));
             }
             BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             RutaVista = "Entorno";

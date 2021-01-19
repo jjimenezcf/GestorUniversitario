@@ -1,11 +1,13 @@
 ﻿function Mensaje(tipo: string, mensaje: string, mensajeDeConsola?: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
-    var mensaje = `(${tipo}) ${mensaje}`;
+    var mensajeConTipo = `(${tipo}) ${mensaje}`;
     if (control)
-        control.value = `${mensaje}`;
+        control.value = `${mensajeConTipo}`;
 
     if (IsNullOrEmpty(mensajeDeConsola))
-        mensajeDeConsola = mensaje;
+        mensajeDeConsola = mensajeConTipo;
+    else
+        mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
 
     if (TipoMensaje.Error === tipo) 
         console.error(mensajeDeConsola);

@@ -160,6 +160,22 @@ namespace GestoresDeNegocio.Entorno
             return gestor.MapearElementos(clasesDtm).ToList();
         }
 
+        public List<MenuDto> LeerMenus(int posicion, int cantidad, string valorDeFiltro)
+        {
+            return Leer(this, posicion, cantidad, valorDeFiltro);
+        }
+
+
+        internal static List<MenuDto> Leer(GestorDeMenus gestor, int posicion, int cantidad, string filtro)
+        {
+            var filtros = new List<ClausulaDeFiltrado>();
+            if (!filtro.IsNullOrEmpty())
+                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(MenuDtm.Nombre), Valor = filtro });
+
+            var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(puestosDtm).ToList();
+        }
+
         protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
