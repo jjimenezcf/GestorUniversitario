@@ -81,6 +81,8 @@
     export class DatosPeticionDinamica {
         public ClaseDeElemento: string;
         public IdInput: string;
+        public buscada: string;
+        public criterio: string;
     }
 
     export class DatosRestrictor {
@@ -759,36 +761,83 @@
         // funciones de carga de elementos para los selectores   ************************************************************************************
 
         protected CargarListaDinamica(input: HTMLInputElement, controlador: string) {
-            let clase: string = input.getAttribute(atListas.claseElemento);
+            if (input.getAttribute(atListasDinamicas.cargando) == 'S' || IsNullOrEmpty(input.value)) {
+                return;
+            }
+
+            let ultimaBuscada: string = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
+            let criterio: string = input.getAttribute(atListasDinamicas.criterioDeBuqueda);
+            if (!IsNullOrEmpty(ultimaBuscada)) {
+                if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
+                    return;
+                if (criterio === atCriterio.comienza && ultimaBuscada.startsWith(input.value))
+                    return;
+            }
+
+            let clase: string = input.getAttribute(atListasDinamicas.claseElemento);
             let idInput: string = input.getAttribute('id');
-            let filtro: ClausulaDeFiltrado = this.DefinirFiltroListaDinamica(input);
+            let filtro: ClausulaDeFiltrado = this.DefinirFiltroListaDinamica(input, criterio);
             if (filtro === null)
                 return;
 
-            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, filtro);
-            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}"}`;
+            let cantidad: string = input.getAttribute(atListasDinamicas.cantidad);
+            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, Numero(cantidad), filtro);
+            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${filtro.valor}" , "criterio":"${filtro.criterio}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CargaDinamica
                 , datosDeEntrada
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
-                , this.AnadirOpciones
-                , this.SiHayErrorTrasPeticionAjax
+                , this.AnadirOpcionesListaDinamica
+                , this.SiHayErrorAlCargarListasDinamicas
             );
-
+            input.setAttribute(atListasDinamicas.cargando, 'S');
             a.Ejecutar();
         }
 
-        private AnadirOpciones(peticion: ApiDeAjax.DescriptorAjax) {
+        private AnadirOpcionesListaDinamica(peticion: ApiDeAjax.DescriptorAjax) {
             let datosDeEntrada: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
+            let input: HTMLInputElement = document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement;
+            try {
+                let listaDinamica: ListaDinamica = new ListaDinamica(input);
 
-            let listaDinamica: ListaDinamica = new ListaDinamica(document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement);
-            for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
+                let propiedadDeDefecto = atListasDinamicas.mostrarPropiedadDeDefecto;
+                let mostrarPropiedad = input.getAttribute(atListasDinamicas.mostraPropiedad);
+                if (propiedadDeDefecto !== mostrarPropiedad) {
+                    if (peticion.resultado.datos.length > 0) {
+                        for (let propiedad in peticion.resultado.datos[0]) {
+                            if (propiedad === mostrarPropiedad) {
+                                propiedadDeDefecto = mostrarPropiedad;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                for (var i = 0; i < peticion.resultado.datos.length; i++) {
+                    listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i][propiedadDeDefecto]);
+                }
+
+                listaDinamica.Lista.click();
             }
+            finally {
+                input.setAttribute(atListasDinamicas.cargando, 'N');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, datosDeEntrada.buscada);
+            }
+        }
 
-            listaDinamica.Lista.click();
+
+        private SiHayErrorAlCargarListasDinamicas(peticion: ApiDeAjax.DescriptorAjax) {
+            let datosDeEntrada: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
+            let input: HTMLDivElement = document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement;
+            try {
+                Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            }
+            finally {
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
+                input.setAttribute(atListasDinamicas.cargando, 'N');
+            }
         }
 
         protected CargarListaDeElementos(controlador: string, claseDeElementoDto: string, idLista: string) {
@@ -835,28 +884,23 @@
             return JSON.stringify(clausulas);
         }
 
-        private DefinirFiltroListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
-            let buscarPor: string = input.getAttribute(atListas.buscarPor);
-            if (IsNullOrEmpty(buscarPor)) {
-                buscarPor = atListas.buscaPorCampoDeDefecto
-            }
-
-            let criterio: string = input.getAttribute(atControl.criterio);
+        private DefinirFiltroListaDinamica(input: HTMLInputElement, criterio: string ): ClausulaDeFiltrado {
+            let buscarPor: string = input.getAttribute(atListasDinamicas.buscarPor);
+            let longitud: number = Numero(input.getAttribute(atListasDinamicas.longitudNecesaria));
             let valor: string = input.value;
-            let longitud: number = Numero(input.getAttribute(atListas.longitudNecesaria));
 
             if (longitud == 0)
                 longitud = 3;
 
-            if (valor.length < longitud || IsNullOrEmpty(valor))
+            if (valor.length < longitud)
                 return null;
 
             let clausula: ClausulaDeFiltrado =  new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
             return clausula;
         }
 
-        private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, filtro: ClausulaDeFiltrado): string {
-            let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=-1&filtro=${JSON.stringify(filtro)}`;
+        private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, cantidad: number, filtro: ClausulaDeFiltrado): string {
+            let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=${cantidad}&filtro=${JSON.stringify(filtro)}`;
             return url;
         }
 

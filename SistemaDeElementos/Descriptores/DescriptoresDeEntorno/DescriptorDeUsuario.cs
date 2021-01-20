@@ -34,39 +34,36 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 
 
-                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(padre: bloque,
                                                 etiqueta: "Puesto de trabajo",
                                                 filtrarPor: nameof(PuestosDeUnUsuarioDto.IdPuesto),
                                                 ayuda: "usuarios de este puesto",
                                                 seleccionarDe: nameof(PuestoDto),
                                                 buscarPor: nameof(PuestoDto.Nombre),
                                                 mostrarPropiedad: nameof(PuestoDto.Nombre),
-                                                cargaDinamica: true,
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
                                                 posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 1;
 
 
-                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(padre: bloque,
                                                 etiqueta: "Roles",
                                                 filtrarPor: nameof(RolesDeUnPuestoDto.IdRol),
                                                 ayuda: "usuarios de un rol",
                                                 seleccionarDe: nameof(RolDto),
                                                 buscarPor: nameof(RolDto.Nombre),
                                                 mostrarPropiedad: nameof(RolDto.Nombre),
-                                                cargaDinamica: true,
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
                                                 posicion: new Posicion(2, 0)).LongitudMinimaParaBuscar = 1;
 
 
 
-                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(padre: bloque,
                                                 etiqueta: "Permisos",
                                                 filtrarPor: nameof(PermisosDeUnUsuarioDto.IdPermiso),
                                                 ayuda: "permisos de un usuario",
                                                 seleccionarDe: nameof(PermisoDto),
                                                 buscarPor: nameof(PermisoDto.Nombre),
                                                 mostrarPropiedad: nameof(PermisoDto.Nombre),
-                                                cargaDinamica: true,
                                                 criterioDeBusqueda: CriteriosDeFiltrado.comienza,
                                                 posicion: new Posicion(3, 0)).LongitudMinimaParaBuscar = 3;
 

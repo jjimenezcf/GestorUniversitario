@@ -545,6 +545,9 @@ namespace GestorDeElementos
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
                         return registros.Where(x => x.Nombre.Contains(filtro.Valor));
 
+                    if (filtro.Criterio == CriteriosDeFiltrado.comienza)
+                        return registros.Where(x => x.Nombre.StartsWith(filtro.Valor));
+
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
                         return registros.Where(x => x.Nombre == filtro.Valor);
                 }

@@ -14,8 +14,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public string MostrarPropiedad { get; private set; }
         public bool CargaDinamica { get; private set; }
         public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
-
         public int LongitudMinimaParaBuscar { get; set; } = 3;
+        public string FiltrarPor { get; set; }
 
         public ListaDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor,  string ayuda, string  seleccionarDe,  string buscarPor, string mostrarPropiedad , bool cargaDinamica, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
         : base(
@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
           , posicion
         )
         {
-            IniciarClase(padre, seleccionarDe, buscarPor, mostrarPropiedad, cargaDinamica, criterioDeBusqueda);
+            IniciarClase(padre, seleccionarDe, filtrarPor, buscarPor, mostrarPropiedad, cargaDinamica, criterioDeBusqueda);
         }
 
         public ListaDeElemento(BloqueDeFitro<TElemento> padre, string propiedad, Posicion posicion)
@@ -60,17 +60,19 @@ namespace MVCSistemaDeElementos.Descriptores
             Etiqueta = atributos.Etiqueta;
             Ayuda = atributos.Ayuda;
 
-            IniciarClase(padre, 
-                atributos.SeleccionarDe, 
-                atributos.BuscarPor, 
-                atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad, 
-                atributos.CargaDinamica,
-                atributos.CriterioDeBusqueda);
+            IniciarClase(padre,
+                seleccionarDe: atributos.SeleccionarDe, 
+                filtrarPor: Propiedad,
+                buscarPor: atributos.BuscarPor,
+                mostrarPropiedad: atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad,
+                cargaDinamica: atributos.CargaDinamica,
+                criterio: atributos.CriterioDeBusqueda);
         }
 
-        private void IniciarClase(BloqueDeFitro<TElemento> padre, string seleccionarDe, string buscarPor, string mostrarPropiedad, bool cargaDinamica, CriteriosDeFiltrado criterio)
+        private void IniciarClase(BloqueDeFitro<TElemento> padre, string seleccionarDe, string filtrarPor, string buscarPor, string mostrarPropiedad, bool cargaDinamica, CriteriosDeFiltrado criterio)
         {
             SeleccionarDe = seleccionarDe;
+            FiltrarPor = filtrarPor;
             BuscarPor = buscarPor;
             CargaDinamica = cargaDinamica;
             MostrarPropiedad = mostrarPropiedad;
@@ -96,17 +98,18 @@ namespace MVCSistemaDeElementos.Descriptores
                                            propiedad=¨{Propiedad.ToLower()}¨ 
                                            class=¨{Css.Render(enumCssFiltro.ListaDinamica)}¨ 
                                            tipo=¨{Tipo}¨
-                                           clase-elemento=¨{SeleccionarDe}¨
-                                           guardar-en=¨{GuardarEn}¨ 
                                            carga-dinamica='S'
+                                           clase-elemento=¨{SeleccionarDe}¨
+                                           mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨  
                                            como-buscar='{BuscarPor}'
+                                           criterio-de-filtro=¨{Criterio}¨ 
+                                           filtrar-por=¨{Propiedad.ToLower()}¨ 
                                            longitud='{LongitudMinimaParaBuscar}'
                                            oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
                                            onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
                                            placeholder=¨Seleccionar ({Criterio}) ...¨ 
                                            list=¨{IdHtml}-lista¨
-                                           control-de-filtro=¨S¨
-                                           criterio-de-filtro=¨{Criterio}¨ />
+                                           control-de-filtro=¨S¨/>
                                     <datalist id=¨{IdHtml}-lista¨>
                                     </datalist>
                                 </div>";

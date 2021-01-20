@@ -622,7 +622,7 @@
         private ObtenerClausulaListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad = input.getAttribute(atControl.propiedad);
             var criterio = literal.filtro.criterio.igual;
-            let valor: number = Numero(input.getAttribute(atListas.idSeleccionado));
+            let valor: number = Numero(input.getAttribute(atListasDinamicas.idSeleccionado));
 
             var clausula = null;
             if (Number(valor) > 0) {

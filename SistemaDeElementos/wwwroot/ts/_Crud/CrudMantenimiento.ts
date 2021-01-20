@@ -337,12 +337,12 @@
             super.CargarListaDinamica(selector, this.Navegador.Controlador);
         }
 
-        public SeleccionarListaDinamica(selector: HTMLInputElement) {
-            let lista: ListaDinamica = new ListaDinamica(selector);
-            let valor: number = lista.BuscarSeleccionado(selector.value);
-            selector.setAttribute(atListas.idSeleccionado, valor.toString());
+        public SeleccionarListaDinamica(input: HTMLInputElement) {
+            let lista: ListaDinamica = new ListaDinamica(input);
+            let valor: number = lista.BuscarSeleccionado(input.value);
+            input.setAttribute(atListasDinamicas.idSeleccionado, valor.toString());
             if (valor === 0)
-                selector.value = "";
+                input.value = "";
         }
 
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {

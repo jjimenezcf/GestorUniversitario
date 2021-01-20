@@ -125,16 +125,29 @@ const atSelector = {
 const atListas = {
     claseElemento: 'clase-elemento',
     guardarEn: 'guardar-en',
-    buscarPor: 'como-buscar',
-    longitudNecesaria: 'longitud',
-    buscaPorCampoDeDefecto: 'por-defecto',
     mostrarPropiedad: 'mostrar-propiedad',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
-    identificador: 'identificador',
-    idSeleccionado: 'idseleccionado'
+    identificador: 'identificador'
 };
 
+const atListasDinamicas = {
+    claseElemento: atListas.claseElemento,
+    buscarPor: 'como-buscar',
+    criterioDeBuqueda: atControl.criterio,
+    mostraPropiedad: atListas.mostrarPropiedad,
+    longitudNecesaria: 'longitud',
+    idSeleccionado: 'idseleccionado',
+    cargando: 'cargando',
+    mostrarPropiedadDeDefecto: 'nombre',
+    ultimaCadenaBuscada: 'ultima-busqueda',
+    cantidad:'cantidad-a-leer'
+};
+
+const atCriterio = {
+    contiene: 'contiene',
+    comienza: 'comienza'
+}
 
 const atRelacion = {
     navegarAlCrud: 'navegar-al-crud',

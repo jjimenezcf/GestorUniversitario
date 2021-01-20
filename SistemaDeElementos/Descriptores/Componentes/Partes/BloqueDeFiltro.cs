@@ -64,6 +64,10 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             AnadirControl(s);
         }
+        public void AnadirSelectorElemento<t1>(ListasDinamicas<t1> s) where t1 : ElementoDto
+        {
+            AnadirControl(s);
+        }
 
         public void AnadirSelector<t1, t2>(SelectorDeFiltro<t1, t2> s) where t1 : ElementoDto where t2 : ElementoDto
         {
