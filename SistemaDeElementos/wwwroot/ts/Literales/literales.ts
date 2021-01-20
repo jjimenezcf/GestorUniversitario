@@ -125,7 +125,7 @@ const atSelector = {
 const atListas = {
     claseElemento: 'clase-elemento',
     guardarEn: 'guardar-en',
-    mostrarPropiedad: 'mostrar-propiedad',
+    mostrarExpresion: 'mostrar-expresion',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
     identificador: 'identificador'
@@ -135,11 +135,11 @@ const atListasDinamicas = {
     claseElemento: atListas.claseElemento,
     buscarPor: 'como-buscar',
     criterioDeBuqueda: atControl.criterio,
-    mostraPropiedad: atListas.mostrarPropiedad,
+    mostrarExpresion: atListas.mostrarExpresion,
     longitudNecesaria: 'longitud',
     idSeleccionado: 'idseleccionado',
     cargando: 'cargando',
-    mostrarPropiedadDeDefecto: 'nombre',
+    expresionPorDefecto: 'nombre',
     ultimaCadenaBuscada: 'ultima-busqueda',
     cantidad:'cantidad-a-leer'
 };

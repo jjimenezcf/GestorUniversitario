@@ -10,13 +10,13 @@ namespace MVCSistemaDeElementos.Descriptores
     {
 
         public string SeleccionarDe { get; private set; }
-        public string MostrarPropiedad { get; private set; }
+        public string MostrarExpresion { get; private set; }
         public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
         public int LongitudMinimaParaBuscar { get; set; } = 3;
         public string FiltrarPor { get; set; }
-        public int catidad { get; set; } = 10;
+        public int Cantidad { get; set; } = 10;
 
-        public ListasDinamicas(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarPropiedad, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
+        public ListasDinamicas(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarExpresion, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
         : base(
             padre: padre
           , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{filtrarPor}"
@@ -29,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
             SeleccionarDe = seleccionarDe;
             FiltrarPor = filtrarPor;
             BuscarPor = buscarPor;
-            MostrarPropiedad = mostrarPropiedad;
+            MostrarExpresion = mostrarExpresion;
 
             Tipo = TipoControl.ListaDinamica;
             Criterio = criterioDeBusqueda;
@@ -46,12 +46,12 @@ namespace MVCSistemaDeElementos.Descriptores
                                            tipo=¨{Tipo}¨
                                            carga-dinamica='S'
                                            clase-elemento=¨{SeleccionarDe}¨
-                                           mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨  
+                                           mostrar-expresion=¨{MostrarExpresion.ToLower()}¨  
                                            como-buscar='{BuscarPor}'
                                            criterio-de-filtro=¨{Criterio}¨ 
                                            filtrar-por=¨{Propiedad.ToLower()}¨ 
                                            longitud='{LongitudMinimaParaBuscar}'
-                                           cantidad-a-leer= '{catidad}'
+                                           cantidad-a-leer= '{Cantidad}'
                                            oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
                                            onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
                                            placeholder=¨Seleccionar ({Criterio}) ...¨ 

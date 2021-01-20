@@ -14,9 +14,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
 
-            new ListaDeElemento<MenuDto>(padre: fltEspecificos,
-                                          propiedad: nameof(MenuDto.Padre),
-                                          posicion: new Posicion() { fila = 0, columna = 0 });
+            new ListasDinamicas<MenuDto>(padre: fltEspecificos,
+                etiqueta:"Menu padre",
+                filtrarPor: nameof(MenuDto.idPadre),
+                ayuda:"seleccionar padre",
+                seleccionarDe: nameof(MenuDto),
+                buscarPor: nameof(MenuDto.Nombre),
+                mostrarExpresion: $"[{nameof(MenuDto.Padre)}].[{nameof(MenuDto.Nombre)}]",
+                criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
+                posicion: new Posicion() { fila = 0, columna = 0 });
 
             RutaVista = "Entorno";
         }

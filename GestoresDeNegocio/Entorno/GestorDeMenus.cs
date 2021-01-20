@@ -21,11 +21,9 @@ namespace GestoresDeNegocio.Entorno
                 CreateMap<MenuDtm, MenuDto>()
                 .ForMember(dto => dto.Padre, dtm => dtm.MapFrom(dtm => dtm.Padre.Nombre))
                 .ForMember(dto => dto.VistaMvc, dtm => dtm.MapFrom(dtm => dtm.VistaMvc.Nombre))
-                //.ForMember(dto => dto.Permiso, dtm => dtm.MapFrom(x => x.Permiso.Nombre))
                 ;
 
                 CreateMap<MenuDto, MenuDtm>()
-                //.ForMember(dtm => dtm.Permiso, dto => dto.Ignore())
                 .ForMember(dtm => dtm.IdVistaMvc, dto => dto.MapFrom(dto => dto.idVistaMvc == 0 ? null : dto.idVistaMvc))
                 .ForMember(dtm => dtm.IdPadre, dto => dto.MapFrom(dto => dto.idPadre == 0 ? null : dto.idPadre));
             }
@@ -51,7 +49,7 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(MenuDto.Padre).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(MenuDto.idPadre).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
                         registros = registros.Where(x => x.IdPadre == null);
@@ -68,14 +66,17 @@ namespace GestoresDeNegocio.Entorno
                     registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
                 }
 
-                if (filtro.Clausula.ToLower() == CamposDeFiltrado.PorDefecto)
+                if (filtro.Clausula.ToLower() == CamposDeFiltrado.Nombre)
                 {
                     registros = registros.Where(x => x.Nombre.Contains(filtro.Valor));
                 }
+
             }
 
             return registros;
         }
+
+
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {

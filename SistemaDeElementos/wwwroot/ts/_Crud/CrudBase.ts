@@ -300,7 +300,7 @@
             }
         }
 
-        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string)  {
+        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
 
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
 
@@ -797,26 +797,22 @@
         }
 
         private AnadirOpcionesListaDinamica(peticion: ApiDeAjax.DescriptorAjax) {
+            let llamador: CrudBase = peticion.llamador as CrudBase;
             let datosDeEntrada: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
             let input: HTMLInputElement = document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement;
             try {
                 let listaDinamica: ListaDinamica = new ListaDinamica(input);
 
-                let propiedadDeDefecto = atListasDinamicas.mostrarPropiedadDeDefecto;
-                let mostrarPropiedad = input.getAttribute(atListasDinamicas.mostraPropiedad);
-                if (propiedadDeDefecto !== mostrarPropiedad) {
-                    if (peticion.resultado.datos.length > 0) {
-                        for (let propiedad in peticion.resultado.datos[0]) {
-                            if (propiedad === mostrarPropiedad) {
-                                propiedadDeDefecto = mostrarPropiedad;
-                                break;
-                            }
-                        }
-                    }
-                }
-
+                let expresionPorDefecto = atListasDinamicas.expresionPorDefecto;
+                let mostrarExpresion = input.getAttribute(atListasDinamicas.mostrarExpresion);
+                let expresion: string = "";
                 for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                    listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i][propiedadDeDefecto]);
+                    if (expresionPorDefecto !== mostrarExpresion)
+                        expresion = llamador.ParsearExpresion(peticion.resultado.datos[i], mostrarExpresion);
+                    else
+                        expresion = peticion.resultado.datos[i][expresionPorDefecto];
+
+                    listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, expresion);
                 }
 
                 listaDinamica.Lista.click();
@@ -827,6 +823,14 @@
             }
         }
 
+        private ParsearExpresion(elemento: any, patron: string): string {
+            let mostrar: string = patron;
+            for (let propiedad in elemento) 
+                if (patron.includes(propiedad))
+                    mostrar = mostrar.replace(propiedad, IsNullOrEmpty(elemento[propiedad]) ? "" : elemento[propiedad]);
+                
+            return mostrar;
+        }
 
         private SiHayErrorAlCargarListasDinamicas(peticion: ApiDeAjax.DescriptorAjax) {
             let datosDeEntrada: DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
@@ -884,7 +888,7 @@
             return JSON.stringify(clausulas);
         }
 
-        private DefinirFiltroListaDinamica(input: HTMLInputElement, criterio: string ): ClausulaDeFiltrado {
+        private DefinirFiltroListaDinamica(input: HTMLInputElement, criterio: string): ClausulaDeFiltrado {
             let buscarPor: string = input.getAttribute(atListasDinamicas.buscarPor);
             let longitud: number = Numero(input.getAttribute(atListasDinamicas.longitudNecesaria));
             let valor: string = input.value;
@@ -895,7 +899,7 @@
             if (valor.length < longitud)
                 return null;
 
-            let clausula: ClausulaDeFiltrado =  new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
+            let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
             return clausula;
         }
 

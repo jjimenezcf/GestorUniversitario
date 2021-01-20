@@ -40,7 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 ayuda: "usuarios de este puesto",
                                                 seleccionarDe: nameof(PuestoDto),
                                                 buscarPor: nameof(PuestoDto.Nombre),
-                                                mostrarPropiedad: nameof(PuestoDto.Nombre),
+                                                mostrarExpresion: nameof(PuestoDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
                                                 posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 1;
 
@@ -51,7 +51,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 ayuda: "usuarios de un rol",
                                                 seleccionarDe: nameof(RolDto),
                                                 buscarPor: nameof(RolDto.Nombre),
-                                                mostrarPropiedad: nameof(RolDto.Nombre),
+                                                mostrarExpresion: nameof(RolDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
                                                 posicion: new Posicion(2, 0)).LongitudMinimaParaBuscar = 1;
 
@@ -63,7 +63,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 ayuda: "permisos de un usuario",
                                                 seleccionarDe: nameof(PermisoDto),
                                                 buscarPor: nameof(PermisoDto.Nombre),
-                                                mostrarPropiedad: nameof(PermisoDto.Nombre),
+                                                mostrarExpresion: nameof(PermisoDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.comienza,
                                                 posicion: new Posicion(3, 0)).LongitudMinimaParaBuscar = 3;
 
