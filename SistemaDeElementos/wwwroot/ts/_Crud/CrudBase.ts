@@ -825,10 +825,10 @@
 
         private ParsearExpresion(elemento: any, patron: string): string {
             let mostrar: string = patron;
-            for (let propiedad in elemento) 
+            for (let propiedad in elemento)
                 if (patron.includes(propiedad))
                     mostrar = mostrar.replace(propiedad, IsNullOrEmpty(elemento[propiedad]) ? "" : elemento[propiedad]);
-                
+
             return mostrar;
         }
 
@@ -862,14 +862,23 @@
         }
 
         private MapearElementosEnLista(peticion: ApiDeAjax.DescriptorAjax) {
-            let datos: DatosPeticionLista = JSON.parse(peticion.DatosDeEntrada);
-            let idLista = datos.IdLista;
+            let llamador: CrudBase = peticion.llamador as CrudBase;
+            let datosDeEntrada: DatosPeticionLista = JSON.parse(peticion.DatosDeEntrada);
+            let idLista = datosDeEntrada.IdLista;
             let lista = new ListaDeElemento(idLista);
+            let input: HTMLInputElement = document.getElementById(idLista) as HTMLInputElement;
+            let expresion: string = "";
+            let mostrarExpresion = input.getAttribute(atListasDeElemento.mostrarExpresion);
+
             for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                lista.AgregarOpcion(peticion.resultado.datos[i].id, peticion.resultado.datos[i].nombre);
+                if (atListasDeElemento.expresionPorDefecto !== mostrarExpresion)
+                    expresion = llamador.ParsearExpresion(peticion.resultado.datos[i], mostrarExpresion);
+                else
+                    expresion = peticion.resultado.datos[i][mostrarExpresion];
+                lista.AgregarOpcion(peticion.resultado.datos[i].id, expresion);
             }
 
-            lista.Lista.setAttribute(atListas.yaCargado, "S");
+            lista.Lista.setAttribute(atListasDeElemento.yaCargado, "S");
         }
 
         private DefinirPeticionDeCargarElementos(controlador: string, claseElemento: string): string {

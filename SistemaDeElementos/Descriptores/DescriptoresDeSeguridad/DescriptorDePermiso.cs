@@ -16,9 +16,8 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
                 var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
-                var fltEspecificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 4));
+                var fltEspecificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
                 
-                //var fltRelacionados = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Relacionados", dimension: new Dimension(1, 2));
                 new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
                                               filtrarPor: PermisoPor.PermisosDeUnUsuario,
@@ -30,12 +29,20 @@ namespace MVCSistemaDeElementos.Descriptores
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
 
                 new ListaDeElemento<PermisoDto>(padre: fltEspecificos,
-                                              propiedad: nameof(PermisoDto.Clase) ,
-                                              posicion: new Posicion() { fila = 0, columna = 0 });
+                                                etiqueta: "Clase de permiso",
+                                                ayuda:"selecciona una clase",
+                                                seleccionarDe: nameof(ClasePermisoDto),
+                                                filtraPor: nameof(PermisoDto.IdClase),
+                                                mostrarExpresion: $"{nameof(ClasePermisoDto.Nombre)} ({nameof(ClasePermisoDto.Id)})",
+                                                posicion: new Posicion() { fila = 0, columna = 0 });
                 
                 new ListaDeElemento<PermisoDto>(padre: fltEspecificos,
-                                        propiedad: nameof(PermisoDto.Tipo),
-                                        posicion: new Posicion() { fila = 0, columna = 1 });
+                                                etiqueta: "Tipo de permiso",
+                                                ayuda:"selecciona un tipo",
+                                                seleccionarDe: nameof(TipoPermisoDto),
+                                                filtraPor: nameof(PermisoDto.IdTipo),
+                                                mostrarExpresion: nameof(TipoPermisoDto.Nombre),
+                                                posicion: new Posicion() { fila = 1, columna = 0 });
 
                 AnadirOpciondeRelacion(Mnt
                     , controlador: nameof(RolesDeUnPermisoController)

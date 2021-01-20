@@ -207,10 +207,10 @@ namespace GestoresDeNegocio.Seguridad
                     filtro.Criterio == CriteriosDeFiltrado.diferente)
                     registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
 
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Clase).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.IdClase).ToLower())
                     registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
 
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.Tipo).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.IdTipo).ToLower())
                     registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
             }
 

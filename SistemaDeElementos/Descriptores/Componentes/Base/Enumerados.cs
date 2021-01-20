@@ -7,7 +7,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public enum enumCssFiltro
     {
         ListaDinamica,
-        ContenedorListaDinamica
+        ListaDeElementos,
+        ContenedorListaDinamica,
+        ContenedorListaDeElementos
     }
 
 
@@ -100,7 +102,9 @@ namespace MVCSistemaDeElementos.Descriptores
             switch (clase)
             {
                 case enumCssFiltro.ListaDinamica: return "lista-dinamica";
+                case enumCssFiltro.ListaDeElementos: return "lista-de-elementos";
                 case enumCssFiltro.ContenedorListaDinamica: return "contenedor-selector";
+                case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-selector";
             }
             throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
         }

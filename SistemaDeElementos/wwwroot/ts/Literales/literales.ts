@@ -128,8 +128,16 @@ const atListas = {
     mostrarExpresion: 'mostrar-expresion',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
-    identificador: 'identificador'
+    identificador: 'identificador',
+    expresionPorDefecto: 'nombre',
 };
+
+const atListasDeElemento = {
+    claseElemento: atListas.claseElemento,
+    mostrarExpresion: atListas.mostrarExpresion,
+    yaCargado: atListas.yaCargado,
+    expresionPorDefecto: atListas.expresionPorDefecto
+}
 
 const atListasDinamicas = {
     claseElemento: atListas.claseElemento,
@@ -139,14 +147,15 @@ const atListasDinamicas = {
     longitudNecesaria: 'longitud',
     idSeleccionado: 'idseleccionado',
     cargando: 'cargando',
-    expresionPorDefecto: 'nombre',
+    expresionPorDefecto: atListas.expresionPorDefecto,
     ultimaCadenaBuscada: 'ultima-busqueda',
     cantidad:'cantidad-a-leer'
 };
 
 const atCriterio = {
     contiene: 'contiene',
-    comienza: 'comienza'
+    comienza: 'comienza',
+    igual: 'igual'
 }
 
 const atRelacion = {

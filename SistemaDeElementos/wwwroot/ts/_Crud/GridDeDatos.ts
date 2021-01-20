@@ -633,7 +633,7 @@
 
         private ObtenerClausulaListaDeELemento(selet: HTMLSelectElement): ClausulaDeFiltrado {
             var propiedad = selet.getAttribute(atControl.propiedad);
-            var criterio = selet.getAttribute(atControl.criterio);
+            var criterio = atCriterio.igual;
             var valor = selet.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor) && Number(valor) > 0) {
