@@ -11,6 +11,7 @@ using ModeloDeDto.Seguridad;
 using GestorDeElementos;
 using Microsoft.EntityFrameworkCore.Internal;
 using GestoresDeNegocio.Entorno;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -37,10 +38,19 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        internal static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDePermisos Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePermisos(contexto, mapeador);
         }
+
+
+
+        public List<PermisoDto> LeerPermisos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
+        }
+
 
         public static void ActualizarCachesDePermisos(ContextoSe contexto, IMapper mapeador, int idPermiso)
         {
@@ -125,12 +135,12 @@ namespace GestoresDeNegocio.Seguridad
 
         private static string ComponerNombreDelPermisoDeDatos(string nombre, enumClaseDePermiso clase, enumModoDeAccesoDeDatos modoAcceso)
         {
-                return $"{ClaseDePermiso.ToString(clase).ToUpper()} ({ModoDeAcceso.ToString(modoAcceso)}): {nombre}";
+            return $"{ClaseDePermiso.ToString(clase).ToUpper()} ({ModoDeAcceso.ToString(modoAcceso)}): {nombre}";
         }
 
         private static string ComponerNombrePermisoFuncional(string nombre, enumClaseDePermiso clase)
         {
-                return $"{ClaseDePermiso.ToString(clase).ToUpper()}: {nombre}";
+            return $"{ClaseDePermiso.ToString(clase).ToUpper()}: {nombre}";
         }
 
         private static PermisoDtm CrearPermisoDeDatos(GestorDePermisos gestorDePermiso, string nombreDelPermiso, enumClaseDePermiso clase, enumModoDeAccesoDeDatos modoDeAcceso)
@@ -143,7 +153,7 @@ namespace GestoresDeNegocio.Seguridad
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(modoDeAcceso), false, false,false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(modoDeAcceso), false, false, false);
             if (tipoDePermiso == null)
                 tipoDePermiso = gestorDeTipo.CrearTipoPermisoDeDatos(modoDeAcceso);
 
@@ -162,7 +172,7 @@ namespace GestoresDeNegocio.Seguridad
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(enumModoDeAccesoFuncional.Acceso) , false, false, false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(enumModoDeAccesoFuncional.Acceso), false, false, false);
             if (tipoDePermiso == null)
                 tipoDePermiso = gestorDeTipo.CrearTipoPermisoFuncional(enumModoDeAccesoFuncional.Acceso);
 
@@ -246,34 +256,26 @@ namespace GestoresDeNegocio.Seguridad
 
         public List<ClasePermisoDto> LeerClases()
         {
-            return LeerClases(0, -1, "");
+            return LeerClases(0, -1, new List<ClausulaDeFiltrado>());
         }
 
-        public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, string valorDeFiltro)
+        public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var gestor = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!valorDeFiltro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(ClasePermisoDtm.Nombre), Valor = valorDeFiltro });
-
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
+            var registros = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(registros).ToList();
         }
 
         public List<TipoPermisoDto> LeerTipos()
         {
-            return LeerTipos(0, -1, "");
+            return LeerTipos(0, -1, new List<ClausulaDeFiltrado>());
         }
 
-        public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, string valorDeFiltro)
+        public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var gestor = GestorDeTipoPermiso.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!valorDeFiltro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(TipoPermisoDtm.Nombre), Valor = valorDeFiltro });
-
-            var tiposDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(tiposDtm).ToList();
+            var registros = gestor.LeerRegistros(posicion, cantidad, filtros);
+            return gestor.MapearElementos(registros).ToList();
         }
 
         protected override void AntesMapearRegistroParaEliminar(PermisoDto elemento, ParametrosDeNegocio opciones)

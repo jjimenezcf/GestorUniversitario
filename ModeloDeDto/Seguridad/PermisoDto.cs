@@ -2,7 +2,7 @@
 {
     public static class PermisoPor
     {
-        public static string Nombre = FiltroPor.Nombre;
+        public static string Nombre = CamposDeFiltrado.Nombre;
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
         public static string PermisosDeUnUsuario = nameof(PermisosDeUnUsuario).ToLower();
     }

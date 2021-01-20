@@ -13,6 +13,8 @@ using System;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Negocio;
+using ModeloDeDto;
+using ModeloDeDto.Seguridad;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -38,16 +40,6 @@ namespace GestoresDeNegocio.Entorno
         public static GestorDeUsuarios Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeUsuarios(contexto, mapeador);
-        }
-
-        internal static List<UsuarioDto> Leer(GestorDeUsuarios gestor, int posicion, int cantidad, string filtro)
-        {
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(UsuarioDto.Nombre), Valor = filtro });
-
-            var usuariosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(usuariosDtm).ToList();
         }
 
         protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -116,6 +108,17 @@ namespace GestoresDeNegocio.Entorno
                         registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsuario == u.Id));
                     }
                 }
+
+                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDto.IdPermiso).ToLower())
+                {
+                        registros = registros.Where(u => u.Permisos.Any(x=>x.IdPermiso == filtro.Valor.Entero()));
+                }
+
+                if (filtro.Clausula.ToLower() == nameof(RolesDeUnPuestoDto.IdRol).ToLower())
+                {
+                    registros = registros.Where(u => u.Puestos.Any(x => x.Puesto.Roles.Any(y=>y.IdRol == filtro.Valor.Entero())));
+                }
+
 
                 if (filtro.Clausula.ToLower() == nameof(UsuarioDtm.Login).ToLower())
                 {
@@ -187,6 +190,12 @@ namespace GestoresDeNegocio.Entorno
             {
                 elemento.Foto = GestorDeElementos.Utilidades.DescargarArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
             }
+        }
+
+        public List<UsuarioDto> LeerUsuarios(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
         public UsuarioDto ValidarUsuario(string login, string password)

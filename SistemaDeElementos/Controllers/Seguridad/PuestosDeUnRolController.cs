@@ -5,6 +5,8 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Seguridad;
 using ModeloDeDto.Seguridad;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -27,13 +29,13 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
             if (claseElemento == nameof(PuestoDto))
-                return ((GestorDePuestosDeUnRol)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro }); 
 
             if (claseElemento == nameof(RolDto))
-                return ((GestorDePuestosDeUnRol)GestorDeElementos).LeerRoles(posicion, cantidad, filtro);
+                return GestorDeRoles.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerRoles(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }

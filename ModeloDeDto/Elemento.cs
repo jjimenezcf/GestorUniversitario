@@ -42,6 +42,17 @@ namespace ModeloDeDto
         public const string ModalDeConsulta = "modal-de-consulta";
     }
 
+    public static class CamposDeFiltrado
+    {
+        public static string Nombre = nameof(Nombre).ToLower();
+        public static string Id = nameof(Id).ToLower();
+        public static string PorDefecto = "por-defecto";
+    }
+
+    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
+
+
+
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
 
@@ -105,7 +116,10 @@ namespace ModeloDeDto
         /// </summary>
         public string SeleccionarDe { get; set; }
 
+        public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.comienza;
+
         public string GuardarEn { get; set; }
+        public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
 
         public string MostrarPropiedad { get; set; }
 
@@ -175,13 +189,6 @@ namespace ModeloDeDto
         /// indica las propiedades del dto con las que se conforma el nombre
         /// </summary>
         public string ExpresionNombre { get; set; } = "[Nombre]";
-    }
-
-
-    public static class FiltroPor
-    {
-        public static string Nombre = nameof(Nombre).ToLower();
-        public static string Id = nameof(Id).ToLower();
     }
 
 

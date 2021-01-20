@@ -14,6 +14,7 @@ using Utilidades;
 using Gestor.Errores;
 using System;
 using System.Reflection;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Negocio
 {

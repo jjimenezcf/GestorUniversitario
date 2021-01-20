@@ -30,25 +30,48 @@ namespace MVCSistemaDeElementos.Descriptores
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
-                       propiedadDondeMapear: FiltroPor.Nombre.ToString());
+                       propiedadDondeMapear: CamposDeFiltrado.Nombre.ToString());
 
                 
 
-                new ListaDeElemento<UsuarioDto>(padre: bloque, 
-                                                etiqueta:"Puesto de trabajo", 
-                                                propiedad: nameof(PuestosDeUnUsuarioDto.IdPuesto), 
-                                                ayuda:"usuarios de este puesto", 
-                                                seleccionarDe: nameof(PuestoDto), 
-                                                guardarEn: nameof(PuestosDeUnUsuarioDto.IdPuesto),
+                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                                                etiqueta: "Puesto de trabajo",
+                                                filtrarPor: nameof(PuestosDeUnUsuarioDto.IdPuesto),
+                                                ayuda: "usuarios de este puesto",
+                                                seleccionarDe: nameof(PuestoDto),
+                                                buscarPor: nameof(PuestoDto.Nombre),
                                                 mostrarPropiedad: nameof(PuestoDto.Nombre),
-                                                cargaDinamica: true, 
-                                                criterioDeBusqueda: CriteriosDeFiltrado.comienza,
-                                                posicion: new Posicion(1, 0));
+                                                cargaDinamica: true,
+                                                criterioDeBusqueda: CriteriosDeFiltrado.contiene,
+                                                posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 1;
 
-                //new DesplegableDeFiltro<UsuarioDto>(bloque, "Rol", "idRol", "usuarios con este rol", new Posicion(2, 0));
-                //new DesplegableDeFiltro<UsuarioDto>(bloque, "Permiso", "idPermiso", "usuarios con este permiso", new Posicion(3, 0));
+
+                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                                                etiqueta: "Roles",
+                                                filtrarPor: nameof(RolesDeUnPuestoDto.IdRol),
+                                                ayuda: "usuarios de un rol",
+                                                seleccionarDe: nameof(RolDto),
+                                                buscarPor: nameof(RolDto.Nombre),
+                                                mostrarPropiedad: nameof(RolDto.Nombre),
+                                                cargaDinamica: true,
+                                                criterioDeBusqueda: CriteriosDeFiltrado.contiene,
+                                                posicion: new Posicion(2, 0)).LongitudMinimaParaBuscar = 1;
+
+
+
+                new ListaDeElemento<UsuarioDto>(padre: bloque,
+                                                etiqueta: "Permisos",
+                                                filtrarPor: nameof(PermisosDeUnUsuarioDto.IdPermiso),
+                                                ayuda: "permisos de un usuario",
+                                                seleccionarDe: nameof(PermisoDto),
+                                                buscarPor: nameof(PermisoDto.Nombre),
+                                                mostrarPropiedad: nameof(PermisoDto.Nombre),
+                                                cargaDinamica: true,
+                                                criterioDeBusqueda: CriteriosDeFiltrado.comienza,
+                                                posicion: new Posicion(3, 0)).LongitudMinimaParaBuscar = 3;
+
             }
-            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
+            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             RutaVista = "Entorno";
 
             AnadirOpciondeRelacion(Mnt

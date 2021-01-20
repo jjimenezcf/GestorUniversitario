@@ -125,6 +125,9 @@ const atSelector = {
 const atListas = {
     claseElemento: 'clase-elemento',
     guardarEn: 'guardar-en',
+    buscarPor: 'como-buscar',
+    longitudNecesaria: 'longitud',
+    buscaPorCampoDeDefecto: 'por-defecto',
     mostrarPropiedad: 'mostrar-propiedad',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',

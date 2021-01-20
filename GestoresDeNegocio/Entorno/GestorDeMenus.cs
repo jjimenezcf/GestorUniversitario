@@ -8,6 +8,7 @@ using ServicioDeDatos.Entorno;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Seguridad;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -36,6 +37,10 @@ namespace GestoresDeNegocio.Entorno
 
         }
 
+        public static GestorDeMenus Gestor(ContextoSe contexto, IMapper mapeador)
+        {
+            return new GestorDeMenus(contexto, mapeador);
+        }
 
         protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
@@ -61,6 +66,11 @@ namespace GestoresDeNegocio.Entorno
                 if (filtro.Clausula.ToLower() == nameof(MenuDtm.Activo).ToLower())
                 {
                     registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
+                }
+
+                if (filtro.Clausula.ToLower() == CamposDeFiltrado.PorDefecto)
+                {
+                    registros = registros.Where(x => x.Nombre.Contains(filtro.Valor));
                 }
             }
 
@@ -149,32 +159,13 @@ namespace GestoresDeNegocio.Entorno
             return elementos;
         }
 
-        public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, string valorDeFiltro)
-        {
-            var gestor = GestorDeVistaMvc.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!valorDeFiltro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(VistaMvcDto.Nombre), Valor = valorDeFiltro });
 
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
+        public List<MenuDto> LeerMenus(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
-        public List<MenuDto> LeerMenus(int posicion, int cantidad, string valorDeFiltro)
-        {
-            return Leer(this, posicion, cantidad, valorDeFiltro);
-        }
-
-
-        internal static List<MenuDto> Leer(GestorDeMenus gestor, int posicion, int cantidad, string filtro)
-        {
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(MenuDtm.Nombre), Valor = filtro });
-
-            var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(puestosDtm).ToList();
-        }
 
         protected override void DespuesDePersistir(MenuDtm registro, ParametrosDeNegocio parametros)
         {

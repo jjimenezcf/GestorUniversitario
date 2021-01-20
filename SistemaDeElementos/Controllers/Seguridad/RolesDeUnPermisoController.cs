@@ -5,6 +5,8 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Seguridad;
 using ModeloDeDto.Seguridad;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -26,16 +28,16 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        //protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
-        //{
-        //    if (claseElemento == nameof(PermisoDto))
-        //        return ((GestorDePermisosDeUnRol)GestorDeElementos).LeerPermisos(posicion, cantidad, filtro);
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        {
+            if (claseElemento == nameof(PermisoDto))
+                return GestorDePermisos.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPermisos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
-        //    if (claseElemento == nameof(RolDto))
-        //        return ((GestorDePermisosDeUnRol)GestorDeElementos).LeerRoles(posicion, cantidad, filtro);
+            if (claseElemento == nameof(RolDto))
+                return GestorDeRoles.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerRoles(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
-        //    return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
-        //}
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+        }
 
     }
 }

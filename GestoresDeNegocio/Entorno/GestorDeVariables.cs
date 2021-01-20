@@ -5,6 +5,7 @@ using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Entorno
 {

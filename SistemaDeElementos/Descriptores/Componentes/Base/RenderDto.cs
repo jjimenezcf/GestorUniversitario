@@ -159,7 +159,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamica));
 
             var htmlSelect = $@"<select {RenderAtributosComunes(tabla, descriptorControl)}
                                         clase-elemento=¨{atributos.SeleccionarDe}¨ 
@@ -176,7 +176,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-selector");
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamica));
 
             var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 

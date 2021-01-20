@@ -20,7 +20,6 @@ using Utilidades;
 
 namespace GestorDeElementos
 {
-    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
     public enum ModoDeOrdenancion { ascendente, descendente }
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 

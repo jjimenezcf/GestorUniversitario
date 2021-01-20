@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using GestorDeElementos;
+using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
@@ -30,7 +31,7 @@ namespace GestoresDeNegocio.Seguridad
         }
 
 
-        internal static GestorDeRoles Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeRoles Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeRoles(contexto, mapeador);
         }
@@ -44,6 +45,13 @@ namespace GestoresDeNegocio.Seguridad
             var rolesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
             return gestor.MapearElementos(rolesDtm).ToList();
         }
+
+        public List<RolDto> LeerRoles(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
+        }
+
 
         protected override IQueryable<RolDtm> AplicarFiltros(IQueryable<RolDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {

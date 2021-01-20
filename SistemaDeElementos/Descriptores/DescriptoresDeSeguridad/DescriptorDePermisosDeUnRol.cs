@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por rol"
                   , new Posicion { fila = 0, columna = 0 });
 
-            BuscarControlEnFiltro(FiltroPor.Nombre).CambiarAtributos("Permiso", nameof(PermisosDeUnRolDto.Permiso), "Buscar por 'permiso'");
+            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Permiso", nameof(PermisosDeUnRolDto.Permiso), "Buscar por 'permiso'");
 
             //Añade una opcion de menú, para relacionar permisos
             //- Abre una modal de selección

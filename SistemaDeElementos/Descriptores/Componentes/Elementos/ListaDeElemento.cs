@@ -13,18 +13,21 @@ namespace MVCSistemaDeElementos.Descriptores
         public string SeleccionarDe { get; private set; }
         public string MostrarPropiedad { get; private set; }
         public bool CargaDinamica { get; private set; }
+        public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
 
-        public ListaDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string propiedad,  string ayuda, string  seleccionarDe,  string guardarEn, string mostrarPropiedad , bool cargaDinamica, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
+        public int LongitudMinimaParaBuscar { get; set; } = 3;
+
+        public ListaDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor,  string ayuda, string  seleccionarDe,  string buscarPor, string mostrarPropiedad , bool cargaDinamica, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
         : base(
             padre: padre
-          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{propiedad}" 
+          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{filtrarPor}" 
           , etiqueta
-          , propiedad
+          , propiedad: filtrarPor
           , ayuda
           , posicion
         )
         {
-            IniciarClase(padre, seleccionarDe, guardarEn, mostrarPropiedad, cargaDinamica, criterioDeBusqueda);
+            IniciarClase(padre, seleccionarDe, buscarPor, mostrarPropiedad, cargaDinamica, criterioDeBusqueda);
         }
 
         public ListaDeElemento(BloqueDeFitro<TElemento> padre, string propiedad, Posicion posicion)
@@ -59,16 +62,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
             IniciarClase(padre, 
                 atributos.SeleccionarDe, 
-                atributos.GuardarEn, 
+                atributos.BuscarPor, 
                 atributos.MostrarPropiedad.IsNullOrEmpty() ? propiedad : atributos.MostrarPropiedad, 
                 atributos.CargaDinamica,
-                CriteriosDeFiltrado.contiene);
+                atributos.CriterioDeBusqueda);
         }
 
-        private void IniciarClase(BloqueDeFitro<TElemento> padre, string seleccionarDe, string guardarEn, string mostrarPropiedad, bool cargaDinamica, CriteriosDeFiltrado criterio)
+        private void IniciarClase(BloqueDeFitro<TElemento> padre, string seleccionarDe, string buscarPor, string mostrarPropiedad, bool cargaDinamica, CriteriosDeFiltrado criterio)
         {
             SeleccionarDe = seleccionarDe;
-            GuardarEn = guardarEn;
+            BuscarPor = buscarPor;
             CargaDinamica = cargaDinamica;
             MostrarPropiedad = mostrarPropiedad;
 
@@ -88,7 +91,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderListaDinamica()
         {
-            var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨contenedor-selector¨>
+            var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨{Css.Render(enumCssFiltro.ContenedorListaDinamica)}¨>
                                     <input id=¨{IdHtml}¨
                                            propiedad=¨{Propiedad.ToLower()}¨ 
                                            class=¨{Css.Render(enumCssFiltro.ListaDinamica)}¨ 
@@ -96,6 +99,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                            clase-elemento=¨{SeleccionarDe}¨
                                            guardar-en=¨{GuardarEn}¨ 
                                            carga-dinamica='S'
+                                           como-buscar='{BuscarPor}'
+                                           longitud='{LongitudMinimaParaBuscar}'
                                            oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
                                            onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
                                            placeholder=¨Seleccionar ({Criterio}) ...¨ 
@@ -112,7 +117,7 @@ namespace MVCSistemaDeElementos.Descriptores
         
         private string RenderListaDeElementos()
         {
-            var htmlSelect = $@"<div id=¨div_{IdHtml}¨  class=¨contenedor-selector¨>
+            var htmlSelect = $@"<div id=¨div_{IdHtml}¨  class=¨{Css.Render(enumCssFiltro.ContenedorListaDinamica)}¨>
                                     <select id=¨{IdHtml}¨ 
                                          class=¨{TipoControl.ListaDeElemento}¨ 
                                           {RenderAtributos()}

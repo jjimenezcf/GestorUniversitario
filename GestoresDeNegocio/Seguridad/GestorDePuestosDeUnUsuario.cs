@@ -12,6 +12,7 @@ using Utilidades;
 using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Elemento;
 using System;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -92,28 +93,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-
-        public dynamic LeerUsuarios(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(UsuarioDto.NombreCompleto), Valor = filtro });
-
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
-        }
-
-        public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDto.Nombre), Valor = filtro });
-
-            var clasesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(clasesDtm).ToList();
-        }
 
         protected override void DespuesDePersistir(PuestosDeUnUsuarioDtm registro, ParametrosDeNegocio parametros)
         {

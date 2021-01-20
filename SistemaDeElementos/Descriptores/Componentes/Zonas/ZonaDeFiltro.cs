@@ -24,7 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = TipoControl.ZonaDeFiltro;
             var b1 = new BloqueDeFitro<TElemento>(this, "General", new Dimension(1, 2));
             new BloqueDeFitro<TElemento>(this, "Común", new Dimension(1, 2));
-            new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: FiltroPor.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: CamposDeFiltrado.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
         }
 
 

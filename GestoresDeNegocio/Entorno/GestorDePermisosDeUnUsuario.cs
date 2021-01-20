@@ -6,6 +6,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
@@ -86,18 +87,6 @@ namespace GestoresDeNegocio.Entorno
                 return registros.OrderBy(x => x.Permiso.Nombre);
 
             return registros;
-        }
-
-        public List<UsuarioDto> LeerUsuarios(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            return GestorDeUsuarios.Leer(gestor, posicion, cantidad, filtro);
-        }
-
-        public List<PermisoDto> LeerPermisos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePermisos.Gestor(Contexto, Mapeador);
-            return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
         }
 
     }

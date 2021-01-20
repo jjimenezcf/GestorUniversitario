@@ -11,6 +11,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -100,6 +101,13 @@ namespace GestoresDeNegocio.Entorno
             }
             return (bool)cache[indice];
 
+        }
+
+
+        public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {            
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
         public VistaMvcDtm LeerVistaMvc(string vistaMvc)

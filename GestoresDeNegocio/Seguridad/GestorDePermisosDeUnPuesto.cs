@@ -77,17 +77,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-        public List<PuestoDto> LeerPuestos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
-            return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
-        }
-
-        public List<PermisoDto> LeerPermisos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePermisos.Gestor(Contexto, Mapeador);
-            return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
-        }
 
     }
 }

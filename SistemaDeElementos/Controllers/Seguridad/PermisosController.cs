@@ -5,6 +5,8 @@ using GestoresDeNegocio.Seguridad;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos;
 using ModeloDeDto.Seguridad;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -37,11 +39,11 @@ namespace MVCSistemaDeElementos.Controllers
             return null;
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
 
             if (claseElemento == nameof(ClasePermisoDto))
-                return ((GestorDePermisos)GestorDeElementos).LeerClases(posicion, cantidad, filtro);
+                return ((GestorDePermisos)GestorDeElementos).LeerClases(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             return null;
 

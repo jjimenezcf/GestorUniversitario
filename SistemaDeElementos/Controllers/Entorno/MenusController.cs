@@ -7,6 +7,7 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Entorno;
 using ModeloDeDto.Entorno;
 using GestoresDeNegocio.Entorno;
+using GestorDeElementos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -40,13 +41,13 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
             if (claseElemento == nameof(VistaMvcDto))
-                return ((GestorDeMenus)GestorDeElementos).LeerVistas(posicion, cantidad, filtro);
+                return GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerVistas(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             if (claseElemento == nameof(MenuDto))
-                return ((GestorDeMenus)GestorDeElementos).LeerMenus(posicion, cantidad, filtro);
+                return GestorDeMenus.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMenus(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
 

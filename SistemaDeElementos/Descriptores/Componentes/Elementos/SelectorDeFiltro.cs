@@ -49,7 +49,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               placeholder=¨{Ayuda}¨
                               {base.RenderAtributos()} 
                               criterioBuscar=¨{CriteriosDeFiltrado.contiene}¨
-                              propiedadBuscar=¨{FiltroPor.Nombre}¨
+                              propiedadBuscar=¨{CamposDeFiltrado.Nombre}¨
                               propiedadMostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
                               id-modal=¨{Modal.IdHtml}¨

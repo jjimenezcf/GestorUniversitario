@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GestorDeElementos;
+using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using Utilidades;
 
@@ -25,24 +26,16 @@ namespace ServicioDeDatos.Seguridad
         }
 
 
-        internal static GestorDePuestosDeTrabajo Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDePuestosDeTrabajo Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePuestosDeTrabajo(contexto, mapeador);
         }
 
-        internal static List<PuestoDto> Leer(GestorDePuestosDeTrabajo gestor, int posicion, int cantidad, string filtro)
-        {
-            var filtros = new List<ClausulaDeFiltrado>();
-            if (!filtro.IsNullOrEmpty())
-                filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PuestoDtm.Nombre), Valor = filtro });
 
-            var puestosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
-            return gestor.MapearElementos(puestosDtm).ToList();
-        }
-
-        public dynamic LeerPuestos(int posicion, int cantidad, string filtro)
+        public List<PuestoDto> LeerPuestos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
-            return Leer(this, posicion, cantidad, filtro);
+            var registros = LeerRegistros(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
         protected override IQueryable<PuestoDtm> AplicarFiltros(IQueryable<PuestoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)

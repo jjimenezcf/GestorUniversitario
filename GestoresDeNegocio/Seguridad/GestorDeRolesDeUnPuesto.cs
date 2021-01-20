@@ -82,17 +82,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-        public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDeRoles.Gestor(Contexto, Mapeador);
-            return GestorDeRoles.Leer(gestor, posicion, cantidad, filtro);
-        }
-
-        public List<PuestoDto> LeerPuestos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePuestosDeTrabajo.Gestor(Contexto, Mapeador);
-            return GestorDePuestosDeTrabajo.Leer(gestor, posicion, cantidad, filtro);
-        }
 
         protected override void DespuesDePersistir(RolesDeUnPuestoDtm registro, ParametrosDeNegocio parametros)
         {

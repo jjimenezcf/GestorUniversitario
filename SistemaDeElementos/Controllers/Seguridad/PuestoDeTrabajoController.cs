@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 using ModeloDeDto.Seguridad;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -26,9 +28,9 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
-            return ((GestorDePuestosDeTrabajo)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+           return ((GestorDePuestosDeTrabajo)GestorDeElementos).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
         }
 
     }

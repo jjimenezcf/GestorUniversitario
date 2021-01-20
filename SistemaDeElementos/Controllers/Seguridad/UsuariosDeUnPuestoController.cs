@@ -6,6 +6,9 @@ using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Seguridad;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto.Entorno;
+using GestorDeElementos;
+using System.Collections.Generic;
+using GestoresDeNegocio.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -28,13 +31,13 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
             if (claseElemento == nameof(UsuarioDto))
-                return ((GestorDeUsuariosDeUnPuesto)GestorDeElementos).LeerUsuarios(posicion, cantidad, filtro);
+                return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             if (claseElemento == nameof(PuestoDto))
-                return ((GestorDeUsuariosDeUnPuesto)GestorDeElementos).LeerPuestos(posicion, cantidad, filtro);
+                GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }

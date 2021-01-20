@@ -41,6 +41,7 @@ namespace GestoresDeNegocio.Seguridad
             return new GestorDePermisosDeUnRol(contexto, mapeador);
         }
 
+
         protected override IQueryable<PermisosDeUnRolDtm> AplicarJoins(IQueryable<PermisosDeUnRolDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
@@ -71,17 +72,6 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        public List<RolDto> LeerRoles(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDeRoles.Gestor(Contexto, Mapeador);
-            return GestorDeRoles.Leer(gestor, posicion, cantidad, filtro);
-        }
-
-        public List<PermisoDto> LeerPermisos(int posicion, int cantidad, string filtro)
-        {
-            var gestor = GestorDePermisos.Gestor(Contexto, Mapeador);
-            return GestorDePermisos.Leer(gestor, posicion, cantidad, filtro);
-        }
 
         protected override void DespuesDePersistir(PermisosDeUnRolDtm registro, ParametrosDeNegocio parametros)
         {

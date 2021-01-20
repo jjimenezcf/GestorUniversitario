@@ -761,7 +761,11 @@
         protected CargarListaDinamica(input: HTMLInputElement, controlador: string) {
             let clase: string = input.getAttribute(atListas.claseElemento);
             let idInput: string = input.getAttribute('id');
-            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, input.value);
+            let filtro: ClausulaDeFiltrado = this.DefinirFiltroListaDinamica(input);
+            if (filtro === null)
+                return;
+
+            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, filtro);
             let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CargaDinamica
@@ -831,9 +835,28 @@
             return JSON.stringify(clausulas);
         }
 
+        private DefinirFiltroListaDinamica(input: HTMLInputElement): ClausulaDeFiltrado {
+            let buscarPor: string = input.getAttribute(atListas.buscarPor);
+            if (IsNullOrEmpty(buscarPor)) {
+                buscarPor = atListas.buscaPorCampoDeDefecto
+            }
 
-        private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, filtro: string): string {
-            let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=-1&filtro=${filtro}`;
+            let criterio: string = input.getAttribute(atControl.criterio);
+            let valor: string = input.value;
+            let longitud: number = Numero(input.getAttribute(atListas.longitudNecesaria));
+
+            if (longitud == 0)
+                longitud = 3;
+
+            if (valor.length < longitud || IsNullOrEmpty(valor))
+                return null;
+
+            let clausula: ClausulaDeFiltrado =  new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
+            return clausula;
+        }
+
+        private DefinirPeticionDeCargarDinamica(controlador: string, claseElemento: string, filtro: ClausulaDeFiltrado): string {
+            let url: string = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=-1&filtro=${JSON.stringify(filtro)}`;
             return url;
         }
 

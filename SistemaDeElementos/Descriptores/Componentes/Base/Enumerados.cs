@@ -6,7 +6,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public enum enumCssFiltro
     {
-        ListaDinamica
+        ListaDinamica,
+        ContenedorListaDinamica
     }
 
 
@@ -23,7 +24,8 @@ namespace MVCSistemaDeElementos.Descriptores
         CuerpoDatosFiltroBloque,
     }
 
-    public enum enumCssMnt {
+    public enum enumCssMnt
+    {
         MntMenuContenedor,
         MntMenuZona,
         MntFiltroExpansor,
@@ -83,7 +85,13 @@ namespace MVCSistemaDeElementos.Descriptores
         CuerpoDeEdicion
     }
 
-    
+    public enum enumCssControlesDto
+    {
+        ContenedorListaDinamica,
+        ListaDinamica
+    }
+
+
 
     public static class Css
     {
@@ -92,6 +100,18 @@ namespace MVCSistemaDeElementos.Descriptores
             switch (clase)
             {
                 case enumCssFiltro.ListaDinamica: return "lista-dinamica";
+                case enumCssFiltro.ContenedorListaDinamica: return "contenedor-selector";
+            }
+            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+        }
+
+
+        public static string Render(enumCssControlesDto clase)
+        {
+            switch (clase)
+            {
+                case enumCssControlesDto.ListaDinamica: return "lista-dinamica";
+                case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-selector";
             }
             throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
         }

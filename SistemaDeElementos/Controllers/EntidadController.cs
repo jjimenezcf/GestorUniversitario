@@ -389,8 +389,10 @@ namespace MVCSistemaDeElementos.Controllers
             dynamic elementos;
             try
             {
+                ClausulaDeFiltrado clausula = filtro == null ? new ClausulaDeFiltrado() : JsonConvert.DeserializeObject<ClausulaDeFiltrado>(filtro);
+
                 CumplimentarDatosDeUsuarioDeConexion();
-                elementos = CargaDinamica(claseElemento, posicion, cantidad, filtro);
+                elementos = CargaDinamica(claseElemento, posicion, cantidad, clausula);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -496,7 +498,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
             throw new Exception($"Debe implementar la función de CargaDinamica para la clase '{claseElemento}' en el controlador '{this.GetType().Name}'");
         }
