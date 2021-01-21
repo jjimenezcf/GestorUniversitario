@@ -106,7 +106,7 @@
     }
 
 
-    function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ResultadoJson {
+    function ParsearRespuesta(req: XMLHttpRequest, peticion: string): ApiDeAjax.ResultadoJson {
         var resultado: any;
         try {
             resultado = JSON.parse(req.response);

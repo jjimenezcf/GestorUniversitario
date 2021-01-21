@@ -34,7 +34,7 @@
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(RolDto),
             GuardarEn = nameof(IdRol),
-            MostrarPropiedad = nameof(RolDto.Nombre),
+            MostrarExpresion = nameof(RolDto.Nombre),
             Fila = 1,
             Columna = 0,
             Ordenar = true,

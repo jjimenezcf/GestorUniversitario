@@ -294,7 +294,8 @@ namespace GestorDeElementos
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, NegociosDeSe.ParsearDto(registro.GetType().Name.Replace("Dtm", "Dto")));
+            var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
+            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio);
 
             if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.NombreObligatorio)
             {
@@ -724,7 +725,7 @@ namespace GestorDeElementos
 
         public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
         {
-            if (Contexto.DatosDeConexion.EsAdministrador || !NegociosDeSe.UsaSeguridad(negocio))
+            if (Contexto.DatosDeConexion.EsAdministrador ||  negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
             var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
@@ -766,7 +767,7 @@ namespace GestorDeElementos
         {
             enumModoDeAccesoDeDatos modoDelUsuario = enumModoDeAccesoDeDatos.SinPermiso;
 
-            if (!NegociosDeSe.UsaSeguridad(negocio))
+            if (!NegociosDeSe.UsaSeguridad(negocio) || negocio == enumNegocio.No_Definido)
                 return enumModoDeAccesoDeDatos.Administrador;
 
             if (Contexto.DatosDeConexion.EsAdministrador)

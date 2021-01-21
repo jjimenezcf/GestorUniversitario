@@ -38,7 +38,7 @@ namespace ModeloDeDto.Seguridad
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(UsuarioDto),
             GuardarEn = nameof(IdUsuario),
-            MostrarPropiedad = nameof(UsuarioDto.Nombre),
+            MostrarExpresion = nameof(UsuarioDto.Nombre),
             Fila = 1,
             Columna = 0,
             Ordenar = true,

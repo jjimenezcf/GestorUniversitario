@@ -9,7 +9,7 @@
     else
         mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
 
-    if (TipoMensaje.Error === tipo) 
+    if (TipoMensaje.Error === tipo)
         console.error(mensajeDeConsola);
     else
         console.log(mensajeDeConsola);
@@ -156,7 +156,7 @@ function Numero(valor: any): number {
         return 0;
 
     if (IsString(valor))
-        return Number(valor) ;
+        return Number(valor);
 
     if (IsBool(valor))
         if (valor)
@@ -211,19 +211,16 @@ function Encriptar(clave: string, textoParaEncriptar: string) {
     return textoParaEncriptar;
 }
 
-class ResultadoJson {
-    estado: number;
-    mensaje: string;
-    consola: string;
-    total: number;
-    datos: any;
-    modoDeAcceso: string;
-    error: boolean;
+
+function ParsearExpresion(elemento: any, patron: string): string {
+    let mostrar: string = patron;
+    for (let propiedad in elemento)
+        if (patron.includes(`[${propiedad}]`))
+            mostrar = mostrar.replace(`[${propiedad}]`, IsNullOrEmpty(elemento[propiedad]) ? "" : elemento[propiedad]);
+
+    return mostrar;
 }
 
-class ResultadoHtml extends ResultadoJson {
-    html: string;
-}
 
 
 

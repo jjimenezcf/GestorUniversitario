@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Gestor.Errores;
 using GestorDeElementos;
 using ModeloDeDto;
@@ -12,6 +13,9 @@ namespace MVCSistemaDeElementos.Descriptores
         public string GuardarEn { get; private set; }
         public string SeleccionarDe { get; private set; }
         public string MostrarExpresion { get; private set; }
+        public string MostrarExpresionHtml => MostrarExpresion.ToLower();
+
+
 
         //string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarExpresion, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
 
@@ -34,38 +38,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            //var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨{Css.Render(enumCssFiltro.ContenedorListaDinamica)}¨>
-            //                        <input id=¨{IdHtml}¨
-            //                               propiedad=¨{Propiedad.ToLower()}¨ 
-            //                               class=¨{Css.Render(enumCssFiltro.ListaDinamica)}¨ 
-            //                               tipo=¨{Tipo}¨
-            //                               carga-dinamica='S'
-            //                               clase-elemento=¨{SeleccionarDe}¨
-            //                               mostrar-propiedad=¨{MostrarPropiedad.ToLower()}¨  
-            //                               como-buscar='{BuscarPor}'
-            //                               criterio-de-filtro=¨{Criterio}¨ 
-            //                               filtrar-por=¨{Propiedad.ToLower()}¨ 
-            //                               longitud='{LongitudMinimaParaBuscar}'
-            //                               oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
-            //                               onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
-            //                               placeholder=¨Seleccionar ({Criterio}) ...¨ 
-            //                               list=¨{IdHtml}-lista¨
-            //                               control-de-filtro=¨S¨/>
-            //                        <datalist id=¨{IdHtml}-lista¨>
-            //                        </datalist>
-            //                    </div>";
+            var valores = new Dictionary<string,object>();
 
-            var htmlSelect = $@"<div id=¨div_{IdHtml}¨  class=¨{Css.Render(enumCssFiltro.ContenedorListaDeElementos)}¨>
-                                    <select id=¨{IdHtml}¨ 
-                                            propiedad=¨{Propiedad.ToLower()}¨ 
-                                            class=¨{Css.Render(enumCssFiltro.ListaDeElementos)}¨ 
-                                            tipo=¨{Tipo}¨
-                                            clase-elemento=¨{SeleccionarDe}¨ 
-                                            mostrar-expresion=¨{MostrarExpresion.ToLower()}¨  >
-                                            <option value=¨0¨>Seleccionar ...</option>
-                                    </select>
-                                </div>";
-            return htmlSelect;
+            valores["IdHtmlContenedor"] = $"div_{IdHtml}";
+            valores["IdHtml"] = IdHtml;
+            valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorListaDeElementos);
+            valores["Propiedad"] = PropiedadHtml;
+            valores["Css"] = Css.Render(enumCssFiltro.ListaDeElementos);
+            valores["Tipo"] = Tipo;
+            valores["SeleccionarDe"] = SeleccionarDe;
+            valores["MostrarExpresion"] = MostrarExpresionHtml;
+
+            return PlantillasHtml.Render(PlantillasHtml.selectorFlt, valores);
+
         }
     }
 }

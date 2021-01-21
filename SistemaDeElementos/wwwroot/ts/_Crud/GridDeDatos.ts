@@ -767,7 +767,7 @@
             super.AntesDeNavegar(valores);
             this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
 
-            let datosRestrictor: DatosRestrictor = valores.Obtener(Sesion.restrictor) as DatosRestrictor;
+            let datosRestrictor: Tipos.DatosRestrictor = valores.Obtener(Sesion.restrictor) as Tipos.DatosRestrictor;
             let idSeleccionado: number = valores.Obtener(Sesion.idSeleccionado) as number;
             this.Estado.Agregar(atGrid.idSeleccionado, idSeleccionado);
             this.Estado.Agregar(atGrid.nombreSeleccionado, datosRestrictor.Texto);
@@ -787,9 +787,9 @@
         // PropiedadRestrictora --> propiedad bindeada al control de filtro de la página de destino donde se mapea el restrictor seleccionado en el grid
         public RelacionarCon(parametrosDeEntrada: string): void {
             try {
-                let datos: Crud.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
+                let datos: Tipos.DatosParaRelacionar = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
                 if (datos.FiltroRestrictor !== null)
-                    this.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+                    ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
                 Mensaje(TipoMensaje.Error, error);
@@ -797,7 +797,7 @@
             }
         }
 
-        private PrepararParametrosDeRelacionarCon(infoSelector: InfoSelector, parametros: string): DatosParaRelacionar {
+        private PrepararParametrosDeRelacionarCon(infoSelector: InfoSelector, parametros: string): Tipos.DatosParaRelacionar {
 
             if (infoSelector.Cantidad != 1)
                 throw new Error("Debe seleccionar un elemento para poder relacionarlo");
@@ -807,7 +807,7 @@
 
 
             let elemento: Elemento = infoSelector.LeerElemento(0);
-            let datos: DatosParaRelacionar = new DatosParaRelacionar();
+            let datos: Tipos.DatosParaRelacionar = new Tipos.DatosParaRelacionar();
             datos.idOpcionDeMenu = partes[0].split('==')[1];
             datos.RelacionarCon = partes[1].split('==')[1];
             datos.PropiedadQueRestringe = partes[2].split('==')[1];
@@ -821,13 +821,13 @@
                 this.LeerElementoParaRelacionar(datos);
             else {
                 let idRestrictor: number = Numero(valorDeLaColumna);
-                let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+                let filtro: Tipos.DatosRestrictor = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
                 datos.FiltroRestrictor = filtro;
             }
             return datos;
         }
 
-        private LeerElementoParaRelacionar(datos: DatosParaRelacionar) {
+        private LeerElementoParaRelacionar(datos: Tipos.DatosParaRelacionar) {
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${datos.idSeleccionado}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerPorId
@@ -844,11 +844,11 @@
 
         private TrasLeerNavegarParaRelacionar(peticion: ApiDeAjax.DescriptorAjax) {
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
-            let datos: DatosParaRelacionar = peticion.DatosDeEntrada as DatosParaRelacionar;
+            let datos: Tipos.DatosParaRelacionar = peticion.DatosDeEntrada as Tipos.DatosParaRelacionar;
             let idRestrictor: number = Numero(peticion.resultado.datos[datos.PropiedadQueRestringe]);
-            let filtro: Crud.DatosRestrictor = new Crud.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+            let filtro: Tipos.DatosRestrictor = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
             datos.FiltroRestrictor = filtro;
-            grid.NavegarARelacionar(datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+            ApiRuote.NavegarARelacionar(grid, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
         }
 
 

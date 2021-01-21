@@ -36,7 +36,7 @@ namespace ModeloDeDto.Seguridad
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(PermisoDto),
             GuardarEn = nameof(IdPermiso),
-            MostrarPropiedad = nameof(PermisoDto.Nombre),
+            MostrarExpresion = nameof(PermisoDto.Nombre),
             Fila = 1,
             Columna = 0,
             Ordenar = true,

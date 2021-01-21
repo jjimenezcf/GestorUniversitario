@@ -54,11 +54,11 @@
                 ventana.style.display = 'block';
             }
             else {
-                this.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
-                this.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
-                this.OcultarPanel(this.CrudDeMnt.CuerpoPie);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoPie);
                 this.PosicionarCreacion();
-                this.MostrarPanel(this.PanelDeCrear);
+                ApiCrud.MostrarPanel(this.PanelDeCrear);
             }
             this.InicializarPanel();
         }
@@ -83,13 +83,13 @@
         public CerrarCreacion() {
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
-                this.CerrarModal(this.PanelDeCrear);
+                ApiCrud.CerrarModal(this.PanelDeCrear);
             }
             else {
-                this.OcultarPanel(this.PanelDeCrear);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoPie);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
+                ApiCrud.OcultarPanel(this.PanelDeCrear);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoPie);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
                 BlanquearMensaje();
             }
 
@@ -114,7 +114,7 @@
 
         private DespuesDeCrear(peticion: ApiDeAjax.DescriptorAjax) {
             let crudCreador: CrudCreacion = peticion.llamador as CrudCreacion;
-            crudCreador.BlanquearControlesDeIU(crudCreador.PanelDeCrear);
+            ApiCrud.BlanquearControlesDeIU(crudCreador.PanelDeCrear);
             if (crudCreador.SeguirCreando) {
                 crudCreador.InicializarPanel();
             }

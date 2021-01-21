@@ -22,7 +22,7 @@ namespace ModeloDeDto.Entorno
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
-            MostrarPropiedad = nameof(Nombre),
+            MostrarExpresion = nameof(Nombre),
             Fila = 0,
             Columna = 0,
             Ordenar = true,
@@ -83,7 +83,7 @@ namespace ModeloDeDto.Entorno
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(VistaMvcDto),
             GuardarEn = nameof(idVistaMvc),
-            MostrarPropiedad =nameof(Nombre),
+            MostrarExpresion =nameof(Nombre),
             Fila = 4,
             Columna = 0,
             Obligatorio = false

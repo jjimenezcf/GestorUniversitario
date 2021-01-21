@@ -36,7 +36,7 @@
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(PuestoDto),
             GuardarEn = nameof(IdPuesto),
-            MostrarPropiedad = nameof(PuestoDto.Nombre),
+            MostrarExpresion = nameof(PuestoDto.Nombre),
             Fila = 1,
             Columna = 0,
             Ordenar = true,

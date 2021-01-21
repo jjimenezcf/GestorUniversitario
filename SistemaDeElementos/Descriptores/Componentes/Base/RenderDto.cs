@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Gestor.Errores;
 using ModeloDeDto;
 using Utilidades;
@@ -147,7 +148,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-check");
-            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.CheckDto))}
                                       type=¨checkbox¨
                                       checked=¨{atributos.ValorPorDefecto}¨>
                                 </input>
@@ -159,26 +160,31 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamica));
 
-            var htmlSelect = $@"<select {RenderAtributosComunes(tabla, descriptorControl)}
-                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 
-                                        guardar-en=¨{atributos.GuardarEn}¨>
-                                        <option value=¨0¨>Seleccionar ...</option>
-                                </select>";
+            var valores = new Dictionary<string, object>();
+            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementosDto);
+            valores["IdHtml"] = descriptorControl.IdHtml;
+            valores["Propiedad"] = descriptorControl.propiedad;
+            valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementosDto);
+            valores["Tipo"] = atributos.TipoDeControl;
+            
+            valores["SeleccionarDe"] = atributos.SeleccionarDe;
+            valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
+            valores["GuardarEn"] = atributos.GuardarEn;
 
-            htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDeElemento}");
+            var htmlSelect = PlantillasHtml.Render(PlantillasHtml.selectorDto, valores);
 
-            return htmlContenedor.Replace("controlParaRenderizar", htmlSelect);
+            return htmlSelect;
 
         }
 
         private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamica));
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamicaDto));
 
-            var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+            var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl,Css.Render(enumCssControlesDto.ListaDinamicaDto))}
                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 
                                        guardar-en=¨{atributos.GuardarEn}¨ 
                                        carga-dinamica=¨S¨ 
@@ -188,9 +194,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                 />
                                 <datalist id=¨{descriptorControl.IdHtml}-lista¨>
                                 </datalist>";
-
-            htmlSelect = htmlSelect.Replace("propiedad-valida", $"propiedad-valida {TipoControl.ListaDinamica}");
-
+            
             return htmlContenedor.Replace("controlParaRenderizar", htmlSelect);
 
         }
@@ -198,21 +202,28 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
-            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
-                                      type=¨text¨ 
-                                      value=¨¨
-                                      placeholder =¨{atributos.Ayuda}¨
-                                      ValorPorDefecto=¨{atributos.ValorPorDefecto}¨>
-                                </input>";
-            return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
+
+            var valores = new Dictionary<string, object>();
+            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditorDto);
+            valores["IdHtml"] = descriptorControl.IdHtml;
+            valores["Propiedad"] = descriptorControl.propiedad;
+            valores["Css"] = Css.Render(enumCssControlesDto.EditorDto);
+            valores["Tipo"] = atributos.TipoDeControl;
+            
+            valores["placeholder"] = atributos.Ayuda;
+            valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+
+            var htmlEditor = PlantillasHtml.Render(PlantillasHtml.editorDto, valores);
+
+            return htmlEditor;
         }
 
         private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-editor");
-            var htmlRestrictor = $@"<input {RenderAtributosComunes(tabla, descriptorControl)}
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorEditorDto));
+            var htmlRestrictor = $@"<input {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.EditorRestrictorDto))}
                                       type=¨text¨ 
                                       value=¨¨
                                       placeholder =¨{atributos.Ayuda}¨>
@@ -222,15 +233,15 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-archivo");
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorArchivoDto));
 
             var htmlArchivo = @$"
-            <form class=¨¨ method=¨post¨ enctype=¨multipart/form-data¨>
-              <table class=¨tabla-archivo-subir¨>
-                 <tr>
-                   <td class=¨td-archivo-subir¨>        
+            <form class=¨{Css.Render(enumCssControlesDto.FormDeArchivoDto)}¨ method=¨post¨ enctype=¨multipart/form-data¨>
+              <table class=¨{Css.Render(enumCssControlesDto.TablaDeArchivo)}¨>
+                 <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
+                   <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>        
                       <a id=¨{descriptorControl.IdHtml}.ref¨ href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
-                      <input  {RenderAtributosComunes(tabla, descriptorControl)}
+                      <input  {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.SelectorDeArchivo))}
                               type=¨file¨ 
                               name=¨fichero¨  
                               style=¨display: none;¨
@@ -242,17 +253,17 @@ namespace MVCSistemaDeElementos.Descriptores
                               placeholder =¨{atributos.Ayuda}¨
                               onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}','barra-{descriptorControl.IdHtml}')¨ />
                   </td>
-                   <td class=¨td-archivo-subir¨>
-                      <div id = ¨barra-{descriptorControl.IdHtml}¨ class=¨barra-azul¨>
+                   <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
+                      <div id = ¨barra-{descriptorControl.IdHtml}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨>
                           <span></span>
                       </div>
                    </td>
                  </tr>
-                 <tr>
-                   <td class=¨td-archivo-subir¨>
+                 <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
+                   <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
                       <canvas id=¨canvas-{descriptorControl.IdHtml}¨></canvas>
                    </td>
-                   <td class=¨td-archivo-subir¨>
+                   <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
                        <div style=¨display: none;¨>
                            <img id=¨img-{descriptorControl.IdHtml}¨
                                     tipo=¨{TipoControl.VisorDeArchivo}¨  
@@ -278,12 +289,12 @@ namespace MVCSistemaDeElementos.Descriptores
                       </div>";
         }
 
-        private static string RenderAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
+        private static string RenderAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, string claseCss)
         {
             var atributos = descriptorControl.atributos;
             var atributosHtml = $@"id=¨{descriptorControl.IdHtml}¨ 
                                    propiedad=¨{descriptorControl.propiedad}¨ 
-                                   class=¨propiedad-valida¨ 
+                                   class=¨{claseCss}¨ 
                                    tipo=¨{atributos.TipoDeControl}¨ 
                                    obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
                                    {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} ";

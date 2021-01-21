@@ -90,7 +90,7 @@
 
         public AplicarRestrictores() {
             if (this.Estado.Contiene(Sesion.restrictor)) {
-                let restrictor: DatosRestrictor = this.Estado.Obtener(Sesion.restrictor);
+                let restrictor: Tipos.DatosRestrictor = this.Estado.Obtener(Sesion.restrictor);
                 this.MapearRestrictorDeFiltro(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeCreacion.MaperaRestrictorDeCreacion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
                 this.crudDeEdicion.MaperaRestrictorDeEdicion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
@@ -258,7 +258,7 @@
 
         public CerrarModalDeBorrado() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            this.CerrarModal(this.ModalDeBorrado);
+            ApiCrud.CerrarModal(this.ModalDeBorrado);
         }
 
         public IraEditar() {
@@ -338,7 +338,7 @@
         }
 
         public SeleccionarListaDinamica(input: HTMLInputElement) {
-            let lista: ListaDinamica = new ListaDinamica(input);
+            let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
             input.setAttribute(atListasDinamicas.idSeleccionado, valor.toString());
             if (valor === 0)
@@ -352,13 +352,13 @@
 
         public OcultarMostrarFiltro(): void {
             if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {
-                this.OcultarPanel(this.ZonaDeFiltro);
+                ApiCrud.OcultarPanel(this.ZonaDeFiltro);
                 this.ExpandirFiltro.value = "0";
                 this.EtiquetaMostrarOcultarFiltro.innerText = "Mostrar filtro";
             }
             else {
                 this.ExpandirFiltro.value = "1";
-                this.MostrarPanel(this.ZonaDeFiltro);
+                ApiCrud.MostrarPanel(this.ZonaDeFiltro);
                 this.EtiquetaMostrarOcultarFiltro.innerText = "Ocultar filtro";
             }
             this.PosicionarPanelesDelCuerpo();
@@ -368,11 +368,11 @@
             let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}.input`) as HTMLInputElement;
             if (NumeroMayorDeCero(extensor.value)) {
                 extensor.value = "0";
-                this.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+                ApiCrud.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
             }
             else {
                 extensor.value = "1";
-                this.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+                ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
             }
             this.PosicionarPanelesDelCuerpo();
         }

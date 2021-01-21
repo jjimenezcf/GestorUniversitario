@@ -1,5 +1,19 @@
 ﻿namespace ApiDeAjax {
 
+    export class ResultadoJson {
+        estado: number;
+        mensaje: string;
+        consola: string;
+        total: number;
+        datos: any;
+        modoDeAcceso: string;
+        error: boolean;
+    }
+
+    export class ResultadoHtml extends ResultadoJson {
+        html: string;
+    }
+
     export enum TipoPeticion {
         Sincrona,
         Asincrona

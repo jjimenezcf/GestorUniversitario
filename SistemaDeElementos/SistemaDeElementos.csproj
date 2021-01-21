@@ -7,10 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Descriptores\Componentes\NewFolder\**" />
+    <Compile Remove="Descriptores\Componentes\Plantillas - Copia\**" />
     <Compile Remove="Descriptores\Componentes\Plantillas\**" />
+    <Content Remove="Descriptores\Componentes\NewFolder\**" />
+    <Content Remove="Descriptores\Componentes\Plantillas - Copia\**" />
     <Content Remove="Descriptores\Componentes\Plantillas\**" />
+    <EmbeddedResource Remove="Descriptores\Componentes\NewFolder\**" />
+    <EmbeddedResource Remove="Descriptores\Componentes\Plantillas - Copia\**" />
     <EmbeddedResource Remove="Descriptores\Componentes\Plantillas\**" />
+    <None Remove="Descriptores\Componentes\NewFolder\**" />
+    <None Remove="Descriptores\Componentes\Plantillas - Copia\**" />
     <None Remove="Descriptores\Componentes\Plantillas\**" />
+    <TypeScriptCompile Remove="Descriptores\Componentes\NewFolder\**" />
+    <TypeScriptCompile Remove="Descriptores\Componentes\Plantillas - Copia\**" />
     <TypeScriptCompile Remove="Descriptores\Componentes\Plantillas\**" />
   </ItemGroup>
 

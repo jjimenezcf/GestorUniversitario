@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 ayuda:"selecciona una clase",
                                                 seleccionarDe: nameof(ClasePermisoDto),
                                                 filtraPor: nameof(PermisoDto.IdClase),
-                                                mostrarExpresion: $"{nameof(ClasePermisoDto.Nombre)} ({nameof(ClasePermisoDto.Id)})",
+                                                mostrarExpresion: ClasePermisoDto.MostrarExpresion,
                                                 posicion: new Posicion() { fila = 0, columna = 0 });
                 
                 new ListaDeElemento<PermisoDto>(padre: fltEspecificos,

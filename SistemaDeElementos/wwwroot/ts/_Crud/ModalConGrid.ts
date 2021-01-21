@@ -30,7 +30,7 @@
             let referenciaCheck: string = `chksel.${this.IdGrid}`;
             this.blanquearCheck(referenciaCheck);
             this.InfoSelector.QuitarTodos();
-            this.CerrarModal(this.Modal);
+            ApiCrud.CerrarModal(this.Modal);
         }
 
         private blanquearCheck(refCheckDeSeleccion: string) {

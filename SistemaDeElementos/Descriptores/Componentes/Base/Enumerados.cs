@@ -89,14 +89,54 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public enum enumCssControlesDto
     {
-        ContenedorListaDinamica,
-        ListaDinamica
+        ContenedorListaDeElementosDto,
+        ContenedorListaDinamicaDto,
+        ContenedorEditorDto,
+        FormDeArchivoDto,
+        ContenedorArchivoDto,
+        TablaDeArchivo,
+        FilaDeArchivo,
+        ColumnaDeArchivo,
+        CheckDto,
+        SelectorDto,
+        EditorDto,
+        EtiquetaDto,
+        ListaDeElementosDto,
+        ListaDinamicaDto,
+        SelectorDeArchivo,
+        BarraAzulArchivo,
+        EditorRestrictorDto
     }
 
 
 
     public static class Css
     {
+        public static string Render(enumCssControlesDto clase)
+        {
+            switch (clase)
+            {
+                case enumCssControlesDto.ContenedorListaDeElementosDto: return "contenedor-selector";
+                case enumCssControlesDto.ContenedorListaDinamicaDto: return "contenedor-selector";
+                case enumCssControlesDto.ContenedorEditorDto: return "contenedor-editor";
+                case enumCssControlesDto.ContenedorArchivoDto: return "contenedor-archivo";
+                case enumCssControlesDto.CheckDto: return "check-dto";
+                case enumCssControlesDto.SelectorDto: return "selector-dto";
+                case enumCssControlesDto.EditorDto: return "editor-dto";
+                case enumCssControlesDto.EditorRestrictorDto: return "editor-restrictor-dto";
+                case enumCssControlesDto.EtiquetaDto: return "etiqueta-dto";
+                case enumCssControlesDto.ListaDinamicaDto: return "lista-dinamica-dto";
+                case enumCssControlesDto.ListaDeElementosDto: return "lista-de-elementos-dto";
+                case enumCssControlesDto.FormDeArchivoDto: return "form-archivo";
+                case enumCssControlesDto.TablaDeArchivo: return "tabla-archivo-subir";
+                case enumCssControlesDto.FilaDeArchivo: return "tr-archivo-subir";
+                case enumCssControlesDto.ColumnaDeArchivo: return "td-archivo-subir";
+                case enumCssControlesDto.SelectorDeArchivo: return "selector-de-archivo";
+                case enumCssControlesDto.BarraAzulArchivo: return "barra-azul";
+            }
+            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+        }
+
         public static string Render(enumCssFiltro clase)
         {
             switch (clase)
@@ -110,15 +150,6 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        public static string Render(enumCssControlesDto clase)
-        {
-            switch (clase)
-            {
-                case enumCssControlesDto.ListaDinamica: return "lista-dinamica";
-                case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-selector";
-            }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
-        }
         public static string Render(enumCssCreacion clase)
         {
             switch (clase)

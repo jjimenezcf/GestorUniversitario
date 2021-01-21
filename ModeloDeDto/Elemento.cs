@@ -5,6 +5,7 @@ using Utilidades;
 
 namespace ModeloDeDto
 {
+
     public static class TipoControl
     {
         public const string Selector = "selector";
@@ -114,12 +115,12 @@ namespace ModeloDeDto
         /// </summary>
         public string SeleccionarDe { get; set; }
 
-        public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.comienza;
+        public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.contiene;
 
         public string GuardarEn { get; set; }
         public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
 
-        public string MostrarPropiedad { get; set; }
+        public string MostrarExpresion { get; set; } = ElementoDto.ExpresionPorDefecto;
 
         public bool CargaDinamica => TipoDeControl == TipoControl.ListaDinamica;
 
@@ -186,12 +187,13 @@ namespace ModeloDeDto
         /// <summary>
         /// indica las propiedades del dto con las que se conforma el nombre
         /// </summary>
-        public string ExpresionNombre { get; set; } = "[Nombre]";
+        public string ExpresionNombre { get; set; } = ElementoDto.ExpresionPorDefecto;
     }
-
 
     public class ElementoDto
     {
+        public static string ExpresionPorDefecto = "[nombre]";
+
         [IUPropiedad(
             Etiqueta = "Id",
             Ayuda = "id del elemento",

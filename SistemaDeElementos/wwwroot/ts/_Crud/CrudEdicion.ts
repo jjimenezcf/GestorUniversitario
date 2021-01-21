@@ -124,11 +124,11 @@
                 ventana.style.display = 'block';
             }
             else {
-                this.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
-                this.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
-                this.OcultarPanel(this.CrudDeMnt.CuerpoPie);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
+                ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoPie);
                 this.PosicionarEdicion()
-                this.MostrarPanel(this.PanelDeEditar);
+                ApiCrud.MostrarPanel(this.PanelDeEditar);
             }
             this.EditarSeleccionado(1);
         }
@@ -166,13 +166,13 @@
 
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
-                this.CerrarModal(this.PanelDeEditar);
+                ApiCrud.CerrarModal(this.PanelDeEditar);
             }
             else {
-                this.OcultarPanel(this.PanelDeEditar);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
-                this.MostrarPanel(this.CrudDeMnt.CuerpoPie);
+                ApiCrud.OcultarPanel(this.PanelDeEditar);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
+                ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoPie);
                 BlanquearMensaje();
             }
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
