@@ -124,7 +124,6 @@ const atSelector = {
 
 const atListas = {
     claseElemento: 'clase-elemento',
-    guardarEn: 'guardar-en',
     mostrarExpresion: 'mostrar-expresion',
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
@@ -150,6 +149,11 @@ const atListasDinamicas = {
     expresionPorDefecto: atListas.expresionPorDefecto,
     ultimaCadenaBuscada: 'ultima-busqueda',
     cantidad:'cantidad-a-leer'
+};
+
+
+const atListasDinamicasDto = {
+    guardarEn: 'guardar-en'
 };
 
 const atCriterio = {

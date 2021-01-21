@@ -81,8 +81,8 @@
         private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
             let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
             for (var i = 0; i < select.length; i++) {
-                var selector = select[i] as HTMLSelectElement;
-                var guardarEn = selector.getAttribute(atListas.guardarEn);
+                let selector: HTMLSelectElement = select[i] as HTMLSelectElement;
+                let guardarEn: string = selector.getAttribute(atListasDinamicasDto.guardarEn);
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
                 if (id === null || id == 0)
                     selector.selectedIndex = 0;
@@ -109,7 +109,7 @@
             for (var i = 0; i < listas.length; i++) {
                 let input: HTMLInputElement = listas[i] as HTMLInputElement;
                 let propiedad: string = input.getAttribute(atControl.propiedad);
-                let guardarEn: string = input.getAttribute(atListas.guardarEn);
+                let guardarEn: string = input.getAttribute(atListasDinamicasDto.guardarEn);
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
                 let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
 
@@ -469,7 +469,7 @@
 
         private MapearSelectorDinamico(input: HTMLInputElement, elementoJson: JSON) {
             let propiedadDto = input.getAttribute(atControl.propiedad);
-            let guardarEn: string = input.getAttribute(atListas.guardarEn);
+            let guardarEn: string = input.getAttribute(atListasDinamicasDto.guardarEn);
             let obligatorio: string = input.getAttribute(atControl.obligatorio);
             let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
@@ -494,7 +494,7 @@
 
         private MapearSelectorDeElementosAlJson(selector: HTMLSelectElement, elementoJson: JSON) {
             let propiedadDto = selector.getAttribute(atControl.propiedad);
-            let guardarEn: string = selector.getAttribute(atListas.guardarEn);
+            let guardarEn: string = selector.getAttribute(atListasDinamicasDto.guardarEn);
             let obligatorio: string = selector.getAttribute(atControl.obligatorio);
 
             if (obligatorio === "S" && Number(selector.value) === 0) {

@@ -18,7 +18,6 @@ namespace MVCSistemaDeElementos.Descriptores
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControl} 
                                          clase-elemento=¨[ClaseElemento]¨ 
-                                         guardar-en=¨[GuardarEn]¨
                                          mostrar-expresion=¨[MostrarExpresion]¨
                                          como-buscar=¨[ComoBuscar]¨
                                          longitud=¨[Longitud]¨ 
@@ -28,7 +27,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                          placeholder =¨[Placeholder]¨
                                          oninput=¨[OnInput]¨ 
                                          onchange=¨[OnChange]¨
-                                         list=¨[IdHtml]-lista¨ >
+                                         list=¨[IdHtml]-lista¨
+                                         control-de-filtro=¨S¨>
                                          <datalist id=¨[IdHtml]-lista¨>
                                          </datalist>
                              </div>";
