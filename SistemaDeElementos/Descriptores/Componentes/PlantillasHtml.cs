@@ -20,7 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string selectorDto = $@"
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <select {atributosComunesDeUnControl} 
-                                          clase-elemento=¨[SeleccionarDe]¨ 
+                                          clase-elemento=¨[ClaseElemento]¨ 
                                           guardar-en=¨[GuardarEn]¨
                                           mostrar-expresion=¨[MostrarExpresion]¨  >
                                           <option value=¨0¨>Seleccionar ...</option>

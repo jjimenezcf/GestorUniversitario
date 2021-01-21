@@ -119,7 +119,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.RestrictorDeEdicion:
-                    htmdDescriptorControl = RenderRestrictor(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderListaDeElemento(tabla, descriptorControl, ancho);
@@ -165,7 +165,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementosDto);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementosDto);
-            valores["SeleccionarDe"] = atributos.SeleccionarDe;
+            valores["ClaseElemento"] = atributos.SeleccionarDe;
             valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["GuardarEn"] = atributos.GuardarEn;
 
@@ -200,7 +200,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditorDto);
-            valores["Css"] = Css.Render(enumCssControlesDto.EditorDto);
+            valores["Css"] = atributos.TipoDeControl == TipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictorDto): Css.Render(enumCssControlesDto.EditorDto);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
@@ -209,17 +209,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlEditor;
         }
 
-        private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
-        {
-            var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorEditorDto));
-            var htmlRestrictor = $@"<input {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.EditorRestrictorDto))}
-                                      type=¨text¨ 
-                                      value=¨¨
-                                      placeholder =¨{atributos.Ayuda}¨>
-                                </input>";
-            return htmlContenedor.Replace("controlParaRenderizar", htmlRestrictor);
-        }
         private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
@@ -269,8 +258,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlContenedor.Replace("controlParaRenderizar", htmlArchivo);
         }
 
-
-
         private static string RenderContenedorDto(DescriptorDeControlDeLaTabla descriptorControl, double ancho, string cssClaseContenedor)
         {
             //17.01.2021 --> Al usar css no me hace flata, y mostrar en bloques style=¨width: {ancho}%
@@ -293,13 +280,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
         {
-            var valores = new Dictionary<string, object>();
-            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
-            valores["IdHtml"] = descriptorControl.IdHtml;
-            valores["Propiedad"] = descriptorControl.propiedad;
-            valores["Tipo"] = atributos.TipoDeControl;
+            Dictionary<string, object> valores = ValoresDeAtributesComunesConFiltros(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
             valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
+            return valores;
+        }
+
+        public static Dictionary<string, object> ValoresDeAtributesComunesConFiltros(string idHtmlContenedor, string idHtml, string propiedad, string tipoDeControl)
+        {
+            var valores = new Dictionary<string, object>();
+            valores["IdHtmlContenedor"] = idHtmlContenedor;
+            valores["IdHtml"] = idHtml;
+            valores["Propiedad"] = propiedad;
+            valores["Tipo"] = tipoDeControl;
             return valores;
         }
     }

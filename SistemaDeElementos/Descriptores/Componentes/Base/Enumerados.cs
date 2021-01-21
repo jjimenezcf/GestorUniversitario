@@ -125,7 +125,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.CheckDto: return "check-dto";
                 case enumCssControlesDto.SelectorDto: return "selector-dto";
                 case enumCssControlesDto.EditorDto: return "editor-dto";
-                case enumCssControlesDto.EditorRestrictorDto: return "editor-restrictor-dto";
+                case enumCssControlesDto.EditorRestrictorDto: return "form-control";
                 case enumCssControlesDto.EtiquetaDto: return "etiqueta-dto";
                 case enumCssControlesDto.ListaDinamicaDto: return "lista-dinamica-dto";
                 case enumCssControlesDto.ListaDeElementosDto: return "lista-de-elementos-dto";
