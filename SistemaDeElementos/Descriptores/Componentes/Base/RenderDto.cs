@@ -169,7 +169,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["GuardarEn"] = atributos.GuardarEn;
 
-            var htmlSelect = PlantillasHtml.Render(PlantillasHtml.selectorDto, valores);
+            var htmlSelect = PlantillasHtml.Render(PlantillasHtml.listaDeElementosDto, valores);
 
             return htmlSelect;
 
@@ -183,7 +183,6 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl,Css.Render(enumCssControlesDto.ListaDinamicaDto))}
                                        clase-elemento=¨{atributos.SeleccionarDe}¨ 
                                        guardar-en=¨{atributos.GuardarEn}¨ 
-                                       carga-dinamica=¨S¨ 
                                        oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
                                        placeholder=¨Seleccionar ...¨ 
                                        list=¨{descriptorControl.IdHtml}-lista¨
@@ -280,20 +279,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
         {
-            Dictionary<string, object> valores = ValoresDeAtributesComunesConFiltros(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
+            Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
             valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
             return valores;
         }
 
-        public static Dictionary<string, object> ValoresDeAtributesComunesConFiltros(string idHtmlContenedor, string idHtml, string propiedad, string tipoDeControl)
-        {
-            var valores = new Dictionary<string, object>();
-            valores["IdHtmlContenedor"] = idHtmlContenedor;
-            valores["IdHtml"] = idHtml;
-            valores["Propiedad"] = propiedad;
-            valores["Tipo"] = tipoDeControl;
-            return valores;
-        }
     }
 }

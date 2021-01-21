@@ -39,29 +39,21 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var htmlSelect = $@"<div id=¨div-{IdHtml}¨  class=¨{Css.Render(enumCssFiltro.ContenedorListaDinamica)}¨>
-                                    <input id=¨{IdHtml}¨
-                                           propiedad=¨{Propiedad.ToLower()}¨ 
-                                           class=¨{Css.Render(enumCssFiltro.ListaDinamica)}¨ 
-                                           tipo=¨{Tipo}¨
-                                           carga-dinamica='S'
-                                           clase-elemento=¨{SeleccionarDe}¨
-                                           mostrar-expresion=¨{MostrarExpresion.ToLower()}¨  
-                                           como-buscar='{BuscarPor}'
-                                           criterio-de-filtro=¨{Criterio}¨ 
-                                           filtrar-por=¨{Propiedad.ToLower()}¨ 
-                                           longitud='{LongitudMinimaParaBuscar}'
-                                           cantidad-a-leer= '{Cantidad}'
-                                           oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
-                                           onchange=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)¨ 
-                                           placeholder=¨Seleccionar ({Criterio}) ...¨ 
-                                           list=¨{IdHtml}-lista¨
-                                           control-de-filtro=¨S¨/>
-                                    <datalist id=¨{IdHtml}-lista¨>
-                                    </datalist>
-                                </div>";
+            var valores = PlantillasHtml.ValoresDeAtributesComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorListaDinamica);
+            valores["Css"] = Css.Render(enumCssFiltro.ListaDinamica);
+            valores["ClaseElemento"] = SeleccionarDe;
+            valores["MostrarExpresion"] = MostrarExpresion.ToLower();
+            valores["ComoBuscar"] = BuscarPor;
+            valores["Longitud"] = LongitudMinimaParaBuscar;
+            valores["Cantidad"] = Cantidad;
+            valores["CriterioDeFiltro"] = Criterio ;
+            valores["FiltrarPor"] = PropiedadHtml;
+            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)";
+            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)";
+            valores["Placeholder"] = $"Seleccionar ({Criterio}) ...";
 
-            return htmlSelect;
+            return PlantillasHtml.Render(PlantillasHtml.listaDinamicaFlt, valores);
         }
 
 

@@ -14,10 +14,45 @@ namespace MVCSistemaDeElementos.Descriptores
                                        [Readonly]
                                        ";
 
-        /*
-         *div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ ¨
-         */
-        public static string selectorDto = $@"
+        public static string listaDinamicaFlt = $@"
+                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                  <input {atributosComunesDeUnControl} 
+                                         clase-elemento=¨[ClaseElemento]¨ 
+                                         guardar-en=¨[GuardarEn]¨
+                                         mostrar-expresion=¨[MostrarExpresion]¨
+                                         como-buscar=¨[ComoBuscar]¨
+                                         longitud=¨[Longitud]¨ 
+                                         cantidad-a-leer=¨[Cantidad]¨ 
+                                         criterio-de-filtro=¨[CriterioDeFiltro]¨
+                                         filtrar-por=¨[FiltrarPor]¨
+                                         placeholder =¨[Placeholder]¨
+                                         oninput=¨[OnInput]¨ 
+                                         onchange=¨[OnChange]¨
+                                         list=¨[IdHtml]-lista¨ >
+                                         <datalist id=¨[IdHtml]-lista¨>
+                                         </datalist>
+                             </div>";
+
+        public static string listaDinamicaDto = $@"
+                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                  <input {atributosComunesDeUnControl} 
+                                         clase-elemento=¨[ClaseElemento]¨ 
+                                         guardar-en=¨[GuardarEn]¨
+                                         mostrar-expresion=¨[MostrarExpresion]¨
+                                         como-buscar=¨[ComoBuscar]¨
+                                         longitud=¨[Longitud]¨ 
+                                         cantidad-a-leer=¨[Cantidad]¨ 
+                                         criterio-de-filtro=¨[CriterioDeFiltro]¨
+                                         placeholder =¨[Placeholder]¨
+                                         oninput=¨Crud.EventosDeListaDinamica('cargar',this)¨ 
+                                         onchange=¨Crud.EventosDeListaDinamica('seleccionar',this)¨
+                                         list=¨[IdHtml]-lista¨ >
+                                         <datalist id=¨[IdHtml]-lista¨>
+                                         </datalist>
+                             </div>";
+
+
+        public static string listaDeElementosDto = $@"
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <select {atributosComunesDeUnControl} 
                                           clase-elemento=¨[ClaseElemento]¨ 
@@ -27,7 +62,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                   </select>
                              </div>";
 
-        public static string selectorFlt = selectorDto.Replace("guardar-en=¨[GuardarEn]¨", "")
+        public static string listaDeElementosFlt = listaDeElementosDto.Replace("guardar-en=¨[GuardarEn]¨", "control-de-filtro=¨S¨")
                                                       .Replace("[Readonly]", "")
                                                       .Replace("obligatorio=¨[Obligatorio]¨", "");
 
@@ -60,6 +95,16 @@ namespace MVCSistemaDeElementos.Descriptores
                 plantilla = plantilla.Replace($"[{indice}]", valores[indice] == null ? "" : valores[indice].ToString());
             }
             return plantilla;
+        }
+
+        public static Dictionary<string, object> ValoresDeAtributesComunes(string idHtmlContenedor, string idHtml, string propiedad, string tipoDeControl)
+        {
+            var valores = new Dictionary<string, object>();
+            valores["IdHtmlContenedor"] = idHtmlContenedor;
+            valores["IdHtml"] = idHtml;
+            valores["Propiedad"] = propiedad;
+            valores["Tipo"] = tipoDeControl;
+            return valores;
         }
     }
 }

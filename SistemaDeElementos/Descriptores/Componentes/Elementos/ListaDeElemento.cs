@@ -38,14 +38,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var valores = RenderDto<TElemento>.ValoresDeAtributesComunesConFiltros($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            var valores = PlantillasHtml.ValoresDeAtributesComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
             valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorListaDeElementos);
             valores["Css"] = Css.Render(enumCssFiltro.ListaDeElementos);
             valores["ClaseElemento"] = SeleccionarDe;
             valores["MostrarExpresion"] = MostrarExpresionHtml;
 
-            return PlantillasHtml.Render(PlantillasHtml.selectorFlt, valores);
-
+            return PlantillasHtml.Render(PlantillasHtml.listaDeElementosFlt, valores);
         }
     }
 }
