@@ -122,7 +122,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderRestrictor(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.ListaDeElemento:
-                    htmdDescriptorControl = RenderSelectorElemento(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderListaDeElemento(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.ListaDinamica:
                     htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
@@ -134,7 +134,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
                     break;
                 case TipoControl.Check:
-                    htmdDescriptorControl = RenderCheck(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderCheck(tabla, descriptorControl);
                     break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
@@ -144,31 +144,27 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmdDescriptorControl;
         }
 
-        private static string RenderCheck(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
+        private static string RenderCheck(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, "contenedor-check");
-            var htmlInput = $@"<input {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.CheckDto))}
-                                      type=¨checkbox¨
-                                      checked=¨{atributos.ValorPorDefecto}¨>
-                                </input>
-                                <label for=¨{descriptorControl.IdHtml}¨>{atributos.Etiqueta}</label>";
 
-            return htmlContenedor.Replace("controlParaRenderizar", htmlInput);
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorCheckDto);
+            valores["Css"] = Css.Render(enumCssControlesDto.CheckDto);
+            valores["Checked"] = atributos.ValorPorDefecto;
+
+            var htmlCheck = PlantillasHtml.Render(PlantillasHtml.checkDto, valores);
+
+            return htmlCheck;
         }
 
-        private static string RenderSelectorElemento(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
+        private static string RenderListaDeElemento(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
 
-            var valores = new Dictionary<string, object>();
-            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementosDto);
-            valores["IdHtml"] = descriptorControl.IdHtml;
-            valores["Propiedad"] = descriptorControl.propiedad;
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementosDto);
-            valores["Tipo"] = atributos.TipoDeControl;
-            
             valores["SeleccionarDe"] = atributos.SeleccionarDe;
             valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["GuardarEn"] = atributos.GuardarEn;
@@ -202,16 +198,10 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-
-            var valores = new Dictionary<string, object>();
-            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditorDto);
-            valores["IdHtml"] = descriptorControl.IdHtml;
-            valores["Propiedad"] = descriptorControl.propiedad;
             valores["Css"] = Css.Render(enumCssControlesDto.EditorDto);
-            valores["Tipo"] = atributos.TipoDeControl;
-            
-            valores["placeholder"] = atributos.Ayuda;
+            valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
             var htmlEditor = PlantillasHtml.Render(PlantillasHtml.editorDto, valores);
@@ -299,6 +289,18 @@ namespace MVCSistemaDeElementos.Descriptores
                                    obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
                                    {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} ";
             return atributosHtml;
+        }
+
+        private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
+        {
+            var valores = new Dictionary<string, object>();
+            valores["IdHtmlContenedor"] = descriptorControl.IdHtmlContenedor;
+            valores["IdHtml"] = descriptorControl.IdHtml;
+            valores["Propiedad"] = descriptorControl.propiedad;
+            valores["Tipo"] = atributos.TipoDeControl;
+            valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
+            valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
+            return valores;
         }
     }
 }

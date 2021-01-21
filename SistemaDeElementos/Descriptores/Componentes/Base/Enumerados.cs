@@ -92,6 +92,7 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorListaDeElementosDto,
         ContenedorListaDinamicaDto,
         ContenedorEditorDto,
+        ContenedorCheckDto,
         FormDeArchivoDto,
         ContenedorArchivoDto,
         TablaDeArchivo,
@@ -120,6 +121,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorListaDinamicaDto: return "contenedor-selector";
                 case enumCssControlesDto.ContenedorEditorDto: return "contenedor-editor";
                 case enumCssControlesDto.ContenedorArchivoDto: return "contenedor-archivo";
+                case enumCssControlesDto.ContenedorCheckDto: return "contenedor-check";
                 case enumCssControlesDto.CheckDto: return "check-dto";
                 case enumCssControlesDto.SelectorDto: return "selector-dto";
                 case enumCssControlesDto.EditorDto: return "editor-dto";

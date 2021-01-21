@@ -176,8 +176,13 @@ a {
         }
 
 .contenedor-check {
+/*    margin-top: 20px;
+    margin-left: 20px;*/
+}
+
+.check-dto {
+    margin-left: 10px;
     margin-top: 20px;
-    margin-left: 20px;
 }
 
 .contenedor-selector {

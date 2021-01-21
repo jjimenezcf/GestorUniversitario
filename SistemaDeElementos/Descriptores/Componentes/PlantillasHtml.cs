@@ -5,15 +5,21 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class PlantillasHtml
     {
 
+        private static string atributosComunesDeUnControl = @"
+                                       id=¨[IdHtml]¨
+                                       propiedad=¨[Propiedad]¨ 
+                                       class=¨[Css]¨ 
+                                       tipo=¨[Tipo]¨ 
+                                       obligatorio=¨[Obligatorio]¨ 
+                                       [Readonly]
+                                       ";
+
         /*
          *div id=¨{descriptorControl.IdHtmlContenedor}¨ name=¨contenedor-control¨ class=¨{cssClaseContenedor}¨ ¨
          */
-        public static string selectorDto = @"
+        public static string selectorDto = $@"
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <select id=¨[IdHtml]¨ 
-                                          propiedad=¨[Propiedad]¨ 
-                                          class=¨[Css]¨ 
-                                          tipo=¨[Tipo]¨
+                                  <select {atributosComunesDeUnControl} 
                                           clase-elemento=¨[SeleccionarDe]¨ 
                                           guardar-en=¨[GuardarEn]¨
                                           mostrar-expresion=¨[MostrarExpresion]¨  >
@@ -21,20 +27,31 @@ namespace MVCSistemaDeElementos.Descriptores
                                   </select>
                              </div>";
 
-        public static string selectorFlt = selectorDto.Replace("guardar-en=¨[GuardarEn]¨", "");
+        public static string selectorFlt = selectorDto.Replace("guardar-en=¨[GuardarEn]¨", "")
+                                                      .Replace("[Readonly]", "")
+                                                      .Replace("obligatorio=¨[Obligatorio]¨", "");
 
-        public static string editorDto = @"
+        public static string editorDto = @$"
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <input id=¨[IdHtml]¨ 
-                                          type=¨text¨
-                                          propiedad=¨[Propiedad]¨ 
-                                          class=¨[Css]¨ 
-                                          tipo=¨[Tipo]¨ 
-                                          value=¨¨
-                                          placeholder =¨[Ayuda]¨
-                                          ValorPorDefecto=¨[ValorPorDefecto]¨>
+                                  <input {atributosComunesDeUnControl}
+                                         type=¨text¨
+                                         placeholder =¨[Placeholder]¨
+                                         valorPorDefecto=¨[ValorPorDefecto]¨
+                                         value=¨¨>
                                   </input>
                              </div>";
+
+        public static string checkDto = @$"
+                             <div class=¨[CssContenedor]¨>
+                                <label></label>
+                             </div>                             
+                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                <input {atributosComunesDeUnControl}
+                                       type=¨checkbox¨ 
+                                       checked=¨[Checked]¨>
+                                <label for=¨[IdHtml]¨>Mostrar en modal</label>
+                             </div>";
+
 
         public static string Render(string plantilla, Dictionary<string,object> valores)
         {
