@@ -5,55 +5,45 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class PlantillasHtml
     {
 
-        private static string atributosComunesDeUnControl = @"
-                                       id=¨[IdHtml]¨
+        private static string atributosComunesDeUnControl = @"id=¨[IdHtml]¨
                                        propiedad=¨[Propiedad]¨ 
                                        class=¨[Css]¨ 
                                        tipo=¨[Tipo]¨ 
+                                       ";
+
+        private static string atributosComunesDeUnControlDto = $@"{atributosComunesDeUnControl}
                                        obligatorio=¨[Obligatorio]¨ 
                                        [Readonly]
                                        ";
 
-        public static string listaDinamicaFlt = $@"
-                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+        private static string atributosComunesDeUnControlflt = $@"{atributosComunesDeUnControl}
+                                       control-de-filtro=¨S¨
+                                       ";
+
+
+        private static string listaDinamica = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControl} 
                                          clase-elemento=¨[ClaseElemento]¨ 
                                          mostrar-expresion=¨[MostrarExpresion]¨
                                          como-buscar=¨[ComoBuscar]¨
+                                         criterio-de-filtro=¨[CriterioDeFiltro]¨
                                          longitud=¨[Longitud]¨ 
                                          cantidad-a-leer=¨[Cantidad]¨ 
-                                         criterio-de-filtro=¨[CriterioDeFiltro]¨
-                                         filtrar-por=¨[FiltrarPor]¨
                                          placeholder =¨[Placeholder]¨
                                          oninput=¨[OnInput]¨ 
-                                         onchange=¨[OnChange]¨
-                                         list=¨[IdHtml]-lista¨
-                                         control-de-filtro=¨S¨>
-                                         <datalist id=¨[IdHtml]-lista¨>
-                                         </datalist>
-                             </div>";
-
-        public static string listaDinamicaDto = $@"
-                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <input {atributosComunesDeUnControl} 
-                                         clase-elemento=¨[ClaseElemento]¨ 
-                                         guardar-en=¨[GuardarEn]¨
-                                         mostrar-expresion=¨[MostrarExpresion]¨
-                                         como-buscar=¨[ComoBuscar]¨
-                                         longitud=¨[Longitud]¨ 
-                                         cantidad-a-leer=¨[Cantidad]¨ 
-                                         criterio-de-filtro=¨[CriterioDeFiltro]¨
-                                         placeholder =¨[Placeholder]¨
-                                         oninput=¨Crud.EventosDeListaDinamica('cargar',this)¨ 
-                                         onchange=¨Crud.EventosDeListaDinamica('seleccionar',this)¨
-                                         list=¨[IdHtml]-lista¨ >
+                                         onchange=¨[OnChange]¨ 
+                                         [RestoDeAtributos]
+                                         list=¨[IdHtml]-lista¨>
                                          <datalist id=¨[IdHtml]-lista¨>
                                          </datalist>
                              </div>";
 
 
-        public static string listaDeElementosDto = $@"
-                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+        public static string listaDinamicaFlt = $@"{listaDinamica}".Replace("[RestoDeAtributos]",atributosComunesDeUnControlflt);
+
+        public static string listaDinamicaDto = $@"{listaDinamica}".Replace("[RestoDeAtributos]", $"guardar-en=¨[GuardarEn] {atributosComunesDeUnControlDto}");
+
+        public static string listaDeElementosDto = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <select {atributosComunesDeUnControl} 
                                           clase-elemento=¨[ClaseElemento]¨ 
                                           guardar-en=¨[GuardarEn]¨
@@ -66,8 +56,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                       .Replace("[Readonly]", "")
                                                       .Replace("obligatorio=¨[Obligatorio]¨", "");
 
-        public static string editorDto = @$"
-                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+        public static string editorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControl}
                                          type=¨text¨
                                          placeholder =¨[Placeholder]¨
@@ -76,8 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                   </input>
                              </div>";
 
-        public static string checkDto = @$"
-                             <div class=¨[CssContenedor]¨>
+        public static string checkDto = @$"<div class=¨[CssContenedor]¨>
                                 <label></label>
                              </div>                             
                              <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>

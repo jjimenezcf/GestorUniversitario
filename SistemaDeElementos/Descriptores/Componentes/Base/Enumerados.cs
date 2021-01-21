@@ -89,24 +89,24 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public enum enumCssControlesDto
     {
-        ContenedorListaDeElementosDto,
-        ContenedorListaDinamicaDto,
-        ContenedorEditorDto,
-        ContenedorCheckDto,
-        FormDeArchivoDto,
-        ContenedorArchivoDto,
+        ContenedorListaDeElementos,
+        ContenedorListaDinamica,
+        ContenedorEditor,
+        ContenedorCheck,
+        FormDeArchivo,
+        ContenedorArchivo,
         TablaDeArchivo,
         FilaDeArchivo,
         ColumnaDeArchivo,
-        CheckDto,
-        SelectorDto,
-        EditorDto,
-        EtiquetaDto,
-        ListaDeElementosDto,
-        ListaDinamicaDto,
+        Check,
+        Selector,
+        Editor,
+        Etiqueta,
+        ListaDeElementos,
+        ListaDinamica,
         SelectorDeArchivo,
         BarraAzulArchivo,
-        EditorRestrictorDto
+        EditorRestrictor
     }
 
 
@@ -117,19 +117,19 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (clase)
             {
-                case enumCssControlesDto.ContenedorListaDeElementosDto: return "contenedor-selector";
-                case enumCssControlesDto.ContenedorListaDinamicaDto: return "contenedor-selector";
-                case enumCssControlesDto.ContenedorEditorDto: return "contenedor-editor";
-                case enumCssControlesDto.ContenedorArchivoDto: return "contenedor-archivo";
-                case enumCssControlesDto.ContenedorCheckDto: return "contenedor-check";
-                case enumCssControlesDto.CheckDto: return "check-dto";
-                case enumCssControlesDto.SelectorDto: return "selector-dto";
-                case enumCssControlesDto.EditorDto: return "editor-dto";
-                case enumCssControlesDto.EditorRestrictorDto: return "form-control";
-                case enumCssControlesDto.EtiquetaDto: return "etiqueta-dto";
-                case enumCssControlesDto.ListaDinamicaDto: return "lista-dinamica-dto";
-                case enumCssControlesDto.ListaDeElementosDto: return "lista-de-elementos-dto";
-                case enumCssControlesDto.FormDeArchivoDto: return "form-archivo";
+                case enumCssControlesDto.ContenedorListaDeElementos: return "contenedor-selector";
+                case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-selector";
+                case enumCssControlesDto.ContenedorEditor: return "contenedor-editor";
+                case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
+                case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
+                case enumCssControlesDto.Check: return "check-dto";
+                case enumCssControlesDto.Selector: return "selector-dto";
+                case enumCssControlesDto.Editor: return "editor-dto";
+                case enumCssControlesDto.EditorRestrictor: return "form-control";
+                case enumCssControlesDto.Etiqueta: return "etiqueta-dto";
+                case enumCssControlesDto.ListaDinamica: return "lista-dinamica";
+                case enumCssControlesDto.ListaDeElementos: return "lista-de-elementos-dto";
+                case enumCssControlesDto.FormDeArchivo: return "form-archivo";
                 case enumCssControlesDto.TablaDeArchivo: return "tabla-archivo-subir";
                 case enumCssControlesDto.FilaDeArchivo: return "tr-archivo-subir";
                 case enumCssControlesDto.ColumnaDeArchivo: return "td-archivo-subir";

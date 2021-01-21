@@ -568,7 +568,7 @@
             }
 
             let ultimaBuscada: string = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
-            let criterio: string = input.getAttribute(atListasDinamicas.criterioDeBuqueda);
+            let criterio: string = input.getAttribute(atListasDinamicas.criterio);
             if (!IsNullOrEmpty(ultimaBuscada)) {
                 if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
                     return;

@@ -48,7 +48,6 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Longitud"] = LongitudMinimaParaBuscar;
             valores["Cantidad"] = Cantidad;
             valores["CriterioDeFiltro"] = Criterio ;
-            valores["FiltrarPor"] = PropiedadHtml;
             valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)";
             valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)";
             valores["Placeholder"] = $"Seleccionar ({Criterio}) ...";

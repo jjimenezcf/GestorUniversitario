@@ -141,7 +141,7 @@ const atListasDeElemento = {
 const atListasDinamicas = {
     claseElemento: atListas.claseElemento,
     buscarPor: 'como-buscar',
-    criterioDeBuqueda: atControl.criterio,
+    criterio: atControl.criterio,
     mostrarExpresion: atListas.mostrarExpresion,
     longitudNecesaria: 'longitud',
     idSeleccionado: 'idseleccionado',

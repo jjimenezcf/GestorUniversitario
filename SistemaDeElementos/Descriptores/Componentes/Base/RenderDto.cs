@@ -149,8 +149,8 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
 
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
-            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorCheckDto);
-            valores["Css"] = Css.Render(enumCssControlesDto.CheckDto);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorCheck);
+            valores["Css"] = Css.Render(enumCssControlesDto.Check);
             valores["Checked"] = atributos.ValorPorDefecto;
 
             var htmlCheck = PlantillasHtml.Render(PlantillasHtml.checkDto, valores);
@@ -163,8 +163,8 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
 
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
-            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementosDto);
-            valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementosDto);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementos);
+            valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementos);
             valores["ClaseElemento"] = atributos.SeleccionarDe;
             valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["GuardarEn"] = atributos.GuardarEn;
@@ -178,28 +178,30 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderListaDinamica(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorListaDinamicaDto));
+            var valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDinamica);
+            valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
+            valores["ClaseElemento"] = atributos.SeleccionarDe;
+            valores["MostrarExpresion"] = atributos.MostrarExpresion;
+            valores["ComoBuscar"] = atributos.BuscarPor;
+            valores["Longitud"] = 3;
+            valores["Cantidad"] = 10;
+            valores["CriterioDeFiltro"] = atributos.CriterioDeBusqueda;
+            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)";
+            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)";
+            valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
+            valores["GuardarEn"] = atributos.GuardarEn;
 
-            var htmlSelect = $@"<input {RenderAtributosComunes(tabla, descriptorControl,Css.Render(enumCssControlesDto.ListaDinamicaDto))}
-                                       clase-elemento=¨{atributos.SeleccionarDe}¨ 
-                                       guardar-en=¨{atributos.GuardarEn}¨ 
-                                       oninput=¨Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)¨ 
-                                       placeholder=¨Seleccionar ...¨ 
-                                       list=¨{descriptorControl.IdHtml}-lista¨
-                                />
-                                <datalist id=¨{descriptorControl.IdHtml}-lista¨>
-                                </datalist>";
-            
-            return htmlContenedor.Replace("controlParaRenderizar", htmlSelect);
-
+            var a = PlantillasHtml.Render(PlantillasHtml.listaDinamicaDto, valores);
+            return a;
         }
 
         private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
-            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditorDto);
-            valores["Css"] = atributos.TipoDeControl == TipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictorDto): Css.Render(enumCssControlesDto.EditorDto);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
+            valores["Css"] = atributos.TipoDeControl == TipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictor): Css.Render(enumCssControlesDto.Editor);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
@@ -211,10 +213,10 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
-            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorArchivoDto));
+            var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorArchivo));
 
             var htmlArchivo = @$"
-            <form class=¨{Css.Render(enumCssControlesDto.FormDeArchivoDto)}¨ method=¨post¨ enctype=¨multipart/form-data¨>
+            <form class=¨{Css.Render(enumCssControlesDto.FormDeArchivo)}¨ method=¨post¨ enctype=¨multipart/form-data¨>
               <table class=¨{Css.Render(enumCssControlesDto.TablaDeArchivo)}¨>
                  <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>        
