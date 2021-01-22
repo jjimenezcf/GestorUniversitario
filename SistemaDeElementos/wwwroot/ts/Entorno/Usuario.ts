@@ -21,6 +21,11 @@
             super(crud, idPanelCreacion);
         }
 
+        public DespuesDeMapearDatosDeIU(crud: Crud.CrudBase, panel: HTMLDivElement, elementoJson: JSON, modoDeTrabajo: string): JSON {
+            super.DespuesDeMapearDatosDeIU(crud, panel, elementoJson, modoDeTrabajo);
+            return elementoJson;
+        }
+
     }
 
     export class CrudEdicionUsuario extends Crud.CrudEdicion {
@@ -28,6 +33,13 @@
         constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
             super(crud, idPanelEdicion);
         }
+
+        public AntesDeMapearDatosDeIU(crud: Crud.CrudBase, panel: HTMLDivElement, modoDeTrabajo: string): JSON {
+            let json: JSON = super.AntesDeMapearDatosDeIU(crud, panel, modoDeTrabajo);
+            console.log('funciona');
+            return json;
+        }
+
     }
 
 

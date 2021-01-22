@@ -76,7 +76,7 @@
         }
 
         private Crear() {
-            let json: JSON = this.MapearControlesDeIU(this.PanelDeCrear, ModoTrabajo.creando);
+            let json: JSON = ApiCrud.MapearControlesDesdeLaIuAlJson(this, this.PanelDeCrear, ModoTrabajo.creando);
             this.CrearElemento(json);
         }
 

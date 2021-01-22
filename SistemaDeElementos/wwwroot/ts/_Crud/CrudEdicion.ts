@@ -217,7 +217,7 @@
         }
 
         protected Modificar() {
-            let json: JSON = this.MapearControlesDeIU(this.PanelDeEditar, ModoTrabajo.editando);
+            let json: JSON = ApiCrud.MapearControlesDesdeLaIuAlJson(this, this.PanelDeEditar, ModoTrabajo.editando);
             this.ModificarElemento(json);
         }
 

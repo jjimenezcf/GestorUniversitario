@@ -374,12 +374,12 @@
             return null;
         }
 
-        protected AntesDeMapearDatosDeIU(panel: HTMLDivElement, modoDeTrabajo: string): JSON {
+        public AntesDeMapearDatosDeIU(crud: CrudBase, panel: HTMLDivElement, modoDeTrabajo: string): JSON {
             if (modoDeTrabajo === ModoTrabajo.creando)
                 return JSON.parse(`{"${literal.id}":"0"}`);
 
             if (modoDeTrabajo === ModoTrabajo.editando) {
-                let input: HTMLInputElement = this.BuscarEditor(panel, literal.id);
+                let input: HTMLInputElement = crud.BuscarEditor(panel, literal.id);
                 if (Number(input.value) <= 0)
                     throw new Error(`El valor del id ${Number(input.value)} debe ser mayor a 0`);
                 return JSON.parse(`{"${literal.id}":"${Number(input.value)}"}`);
@@ -388,180 +388,12 @@
             throw new Error(`No se ha indicado que hacer para el modo de trabajo ${modoDeTrabajo} antes de mapear los datos de la IU`);
         }
 
-        protected MapearControlesDeIU(panel: HTMLDivElement, modoDeTrabajo: string): JSON {
-            let elementoJson: JSON = this.AntesDeMapearDatosDeIU(panel, modoDeTrabajo);
-
-            this.MapearSelectoresDeElementosAlJson(panel, elementoJson);
-            this.MapearSelectoresDinamicosAlJson(panel, elementoJson);
-            this.MapearRestrictoresAlJson(panel, elementoJson);
-            this.MapearEditoresAlJson(panel, elementoJson);
-            this.MapearArchivosAlJson(panel, elementoJson);
-            this.MapearUrlArchivosAlJson(panel, elementoJson);
-            this.MapearCheckesAlJson(panel, elementoJson);
-
-            return this.DespuesDeMapearDatosDeIU(panel, elementoJson, modoDeTrabajo);
-        }
-
-        protected MapearEditoresAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < editores.length; i++) {
-                this.MapearEditorAlJson(editores[i], elementoJson);
-            }
-        }
-
-        private MapearEditorAlJson(input: HTMLInputElement, elementoJson: JSON): void {
-            var propiedadDto = input.getAttribute(atControl.propiedad);
-            let valor: string = (input as HTMLInputElement).value;
-            let obligatorio: string = input.getAttribute(atControl.obligatorio);
-
-            if (obligatorio === "S" && NoDefinida(valor)) {
-                input.classList.remove(ClaseCss.crtlValido);
-                input.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`El campo ${propiedadDto} es obligatorio`);
-            }
-
-            input.classList.remove(ClaseCss.crtlNoValido);
-            input.classList.add(ClaseCss.crtlValido);
-            elementoJson[propiedadDto] = valor;
-        }
-
-
-        protected MapearRestrictoresAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < restrictores.length; i++) {
-                this.MapearRestrictorAlJson(restrictores[i], elementoJson);
-            }
-        }
-
-        private MapearRestrictorAlJson(input: HTMLInputElement, elementoJson: JSON): void {
-            let propiedadDto: string = input.getAttribute(atControl.propiedad);
-            let idRestrictor: string = input.getAttribute(atControl.restrictor);
-
-            if (!NumeroMayorDeCero(idRestrictor)) {
-                input.classList.remove(ClaseCss.crtlValido);
-                input.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`El campo ${propiedadDto} es obligatorio`);
-            }
-
-            input.classList.remove(ClaseCss.crtlNoValido);
-            input.classList.add(ClaseCss.crtlValido);
-            elementoJson[propiedadDto] = idRestrictor;
-        }
-
-        protected MapearCheckesAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let checkes: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Check}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < checkes.length; i++) {
-                this.MapearCheckAlJson(checkes[i], elementoJson);
-            }
-        }
-
-
-        private MapearCheckAlJson(check: HTMLInputElement, elementoJson: JSON): void {
-            var propiedadDto = check.getAttribute(atControl.propiedad);
-            elementoJson[propiedadDto] = check.checked;
-        }
-        protected MapearSelectoresDinamicosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < selectores.length; i++) {
-                this.MapearSelectorDinamico(selectores[i], elementoJson);
-            }
-        }
-
-        private MapearSelectorDinamico(input: HTMLInputElement, elementoJson: JSON) {
-            let propiedadDto = input.getAttribute(atControl.propiedad);
-            let guardarEn: string = input.getAttribute(atListasDinamicasDto.guardarEn);
-            let obligatorio: string = input.getAttribute(atControl.obligatorio);
-            let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
-            let valor: number = lista.BuscarSeleccionado(input.value);
-
-            if (obligatorio === "S" && (IsNullOrEmpty(input.value) || Number(valor) === 0)) {
-                input.classList.remove(ClaseCss.crtlValido);
-                input.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
-            }
-
-            input.classList.remove(ClaseCss.crtlNoValido);
-            input.classList.add(ClaseCss.crtlValido);
-            elementoJson[guardarEn] = valor.toString();
-        }
-
-        protected MapearSelectoresDeElementosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[tipo="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
-            for (let i = 0; i < selectores.length; i++) {
-                this.MapearSelectorDeElementosAlJson(selectores[i], elementoJson);
-            }
-        }
-
-        private MapearSelectorDeElementosAlJson(selector: HTMLSelectElement, elementoJson: JSON) {
-            let propiedadDto = selector.getAttribute(atControl.propiedad);
-            let guardarEn: string = selector.getAttribute(atListasDinamicasDto.guardarEn);
-            let obligatorio: string = selector.getAttribute(atControl.obligatorio);
-
-            if (obligatorio === "S" && Number(selector.value) === 0) {
-                selector.classList.remove(ClaseCss.crtlValido);
-                selector.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`Debe seleccionar un elemento de la lista ${propiedadDto}`);
-            }
-
-            selector.classList.remove(ClaseCss.crtlNoValido);
-            selector.classList.add(ClaseCss.crtlValido);
-            elementoJson[guardarEn] = selector.value;
-        }
-
-        protected MapearArchivosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < archivos.length; i++) {
-                this.MapearArchivoAlJson(archivos[i], elementoJson);
-            }
-        }
-
-
-        private MapearArchivoAlJson(archivo: HTMLInputElement, elementoJson: JSON): void {
-            var propiedadDto = archivo.getAttribute(atControl.propiedad);
-            let valor: string = archivo.getAttribute(atArchivo.id);
-            let obligatorio: string = archivo.getAttribute(atControl.obligatorio);
-
-            if (obligatorio === "S" && IsNullOrEmpty(valor)) {
-                archivo.classList.remove(ClaseCss.crtlValido);
-                archivo.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`El campo ${propiedadDto} es obligatorio`);
-            }
-
-            archivo.classList.remove(ClaseCss.crtlNoValido);
-            archivo.classList.add(ClaseCss.crtlValido);
-            elementoJson[propiedadDto] = valor;
-        }
-
-        private MapearUrlArchivosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
-            let urlsDeArchivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
-            for (let i = 0; i < urlsDeArchivos.length; i++) {
-                this.MapearUrlArchivoAlJson(urlsDeArchivos[i], elementoJson);
-            }
-        }
-
-        private MapearUrlArchivoAlJson(urlDeArchivo: HTMLInputElement, elementoJson: JSON): void {
-            var propiedadDto = urlDeArchivo.getAttribute(atControl.propiedad);
-            let valor: string = urlDeArchivo.getAttribute(atArchivo.nombre);
-            let obligatorio: string = urlDeArchivo.getAttribute(atControl.obligatorio);
-
-            if (obligatorio === "S" && IsNullOrEmpty(valor)) {
-                urlDeArchivo.classList.remove(ClaseCss.crtlValido);
-                urlDeArchivo.classList.add(ClaseCss.crtlNoValido);
-                throw new Error(`El campo ${propiedadDto} es obligatorio`);
-            }
-
-            urlDeArchivo.classList.remove(ClaseCss.crtlNoValido);
-            urlDeArchivo.classList.add(ClaseCss.crtlValido);
-            elementoJson[propiedadDto] = valor;
-        }
-
-        protected DespuesDeMapearDatosDeIU(panel: HTMLDivElement, elementoJson: JSON, modoDeTrabajo: string): JSON {
+        
+        public DespuesDeMapearDatosDeIU(crud: CrudBase, panel: HTMLDivElement, elementoJson: JSON, modoDeTrabajo: string): JSON {
             return elementoJson;
         }
 
-
         // funciones de carga de elementos para los selectores   ************************************************************************************
-
         protected CargarListaDinamica(input: HTMLInputElement, controlador: string) {
             if (input.getAttribute(atListasDinamicas.cargando) == 'S' || IsNullOrEmpty(input.value)) {
                 return;
