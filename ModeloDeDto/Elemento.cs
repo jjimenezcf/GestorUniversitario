@@ -47,7 +47,6 @@ namespace ModeloDeDto
     {
         public static string Nombre = nameof(Nombre).ToLower();
         public static string Id = nameof(Id).ToLower();
-        public static string PorDefecto = "por-defecto";
     }
 
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
@@ -118,7 +117,7 @@ namespace ModeloDeDto
         public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.contiene;
 
         public string GuardarEn { get; set; }
-        public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
+        public string BuscarPor { get; set; } = CamposDeFiltrado.Nombre;
 
         public string MostrarExpresion { get; set; } = ElementoDto.ExpresionPorDefecto;
 
@@ -192,7 +191,7 @@ namespace ModeloDeDto
 
     public class ElementoDto
     {
-        public static string ExpresionPorDefecto = "[nombre]";
+        public static string ExpresionPorDefecto = $"[{CamposDeFiltrado.Nombre}]";
 
         [IUPropiedad(
             Etiqueta = "Id",

@@ -8,17 +8,13 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string atributosComunesDeUnControl = @"id=¨[IdHtml]¨
                                        propiedad=¨[Propiedad]¨ 
                                        class=¨[Css]¨ 
-                                       tipo=¨[Tipo]¨ 
-                                       ";
+                                       tipo=¨[Tipo]¨";
 
         private static string atributosComunesDeUnControlDto = $@"{atributosComunesDeUnControl}
                                        obligatorio=¨[Obligatorio]¨ 
-                                       [Readonly]
-                                       ";
+                                       [Readonly]";
 
-        private static string atributosComunesDeUnControlflt = $@"{atributosComunesDeUnControl}
-                                       control-de-filtro=¨S¨
-                                       ";
+        private static string atributosComunesDeUnControlflt = $@"{atributosComunesDeUnControl}control-de-filtro=¨S¨";
 
 
         private static string listaDinamica = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
@@ -41,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string listaDinamicaFlt = $@"{listaDinamica}".Replace("[RestoDeAtributos]",atributosComunesDeUnControlflt);
 
-        public static string listaDinamicaDto = $@"{listaDinamica}".Replace("[RestoDeAtributos]", $"guardar-en=¨[GuardarEn] {atributosComunesDeUnControlDto}");
+        public static string listaDinamicaDto = $@"{listaDinamica}".Replace("[RestoDeAtributos]", $"guardar-en=¨[GuardarEn]¨ {atributosComunesDeUnControlDto}");
 
         public static string listaDeElementosDto = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <select {atributosComunesDeUnControl} 

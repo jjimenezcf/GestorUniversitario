@@ -8,6 +8,7 @@ namespace ModeloDeDto.Entorno
          , AnchoSeparador = 5)]
     public class MenuDto : ElementoDto
     {
+        private const string MostrarPadre = "[Padre].[Nombre]";
 
         [IUPropiedad(
             Etiqueta = "Id del menú padre",
@@ -22,7 +23,7 @@ namespace ModeloDeDto.Entorno
             TipoDeControl = TipoControl.ListaDinamica,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
-            MostrarExpresion = nameof(Nombre),
+            MostrarExpresion = MostrarPadre,
             Fila = 0,
             Columna = 0,
             Ordenar = true,

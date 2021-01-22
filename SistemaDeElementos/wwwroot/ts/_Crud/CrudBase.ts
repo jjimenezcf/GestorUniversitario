@@ -608,8 +608,8 @@
                 let mostrarExpresion = input.getAttribute(atListasDinamicas.mostrarExpresion);
                 let expresion: string = "";
                 for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                    if (expresionPorDefecto !== mostrarExpresion)
-                        expresion = ParsearExpresion(peticion.resultado.datos[i], mostrarExpresion);
+                    if (expresionPorDefecto.toLowerCase() !== mostrarExpresion.toLowerCase())
+                        expresion = ParsearExpresion(peticion.resultado.datos[i], mostrarExpresion.toLowerCase());
                     else
                         expresion = peticion.resultado.datos[i][expresionPorDefecto];
 

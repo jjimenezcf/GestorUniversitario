@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string SeleccionarDe { get; private set; }
         public string MostrarExpresion { get; private set; }
-        public string BuscarPor { get; set; } = CamposDeFiltrado.PorDefecto;
+        public string BuscarPor { get; set; } = CamposDeFiltrado.Nombre;
         public int LongitudMinimaParaBuscar { get; set; } = 3;
         public string FiltrarPor { get; set; }
         public int Cantidad { get; set; } = 10;
