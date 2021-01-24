@@ -29,6 +29,19 @@ namespace GestorDeElementos
             var rutaUrlBase = "/Archivos";
             return $@"{rutaUrlBase}/{nombreFichero}";
         }
+
+        public static PropertyInfo[] PropiedadesDelObjeto(Type tipo)
+        {
+            var indice = tipo.FullName;
+            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
+            if (!cache.ContainsKey(indice))
+            {
+                Type t = tipo.GetType();
+                cache[indice] = t.GetProperties();
+            }
+            PropertyInfo[] props = (PropertyInfo[])cache[indice];
+            return props;
+        }
     }
 
 

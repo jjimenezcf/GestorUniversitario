@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
 using Utilidades;
@@ -29,14 +30,7 @@ namespace GestorDeElementos
     {
         public Type Dtm { get; set; }
     }
-    public class ClausulaDeFiltrado
-    {
-        public string Clausula { get; set; }
-        public CriteriosDeFiltrado Criterio { get; set; }
 
-        private string _valor = "";
-        public string Valor { get { return _valor.Trim(); } set { _valor = value; } }
-    }
 
     public class ClausulaDeOrdenacion
     {
@@ -523,38 +517,22 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
-            return FiltrosBasicos(registros, filtros);
-
-            //if (HayFiltroPorId(registros))
-            //    return registros;
-
-            //return registros; //.FiltrarPorNombre(filtros);
-        }
-
-        private IQueryable<TRegistro> FiltrosBasicos(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros)
-        {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Valor.Entero() > 0)
+                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
                 {
-                    HayFiltroPorId = true;
-                    return registros.Where(x => x.Id == filtro.Valor.Entero());
+                    HayFiltroPorId = filtro.Criterio == CriteriosDeFiltrado.igual;
+                    return registros.AplicarFiltroPorIdentificador(filtro,nameof(Registro.Id));
                 }
 
-                if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower() && !filtro.Valor.IsNullOrEmpty())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return registros.Where(x => x.Nombre.Contains(filtro.Valor));
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.comienza)
-                        return registros.Where(x => x.Nombre.StartsWith(filtro.Valor));
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return registros.Where(x => x.Nombre == filtro.Valor);
-                }
+                //if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower())
+                //{
+                //    return registros.AplicarFiltroPorNombre(filtro);
+                //}
 
             }
-            return registros;
+
+            return registros.AplicarFiltroPorPropiedades(filtros);
         }
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -725,8 +703,11 @@ namespace GestorDeElementos
 
         public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
         {
-            if (Contexto.DatosDeConexion.EsAdministrador ||  negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
+            if (Contexto.DatosDeConexion.EsAdministrador || negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;
+
+            if (!Contexto.DatosDeConexion.EsAdministrador && NegociosDeSe.EsDeParametrizacion(negocio))
+                GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos de parametrización sobre el negocio {NegociosDeSe.ToString(negocio)}");
 
             var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
             var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
@@ -773,6 +754,9 @@ namespace GestorDeElementos
             if (Contexto.DatosDeConexion.EsAdministrador)
                 modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
             else
+            if (NegociosDeSe.EsDeParametrizacion(negocio) && !Contexto.DatosDeConexion.EsAdministrador)
+                modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+            else
             {
                 var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
                 foreach (var modoLeido in modosLeidos)
@@ -800,6 +784,7 @@ namespace GestorDeElementos
             var estaActivo = (bool)negocioActivo.Invoke(gestorDeNegocio, new object[] { negocio });
             return estaActivo;
         }
+
 
         private List<ModoDeAccesoAlNegocioDtm> ModosDeAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
