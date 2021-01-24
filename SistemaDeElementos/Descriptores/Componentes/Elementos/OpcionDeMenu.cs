@@ -59,7 +59,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion, EventosDeListaDinamica}
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion, EventosDeListaDinamica }
 
     /**********************************************************/
     // Acciones de menú de para navegar
@@ -74,7 +74,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string PropiedadQueRestringe { get; private set; }
         public string NavegarAlCrud { get; private set; }
 
-        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt,string propiedadQueRestringe, string propiedadRestrictora)
+        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora)
         : base(TipoDeAccionDeMnt.RelacionarElementos)
         {
             TipoAccion = TipoDeAccionDeMnt.RelacionarElementos;
@@ -106,11 +106,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderAccion()
         {
-            var parametros = ""; 
-            for(var i=0; i< Parametros.Count; i++)
-                parametros = $"{parametros}{(i ==0 ? "": "#")}{Parametros[i]}";
+            var parametros = "";
+            for (var i = 0; i < Parametros.Count; i++)
+                parametros = $"{parametros}{(i == 0 ? "" : "#")}{Parametros[i]}";
 
-            return $"Crud.EventosDelMantenimiento('{TipoDeAccion}'{(Parametros.Count == 0 ? "": $",'{parametros}'")})";
+            return $"Crud.EventosDelMantenimiento('{TipoDeAccion}'{(Parametros.Count == 0 ? "" : $",'{parametros}'")})";
         }
     }
 
@@ -138,9 +138,9 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public class RelacionarElementos: AccionDeMenuMnt
+    public class RelacionarElementos : AccionDeMenuMnt
     {
-        public string IdHtmlDeLaModalAsociada {get; private set;}
+        public string IdHtmlDeLaModalAsociada { get; private set; }
         public Func<string> RenderDeLaModal { get; private set; }
         public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
         : base(TipoDeAccionDeMnt.AbrirModalParaRelacionar)
@@ -257,7 +257,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public enumCssOpcionMenu ClaseBoton { get; private set; }
 
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
-        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios,clase)
+        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, clase)
         {
         }
 
@@ -282,7 +282,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var disbled = !Menu.ZonaMenu.Mnt.Crud.GestorDeUsuario.TienePermisoDeDatos(usuarioConectado: Menu.ZonaMenu.Mnt.Crud.UsuarioConectado
                                                                     , permisosNecesarios: PermisosNecesarios
-                                                                    , elemento: Menu.ZonaMenu.Mnt.Crud.Negocio) 
+                                                                    , elemento: Menu.ZonaMenu.Mnt.Crud.Negocio)
                 ? "disabled"
                 : "";
 

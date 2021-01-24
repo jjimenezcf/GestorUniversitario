@@ -68,16 +68,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
             DefinirColumnasDelGrid();
 
-            if (Modo == ModoDescriptor.Mantenimiento)
-            {
-                Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
-                Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
-                Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
+            Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
+            Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
+            Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
+            Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
+            Mnt.ZonaMenu.AnadirOpcionDeIrAEditarFilasSeleccionadas();
+            Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
 
-                Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
-                Mnt.ZonaMenu.AnadirOpcionDeIrAEditarFilasSeleccionadas();
-                Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
-            }
+
         }
 
 
@@ -161,7 +159,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (ModoDescriptor.Consulta == Modo)
                 return $@"
                  {renderMnt}
-                 <!--  *******************  div de borrado -->
+                 <!--  *******************  div de edición -->
                  {Editor.RenderControl()}";
 
             return renderMnt;
@@ -198,7 +196,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor,enumCssOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }
