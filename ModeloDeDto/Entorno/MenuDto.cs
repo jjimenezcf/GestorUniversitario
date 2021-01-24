@@ -112,7 +112,8 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta ="Opción activa",
             Ayuda = "indica si la opción de menú está activa",
-            VisibleEnGrid = false,
+            VisibleEnGrid = true,
+            PorAnchoMnt = 15,
             Obligatorio = true,
             Fila = 5,
             Columna = 1,
