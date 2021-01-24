@@ -896,6 +896,10 @@
         }
 
         protected CargarGrid(accion: string, posicion: number) {
+
+            if (this.Grid.getAttribute(atGrid.cargando) == 'S')
+                return;
+
             let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
             var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
             let a = new ApiDeAjax.DescriptorAjax(this
@@ -905,9 +909,9 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , this.CrearFilasEnElGrid
-                , null
+                , this.SiHayErrorAlCargarElGrid
             );
-
+            this.Grid.setAttribute(atGrid.cargando, 'S');
             a.Ejecutar();
         }
 
@@ -929,19 +933,34 @@
             return peticion;
         }
 
+        private SiHayErrorAlCargarElGrid(peticion: ApiDeAjax.DescriptorAjax) {
+            let grid: GridDeDatos = peticion.llamador as GridDeDatos;
+            try {
+                Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            }
+            finally {
+                grid.Grid.setAttribute(atGrid.cargando, 'N');
+            }
+        }
+
         private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
             let grid: GridDeDatos = datosDeEntrada.Grid;
-            let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
-            var registros = infoObtenida.registros;
-            if (datosDeEntrada.Accion == atGrid.accion.buscar)
-                grid.Navegador.Total = infoObtenida.total;
+            try {
+                let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
+                var registros = infoObtenida.registros;
+                if (datosDeEntrada.Accion == atGrid.accion.buscar)
+                    grid.Navegador.Total = infoObtenida.total;
 
-            var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
-            grid.AnadirCuerpoALaTabla(grid, cuerpo);
-            grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-            grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
-            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+                var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
+                grid.AnadirCuerpoALaTabla(grid, cuerpo);
+                grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+                grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
+                grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+            }
+            finally {
+                grid.Grid.setAttribute(atGrid.cargando, 'N');
+            }
         }
 
         private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {

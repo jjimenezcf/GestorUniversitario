@@ -65,6 +65,7 @@ const ModoOrdenacion = {
 
 const atGrid = {
     id: atMantenimniento.gridDelMnt,
+    cargando: 'cargando',
     zonaNavegador: 'zona-de-navegador',
     cabeceraTabla: 'cabecera-de-tabla',
     idSeleccionado: 'id-seleccionado',
