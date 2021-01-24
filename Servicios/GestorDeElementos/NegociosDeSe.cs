@@ -52,9 +52,23 @@ namespace GestorDeElementos
            enumNegocio.Rol
         };
 
+        private static List<enumNegocio> _negociosDeParametrizacion = new List<enumNegocio>
+        {
+           enumNegocio.VistaMvc,
+           enumNegocio.Menu,
+           enumNegocio.Variable,
+           enumNegocio.Negocio,
+           enumNegocio.Permiso
+        };
+
         public static bool UsaSeguridad(enumNegocio negocio)
         {
             return _negociosConSeguridad.Contains(negocio);
+        }
+
+        public static bool EsDeParametrizacion(enumNegocio negocio)
+        {
+            return _negociosDeParametrizacion.Contains(negocio);
         }
 
         public static string ToString(enumNegocio negocio)
