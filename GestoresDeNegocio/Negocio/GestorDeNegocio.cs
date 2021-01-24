@@ -108,6 +108,18 @@ namespace GestoresDeNegocio.Negocio
             if (usuarioConectado.EsAdministrador)
                 return true;
 
+            if (negocio == enumNegocio.Variable)
+            {
+                switch (permisosNecesarios)
+                {
+                    case enumModoDeAccesoDeDatos.Consultor: return true;
+                    case enumModoDeAccesoDeDatos.Administrador: return Contexto.DatosDeConexion.EsAdministrador;
+                    case enumModoDeAccesoDeDatos.Gestor: return Contexto.DatosDeConexion.EsAdministrador;
+                    default:
+                        throw new Exception($"Al elemto variable no se le puede acceder con el tipo de permiso: '{permisosNecesarios}'");
+                }
+            }
+
             var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocio)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
