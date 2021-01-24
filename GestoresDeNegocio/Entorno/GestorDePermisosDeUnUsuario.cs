@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using AutoMapper;
 using GestorDeElementos;
-using GestoresDeNegocio.Entorno;
-using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using ModeloDeDto.Entorno;
-using ModeloDeDto.Seguridad;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
-using Utilidades;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -60,23 +55,9 @@ namespace GestoresDeNegocio.Entorno
                 return registros;
 
             foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                //if (string.Equals(filtro.Clausula, nameof(PermisosDeUnUsuarioDtm.IdUsuario), StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.igual)
-                //    registros = registros.Where(x => x.IdUsuario == filtro.Valor.Entero());
-
-                //if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
-                //    registros = registros.Where(x => x.IdPermiso == filtro.Valor.Entero());
-
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.Permiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.contiene)
                     registros = registros.Where(x => x.Permiso.Nombre.Contains(filtro.Valor));
-
-                if (filtro.Clausula.ToLower() == nameof(PermisosDeUnUsuarioDtm.IdPermiso).ToLower() && filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
-                {
-                    //var lista = filtro.Valor.Split(',').Select(s => s.Entero()).ToArray();
-
-                    //return registros.Where(x => lista.Contains(x.IdPermiso));
-                }
-            }
+           
             return registros;
 
         }
