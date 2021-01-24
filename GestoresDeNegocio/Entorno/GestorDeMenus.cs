@@ -40,44 +40,6 @@ namespace GestoresDeNegocio.Entorno
             return new GestorDeMenus(contexto, mapeador);
         }
 
-        protected override IQueryable<MenuDtm> AplicarFiltros(IQueryable<MenuDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarFiltros(registros, filtros, parametros);
-
-            if (HayFiltroPorId)
-                return registros;
-
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(MenuDto.idPadre).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.esNulo)
-                        registros = registros.Where(x => x.IdPadre == null);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.noEsNulo)
-                        registros = registros.Where(x => x.IdPadre != null);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual && filtro.Valor.Entero() > 0)
-                        registros = registros.Where(x => x.IdPadre == filtro.Valor.Entero());
-                }
-
-                if (filtro.Clausula.ToLower() == nameof(MenuDtm.Activo).ToLower())
-                {
-                    registros = registros.Where(x => x.Activo == bool.Parse(filtro.Valor));
-                }
-
-                if (filtro.Clausula.ToLower() == CamposDeFiltrado.Nombre)
-                {
-                    registros = registros.Where(x => x.Nombre.Contains(filtro.Valor));
-                }
-
-            }
-
-            return registros;
-        }
-
-
-
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
             registros = base.AplicarOrden(registros, ordenacion);

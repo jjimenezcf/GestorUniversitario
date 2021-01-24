@@ -119,19 +119,13 @@ namespace GestoresDeNegocio.Entorno
                     registros = registros.Where(u => u.Puestos.Any(x => x.Puesto.Roles.Any(y=>y.IdRol == filtro.Valor.Entero())));
                 }
 
-
-                if (filtro.Clausula.ToLower() == nameof(UsuarioDtm.Login).ToLower())
-                {
-                    registros = registros.Where(x => x.Login == filtro.Valor);
-                }
-
                 if (filtro.Clausula.ToLower() == nameof(PuestosDeUnUsuarioDtm.IdPuesto).ToLower()){
 
                    if (filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Puestos.Any(r => r.IdPuesto == filtro.Valor.Entero()));
+                    registros = registros.Where(i => !i.Puestos.Any(r => r.IdPuesto.Equals(filtro.Valor.Entero())));
 
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        registros = registros.Where(i => i.Puestos.Any(r => r.IdPuesto == filtro.Valor.Entero()));
+                        registros = registros.Where(i => i.Puestos.Any(r => r.IdPuesto.Equals(filtro.Valor.Entero())));
                 }
 
             }
