@@ -94,8 +94,16 @@ namespace Utilidades
             int.TryParse(str, out numero);
             return numero;
         }
+
+        public static bool EsEntero(this string str)
+        {
+            bool result = int.TryParse(str, out _);
+            return result;
+        }
+
     }
 
+    
     public static class Excepciones
     {
         public static string MensajeCompleto(this Exception exc, bool mostrarPila = false)
