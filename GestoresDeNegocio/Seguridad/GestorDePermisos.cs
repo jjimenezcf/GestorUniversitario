@@ -23,13 +23,12 @@ namespace GestoresDeNegocio.Seguridad
             {
                 CreateMap<PermisoDtm, PermisoDto>()
                 .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre))
-                .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre))
+                .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre));
+
+                CreateMap<PermisoDto, PermisoDtm>()
                     .ForMember(dtm => dtm.Clase, dto => dto.Ignore())
                     .ForMember(dtm => dtm.Tipo, dto => dto.Ignore());
 
-                CreateMap<PermisoDto, PermisoDtm>();
-
-                CreateMap<ClasePermisoDtm, ClasePermisoDto>();
 
             }
         }
@@ -208,12 +207,6 @@ namespace GestoresDeNegocio.Seguridad
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdRol).ToLower() &&
                     filtro.Criterio == CriteriosDeFiltrado.diferente)
                     registros = registros.Where(i => !i.Roles.Any(r => r.IdRol == filtro.Valor.Entero()));
-
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.IdClase).ToLower())
-                    registros = registros.Where(x => x.IdClase == filtro.Valor.Entero());
-
-                if (filtro.Clausula.ToLower() == nameof(PermisoDtm.IdTipo).ToLower())
-                    registros = registros.Where(x => x.IdTipo == filtro.Valor.Entero());
             }
 
             return registros;
