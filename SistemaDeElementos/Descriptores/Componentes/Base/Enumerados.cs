@@ -87,7 +87,12 @@ namespace MVCSistemaDeElementos.Descriptores
     public enum enumCssEdicion
     {
         TablaDeEdicion,
-        CuerpoDeEdicion
+        CuerpoDeTablaDeEdicion,
+        CuerpoDeEdicion,
+        ContenedorDeEdicionCabecera,
+        ContenedorDeEdicionCuerpo,
+        ContenedorDeEdicionPie,
+        ContenedorId
     }
 
     public enum enumCssControlesDto
@@ -173,6 +178,11 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 case enumCssEdicion.TablaDeEdicion: return "tabla-edicion";
                 case enumCssEdicion.CuerpoDeEdicion: return "cuerpo-edicion";
+                case enumCssEdicion.ContenedorDeEdicionCabecera: return "contenedor-edicion-cabecera";
+                case enumCssEdicion.ContenedorDeEdicionCuerpo: return "contenedor-edicion-cuerpo";
+                case enumCssEdicion.ContenedorDeEdicionPie: return "contenedor-edicion-pie";
+                case enumCssEdicion.CuerpoDeTablaDeEdicion: return "cuerpo-tabla-edicion";
+                case enumCssEdicion.ContenedorId: return "contenedor-id";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

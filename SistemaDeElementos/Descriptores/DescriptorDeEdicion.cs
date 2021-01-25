@@ -49,9 +49,9 @@ namespace MVCSistemaDeElementos.Descriptores
                    <div id=¨{IdHtml}¨ 
                         class=¨{Css.Render(enumCssDiv.DivOculto)} {Css.Render(enumCssEdicion.CuerpoDeEdicion)}¨
                         controlador=¨{Crud.Controlador}¨>
-                           <h2>Edición</h2> 
-                           {MenuDeEdicion.RenderControl()}
-                           {RendelDivDeEdicion(tabla)}
+                           {RenderContenedorDeEdicionCabecera()}
+                           {RenderContenedorDeEdicionCuerpo(tabla)}
+                           {RenderContenedorDeEdicionPie(tabla)}
                    </div>
                 ";
             }
@@ -65,7 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 idHtml: IdHtml
                 , controlador: Crud.Controlador
                 , tituloH2: "Edición"
-                , cuerpo: RendelDivDeEdicion(tabla)
+                , cuerpo: RenderContenedorDeEdicionCuerpo(tabla) + RenderContenedorDeEdicionPie(tabla)
                 , idOpcion: $"{IdHtml}-modificar"
                 , opcion: Crud.NegocioActivo ? "Modificar" : ""
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
@@ -77,17 +77,35 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlModal;
         }
 
-        private string RendelDivDeEdicion(DescriptorDeTabla tabla)
+        private string RenderContenedorDeEdicionCabecera()
         {
-            var htmlModal = $@"{htmlRenderObjetoVacio(tabla)}
-                               {htmlRenderPie(tabla)}
-                               {(AbrirEnModal ? "" : HtmlRenderNavegadorDeSeleccionados())}";
+            var htmlModal = $@"<div id=¨contenedor_edicion_cabecera_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCabecera)}¨>
+                           <h2>Edición</h2> 
+                              {MenuDeEdicion.RenderControl()}
+                           </div>";
+            return htmlModal;
+        }
+
+        private string RenderContenedorDeEdicionCuerpo(DescriptorDeTabla tabla)
+        {
+            var htmlModal = $@"<div id=¨contenedor_edicion_cuerpo_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
+                                 {htmlRenderObjetoVacio(tabla)}
+                               </div>";
+            return htmlModal;
+        }
+
+        private string RenderContenedorDeEdicionPie(DescriptorDeTabla tabla)
+        {
+            var htmlModal = $@"<div id=¨contenedor_edicion_pie_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionPie)}¨>
+                                  {htmlRenderPie(tabla)}
+                                  {(AbrirEnModal ? "" : HtmlRenderNavegadorDeSeleccionados())}
+                               </div>";
             return htmlModal;
         }
 
         private string HtmlRenderNavegadorDeSeleccionados()
         {
-            var clase = AbrirEnModal ? "contenido-pie-navegador" : "contenedor-pie-navegador";
+            var clase = AbrirEnModal ? "contenido-modal-pie-navegador" : "contenedor-pie-navegador";
             var htmlNavegadorGrid = $@"
                 <div id= ¨pie-edicion-{IdHtml}-navegador¨ class = ¨{clase}¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Primer elemento¨ onclick=¨Crud.EventosDeEdicion('mostrar-primero')¨>
@@ -117,7 +135,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmContenedorPie =
                    $@"
-                   <Div id=¨{IdHtml}¨ class=¨contenedor-id¨>
+                   <Div id=¨{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorId)}¨>
                      {RenderInputId(tabla)}
                   </Div>
                 ";
@@ -139,8 +157,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual string htmlRenderObjetoVacio(DescriptorDeTabla tabla)
         {
+            /*
+             * */
+
             var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ name=¨table_propiedad¨  class=¨{Css.Render(enumCssEdicion.TablaDeEdicion)}¨>
-                                  htmlFilas
+                                  <tbody class=¨{Css.Render(enumCssEdicion.CuerpoDeTablaDeEdicion)}¨>
+                                     htmlFilas
+                                  </tbody>
                                 </table>
                                ";
 
