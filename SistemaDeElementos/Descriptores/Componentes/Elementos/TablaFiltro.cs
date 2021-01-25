@@ -111,7 +111,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     Gestor.Errores.GestorDeErrores.Emitir($"El control {c.Propiedad} no puede ser renderizado en la columna indicada {c.Posicion.columna}, solo hay {Dimension.Columnas} columnas");
 
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
-                    htmlEtiqueta = $"{c.RenderLabel()}";
+                    htmlEtiqueta = $"{(c.Tipo == TipoControl.Check ? "" : c.RenderLabel())}";
 
                 if (c.Posicion.fila == i && c.Posicion.columna == j)
                     htmlControl = $"{c.RenderControl()}";

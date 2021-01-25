@@ -151,7 +151,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorCheck);
             valores["Css"] = Css.Render(enumCssControlesDto.Check);
-            valores["Checked"] = atributos.ValorPorDefecto;
+            valores["Checked"] = atributos.ValorPorDefecto.ToString().ToLower();
+            valores["Etiqueta"] = atributos.Etiqueta;
 
             var htmlCheck = PlantillasHtml.Render(PlantillasHtml.checkDto, valores);
 
@@ -183,7 +184,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
             valores["ClaseElemento"] = atributos.SeleccionarDe;
             valores["MostrarExpresion"] = atributos.MostrarExpresion;
-            valores["ComoBuscar"] = atributos.BuscarPor;
+            valores["BuscarPor"] = atributos.BuscarPor;
             valores["Longitud"] = 3;
             valores["Cantidad"] = 10;
             valores["CriterioDeFiltro"] = atributos.CriterioDeBusqueda;

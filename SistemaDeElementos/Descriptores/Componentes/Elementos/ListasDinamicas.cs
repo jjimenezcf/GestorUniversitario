@@ -16,10 +16,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public string FiltrarPor { get; set; }
         public int Cantidad { get; set; } = 10;
 
-        public ListasDinamicas(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarExpresion, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
+        public ListasDinamicas(BloqueDeFitro<TElemento> bloque, string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarExpresion, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
         : base(
-            padre: padre
-          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{filtrarPor}"
+            padre: bloque
+          , id: $"{bloque.Id}_{TipoControl.ListaDeElemento}_{filtrarPor}"
           , etiqueta
           , propiedad: filtrarPor
           , ayuda
@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             Tipo = TipoControl.ListaDinamica;
             Criterio = criterioDeBusqueda;
-            padre.AnadirSelectorElemento(this);
+            bloque.AnadirSelectorElemento(this);
         }
 
 
@@ -44,7 +44,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssFiltro.ListaDinamica);
             valores["ClaseElemento"] = SeleccionarDe;
             valores["MostrarExpresion"] = MostrarExpresion.ToLower();
-            valores["ComoBuscar"] = BuscarPor;
+            valores["BuscarPor"] = BuscarPor;
             valores["Longitud"] = LongitudMinimaParaBuscar;
             valores["Cantidad"] = Cantidad;
             valores["CriterioDeFiltro"] = Criterio ;

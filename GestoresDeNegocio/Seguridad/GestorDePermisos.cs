@@ -23,7 +23,9 @@ namespace GestoresDeNegocio.Seguridad
             {
                 CreateMap<PermisoDtm, PermisoDto>()
                 .ForMember(dto => dto.Clase, dtm => dtm.MapFrom(dtm => dtm.Clase.Nombre))
-                .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre));
+                .ForMember(dto => dto.Tipo, dtm => dtm.MapFrom(dtm => dtm.Tipo.Nombre))
+                    .ForMember(dtm => dtm.Clase, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.Tipo, dto => dto.Ignore());
 
                 CreateMap<PermisoDto, PermisoDtm>();
 

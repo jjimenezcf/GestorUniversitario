@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
 
-            new ListasDinamicas<MenuDto>(padre: fltEspecificos,
+            new ListasDinamicas<MenuDto>(bloque: fltEspecificos,
                 etiqueta:"Menu padre",
                 filtrarPor: nameof(MenuDto.idPadre),
                 ayuda:"seleccionar padre",
@@ -24,6 +24,14 @@ namespace MVCSistemaDeElementos.Descriptores
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
                 posicion: new Posicion() { fila = 0, columna = 0 });
 
+            new CheckFiltro<MenuDto>(bloque: fltEspecificos,
+                etiqueta: "Mostrar las activas",
+                filtrarPor: nameof(MenuDto.Activo),
+                ayuda: "Sólo las activos",
+                valorInicial: false,
+                filtrarPorFalse: false,
+                posicion: new Posicion(0, 1));
+
             RutaVista = "Entorno";
         }
     public override string RenderControl()
@@ -31,7 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores
         var render = base.RenderControl();
 
         render = render +
-                   $@"<script src=¨../../ts/Entorno/Menu.js¨></script>
+                  $@"<script src=¨../../ts/Entorno/Menu.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDeMenus('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
@@ -41,8 +49,13 @@ namespace MVCSistemaDeElementos.Descriptores
                          }}
                       </script>
                      ";
-        return render.Render();
+            return render.Render();
         }
 
     }
 }
+
+/*
+ * 
+                    
+*/

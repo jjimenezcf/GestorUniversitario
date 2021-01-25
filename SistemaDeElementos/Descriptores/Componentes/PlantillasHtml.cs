@@ -14,14 +14,14 @@ namespace MVCSistemaDeElementos.Descriptores
                                        obligatorio=¨[Obligatorio]¨ 
                                        [Readonly]";
 
-        private static string atributosComunesDeUnControlflt = $@"{atributosComunesDeUnControl}control-de-filtro=¨S¨";
+        private static string atributosComunesDeUnControlflt = $@"{atributosComunesDeUnControl}
+                                       control-de-filtro=¨S¨";
 
 
         private static string listaDinamica = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <input {atributosComunesDeUnControl} 
-                                         clase-elemento=¨[ClaseElemento]¨ 
+                                  <input clase-elemento=¨[ClaseElemento]¨ 
                                          mostrar-expresion=¨[MostrarExpresion]¨
-                                         como-buscar=¨[ComoBuscar]¨
+                                         como-buscar=¨[BuscarPor]¨
                                          criterio-de-filtro=¨[CriterioDeFiltro]¨
                                          longitud=¨[Longitud]¨ 
                                          cantidad-a-leer=¨[Cantidad]¨ 
@@ -35,22 +35,21 @@ namespace MVCSistemaDeElementos.Descriptores
                              </div>";
 
 
-        public static string listaDinamicaFlt = $@"{listaDinamica}".Replace("[RestoDeAtributos]",atributosComunesDeUnControlflt);
+        public static string listaDinamicaFlt = $@"{listaDinamica}".Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
         public static string listaDinamicaDto = $@"{listaDinamica}".Replace("[RestoDeAtributos]", $"guardar-en=¨[GuardarEn]¨ {atributosComunesDeUnControlDto}");
 
-        public static string listaDeElementosDto = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <select {atributosComunesDeUnControl} 
-                                          clase-elemento=¨[ClaseElemento]¨ 
-                                          guardar-en=¨[GuardarEn]¨
+        public static string listaDeElementos = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                  <select clase-elemento=¨[ClaseElemento]¨ 
+                                          [RestoDeAtributos]
                                           mostrar-expresion=¨[MostrarExpresion]¨  >
                                           <option value=¨0¨>Seleccionar ...</option>
                                   </select>
                              </div>";
 
-        public static string listaDeElementosFlt = listaDeElementosDto.Replace("guardar-en=¨[GuardarEn]¨", "control-de-filtro=¨S¨")
-                                                      .Replace("[Readonly]", "")
-                                                      .Replace("obligatorio=¨[Obligatorio]¨", "");
+        public static string listaDeElementosDto = listaDeElementos.Replace("[RestoDeAtributos]", $"guardar-en=¨[GuardarEn]¨ {atributosComunesDeUnControlDto}");
+
+        public static string listaDeElementosFlt = listaDeElementos.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
         public static string editorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControl}
@@ -61,20 +60,28 @@ namespace MVCSistemaDeElementos.Descriptores
                                   </input>
                              </div>";
 
-        public static string checkDto = @$"<div class=¨[CssContenedor]¨>
-                                <label></label>
-                             </div>                             
-                             <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                <input {atributosComunesDeUnControl}
+
+        private static string check = $@"<input [RestoDeAtributos]
                                        type=¨checkbox¨ 
-                                       checked=¨[Checked]¨>
-                                <label for=¨[IdHtml]¨>Mostrar en modal</label>
-                             </div>";
+                                       value =¨[Checked]¨>
+                                       <label for=¨[IdHtml]¨>[Etiqueta]</label>";
 
+        private static string checkInternoFlt = check.Replace("[RestoDeAtributos]", $" filtrar-por-false=¨[FiltrarPorFalse]¨ {atributosComunesDeUnControlflt}");
+        private static string checkInternoDto = check.Replace("[RestoDeAtributos]", atributosComunesDeUnControl);
 
-        public static string Render(string plantilla, Dictionary<string,object> valores)
+        public static string checkFlt = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                                       {checkInternoFlt}
+                                                     </div>";
+
+        public static string checkDto = $@"<div class=¨[CssContenedor]¨>
+                                                       <label></label>
+                                                     </div><div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                                       {checkInternoDto}
+                                                     </div>";
+
+        public static string Render(string plantilla, Dictionary<string, object> valores)
         {
-            foreach(var indice in valores.Keys)
+            foreach (var indice in valores.Keys)
             {
                 plantilla = plantilla.Replace($"[{indice}]", valores[indice] == null ? "" : valores[indice].ToString());
             }

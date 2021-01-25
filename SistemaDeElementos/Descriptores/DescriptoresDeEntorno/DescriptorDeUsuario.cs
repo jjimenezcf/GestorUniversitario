@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 
 
-                new ListasDinamicas<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(bloque: bloque,
                                                 etiqueta: "Puesto de trabajo",
                                                 filtrarPor: nameof(PuestosDeUnUsuarioDto.IdPuesto),
                                                 ayuda: "usuarios de este puesto",
@@ -45,7 +45,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 1;
 
 
-                new ListasDinamicas<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(bloque: bloque,
                                                 etiqueta: "Roles",
                                                 filtrarPor: nameof(RolesDeUnPuestoDto.IdRol),
                                                 ayuda: "usuarios de un rol",
@@ -57,7 +57,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
 
 
-                new ListasDinamicas<UsuarioDto>(padre: bloque,
+                new ListasDinamicas<UsuarioDto>(bloque: bloque,
                                                 etiqueta: "Permisos",
                                                 filtrarPor: nameof(PermisosDeUnUsuarioDto.IdPermiso),
                                                 ayuda: "permisos de un usuario",

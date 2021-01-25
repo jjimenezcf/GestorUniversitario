@@ -144,10 +144,11 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
         public override string RenderControl()
-        {
-            var renderMnt = Mnt.RenderControl();
-            if (ModoDescriptor.Mantenimiento == Modo)
-                return $@"
+        {try
+            {
+                var renderMnt = Mnt.RenderControl();
+                if (ModoDescriptor.Mantenimiento == Modo)
+                    return $@"
                   {renderMnt}
                   <!--  ******************* div de creacion ******************* -->
                   {Creador.RenderControl()}
@@ -156,13 +157,20 @@ namespace MVCSistemaDeElementos.Descriptores
                   <!--  *******************  div de borrado ******************* -->
                   {Borrado.RenderControl()}";
 
-            if (ModoDescriptor.Consulta == Modo)
-                return $@"
+                if (ModoDescriptor.Consulta == Modo)
+                    return $@"
                  {renderMnt}
                  <!--  *******************  div de edición -->
                  {Editor.RenderControl()}";
 
-            return renderMnt;
+                return renderMnt;
+            }
+            catch (Exception e)
+            {
+                return $@"
+                   <input id=error>{e.Message}</input>
+                ";
+            }
         }
 
 

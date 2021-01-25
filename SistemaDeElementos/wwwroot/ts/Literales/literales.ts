@@ -27,7 +27,6 @@ const atControl = {
     propiedad: "propiedad",
     nombre: "name",
     criterio: "criterio-de-filtro",
-    zonaDeFiltro: "zona-de-filtro",
     filtro: "control-de-filtro",
     tablaDeDatos: "tabla-de-datos",
     id: literal.id,
@@ -48,8 +47,12 @@ const atControl = {
     }
 };
 
+const atCheck = {
+    filtrarPorFalse: "filtrar-por-false"
+}
+
 const atMantenimniento = {
-    zonaDeFiltro: atControl.zonaDeFiltro,
+    zonaDeFiltro: "zona-de-filtro",
     controlador: literal.controlador,
     negocio: literal.negocio,
     zonaMenu: "zona-de-menu",

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -9,7 +10,9 @@ namespace MVCSistemaDeElementos.Descriptores
         ListaDinamica,
         ListaDeElementos,
         ContenedorListaDinamica,
-        ContenedorListaDeElementos
+        ContenedorListaDeElementos,
+        ContenedorCheck,
+        Check
     }
 
 
@@ -136,7 +139,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.SelectorDeArchivo: return "selector-de-archivo";
                 case enumCssControlesDto.BarraAzulArchivo: return "barra-azul";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssFiltro clase)
@@ -147,8 +150,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssFiltro.ListaDeElementos: return "lista-de-elementos";
                 case enumCssFiltro.ContenedorListaDinamica: return "contenedor-selector";
                 case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-selector";
+                case enumCssFiltro.ContenedorCheck: return "contenedor-check";
+                case enumCssFiltro.Check: return "check-flt";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
 
@@ -159,7 +164,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssCreacion.TablaDeCreacion: return "tabla-creacion";
                 case enumCssCreacion.CuerpoDeCrearcion: return "cuerpo-creacion";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssEdicion clase)
@@ -169,7 +174,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssEdicion.TablaDeEdicion: return "tabla-edicion";
                 case enumCssEdicion.CuerpoDeEdicion: return "cuerpo-edicion";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssMnt clase)
@@ -183,7 +188,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssMnt.MntFiltroBloqueVacio: return "div-mnt-bloque-vacio";
                 case enumCssMnt.MntTablaDeFiltro: return "tabla-filtro";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
         public static string Render(enumCssNavegadorEnModal clase)
         {
@@ -196,7 +201,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssNavegadorEnModal.InfoGrid: return "pie-grid-info";
                 case enumCssNavegadorEnModal.Navegador: return "pie-grid-navegador";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
 
@@ -210,7 +215,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssNavegadorEnMnt.InfoGrid: return "cuerpo-pie-info";
                 case enumCssNavegadorEnMnt.Navegador: return "cuerpo-pie-navegador";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssGrid clase)
@@ -220,7 +225,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssGrid.ColumnaCabecera: return "columna-cabecera";
                 case enumCssGrid.ColumnaOculta: return "columna-oculta";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssCuerpo clase)
@@ -237,7 +242,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssCuerpo.CuerpoDatosGridThead: return "cuerpo-datos-thead";
                 case enumCssCuerpo.CuerpoPie: return "cuerpo-pie";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssDiv clase)
@@ -247,7 +252,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssDiv.DivVisible: return "div-visible";
                 case enumCssDiv.DivOculto: return "div-no-visible";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
         public static string Render(enumCssOpcionMenu clase)
@@ -258,7 +263,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssOpcionMenu.DeVista: return "de-vista";
                 case enumCssOpcionMenu.Basico: return "basico";
             }
-            throw new System.Exception($"No se ha definido que renderizar para la clase {clase}");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
     }
 

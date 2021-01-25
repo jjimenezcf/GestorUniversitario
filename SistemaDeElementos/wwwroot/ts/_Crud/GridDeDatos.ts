@@ -380,8 +380,10 @@
 
         constructor(idPanelMnt: string) {
             super();
-
             this._idCuerpoCabecera = idPanelMnt;
+
+            if (this.CuerpoCabecera === null)
+                throw Error(`No se puede crear el Crud ${idPanelMnt}`);
             this._idGrid = this.CuerpoCabecera.getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
             this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
@@ -534,6 +536,10 @@
                         clausula = this.ObtenerClausulaListaDinamica(control as HTMLInputElement);
                         break;
                     }
+                    case TipoControl.Check: {
+                        clausula = this.ObtenerClausulaCheck(control as HTMLInputElement);
+                        break;
+                    }
                     default: {
                         Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
@@ -556,7 +562,7 @@
         private ObtenerControlesDeFiltro(): Array<string> {
 
             var arrayIds = new Array<string>();
-            var arrayHtmlInput = this.ZonaDeFiltro.getElementsByTagName(TagName.input);
+            var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`) as NodeListOf<HTMLButtonElement>; // .getElementsByTagName(TagName.input);
 
             for (let i = 0; i < arrayHtmlInput.length; i++) {
                 var htmlInput = arrayHtmlInput[i];
@@ -628,6 +634,18 @@
             if (Number(valor) > 0) {
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
             }
+            return clausula;
+        }
+
+        private ObtenerClausulaCheck(input: HTMLInputElement): ClausulaDeFiltrado {
+            var propiedad = input.getAttribute(atControl.propiedad);
+            var criterio = literal.filtro.criterio.igual;
+            let filtrarPorFalse = input.getAttribute(atCheck.filtrarPorFalse);
+            let valor: boolean = input.checked;
+
+            var clausula = null;
+            if (valor || (filtrarPorFalse === "S" && !valor))
+               clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
             return clausula;
         }
 
