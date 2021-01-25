@@ -50,9 +50,9 @@ namespace MVCSistemaDeElementos.Descriptores
                    <div id=¨{IdHtml}¨ 
                          class=¨{Css.Render(enumCssDiv.DivOculto)} {Css.Render(enumCssCreacion.CuerpoDeCrearcion)}¨
                          controlador=¨{Crud.Controlador}¨>
-                         <h2>Creación</h2> 
-                         {MenuCreacion.RenderControl()}
-                         {RendelDivDeCreacion()}
+                           {RenderContenedorDeCreacionCabecera()}
+                           {RenderContenedorDeCreacionCuerpo()}
+                           {RenderContenedorDeCreacionPie()}
                    </div>
                 ";
             }
@@ -67,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 idHtml: IdHtml
                 , controlador: Crud.Controlador
                 , tituloH2: "Creación"
-                , cuerpo: RendelDivDeCreacion()
+                , cuerpo: RenderContenedorDeCreacionCuerpo() + RenderContenedorDeCreacionPie()
                 , idOpcion: $"{IdHtml}-crear"
                 , opcion: Crud.NegocioActivo ? "Crear": ""
                 , accion: Crud.NegocioActivo ? "Crud.EventosModalDeCreacion('crear-elemento')": ""
@@ -76,6 +76,32 @@ namespace MVCSistemaDeElementos.Descriptores
                 , claseBoton: enumCssOpcionMenu.DeElemento
                 , permisosNecesarios: ServicioDeDatos.Seguridad.enumModoDeAccesoDeDatos.Gestor);
 
+            return htmlModal;
+        }
+
+        private string RenderContenedorDeCreacionCabecera()
+        {
+            var htmlModal = $@"<div id=¨contenedor_creacion_cabecera_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCabecera)}¨>
+                                 <h2>Creación</h2> 
+                                 {MenuCreacion.RenderControl()}
+                              </div>";
+            return htmlModal;
+        }
+
+        private string RenderContenedorDeCreacionCuerpo()
+        {
+            var htmlModal = $@"<div id=¨contenedor_creacion_cuerpo_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
+                                 {htmlRenderObjetoVacio()}
+                               </div>";
+            return htmlModal;
+        }
+
+        private string RenderContenedorDeCreacionPie()
+        {
+            var htmlModal = $@"<div id=¨contenedor_creacion_pie_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionPie)}¨>
+                                  {htmlDeCreacionEspecifico}
+                                  {(AbrirEnModal ? "" : htmlRenderOpciones())}
+                               </div>";
             return htmlModal;
         }
 

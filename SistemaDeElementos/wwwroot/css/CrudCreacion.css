@@ -5,18 +5,27 @@
     position: fixed;
     width: 100%;
     padding: 10px;
+    grid-area: cuerpo-creacion;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px 1fr 50px;
+    grid-template-areas: "contenedor-edicion-cabecera" "contenedor-edicion-cuerpo" "contenedor-edicion-pie";
 }
 
 .contenedor-opciones-creacion {
-    float: right;
+    /*float: right;*/
     /*padding-top: 15px;*/
-    padding-right: 10px;
+    /*padding-right: 10px;
     width: 200px;
-    text-align: right;
+    text-align: right;*/
 }
 
 .tabla-creacion {
-    width: inherit;
+    width: 100%;
 }
 
+
+.tabla-creacion > tbody {
+    width: 100%;
+}
 

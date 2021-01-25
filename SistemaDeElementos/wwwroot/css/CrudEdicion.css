@@ -4,7 +4,7 @@
     position: fixed;
     width: 100%;
     padding: 10px;
-    grid-area: contenedor-edicion-pie;
+    grid-area: cuerpo-edicion;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 100px 1fr 50px;
