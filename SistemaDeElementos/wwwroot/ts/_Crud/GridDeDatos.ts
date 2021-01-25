@@ -560,28 +560,27 @@
         }
 
         private ObtenerControlesDeFiltro(): Array<string> {
-
             var arrayIds = new Array<string>();
-            var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`) as NodeListOf<HTMLButtonElement>; // .getElementsByTagName(TagName.input);
-
+            var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`) as NodeListOf<HTMLButtonElement>;
             for (let i = 0; i < arrayHtmlInput.length; i++) {
                 var htmlInput = arrayHtmlInput[i];
-                var esFiltro = htmlInput.getAttribute(atControl.filtro);
-                if (esFiltro === 'S') {
-                    var id = htmlInput.getAttribute(atControl.id);
-                    if (id === null)
-                        console.log(`Falta el atributo id del componente de filtro ${htmlInput}`);
-                    else
-                        arrayIds.push(id);
-                }
+                var id = htmlInput.getAttribute(atControl.id);
+                if (id === null)
+                    console.log(`Falta el atributo id del componente de filtro ${htmlInput}`);
+                else
+                    arrayIds.push(id);
             }
 
-            var arrayHtmlSelect = this.ZonaDeFiltro.getElementsByTagName(TagName.select);
+            var arrayHtmlSelect = this.ZonaDeFiltro.querySelectorAll(`select[${atControl.filtro}="S"]`) as NodeListOf<HTMLButtonElement>;
             for (let i = 0; i < arrayHtmlSelect.length; i++) {
                 var htmlSelect = arrayHtmlSelect[i];
                 var id = htmlSelect.getAttribute(atControl.id);
-                arrayIds.push(id);
+                if (id === null)
+                    console.log(`Falta el atributo id del componente de filtro ${htmlSelect}`);
+                else
+                    arrayIds.push(id);
             }
+
 
             return arrayIds;
         }
@@ -645,7 +644,7 @@
 
             var clausula = null;
             if (valor || (filtrarPorFalse === "S" && !valor))
-               clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
             return clausula;
         }
 
