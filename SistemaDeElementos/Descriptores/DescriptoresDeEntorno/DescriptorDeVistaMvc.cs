@@ -10,11 +10,20 @@ namespace MVCSistemaDeElementos.Descriptores
             : base(nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo)
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            
             new EditorFiltro<VistaMvcDto>(bloque: fltGeneral
                 , etiqueta: "Controlador"
                 , propiedad: nameof(VistaMvcDto.Controlador)
                 , ayuda: "buscar por controlador"
                 , new Posicion { fila = 1, columna = 0 });
+
+            new CheckFiltro<VistaMvcDto>(bloque: fltGeneral,
+                etiqueta: "Mostrar solo las modales",
+                filtrarPor: nameof(VistaMvcDto.MostrarEnModal),
+                ayuda: "Sólo las las modales",
+                valorInicial: false,
+                filtrarPorFalse: false,
+                posicion: new Posicion(1, 1));
 
             RutaVista = "Entorno";
         }
