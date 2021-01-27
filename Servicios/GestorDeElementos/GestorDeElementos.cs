@@ -62,7 +62,7 @@ namespace GestorDeElementos
     public class ParametrosDeMapeo
     {
         public bool AnularMapeo = false;
-        public Dictionary<string, object> parametros = new Dictionary<string, object>();
+        public Dictionary<string, object> Opciones = new Dictionary<string, object>();
     }
 
     #endregion
@@ -336,21 +336,22 @@ namespace GestorDeElementos
 
         #region Métodos de lectura
 
-        public TElemento LeerElementoPorId(int id)
+        public TElemento LeerElementoPorId(int id, Dictionary<string,object> opcionesDelMapeo = null)
         {
             TRegistro elementoDtm;
+            var parametros = opcionesDelMapeo == null ? new ParametrosDeMapeo() : new ParametrosDeMapeo() { Opciones = opcionesDelMapeo };
 
             elementoDtm = LeerRegistroPorId(id);
-            return MapearElemento(elementoDtm);
+            return MapearElemento(elementoDtm, parametros);
         }
 
-        public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden)
+        public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo)
         {
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
 
-            // (IEnumerable<TElemento>)Mapeador.Map(elementosDeBd, typeof(IEnumerable<TRegistro>), typeof(IEnumerable<TElemento>));
+            ParametrosDeMapeo parametrosDelMapeo = opcionesDeMapeo.Count > 0 ? new ParametrosDeMapeo() { Opciones = opcionesDeMapeo} : null;  
 
-            return MapearElementos(elementosDeBd);
+            return MapearElementos(elementosDeBd, parametrosDelMapeo);
         }
 
         public List<TElemento> ProyectarElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, ParametrosDeNegocio parametros = null)
@@ -663,6 +664,9 @@ namespace GestorDeElementos
             if (parametros == null)
                 parametros = new ParametrosDeMapeo();
 
+            if (parametros.AnularMapeo)
+                return null;
+
             TElemento elemento = null;
             elemento = Mapeador.Map<TRegistro, TElemento>(registro,
                 opt =>
@@ -671,9 +675,6 @@ namespace GestorDeElementos
                     opt.AfterMap((registro, elemento) => DespuesDeMapearElemento(registro, elemento, parametros));
                 }
                 );
-
-            if (parametros.AnularMapeo)
-                elemento = null;
 
             return elemento;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using AutoMapper;
@@ -15,19 +16,61 @@ namespace GestorDeElementos
         {
             var rutaDeDescarga = $@".\wwwroot\Archivos";
             var ficheroCacheado = $"{id}.se";
+            var ficheroConRutaEnLaGd = $@"{almacenadoEn}\{ficheroCacheado}";
+            var ficheroConRutaCacheado = $@"{rutaDeDescarga}\{ficheroCacheado}";
 
+            if (!File.Exists(ficheroConRutaEnLaGd))
+                return ""; //devolver img de fichero no encontrado
 
-            if (!File.Exists($@"{rutaDeDescarga}\{ficheroCacheado}"))
-                if (File.Exists($@"{almacenadoEn}\{ficheroCacheado}"))
-                    File.Copy($@"{almacenadoEn}\{ficheroCacheado}", $@"{rutaDeDescarga}\{ficheroCacheado}");
-                else
-                    return "";
+            if (!File.Exists(ficheroConRutaCacheado))
+            {
+                if (!CopiarFichero(ficheroConRutaEnLaGd, ficheroConRutaCacheado))
+                    return ""; //devolver img de fichero bloqueado
+            }
 
-
-            File.Copy($@"{rutaDeDescarga}\{ficheroCacheado}", $@"{rutaDeDescarga}\{nombreFichero}", true);
+            var ficherpParaDevolverConRuta = $@"{rutaDeDescarga}\{Path.GetFileNameWithoutExtension(nombreFichero)}_{DateTime.Now.Ticks}{Path.GetExtension(nombreFichero)}";
+            if (!CopiarFichero(ficheroConRutaCacheado, ficherpParaDevolverConRuta))
+                return "";//devolver img de fichero bloqueado;
 
             var rutaUrlBase = "/Archivos";
-            return $@"{rutaUrlBase}/{nombreFichero}";
+            string urlArchivoRelativa = $@"{rutaUrlBase}/{Path.GetFileName(ficherpParaDevolverConRuta)}";
+            return urlArchivoRelativa;
+        }
+
+        private static bool EstaEnUso(string ficheroConRuta)
+        {
+            bool usando = false;
+            try
+            {
+                var f = File.OpenWrite(ficheroConRuta);
+                f.Close();
+            }
+            catch
+            {
+                usando = true;
+            }
+            return usando;
+        }
+
+        private static bool CopiarFichero(string ficheroConRutaOrigen, string ficheroConRutaDestino)
+        {
+            var contadorEspera = 0;
+            var copiado = false;
+
+            while (contadorEspera <= 2 && !copiado) 
+            {
+                try
+                {
+                    File.Copy(ficheroConRutaOrigen, ficheroConRutaDestino, true);
+                    copiado = true;
+                }
+                catch
+                {
+                    contadorEspera += 1;
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+            return copiado;
         }
 
         public static PropertyInfo[] PropiedadesDelObjeto(Type tipo)

@@ -185,7 +185,7 @@ namespace GestoresDeNegocio.Entorno
         protected override void DespuesDeMapearElemento(UsuarioDtm registro, UsuarioDto elemento, ParametrosDeMapeo parametros)
         {
             base.DespuesDeMapearElemento(registro, elemento, parametros);
-            if (registro.Archivo != null)
+            if (registro.Archivo != null && parametros.Opciones.ContainsKey(ElementoDto.DescargarGestionDocumental) && Equals(parametros.Opciones[ElementoDto.DescargarGestionDocumental], true) )
             {
                 elemento.Foto = GestorDeElementos.Utilidades.DescargarArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
             }

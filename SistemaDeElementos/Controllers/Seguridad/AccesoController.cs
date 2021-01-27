@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModeloDeDto;
 using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
 using Newtonsoft.Json;
@@ -46,8 +47,10 @@ namespace SistemaDeElementos.Controllers.Seguridad
             {
 
                 List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(restrictor);
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
 
-                var elementos = _gestordeUsuarios.LeerElementos(0, -1, filtros, null).ToList();
+                var elementos = _gestordeUsuarios.LeerElementos(0, -1, filtros, null, opcionesDeMapeo).ToList();
 
                 if (elementos.Count == 0)
                     Emitir($"No se ha localizado el usuario: {filtros[0].Valor}");

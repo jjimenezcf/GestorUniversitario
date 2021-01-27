@@ -212,8 +212,10 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 CumplimentarDatosDeUsuarioDeConexion();
-                var elemento = GestorDeElementos.LeerElementoPorId(id);
-                
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
+
+                var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
                 var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, elemento);
                 if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
@@ -280,13 +282,15 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 CumplimentarDatosDeUsuarioDeConexion();
-                var elementos = Leer(pos, can, filtro, orden);
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+                var elementos = Leer(pos, can, filtro, orden, opcionesDeMapeo);
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.Count() == 0)
                 {
                     pos = pos - can;
                     if (pos < 0) pos = 0;
-                    elementos = Leer(pos, can, filtro, orden);
+                    elementos = Leer(pos, can, filtro, orden, opcionesDeMapeo);
                     r.Mensaje = "No hay más elementos";
                 }
 
@@ -333,14 +337,16 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         //END-POINT: Desde ModalSeleccion.ts
-        public JsonResult epLeer(string filtro)
+        public JsonResult epLeerParaSelector(string filtro)
         {
             var r = new Resultado();
             List<TElemento> elementos;
             try
             {
                 CumplimentarDatosDeUsuarioDeConexion();
-                elementos = Leer(0, -1, filtro, null).ToList();
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+                elementos = Leer(0, 2, filtro, null, opcionesDeMapeo).ToList();
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -542,18 +548,22 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected IEnumerable<TElemento> LeerOrdenados(string filtro, string orden)
+        protected IEnumerable<TElemento> LeerOrdenados(string filtro, string orden, string parametrosDeMapeo)
         {
 
             List<ClausulaDeFiltrado> filtros = filtro.IsNullOrEmpty()
                                                ? new List<ClausulaDeFiltrado>()
                                                : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
+            Dictionary<string,object> parametros = parametrosDeMapeo.IsNullOrEmpty()
+                ? new Dictionary<string, object>()
+                : JsonConvert.DeserializeObject<Dictionary<string, object>>(parametrosDeMapeo);
 
             var elementos = GestorDeElementos.LeerElementos(Descriptor.Mnt.Datos.PosicionInicial
                                                           , Descriptor.Mnt.Datos.CantidadPorLeer
                                                           , filtros
-                                                          , orden.ParsearOrdenacion());
+                                                          , orden.ParsearOrdenacion()
+                                                          , parametros);
 
             return elementos;
         }
@@ -577,7 +587,7 @@ namespace MVCSistemaDeElementos.Controllers
             return GestorDeElementos.Recontar(filtros);
         }
 
-        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
+        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden, Dictionary<string,object> opcionesDeMapeo)
         {
             Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
             Descriptor.Mnt.Datos.PosicionInicial = posicion;
@@ -585,7 +595,7 @@ namespace MVCSistemaDeElementos.Controllers
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
-            return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes);
+            return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
         }
 
         private void CumplimentarDatosDeUsuarioDeConexion()

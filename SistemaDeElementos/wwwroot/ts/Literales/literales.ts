@@ -212,7 +212,7 @@ const Ajax = {
         Modificar: "epModificarPorId",
         Borrar: "epBorrarPorId",
         RecargarModalEnHtml: "epRecargarModalEnHtml",
-        Leer: "epLeer",
+        Leer: "epLeerParaSelector",
         CargarLista: "epCargarLista",
         CargaDinamica: "epCargaDinamica",
         SubirArchivo: "epSubirArchivo",

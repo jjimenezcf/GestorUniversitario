@@ -192,6 +192,7 @@ namespace ModeloDeDto
     public class ElementoDto
     {
         public static string ExpresionPorDefecto = $"[{CamposDeFiltrado.Nombre}]";
+        public static string DescargarGestionDocumental = "descargar-gestion-documental";
 
         [IUPropiedad(
             Etiqueta = "Id",
