@@ -16,23 +16,24 @@ namespace GestorDeElementos
         {
             var rutaDeDescarga = $@".\wwwroot\Archivos";
             var ficheroCacheado = $"{id}.se";
+            var rutaUrlBase = "/Archivos";
             var ficheroConRutaEnLaGd = $@"{almacenadoEn}\{ficheroCacheado}";
             var ficheroConRutaCacheado = $@"{rutaDeDescarga}\{ficheroCacheado}";
 
             if (!File.Exists(ficheroConRutaEnLaGd))
-                return ""; //devolver img de fichero no encontrado
+                return $@"{rutaUrlBase}/FicheroNoEncontrado.png";
+
 
             if (!File.Exists(ficheroConRutaCacheado))
             {
                 if (!CopiarFichero(ficheroConRutaEnLaGd, ficheroConRutaCacheado))
-                    return ""; //devolver img de fichero bloqueado
+                    return $@"{rutaUrlBase}/FicheroBloqueado.png";
             }
 
             var ficherpParaDevolverConRuta = $@"{rutaDeDescarga}\{Path.GetFileNameWithoutExtension(nombreFichero)}_{DateTime.Now.Ticks}{Path.GetExtension(nombreFichero)}";
             if (!CopiarFichero(ficheroConRutaCacheado, ficherpParaDevolverConRuta))
-                return "";//devolver img de fichero bloqueado;
+                return $@"{rutaUrlBase}/FicheroBloqueado.png";
 
-            var rutaUrlBase = "/Archivos";
             string urlArchivoRelativa = $@"{rutaUrlBase}/{Path.GetFileName(ficherpParaDevolverConRuta)}";
             return urlArchivoRelativa;
         }
@@ -57,7 +58,7 @@ namespace GestorDeElementos
             var contadorEspera = 0;
             var copiado = false;
 
-            while (contadorEspera <= 2 && !copiado) 
+            while (contadorEspera <= 2 && !copiado)
             {
                 try
                 {
