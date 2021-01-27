@@ -966,11 +966,11 @@
             try {
                 let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
                 var registros = infoObtenida.registros;
-                if (datosDeEntrada.Accion == atGrid.accion.buscar)
+                if (datosDeEntrada.Accion === atGrid.accion.buscar)
                     grid.Navegador.Total = infoObtenida.total;
 
-                var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
-                grid.AnadirCuerpoALaTabla(grid, cuerpo);
+                var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros, datosDeEntrada.Accion);
+                grid.AnadirCuerpoALaTabla(grid, cuerpo, datosDeEntrada.Accion);
                 grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
                 grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
                 grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
@@ -980,9 +980,12 @@
             }
         }
 
-        private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
+        private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any, accion: string) {
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
-            var cuerpoDeLaTabla = document.createElement("tbody");
+            let cuerpoDeLaTabla: HTMLTableSectionElement = accion !== atGrid.accion.siguiente ?
+                document.createElement("tbody") :
+                grid.Grid.querySelector("table").querySelector("tbody");
+
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
             for (let i = 0; i < registros.length; i++) {
@@ -992,13 +995,14 @@
             return cuerpoDeLaTabla;
         }
 
-        private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
-            var tabla = grid.Grid.querySelector("table");
-            var tbody = tabla.querySelector("tbody");
+        private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement, accion: string) {
+            let tabla: HTMLTableElement = grid.Grid.querySelector("table");
+            let tbody: HTMLTableSectionElement = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
                 tabla.append(cuerpoDeLaTabla);
             else {
-                tabla.removeChild(tbody);
+                if (accion !== atGrid.accion.siguiente)
+                    tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
         }
