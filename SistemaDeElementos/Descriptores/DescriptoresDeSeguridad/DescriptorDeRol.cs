@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Seguridad;
+﻿using ModeloDeDto;
+using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
@@ -28,6 +29,18 @@ namespace MVCSistemaDeElementos.Descriptores
                 , nombreOpcion: "Permisos"
                 , propiedadQueRestringe: nameof(RolDto.Id)
                 , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
+
+
+            var bloque = new BloqueDeFitro<RolDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
+            new ListasDinamicas<RolDto>(bloque: bloque,
+                                            etiqueta: "Permisos asociado",
+                                            filtrarPor: nameof(PermisosDeUnRolDto.IdPermiso),
+                                            ayuda: "roles con el permiso",
+                                            seleccionarDe: nameof(PermisoDto),
+                                            buscarPor: nameof(PermisoDto.Nombre),
+                                            mostrarExpresion: nameof(PermisoDto.Nombre),
+                                            criterioDeBusqueda: CriteriosDeFiltrado.contiene,
+                                            posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 3;
         }
 
 

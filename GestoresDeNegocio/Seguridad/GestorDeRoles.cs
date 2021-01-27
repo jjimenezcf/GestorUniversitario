@@ -68,8 +68,8 @@ namespace GestoresDeNegocio.Seguridad
 
 
                 if (filtro.Clausula.ToLower() == nameof(PermisosDeUnRolDtm.IdPermiso).ToLower() &&
-                    filtro.Criterio == CriteriosDeFiltrado.diferente)
-                    registros = registros.Where(i => !i.Permisos.Any(r => r.IdPermiso == filtro.Valor.Entero()));
+                    filtro.Criterio == CriteriosDeFiltrado.igual)
+                    registros = registros.Where(i => i.Permisos.Any(r => r.IdPermiso == filtro.Valor.Entero()));
             }
 
             return registros;

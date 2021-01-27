@@ -93,6 +93,8 @@
 
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
 
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
@@ -125,6 +127,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Update="wwwroot\ts\Callejero\Paises.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Entorno\PermisosDeUnUsuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

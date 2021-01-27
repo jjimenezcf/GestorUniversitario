@@ -481,7 +481,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        public JsonResult epLeerModoDeAccesoAlElemento(string negocio,int id)
+        public JsonResult epLeerModoDeAccesoAlElemento(string negocio, int id)
         {
             var r = new Resultado();
             try
@@ -534,8 +534,16 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             Descriptor.GestorDeNegocio = GestorDeNegocio.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
             ViewBag.DatosDeConexion = DatosDeConexion;
+
+            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
+
+            if (!this.ExisteLaVista(destino))
+            {
+                ViewBag.Vista = destino;
+                return VistaNoDefinida(destino);
+            }
+
 
             return base.View(destino, Descriptor);
         }
@@ -555,7 +563,7 @@ namespace MVCSistemaDeElementos.Controllers
                                                ? new List<ClausulaDeFiltrado>()
                                                : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
 
-            Dictionary<string,object> parametros = parametrosDeMapeo.IsNullOrEmpty()
+            Dictionary<string, object> parametros = parametrosDeMapeo.IsNullOrEmpty()
                 ? new Dictionary<string, object>()
                 : JsonConvert.DeserializeObject<Dictionary<string, object>>(parametrosDeMapeo);
 
@@ -587,7 +595,7 @@ namespace MVCSistemaDeElementos.Controllers
             return GestorDeElementos.Recontar(filtros);
         }
 
-        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden, Dictionary<string,object> opcionesDeMapeo)
+        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden, Dictionary<string, object> opcionesDeMapeo)
         {
             Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
             Descriptor.Mnt.Datos.PosicionInicial = posicion;

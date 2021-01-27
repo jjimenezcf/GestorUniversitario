@@ -52,7 +52,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string listaDeElementosFlt = listaDeElementos.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
         public static string editorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                  <input {atributosComunesDeUnControl}
+                                  <input {atributosComunesDeUnControlDto}
                                          type=¨text¨
                                          placeholder =¨[Placeholder]¨
                                          valorPorDefecto=¨[ValorPorDefecto]¨

@@ -4,6 +4,7 @@ using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Negocio;
+using ServicioDeDatos.Callejero;
 
 namespace ServicioDeDatos
 {
@@ -67,6 +68,8 @@ namespace ServicioDeDatos
 
             DefinirTablasDelEsquemaDeNegocio(modelBuilder);
 
+            DefinirTablasDelCallejero(modelBuilder);
+
         }
 
         private static void DefinirEsquemaDeSeguridad(ModelBuilder modelBuilder)
@@ -110,6 +113,12 @@ namespace ServicioDeDatos
         private static void DefinirTablasDelEsquemaSisDoc(ModelBuilder modelBuilder)
         {
             TablaArchivo.Definir(modelBuilder);
+        }
+
+
+        private static void DefinirTablasDelCallejero(ModelBuilder modelBuilder)
+        {
+            TablaPais.Definir(modelBuilder);
         }
 
 

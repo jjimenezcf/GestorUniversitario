@@ -15,6 +15,7 @@ using System.Security.Claims;
 using AutoMapper;
 using System;
 using GestoresDeNegocio.Negocio;
+using GestoresDeNegocio.Callejero;
 
 namespace MVCSistemaDeElementos
 {
@@ -87,6 +88,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePermisosDeUnUsuario>();
             services.AddScoped<GestorDePermisosDeUnPuesto>();
             services.AddScoped<GestorDeNegocio>();
+            services.AddScoped<GestorDePaises>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

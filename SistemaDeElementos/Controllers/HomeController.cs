@@ -42,6 +42,7 @@ namespace MVCSistemaDeElementos.Controllers
             return View("PanelDeControl");
         }
 
+
         public IActionResult About()
         {
             try

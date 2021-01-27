@@ -52,5 +52,11 @@ namespace MVCSistemaDeElementos.Controllers
 
             return HttpContext.User.FindFirst(nameof(UsuarioDto.Login)).Value;
         }
+
+
+        protected ViewResult VistaNoDefinida(string vista)
+        {
+            return View("VistaNoDefinida");
+        }
     }
 }
