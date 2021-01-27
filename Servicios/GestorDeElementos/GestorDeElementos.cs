@@ -34,11 +34,8 @@ namespace GestorDeElementos
 
     public class ClausulaDeOrdenacion
     {
-        public static string PorDefecto = nameof(PorDefecto);
-
         public string Criterio { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
-        public bool TablaPrincipal { get; set; } = true;
     }
 
     #endregion
@@ -441,13 +438,16 @@ namespace GestorDeElementos
 
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
-            if (parametros.Operacion == TipoOperacion.Leer)
-                AplicarOrdenTablaPrincipal(ref orden, ref registros);
-
             registros = AplicarJoins(registros, filtros, joins, parametros);
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
+
+            if (parametros.Operacion == TipoOperacion.Leer)
+            {
+                if (orden == null) orden = new List<ClausulaDeOrdenacion>();
+               registros = AplicarOrden(registros, orden);
+            }
 
             registros = registros.Skip(posicion);
 
@@ -456,32 +456,7 @@ namespace GestorDeElementos
                 registros = registros.Take(cantidad);
             }
 
-            if (parametros.Operacion == TipoOperacion.Leer && orden.Count > 0)
-                AplicarOrden(registros, orden);
-
             return registros;
-        }
-
-        private void AplicarOrdenTablaPrincipal(ref List<ClausulaDeOrdenacion> orden, ref IQueryable<TRegistro> registros)
-        {
-            if (orden == null || orden.Count == 0)
-            {
-                orden = new List<ClausulaDeOrdenacion>();
-                orden.Add(new ClausulaDeOrdenacion { TablaPrincipal = true, Criterio = ClausulaDeOrdenacion.PorDefecto, Modo = ModoDeOrdenancion.ascendente });
-            }
-
-            List<ClausulaDeOrdenacion> ordenAntesDeJoin = new List<ClausulaDeOrdenacion>();
-            for (var i = orden.Count - 1; i >= 0; i--)
-            {
-                var c = orden[i];
-                if (c.TablaPrincipal)
-                {
-                    ordenAntesDeJoin.Add(new ClausulaDeOrdenacion { Criterio = c.Criterio, TablaPrincipal = true, Modo = ModoDeOrdenancion.ascendente });
-                    orden.RemoveAt(i);
-                }
-            }
-
-            registros = AplicarOrden(registros, ordenAntesDeJoin);
         }
 
         /// <summary>
@@ -492,24 +467,18 @@ namespace GestorDeElementos
         /// <param name="parametros">parámetros de negocio que modifican el comportamiento</param>
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Criterio.ToLower() == nameof(Registro.Id).ToLower())
-                    return registros = OrdenPorId(registros, orden);
-
-                if (orden.Criterio.ToLower() == nameof(Registro.Nombre).ToLower())
-                    return registros = OrdenPorNombre(registros, orden);
-            }
+            if (ordenacion.Count == 1 && ordenacion[0].Criterio.ToLower() == nameof(IElementoDtm.Nombre).ToLower())
+                registros = OrdenPorNombre(registros, ordenacion[0]);
 
             return registros;
         }
-        private static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        protected static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {
             return orden.Modo == ModoDeOrdenancion.ascendente
                 ? registros.OrderBy(x => x.Id)
                 : registros.OrderByDescending(x => x.Id);
         }
-        private static IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
+        protected static IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {
             return orden.Modo == ModoDeOrdenancion.ascendente
                 ? registros.OrderBy(x => x.Nombre)
@@ -525,12 +494,6 @@ namespace GestorDeElementos
                     HayFiltroPorId = filtro.Criterio == CriteriosDeFiltrado.igual;
                     return registros.AplicarFiltroPorIdentificador(filtro,nameof(Registro.Id));
                 }
-
-                //if (filtro.Clausula.ToLower() == nameof(Registro.Nombre).ToLower())
-                //{
-                //    return registros.AplicarFiltroPorNombre(filtro);
-                //}
-
             }
 
             return registros.AplicarFiltroPorPropiedades(filtros);

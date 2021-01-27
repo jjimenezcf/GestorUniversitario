@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ServicioDeDatos.Entorno
 {
     [Table("USUARIO", Schema = "ENTORNO")]
-    public class UsuarioDtm : Registro
+    public class UsuarioDtm : Registro, INombre
     {
         [Required]
         [Column("LOGIN", TypeName = "VARCHAR(50)")]

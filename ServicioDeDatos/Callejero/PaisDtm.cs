@@ -1,15 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos.Callejero
 {
     [Table("PAIS", Schema = "CALLEJERO")]
     public class PaisDtm : ElementoDtm
     {
-        [Required]
-        [Column("CODIGO", Order = 3, TypeName = "VARCHAR(3)")]
         public string Codigo { get; set; }
     }
 
@@ -17,8 +17,11 @@ namespace ServicioDeDatos.Callejero
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            GeneradorMd.DefinirElementoDto<PaisDtm>(modelBuilder);
-            modelBuilder.Entity<PaisDtm>().Property(v => v.Codigo).IsRequired(true);
+            GeneradorMd.DefinirCamposDelElementoDtm<PaisDtm>(modelBuilder);
+            modelBuilder.Entity<PaisDtm>().Property(v => v.Codigo)
+                .HasColumnName("CODIGO")
+                .HasColumnType("VARCHAR(3)")
+                .IsRequired(true);
         }
     }
 

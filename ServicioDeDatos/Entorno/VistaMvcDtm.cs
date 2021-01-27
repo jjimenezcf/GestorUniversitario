@@ -8,7 +8,7 @@ using ServicioDeDatos.Seguridad;
 namespace ServicioDeDatos.Entorno
 {
     [Table("VISTA_MVC", Schema = "ENTORNO")]
-    public class VistaMvcDtm : Registro
+    public class VistaMvcDtm : Registro, INombre
     {
         [Required]
         [Column("CONTROLADOR", TypeName = "VARCHAR(250)")]

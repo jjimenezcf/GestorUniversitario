@@ -29,7 +29,30 @@ namespace ServicioDeDatos.Elemento
             throw new Exception($"No se ha definido el nombre de la tabla de la clase {t.Name}");
         }
 
-        internal static void DefinirElementoDto<TEntity>(ModelBuilder modelBuilder) where TEntity : ElementoDtm
+        internal static void DefinirCampoArchivo<TEntity>(ModelBuilder modelBuilder) where TEntity : Registro
+        {
+            var nombreDeTabla = NombreDeTabla(typeof(TEntity));
+
+
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnName("IDARCHIVO");
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnType("INT");
+            modelBuilder.Entity<TEntity>().Property("IdArchivo").IsRequired(false);
+
+
+
+            modelBuilder.Entity<TEntity>()
+                        .HasIndex("IdArchivo")
+                        .HasDatabaseName($"I_{nombreDeTabla}_IDARCHIVO");
+
+            modelBuilder.Entity<TEntity>()
+                        .HasOne("Archivo")
+                        .WithMany()
+                        .HasForeignKey("IdArchivo")
+                        .HasConstraintName($"FK_{nombreDeTabla}_IDARCHIVO")
+                        .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        internal static void DefinirCamposDelElementoDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : ElementoDtm
         {
             var nombreDeTabla = NombreDeTabla(typeof(TEntity));
 
@@ -37,12 +60,6 @@ namespace ServicioDeDatos.Elemento
                         .HasIndex(p => p.Nombre)
                         .HasDatabaseName($"I_{nombreDeTabla}_NOMBRE");
 
-            DefinirRegistroAuditado<TEntity>(modelBuilder, nombreDeTabla);
-
-        }
-
-        private static void DefinirRegistroAuditado<TEntity>(ModelBuilder modelBuilder, string nombreDeTabla) where TEntity : RegistroAuditado
-        {
             modelBuilder.Entity<TEntity>()
            .HasOne(p => p.UsuarioCreador)
            .WithMany()
@@ -67,30 +84,23 @@ namespace ServicioDeDatos.Elemento
                         .HasDatabaseName($"I_{nombreDeTabla}_IDUSUMODI");
 
         }
-
-        internal static void DefinirCampoArchivo<TEntity>(ModelBuilder modelBuilder) where TEntity : Registro
-        {
-            var nombreDeTabla = NombreDeTabla(typeof(TEntity));
-
-
-            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnName("IDARCHIVO");
-            modelBuilder.Entity<TEntity>().Property("IdArchivo").HasColumnType("INT");
-            modelBuilder.Entity<TEntity>().Property("IdArchivo").IsRequired(false);
-
-
-
-            modelBuilder.Entity<TEntity>()
-                        .HasIndex("IdArchivo")
-                        .HasDatabaseName($"I_{nombreDeTabla}_IDARCHIVO");
-
-            modelBuilder.Entity<TEntity>()
-                        .HasOne("Archivo")
-                        .WithMany()
-                        .HasForeignKey("IdArchivo")
-                        .HasConstraintName($"FK_{nombreDeTabla}_IDARCHIVO")
-                        .OnDelete(DeleteBehavior.Restrict);
-        }
     }
+
+    public interface INombre
+    {
+        public string Nombre { get; set; }
+    }
+
+    public interface IElementoDtm: INombre
+    {
+        public DateTime FechaCreacion { get; set; }
+        public int IdUsuaCrea { get; set; }
+        public UsuarioDtm UsuarioCreador { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public int? IdUsuaModi { get; set; }
+        public UsuarioDtm UsuarioModificador { get; set; }
+    }
+
 
     public class Registro
     {
@@ -141,8 +151,22 @@ namespace ServicioDeDatos.Elemento
 
     }
 
-    public class RegistroAuditado : Registro
+
+    public class RegistroDeRelacion : Registro
     {
+        public RegistroDeRelacion()
+        {
+            RegistroDeRelacion = true;
+            NombreObligatorio = false;
+        }
+    }
+
+    public class ElementoDtm : Registro, IElementoDtm, INombre
+    {
+        [Required]
+        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
+        public new string Nombre { get; set; }
+
         [Required]
         [Column("FECCRE", Order = 1, TypeName = "DATETIME")]
         public DateTime FechaCreacion { get; set; }
@@ -160,27 +184,10 @@ namespace ServicioDeDatos.Elemento
         public int? IdUsuaModi { get; set; }
         public virtual UsuarioDtm UsuarioModificador { get; set; }
 
-        public RegistroAuditado()
+        public ElementoDtm()
         {
-            RegistroConAuditoria = true;
+            RegistroConAuditoria = true;            
         }
-    }
-
-    public class RegistroDeRelacion : Registro
-    {
-        public RegistroDeRelacion()
-        {
-            RegistroDeRelacion = true;
-            NombreObligatorio = false;
-        }
-    }
-
-
-    public class ElementoDtm : RegistroAuditado
-    {
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public new string Nombre { get; set; }
     }
 
     public class ConsultaSql

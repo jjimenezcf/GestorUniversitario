@@ -603,6 +603,9 @@ namespace MVCSistemaDeElementos.Controllers
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
+            if (ordenes.Count == 0 && typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)) )
+                ordenes.Add(new ClausulaDeOrdenacion() { Criterio = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
+
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
         }
 

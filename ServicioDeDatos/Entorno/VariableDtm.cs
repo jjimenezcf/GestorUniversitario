@@ -6,7 +6,7 @@ using ServicioDeDatos.Elemento;
 namespace ServicioDeDatos.Entorno
 {
     [Table("VARIABLE", Schema = "ENTORNO")]
-    public class VariableDtm : Registro
+    public class VariableDtm : Registro, INombre
     {
         [Column("DESCRIPCION", Order = 4, TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }

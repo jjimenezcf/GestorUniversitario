@@ -42,11 +42,18 @@ namespace GestoresDeNegocio.Entorno
 
         protected override IQueryable<MenuDtm> AplicarOrden(IQueryable<MenuDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
-            registros = base.AplicarOrden(registros, ordenacion);
+            if (ordenacion.Count == 0)
+            {
+                registros = registros.OrderBy(x => x.IdPadre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre);
+                return registros;
+            }
 
             foreach (ClausulaDeOrdenacion orden in ordenacion)
             {
-                if (orden.Criterio == ClausulaDeOrdenacion.PorDefecto)
+                if (orden.Criterio.ToLower() == nameof(MenuDtm.Id).ToLower())
+                    return registros = OrdenPorId(registros, orden);
+
+                if (orden.Criterio == nameof(MenuDtm.IdPadre))
                 {
                     registros = registros.OrderBy(x => x.IdPadre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre);
                     break;

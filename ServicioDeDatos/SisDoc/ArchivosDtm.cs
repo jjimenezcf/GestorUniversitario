@@ -18,7 +18,7 @@ namespace ServicioDeDatos.Archivos
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
-            GeneradorMd.DefinirElementoDto<ArchivoDtm>(modelBuilder);
+            GeneradorMd.DefinirCamposDelElementoDtm<ArchivoDtm>(modelBuilder);
         }
 
     }

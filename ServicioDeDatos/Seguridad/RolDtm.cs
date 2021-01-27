@@ -7,7 +7,7 @@ namespace ServicioDeDatos.Seguridad
 {
 
     [Table("ROL", Schema = "SEGURIDAD")]
-    public class RolDtm : Registro
+    public class RolDtm : Registro, INombre
     {
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }
