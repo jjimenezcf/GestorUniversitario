@@ -48,7 +48,7 @@ namespace GestoresDeNegocio.Seguridad
 
         public List<PermisoDto> LeerPermisos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
-            var registros = LeerRegistros(posicion, cantidad, filtros);
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return MapearElementos(registros).ToList();
         }
 
@@ -82,7 +82,7 @@ namespace GestoresDeNegocio.Seguridad
             if (!filtro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(PermisoDto.Nombre), Valor = filtro });
 
-            var permisosDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            var permisosDtm = gestor.LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return gestor.MapearElementos(permisosDtm).ToList();
         }
 
@@ -257,7 +257,7 @@ namespace GestoresDeNegocio.Seguridad
         public List<ClasePermisoDto> LeerClases(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var gestor = GestorDeClaseDePermisos.Gestor(Contexto, Mapeador);
-            var registros = gestor.LeerRegistros(posicion, cantidad, filtros);
+            var registros = gestor.LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return gestor.MapearElementos(registros).ToList();
         }
 
@@ -269,7 +269,7 @@ namespace GestoresDeNegocio.Seguridad
         public List<TipoPermisoDto> LeerTipos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var gestor = GestorDeTipoPermiso.Gestor(Contexto, Mapeador);
-            var registros = gestor.LeerRegistros(posicion, cantidad, filtros);
+            var registros = gestor.LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return gestor.MapearElementos(registros).ToList();
         }
 
@@ -280,7 +280,7 @@ namespace GestoresDeNegocio.Seguridad
             var gestor = GestorDePermisosDeUnRol.Gestor(Contexto, Mapeador);
             var filtro = new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnRolDtm.IdPermiso), Criterio = CriteriosDeFiltrado.igual, Valor = elemento.Id.ToString() };
             var filtros = new List<ClausulaDeFiltrado> { filtro };
-            var r = gestor.LeerRegistros(0, 1, filtros);
+            var r = gestor.LeerRegistrosPorNombre(0, 1, filtros);
             if (r.Count > 0)
             {
                 var roles = "";

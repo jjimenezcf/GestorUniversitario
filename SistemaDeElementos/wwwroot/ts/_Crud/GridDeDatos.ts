@@ -10,78 +10,6 @@
         }
     }
 
-    class Orden {
-        public IdColumna: string;
-        public Propiedad: string;
-        public Modo: string;
-        private _cssClase: string;
-
-        get ccsClase(): string {
-            return this._cssClase;
-        }
-
-        set ccsClase(modo: string) {
-            if (modo === ModoOrdenacion.ascedente)
-                this._cssClase = ClaseCss.ordenAscendente;
-            else if (modo === ModoOrdenacion.descendente)
-                this._cssClase = ClaseCss.ordenDescendente;
-            else if (modo === ModoOrdenacion.sinOrden)
-                this._cssClase = ClaseCss.sinOrden;
-        }
-
-        constructor(idcolumna: string, propiedad: string, modo: string) {
-            this.Modo = modo;
-            this.Propiedad = propiedad;
-            this.IdColumna = idcolumna;
-            this.ccsClase = modo;
-        }
-    }
-
-    class Ordenacion {
-        private lista: Array<Orden>;
-
-        public Count(): number {
-            return this.lista.length;
-        }
-
-        constructor() {
-            this.lista = new Array<Orden>();
-        }
-
-        private Anadir(idcolumna: string, propiedad: string, modo: string) {
-            for (let i = 0; i < this.lista.length; i++) {
-                if (this.lista[i].Propiedad === propiedad) {
-                    this.lista[i].Modo = modo;
-                    this.lista[i].ccsClase = modo;
-                    return;
-                }
-            }
-            let orden: Orden = new Orden(idcolumna, propiedad, modo);
-            this.lista.push(orden);
-        }
-
-        private Quitar(propiedad: string) {
-            for (let i = 0; i < this.lista.length; i++) {
-                if (this.lista[i].Propiedad == propiedad) {
-                    this.lista.splice(i, 1);
-                    return;
-                }
-            }
-        }
-
-        public Actualizar(idcolumna: string, propiedad: string, modo: string) {
-            if (modo === ModoOrdenacion.sinOrden)
-                this.Quitar(propiedad);
-            else
-                this.Anadir(idcolumna, propiedad, modo);
-        }
-
-        public Leer(i: number): Orden {
-            return this.lista[i];
-        }
-    }
-
-
     class PropiedadesDeLaFila {
         id: string;
         propiedad: string;
@@ -271,7 +199,7 @@
 
     export class GridDeDatos extends CrudBase {
 
-        protected Ordenacion: Ordenacion;
+        protected Ordenacion: ApiCrud.Ordenacion;
         protected Navegador: Navegador;
 
         private _infoSelector: InfoSelector;
@@ -390,7 +318,7 @@
 
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
-            this.Ordenacion = new Ordenacion();
+            this.Ordenacion = new ApiCrud.Ordenacion();
         }
 
         public Inicializar(idPanelMnt: string) {
@@ -401,7 +329,7 @@
         private InicializarNavegador() {
             this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
-                let orden: Orden = this.Ordenacion.Leer(i);
+                let orden: ApiControl.Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
                 columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
@@ -448,13 +376,13 @@
 
             this.Navegador.Actualizar(accion, posicionDesdeLaQueSeLeyo, registrosLeidos, this.InfoSelector.Cantidad);
 
-            for (var i = 0; i < this.Ordenacion.Count(); i++) {
-                let orden: Orden = this.Ordenacion.Leer(i);
-                let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
-                columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
-                let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
-                a.setAttribute("class", orden.ccsClase);
-            }
+            //for (var i = 0; i < this.Ordenacion.Count(); i++) {
+            //    let orden: ApiControl.Orden = this.Ordenacion.Leer(i);
+            //    let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
+            //    columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
+            //    let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
+            //    a.setAttribute("class", orden.ccsClase);
+            //}
         }
 
         protected EstablecerOrdenacion(idcolumna: string) {
@@ -472,7 +400,7 @@
             let propiedad: string = htmlColumna.getAttribute(atControl.propiedad);
             this.Ordenacion.Actualizar(idcolumna, propiedad, modo);
 
-            htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
+            //htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
 
         }
 

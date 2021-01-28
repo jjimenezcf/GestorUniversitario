@@ -30,7 +30,7 @@ namespace UtilidadesParaIu
         public int PorAnchoSel { get { return _PorAnchoSel == 0 ? PorAnchoMnt : _PorAnchoSel; } set { _PorAnchoSel = value; } }
         public bool Ordenar { get; set; } = false;
 
-        public string Sentido = "Asc";
+        public enumCssOrdenacion cssOrdenacion { get; set; } = enumCssOrdenacion.SinOrden;
         public bool Visible { get; set; } = true;
         public bool Editable { get; set; } = false;
         public Aliniacion Alineada

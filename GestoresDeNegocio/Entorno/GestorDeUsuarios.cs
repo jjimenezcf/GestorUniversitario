@@ -193,7 +193,7 @@ namespace GestoresDeNegocio.Entorno
 
         public List<UsuarioDto> LeerUsuarios(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
-            var registros = LeerRegistros(posicion, cantidad, filtros);
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return MapearElementos(registros).ToList();
         }
 

@@ -21,7 +21,6 @@ using Utilidades;
 
 namespace GestorDeElementos
 {
-    public enum ModoDeOrdenancion { ascendente, descendente }
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 
 
@@ -29,13 +28,6 @@ namespace GestorDeElementos
     public class ClausulaDeJoin
     {
         public Type Dtm { get; set; }
-    }
-
-
-    public class ClausulaDeOrdenacion
-    {
-        public string Criterio { get; set; }
-        public ModoDeOrdenancion Modo { get; set; }
     }
 
     #endregion
@@ -411,7 +403,18 @@ namespace GestorDeElementos
 
         public List<TRegistro> LeerRegistros(List<ClausulaDeFiltrado> filtros)
         {
-            return LeerRegistros(0, 0, filtros);
+            return LeerRegistrosPorNombre(0, 0, filtros);
+        }
+
+        public List<TRegistro> LeerRegistrosPorNombre(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null)
+        {
+            if (!typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)))
+                throw new Exception($"se ha solicitado leer registros por nombre, el tipo {typeof(TRegistro).Name} no tiene dicho campo");
+
+            List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
+            orden.Add(new ClausulaDeOrdenacion() { Criterio = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
+
+            return LeerRegistros(posicion,cantidad,filtros,orden);
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
@@ -467,10 +470,7 @@ namespace GestorDeElementos
         /// <param name="parametros">parámetros de negocio que modifican el comportamiento</param>
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
-            if (ordenacion.Count == 1 && ordenacion[0].Criterio.ToLower() == nameof(IElementoDtm.Nombre).ToLower())
-                registros = OrdenPorNombre(registros, ordenacion[0]);
-
-            return registros;
+            return registros.AplicarOrdenPorPropiedades(ordenacion);
         }
         protected static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {

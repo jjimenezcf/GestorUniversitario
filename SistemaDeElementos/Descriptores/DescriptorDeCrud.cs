@@ -103,6 +103,10 @@ namespace MVCSistemaDeElementos.Descriptores
                     columna.Visible = atributos.EsVisible(ModoDeTrabajo.Mantenimiento);
                     columna.Titulo = atributos.EtiquetaGrid;
                     columna.Ordenar = atributos.Ordenar;
+
+                    if (p.Name.ToLower() == CamposDeFiltrado.Nombre && atributos.Ordenar)
+                        columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
+
                     columna.Alineada = atributos.Alineada;
                     columna.PorAnchoMnt = 0;
                     columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;

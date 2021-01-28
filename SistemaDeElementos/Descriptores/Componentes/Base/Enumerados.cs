@@ -5,6 +5,20 @@ using ServicioDeDatos.Seguridad;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
+    public enum enumModoOrdenacion
+    {
+        ascendente,
+        descendente,
+        sinOrden,
+    };
+
+    public enum enumCssOrdenacion
+    {
+        SinOrden,
+        Ascendente,
+        Descendente
+    }
+
     public enum enumCssFiltro
     {
         ListaDinamica,
@@ -117,7 +131,20 @@ namespace MVCSistemaDeElementos.Descriptores
         EditorRestrictor
     }
 
+    public static class MetodosDeRenderizacion
+    {
+        public static string Render(this enumModoOrdenacion modo)
+        {
+            switch (modo)
+            {
+                case enumModoOrdenacion.ascendente: return "ascendente";
+                case enumModoOrdenacion.descendente: return "descendente";
+                case enumModoOrdenacion.sinOrden: return "sin-orden";
+            }
 
+            throw new Exception($"No se ha definido como renderizar el modo {modo}");
+        }
+    }
 
     public static class Css
     {
@@ -157,6 +184,18 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-selector";
                 case enumCssFiltro.ContenedorCheck: return "contenedor-check";
                 case enumCssFiltro.Check: return "check-flt";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
+        }
+
+
+        public static string Render(enumCssOrdenacion clase)
+        {
+            switch (clase)
+            {
+                case enumCssOrdenacion.SinOrden: return "ordenada-sin-orden";
+                case enumCssOrdenacion.Ascendente: return "ordenada-ascendente";
+                case enumCssOrdenacion.Descendente: return "ordenada-desscendente";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

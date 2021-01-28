@@ -11,6 +11,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using System.Linq.Dynamic.Core;
 using ModeloDeDto;
 
 namespace GestoresDeNegocio.Entorno
@@ -50,6 +51,7 @@ namespace GestoresDeNegocio.Entorno
             registros = registros.Include(p => p.Permiso);
             return registros;
         }
+
 
         protected override IQueryable<VistaMvcDtm> AplicarFiltros(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
@@ -106,7 +108,7 @@ namespace GestoresDeNegocio.Entorno
 
         public List<VistaMvcDto> LeerVistas(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {            
-            var registros = LeerRegistros(posicion, cantidad, filtros);
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return MapearElementos(registros).ToList();
         }
 
@@ -122,7 +124,7 @@ namespace GestoresDeNegocio.Entorno
                     new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Controlador), Criterio = CriteriosDeFiltrado.igual, Valor = vista.Split(".")[0]},
                     new ClausulaDeFiltrado { Clausula = nameof(VistaMvcDtm.Accion), Criterio = CriteriosDeFiltrado.igual, Valor = vista.Split(".")[1] }
                 };
-                var vistas = LeerRegistros(0, -1, filtros);
+                var vistas = LeerRegistrosPorNombre(0, -1, filtros);
                 if (vistas.Count != 1)
                 {
                     if (vistas.Count == 0)

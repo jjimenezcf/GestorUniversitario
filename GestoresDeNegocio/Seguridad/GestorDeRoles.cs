@@ -42,13 +42,13 @@ namespace GestoresDeNegocio.Seguridad
             if (!filtro.IsNullOrEmpty())
                 filtros.Add(new ClausulaDeFiltrado { Criterio = CriteriosDeFiltrado.contiene, Clausula = nameof(RolDto.Nombre), Valor = filtro });
 
-            var rolesDtm = gestor.LeerRegistros(posicion, cantidad, filtros);
+            var rolesDtm = gestor.LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return gestor.MapearElementos(rolesDtm).ToList();
         }
 
         public List<RolDto> LeerRoles(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
-            var registros = LeerRegistros(posicion, cantidad, filtros);
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return MapearElementos(registros).ToList();
         }
 

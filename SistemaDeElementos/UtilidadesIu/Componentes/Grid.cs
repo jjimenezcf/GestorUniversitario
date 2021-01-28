@@ -82,7 +82,7 @@ namespace UtilidadesParaIu
                           <th id = ¨{columna.IdHtml}¨ 
                               class=¨{claseCss}¨ 
                               propiedad = ¨{columna.Propiedad.ToLower()}¨
-                              modo-ordenacion=¨sin-orden¨ 
+                              modo-ordenacion=¨{(columna.cssOrdenacion == enumCssOrdenacion.SinOrden ? $"{enumModoOrdenacion.sinOrden.Render()}": $"{enumModoOrdenacion.ascendente.Render()}")}¨ 
                               style = ¨{atributosDelEstilo}¨
                               alineacion=¨{columna.AlineacionCss}¨
                               >
@@ -108,7 +108,7 @@ namespace UtilidadesParaIu
 
             var estilo = columna.Visible ? "" : @"visibility: hidden; style=¨width: 0px; height: 0px; float: right;¨";
 
-            return $@"<a {htmlRef} class=¨ordenada-sin-orden¨ {estilo}>{columna.Titulo}</a>";
+            return $@"<a {htmlRef} class=¨{(Css.Render(columna.cssOrdenacion))}¨ {estilo}>{columna.Titulo}</a>";
         }
 
         private static string RenderEventoPuslsa(CeldaDelGrid<TElemento> celda, string idControlHtml)
