@@ -8,10 +8,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
-
+        public DescriptorDeMantenimiento<TElemento> Mnt => (DescriptorDeMantenimiento<TElemento>)Padre;
         public List<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
 
-        public ZonaDeFiltro(ControlHtml mnt)
+        public ZonaDeFiltro(DescriptorDeMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
           id: $"{mnt.Id}_Filtro",
@@ -79,8 +79,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return false;
         }
 
-
-        public string RenderModalesFiltro()
+        public string RenderizarLasModalesDelFiltro()
         {
             var htmlModalesEnFiltro = "";
             foreach (BloqueDeFitro<TElemento> b in Bloques)
@@ -89,9 +88,35 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlModalesEnFiltro;
         }
 
-        public override string RenderControl()
+        public string RenderFiltroDeUnaModal(enumTipoDeModal tipoDeModal)
         {
+            string evento;
+            switch (tipoDeModal)
+            {
+                case enumTipoDeModal.ModalDeSeleccion:
+                    evento = $"javascript:Crud.{GestorDeEventos.EventosModalDeSeleccion}('{TipoDeAccionDeMnt.TeclaPulsada}', '{Mnt.Datos.IdHtmlModal}');";
+                    break;
+                case enumTipoDeModal.ModalDeRelacion:
+                    evento = $"javascript:Crud.{GestorDeEventos.EventosModalDeCrearRelaciones}('{TipoDeAccionDeMnt.TeclaPulsada}', '{Mnt.Datos.IdHtmlModal}');";
+                    break;
+                case enumTipoDeModal.ModalDeConsulta:
+                    evento = $"javascript:Crud.{GestorDeEventos.EventosModalDeConsultaDeRelaciones}('{TipoDeAccionDeMnt.TeclaPulsada}', '{Mnt.Datos.IdHtmlModal}');";
+                    break;
+                default:
+                    throw new Exception($"Ha de definir el evento de pulsar una tecla para la modal del tipo {tipoDeModal}");
+            }
+            return RenderControl().Replace("eventoTeclaPulsada",evento);
+        }
 
+        public string RenderZonaDeFiltroNoModal()
+        {
+            var evento = $"javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.TeclaPulsada}', '');";
+            return RenderControl().Replace("eventoTeclaPulsada", evento);
+        }
+
+
+        public override string RenderControl()
+        {           
             var numeroBloques = 0;
             var areas = "";
             foreach (BloqueDeFitro<TElemento> b in Bloques)
@@ -129,12 +154,13 @@ namespace MVCSistemaDeElementos.Descriptores
             return $@"<!-- ******************* Filtro ******************* -->
                       <div id = ¨{IdHtml}¨
                            class=¨{Css.Render(enumCssCuerpo.CuerpoDatosFiltro)}¨ 
+                           onkeypress=¨eventoTeclaPulsada¨
                            {estilo}>
-                           {RenderZonaDeFiltrado()} 
+                           {RenderDeBloquesDeFiltro()} 
                       </div> ";
         }
 
-        private string RenderZonaDeFiltrado()
+        private string RenderDeBloquesDeFiltro()
         {
             var htmlBloques = "";
 

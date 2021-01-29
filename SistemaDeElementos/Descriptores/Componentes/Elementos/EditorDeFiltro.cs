@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderEditor()
         {
-            return $@"<div>
+            return $@"<div class=¨{Css.Render(enumCssFiltro.ContenedorEditor)}¨>
                          <input id=¨{IdHtml}¨ type = ¨text¨  class=¨form-control¨ {base.RenderAtributos()}  placeholder=¨{Ayuda}¨>
                      </div>
                   ";

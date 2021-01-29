@@ -31,7 +31,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               		       	titulo
                                            </div>
                               		       <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
-                              		 	       crudDeSeleccion
+                              		 	       crudDeRelacion
                                            </div>
                                            <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
                                               <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return _htmlMiModal
                 .Replace("titulo", Etiqueta)
-                .Replace("crudDeSeleccion", CrudModal.RenderCrudModal(idModal: this.IdHtml));
+                .Replace("crudDeRelacion", CrudModal.RenderCrudModal(idModal: this.IdHtml, enumTipoDeModal.ModalDeRelacion));
         }
 
         public override string RenderControl()

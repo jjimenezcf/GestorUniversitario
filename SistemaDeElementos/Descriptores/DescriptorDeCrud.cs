@@ -178,9 +178,9 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        internal string RenderCrudModal(string idModal)
+        internal string RenderCrudModal(string idModal, enumTipoDeModal tipoDeModal)
         {
-            return Mnt.RenderMntModal(idModal);
+            return Mnt.RenderMntModal(idModal, tipoDeModal);
         }
 
         public static ModoDescriptor ParsearModo(string modo)

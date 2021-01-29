@@ -126,7 +126,7 @@ a {
 
 .boton-de-seleccion {
     text-decoration: none;
-    width: 38px;
+    width: 18px;
     height: 38px;
     color: #ffffff;
     background-color: #adb5bd;
@@ -139,11 +139,25 @@ a {
     padding-left: 10px;
 }
 
+.contenedor-editor-filtro {
+    margin-right: 20px;
+    margin-top:2px;
+}
+
+.contenedor-selector-filtro {
+    /*position: relative;
+    display: -ms-flexbox;*/
+    display: flex;
+/*    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: stretch;
+    align-items: stretch;*/
+    margin-right: 20px;
+}
 
 .contenedor-editor {
     border-width: 2px;
-    width: 100%;
-
+    margin-right: 20px;
 }
 
     .contenedor-editor > input {
@@ -176,7 +190,7 @@ a {
         }
 
 .contenedor-check {
-/*    margin-top: 20px;
+    /*    margin-top: 20px;
     margin-left: 20px;*/
 }
 
@@ -190,15 +204,17 @@ a {
     margin-top: 20px;
 }
 
-.contenedor-selector {
-    position: relative;
+.contenedor-listas {
+    /*    position: relative;
     border-color: aqua;
     border-width: 2px;
-    width: 100%;
+    width: 100%;*/
+    margin-top: 5px;
+    margin-right: 20px;
 }
 
 
-    .contenedor-selector > select, input.lista-de-elemento {
+    .contenedor-listas > select, input.lista-de-elemento {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;
@@ -216,7 +232,7 @@ a {
 
 
 
-    .contenedor-selector > select, input.lista-dinamica {
+    .contenedor-listas > select, input.lista-dinamica {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;
@@ -231,21 +247,14 @@ a {
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
-        .contenedor-selector > select.lista-de-elemento.propiedad-no-valida, input.lista-dinamica.propiedad-no-valida {
+        .contenedor-listas > select.lista-de-elemento.propiedad-no-valida, input.lista-dinamica.propiedad-no-valida {
             background: #f58eb1;
         }
 
-        .contenedor-selector > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
-            background: #dcd6d6;
+        .contenedor-listas > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
+            /* background: #dcd6d6;*/
         }
 
-        .contenedor-selector > select.lista-de-elemento.solo-lectura, input.lista-dinamica.solo-lectura {
+        .contenedor-listas > select.lista-de-elemento.solo-lectura, input.lista-dinamica.solo-lectura {
             background: #ffd800;
         }
-
-
-
-
-
-
-

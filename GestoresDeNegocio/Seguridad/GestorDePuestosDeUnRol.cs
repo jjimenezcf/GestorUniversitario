@@ -70,16 +70,6 @@ namespace GestoresDeNegocio.Seguridad
             return registros;
         }
 
-        protected override IQueryable<RolesDeUnPuestoDtm> AplicarOrden(IQueryable<RolesDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            registros = base.AplicarOrden(registros, ordenacion);
-
-            if (ordenacion.Count == 0)
-                return registros.OrderBy(x => x.Rol.Nombre);
-
-            return registros;
-        }
-
         protected override void DespuesDePersistir(RolesDeUnPuestoDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);

@@ -57,9 +57,9 @@
 
         }
 
-        private get Controlador(): string {
-            return this.PanelDeEditar.getAttribute(literal.controlador);
-        }
+        //private get Controlador(): string {
+        //    return this.PanelDeEditar.getAttribute(literal.controlador);
+        //}
 
         constructor(crud: CrudMnt, idPanelEdicion: string) {
             super();
@@ -69,6 +69,7 @@
 
             this._idPanelEdicion = idPanelEdicion;
             this.PanelDeMnt = crud.CuerpoCabecera;
+            this._controlador = this.PanelDeEditar.getAttribute(literal.controlador);
             this.CrudDeMnt = crud;
         }
 

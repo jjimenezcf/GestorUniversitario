@@ -333,18 +333,6 @@
                 modal.TextoSelectorCambiado();
         }
 
-        public CargarListaDinamica(selector: HTMLInputElement) {
-            super.CargarListaDinamica(selector, this.Navegador.Controlador);
-        }
-
-        public SeleccionarListaDinamica(input: HTMLInputElement) {
-            let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
-            let valor: number = lista.BuscarSeleccionado(input.value);
-            input.setAttribute(atListasDinamicas.idSeleccionado, valor.toString());
-            if (valor === 0)
-                input.value = "";
-        }
-
         public MapearRestrictorDeFiltro(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
             let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
             this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);

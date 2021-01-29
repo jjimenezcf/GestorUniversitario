@@ -70,7 +70,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Fecha de alta",
             EtiquetaGrid = "Alta",
-            VisibleEnGrid = false,
+            VisibleEnGrid = true,
             VisibleAlCrear = false,
             VisibleEnEdicion = true,
             VisibleAlConsultar = true,

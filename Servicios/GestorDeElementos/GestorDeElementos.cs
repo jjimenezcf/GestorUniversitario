@@ -183,7 +183,7 @@ namespace GestorDeElementos
 
             var filtros = new List<ClausulaDeFiltrado>();
             DefinirFiltroDeRelacion(registro, filtros, idElemento1, idElemento2);
-            var registros = LeerRegistros(filtros).ToList();
+            var registros = ValidarAntesDeRelacionar(filtros).ToList();
             if (registros.Count != 0)
                 return $"El registro {registro} ya existe";
 
@@ -191,6 +191,11 @@ namespace GestorDeElementos
             PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
 
             return "";
+        }
+
+        public List<TRegistro> ValidarAntesDeRelacionar(List<ClausulaDeFiltrado> filtros)
+        {
+            return LeerRegistros(0, 1, filtros, null, null, null);
         }
 
         private void DefinirFiltroDeRelacion(TRegistro registro, List<ClausulaDeFiltrado> filtros, int idElemento1, int idElemento2)
@@ -401,10 +406,6 @@ namespace GestorDeElementos
             return registros.ToList();
         }
 
-        public List<TRegistro> LeerRegistros(List<ClausulaDeFiltrado> filtros)
-        {
-            return LeerRegistrosPorNombre(0, 0, filtros);
-        }
 
         public List<TRegistro> LeerRegistrosPorNombre(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null)
         {
@@ -470,7 +471,7 @@ namespace GestorDeElementos
         /// <param name="parametros">parámetros de negocio que modifican el comportamiento</param>
         protected virtual IQueryable<TRegistro> AplicarOrden(IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion)
         {
-            return registros.AplicarOrdenPorPropiedades(ordenacion);
+            return registros.AplicarOrdenesBasicos(ordenacion);
         }
         protected static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {

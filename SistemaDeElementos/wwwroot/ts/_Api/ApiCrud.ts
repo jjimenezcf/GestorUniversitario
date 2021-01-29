@@ -1,33 +1,6 @@
 ﻿namespace ApiControl {
 
-    export class Orden {
-        public IdColumna: string;
-        public Propiedad: string;
-        public Modo: string;
-        private _cssClase: string;
-
-        get ccsClase(): string {
-            return this._cssClase;
-        }
-
-        set ccsClase(modo: string) {
-            if (modo === ModoOrdenacion.ascedente)
-                this._cssClase = ClaseCss.ordenAscendente;
-            else if (modo === ModoOrdenacion.descendente)
-                this._cssClase = ClaseCss.ordenDescendente;
-            else if (modo === ModoOrdenacion.sinOrden)
-                this._cssClase = ClaseCss.sinOrden;
-        }
-
-        constructor(idcolumna: string, propiedad: string, modo: string) {
-            this.Modo = modo;
-            this.Propiedad = propiedad;
-            this.IdColumna = idcolumna;
-            this.ccsClase = modo;
-        }
-    }
-
-    export function AjustarColumnaDelGrid(columanDeOrdenacion: ApiControl.Orden) {
+    export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(columanDeOrdenacion.IdColumna) as HTMLTableHeaderCellElement;
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
         let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
@@ -51,6 +24,17 @@
         for (let i = 0; i < ListaDinamica.length; i++) {
             MapearListaDinamicaAlJson(ListaDinamica[i], elementoJson);
         }
+    }
+
+    export function AlmacenarValorDeListaDinamica(input: HTMLInputElement, valor: number) {
+        let idGuardarEn: string = input.getAttribute(atListasDinamicasDto.guardarEn);
+        //if (!IsNullOrEmpty(idGuardarEn)) {
+        //    let guardarEn: HTMLInputElement = document.getElementById(idGuardarEn) as HTMLInputElement;
+        //    guardarEn.value = valor.toString();
+        //}
+        input.setAttribute(atListasDinamicas.idSeleccionado, valor.toString());
+        if (Numero(valor) === 0)
+            input.value = "";
     }
 
     function MapearListaDinamicaAlJson(input: HTMLInputElement, elementoJson: JSON): void {
@@ -200,58 +184,6 @@
 
 namespace ApiCrud {
 
-
-    export class Ordenacion {
-        private lista: Array<ApiControl.Orden>;
-
-        public Count(): number {
-            return this.lista.length;
-        }
-
-        constructor() {
-            this.lista = new Array<ApiControl.Orden>();
-        }
-
-        private Anadir(idcolumna: string, propiedad: string, modo: string) {
-            for (let i = 0; i < this.lista.length; i++) {
-                if (this.lista[i].Propiedad === propiedad) {
-                    this.lista[i].Modo = modo;
-                    this.lista[i].ccsClase = modo;
-                    ApiControl.AjustarColumnaDelGrid(this.lista[i]);
-                    return;
-                }
-            }
-            let orden: ApiControl.Orden = new ApiControl.Orden(idcolumna, propiedad, modo);
-            this.lista.push(orden);
-            ApiControl.AjustarColumnaDelGrid(orden);
-        }
-
-        private Quitar(propiedad: string) {
-            for (let i = 0; i < this.lista.length; i++) {
-                if (this.lista[i].Propiedad == propiedad) {
-                    this.lista[i].Modo = ModoOrdenacion.sinOrden;
-                    this.lista[i].ccsClase = ModoOrdenacion.sinOrden;
-                    let orden: ApiControl.Orden = this.lista[i] as ApiControl.Orden;
-                    ApiControl.AjustarColumnaDelGrid(orden);
-                    this.lista.splice(i, 1);
-                    return;
-                }
-            }
-        }
-
-        public Actualizar(idcolumna: string, propiedad: string, modo: string) {
-            if (modo === ModoOrdenacion.sinOrden)
-                this.Quitar(propiedad);
-            else
-                this.Anadir(idcolumna, propiedad, modo);
-        }
-
-        public Leer(i: number): ApiControl.Orden {
-            return this.lista[i];
-        }
-    }
-
-
     export function MapearControlesDesdeLaIuAlJson(crud: Crud.CrudBase, panel: HTMLDivElement, modoDeTrabajo: string): JSON {
 
         let elementoJson: JSON = crud.AntesDeMapearDatosDeIU(crud, panel, modoDeTrabajo);
@@ -287,6 +219,14 @@ namespace ApiCrud {
         body.style.position = "inherit";
         body.style.height = "auto";
         body.style.overflow = "visible";
+    }
+
+    export function QuitarClaseDeCtrlNoValido(panel: HTMLDivElement) {
+        let crtls: HTMLCollectionOf<HTMLElement> = panel.getElementsByClassName(ClaseCss.crtlNoValido) as HTMLCollectionOf<HTMLElement>;
+        for (let i = 0; i < crtls.length; i++) {
+            crtls[i].classList.remove(ClaseCss.crtlNoValido);
+        }
+        
     }
 
     function BlanquearEditores(panel: HTMLDivElement) {

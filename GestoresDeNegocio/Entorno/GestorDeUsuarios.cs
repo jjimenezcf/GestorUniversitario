@@ -49,35 +49,6 @@ namespace GestoresDeNegocio.Entorno
             return registros;
         }
 
-        protected override IQueryable<UsuarioDtm> AplicarOrden(IQueryable<UsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            registros = base.AplicarOrden(registros, ordenacion);
-
-            if (ordenacion.Count == 0)
-                return registros.OrderBy(x => x.Apellido);
-
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Criterio == nameof(UsuarioDtm.Apellido).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Apellido)
-                        : registros.OrderByDescending(x => x.Apellido);
-
-                if (orden.Criterio == nameof(UsuarioDtm.Login).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Login)
-                        : registros.OrderByDescending(x => x.Login);
-
-                if (orden.Criterio == nameof(UsuarioDtm.Alta).ToLower())
-                    return orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Alta)
-                        : registros.OrderByDescending(x => x.Alta);
-            }
-
-            return registros;
-
-        }
-
         protected override IQueryable<UsuarioDtm> AplicarFiltros(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);

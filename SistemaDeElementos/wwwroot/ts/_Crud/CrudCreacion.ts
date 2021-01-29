@@ -14,9 +14,9 @@
             return this.PanelDeCrear.className === ClaseCss.contenedorModal;
         }
 
-        private get Controlador(): string {
-            return this.PanelDeCrear.getAttribute(literal.controlador);
-        }
+        //private get Controlador(): string {
+        //    return this.PanelDeCrear.getAttribute(literal.controlador);
+        //}
 
         private get SeguirCreando(): boolean {
             let check: HTMLInputElement = document.getElementById(`${this._idPanelCreacion}-crear-mas`) as HTMLInputElement;
@@ -30,6 +30,7 @@
                 throw Error("No se puede construir un objeto del tipo CrudCreacion sin indica el panel de creación");
 
             this._idPanelCreacion = idPanelCreacion;
+            this._controlador = this.PanelDeCrear.getAttribute(literal.controlador);
             this.CrudDeMnt = crud;
         }
 
@@ -43,6 +44,8 @@
                     this.CerrarCreacion();
                 else
                     throw `la opción ${accion} no está definida`;
+
+            ApiCrud.QuitarClaseDeCtrlNoValido(this.PanelDeCrear);
 
         }
 

@@ -273,7 +273,8 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
+        TeclaPulsada: "tecla-pulsada"
     },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",
@@ -284,7 +285,8 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
+        TeclaPulsada: "tecla-pulsada"
     },
     ModalParaConsultaDeRelaciones: {
         Cerrar: "cerrar-consulta",
@@ -294,7 +296,8 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
+        TeclaPulsada: "tecla-pulsada"
     },
     ModalCreacion: {
         Crear: "crear-elemento",
@@ -328,7 +331,8 @@ const Evento = {
         CambiarSelector: "cambiar-selector",
         OcultarMostrarFiltro: "ocultar-mostrar-filtro",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas"
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
+        TeclaPulsada: "tecla-pulsada"
     },
     Creacion: {
         Crear: "nuevo-elemento",

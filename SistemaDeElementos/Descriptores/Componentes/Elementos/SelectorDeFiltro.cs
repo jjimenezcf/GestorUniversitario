@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             ControlHtml edt = CrudModal.Mnt.Filtro.BuscarControl(PropiedadDondeMapear);
 
-            return $@"<div class=¨input-group¨>
+            return $@"<div class=¨{Css.Render(enumCssFiltro.ContenedorSelector)}¨>
                        <input id=¨{IdHtml}¨ 
                               type = ¨text¨ 
                               class=¨form-control¨ 

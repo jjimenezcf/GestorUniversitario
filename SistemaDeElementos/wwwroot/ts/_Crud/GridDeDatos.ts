@@ -199,7 +199,7 @@
 
     export class GridDeDatos extends CrudBase {
 
-        protected Ordenacion: ApiCrud.Ordenacion;
+        protected Ordenacion: Tipos.Ordenacion;
         protected Navegador: Navegador;
 
         private _infoSelector: InfoSelector;
@@ -245,10 +245,6 @@
         }
         public get CuerpoPie(): HTMLDivElement {
             return document.getElementById(`cuerpo.pie.${this._idCuerpoCabecera}`) as HTMLDivElement;
-        }
-
-        public get Controlador() {
-            return this.CuerpoCabecera.getAttribute(atMantenimniento.controlador);
         }
 
         public get Negocio() {
@@ -312,13 +308,15 @@
 
             if (this.CuerpoCabecera === null)
                 throw Error(`No se puede crear el Crud ${idPanelMnt}`);
+
+            this._controlador = this.CuerpoCabecera.getAttribute(atMantenimniento.controlador);
             this._idGrid = this.CuerpoCabecera.getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
             this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
 
             this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
-            this.Ordenacion = new ApiCrud.Ordenacion();
+            this.Ordenacion = new Tipos.Ordenacion();
         }
 
         public Inicializar(idPanelMnt: string) {
@@ -329,7 +327,7 @@
         private InicializarNavegador() {
             this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
-                let orden: ApiControl.Orden = this.Ordenacion.Leer(i);
+                let orden: Tipos.Orden = this.Ordenacion.Leer(i);
                 let columna: HTMLTableHeaderCellElement = document.getElementById(orden.IdColumna) as HTMLTableHeaderCellElement;
                 columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
                 let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
@@ -1165,7 +1163,7 @@
             return peticion;
         }
 
-        public OrdenarPor(columna: string) {
+        public OrdenarPor(columna: string): void {
             this.EstablecerOrdenacion(columna);
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
@@ -1182,7 +1180,14 @@
             this.AplicarQueFilasMostrar(inputDeSeleccionadas, tbodyDelGrid, seleccionadas);
         }
 
-        public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector) {
+        public TeclaPulsada(grid: GridDeDatos, e): void {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                grid.CargarGrid(atGrid.accion.buscar, 0);
+                e.preventDefault();
+            }
+        }
+
+        public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector) : void{
             if (NumeroMayorDeCero(inputDeSeleccionadas.value)) {
                 this.MostrarFilasSeleccionadas(tbodyDelGrid, seleccionadas);
             }

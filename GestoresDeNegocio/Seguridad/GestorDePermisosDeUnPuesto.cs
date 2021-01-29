@@ -67,16 +67,5 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        protected override IQueryable<PermisosDeUnPuestoDtm> AplicarOrden(IQueryable<PermisosDeUnPuestoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            registros = base.AplicarOrden(registros, ordenacion);
-
-            if (ordenacion.Count == 0)
-                return registros.OrderBy(x => x.Permiso.Nombre);
-
-            return registros;
-        }
-
-
     }
 }

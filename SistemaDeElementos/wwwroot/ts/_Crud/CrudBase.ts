@@ -24,6 +24,12 @@
             this._estado = valor;
         }
 
+        protected _controlador: string;
+
+        public get Controlador() {
+            return this._controlador;
+        }
+
         constructor() {
         }
 
@@ -113,13 +119,13 @@
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
                 let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
 
-                if (id === null || id == 0)
-                    input.value = "";
-                else {
+                if (Numero(id) > 0) {
                     let listaDinamica = new Tipos.ListaDinamica(input);
                     listaDinamica.AgregarOpcion(id, valor);
                     input.value = valor;
                 }
+
+                ApiControl.AlmacenarValorDeListaDinamica(input, id);
 
                 input.classList.remove(ClaseCss.soloLectura);
                 if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
@@ -393,8 +399,15 @@
             return elementoJson;
         }
 
+        public SeleccionarListaDinamica(input: HTMLInputElement) {
+            let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
+            let valor: number = lista.BuscarSeleccionado(input.value);
+            ApiControl.AlmacenarValorDeListaDinamica(input, valor);
+        }
+
+
         // funciones de carga de elementos para los selectores   ************************************************************************************
-        protected CargarListaDinamica(input: HTMLInputElement, controlador: string) {
+        public CargarListaDinamica(input: HTMLInputElement) {
             if (input.getAttribute(atListasDinamicas.cargando) == 'S' || IsNullOrEmpty(input.value)) {
                 return;
             }
@@ -415,7 +428,7 @@
                 return;
 
             let cantidad: string = input.getAttribute(atListasDinamicas.cantidad);
-            let url: string = this.DefinirPeticionDeCargarDinamica(controlador, clase, Numero(cantidad), filtro);
+            let url: string = this.DefinirPeticionDeCargarDinamica(this.Controlador, clase, Numero(cantidad), filtro);
             let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${filtro.valor}" , "criterio":"${filtro.criterio}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CargaDinamica

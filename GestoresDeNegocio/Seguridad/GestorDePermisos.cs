@@ -217,25 +217,17 @@ namespace GestoresDeNegocio.Seguridad
         {
             registros = base.AplicarOrden(registros, ordenacion);
 
-            if (ordenacion.Count == 0)
-                return registros.OrderBy(x => x.Nombre);
-
             foreach (var orden in ordenacion)
             {
-                if (orden.Criterio == nameof(PermisoDtm.Nombre).ToLower())
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Nombre)
-                        : registros.OrderByDescending(x => x.Nombre);
-
                 if (orden.Criterio == nameof(PermisoDtm.Clase).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Clase)
-                        : registros.OrderByDescending(x => x.Clase);
+                        ? registros.OrderBy(x => x.Clase.Nombre)
+                        : registros.OrderByDescending(x => x.Clase.Nombre);
 
                 if (orden.Criterio == nameof(PermisoDtm.Tipo).ToLower())
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Tipo)
-                        : registros.OrderByDescending(x => x.Tipo);
+                        ? registros.OrderBy(x => x.Tipo.Nombre)
+                        : registros.OrderByDescending(x => x.Tipo.Nombre);
             }
 
             return registros;

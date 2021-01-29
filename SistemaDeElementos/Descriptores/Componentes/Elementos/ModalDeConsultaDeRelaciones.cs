@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return _htmlMiModal
                 .Replace("titulo", Etiqueta)
-                .Replace("crudDeConsulta", CrudModal.RenderCrudModal(idModal: this.IdHtml));
+                .Replace("crudDeConsulta", CrudModal.RenderCrudModal(idModal: this.IdHtml, enumTipoDeModal.ModalDeConsulta));
         }
 
         public override string RenderControl()

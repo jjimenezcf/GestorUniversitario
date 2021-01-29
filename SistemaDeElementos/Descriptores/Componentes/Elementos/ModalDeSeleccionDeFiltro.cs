@@ -47,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return _htmlMiModal
                 .Replace("titulo", Titulo)
-                .Replace("crudDeSeleccion", CrudModal.RenderCrudModal(idModal: this.IdHtml))
+                .Replace("crudDeSeleccion", CrudModal.RenderCrudModal(idModal: this.IdHtml, enumTipoDeModal.ModalDeSeleccion))
                 .Replace("idSelector", Selector.IdHtml);
 
         }

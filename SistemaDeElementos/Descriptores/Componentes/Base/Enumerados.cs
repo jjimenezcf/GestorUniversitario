@@ -4,6 +4,7 @@ using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
+    public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta}
 
     public enum enumModoOrdenacion
     {
@@ -26,6 +27,8 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorListaDinamica,
         ContenedorListaDeElementos,
         ContenedorCheck,
+        ContenedorEditor,
+        ContenedorSelector,
         Check
     }
 
@@ -152,8 +155,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (clase)
             {
-                case enumCssControlesDto.ContenedorListaDeElementos: return "contenedor-selector";
-                case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-selector";
+                case enumCssControlesDto.ContenedorListaDeElementos: return "contenedor-listas";
+                case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-listas";
                 case enumCssControlesDto.ContenedorEditor: return "contenedor-editor";
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
@@ -180,9 +183,11 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 case enumCssFiltro.ListaDinamica: return "lista-dinamica";
                 case enumCssFiltro.ListaDeElementos: return "lista-de-elementos";
-                case enumCssFiltro.ContenedorListaDinamica: return "contenedor-selector";
-                case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-selector";
+                case enumCssFiltro.ContenedorListaDinamica: return "contenedor-listas";
+                case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-listas";
                 case enumCssFiltro.ContenedorCheck: return "contenedor-check";
+                case enumCssFiltro.ContenedorEditor: return "contenedor-editor-filtro";
+                case enumCssFiltro.ContenedorSelector: return "contenedor-selector-filtro";
                 case enumCssFiltro.Check: return "check-flt";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");

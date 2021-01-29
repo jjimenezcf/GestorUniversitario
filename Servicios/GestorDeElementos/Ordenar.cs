@@ -54,7 +54,7 @@ namespace GestorDeElementos
         }
 
 
-        public static IQueryable<TRegistro> AplicarOrdenPorPropiedades<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion) where TRegistro : Registro
+        public static IQueryable<TRegistro> AplicarOrdenesBasicos<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeOrdenacion> ordenacion) where TRegistro : Registro
         {
             if (ordenacion.Count == 0)
                 return registros;

@@ -21,6 +21,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
         public const string FilaPulsada = "fila-pulsada";
+        public const string TeclaPulsada = "tecla-pulsada";
     }
 
     public static class TipoDeAccionDeCreacion

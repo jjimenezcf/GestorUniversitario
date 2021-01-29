@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , etiqueta: "Codigo"
                 , propiedad: nameof(PaisDto.Codigo)
                 , ayuda: "buscar por codigo"
-                , new Posicion { fila = 0, columna = 1 });
+                , new Posicion { fila = 1, columna = 0 });
             RutaVista = "Callejero";
         }
 

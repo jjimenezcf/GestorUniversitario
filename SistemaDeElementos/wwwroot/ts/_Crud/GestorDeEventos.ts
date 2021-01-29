@@ -72,6 +72,10 @@
                     crudMnt.MostrarSoloSeleccionadas(crudMnt.InputSeleccionadas, crudMnt.EtiquetasSeleccionadas, crudMnt.CuerpoTablaGrid, crudMnt.InfoSelector);
                     break;
                 }
+                case Evento.Mnt.TeclaPulsada: {
+                    crudMnt.TeclaPulsada(crudMnt, event);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;
@@ -140,6 +144,10 @@
                     crudMnt.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
+                case Evento.ModalSeleccion.TeclaPulsada: {
+                    modal.TeclaPulsada(modal,event);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
                     break;
@@ -204,6 +212,10 @@
                     modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
+                case Evento.ModalParaRelacionar.TeclaPulsada: {
+                    modal.TeclaPulsada(modal, event);
+                    break;
+                }
                 default: {
                     Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
@@ -264,6 +276,10 @@
                     var etiqueta = modal.EtiquetasSeleccionadas;
                     var tbodyDelGrid = modal.CuerpoTablaGrid;
                     modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
+                    break;
+                }
+                case Evento.ModalParaConsultaDeRelaciones.TeclaPulsada: {
+                    modal.TeclaPulsada(modal, event);
                     break;
                 }
                 default: {

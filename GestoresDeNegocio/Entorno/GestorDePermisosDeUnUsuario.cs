@@ -61,16 +61,5 @@ namespace GestoresDeNegocio.Entorno
             return registros;
 
         }
-
-        protected override IQueryable<PermisosDeUnUsuarioDtm> AplicarOrden(IQueryable<PermisosDeUnUsuarioDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            registros = base.AplicarOrden(registros, ordenacion);
-
-            if (ordenacion.Count == 0)
-                return registros.OrderBy(x => x.Permiso.Nombre);
-
-            return registros;
-        }
-
     }
 }

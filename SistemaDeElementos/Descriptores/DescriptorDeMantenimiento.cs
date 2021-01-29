@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
             var htmlCuerpoCabecera = RenderCuerpoCabecera(RenderTitulo(), RenderMenuDelMnt());
-            var htmlCuerpoDatos = RenderCuerpoDatos(Filtro.RenderControl(), Datos.RenderControl());
+            var htmlCuerpoDatos = RenderCuerpoDatos(Filtro.RenderZonaDeFiltroNoModal(), Datos.RenderControl());
             var htmlCuerpoPie = RenderCuerpoPie();
 
             var htmContenedorMnt =
@@ -65,7 +65,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 }
             }
 
-            htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderModalesFiltro();
+            htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderizarLasModalesDelFiltro();
 
             return htmContenedorMnt.Render();
         }
@@ -125,12 +125,12 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlParteSuperiror;
         }
 
-        public string RenderMntModal(string idModal)
+        public string RenderMntModal(string idModal, enumTipoDeModal tipoDeModal)
         {
             Datos.IdHtmlModal = idModal.ToLower();
 
             var htmlMnt =
-                   Filtro.RenderControl() + Environment.NewLine +
+                   Filtro.RenderFiltroDeUnaModal(tipoDeModal) + Environment.NewLine +
                    Datos.RenderControl() + Environment.NewLine;
 
             var htmContenedorMnt =
