@@ -42,6 +42,7 @@
             Fila = 1,
             Columna = 0,
             Ordenar = true,
+            OrdenarPor = "Clase.Nombre",
             PorAnchoMnt = 15
             )
         ]
@@ -66,6 +67,7 @@
             Fila = 1,
             Columna = 1,
             Ordenar = true,
+            OrdenarPor = "Tipo.Nombre",
             PorAnchoMnt = 15
             )
         ]

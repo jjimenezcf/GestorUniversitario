@@ -555,7 +555,7 @@ namespace MVCSistemaDeElementos.Controllers
             return base.View(descriptor.Vista, descriptor);
         }
 
-
+        /*
         protected IEnumerable<TElemento> LeerOrdenados(string filtro, string orden, string parametrosDeMapeo)
         {
 
@@ -575,6 +575,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             return elementos;
         }
+        */
 
         public int Contar(string filtro = null)
         {
@@ -604,7 +605,7 @@ namespace MVCSistemaDeElementos.Controllers
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);
 
             if (ordenes.Count == 0 && typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)) )
-                ordenes.Add(new ClausulaDeOrdenacion() { Criterio = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
+                ordenes.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
         }

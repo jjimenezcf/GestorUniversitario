@@ -74,7 +74,9 @@ namespace UtilidadesParaIu
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss};";
             if (columna.Visible)
                 atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
-            string htmlRef = columna.Ordenar ? RenderAccionOrdenar(columna) : columna.Visible ? columna.Titulo : "";
+            string htmlRef = columna.ConOrdenacion 
+                ? RenderAccionOrdenar(columna) 
+                : columna.Visible ? columna.Titulo : "";
 
             string claseCss = columna.Visible ? Css.Render(enumCssGrid.ColumnaCabecera) : Css.Render(enumCssGrid.ColumnaOculta);
 
@@ -85,6 +87,7 @@ namespace UtilidadesParaIu
                               modo-ordenacion=¨{(columna.cssOrdenacion == enumCssOrdenacion.SinOrden ? $"{enumModoOrdenacion.sinOrden.Render()}": $"{enumModoOrdenacion.ascendente.Render()}")}¨ 
                               style = ¨{atributosDelEstilo}¨
                               alineacion=¨{columna.AlineacionCss}¨
+                              ordenar-por = ¨{columna.OrdenarPor}¨
                               >
                               {htmlRef}
                           </th>";
@@ -108,7 +111,7 @@ namespace UtilidadesParaIu
 
             var estilo = columna.Visible ? "" : @"visibility: hidden; style=¨width: 0px; height: 0px; float: right;¨";
 
-            return $@"<a {htmlRef} class=¨{(Css.Render(columna.cssOrdenacion))}¨ {estilo}>{columna.Titulo}</a>";
+            return $@"<a {htmlRef} class=¨{Css.Render(columna.cssOrdenacion)}¨ {estilo}>{columna.Titulo}</a>";
         }
 
         private static string RenderEventoPuslsa(CeldaDelGrid<TElemento> celda, string idControlHtml)

@@ -25,6 +25,7 @@ const atMenu = {
 
 const atControl = {
     propiedad: "propiedad",
+    ordenarPor: "ordenar-por",
     nombre: "name",
     criterio: "criterio-de-filtro",
     filtro: "control-de-filtro",

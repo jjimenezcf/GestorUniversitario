@@ -6,6 +6,7 @@ namespace MVCSistemaDeElementos.UtilidadesIu
 {
     public static class parametrosMvc
     {
+        /*
         public static List<ClausulaDeOrdenacion> ParsearOrdenacion(this string orden)
         {
             var ordenParseado = new List<ClausulaDeOrdenacion>();
@@ -36,6 +37,6 @@ namespace MVCSistemaDeElementos.UtilidadesIu
 
             return ordenParseado;
         }
-
+        */
     }
 }

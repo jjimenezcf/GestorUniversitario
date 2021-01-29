@@ -213,26 +213,6 @@ namespace GestoresDeNegocio.Seguridad
 
         }
 
-        protected override IQueryable<PermisoDtm> AplicarOrden(IQueryable<PermisoDtm> registros, List<ClausulaDeOrdenacion> ordenacion)
-        {
-            registros = base.AplicarOrden(registros, ordenacion);
-
-            foreach (var orden in ordenacion)
-            {
-                if (orden.Criterio == nameof(PermisoDtm.Clase).ToLower())
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Clase.Nombre)
-                        : registros.OrderByDescending(x => x.Clase.Nombre);
-
-                if (orden.Criterio == nameof(PermisoDtm.Tipo).ToLower())
-                    registros = orden.Modo == ModoDeOrdenancion.ascendente
-                        ? registros.OrderBy(x => x.Tipo.Nombre)
-                        : registros.OrderByDescending(x => x.Tipo.Nombre);
-            }
-
-            return registros;
-        }
-
         protected override IQueryable<PermisoDtm> AplicarJoins(IQueryable<PermisoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);

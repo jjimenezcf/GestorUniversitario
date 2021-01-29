@@ -28,7 +28,7 @@ namespace UtilidadesParaIu
 
         private int _PorAnchoSel;
         public int PorAnchoSel { get { return _PorAnchoSel == 0 ? PorAnchoMnt : _PorAnchoSel; } set { _PorAnchoSel = value; } }
-        public bool Ordenar { get; set; } = false;
+        public bool ConOrdenacion { get; set; } = false;
 
         public enumCssOrdenacion cssOrdenacion { get; set; } = enumCssOrdenacion.SinOrden;
         public bool Visible { get; set; } = true;
@@ -54,6 +54,7 @@ namespace UtilidadesParaIu
         public string AlineacionCss => HtmlRender.AlineacionCss(Alineada);
 
         public HtmlDescriptorCabecera descriptor { get; set; }
+        public string OrdenarPor { get; internal set; }
 
         public ColumnaDelGrid()
         {

@@ -50,16 +50,16 @@ namespace GestoresDeNegocio.Entorno
 
             foreach (ClausulaDeOrdenacion orden in ordenacion)
             {
-                if (orden.Criterio.ToLower() == nameof(MenuDtm.Id).ToLower())
+                if (orden.OrdenarPor.ToLower() == nameof(MenuDtm.Id).ToLower())
                     return registros = OrdenPorId(registros, orden);
 
-                if (orden.Criterio == nameof(MenuDtm.IdPadre))
+                if (orden.OrdenarPor == nameof(MenuDtm.IdPadre))
                 {
                     registros = registros.OrderBy(x => x.IdPadre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre);
                     break;
                 }
 
-                if (orden.Criterio.ToLower() == nameof(MenuDtm.Padre).ToLower())
+                if (orden.OrdenarPor.ToLower() == nameof(MenuDtm.Padre).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre.Orden)
@@ -68,7 +68,7 @@ namespace GestoresDeNegocio.Entorno
                     break;
                 }
 
-                if (orden.Criterio.ToLower() == nameof(MenuDtm.Nombre).ToLower())
+                if (orden.OrdenarPor.ToLower() == nameof(MenuDtm.Nombre).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Nombre)
@@ -76,7 +76,7 @@ namespace GestoresDeNegocio.Entorno
                     break;
                 }
 
-                if (orden.Criterio.ToLower() == nameof(MenuDtm.Orden).ToLower())
+                if (orden.OrdenarPor.ToLower() == nameof(MenuDtm.Orden).ToLower())
                 {
                     registros = orden.Modo == ModoDeOrdenancion.ascendente
                     ? registros.OrderBy(x => x.Padre).ThenBy(x => x.Orden).ThenBy(x => x.Nombre)
@@ -133,7 +133,7 @@ namespace GestoresDeNegocio.Entorno
         public List<MenuDto> LeerMenus(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
-            orden.Add(new ClausulaDeOrdenacion() {Criterio = nameof(MenuDto.idPadre), Modo = ModoDeOrdenancion.ascendente });
+            orden.Add(new ClausulaDeOrdenacion() {OrdenarPor = nameof(MenuDto.idPadre), Modo = ModoDeOrdenancion.ascendente });
 
             var registros = LeerRegistros(posicion, cantidad, filtros, orden);
             return MapearElementos(registros).ToList();

@@ -413,7 +413,7 @@ namespace GestorDeElementos
                 throw new Exception($"se ha solicitado leer registros por nombre, el tipo {typeof(TRegistro).Name} no tiene dicho campo");
 
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
-            orden.Add(new ClausulaDeOrdenacion() { Criterio = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
+            orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
 
             return LeerRegistros(posicion,cantidad,filtros,orden);
         }

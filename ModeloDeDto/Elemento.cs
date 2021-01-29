@@ -93,6 +93,7 @@ namespace ModeloDeDto
         public short Posicion { get; set; } = 0;
         public object ValorPorDefecto { get; set; }
         public bool Ordenar { get; set; } = false;
+        public string OrdenarPor { get; set; }
         public int PosicionEnGrid { get; set; } = -1;
         public Aliniacion Alineada
         {

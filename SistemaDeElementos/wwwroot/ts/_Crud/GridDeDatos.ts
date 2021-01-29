@@ -1,11 +1,11 @@
 ﻿namespace Crud {
 
     class ClausulaDeOrdenacion {
-        criterio: string;
+        ordenarPor: string;
         modo: string;
 
-        constructor(propiedad: string, modo: string) {
-            this.criterio = propiedad;
+        constructor(ordenarPor: string, modo: string) {
+            this.ordenarPor = ordenarPor;
             this.modo = modo;
         }
     }
@@ -396,7 +396,8 @@
                 modo = ModoOrdenacion.ascedente;
 
             let propiedad: string = htmlColumna.getAttribute(atControl.propiedad);
-            this.Ordenacion.Actualizar(idcolumna, propiedad, modo);
+            let ordenarPor: string = htmlColumna.getAttribute(atControl.ordenarPor);
+            this.Ordenacion.Actualizar(idcolumna, propiedad, modo, ordenarPor);
 
             //htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
 
@@ -429,7 +430,7 @@
             var clausulas = new Array<ClausulaDeOrdenacion>();
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden = this.Ordenacion.Leer(i);
-                clausulas.push(new ClausulaDeOrdenacion(orden.Propiedad, orden.Modo));
+                clausulas.push(new ClausulaDeOrdenacion(orden.OrdenarPor, orden.Modo));
             }
             return JSON.stringify(clausulas);
         }
@@ -1187,7 +1188,7 @@
             }
         }
 
-        public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector) : void{
+        public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector): void {
             if (NumeroMayorDeCero(inputDeSeleccionadas.value)) {
                 this.MostrarFilasSeleccionadas(tbodyDelGrid, seleccionadas);
             }

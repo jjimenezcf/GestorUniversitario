@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ServicioDeDatos.Elemento;
 
 namespace GestorDeElementos
@@ -24,7 +25,7 @@ namespace GestorDeElementos
 
     public class ClausulaDeOrdenacion
     {
-        public string Criterio { get; set; }
+        public string OrdenarPor { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
     }
 
@@ -58,24 +59,30 @@ namespace GestorDeElementos
         {
             if (ordenacion.Count == 0)
                 return registros;
+            try
+            {
+                if (ordenacion.Count == 1)
+                    return registros.OrderBy($"{ordenacion[0].OrdenarPor} {ordenacion[0].Modo.toSql()}");
 
-            if (ordenacion.Count == 1)
-                return registros.OrderBy($"{ordenacion[0].Criterio} {ordenacion[0].Modo.toSql()}");
-           
-            if (ordenacion.Count == 2)
-                return registros.OrderBy($"{ordenacion[0].Criterio} {ordenacion[0].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[1].Criterio} {ordenacion[1].Modo.toSql()}");
-           
-            if (ordenacion.Count == 3)
-                return registros.OrderBy($"{ordenacion[0].Criterio} {ordenacion[0].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[1].Criterio} {ordenacion[1].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[2].Criterio} {ordenacion[2].Modo.toSql()}");
+                if (ordenacion.Count == 2)
+                    return registros.OrderBy($"{ordenacion[0].OrdenarPor} {ordenacion[0].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[1].OrdenarPor} {ordenacion[1].Modo.toSql()}");
 
-            if (ordenacion.Count == 4)
-                return registros.OrderBy($"{ordenacion[0].Criterio} {ordenacion[0].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[1].Criterio} {ordenacion[1].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[2].Criterio} {ordenacion[2].Modo.toSql()}")
-                    .ThenBy($"{ordenacion[3].Criterio} {ordenacion[3].Modo.toSql()}");
+                if (ordenacion.Count == 3)
+                    return registros.OrderBy($"{ordenacion[0].OrdenarPor} {ordenacion[0].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[1].OrdenarPor} {ordenacion[1].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[2].OrdenarPor} {ordenacion[2].Modo.toSql()}");
+
+                if (ordenacion.Count == 4)
+                    return registros.OrderBy($"{ordenacion[0].OrdenarPor} {ordenacion[0].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[1].OrdenarPor} {ordenacion[1].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[2].OrdenarPor} {ordenacion[2].Modo.toSql()}")
+                        .ThenBy($"{ordenacion[3].OrdenarPor} {ordenacion[3].Modo.toSql()}");
+            }
+            catch
+            {
+                throw new Exception($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}");
+            }
 
 
             return registros;

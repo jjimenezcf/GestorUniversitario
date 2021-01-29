@@ -5,10 +5,17 @@
         public IdColumna: string;
         public Propiedad: string;
         public Modo: string;
+        private _ordenarPor: string;
         private _cssClase: string;
 
         get ccsClase(): string {
             return this._cssClase;
+        }
+
+        get OrdenarPor(): string {
+            if (IsNullOrEmpty(this._ordenarPor))
+                return this.Propiedad;
+            return this._ordenarPor;
         }
 
         set ccsClase(modo: string) {
@@ -20,11 +27,12 @@
                 this._cssClase = ClaseCss.sinOrden;
         }
 
-        constructor(idcolumna: string, propiedad: string, modo: string) {
+        constructor(idcolumna: string, propiedad: string, modo: string, ordenarPor: string) {
             this.Modo = modo;
             this.Propiedad = propiedad;
             this.IdColumna = idcolumna;
             this.ccsClase = modo;
+            this._ordenarPor = ordenarPor;
         }
     }
 
@@ -40,7 +48,7 @@
             this.lista = new Array<Tipos.Orden>();
         }
 
-        private Anadir(idcolumna: string, propiedad: string, modo: string) {
+        private Anadir(idcolumna: string, propiedad: string, modo: string, ordenarPor: string) {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad === propiedad) {
                     this.lista[i].Modo = modo;
@@ -49,7 +57,7 @@
                     return;
                 }
             }
-            let orden: Tipos.Orden = new Tipos.Orden(idcolumna, propiedad, modo);
+            let orden: Tipos.Orden = new Tipos.Orden(idcolumna, propiedad, modo, ordenarPor);
             this.lista.push(orden);
             ApiControl.AjustarColumnaDelGrid(orden);
         }
@@ -67,11 +75,11 @@
             }
         }
 
-        public Actualizar(idcolumna: string, propiedad: string, modo: string) {
+        public Actualizar(idcolumna: string, propiedad: string, modo: string, ordenarPor: string) {
             if (modo === ModoOrdenacion.sinOrden)
                 this.Quitar(propiedad);
             else
-                this.Anadir(idcolumna, propiedad, modo);
+                this.Anadir(idcolumna, propiedad, modo, ordenarPor);
         }
 
         public Leer(i: number): Tipos.Orden {
