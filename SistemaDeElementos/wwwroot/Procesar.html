@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/PanelDeControl.css" type="text/css">
+    <link rel="stylesheet" href="/css/Controles.css" type="text/css">
+    <link rel="stylesheet" href="/css/Grid.css" type="text/css">
+    <link rel="stylesheet" href="/css/ApiDeArchivos.css" type="text/css">
+    <link rel="stylesheet" href="/css/CrudCreacion.css" type="text/css">
+    <link rel="stylesheet" href="/css/CrudEdicion.css" type="text/css">
+    <link rel="stylesheet" href="/css/CrudBase.css" type="text/css">
+    <link rel="stylesheet" href="/css/CrudModal.css" type="text/css">
+    <link rel="stylesheet" href="/css/seMenu.css" type="text/css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!--@*
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />*@-->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!--@*
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>*@-->
+
+    <script src="/ts/Literales/Literales.js"></script>
+    <script src="/ts/TiposDeDatos/TiposDeDatos.js"></script>
+    <script src="/ts/Utilidades.js"></script>
+    <script src="/ts/InfoSelector.js"></script>
+    <script src="/ts/Diccionario.js"></script>
+    <script src="/ts/HistorialDeNavegacion.js"></script>
+    <script src="/ts/_Api/ApiDeAjax.js"></script>
+    <script src="/ts/_Api/ApiDeArchivos.js"></script>
+    <script src="/ts/_Api/ApiCrud.js"></script>
+    <script src="/ts/ArbolDeMenu.js"></script>
+    <script src="/ts/InicializarEntorno.js"></script>
+    <script src="/ts/_Crud/CrudBase.js"></script>
+    <script src="/ts/_Crud/GridDeDatos.js"></script>
+    <script src="/ts/_Crud/CrudCreacion.js"></script>
+    <script src="/ts/_Crud/CrudEdicion.js"></script>
+    <script src="/ts/_Crud/ModalConGrid.js"></script>
+    <script src="/ts/_Crud/ModalParaRelacionar.js"></script>
+    <script src="/ts/_Crud/ModalParaConsultarRelaciones.js"></script>
+    <script src="/ts/_Crud/ModalDeSeleccion.js"></script>
+    <script src="/ts/_Crud/CrudMantenimiento.js"></script>
+    <script src="/ts/_Crud/GestorDeEventos.js"></script>
+    <script>
+        EntornoSe.InicializarHistorial();
+    </script>
+</head>
+
+<!--@using ServicioDeDatos-->
+
+<body class="body-formulario">
+
+    <!--@{
+    var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
+    }-->
+
+    <div id="div-formulario" class="formulario">
+
+        <!--  Cabecera del formulario -->
+        <div id="div-cabecera" class="cabecera">
+            <div class="cabecera-menu">
+                <img id="id-menu"
+                     src="~/images/menu/bars-solid.svg"
+                     class="btn-menu fa-icono"
+                     modal-menu="id-modal-menu"
+                     onclick="ArbolDeMenu.MostrarMenu()"
+                     menu-abierto="false" />
+
+                <input id="id-producto" type="text" value="Sitema de elementos" readonly />
+            </div>
+            <div class="cabecera-separador"></div>
+            <div class="cabecera-consultas">
+                <input id="id-Consultas" type="text" value="Consultas" readonly />
+            </div>
+            <div class="cabecera-favoritos">
+                <input id="id-Favoritos" type="text" value="Favoritos" readonly />
+            </div>
+            <div class="cabecera-opciones">
+                <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
+                    <button value=Submit type=submit>Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <!--  cuerpo del formulario -->
+        <div id="div-cuerpo" class="cuerpo">
+            <div id="div-cuerpo-cabecera" class="cuerpo-cabecera">
+                soy la cabecera del cuerpo
+            </div>
+            <div id="div-cuerpo-datos" class="cuerpo-datos">
+                soy el cuerpo del cuerpo
+            </div>
+            <div id="div-cuerpo-pie" class="cuerpo-pie">
+                soy el pie del cuepo
+            </div>
+            <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
+            </div>
+        </div>
+
+        <!--  Pie del formulario -->
+        <div id="div-pie" class="pie">
+            <div class="pie-mensaje">
+                <input id="Mensaje" readonly value="" />
+            </div>
+            <div class="pie-conexion">
+                <div class="pie-conexion-datos">
+                    <input id="i-pie-conexion-datos" readonly value="@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd" />
+                </div>
+                <div class="pie-conexion-usuario">
+                    <input id="i-pie-conexion-usuario" readonly value="Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="id-modal-menu" class="modal-menu">
+        <div id="id-contenedor-menu" class="menu-contenedor">
+        </div>
+    </div>
+
+    <script>
+
+        function Ajustar() {
+            EntornoSe.AjustarDivs();
+        }
+
+        window.onload = EntornoSe.IniciarEntorno;
+        window.onresize = Ajustar;
+    </script>
+
+
+</body>
+</html>
+
+
+
+
