@@ -11,6 +11,7 @@
     width: 100%;
     display: flex;
     margin-bottom: 10px;
+    margin-left: 10px
 }
 .div-mnt-menu-zona {
     width: 90%;
@@ -19,7 +20,7 @@
     width: 10%;
     text-align: right;
     align-content: end;
-    margin-right:10px;
+    margin-right:40px;
 }
 
 .div-mnt-filtro-zona {

@@ -6,6 +6,8 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta}
 
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
+
     public enum enumModoOrdenacion
     {
         ascendente,
@@ -40,9 +42,11 @@ namespace MVCSistemaDeElementos.Descriptores
         CuerpoDatos,
         CuerpoDatosFiltro,
         CuerpoDatosGrid,
+        CuerpoDatosFormulario,
         CuerpoDatosGridThead,
         CuerpoDatosGridTboby,
         CuerpoPie,
+        CuerpoPieFormulario,
         CuerpoDatosFiltroBloque,
     }
 
@@ -112,6 +116,13 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorId
     }
 
+    public enum enumCssControlesFormulario
+    {
+        Editor,
+        Lista,
+        Check
+    }
+
     public enum enumCssControlesDto
     {
         ContenedorListaDeElementos,
@@ -134,6 +145,21 @@ namespace MVCSistemaDeElementos.Descriptores
         EditorRestrictor
     }
 
+    public enum enumCssFormulario
+    {
+        ContenedorDeBloques,
+        BloqueExpansor,
+        BloqueDatos,
+        BloqueIzquierdo,
+        BloqueDerecho,
+        Tabla,
+        fila,
+        columnaLabel,
+        columnaControl,
+        referenciaExpansor
+
+    }
+
     public static class MetodosDeRenderizacion
     {
         public static string Render(this enumModoOrdenacion modo)
@@ -151,6 +177,36 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public static class Css
     {
+        public static string Render(enumCssControlesFormulario clase)
+        {
+            switch (clase)
+            {
+                case enumCssControlesFormulario.Editor: return "formulario-editor";
+                case enumCssControlesFormulario.Lista: return "formulario-lista";
+                case enumCssControlesFormulario.Check: return "formulario-check";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
+        }
+
+        public static string Render(enumCssFormulario clase)
+        {
+            switch (clase)
+            {
+                case enumCssFormulario.ContenedorDeBloques: return "formulario-contenedor-de-bloques";
+                case enumCssFormulario.BloqueIzquierdo: return "formulario-bloque-izquierdo";
+                case enumCssFormulario.BloqueDerecho: return "formulario-bloque-derecho";
+                case enumCssFormulario.BloqueExpansor: return "formulario-contenedor-bloque-expansor";
+                case enumCssFormulario.BloqueDatos: return "formulario-contenedor-bloque-datos";
+                case enumCssFormulario.Tabla: return "formulario-tabla";
+                case enumCssFormulario.fila: return "formulario-fila";
+                case enumCssFormulario.columnaControl: return "formulario-columna-control";
+                case enumCssFormulario.columnaLabel: return "formulario-columna-label";
+                case enumCssFormulario.referenciaExpansor: return "formulario-referencia";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
+        }
+
+
         public static string Render(enumCssControlesDto clase)
         {
             switch (clase)
@@ -295,6 +351,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssCuerpo.CuerpoDatosGridTboby: return "cuerpo-datos-tbody";
                 case enumCssCuerpo.CuerpoDatosGridThead: return "cuerpo-datos-thead";
                 case enumCssCuerpo.CuerpoPie: return "cuerpo-pie";
+                case enumCssCuerpo.CuerpoDatosFormulario: return "cuerpo-datos-formulario";
+                case enumCssCuerpo.CuerpoPieFormulario: return "cuerpo-pie-formulario";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

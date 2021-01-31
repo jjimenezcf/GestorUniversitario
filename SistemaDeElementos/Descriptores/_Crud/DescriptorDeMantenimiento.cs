@@ -93,16 +93,20 @@ namespace MVCSistemaDeElementos.Descriptores
         private object RenderCuerpoDatos(string htmlFiltro, string htmlDatos)
         {
             return
-            $@"<div id=¨cuerpo.datos.{IdHtml}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatos)}¨>
+            $@"<div id=¨cuerpo.datos.{IdHtml}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatos)}¨ style= ¨grid-template-rows: auto auto 0%;¨>
                      {htmlFiltro}
                      {htmlDatos}
+                     <div id = ¨formulario-cuerpo¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatosFormulario)}¨ style=¨display: none; height: 0px; width: 0px;¨>
+                     </div>
                </div>";
         }
 
         private object RenderCuerpoPie()
         {
-            return $@"<div id=¨{IdHtmlZonaNavegador}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoPie)}¨>
+            return $@"<div id=¨{IdHtmlZonaNavegador}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoPie)}¨ style=¨grid-template-columns: auto auto auto auto 0%;¨>
                        {Datos.Grid.NavegadorToHtml()}
+                       <div id = ¨formulario-pie¨ class=¨{Css.Render(enumCssCuerpo.CuerpoPieFormulario)}¨ style=¨display: none; height: 0px; width: 0px;¨>
+                       </div>
                      </div>";
         }
 

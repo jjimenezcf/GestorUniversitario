@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="~/css/PanelDeControl.css" type="text/css">
-    <link rel="stylesheet" href="~/css/Controles.css" type="text/css">
+    <link rel="stylesheet" href="~/css/Formulario.css" type="text/css">
+    <link rel="stylesheet" href="~/css/ControlesDto.css" type="text/css">
     <link rel="stylesheet" href="~/css/Grid.css" type="text/css">
     <link rel="stylesheet" href="~/css/ApiDeArchivos.css" type="text/css">
     <link rel="stylesheet" href="~/css/CrudCreacion.css" type="text/css">
@@ -50,16 +51,16 @@
 
 @using ServicioDeDatos
 
-<body class="body-formulario">
+<body class="body-pagina">
 
     @{
         var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
     }
 
-    <div id ="div-formulario" class="formulario">
+    <div id ="contenedor-pagina" class="pagina">
 
-        <!--  Cabecera del formulario -->
-        <div id="div-cabecera" class="cabecera">
+        <!--  Cabecera de la pagina -->
+        <div id="cabecera-de-pagina" class="cabecera">
             <div class="cabecera-menu">
                 <img id="id-menu"
                      src="~/images/menu/bars-solid.svg"
@@ -84,15 +85,15 @@
             </div>
         </div>
 
-        <!--  cuerpo del formulario -->
-        <div id="div-cuerpo" class="cuerpo">
+        <!--  cuerpo de la pagina -->
+        <div id="cuerpo-de-pagina" class="cuerpo">
             @RenderBody()
             <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
             </div>
         </div>
 
-        <!--  Pie del formulario -->
-        <div id="div-pie" class="pie">
+        <!--  Pie de la pagina -->
+        <div id="pie-de-pagina" class="pie">
             <div class="pie-mensaje">
                 <input id="Mensaje" readonly value="" />
             </div>

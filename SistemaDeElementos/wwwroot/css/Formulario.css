@@ -1,0 +1,101 @@
+﻿
+.cuerpo-datos-formulario {
+    grid-area: cuerpo-datos-formulario;
+    width: 100%;
+    /*background-color: antiquewhite;*/
+    /*overflow-y: scroll;*/
+}
+.cuerpo-pie-formulario {
+    grid-area: cuerpo-pie-formulario;
+    display: flex;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.formulario-contenedor-de-bloques {
+    display: grid;
+    grid-area: cuerpo-datos-formulario;
+    grid-template-columns: 100%;
+    grid-template-rows: 30px;
+    gap: 0px 0px;
+    width: 100%;
+    /*height:100%;*/
+    grid-template-areas: "formulario-contenedor-bloque-expansor" "formulario-contenedor-bloque-datos";
+}
+
+.formulario-contenedor-bloque-expansor {
+    display: grid;
+    grid-area: formulario-contenedor-bloque-expansor;
+    gap: 0px 0px;
+    width: 100%;
+    /*background-color: aquamarine;*/
+}
+
+.formulario-contenedor-bloque-datos {
+    display: grid;
+    grid-area: formulario-contenedor-bloque-datos;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    width: 100%;
+    grid-template-areas: "formulario-bloque-izquierdo formulario-bloque-derecho";
+    /*background-color: blue;*/
+}
+
+.formulario-bloque-izquierdo {
+    grid-area: formulario-bloque-izquierdo;
+    /*text-align: left;*/
+    min-width: 100px;
+    /*align-items: center;*/
+    display: flex;
+}
+
+.formulario-bloque-derecho {
+    grid-area: formulario-bloque-derecho;
+    /*text-align: right;*/
+    min-width: 100px;
+    /*align-items: center;*/
+    display: flex;
+    margin-right: 20px;
+}
+.formulario-editor {
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    text-align: left;
+     margin: 5px; 
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.formulario-lista {
+}
+.formulario-check {
+}
+
+.formulario-tabla {
+    margin-left: 20px;
+    width: 100%;
+}
+
+.formulario-fila {
+    /*    margin-top: 5px;
+    margin-bottom: 5px;*/
+    /*height: calc(1.5em + .75rem + 2px);*/
+}
+
+.formulario-columna-label {
+    width:25%
+}
+.formulario-columna-control {
+    width: 75%
+}
+.formulario-referencia {
+    margin-left: 20px;
+}

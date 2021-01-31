@@ -1,13 +1,13 @@
-﻿html, body, .formulario {
+﻿html, body, .pagina {
     height: -webkit-fill-available;
     width: -webkit-fill-available;
 }
 
-.body-formulario {
+.body-pagina {
     overflow-y: hidden;
 }
 
-.formulario {
+.pagina {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 50px;
@@ -111,16 +111,22 @@
 
 .cuerpo-cabecera {
     grid-area: cuerpo-cabecera;
-    margin-left: 10px
+    /*margin-left: 10px;*/
+    border: ridge;
+}
+.cuerpo-cabecera > h2{
+    margin-left: 10px;
 }
 
 .cuerpo-datos {
     display: grid;
-/*    grid-template-columns: 1fr;
+    /*    grid-template-columns: 1fr;
     grid-template-rows: 25% 75%;
     gap: 0px 0px;*/
-    grid-template-areas: "cuerpo-datos-filtro" "cuerpo-datos-grid";
+    grid-template-areas: "cuerpo-datos-filtro" "cuerpo-datos-grid" "cuerpo-datos-formulario";
     grid-area: cuerpo-datos;
+    /*overflow-y: scroll;*/
+    overflow-x: hidden;
 }
 
 .cuerpo-pie {
@@ -128,9 +134,10 @@
     display: grid;
     grid-template-columns: auto;
     grid-template-rows: 100%;
-    grid-template-areas: "cuerpo-pie-navegador cuerpo-pie-opciones cuerpo-pie-mensaje cuerpo-pie-info";
+    grid-template-areas: "cuerpo-pie-navegador cuerpo-pie-opciones cuerpo-pie-mensaje cuerpo-pie-info cuerpo-pie-formulario";
     /*align-self: center;*/
     margin: 0px;
+    border: ridge;
 }
 
 /*.cuerpo-pie-navegador {

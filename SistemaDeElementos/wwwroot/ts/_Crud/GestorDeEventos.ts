@@ -227,8 +227,6 @@
         }
     }
 
-
-
     export function EventosModalDeConsultaDeRelaciones(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");
@@ -411,6 +409,4 @@
 
 
     }
-
-
 }

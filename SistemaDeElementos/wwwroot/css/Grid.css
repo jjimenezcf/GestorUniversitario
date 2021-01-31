@@ -16,10 +16,12 @@
 .cuerpo-datos-grid {
     grid-area: cuerpo-datos-grid;
     width: 100%;
+    border: ridge;
 }
 
 .cuerpo-datos-tabla {
-    border-bottom: inset;
+/*    border-bottom: ridge;
+    border-top: ridge;*/
     display: block;
     width: 1fr;
 }

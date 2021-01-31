@@ -11,6 +11,10 @@
             return this.Estado.Obtener(Sesion.paginaActual);
         }
 
+        protected get CuerpoDelFormulario(): HTMLDivElement {           
+            return document.getElementById(`datos-${this._idFormulario}`) as HTMLDivElement
+        }
+
         private _estado: HistorialSe.EstadoPagina = undefined;
 
         public get Estado(): HistorialSe.EstadoPagina {
@@ -41,8 +45,40 @@
                 this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this._idFormulario);
             else
                 this._estado = new HistorialSe.EstadoPagina(this._idFormulario);
+
+            this.CuerpoDelFormulario.style.overflowY = "scroll"
         }
 
+        public OcultarMostrarBloque(idHtmlBloque: string): void {
+            let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}.input`) as HTMLInputElement;
+            if (NumeroMayorDeCero(extensor.value)) {
+                extensor.value = "0";
+                ApiCrud.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+            }
+            else {
+                extensor.value = "1";
+                ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+            }
+        }
+    }
+
+    export function EventosDelFormulario(accion: string, parametros: any) {
+        try {
+            switch (accion) {
+                case Evento.Mnt.OcultarMostrarBloque: {
+                    let idHtmlBloque: string = parametros;
+                    formulario.OcultarMostrarBloque(idHtmlBloque);
+                    break;
+                }
+                default: {
+                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            Mensaje(TipoMensaje.Error, error);
+        }
     }
 
 }

@@ -365,9 +365,12 @@
             return AlturaFormulario() - posicionGrid - alturaPiePnlControl - alturaZonaNavegador;
         }
 
+        /**
+         le he puesto -9 ya que le he pintado bordes al cuerpo del grid
+         */
         public FijarAlturaCuerpoDeLaTabla(alturaDelGrid: number): void {
             let alturaCabecera = this.CabeceraTablaGrid.getBoundingClientRect().height;
-            this.CuerpoTablaGrid.style.height = `${alturaDelGrid - alturaCabecera}px`;
+            this.CuerpoTablaGrid.style.height = `${alturaDelGrid - alturaCabecera -9}px`;
         }
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {

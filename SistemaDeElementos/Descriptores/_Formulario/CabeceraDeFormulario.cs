@@ -4,6 +4,8 @@
     {
         DescriptorDeFormulario Formulario { get; }
 
+        public string IdHtml => $"cabecera-{Formulario.Id}".ToLower();
+
         public CabeceraDeFormulario(DescriptorDeFormulario formulario)
         {
             Formulario = formulario;
@@ -11,7 +13,7 @@
 
         public string RenderCabecera()
         {
-            return $@"<h2>soy la cabecera del formulario {Formulario.Titulo}</h2>";
+            return $@"";
         }
     }
 }

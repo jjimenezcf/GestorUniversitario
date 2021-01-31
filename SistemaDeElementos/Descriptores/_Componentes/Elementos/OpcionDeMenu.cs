@@ -60,8 +60,6 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosModalDeSeleccion, EventosDeListaDinamica }
-
     /**********************************************************/
     // Acciones de menú de para navegar
     // renderiza llamada Crud.EventosDelMantenimiento(...)

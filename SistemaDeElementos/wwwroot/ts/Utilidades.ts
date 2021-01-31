@@ -16,12 +16,12 @@
 }
 
 function AlturaCabeceraPnlControl(): number {
-    let cabecera: HTMLDivElement = document.getElementById("div-cabecera") as HTMLDivElement;
+    let cabecera: HTMLDivElement = document.getElementById("cabecera-de-pagina") as HTMLDivElement;
     return cabecera.getBoundingClientRect().height;
 }
 
 function AlturaPiePnlControl(): number {
-    let pie: HTMLDivElement = document.getElementById("div-pie") as HTMLDivElement;
+    let pie: HTMLDivElement = document.getElementById("pie-de-pagina") as HTMLDivElement;
     return pie.getBoundingClientRect().height;
 }
 

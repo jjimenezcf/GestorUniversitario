@@ -51,66 +51,126 @@
 
 <!--@using ServicioDeDatos-->
 
-<body class="body-formulario">
+<body class="body-pagina">
 
-    <!--@{
-    var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
-    }-->
 
-    <div id="div-formulario" class="formulario">
+    <div id="contenedor-pagina" class="pagina">
 
-        <!--  Cabecera del formulario -->
-        <div id="div-cabecera" class="cabecera">
+        <!--  Cabecera de la pagina -->
+        <div id="cabecera-de-pagina" class="cabecera">
             <div class="cabecera-menu">
-                <img id="id-menu"
-                     src="~/images/menu/bars-solid.svg"
-                     class="btn-menu fa-icono"
-                     modal-menu="id-modal-menu"
-                     onclick="ArbolDeMenu.MostrarMenu()"
-                     menu-abierto="false" />
+                <img id="id-menu" src="/images/menu/bars-solid.svg" class="btn-menu fa-icono" modal-menu="id-modal-menu" onclick="ArbolDeMenu.MostrarMenu()" menu-abierto="false">
 
-                <input id="id-producto" type="text" value="Sitema de elementos" readonly />
+                <input id="id-producto" type="text" value="Sitema de elementos" readonly="">
             </div>
             <div class="cabecera-separador"></div>
             <div class="cabecera-consultas">
-                <input id="id-Consultas" type="text" value="Consultas" readonly />
+                <input id="id-Consultas" type="text" value="Consultas" readonly="">
             </div>
             <div class="cabecera-favoritos">
-                <input id="id-Favoritos" type="text" value="Favoritos" readonly />
+                <input id="id-Favoritos" type="text" value="Favoritos" readonly="">
             </div>
             <div class="cabecera-opciones">
-                <form id=logout-form action=https://localhost:44396/Acceso/logout/ method=post>
-                    <button value=Submit type=submit>Logout</button>
+                <form id="logout-form" action="https://localhost:44396/Acceso/logout/" method="post">
+                    <button value="Submit" type="submit">Logout</button>
                 </form>
             </div>
         </div>
 
-        <!--  cuerpo del formulario -->
-        <div id="div-cuerpo" class="cuerpo">
-            <div id="div-cuerpo-cabecera" class="cuerpo-cabecera">
-                soy la cabecera del cuerpo
+        <!--  cuerpo de la pagina -->
+        <div id="cuerpo-de-pagina" class="cuerpo" style="height: 906px;">
+
+            <!-- ******************* cabecera de los datos del formulario ******************* -->
+            <div id="cabecera-importar-callejero" class="cuerpo-cabecera" controlador="ImportarCallejeroController" accion="ImportarCallejero" datos="datos-importar-callejero" pie="pie-importar-callejero">
+                <h2>soy la cabecera del formulario Importar Callejero</h2>
             </div>
-            <div id="div-cuerpo-datos" class="cuerpo-datos">
-                soy el cuerpo del cuerpo
+            <!-- ******************* datos del formulario ******************* -->
+            <div id="datos-importar-callejero" class="cuerpo-datos" style="grid-template-rows: 0% 0% 100%;">
+                <div id="formulario-filtro" class="cuerpo-datos-filtro" style="display: none; height: 0px; width: 0px;">
+                </div>
+                <div id="formulario-grid" class="cuerpo-datos-grid" style="display: none; height: 0px; width: 0px;">
+                </div>
+                <div id="formulario-cuerpo" class="cuerpo-datos-formulario">
+
+                    <!-- **************** Bloque de Datos Base ************************ -->
+                    <div id="datos-importar-callejero-general" class="formulario-contenedor-de-bloques">
+                        <div id="datos-importar-callejero-general-expansor" class="formulario-contenedor-bloque-expansor">
+                            <a id="mostrar.datos-importar-callejero.ref" style="margin-left: 10px;" href="javascript:Formulario.EventosDelFormulario('ocultar-mostrar-bloque', 'datos-importar-callejero-general-datos');">
+                                bloque: Datos Base
+                            </a>
+                            <input id="expandir.datos-importar-callejero-general-datos.input" type="hidden" value="1">
+                        </div>
+                        <div id="datos-importar-callejero-general-datos" class="formulario-contenedor-bloque-datos">
+                            <div id="datos-importar-callejero-general-izquierdo" class="formulario-bloque-izquierdo">
+                                <table>
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label for=¨Name¨>{control.}</label>
+                                            </td>
+                                            <td>
+                                                control
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="datos-importar-callejero-general-derecho" class="formulario-bloque-derecho">
+                                Informacion bloque derecho
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- **************** Bloque de Otros datos ************************ -->
+                    <div id="datos-importar-callejero-otros" class="formulario-contenedor-de-bloques">
+                        <div id="datos-importar-callejero-otros-expansor" class="formulario-contenedor-bloque-expansor">
+                            <a id="mostrar.datos-importar-callejero.ref" style="margin-left: 10px;" href="javascript:Formulario.EventosDelFormulario('ocultar-mostrar-bloque', 'datos-importar-callejero-otros-datos');">
+                                bloque: Otros datos
+                            </a>
+                            <input id="expandir.datos-importar-callejero-otros-datos.input" type="hidden" value="1">
+                        </div>
+                        <div id="datos-importar-callejero-otros-datos" class="formulario-contenedor-bloque-datos">
+                            <div id="datos-importar-callejero-otros-izquierdo" class="formulario-bloque-izquierdo">
+                                Informacion bloque izquierdo
+                            </div>
+                            <div id="datos-importar-callejero-otros-derecho" class="formulario-bloque-derecho">
+                                Informacion bloque derecho
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="div-cuerpo-pie" class="cuerpo-pie">
-                soy el pie del cuepo
+            <!-- ******************* pie del formulario ******************* -->
+            <div id="pie-importar-callejero" class="cuerpo-pie">
+                <h2>soy el pie del formulario Importar Callejero</h2>
             </div>
+            <script src="../../ts/Callejero/ImportarCallejero.js"></script>
+            <script>
+                try {
+                    Callejero.CrearFormulario('importar-callejero');
+                }
+                catch (error) {
+                    Mensaje(TipoMensaje.Error, error);
+                }
+            </script>
+
             <div id="CapaDeBloqueo" class="sin-capa-de-bloqueo">
             </div>
         </div>
 
-        <!--  Pie del formulario -->
-        <div id="div-pie" class="pie">
+        <!--  Pie de la pagina -->
+        <div id="pie-de-pagina" class="pie">
             <div class="pie-mensaje">
-                <input id="Mensaje" readonly value="" />
+                <input id="Mensaje" readonly="" value="">
             </div>
             <div class="pie-conexion">
                 <div class="pie-conexion-datos">
-                    <input id="i-pie-conexion-datos" readonly value="@datosDeConexion.ServidorWeb - @datosDeConexion.ServidorBd:@datosDeConexion.Bd" />
+                    <input id="i-pie-conexion-datos" readonly="" value="PORTDESA1 - DESARROLLO2:SistemaDeElementos">
                 </div>
                 <div class="pie-conexion-usuario">
-                    <input id="i-pie-conexion-usuario" readonly value="Version: @datosDeConexion.Version - Usuario: @datosDeConexion.Login" />
+                    <input id="i-pie-conexion-usuario" readonly="" value="Version: 0.1 - Usuario: raul.miras">
                 </div>
             </div>
         </div>
@@ -118,8 +178,177 @@
 
     <div id="id-modal-menu" class="modal-menu">
         <div id="id-contenedor-menu" class="menu-contenedor">
+            <ul id="id_menuraiz" class="menu-contenido">
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/configuracion.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1056" type="button" class="menu-opcion" value="Configuración" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1056')">
+                    </a>
+                    <ul id="id_menu_1056" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+
+                        <li>
+                            <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                <img src="/images/menu/funcionalidad-3.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                                <input id="1057" type="button" class="menu-opcion" value="Funcionalidad" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1057')">
+                            </a>
+                            <ul id="id_menu_1057" name="menu" menu-padre="id_menu_1056" menu-plegado="true">
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/vista.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="1004" type="button" class="menu-opcion" value="Vistas" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('1004','VistaMvc','CrudVistaMvc')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/arbol.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2" type="button" class="menu-opcion" value="Menus" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2','Menus','CrudMenu')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="4" type="button" class="menu-opcion" value="Variables" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('4','Variables','CrudVariable')">
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                <img src="/images/menu/accesos.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                                <input id="1058" type="button" class="menu-opcion" value="Accesos" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1058')">
+                            </a>
+                            <ul id="id_menu_1058" name="menu" menu-padre="id_menu_1056" menu-plegado="true">
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/usuario.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="1" type="button" class="menu-opcion" value="Usuarios" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('1','Usuarios','CrudUsuario')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/puestoDeTrabajo.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2004" type="button" class="menu-opcion" value="Puestos" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2004','PuestoDeTrabajo','CrudPuestoDeTrabajo')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/roles.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2008" type="button" class="menu-opcion" value="Roles" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2008','Rol','CrudRol')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="3" type="button" class="menu-opcion" value="Permisos" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('3','Permisos','CrudPermiso')">
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                <img src="/images/menu/bars-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                                <input id="4060" type="button" class="menu-opcion" value="Negocios" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_4060')">
+                            </a>
+                            <ul id="id_menu_4060" name="menu" menu-padre="id_menu_1056" menu-plegado="true">
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/red.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2030" type="button" class="menu-opcion" value="Negocios de SE" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2030','Negocio','CrudDeNegocios')">
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/home-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1061" type="button" class="menu-opcion" value="Maestros" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1061')">
+                    </a>
+                    <ul id="id_menu_1061" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+
+                        <li>
+                            <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                <img src="/images/menu/callejero.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                                <input id="3058" type="button" class="menu-opcion" value="Callejero" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_3058')">
+                            </a>
+                            <ul id="id_menu_3058" name="menu" menu-padre="id_menu_1061" menu-plegado="true">
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/angle-down-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2034" type="button" class="menu-opcion" value="Importar" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2034','ImportarCallejero','ImportarCallejero')">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                                        <img src="/images/menu/paises.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">    <input id="2033" type="button" class="menu-opcion" value="Paises" style="padding-left: 3px;" onclick="ArbolDeMenu.OpcionSeleccionada('2033','Paises','CrudPaises')">
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1062" type="button" class="menu-opcion" value="Gestión documental" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1062')">
+                    </a>
+                    <ul id="id_menu_1062" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1063" type="button" class="menu-opcion" value="Gestión administrativa" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1063')">
+                    </a>
+                    <ul id="id_menu_1063" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1065" type="button" class="menu-opcion" value="Gestión logística" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1065')">
+                    </a>
+                    <ul id="id_menu_1065" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1067" type="button" class="menu-opcion" value="Gestión financiera" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1067')">
+                    </a>
+                    <ul id="id_menu_1067" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1066" type="button" class="menu-opcion" value="Gestión técnica" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1066')">
+                    </a>
+                    <ul id="id_menu_1066" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+                <li>
+                    <a style="display: flex; padding-top: 2px;padding-bottom: 2px;">
+                        <img src="/images/menu/cog-solid.svg" style="margin-top: 6px;margin-right: 0px; width: 20px; height: 20px;">
+                        <input id="1064" type="button" class="menu-opcion" value="Gestión jurídica" style="padding-left: 3px;" onclick="ArbolDeMenu.MenuPulsado('id_menu_1064')">
+                    </a>
+                    <ul id="id_menu_1064" name="menu" menu-padre="id_menu_0" menu-plegado="true">
+                    </ul>
+                </li>
+
+            </ul>
         </div>
     </div>
+
+
 
     <script>
 
@@ -130,6 +359,12 @@
         window.onload = EntornoSe.IniciarEntorno;
         window.onresize = Ajustar;
     </script>
+
+
+
+
+
+
 
 
 </body>

@@ -10,7 +10,7 @@
 
 
         public get Cuerpo(): HTMLDivElement {
-            return document.getElementById("div-cuerpo") as HTMLDivElement;
+            return document.getElementById("cuerpo-de-pagina") as HTMLDivElement;
         };
 
         private modoTrabajo: string;
@@ -352,7 +352,7 @@
             this.PosicionarPanelesDelCuerpo();
         }
 
-        public OcultarMostrarBloque(idHtmlBloque: string) {
+        public OcultarMostrarBloque(idHtmlBloque: string): void {
             let extensor: HTMLInputElement = document.getElementById(`expandir.${idHtmlBloque}.input`) as HTMLInputElement;
             if (NumeroMayorDeCero(extensor.value)) {
                 extensor.value = "0";

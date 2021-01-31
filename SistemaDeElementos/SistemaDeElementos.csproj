@@ -82,7 +82,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\Controles.css" />
+    <None Include="wwwroot\css\ControlesDto.css" />
     <None Include="wwwroot\Acceso\Denegado.html" />
     <None Include="wwwroot\Acceso\Login.html" />
   </ItemGroup>

@@ -3,6 +3,7 @@
     public class PieDeFormulario
     {
         DescriptorDeFormulario Formulario { get; }
+        public string IdHtml => $"pie-{Formulario.Id}".ToLower();
 
         public PieDeFormulario(DescriptorDeFormulario formulario)
         {
@@ -11,7 +12,7 @@
 
         public string RenderPie()
         {
-            return $@"<h2>soy el pie del formulario {Formulario.Titulo}</h2>";
+            return "";
         }
     }
 }
