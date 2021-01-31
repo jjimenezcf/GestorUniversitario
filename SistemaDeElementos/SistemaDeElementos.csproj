@@ -7,21 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Descriptores\Componentes\NewFolder\**" />
-    <Compile Remove="Descriptores\Componentes\Plantillas - Copia\**" />
-    <Compile Remove="Descriptores\Componentes\Plantillas\**" />
-    <Content Remove="Descriptores\Componentes\NewFolder\**" />
-    <Content Remove="Descriptores\Componentes\Plantillas - Copia\**" />
-    <Content Remove="Descriptores\Componentes\Plantillas\**" />
-    <EmbeddedResource Remove="Descriptores\Componentes\NewFolder\**" />
-    <EmbeddedResource Remove="Descriptores\Componentes\Plantillas - Copia\**" />
-    <EmbeddedResource Remove="Descriptores\Componentes\Plantillas\**" />
-    <None Remove="Descriptores\Componentes\NewFolder\**" />
-    <None Remove="Descriptores\Componentes\Plantillas - Copia\**" />
-    <None Remove="Descriptores\Componentes\Plantillas\**" />
-    <TypeScriptCompile Remove="Descriptores\Componentes\NewFolder\**" />
-    <TypeScriptCompile Remove="Descriptores\Componentes\Plantillas - Copia\**" />
-    <TypeScriptCompile Remove="Descriptores\Componentes\Plantillas\**" />
+    <Compile Remove="Descriptores\_Componentes\NewFolder\**" />
+    <Compile Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
+    <Compile Remove="Descriptores\_Componentes\Plantillas\**" />
+    <Content Remove="Descriptores\_Componentes\NewFolder\**" />
+    <Content Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
+    <Content Remove="Descriptores\_Componentes\Plantillas\**" />
+    <EmbeddedResource Remove="Descriptores\_Componentes\NewFolder\**" />
+    <EmbeddedResource Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
+    <EmbeddedResource Remove="Descriptores\_Componentes\Plantillas\**" />
+    <None Remove="Descriptores\_Componentes\NewFolder\**" />
+    <None Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
+    <None Remove="Descriptores\_Componentes\Plantillas\**" />
+    <TypeScriptCompile Remove="Descriptores\_Componentes\NewFolder\**" />
+    <TypeScriptCompile Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
+    <TypeScriptCompile Remove="Descriptores\_Componentes\Plantillas\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +37,7 @@
     <Content Remove="wwwroot\ts\HistorialDeNavegacion.ts" />
     <Content Remove="wwwroot\ts\InfoSelector.ts" />
     <Content Remove="wwwroot\ts\InicializarEntorno.ts" />
-    <Content Remove="wwwroot\ts\Literales\literales.ts" />
+    <Content Remove="wwwroot\ts\_Literales\literales.ts" />
     <Content Remove="wwwroot\ts\Seguridad\ClaseDePermiso.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Menu.ts" />
     <Content Remove="wwwroot\ts\Seguridad\Permisos.ts" />
