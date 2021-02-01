@@ -1,4 +1,5 @@
-﻿using GestorDeElementos;
+﻿using Enumerados;
+using GestorDeElementos;
 using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
@@ -32,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ZonaDeMenu(DescriptorDeMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
-          id: $"{mnt.Id}_{TipoControl.ZonaDeMenu}",
+          id: $"{mnt.Id}_{enumTipoControl.ZonaDeMenu.Render()}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -40,13 +41,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaDeMenu;
+            Tipo = enumTipoControl.ZonaDeMenu;
         }
 
         public ZonaDeMenu(DescriptorDeCreacion<TElemento> creador)
         : base(
           padre: creador,
-          id: $"{creador.Id}_{TipoControl.ZonaDeMenu}",
+          id: $"{creador.Id}_{enumTipoControl.ZonaDeMenu.Render()}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -54,13 +55,13 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaDeMenu;
+            Tipo = enumTipoControl.ZonaDeMenu;
         }
 
         public ZonaDeMenu(DescriptorDeEdicion<TElemento> editor)
         : base(
           padre: editor,
-          id: $"{editor.Id}_{TipoControl.ZonaDeMenu}",
+          id: $"{editor.Id}_{enumTipoControl.ZonaDeMenu.Render()}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
@@ -68,7 +69,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Menu = new Menu<TElemento>(this);
-            Tipo = TipoControl.ZonaDeMenu;
+            Tipo = enumTipoControl.ZonaDeMenu;
         }
 
 

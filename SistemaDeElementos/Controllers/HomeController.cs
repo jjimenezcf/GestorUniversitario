@@ -80,7 +80,7 @@ namespace MVCSistemaDeElementos.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(Exception e)
         {
-            Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo($"Error al ejecutar la petición",e);
+            GestorDeErrores.EnviarExcepcionPorCorreo($"Error al ejecutar la petición",e);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

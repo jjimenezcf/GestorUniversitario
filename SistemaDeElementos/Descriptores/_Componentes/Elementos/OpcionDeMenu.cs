@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enumerados;
 using GestorDeElementos;
 using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
@@ -263,14 +264,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
         : base(
           padre: menu,
-          id: $"{menu.Id}_{TipoControl.Opcion}_{menu.OpcionesDeMenu.Count}",
+          id: $"{menu.Id}_{enumTipoControl.Opcion.Render()}_{menu.OpcionesDeMenu.Count}",
           etiqueta: titulo,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-            Tipo = TipoControl.Opcion;
+            Tipo = enumTipoControl.Opcion;
             TipoDeLLamada = tipoAccion;
             Accion = accion;
             PermisosNecesarios = permisosNecesarios;

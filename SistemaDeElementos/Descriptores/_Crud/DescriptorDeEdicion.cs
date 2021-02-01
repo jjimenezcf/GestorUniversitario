@@ -1,4 +1,5 @@
 ﻿using System;
+using Enumerados;
 using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
@@ -16,14 +17,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeEdicion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
           padre: crud,
-          id: $"{crud.Id}_{TipoControl.pnlEditor}",
+          id: $"{crud.Id}_{enumTipoControl.pnlEditor.Render()}",
           etiqueta: etiqueta,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-            Tipo = TipoControl.pnlEditor;
+            Tipo = enumTipoControl.pnlEditor;
 
             MenuDeEdicion = new ZonaDeMenu<TElemento>(editor: this);
             MenuDeEdicion.AnadirOpcionDeModificarElemento();
@@ -147,7 +148,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmdDescriptorControl = $@"<input id=¨{tabla.IdHtml}_idElemento¨ 
                                              propiedad=¨{nameof(ElementoDto.Id).ToLower()}¨ 
                                              class=¨propiedad propiedad-id¨ 
-                                             tipo=¨{TipoControl.Editor}¨ 
+                                             tipo=¨{enumTipoControl.Editor.Render()}¨ 
                                              type=¨text¨ 
                                              readonly
                                              value=¨¨>

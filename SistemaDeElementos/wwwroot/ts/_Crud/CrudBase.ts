@@ -277,6 +277,7 @@
         }
 
         protected MapearRestrictor(restrictores: NodeListOf<HTMLInputElement>, porpiedadRestrictora: string, valorMostrar: string, valorRestrictor: number) {
+            
             for (let i = 0; i < restrictores.length; i++) {
                 if (restrictores[i].getAttribute(atControl.propiedad) === porpiedadRestrictora) {
                     restrictores[i].setAttribute(atControl.valorInput, valorMostrar);

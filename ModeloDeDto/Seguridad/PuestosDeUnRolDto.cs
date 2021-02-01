@@ -1,11 +1,13 @@
-﻿namespace ModeloDeDto.Seguridad
+﻿using Enumerados;
+
+namespace ModeloDeDto.Seguridad
 {
     [IUDto(ExpresionNombre = "[Puesto]")]
     public class PuestosDeUnRolDto : ElementoDto
     {
         [IUPropiedad(Etiqueta = "Rol",
             Ayuda = "Puesto de un rol",
-            TipoDeControl = TipoControl.RestrictorDeEdicion,
+            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false
@@ -31,7 +33,7 @@
         [IUPropiedad(
             Etiqueta = "Puesto",
             Ayuda = "Indique el puesto",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(RolDto),
             GuardarEn = nameof(IdRol),
             MostrarExpresion = nameof(RolDto.Nombre),

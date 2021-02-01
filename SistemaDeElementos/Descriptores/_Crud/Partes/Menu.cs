@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enumerados;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -12,14 +13,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public Menu(ZonaDeMenu<TElemento> padre)
         : base(
           padre: padre,
-          id: $"{padre.Id}_{TipoControl.Menu}",
+          id: $"{padre.Id}_{enumTipoControl.Menu.Render()}",
           etiqueta: null,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-            Tipo = TipoControl.Menu;
+            Tipo = enumTipoControl.Menu;
         }
 
         internal void Add(OpcionDeMenu<TElemento> opcion)

@@ -1,4 +1,5 @@
-﻿using ModeloDeDto;
+﻿using Enumerados;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -13,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public ModalDeConsultaDeRelaciones(DescriptorDeMantenimiento<TElemento> mantenimiento, string tituloModal, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadRestrictora)
         : base(padre: mantenimiento
-              ,id: $"{mantenimiento.Id}-{TipoControl.ModalDeConsulta}-{typeof(TSeleccionado).Name}"
+              ,id: $"{mantenimiento.Id}-{enumTipoControl.ModalDeConsulta.Render()}-{typeof(TSeleccionado).Name}"
               ,etiqueta: tituloModal
               ,propiedad: ""
               ,ayuda: ""

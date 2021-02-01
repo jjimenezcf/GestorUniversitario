@@ -1,4 +1,5 @@
-﻿using GestorDeElementos;
+﻿using Enumerados;
+using GestorDeElementos;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -7,14 +8,14 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public EditorFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string propiedad, string ayuda, Posicion posicion)
         : base(padre: bloque
-              , id: $"{bloque.Id}_{TipoControl.Editor}_{propiedad}"
+              , id: $"{bloque.Id}_{enumTipoControl.Editor.Render()}_{propiedad}"
               , etiqueta
               , propiedad
               , ayuda
               , posicion
               )
         {
-            Tipo = TipoControl.Editor;
+            Tipo = enumTipoControl.Editor;
             Criterio = CriteriosDeFiltrado.contiene;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);

@@ -1,4 +1,5 @@
-﻿using ServicioDeDatos.Seguridad;
+﻿using Enumerados;
+using ServicioDeDatos.Seguridad;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -28,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string PropiedadHtml => Propiedad.ToLower();
         public string Ayuda { get; set; }
         public Posicion Posicion { get; private set; }
-        public string Tipo { get; protected set; }
+        public enumTipoControl Tipo { get; protected set; }
 
         public ControlHtml Padre { get; set; }
 
@@ -42,10 +43,10 @@ namespace MVCSistemaDeElementos.Descriptores
             Posicion = posicion;
         }
 
-        public string RenderLabel()
+        public string RenderLabel(string idHtml)
         {
             return $@"<div¨>
-                         {Etiqueta}
+                         <label for=¨{idHtml}¨>{Etiqueta}</label>
                       </div>
                   ";
         }
@@ -54,7 +55,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public virtual string RenderAtributos(string atributos = "")
         {
-            atributos += $@"tipo=¨{Tipo}¨
+            atributos += $@"tipo=¨{Tipo.Render()}¨
                             propiedad=¨{Propiedad.ToLower()}¨ ";
             return atributos;
         }
@@ -62,7 +63,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public void CambiarAtributos(string etiqueta, string propiedad, string ayuda)
         {
             Etiqueta = etiqueta;
-            Id = $"{Padre.Id}_{Tipo}_{propiedad}";
+            Id = $"{Padre.Id}_{Tipo.Render()}_{propiedad}";
             Propiedad = propiedad;
             Ayuda = ayuda;
         }

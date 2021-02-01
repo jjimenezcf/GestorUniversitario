@@ -4,7 +4,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class CuerpoDeFormulario
     {
-        DescriptorDeFormulario Formulario { get; }
+        public DescriptorDeFormulario Formulario { get; }
 
         public List<ContenedorDeBloques> Contenedores = new List<ContenedorDeBloques>();
 

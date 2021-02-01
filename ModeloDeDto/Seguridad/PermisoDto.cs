@@ -1,4 +1,6 @@
-﻿namespace ModeloDeDto.Seguridad
+﻿using Enumerados;
+
+namespace ModeloDeDto.Seguridad
 {
     public static class PermisoPor
     {
@@ -35,7 +37,7 @@
         [IUPropiedad(
             Etiqueta = "Clase",
             Ayuda = "Indique clase de permiso",
-            TipoDeControl = TipoControl.ListaDeElemento,
+            TipoDeControl = enumTipoControl.ListaDeElemento,
             SeleccionarDe = nameof(ClasePermisoDto),
             GuardarEn = nameof(IdClase),
             MostrarExpresion = ClasePermisoDto.MostrarExpresion,
@@ -60,7 +62,7 @@
         [IUPropiedad(
             Etiqueta = "Tipo",
             Ayuda = "Indique el tipo a aplicar",
-            TipoDeControl = TipoControl.ListaDeElemento,
+            TipoDeControl = enumTipoControl.ListaDeElemento,
             SeleccionarDe = nameof(TipoPermisoDto),
             GuardarEn = nameof(IdTipo),
             MostrarExpresion = nameof(Nombre),

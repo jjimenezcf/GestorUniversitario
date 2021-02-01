@@ -1,6 +1,7 @@
 ﻿using System;
 using UtilidadesParaIu;
 using ModeloDeDto;
+using Enumerados;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -18,14 +19,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCreacion(DescriptorDeCrud<TElemento> crud, string etiqueta)
         : base(
           padre: crud,
-          id: $"{crud.Id}_{TipoControl.pnlCreador}",
+          id: $"{crud.Id}_{enumTipoControl.pnlCreador.Render()}",
           etiqueta: etiqueta,
           propiedad: null,
           ayuda: null,
           posicion: null
         )
         {
-            Tipo = TipoControl.pnlCreador;
+            Tipo = enumTipoControl.pnlCreador;
             MenuCreacion = new ZonaDeMenu<TElemento>(creador: this);
             MenuCreacion.AnadirOpcionDeNuevoElemento();
             MenuCreacion.AnadirOpcionDeCerrarCreacion();

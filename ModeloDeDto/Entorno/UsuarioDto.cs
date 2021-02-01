@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Enumerados;
 
 namespace ModeloDeDto.Entorno
 {
@@ -89,7 +89,7 @@ namespace ModeloDeDto.Entorno
             Etiqueta = "Fotografía",
             Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),
-            TipoDeControl= TipoControl.Archivo,
+            TipoDeControl= enumTipoControl.Archivo,
             ExtensionesValidas = ".png, .jpg",
             UrlDelArchivo = nameof(Foto),
             Fila = 4,
@@ -97,7 +97,7 @@ namespace ModeloDeDto.Entorno
         public int? IdArchivo { get; set; }
 
         [IUPropiedad(
-            TipoDeControl = TipoControl.ImagenDelCanvas
+            TipoDeControl = enumTipoControl.ImagenDelCanvas
             )]
         public string Foto { get; set; }
 

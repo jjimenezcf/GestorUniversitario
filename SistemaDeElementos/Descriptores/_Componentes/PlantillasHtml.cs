@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -88,13 +89,13 @@ namespace MVCSistemaDeElementos.Descriptores
             return plantilla;
         }
 
-        public static Dictionary<string, object> ValoresDeAtributesComunes(string idHtmlContenedor, string idHtml, string propiedad, string tipoDeControl)
+        public static Dictionary<string, object> ValoresDeAtributesComunes(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl)
         {
             var valores = new Dictionary<string, object>();
             valores["IdHtmlContenedor"] = idHtmlContenedor;
             valores["IdHtml"] = idHtml;
             valores["Propiedad"] = propiedad;
-            valores["Tipo"] = tipoDeControl;
+            valores["Tipo"] = tipoDeControl.Render();
             return valores;
         }
     }

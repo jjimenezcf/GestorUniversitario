@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Enumerados;
 using Gestor.Errores;
 using GestorDeElementos;
 using ModeloDeDto;
@@ -19,7 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ListasDinamicas(BloqueDeFitro<TElemento> bloque, string etiqueta, string filtrarPor, string ayuda, string seleccionarDe, string buscarPor, string mostrarExpresion, CriteriosDeFiltrado criterioDeBusqueda, Posicion posicion)
         : base(
             padre: bloque
-          , id: $"{bloque.Id}_{TipoControl.ListaDeElemento}_{filtrarPor}"
+          , id: $"{bloque.Id}_{enumTipoControl.ListaDeElemento.Render()}_{filtrarPor}"
           , etiqueta
           , propiedad: filtrarPor
           , ayuda
@@ -31,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
             BuscarPor = buscarPor;
             MostrarExpresion = mostrarExpresion;
 
-            Tipo = TipoControl.ListaDinamica;
+            Tipo = enumTipoControl.ListaDinamica;
             Criterio = criterioDeBusqueda;
             bloque.AnadirSelectorElemento(this);
         }

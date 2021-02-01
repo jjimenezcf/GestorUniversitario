@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 
 namespace ModeloDeDto.Entorno
 {
@@ -20,7 +21,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Padre",
             Ayuda = "Indique el menú padre",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(MenuDto),
             GuardarEn = nameof(idPadre),
             MostrarExpresion = MostrarPadre,
@@ -49,7 +50,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Icono",
             Ayuda = "Seleccione un icono",
-            TipoDeControl = TipoControl.UrlDeArchivo,
+            TipoDeControl = enumTipoControl.UrlDeArchivo,
             ExtensionesValidas = ".svg",
             RutaDestino = "/images/menu",
             Tipo = typeof(string),
@@ -81,7 +82,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = nameof(VistaMvc),
             Ayuda = "Seleccione la vista",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(VistaMvcDto),
             GuardarEn = nameof(idVistaMvc),
             MostrarExpresion =nameof(Nombre),
@@ -117,7 +118,7 @@ namespace ModeloDeDto.Entorno
             Obligatorio = true,
             Fila = 5,
             Columna = 1,
-            TipoDeControl = TipoControl.Check,
+            TipoDeControl = enumTipoControl.Check,
             ValorPorDefecto = false
             )
         ]

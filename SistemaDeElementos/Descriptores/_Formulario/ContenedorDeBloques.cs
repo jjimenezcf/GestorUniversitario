@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -75,18 +76,49 @@ namespace MVCSistemaDeElementos.Descriptores
         public string RenderFila(ControlDeFormulario control)
         {
             return $@"<tr class = ¨{Css.Render(enumCssFormulario.fila)}¨>
+                        {RenderContenidoDeLaFila(control)}
+                      </tr>";
+        }
+
+        private object RenderContenidoDeLaFila(ControlDeFormulario control)
+        {
+            switch (control.Tipo)
+            {
+                case enumTipoControl.Archivo: return RenderArchivo((ControlDeArchivo)control);
+                case enumTipoControl.Editor: return RenderEditor(control);
+            }
+
+            throw new System.Exception($"No se ha implementado como renderizar un control del tipo {control.Tipo.Render()}");
+        }
+
+        private object RenderEditor(ControlDeFormulario control)
+        {
+            var htmlfilaEditor = $@"
                         <td class = ¨{Css.Render(enumCssFormulario.columnaLabel)}¨>
                            <label for=¨{control.IdHtml}¨>{control.Etiqueta}</label>
                         </td>
                         <td class = ¨{Css.Render(enumCssFormulario.columnaControl)}¨>
-                           {RenderControl(control)}
-                        </td>
-                      </tr>";
+                           {((ControlDeEdicion)control).RenderEditor()}
+                        </td>";
+            return htmlfilaEditor;
         }
 
-        public string RenderControl(ControlDeFormulario control)
+        private object RenderArchivo(ControlDeArchivo control)
         {
-            return $@"<input {control.RenderAtributos("type=¨text¨")}></input>";
+            var htmlfilaArchivo = $@"
+                        <td class = ¨{Css.Render(enumCssFormulario.columnaLabel)}¨>
+                           <a id=¨{control.IdHtmlSelector}¨ 
+                              class=¨{Css.Render(enumCssControlesFormulario.SelectorArchivo)}¨ 
+                              href=¨javascript:ApiDeArchivos.SeleccionarUnArchivo('{control.IdHtml}','{control.IdHtmlNombre}')¨>
+                              {control.Etiqueta}
+                           </a>
+                        </td>
+                        <td class = ¨{Css.Render(enumCssFormulario.columnaControl)}¨>
+                           {control.RenderArchivo("*.csv")}
+                        </td>";
+            return htmlfilaArchivo;
         }
+
+
     }
 }

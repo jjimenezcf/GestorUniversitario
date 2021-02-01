@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enumerados;
 using ModeloDeDto;
 using Utilidades;
 
@@ -24,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
           posicion: null
         )
         {
-            Tipo = TipoControl.Bloque;
+            Tipo = enumTipoControl.Bloque;
             Tabla = new TablaFiltro(this, dimension, new List<ControlFiltroHtml>());
             filtro.Bloques.Add(this);
         }
@@ -39,7 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private void AjustarDimensionDeLaTabla()
         {
             foreach (var control in Controles)
-                if (control.Tipo != TipoControl.GridModal && control.Posicion.fila >= Tabla.Dimension.Filas)
+                if (control.Tipo != enumTipoControl.GridModal && control.Posicion.fila >= Tabla.Dimension.Filas)
                     Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
         }
 
@@ -51,7 +52,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (control.Id == c.Id)
                     continue;
 
-                if (control.Tipo != TipoControl.GridModal && control.Posicion.fila >= c.Posicion.fila)
+                if (control.Tipo != enumTipoControl.GridModal && control.Posicion.fila >= c.Posicion.fila)
                 {
                     if (control.Posicion.fila == c.Posicion.fila && control.Posicion.columna == c.Posicion.columna)
                         control.Posicion.fila++;
@@ -91,7 +92,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlModalesEnBloque = "";
             foreach (ControlHtml c in Controles)
             {
-                if (c.Tipo == TipoControl.GridModal)
+                if (c.Tipo == enumTipoControl.GridModal)
                     htmlModalesEnBloque =
                         $@"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
                         $"{c.RenderControl()}";
@@ -121,7 +122,7 @@ namespace MVCSistemaDeElementos.Descriptores
             foreach (ControlFiltroHtml c in Controles)
             {
 
-                if (c.Id == $"{Id}_{c.Tipo}_{propiedad}")
+                if (c.Id == $"{Id}_{c.Tipo.Render()}_{propiedad}")
                     return c;
             }
             return null;

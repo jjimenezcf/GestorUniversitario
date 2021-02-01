@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Entorno;
+﻿using Enumerados;
+using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.Seguridad
 {
@@ -9,7 +10,7 @@ namespace ModeloDeDto.Seguridad
         [IUPropiedad(
             Etiqueta = "Puesto",
             Ayuda = "Usuarios de un puesto",
-            TipoDeControl = TipoControl.RestrictorDeEdicion,
+            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false
@@ -35,7 +36,7 @@ namespace ModeloDeDto.Seguridad
         [IUPropiedad(
             Etiqueta = "Usuario",
             Ayuda = "Indique el usuario",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(UsuarioDto),
             GuardarEn = nameof(IdUsuario),
             MostrarExpresion = nameof(UsuarioDto.Nombre),

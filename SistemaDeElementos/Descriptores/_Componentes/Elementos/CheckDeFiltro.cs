@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 using GestorDeElementos;
 using ModeloDeDto;
 
@@ -11,14 +12,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public CheckFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string filtrarPor, string ayuda, bool valorInicial, bool filtrarPorFalse, Posicion posicion)
         : base(padre: bloque
-              , id: $"{bloque.Id}_{TipoControl.Check}_{filtrarPor}"
+              , id: $"{bloque.Id}_{enumTipoControl.Check.Render()}_{filtrarPor}"
               , etiqueta
               , filtrarPor
               , ayuda
               , posicion
               )
         {
-            Tipo = TipoControl.Check;
+            Tipo = enumTipoControl.Check;
             Criterio = CriteriosDeFiltrado.igual;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);

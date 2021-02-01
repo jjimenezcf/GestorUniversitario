@@ -1,4 +1,5 @@
-﻿using GestorDeElementos;
+﻿using Enumerados;
+using GestorDeElementos;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -14,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
               , posicion
               )
         {
-            Tipo = TipoControl.RestrictorDeFiltro;
+            Tipo = enumTipoControl.RestrictorDeFiltro;
             Criterio = CriteriosDeFiltrado.igual;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);

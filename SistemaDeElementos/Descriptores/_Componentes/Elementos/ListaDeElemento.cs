@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Enumerados;
 using Gestor.Errores;
 using GestorDeElementos;
 using ModeloDeDto;
@@ -22,14 +23,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public ListaDeElemento(BloqueDeFitro<TElemento> padre, string etiqueta, string ayuda, string seleccionarDe, string filtraPor, string mostrarExpresion, Posicion posicion)
         : base(
             padre: padre
-          , id: $"{padre.Id}_{TipoControl.ListaDeElemento}_{filtraPor}"
+          , id: $"{padre.Id}_{enumTipoControl.ListaDeElemento.Render()}_{filtraPor}"
           , etiqueta: etiqueta
           , filtraPor
           , ayuda: ayuda
           , posicion
           )
         {
-            Tipo = TipoControl.ListaDeElemento;
+            Tipo = enumTipoControl.ListaDeElemento;
             SeleccionarDe = seleccionarDe;
             MostrarExpresion = mostrarExpresion;
             padre.AnadirSelectorElemento(this);

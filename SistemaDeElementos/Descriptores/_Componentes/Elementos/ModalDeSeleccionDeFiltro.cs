@@ -1,4 +1,5 @@
-﻿using ModeloDeDto;
+﻿using Enumerados;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -20,7 +21,7 @@ namespace MVCSistemaDeElementos.Descriptores
           posicion: null
         )
         {
-            Tipo = TipoControl.GridModal;
+            Tipo = enumTipoControl.GridModal;
             Selector = selector;
             Selector.Modal = this;
             CrudModal = crudModal;

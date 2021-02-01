@@ -4,9 +4,10 @@ using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta}
+    public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta }
 
     public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
+
 
     public enum enumModoOrdenacion
     {
@@ -120,7 +121,10 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         Editor,
         Lista,
-        Check
+        Check,
+        Archivo,
+        SelectorArchivo,
+        VisorDatosArchivo
     }
 
     public enum enumCssControlesDto
@@ -184,6 +188,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesFormulario.Editor: return "formulario-editor";
                 case enumCssControlesFormulario.Lista: return "formulario-lista";
                 case enumCssControlesFormulario.Check: return "formulario-check";
+                case enumCssControlesFormulario.Archivo: return "formulario-archivo";
+                case enumCssControlesFormulario.SelectorArchivo: return "formulario-selector-archivo";
+                case enumCssControlesFormulario.VisorDatosArchivo: return "formulario-visor-datos-archivo";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Enumerados;
 using ModeloDeDto;
 using UtilidadesParaIu;
 
@@ -6,7 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeMantenimiento<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        public static string NombreMnt = $"{DescriptorDeCrud<TElemento>.NombreCrud}_{TipoControl.Mantenimiento}".ToLower();
+        public static string NombreMnt = $"{DescriptorDeCrud<TElemento>.NombreCrud}_{enumTipoControl.Mantenimiento.Render()}".ToLower();
 
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public ZonaDeMenu<TElemento> ZonaMenu { get; private set; }
@@ -20,14 +21,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMantenimiento(DescriptorDeCrud<TElemento> crud, string etiqueta)
             : base(
               padre: crud,
-              id: $"{crud.Id}_{TipoControl.Mantenimiento}",
+              id: $"{crud.Id}_{enumTipoControl.Mantenimiento.Render()}",
               etiqueta: etiqueta,
               propiedad: null,
               ayuda: null,
               posicion: null
             )
         {
-            Tipo = TipoControl.Mantenimiento;
+            Tipo = enumTipoControl.Mantenimiento;
             ZonaMenu = new ZonaDeMenu<TElemento>(mnt: this);
             Filtro = new ZonaDeFiltro<TElemento>(mnt: this);
             Datos = new ZonaDeDatos<TElemento>(mnt: this);

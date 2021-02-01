@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enumerados;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
@@ -60,7 +61,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             var elemento = typeof(TElemento).Name.Replace("Dto", "");
-            Tipo = TipoControl.DescriptorDeCrud;
+            Tipo = enumTipoControl.DescriptorDeCrud;
             Mnt = new DescriptorDeMantenimiento<TElemento>(crud: this, etiqueta: elemento);
             Controlador = controlador.Replace("Controller", "");
             Vista = $@"{vista}";
@@ -149,7 +150,8 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
         public override string RenderControl()
-        {try
+        {
+            try
             {
                 var renderMnt = Mnt.RenderControl();
                 if (ModoDescriptor.Mantenimiento == Modo)

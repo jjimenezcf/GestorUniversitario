@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 using Gestor.Errores;
 using ModeloDeDto;
 using Utilidades;
@@ -35,7 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
           posicion: null
         )
         {
-            Tipo = TipoControl.ZonaDeDatos;
+            Tipo = enumTipoControl.ZonaDeDatos;
             Grid = new Grid<TElemento>(this);
         }
 

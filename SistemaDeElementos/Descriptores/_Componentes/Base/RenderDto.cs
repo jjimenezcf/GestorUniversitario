@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enumerados;
 using Gestor.Errores;
 using ModeloDeDto;
 using Utilidades;
@@ -96,13 +97,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderEtiquetaDelDto(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, short i, short j, double ancho)
         {
-            if (descriptorControl.atributos.TipoDeControl == TipoControl.Check)
+            if (descriptorControl.atributos.TipoDeControl == enumTipoControl.Check)
                 return "";
             //17.01.2021 --> al poner el display en bloqk no hace falta width: {ancho}%
             return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
                            name=¨lbl_propiedad¨
                            class=¨div-lbl-propiedad¨ 
-                           style=¨{ (descriptorControl.atributos.TipoDeControl == TipoControl.Archivo ? "; margin-top: 11px":"")}¨>
+                           style=¨{ (descriptorControl.atributos.TipoDeControl == enumTipoControl.Archivo ? "; margin-top: 11px":"")}¨>
                            <label for=¨{descriptorControl.IdHtml}¨>{descriptorControl.atributos.Etiqueta}:</label>
                        </div>
                       ";
@@ -115,25 +116,25 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = "";
             switch(atributos.TipoDeControl) {
-                case TipoControl.Editor:
+                case enumTipoControl.Editor:
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.RestrictorDeEdicion:
+                case enumTipoControl.RestrictorDeEdicion:
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.ListaDeElemento:
+                case enumTipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderListaDeElemento(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.ListaDinamica:
+                case enumTipoControl.ListaDinamica:
                     htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.Archivo:
+                case enumTipoControl.Archivo:
                     htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.UrlDeArchivo:
+                case enumTipoControl.UrlDeArchivo:
                     htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
                     break;
-                case TipoControl.Check:
+                case enumTipoControl.Check:
                     htmdDescriptorControl = RenderCheck(tabla, descriptorControl);
                     break;
                 default: 
@@ -202,7 +203,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
-            valores["Css"] = atributos.TipoDeControl == TipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictor): Css.Render(enumCssControlesDto.Editor);
+            valores["Css"] = atributos.TipoDeControl == enumTipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictor): Css.Render(enumCssControlesDto.Editor);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
@@ -247,8 +248,8 @@ namespace MVCSistemaDeElementos.Descriptores
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
                        <div style=¨display: none;¨>
                            <img id=¨img-{descriptorControl.IdHtml}¨
-                                    tipo=¨{TipoControl.VisorDeArchivo}¨  
-                                    propiedad=¨{(atributos.TipoDeControl == TipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
+                                    tipo=¨{enumTipoControl.VisorDeArchivo.Render()}¨  
+                                    propiedad=¨{(atributos.TipoDeControl == enumTipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
                                     src=¨¨>
                        </div>
                    </td>
@@ -274,7 +275,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributosHtml = $@"id=¨{descriptorControl.IdHtml}¨ 
                                    propiedad=¨{descriptorControl.propiedad}¨ 
                                    class=¨{claseCss}¨ 
-                                   tipo=¨{atributos.TipoDeControl}¨ 
+                                   tipo=¨{atributos.TipoDeControl.Render()}¨ 
                                    obligatorio=¨{(atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N")}¨ 
                                    {(!atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "")} ";
             return atributosHtml;

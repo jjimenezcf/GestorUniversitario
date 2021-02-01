@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ayudas\Extensiones\Utilidades.csproj" />
+    <ProjectReference Include="..\Enumerados\Enumerados.csproj" />
     <ProjectReference Include="..\ServicioDeDatos\ServicioDeDatos.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeErrores\GestorDeErrores.csproj" />
   </ItemGroup>

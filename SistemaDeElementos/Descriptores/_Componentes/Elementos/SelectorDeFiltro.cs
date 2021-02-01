@@ -1,4 +1,5 @@
-﻿using GestorDeElementos;
+﻿using Enumerados;
+using GestorDeElementos;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -20,14 +21,14 @@ namespace MVCSistemaDeElementos.Descriptores
         public SelectorDeFiltro(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadDondeMapear)
         : base(
           padre: padre
-          , id: $"{padre.Id}_{TipoControl.Selector}_{filtrarPor}" //  $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
+          , id: $"{padre.Id}_{enumTipoControl.Selector.Render()}_{filtrarPor}" //  $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
           , etiqueta
           , filtrarPor
           , ayuda
           , posicion
           )
         {
-            Tipo = TipoControl.Selector;
+            Tipo = enumTipoControl.Selector;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = new ModalDeSeleccionDeFiltro<TElemento, TSeleccionado>(this, crudModal);

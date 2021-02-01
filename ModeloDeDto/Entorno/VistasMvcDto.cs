@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enumerados;
 
 namespace ModeloDeDto.Entorno
 {
@@ -63,7 +64,7 @@ namespace ModeloDeDto.Entorno
             Ayuda = "indica si se ha de mostrar en modal la creación o edición",
             VisibleEnEdicion = true,
             Obligatorio = true,
-            TipoDeControl = TipoControl.Check,
+            TipoDeControl = enumTipoControl.Check,
             ValorPorDefecto = false,
             Tipo = typeof(bool),
             Fila = 3,

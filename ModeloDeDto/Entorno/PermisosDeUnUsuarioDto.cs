@@ -1,5 +1,6 @@
 ﻿
 
+using Enumerados;
 using ModeloDeDto.Seguridad;
 
 namespace ModeloDeDto.Entorno
@@ -9,7 +10,7 @@ namespace ModeloDeDto.Entorno
     {
         [IUPropiedad(Etiqueta = "Usuario",
             Ayuda = "permisos de un usuario",
-            TipoDeControl = TipoControl.RestrictorDeEdicion,
+            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false
@@ -35,7 +36,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Permiso",
             Ayuda = "Indique el permiso",
-            TipoDeControl = TipoControl.ListaDinamica,
+            TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(PermisoDto),
             GuardarEn = nameof(IdPermiso),
             MostrarExpresion = nameof(PermisoDto.Nombre),
@@ -50,7 +51,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             Etiqueta = "Origen",
             Ayuda = "Origen del permiso",
-            TipoDeControl = TipoControl.Editor,
+            TipoDeControl = enumTipoControl.Editor,
             PorAnchoMnt = 60
             )
         ]

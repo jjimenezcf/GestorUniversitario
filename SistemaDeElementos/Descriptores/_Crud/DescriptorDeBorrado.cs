@@ -1,4 +1,5 @@
-﻿using ModeloDeDto;
+﻿using Enumerados;
+using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -9,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeBorrado(DescriptorDeCrud<TElemento> crud, string etiqueta) 
         : base(
           padre: crud,
-          id: $"{crud.Id}_{TipoControl.pnlBorrado}",
+          id: $"{crud.Id}_{enumTipoControl.pnlBorrado.Render()}",
           etiqueta: etiqueta,
           propiedad: null,
           ayuda: null,

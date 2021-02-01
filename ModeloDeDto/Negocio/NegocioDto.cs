@@ -1,4 +1,6 @@
-﻿namespace ModeloDeDto.Negocio
+﻿using Enumerados;
+
+namespace ModeloDeDto.Negocio
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5)]
@@ -29,7 +31,7 @@
         [IUPropiedad(
             Etiqueta = "Icono",
             Ayuda = "Seleccione un icono",
-            TipoDeControl = TipoControl.UrlDeArchivo,
+            TipoDeControl = enumTipoControl.UrlDeArchivo,
             ExtensionesValidas = ".svg",
             RutaDestino = "/images/menu",
             Tipo = typeof(string),
@@ -99,7 +101,7 @@
             Obligatorio = true,
             Fila = 5,
             Columna = 1,
-            TipoDeControl = TipoControl.Check,
+            TipoDeControl = enumTipoControl.Check,
             ValorPorDefecto = false
             )
         ]
