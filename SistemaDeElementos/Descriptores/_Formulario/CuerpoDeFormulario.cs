@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   <div id=¨idContenedor-expansor¨ class=¨{Css.Render(enumCssFormulario.BloqueExpansor)}¨>
                       <a id=¨mostrar.{IdHtml}.ref¨ 
                          class=¨{Css.Render(enumCssFormulario.referenciaExpansor)}¨
-                         href=¨javascript:Formulario.{GestorDeEventos.EventosDelFormulario}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', 'idContenedor-datos');¨>                           
+                         href=¨javascript:Formulario.{GestorDeEventos.EventosDelFormulario}('{TipoDeAccionFormulario.OcultarMostrarBloque}', 'idContenedor-datos');¨>                           
                          bloque: Titulo
                       </a>
                       <input id=¨expandir.idContenedor-datos.input¨ type=¨hidden¨ value=¨1¨/>

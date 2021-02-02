@@ -19,7 +19,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<PuestosDeUnRolDto>.NombreMnt
                 , nombreOpcion: "Puestos"
                 , propiedadQueRestringe: nameof(RolDto.Id)
-                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol));
+                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol)
+                , "Incluir el rol a los puestos seleccionados");
 
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PermisosDeUnRolController)
@@ -28,7 +29,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<PermisosDeUnRolDto>.NombreMnt
                 , nombreOpcion: "Permisos"
                 , propiedadQueRestringe: nameof(RolDto.Id)
-                , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
+                , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol)
+                , "Añadir permisos al rol seleccionado");
 
 
             var bloque = new BloqueDeFitro<RolDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));

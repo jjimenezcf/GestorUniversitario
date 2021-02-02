@@ -33,7 +33,7 @@ const atControl = {
     id: literal.id,
     crudModal: 'crud-modal',
     propiedadRestrictora: 'propiedad-restrictora',
-    controlador: "controlador",
+    controlador: literal.controlador,
     obligatorio: "obligatorio",
     modoOrdenacion: "modo-ordenacion",
     expresionElemento: "expresion-elemento",
@@ -99,10 +99,12 @@ const atGrid = {
 
 const atArchivo = {
     id: "id-archivo",
+    controlador: literal.controlador,
     nombre: "nombre-archivo",
     canvas: "canvas-vinculado",
     imagen: "imagen-vinculada",
     barra: "barra-vinculada",
+    infoArchivo: "info-archivo",
     rutaDestino: "ruta-destino",
     extensionesValidas: "accept",
     limiteEnByte: "limite-en-byte",
@@ -347,6 +349,11 @@ const Evento = {
         MostrarAnterior: "mostrar-anterior",
         MostrarSiguiente: "mostrar-siguiente",
         MostrarUltimo: "mostrar-ultimo",
+    },
+    Formulario: {
+        Aceptar: "aceptar",
+        Cerrar: "cerrar",
+        OcultarMostrarBloque: "ocultar-mostrar-bloque",
     }
 };
 
@@ -365,9 +372,9 @@ const TipoControl = {
 };
 
 const ClaseDeOpcioDeMenu = {
-    DeElemento: "de-elemento",
-    DeVista: "de-vista",
-    Basico: "basico"
+    DeElemento: "opcion-menu-de-elemento",
+    DeVista: "opcion-menu-de-vista",
+    Basico: "opcion-menu-basica",
 }
 
 const ModoDeAccesoDeDatos = {

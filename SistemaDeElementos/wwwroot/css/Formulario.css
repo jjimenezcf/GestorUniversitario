@@ -121,3 +121,12 @@
 .formulario-referencia {
     margin-left: 20px;
 }
+.formulario-contenedor-opcion {
+    margin-left: 10px;
+}
+
+.formulario-menu {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}

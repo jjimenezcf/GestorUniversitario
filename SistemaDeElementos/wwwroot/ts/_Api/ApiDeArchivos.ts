@@ -2,14 +2,14 @@
 
 
     export class DatosPeticionSubirArchivo {
-        private _idSelector: string;
+        private _idArchivo: string;
 
-        public Selector(): HTMLInputElement {
-            return document.getElementById(this._idSelector) as HTMLInputElement;
+        public Archivo(): HTMLInputElement {
+            return document.getElementById(this._idArchivo) as HTMLInputElement;
         }
 
-        constructor(idSelector: string) {
-            this._idSelector = idSelector;
+        constructor(idArchivo: string) {
+            this._idArchivo = idArchivo;
         }
 
     }
@@ -101,7 +101,7 @@
         }
 
         let htmlDatos: HTMLInputElement = document.getElementById(idDatosArchivo) as HTMLInputElement;
-        htmlDatos.value = `${filePath} (${ficheros[0].size} bytes, ${ficheros[0].type} )`
+        htmlDatos.value = `${filePath} (${ficheros[0].size} bytes, ${ficheros[0].type} )`;
     };
 
     export function SeleccionarArchivo(idSelector: string) {
@@ -115,16 +115,31 @@
         canvases.forEach((canvas) => { canvas.width = canvas.width; });
     }
 
-    function SubirArchivo(controlador: string, idSelectorDeArchivo: string, idBarra: string) {
+    function SubirArchivos(htmlPanel: HTMLDivElement): void {
+        let archivos: NodeListOf<HTMLInputElement> = htmlPanel.querySelectorAll(`${atControl.tipo}[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+        for (let i: number = 0; i < archivos.length; i++) {
+            let idArchivo: string = archivos[i].getAttribute(literal.id);
+            let idInfoArchivo: string = archivos[i].getAttribute(atArchivo.infoArchivo);
+            let idBarra: string = archivos[i].getAttribute(atArchivo.barra);
+            let barraHtml: HTMLDivElement = document.getElementById(idBarra) as HTMLDivElement;
+            let infoArchivoHtml: HTMLInputElement = document.getElementById(idInfoArchivo) as HTMLInputElement;
+            let controlador: string = archivos[i].getAttribute(atArchivo.controlador);
+            barraHtml.style.display = "block";
+            infoArchivoHtml.style.display = "none";
+            SubirArchivo(controlador, idArchivo, idBarra);
+        }
+    }
 
-        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
+    function SubirArchivo(controlador: string, idArchivo: string, idBarra: string) {
+
+        let htmlFicheros: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
         let ficheros = htmlFicheros.files;
 
         let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
 
         let a = new ApiDeAjax.DescriptorAjax(this
             , Ajax.EndPoint.SubirArchivo
-            , new DatosPeticionSubirArchivo(idSelectorDeArchivo)
+            , new DatosPeticionSubirArchivo(idArchivo)
             , url
             , ApiDeAjax.TipoPeticion.Asincrona
             , ApiDeAjax.ModoPeticion.Post
@@ -149,12 +164,12 @@
 
     function TrasSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
-        let selector: HTMLInputElement = datos.Selector();
+        let selector: HTMLInputElement = datos.Archivo();
 
         selector.removeAttribute(atArchivo.id);
         selector.removeAttribute(atArchivo.nombre);
         let tipo: string = selector.getAttribute(atControl.tipo);
-        if ( tipo === TipoControl.Archivo)
+        if (tipo === TipoControl.Archivo)
             selector.setAttribute(atArchivo.id, peticion.resultado.datos);
         if (tipo === TipoControl.UrlDeArchivo)
             selector.setAttribute(atArchivo.nombre, peticion.resultado.datos);
@@ -162,9 +177,17 @@
 
     function SiHayErrorAlSubirElArchivo(peticion: ApiDeAjax.DescriptorAjax) {
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
-        let selector: HTMLInputElement = datos.Selector();
-        BlanquearArchivo(selector);
+        let archivo: HTMLInputElement = datos.Archivo();
+        let idInfoArchivo: string = archivo.getAttribute(atArchivo.infoArchivo);
+        BlanquearArchivo(archivo);
         Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+        if (IsNullOrEmpty(idInfoArchivo)) {
+            let idBarra: string = archivo.getAttribute(atArchivo.barra);
+            let barraHtml: HTMLDivElement = document.getElementById(idBarra) as HTMLDivElement;
+            let infoArchivoHtml: HTMLInputElement = document.getElementById(idInfoArchivo) as HTMLInputElement;
+            barraHtml.style.display = "none";
+            infoArchivoHtml.style.display = "block";
+        }
     }
 
 }

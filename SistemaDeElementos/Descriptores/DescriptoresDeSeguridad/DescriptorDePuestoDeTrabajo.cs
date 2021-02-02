@@ -20,7 +20,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<UsuariosDeUnPuestoDto>.NombreMnt
                 , nombreOpcion: "Usuarios"
                 , propiedadQueRestringe: nameof(PuestoDto.Id)
-                , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto));
+                , propiedadRestrictora: nameof(UsuariosDeUnPuestoDto.IdPuesto)
+                , "Incluir usuarios en el puesto seleccionado");
 
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(RolesDeUnPuestoController)
@@ -29,7 +30,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
                 , nombreOpcion: "Roles"
                 , propiedadQueRestringe: nameof(PuestoDto.Id)
-                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto)
+                , "Añadir roles al puesto seleccionado");
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<PuestoDto, PermisosDeUnPuestoDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un Puesto"
@@ -37,7 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , propiedadRestrictora: nameof(PermisosDeUnPuestoDto.IdPuesto));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento, "Mostrar los permisos de un puesto de trabajo");
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

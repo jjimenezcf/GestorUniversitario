@@ -78,7 +78,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<PuestosDeUnUsuarioDto>.NombreMnt
                 , nombreOpcion: "Puestos"
                 , propiedadQueRestringe: nameof(UsuarioDto.Id)
-                , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
+                , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario)
+                , "Añadir puestos al usuario seleccionado");
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<UsuarioDto, PermisosDeUnUsuarioDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un usuario"
@@ -86,7 +87,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento, "Mostrar los permisos de un usuario");
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

@@ -40,13 +40,31 @@
 
         }
 
-        public Inicializar() {
+        public Inicializar(): void {
             if (EntornoSe.Historial.HayHistorial(this._idFormulario))
                 this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this._idFormulario);
             else
                 this._estado = new HistorialSe.EstadoPagina(this._idFormulario);
 
             this.CuerpoDelFormulario.style.overflowY = "scroll"
+        }
+
+        public Cerrar() : void {
+            if (this.AntesDeCerrar()) {
+                window.history.back();
+            }
+        }
+        protected AntesDeCerrar(): boolean {
+            return true;
+        }
+
+        public Aceptar(): void {
+            if (this.AntesDeAceptar()) {
+                this.Cerrar();
+            }
+        }
+        public AntesDeAceptar(): boolean {
+            return true;
         }
 
         public OcultarMostrarBloque(idHtmlBloque: string): void {
@@ -65,7 +83,15 @@
     export function EventosDelFormulario(accion: string, parametros: any) {
         try {
             switch (accion) {
-                case Evento.Mnt.OcultarMostrarBloque: {
+                case Evento.Formulario.Aceptar: {
+                    formulario.Aceptar();
+                    break;
+                }
+                case Evento.Formulario.Cerrar: {
+                    formulario.Cerrar();
+                    break;
+                }
+                case Evento.Formulario.OcultarMostrarBloque: {
                     let idHtmlBloque: string = parametros;
                     formulario.OcultarMostrarBloque(idHtmlBloque);
                     break;

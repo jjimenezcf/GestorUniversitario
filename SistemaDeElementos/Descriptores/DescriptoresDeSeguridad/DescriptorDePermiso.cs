@@ -51,7 +51,8 @@ namespace MVCSistemaDeElementos.Descriptores
                     , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPermisoDto>.NombreMnt
                     , nombreOpcion: "Roles"
                     , propiedadQueRestringe: nameof(PermisoDto.Id)
-                    , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdPermiso));
+                    , propiedadRestrictora: nameof(PermisosDeUnRolDto.IdPermiso)
+                    , "Añadir roles al permiso seleccionado");
 
             }
 

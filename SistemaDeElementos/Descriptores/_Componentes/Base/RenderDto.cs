@@ -216,6 +216,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorArchivo));
+            var idHtmBarra = $"barra-{descriptorControl.IdHtml}";
+            var idHtmImg = $"img-{descriptorControl.IdHtml}";
+            var idHtmCanva = $"canvas-{descriptorControl.IdHtml}";
 
             var htmlArchivo = @$"
             <form class=¨{Css.Render(enumCssControlesDto.FormDeArchivo)}¨ method=¨post¨ enctype=¨multipart/form-data¨>
@@ -229,25 +232,25 @@ namespace MVCSistemaDeElementos.Descriptores
                               style=¨display: none;¨
                               accept=¨{atributos.ExtensionesValidas}¨
                               ruta-destino=¨{atributos.RutaDestino}¨
-                              canvas-vinculado = ¨canvas-{descriptorControl.IdHtml}¨  
-                              imagen-vinculada = ¨img-{descriptorControl.IdHtml}¨   
-                              barra-vinculada = ¨barra-{descriptorControl.IdHtml}¨  
+                              canvas-vinculado = ¨{idHtmCanva}¨  
+                              imagen-vinculada = ¨{idHtmImg}¨   
+                              barra-vinculada = ¨{idHtmBarra}¨  
                               placeholder =¨{atributos.Ayuda}¨
-                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','canvas-{descriptorControl.IdHtml}','barra-{descriptorControl.IdHtml}')¨ />
+                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','{idHtmCanva}','{idHtmBarra}')¨ />
                   </td>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
-                      <div id = ¨barra-{descriptorControl.IdHtml}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨>
+                      <div id = ¨{idHtmBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨>
                           <span></span>
                       </div>
                    </td>
                  </tr>
                  <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
-                      <canvas id=¨canvas-{descriptorControl.IdHtml}¨></canvas>
+                      <canvas id=¨{idHtmCanva}¨></canvas>
                    </td>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
                        <div style=¨display: none;¨>
-                           <img id=¨img-{descriptorControl.IdHtml}¨
+                           <img id=¨{idHtmImg}¨
                                     tipo=¨{enumTipoControl.VisorDeArchivo.Render()}¨  
                                     propiedad=¨{(atributos.TipoDeControl == enumTipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
                                     src=¨¨>

@@ -8,43 +8,6 @@ using ServicioDeDatos.Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum TipoDeLlamada { Post, Get }
-
-    public static class TipoDeAccionDeMnt
-    {
-        public const string CrearElemento = "crear-elemento";
-        public const string EditarElemento = "editar-elemento";
-        public const string EliminarElemento = "eliminar-elemento";
-        public const string RelacionarElementos = "relacionar-elementos";
-        public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
-        public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
-        public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
-        public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
-        public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
-        public const string FilaPulsada = "fila-pulsada";
-        public const string TeclaPulsada = "tecla-pulsada";
-    }
-
-    public static class TipoDeAccionDeCreacion
-    {
-        public const string NuevoElemento = "nuevo-elemento";
-        public const string CerrarCreacion = "cerrar-creacion";
-    }
-    public static class TipoDeAccionDeEdicion
-    {
-        public const string ModificarElemento = "modificar-elemento";
-        public const string CancelarEdicion = "cancelar-edicion";
-    }
-    public static class TipoDeAccionDeRelacionar
-    {
-        public const string Relacionar = "nuevas-relaciones";
-        public const string Cerrar = "cerrar-relacionar";
-    }
-
-    public static class TipoDeAccionDeConsulta
-    {
-        public const string Cerrar = "cerrar-consulta";
-    }
     public class AccionDeMenu
     {
 
@@ -256,18 +219,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public enumCssOpcionMenu ClaseBoton { get; private set; }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
-        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, clase)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase, string ayuda)
+        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, clase, ayuda)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase, string ayuda)
         : base(
           padre: menu,
           id: $"{menu.Id}_{enumTipoControl.Opcion.Render()}_{menu.OpcionesDeMenu.Count}",
           etiqueta: titulo,
           propiedad: null,
-          ayuda: null,
+          ayuda: ayuda,
           posicion: null
         )
         {
@@ -292,13 +255,26 @@ namespace MVCSistemaDeElementos.Descriptores
                     <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ clase=¨{Css.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ {disbled} />
+                        <input type=¨button¨ 
+                               clase=¨{Css.Render(ClaseBoton)}¨ 
+                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
+                               value=¨{Etiqueta}¨ 
+                               onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
+                               title=¨{Ayuda}¨
+                               {disbled} />
                     </form>
                 ";
                 return htmlFormPost;
             }
 
-            var htmlOpcionMenu = $"<input id=¨{IdHtml}¨ type=¨button¨ clase=¨{Css.Render(ClaseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ value=¨{Etiqueta}¨ onClick=¨{Accion.RenderAccion()}¨ {disbled} />";
+            var htmlOpcionMenu = $@"<input id=¨{IdHtml}¨
+                                           type=¨button¨
+                                           clase=¨{Css.Render(ClaseBoton)}¨
+                                           permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨
+                                           value=¨{Etiqueta}¨
+                                           onClick=¨{Accion.RenderAccion()}¨
+                                           title=¨{Ayuda}¨
+                                           {disbled} />";
             return htmlOpcionMenu;
         }
     }

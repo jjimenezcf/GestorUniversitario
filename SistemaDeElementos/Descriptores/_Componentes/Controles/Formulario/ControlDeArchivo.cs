@@ -10,6 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public string IdHtmlNombre => $"{IdHtml}.nombre";
         public string IdHtmlSelector => $"{IdHtml}.ref";
+        public string IdHtmlBarra => $"{IdHtml}.barra";
 
         public int LimiteEnByte { get; set; } = 0;
         public string ExtensionesValidas { get; }
@@ -29,18 +30,25 @@ namespace MVCSistemaDeElementos.Descriptores
                                        name=¨fichero¨  
                                        style=¨display: none;¨
                                        accept=¨{ExtensionesValidas}¨
+                                       controlador=¨{Padre.Cuerpo.Formulario.Controlador}¨
+                                       info-archivo=¨{IdHtmlNombre}¨
                                        limite-en-byte = {LimiteEnByte}
+                                       barra-vinculada = ¨{IdHtmlBarra}¨ 
                                        onChange=¨ApiDeArchivos.MostrarArchivo('{IdHtml}','{IdHtmlNombre}')¨ />
                                    <input {RenderAtributos($"{IdHtmlNombre}"
                                        , enumTipoControl.Editor
-                                       , enumCssControlesFormulario.VisorDatosArchivo
+                                       , enumCssControlesFormulario.InfoArchivo
                                        , ayuda: ""
                                        , $"type = ¨{enumInputType.text.Render()}¨")}
                                        readonly>
                                    </input>
+                                   <div id = ¨{IdHtmlBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨ style=¨display: none;¨>
+                                       <span></span>
+                                   </div>
                                  </form>
                                 ";
             return htmlArchivo;
         }
     }
 }
+

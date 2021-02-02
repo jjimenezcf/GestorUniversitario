@@ -8,6 +8,46 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
 
+    public enum TipoDeLlamada { Post, Get }
+    public static class TipoDeAccionDeMnt
+    {
+        public const string CrearElemento = "crear-elemento";
+        public const string EditarElemento = "editar-elemento";
+        public const string EliminarElemento = "eliminar-elemento";
+        public const string RelacionarElementos = "relacionar-elementos";
+        public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
+        public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
+        public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
+        public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
+        public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
+        public const string FilaPulsada = "fila-pulsada";
+        public const string TeclaPulsada = "tecla-pulsada";
+    }
+    public static class TipoDeAccionFormulario
+    {
+        public const string Cerrar = "cerrar";
+        public const string Aceptar = "aceptar";
+        public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
+    }
+    public static class TipoDeAccionDeCreacion
+    {
+        public const string NuevoElemento = "nuevo-elemento";
+        public const string CerrarCreacion = "cerrar-creacion";
+    }
+    public static class TipoDeAccionDeEdicion
+    {
+        public const string ModificarElemento = "modificar-elemento";
+        public const string CancelarEdicion = "cancelar-edicion";
+    }
+    public static class TipoDeAccionDeRelacionar
+    {
+        public const string Relacionar = "nuevas-relaciones";
+        public const string Cerrar = "cerrar-relacionar";
+    }
+    public static class TipoDeAccionDeConsulta
+    {
+        public const string Cerrar = "cerrar-consulta";
+    }
 
     public enum enumModoOrdenacion
     {
@@ -34,7 +74,6 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorSelector,
         Check
     }
-
 
     public enum enumCssCuerpo
     {
@@ -70,7 +109,6 @@ namespace MVCSistemaDeElementos.Descriptores
         Contenedor,
         Navegador
     }
-
 
     public enum enumCssNavegadorEnMnt
     {
@@ -124,7 +162,9 @@ namespace MVCSistemaDeElementos.Descriptores
         Check,
         Archivo,
         SelectorArchivo,
-        VisorDatosArchivo
+        InfoArchivo,
+        ContenedorOpcion,
+        Menu
     }
 
     public enum enumCssControlesDto
@@ -190,7 +230,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesFormulario.Check: return "formulario-check";
                 case enumCssControlesFormulario.Archivo: return "formulario-archivo";
                 case enumCssControlesFormulario.SelectorArchivo: return "formulario-selector-archivo";
-                case enumCssControlesFormulario.VisorDatosArchivo: return "formulario-visor-datos-archivo";
+                case enumCssControlesFormulario.InfoArchivo: return "formulario-visor-datos-archivo";
+                case enumCssControlesFormulario.ContenedorOpcion: return "formulario-contenedor-opcion";
+                case enumCssControlesFormulario.Menu: return "formulario-menu";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
         }
@@ -378,9 +420,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (clase)
             {
-                case enumCssOpcionMenu.DeElemento: return "de-elemento";
-                case enumCssOpcionMenu.DeVista: return "de-vista";
-                case enumCssOpcionMenu.Basico: return "basico";
+                case enumCssOpcionMenu.DeElemento: return "opcion-menu-de-elemento";
+                case enumCssOpcionMenu.DeVista: return "opcion-menu-de-vista";
+                case enumCssOpcionMenu.Basico: return "opcion-menu-basica";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

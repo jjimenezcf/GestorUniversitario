@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDeRol(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(RolesDeUnPermisoDto.IdPermiso));
             var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl());
-            var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", enumModoDeAccesoDeDatos.Gestor,enumCssOpcionMenu.DeVista);
+            var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", enumModoDeAccesoDeDatos.Gestor,enumCssOpcionMenu.DeVista, "Seleccionar los roles donde incluir el permiso");
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt
@@ -37,7 +37,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<PuestosDeUnRolDto>.NombreMnt
                 , nombreOpcion: "Puestos"
                 , propiedadQueRestringe: nameof(PuestosDeUnRolDto.IdRol)
-                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol));
+                , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol)
+                , ayuda: "Incluir el rol a los puestos seleccionados");
         }
 
 

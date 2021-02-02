@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
             var relacionarPuestos = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestosDeUnUsuarioDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Puestos", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeVista);
+            var opcion = new OpcionDeMenu<PuestosDeUnUsuarioDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Puestos", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeVista, "Seleccionar los puestos de un usuario");
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt
@@ -38,7 +38,8 @@ namespace MVCSistemaDeElementos.Descriptores
                 , navegarAlCrud: DescriptorDeMantenimiento<RolesDeUnPuestoDto>.NombreMnt
                 , nombreOpcion: "Roles"
                 , propiedadQueRestringe: nameof(PuestosDeUnUsuarioDto.IdPuesto)
-                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
+                , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto)
+                , ayuda: "Añadir roles al puesto seleccionado");
         }
 
 
