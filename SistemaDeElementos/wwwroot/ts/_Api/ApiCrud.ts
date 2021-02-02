@@ -27,12 +27,7 @@
     }
 
     export function AlmacenarValorDeListaDinamica(input: HTMLInputElement, valor: number) {
-        let idGuardarEn: string = input.getAttribute(atListasDinamicasDto.guardarEn);
-        //if (!IsNullOrEmpty(idGuardarEn)) {
-        //    let guardarEn: HTMLInputElement = document.getElementById(idGuardarEn) as HTMLInputElement;
-        //    guardarEn.value = valor.toString();
-        //}
-        input.setAttribute(atListasDinamicas.idSeleccionado, valor.toString());
+        input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
         if (Numero(valor) === 0)
             input.value = "";
     }
