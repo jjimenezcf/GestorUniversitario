@@ -73,13 +73,43 @@
         img.onerror = ErrorAlVisializar;
     };
 
-    export function SeleccionarArchivo(idSelector: string) {
+    export function SeleccionarImagen(idSelector: string) {
         let inputFile: HTMLDivElement = document.getElementById(idSelector) as HTMLDivElement;
         if (inputFile) {
             inputFile.click();
         }
     }
 
+    export function MostrarArchivo(idSelectorDeArchivo: string, idDatosArchivo) {
+
+        BlanquearMensaje();
+        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
+        let ficheros = htmlFicheros.files;
+
+        let filePath: string = ficheros[0].name;
+        let extensiones: string = htmlFicheros.getAttribute(atArchivo.extensionesValidas);
+        let limite: number = Numero(htmlFicheros.getAttribute(atArchivo.limiteEnByte));
+
+        var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+        if (extensiones.indexOf(ext) < 0) {
+            Mensaje(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
+            return;
+        }
+        if (limite > 0 && limite < ficheros[0].size) {
+            Mensaje(TipoMensaje.Error, `Tamaño del fichero demasiado grande, el límite es ${limite} bytes`);
+            return;
+        }
+
+        let htmlDatos: HTMLInputElement = document.getElementById(idDatosArchivo) as HTMLInputElement;
+        htmlDatos.value = `${filePath} (${ficheros[0].size} bytes, ${ficheros[0].type} )`
+    };
+
+    export function SeleccionarArchivo(idSelector: string) {
+        let inputFile: HTMLDivElement = document.getElementById(idSelector) as HTMLDivElement;
+        if (inputFile) {
+            inputFile.click();
+        }
+    }
     export function InicializarCanvases(panel: HTMLDivElement) {
         let canvases: NodeListOf<HTMLCanvasElement> = panel.querySelectorAll("canvas") as NodeListOf<HTMLCanvasElement>;
         canvases.forEach((canvas) => { canvas.width = canvas.width; });

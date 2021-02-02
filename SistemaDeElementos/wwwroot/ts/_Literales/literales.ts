@@ -105,6 +105,7 @@ const atArchivo = {
     barra: "barra-vinculada",
     rutaDestino: "ruta-destino",
     extensionesValidas: "accept",
+    limiteEnByte: "limite-en-byte",
     url: "src"
 };
 

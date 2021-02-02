@@ -109,12 +109,12 @@ namespace MVCSistemaDeElementos.Descriptores
                         <td class = ¨{Css.Render(enumCssFormulario.columnaLabel)}¨>
                            <a id=¨{control.IdHtmlSelector}¨ 
                               class=¨{Css.Render(enumCssControlesFormulario.SelectorArchivo)}¨ 
-                              href=¨javascript:ApiDeArchivos.SeleccionarUnArchivo('{control.IdHtml}','{control.IdHtmlNombre}')¨>
+                              href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{control.IdHtml}')¨>
                               {control.Etiqueta}
                            </a>
                         </td>
                         <td class = ¨{Css.Render(enumCssFormulario.columnaControl)}¨>
-                           {control.RenderArchivo("*.csv")}
+                           {control.RenderArchivo()}
                         </td>";
             return htmlfilaArchivo;
         }

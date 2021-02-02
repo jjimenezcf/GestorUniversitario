@@ -222,7 +222,7 @@ namespace MVCSistemaDeElementos.Descriptores
               <table class=¨{Css.Render(enumCssControlesDto.TablaDeArchivo)}¨>
                  <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>        
-                      <a id=¨{descriptorControl.IdHtml}.ref¨ href=¨javascript:ApiDeArchivos.SeleccionarArchivo('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
+                      <a id=¨{descriptorControl.IdHtml}.ref¨ href=¨javascript:ApiDeArchivos.SeleccionarImagen('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
                       <input  {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.SelectorDeArchivo))}
                               type=¨file¨ 
                               name=¨fichero¨  
