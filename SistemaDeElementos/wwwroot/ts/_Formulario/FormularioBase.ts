@@ -63,7 +63,7 @@
                 this.Cerrar();
             }
         }
-        public AntesDeAceptar(): boolean {
+        protected AntesDeAceptar(): boolean {
             return true;
         }
 

@@ -105,6 +105,14 @@ const atArchivo = {
     imagen: "imagen-vinculada",
     barra: "barra-vinculada",
     infoArchivo: "info-archivo",
+    estado: "estado-subida",
+    situacion : {
+        subiendo: 'subiendo',
+        subido: 'subido',
+        error: 'error',
+        pendiente: 'pendiente',
+        sinArchivo: 'sin-archivo'
+    },
     rutaDestino: "ruta-destino",
     extensionesValidas: "accept",
     limiteEnByte: "limite-en-byte",

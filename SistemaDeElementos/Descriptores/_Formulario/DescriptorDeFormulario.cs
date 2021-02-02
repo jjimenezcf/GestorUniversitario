@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Id = idHtml;
             Titulo = titulo;
-            Controlador = controlador;
+            Controlador = controlador.Replace("Controller","");
             Vista = vista;
             RutaVista = ruta;
 
