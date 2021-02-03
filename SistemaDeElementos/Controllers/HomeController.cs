@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
         public IActionResult Index()
         {
 
-            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest(); 
+            DatosDeConexion.Login = ApiController.ObtenerUsuarioDeLaRequest(HttpContext); 
             ViewBag.DatosDeConexion = DatosDeConexion;
             return View();
         }

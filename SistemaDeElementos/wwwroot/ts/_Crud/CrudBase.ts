@@ -62,9 +62,9 @@
             }
         }
 
-        protected InicializarCanvases(panel: HTMLDivElement) {
-            let canvases: NodeListOf<HTMLCanvasElement> = panel.querySelectorAll("canvas") as NodeListOf<HTMLCanvasElement>;
-            canvases.forEach((canvas) => { canvas.width = canvas.width; });
+        protected InicializarArchivos(panel: HTMLDivElement) {
+            let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+             archivos.forEach((archivo) => { ApiDeArchivos.BlanquearArchivo(archivo); });
         }
 
 

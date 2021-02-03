@@ -11,11 +11,12 @@ namespace MVCSistemaDeElementos.Descriptores
         public string IdHtmlNombre => $"{IdHtml}.nombre";
         public string IdHtmlSelector => $"{IdHtml}.ref";
         public string IdHtmlBarra => $"{IdHtml}.barra";
+        public string IdHtmlContenedorBarra => $"{IdHtml}.contenedor.barra";
 
         public int LimiteEnByte { get; set; } = 0;
         public string ExtensionesValidas { get; }
 
-        public ControlDeArchivo(ContenedorDeBloques padre, string id, string etiqueta, string ayuda, string extensionesValidas = "*.*", int limiteEnByte = 0)
+        public ControlDeArchivo(ContenedorDeBloques padre, string id, string etiqueta, string ayuda, string extensionesValidas, int limiteEnByte = 0)
             : base(padre, id, enumTipoControl.Archivo, etiqueta, enumCssControlesFormulario.Archivo, ayuda)
         {
             ExtensionesValidas = extensionesValidas;
@@ -42,8 +43,10 @@ namespace MVCSistemaDeElementos.Descriptores
                                        , $"type = ¨{enumInputType.text.Render()}¨")}
                                        readonly>
                                    </input>
-                                   <div id = ¨{IdHtmlBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨ style=¨display: none;¨>
-                                       <span></span>
+                                   <div id = ¨{IdHtmlContenedorBarra}¨ class=¨{Css.Render(enumCssControlesFormulario.InfoArchivo)}¨ style=¨display: none;¨>
+                                      <div id = ¨{IdHtmlBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨ contenedor-barra = ¨{IdHtmlContenedorBarra}¨ style=¨display: none;¨>
+                                         <span></span>
+                                      </div>
                                    </div>
                                  </form>
                                 ";
@@ -51,4 +54,3 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 }
-

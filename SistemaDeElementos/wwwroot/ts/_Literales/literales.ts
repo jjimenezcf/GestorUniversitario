@@ -104,6 +104,7 @@ const atArchivo = {
     canvas: "canvas-vinculado",
     imagen: "imagen-vinculada",
     barra: "barra-vinculada",
+    contenedorBarra: "contenedor-barra",
     infoArchivo: "info-archivo",
     estado: "estado-subida",
     situacion : {

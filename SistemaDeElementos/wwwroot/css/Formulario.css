@@ -130,3 +130,9 @@
     align-items: center;
     height: 100%;
 }
+
+.formulario-contenedor-barra {
+    margin-left: 10px;
+    padding-top: 10px;
+    height: calc(1.5em + .75rem + 2px);
+}

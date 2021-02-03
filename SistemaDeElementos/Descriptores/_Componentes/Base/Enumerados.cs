@@ -164,6 +164,7 @@ namespace MVCSistemaDeElementos.Descriptores
         SelectorArchivo,
         InfoArchivo,
         ContenedorOpcion,
+        ContenedorBarra,
         Menu
     }
 
@@ -184,7 +185,7 @@ namespace MVCSistemaDeElementos.Descriptores
         Etiqueta,
         ListaDeElementos,
         ListaDinamica,
-        SelectorDeArchivo,
+        SelectorDeImagen,
         BarraAzulArchivo,
         EditorRestrictor
     }
@@ -233,6 +234,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesFormulario.InfoArchivo: return "formulario-visor-datos-archivo";
                 case enumCssControlesFormulario.ContenedorOpcion: return "formulario-contenedor-opcion";
                 case enumCssControlesFormulario.Menu: return "formulario-menu";
+                case enumCssControlesFormulario.ContenedorBarra: return "formulario-contenedor-barra";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
         }
@@ -276,7 +278,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.TablaDeArchivo: return "tabla-archivo-subir";
                 case enumCssControlesDto.FilaDeArchivo: return "tr-archivo-subir";
                 case enumCssControlesDto.ColumnaDeArchivo: return "td-archivo-subir";
-                case enumCssControlesDto.SelectorDeArchivo: return "selector-de-archivo";
+                case enumCssControlesDto.SelectorDeImagen: return "selector-de-archivo";
                 case enumCssControlesDto.BarraAzulArchivo: return "barra-azul";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");

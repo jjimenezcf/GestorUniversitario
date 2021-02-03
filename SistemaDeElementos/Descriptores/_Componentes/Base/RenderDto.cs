@@ -129,10 +129,10 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderListaDinamica(tabla, descriptorControl, ancho);
                     break;
                 case enumTipoControl.Archivo:
-                    htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderSelectorImagen(tabla, descriptorControl, ancho);
                     break;
                 case enumTipoControl.UrlDeArchivo:
-                    htmdDescriptorControl = RenderSelectorDeArchivo(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderSelectorImagen(tabla, descriptorControl, ancho);
                     break;
                 case enumTipoControl.Check:
                     htmdDescriptorControl = RenderCheck(tabla, descriptorControl);
@@ -212,13 +212,14 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlEditor;
         }
 
-        private static string RenderSelectorDeArchivo(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
+        private static string RenderSelectorImagen(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             var htmlContenedor = RenderContenedorDto(descriptorControl, ancho, Css.Render(enumCssControlesDto.ContenedorArchivo));
-            var idHtmBarra = $"barra-{descriptorControl.IdHtml}";
-            var idHtmImg = $"img-{descriptorControl.IdHtml}";
-            var idHtmCanva = $"canvas-{descriptorControl.IdHtml}";
+            var idHtmlBarra = $"barra-{descriptorControl.IdHtml}";
+            var idHtmlImg = $"img-{descriptorControl.IdHtml}";
+            var idHtmlCanva = $"canvas-{descriptorControl.IdHtml}";
+            var idHtmlInfoArchivo = $"nombre-{descriptorControl.IdHtml}";
 
             var htmlArchivo = @$"
             <form class=¨{Css.Render(enumCssControlesDto.FormDeArchivo)}¨ method=¨post¨ enctype=¨multipart/form-data¨>
@@ -226,34 +227,36 @@ namespace MVCSistemaDeElementos.Descriptores
                  <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>        
                       <a id=¨{descriptorControl.IdHtml}.ref¨ href=¨javascript:ApiDeArchivos.SeleccionarImagen('{descriptorControl.IdHtml}')¨>{atributos.Ayuda}</a>
-                      <input  {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.SelectorDeArchivo))}
+                      <input  {RenderAtributosComunes(tabla, descriptorControl, Css.Render(enumCssControlesDto.SelectorDeImagen))}
                               type=¨file¨ 
                               name=¨fichero¨  
                               style=¨display: none;¨
                               accept=¨{atributos.ExtensionesValidas}¨
                               ruta-destino=¨{atributos.RutaDestino}¨
-                              canvas-vinculado = ¨{idHtmCanva}¨  
-                              imagen-vinculada = ¨{idHtmImg}¨   
-                              barra-vinculada = ¨{idHtmBarra}¨  
+                              canvas-vinculado = ¨{idHtmlCanva}¨  
+                              imagen-vinculada = ¨{idHtmlImg}¨   
+                              barra-vinculada = ¨{idHtmlBarra}¨  
+                              info-archivo=¨{idHtmlInfoArchivo}¨
                               placeholder =¨{atributos.Ayuda}¨
-                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','{idHtmCanva}','{idHtmBarra}')¨ />
+                              onChange=¨ApiDeArchivos.MostrarCanvas('{tabla.Controlador}','{descriptorControl.IdHtml}','{idHtmlCanva}')¨ />
                   </td>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
-                      <div id = ¨{idHtmBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨>
+                      <div id = ¨{idHtmlBarra}¨ class=¨{Css.Render(enumCssControlesDto.BarraAzulArchivo)}¨>
                           <span></span>
                       </div>
                    </td>
                  </tr>
                  <tr class=¨{Css.Render(enumCssControlesDto.FilaDeArchivo)}¨>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
-                      <canvas id=¨{idHtmCanva}¨></canvas>
+                      <canvas id=¨{idHtmlCanva}¨></canvas>
                    </td>
                    <td class=¨{Css.Render(enumCssControlesDto.ColumnaDeArchivo)}¨>
                        <div style=¨display: none;¨>
-                           <img id=¨{idHtmImg}¨
+                           <img id=¨{idHtmlImg}¨
                                     tipo=¨{enumTipoControl.VisorDeArchivo.Render()}¨  
                                     propiedad=¨{(atributos.TipoDeControl == enumTipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
                                     src=¨¨>
+                           <input id=¨{idHtmlInfoArchivo}¨> </input>
                        </div>
                    </td>
                  </tr>
@@ -263,6 +266,16 @@ namespace MVCSistemaDeElementos.Descriptores
             ";
             return htmlContenedor.Replace("controlParaRenderizar", htmlArchivo);
         }
+        /*
+         * 
+                                   <input id=¨{}¨
+                                       , enumTipoControl.Editor
+                                       , enumCssControlesFormulario.InfoArchivo
+                                       , ayuda: ""
+                                       , type = ¨{enumInputType.text.Render()}¨)}
+                                       readonly>
+                                   </input>
+         */
 
         private static string RenderContenedorDto(DescriptorDeControlDeLaTabla descriptorControl, double ancho, string cssClaseContenedor)
         {

@@ -81,82 +81,9 @@ namespace MVCSistemaDeElementos.Controllers
         [HttpPost]
         public JsonResult epSubirArchivo(IFormFile fichero, string rutaDestino, string extensionesValidas)
         {
-            var r = new Resultado();
-
-            try
-            {
-                if (fichero == null)
-                    GestorDeErrores.Emitir("No se ha identificado el fichero");
-
-                CumplimentarDatosDeUsuarioDeConexion();
-                ValidarExtension(fichero, extensionesValidas);
-                var rutaBase = @"..\SistemaDeElementos\wwwroot";
-                var rutaDeDescarga = $@"{rutaBase}\Archivos";
-                var rutaConFichero = $@"{rutaDeDescarga}\{fichero.FileName}";
-
-                using (var stream = new FileStream(rutaConFichero, FileMode.Create))
-                {
-                    fichero.CopyTo(stream);
-                }
-
-                if (rutaDestino.IsNullOrEmpty())
-                {
-                    r.Datos = GestoresDeNegocio.Archivos.GestorDocumental.SubirArchivo(GestorDeElementos.Contexto, rutaConFichero, GestorDeElementos.Mapeador);
-                }
-                else
-                {
-                    rutaDestino = $@"{rutaBase}{rutaDestino.Replace("/", @"\")}";
-
-                    if (!Directory.Exists(rutaDestino))
-                        Directory.CreateDirectory(rutaDestino);
-
-                    if (!System.IO.File.Exists($@"{rutaDestino}\{fichero.FileName}"))
-                        System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{fichero.FileName}");
-
-                    r.Datos = fichero.FileName;
-                }
-
-                r.Estado = enumEstadoPeticion.Ok;
-                r.Mensaje = "fichero subido";
-            }
-            catch (Exception e)
-            {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
-                r.Mensaje = $"No se ha podido subir el fichero. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
-            }
-
-
-            return new JsonResult(r);
-
+            return SubirArchivo(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext, fichero, rutaDestino, extensionesValidas);
         }
 
-        private void ValidarExtension(IFormFile fichero, string extensiones)
-        {
-            if (extensiones.IsNullOrEmpty() || extensiones.EndsWith("*"))
-                return;
-
-            if (EsImagen(fichero) && (extensiones.Contains("png")
-                                   || extensiones.Contains("jpg")
-                                   || extensiones.Contains("svg")
-                                   ))
-                return;
-
-            throw new Exception($"Para el tipo de fichero {fichero.ContentType} sólo se aceptan '{extensiones}'");
-
-        }
-
-        private bool EsImagen(IFormFile fichero)
-        {
-            return fichero.ContentType == "image/jpeg"
-                || fichero.ContentType == "image/png"
-                || fichero.ContentType == "image/gif"
-                || fichero.ContentType == "image/jpg"
-                || fichero.ContentType == "image/vnd.Microsoft.icon"
-                || fichero.ContentType == "image/x-icon"
-                || fichero.ContentType == "image/vnd.djvu"
-                || fichero.ContentType == "image/svg+xml";
-        }
         //END-POINT: Desde CrudCreacion.ts
         public JsonResult epCrearElemento(string elementoJson)
         {
@@ -164,7 +91,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
                 r.Estado = enumEstadoPeticion.Ok;
@@ -187,7 +114,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
                 r.Estado = enumEstadoPeticion.Ok;
@@ -211,7 +138,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var opcionesDeMapeo = new Dictionary<string, object>();
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
 
@@ -245,7 +172,7 @@ namespace MVCSistemaDeElementos.Controllers
             var tran = GestorDeElementos.IniciarTransaccion();
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 foreach (var id in listaIds)
                 {
@@ -281,7 +208,7 @@ namespace MVCSistemaDeElementos.Controllers
             int can = cantidad.Entero();
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var opcionesDeMapeo = new Dictionary<string, object>();
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
                 var elementos = Leer(pos, can, filtro, orden, opcionesDeMapeo);
@@ -343,7 +270,7 @@ namespace MVCSistemaDeElementos.Controllers
             List<TElemento> elementos;
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var opcionesDeMapeo = new Dictionary<string, object>();
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
                 elementos = Leer(0, 2, filtro, null, opcionesDeMapeo).ToList();
@@ -373,7 +300,7 @@ namespace MVCSistemaDeElementos.Controllers
             dynamic elementos;
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 elementos = CargarLista(claseElemento);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
@@ -397,7 +324,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ClausulaDeFiltrado clausula = filtro == null ? new ClausulaDeFiltrado() : JsonConvert.DeserializeObject<ClausulaDeFiltrado>(filtro);
 
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 elementos = CargaDinamica(claseElemento, posicion, cantidad, clausula);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
@@ -425,7 +352,7 @@ namespace MVCSistemaDeElementos.Controllers
             var r = new Resultado();
             try
             {
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 List<int> listaIds = JsonConvert.DeserializeObject<List<int>>(idsJson);
                 var relacionados = 0;
                 var mensajeInformativo = "";
@@ -464,7 +391,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio));
 
                 r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
@@ -487,7 +414,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
-                CumplimentarDatosDeUsuarioDeConexion();
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio), id);
 
                 r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
@@ -516,7 +443,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
-            CumplimentarDatosDeUsuarioDeConexion();
+            ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador,HttpContext);
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
@@ -610,14 +537,6 @@ namespace MVCSistemaDeElementos.Controllers
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
         }
 
-        private void CumplimentarDatosDeUsuarioDeConexion()
-        {
-            DatosDeConexion.Login = ObtenerUsuarioDeLaRequest();
-            var gestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            var usuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
-            DatosDeConexion.IdUsuario = usuario.Id;
-            DatosDeConexion.EsAdministrador = usuario.EsAdministrador;
-        }
 
 
         //END-POINT: Desde ModalSeleccion.ts

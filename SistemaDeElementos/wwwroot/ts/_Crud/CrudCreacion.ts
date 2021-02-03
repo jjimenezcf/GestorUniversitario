@@ -75,7 +75,7 @@
         private InicializarPanel() {
             this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
             this.InicializarListasDinamicas(this.PanelDeCrear);
-            this.InicializarCanvases(this.PanelDeCrear);
+            this.InicializarArchivos(this.PanelDeCrear);
         }
 
         private Crear() {
