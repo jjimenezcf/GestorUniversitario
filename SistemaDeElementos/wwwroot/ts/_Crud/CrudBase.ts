@@ -64,7 +64,7 @@
 
         protected InicializarArchivos(panel: HTMLDivElement) {
             let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
-             archivos.forEach((archivo) => { ApiDeArchivos.BlanquearArchivo(archivo); });
+            archivos.forEach((archivo) => { ApiDeArchivos.BlanquearArchivo(archivo, true); });
         }
 
 

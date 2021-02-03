@@ -241,7 +241,7 @@ namespace ApiCrud {
     function BlanquearArchivos(panel: HTMLDivElement) {
         let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`${atControl.tipo}[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < archivos.length; i++) {
-            ApiDeArchivos.BlanquearArchivo(archivos[i]);
+            ApiDeArchivos.BlanquearArchivo(archivos[i], true);
         }
     }
 }

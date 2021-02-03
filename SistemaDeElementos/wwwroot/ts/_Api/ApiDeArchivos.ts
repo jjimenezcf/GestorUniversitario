@@ -14,7 +14,7 @@
 
     }
 
-    export function BlanquearArchivo(archivo: HTMLInputElement) {
+    export function BlanquearArchivo(archivo: HTMLInputElement, blanquearImagen: boolean) {
         archivo.setAttribute(atArchivo.id, '0');
         archivo.value = "";
         archivo.removeAttribute(atArchivo.id);
@@ -23,7 +23,7 @@
         archivo.classList.add(ClaseCss.crtlValido);
         InicializarBarra(archivo);
         BlanquearInfoArchivo(archivo);
-        if (EsImagen(archivo)) {
+        if (EsImagen(archivo) && blanquearImagen) {
             BlanquearImagen(archivo);
         }
     }
@@ -69,7 +69,7 @@
         }
 
         function ErrorAlVisializar() {
-            ApiDeArchivos.BlanquearArchivo(htmlFicheros);
+            ApiDeArchivos.BlanquearArchivo(htmlFicheros, true);
             Mensaje(TipoMensaje.Error, "Fichero no válido para mostrar en un Canvas");
         }
 
@@ -192,7 +192,7 @@
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
         let archivo: HTMLInputElement = datos.Archivo();
         CambiarEstado(archivo, atArchivo.situacion.subido);
-        BlanquearArchivo(archivo);
+        BlanquearArchivo(archivo, false);
         VisualizarBarraDeOk(archivo);
         let tipo: string = archivo.getAttribute(atControl.tipo);
         if (tipo === TipoControl.Archivo)
@@ -205,7 +205,7 @@
         let datos: DatosPeticionSubirArchivo = peticion.DatosDeEntrada;
         let archivo: HTMLInputElement = datos.Archivo();
         CambiarEstado(archivo, atArchivo.situacion.error);
-        BlanquearArchivo(archivo);
+        BlanquearArchivo(archivo, true);
         VisualizarBarraDeError(archivo);
         Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
     }
