@@ -169,7 +169,7 @@
                 console.log(this.resultado.consola);
 
             if (!IsNullOrEmpty(this.resultado.mensaje))
-                Mensaje(TipoMensaje.Info, this.resultado.mensaje);
+                console.log(TipoMensaje.Info, this.resultado.mensaje);
 
             if (this.TrasLaPeticion)
                 try {

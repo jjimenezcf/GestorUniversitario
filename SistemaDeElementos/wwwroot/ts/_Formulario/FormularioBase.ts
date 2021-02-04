@@ -11,8 +11,13 @@
             return this.Estado.Obtener(Sesion.paginaActual);
         }
 
-        protected get CuerpoDelFormulario(): HTMLDivElement {           
-            return document.getElementById(`datos-${this._idFormulario}`) as HTMLDivElement
+        private _mensajes: EntornoSe.AlmacenDeMensajes;
+        public get Mensajes(): EntornoSe.AlmacenDeMensajes {
+            return this._mensajes;
+        }
+
+        protected get CuerpoDelFormulario(): HTMLDivElement {
+            return document.getElementById(`datos-${this._idFormulario}`) as HTMLDivElement;
         }
 
         private _estado: HistorialSe.EstadoPagina = undefined;
@@ -37,7 +42,8 @@
         constructor(idFormulario: string) {
 
             this._idFormulario = idFormulario;
-
+            this._mensajes = new EntornoSe.AlmacenDeMensajes(this._idFormulario);
+            this.Mensajes.Info("Creado");
         }
 
         public Inicializar(): void {
@@ -46,10 +52,10 @@
             else
                 this._estado = new HistorialSe.EstadoPagina(this._idFormulario);
 
-            this.CuerpoDelFormulario.style.overflowY = "scroll"
+            this.CuerpoDelFormulario.style.overflowY = "scroll";
         }
 
-        public Cerrar() : void {
+        public Cerrar(): void {
             if (this.AntesDeCerrar()) {
                 window.history.back();
             }

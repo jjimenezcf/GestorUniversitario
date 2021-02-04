@@ -11,7 +11,6 @@
         constructor(idArchivo: string) {
             this._idArchivo = idArchivo;
         }
-
     }
 
     export function BlanquearArchivo(archivo: HTMLInputElement, blanquearImagen: boolean) {
@@ -29,19 +28,27 @@
     }
 
 
-    export function SubirArchivos(htmlPanel: HTMLDivElement): void {
+    export function PrometoSubirLosArchivos(htmlPanel: HTMLDivElement): Promise<string[]> {
+
+        const promesas: Promise<string>[] = [];
+
         let archivos: NodeListOf<HTMLInputElement> = htmlPanel.querySelectorAll(`[${atControl.tipo}=${TipoControl.Archivo}]`) as NodeListOf<HTMLInputElement>;
         BlanquearEstado(archivos);
+
         for (let i: number = 0; i < archivos.length; i++) {
             if (archivos[i].files.length > 0) {
                 let idArchivo: string = archivos[i].getAttribute(literal.id);
                 let controlador: string = archivos[i].getAttribute(atArchivo.controlador);
-                SubirArchivo(controlador, idArchivo);
+
+                let promesa: Promise<string> = PrometoSubirElArchivo(controlador, idArchivo)
+
+                promesas.push(promesa);
             }
             else {
                 CambiarEstado(archivos[i], atArchivo.situacion.sinArchivo);
             }
         }
+        return Promise.all(promesas);
     }
 
     function BlanquearEstado(archivos: NodeListOf<HTMLInputElement>) {
@@ -57,7 +64,7 @@
         }
     }
 
-    export function MostrarCanvas(controlador: string, idSelectorDeArchivo: string, idCanva: string) {
+    export function MostrarCanvas(controlador: string, idArchivo: string, idCanva: string) {
 
         function visializarImagen() {
             let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
@@ -65,21 +72,26 @@
             htmlCanvas.height = 100;
             var canvas = htmlCanvas.getContext('2d');
             canvas.drawImage(img, 0, 0, 100, 100);
-            SubirArchivo(controlador, idSelectorDeArchivo);
+            PrometoSubirElArchivo(controlador, idArchivo)
+                .then()
+                .catch(() => {
+                    let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement
+                    BlanquearImagen(archivo);
+                });
         }
 
         function ErrorAlVisializar() {
-            ApiDeArchivos.BlanquearArchivo(htmlFicheros, true);
+            ApiDeArchivos.BlanquearArchivo(archivo, true);
             Mensaje(TipoMensaje.Error, "Fichero no válido para mostrar en un Canvas");
         }
 
         BlanquearMensaje();
-        let htmlFicheros: HTMLInputElement = document.getElementById(idSelectorDeArchivo) as HTMLInputElement;
-        InicializarBarra(htmlFicheros);
-        let ficheros = htmlFicheros.files;
+        let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
+        InicializarBarra(archivo);
+        let ficheros = archivo.files;
 
         let filePath: string = ficheros[0].name;
-        let extensiones: string = htmlFicheros.getAttribute(atArchivo.extensionesValidas);
+        let extensiones: string = archivo.getAttribute(atArchivo.extensionesValidas);
 
         var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
         if (extensiones.indexOf(ext) < 0) {
@@ -101,12 +113,17 @@
         }
     }
 
-    export function MostrarArchivo(idArchivo: string, idInfoArchivo: string) {
+    export function MostrarArchivo(idArchivo: string, idInfoArchivo: string): void {
 
         BlanquearMensaje();
         let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
-        InicializarBarra(archivo);
+        if (archivo.files === undefined || archivo.files.length === 0 || IsNullOrEmpty(archivo.files[0].name)) {
+            BlanquearInfoArchivo(archivo);
+            return;
+        }
+
         let ficheros = archivo.files;
+        InicializarBarra(archivo);
 
         let filePath: string = ficheros[0].name;
         let extensiones: string = archivo.getAttribute(atArchivo.extensionesValidas);
@@ -127,35 +144,46 @@
         infoArchivo.value = `${filePath} (${ficheros[0].size} bytes, ${ficheros[0].type} )`;
     };
 
-    function SubirArchivo(controlador: string, idArchivo: string) {
+    function PrometoSubirElArchivo(controlador: string, idArchivo: string): Promise<string> {
 
-        let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
-        let ficheros = archivo.files;
+        return new Promise((resolve, reject) => {
 
-        let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
+            let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
+            let ficheros = archivo.files;
 
-        let a = new ApiDeAjax.DescriptorAjax(this
-            , Ajax.EndPoint.SubirArchivo
-            , new DatosPeticionSubirArchivo(idArchivo)
-            , url
-            , ApiDeAjax.TipoPeticion.Asincrona
-            , ApiDeAjax.ModoPeticion.Post
-            , TrasSubirElArchivo
-            , SiHayErrorAlSubirElArchivo
-        );
+            let url: string = `/${controlador}/${Ajax.EndPoint.SubirArchivo}`;
 
-        let datosPost = new FormData();
-        datosPost.append(Ajax.Param.fichero, ficheros[0]);
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.SubirArchivo
+                , new DatosPeticionSubirArchivo(idArchivo)
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Post
+                , (peticion) => {
+                    TrasSubirElArchivo(peticion);
+                    resolve(`el archivo ${idArchivo} ha subido`);
+                }
+                , (peticion) => {
+                    SiHayErrorAlSubirElArchivo(peticion);
+                    let etiqueta: HTMLElement = document.getElementById(`${idArchivo}.ref`);
 
-        let rutaDestino: string = archivo.getAttribute(atArchivo.rutaDestino);
-        datosPost.append(Ajax.Param.rutaDestino, IsNullOrEmpty(rutaDestino) ? '' : rutaDestino);
+                    reject(`el archivo '${etiqueta !== null && etiqueta !== undefined ? etiqueta.innerText : idArchivo}' no se ha podido subir, el trabajo no será sometido`);
+                }
+            );
 
-        let extensionesValidas: string = archivo.getAttribute(atArchivo.extensionesValidas);
-        datosPost.append(Ajax.Param.extensiones, extensionesValidas);
-        a.DatosPost = datosPost;
-        DefinirBarraDeProceso(a, archivo);
-        CambiarEstado(archivo, atArchivo.situacion.subiendo);
-        a.Ejecutar();
+            let datosPost = new FormData();
+            datosPost.append(Ajax.Param.fichero, ficheros[0]);
+
+            let rutaDestino: string = archivo.getAttribute(atArchivo.rutaDestino);
+            datosPost.append(Ajax.Param.rutaDestino, IsNullOrEmpty(rutaDestino) ? '' : rutaDestino);
+
+            let extensionesValidas: string = archivo.getAttribute(atArchivo.extensionesValidas);
+            datosPost.append(Ajax.Param.extensiones, extensionesValidas);
+            a.DatosPost = datosPost;
+            DefinirBarraDeProceso(a, archivo);
+            CambiarEstado(archivo, atArchivo.situacion.subiendo);
+            a.Ejecutar();
+        });
     }
 
     function DefinirBarraDeProceso(descriptor: ApiDeAjax.DescriptorAjax, archivo: HTMLInputElement) {
@@ -207,7 +235,7 @@
         CambiarEstado(archivo, atArchivo.situacion.error);
         BlanquearArchivo(archivo, true);
         VisualizarBarraDeError(archivo);
-        Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+        //Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
     }
 
     function BlanquearImagen(archivo: HTMLInputElement): void {
