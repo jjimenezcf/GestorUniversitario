@@ -1,5 +1,27 @@
 ﻿module EntornoSe {
 
+    export class AlmacenDeMensajes {
+        private _id: string
+        private _errores: string[] = [];
+        private _mensajes: string[] = []
+
+        constructor(id: string) {
+            this._id = id;
+        }
+
+        public Error(mensaje: string, mensajeDeConsola?: string): number {
+            Mensaje(TipoMensaje.Error, mensaje, mensajeDeConsola);
+            this._errores.push(mensaje);
+            return this._errores.length;
+        }
+
+        public Info(mensaje: string, mensajeDeConsola?: string): number {
+            Mensaje(TipoMensaje.Info, mensaje, mensajeDeConsola);
+            this._mensajes.push(mensaje);
+            return this._mensajes.length;
+        }
+    }
+
     export let Historial: HistorialSe.HistorialDeNavegacion = undefined;
 
     export function IniciarEntorno() {
