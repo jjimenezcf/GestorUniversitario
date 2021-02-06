@@ -9,9 +9,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePermisosDeUnRol : DescriptorDeCrud<PermisosDeUnRolDto>
     {
         public DescriptorDePermisosDeUnRol(ModoDescriptor modo)
-        : base(nameof(PermisosDeUnRolController), nameof(PermisosDeUnRolController.CrudPermisosDeUnRol), modo)
+        : base(nameof(PermisosDeUnRolController), nameof(PermisosDeUnRolController.CrudPermisosDeUnRol), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PermisosDeUnRolDto>(bloque: fltGeneral
                   , etiqueta: "Rol"
@@ -41,7 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/PermisosDeUnRol.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/PermisosDeUnRol.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePermisosDeUnRol('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

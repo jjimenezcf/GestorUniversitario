@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210206094532_añadir columna parametros")]
+    partial class añadircolumnaparametros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -862,54 +864,6 @@ namespace Migraciones.Migrations
                     b.ToTable("TRABAJO", "TRABAJO");
                 });
 
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoErrorDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Error")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("ERROR");
-
-                    b.Property<int>("idTrabajo")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_TRABAJO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idTrabajo");
-
-                    b.ToTable("ERROR", "TRABAJO");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoLogDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Log")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("LOG");
-
-                    b.Property<int>("idTrabajo")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_TRABAJO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idTrabajo");
-
-                    b.ToTable("LOG", "TRABAJO");
-                });
-
             modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajosDeUsuarioDtm", b =>
                 {
                     b.Property<int>("Id")
@@ -1218,30 +1172,6 @@ namespace Migraciones.Migrations
                     b.Navigation("Ejecutor");
 
                     b.Navigation("InformarA");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoErrorDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.TrabajosSometidos.TrabajoDtm", "Trabajo")
-                        .WithMany()
-                        .HasForeignKey("idTrabajo")
-                        .HasConstraintName("FK_ERROR_DE_TRABAJO_ID_TRABAJO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Trabajo");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoLogDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.TrabajosSometidos.TrabajoDtm", "Trabajo")
-                        .WithMany()
-                        .HasForeignKey("idTrabajo")
-                        .HasConstraintName("FK_LOG_DE_TRABAJO_ID_TRABAJO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Trabajo");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajosDeUsuarioDtm", b =>

@@ -16,6 +16,7 @@ using AutoMapper;
 using System;
 using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Callejero;
+using GestoresDeNegocio.TrabajosSometidos;
 
 namespace MVCSistemaDeElementos
 {
@@ -87,8 +88,9 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeRolesDeUnPermiso>();
             services.AddScoped<GestorDePermisosDeUnUsuario>();
             services.AddScoped<GestorDePermisosDeUnPuesto>();
-            services.AddScoped<GestorDeNegocio>();
+            services.AddScoped<GestorDeNegocios>();
             services.AddScoped<GestorDePaises>();
+            services.AddScoped<GestorDeTrabajosSometido>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210205184023_añadir trabajos sometipos")]
+    partial class añadirtrabajossometipos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -862,114 +864,6 @@ namespace Migraciones.Migrations
                     b.ToTable("TRABAJO", "TRABAJO");
                 });
 
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoErrorDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Error")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("ERROR");
-
-                    b.Property<int>("idTrabajo")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_TRABAJO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idTrabajo");
-
-                    b.ToTable("ERROR", "TRABAJO");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoLogDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Log")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("LOG");
-
-                    b.Property<int>("idTrabajo")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_TRABAJO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idTrabajo");
-
-                    b.ToTable("LOG", "TRABAJO");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajosDeUsuarioDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("Entrada")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("ENTRADA");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("CHAR(2)")
-                        .HasColumnName("ESTADO");
-
-                    b.Property<DateTime?>("Iniciado")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("INICIADO");
-
-                    b.Property<DateTime>("Panificado")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("PLANIFICADO");
-
-                    b.Property<string>("Parametros")
-                        .HasColumnType("VARCHAR(2000)")
-                        .HasColumnName("PARAMETROS");
-
-                    b.Property<int>("Periodicidad")
-                        .HasColumnType("INT")
-                        .HasColumnName("PERIODICIDAD");
-
-                    b.Property<DateTime?>("Terminado")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("TERMINADO");
-
-                    b.Property<int>("idEjecutor")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_EJECUTOR");
-
-                    b.Property<int>("idSometedor")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_SOMETEDOR");
-
-                    b.Property<int>("idTrabajo")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_TRABAJO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idEjecutor");
-
-                    b.HasIndex("idSometedor");
-
-                    b.HasIndex("idTrabajo");
-
-                    b.ToTable("USUARIO", "TRABAJO");
-                });
-
             modelBuilder.Entity("ServicioDeDatos.Archivos.ArchivoDtm", b =>
                 {
                     b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "UsuarioCreador")
@@ -1206,72 +1100,16 @@ namespace Migraciones.Migrations
                     b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "Ejecutor")
                         .WithMany()
                         .HasForeignKey("IdEjecutor")
-                        .HasConstraintName("FK_TRABAJO_ID_EJECUTOR")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("FK_USUARIO_IDEJECUTOR");
 
                     b.HasOne("ServicioDeDatos.Seguridad.PuestoDtm", "InformarA")
                         .WithMany()
                         .HasForeignKey("IdInformarA")
-                        .HasConstraintName("FK_TRABAJO_ID_INFORMAR_A")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("FK_USUARIO_IDPUESTO");
 
                     b.Navigation("Ejecutor");
 
                     b.Navigation("InformarA");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoErrorDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.TrabajosSometidos.TrabajoDtm", "Trabajo")
-                        .WithMany()
-                        .HasForeignKey("idTrabajo")
-                        .HasConstraintName("FK_ERROR_DE_TRABAJO_ID_TRABAJO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Trabajo");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajoLogDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.TrabajosSometidos.TrabajoDtm", "Trabajo")
-                        .WithMany()
-                        .HasForeignKey("idTrabajo")
-                        .HasConstraintName("FK_LOG_DE_TRABAJO_ID_TRABAJO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Trabajo");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.TrabajosSometidos.TrabajosDeUsuarioDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "Ejecutor")
-                        .WithMany()
-                        .HasForeignKey("idEjecutor")
-                        .HasConstraintName("FK_TRABAJO_DE_USUARIO_ID_EJECUTOR")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "Sometedor")
-                        .WithMany()
-                        .HasForeignKey("idSometedor")
-                        .HasConstraintName("FK_TRABAJO_DE_USUARIO_ID_SOMETEDOR")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ServicioDeDatos.TrabajosSometidos.TrabajoDtm", "Trabajo")
-                        .WithMany()
-                        .HasForeignKey("idTrabajo")
-                        .HasConstraintName("FK_TRABAJO_DE_USUARIO_ID_TRABAJO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Ejecutor");
-
-                    b.Navigation("Sometedor");
-
-                    b.Navigation("Trabajo");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.MenuDtm", b =>

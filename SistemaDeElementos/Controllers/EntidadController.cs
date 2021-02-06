@@ -460,10 +460,10 @@ namespace MVCSistemaDeElementos.Controllers
                     throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de consulta sobre el negocio {Descriptor.Negocio}");
             }
 
-            Descriptor.GestorDeNegocio = GestorDeNegocio.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            Descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
+            var destino = $"{(Descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaBase}/")}{Descriptor.Vista}";
 
             if (!this.ExisteLaVista(destino))
             {

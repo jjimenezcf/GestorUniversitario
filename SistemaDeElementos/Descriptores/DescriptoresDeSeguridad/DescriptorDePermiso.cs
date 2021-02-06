@@ -10,7 +10,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePermiso : DescriptorDeCrud<PermisoDto>
     {
         public DescriptorDePermiso(ModoDescriptor modo)
-        : base(controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo)
+        : base(controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo, "Seguridad")
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {
@@ -55,8 +55,6 @@ namespace MVCSistemaDeElementos.Descriptores
                     , "Añadir roles al permiso seleccionado");
 
             }
-
-            RutaVista = "Seguridad";
         }
 
 
@@ -65,7 +63,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/Permisos.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/Permisos.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePermisos('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

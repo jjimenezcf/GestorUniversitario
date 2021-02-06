@@ -8,9 +8,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePermisosDeUnUsuario : DescriptorDeCrud<PermisosDeUnUsuarioDto>
     {
         public DescriptorDePermisosDeUnUsuario(ModoDescriptor modo)
-        : base(nameof(PermisosDeUnUsuarioController), nameof(PermisosDeUnUsuarioController.CrudPermisosDeUnUsuario), modo)
+        : base(nameof(PermisosDeUnUsuarioController), nameof(PermisosDeUnUsuarioController.CrudPermisosDeUnUsuario), modo, "Entorno")
         {
-            RutaVista = "Entorno";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PermisosDeUnUsuarioDto>(bloque: fltGeneral
                   , etiqueta: "Usuario"
@@ -27,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Entorno/PermisosDeUnUsuario.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/PermisosDeUnUsuario.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDePermisosDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

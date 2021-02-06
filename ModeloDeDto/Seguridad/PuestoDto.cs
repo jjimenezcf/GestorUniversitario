@@ -4,6 +4,8 @@
       , AnchoSeparador = 5)]
     public class PuestoDto : ElementoDto
     {
+        public const string MostrarPuesto = "[Nombre]";
+
         [IUPropiedad(
             Etiqueta = "Puesto",
             Ayuda = "Nombre al puesto de trabajo",

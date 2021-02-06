@@ -74,11 +74,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                                        {checkInternoFlt}
                                                      </div>";
 
-        public static string checkDto = $@"<div class=¨[CssContenedor]¨>
-                                                       <label></label>
-                                                     </div><div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
-                                                       {checkInternoDto}
-                                                     </div>";
+        public static string checkDto = $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                                {checkInternoDto}
+                                           </div>";
 
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {

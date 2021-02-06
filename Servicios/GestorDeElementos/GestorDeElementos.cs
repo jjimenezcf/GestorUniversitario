@@ -744,7 +744,7 @@ namespace GestorDeElementos
 
         private bool NegocioActivo(enumNegocio negocio)
         {
-            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, $"Negocio.GestorDeNegocios");
             var negocioActivo = gestorDeNegocio.GetType().GetMethod("NegocioActivo");
             var estaActivo = (bool)negocioActivo.Invoke(gestorDeNegocio, new object[] { negocio });
             return estaActivo;

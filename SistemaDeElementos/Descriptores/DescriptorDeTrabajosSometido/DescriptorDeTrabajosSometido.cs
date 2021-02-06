@@ -1,16 +1,16 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
-using ModeloDeDto.Negocio;
+using ModeloDeDto.TrabajosSometidos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeNegocio : DescriptorDeCrud<NegocioDto>
+    public class DescriptorDeTrabajosSometido : DescriptorDeCrud<TrabajoSometidoDto>
     {
-        public DescriptorDeNegocio(ModoDescriptor modo)
-        : base(controlador: nameof(NegocioController)
-               , vista: $"{nameof(NegocioController.CrudDeNegocios)}"
+        public DescriptorDeTrabajosSometido(ModoDescriptor modo)
+        : base(controlador: nameof(TrabajosSometidoController)
+               , vista: $"{nameof(TrabajosSometidoController.CrudDeTrabajosSometido)}"
                , modo: modo
-              , rutaBase: "Negocio")
+               , rutaBase: "TrabajosSometido")
         {
         }
 
@@ -19,10 +19,10 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/Negocio.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/TrabajosSometido.js¨></script>
                       <script>
                          try {{                           
-                            Negocio.CrearCrudDeNegocios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                            TrabajosSometido.CrearCrudDeTrabajosSometido('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
                             Mensaje(TipoMensaje.Error, error);

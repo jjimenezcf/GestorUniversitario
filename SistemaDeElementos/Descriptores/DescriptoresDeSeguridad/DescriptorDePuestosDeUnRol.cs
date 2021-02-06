@@ -10,9 +10,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePuestosDeUnRol : DescriptorDeCrud<PuestosDeUnRolDto>
     {
         public DescriptorDePuestosDeUnRol(ModoDescriptor modo)
-        : base(nameof(PuestosDeUnRolController), nameof(PuestosDeUnRolController.CrudPuestosDeUnRol), modo)
+        : base(nameof(PuestosDeUnRolController), nameof(PuestosDeUnRolController.CrudPuestosDeUnRol), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PuestosDeUnRolDto>(bloque: fltGeneral
                   , etiqueta: "Rol"
@@ -47,7 +46,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/PuestosDeUnRol.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/PuestosDeUnRol.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePuestosDeUnRol('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

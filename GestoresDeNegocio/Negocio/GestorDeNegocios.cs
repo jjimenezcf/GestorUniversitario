@@ -19,7 +19,7 @@ using ModeloDeDto;
 namespace GestoresDeNegocio.Negocio
 {
 
-    public class GestorDeNegocio : GestorDeElementos<ContextoSe, NegocioDtm, NegocioDto>
+    public class GestorDeNegocios : GestorDeElementos<ContextoSe, NegocioDtm, NegocioDto>
     {
 
         public class MapearNegocio : Profile
@@ -38,14 +38,14 @@ namespace GestoresDeNegocio.Negocio
             }
         }
 
-        public GestorDeNegocio(ContextoSe contexto, IMapper mapeador)
+        public GestorDeNegocios(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
 
         }
-        public static GestorDeNegocio Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeNegocios Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            return new GestorDeNegocio(contexto, mapeador);
+            return new GestorDeNegocios(contexto, mapeador);
         }
 
 
@@ -121,7 +121,7 @@ namespace GestoresDeNegocio.Negocio
             }
 
             var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
-            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocio)}.{nameof(TienePermisos)}");
+            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocios)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
 
             if (!cache.ContainsKey(indice))

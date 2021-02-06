@@ -214,9 +214,11 @@ function Encriptar(clave: string, textoParaEncriptar: string) {
 
 function ParsearExpresion(elemento: any, patron: string): string {
     let mostrar: string = patron;
-    for (let propiedad in elemento)
-        if (patron.includes(`[${propiedad}]`))
-            mostrar = mostrar.replace(`[${propiedad}]`, IsNullOrEmpty(elemento[propiedad]) ? "" : elemento[propiedad]);
+    for (let i = 0; i < Object.keys(elemento).length; i++) {
+        let propiedad = Object.keys(elemento)[i];
+        if (patron.includes(`[${propiedad.toLowerCase()}]`))
+            mostrar = mostrar.replace(`[${propiedad.toLowerCase()}]`, IsNullOrEmpty(elemento[propiedad]) ? "" : elemento[propiedad]);
+    }
 
     return mostrar;
 }

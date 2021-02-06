@@ -44,13 +44,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public bool EsModal => Modo != ModoDescriptor.Mantenimiento;
 
-        public string RutaVista { get; set; }
+        public string RutaBase { get; set; }
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }
-        public GestorDeNegocio GestorDeNegocio { get; internal set; }
+        public GestorDeNegocios GestorDeNegocio { get; internal set; }
         public bool NegocioActivo => GestorDeNegocio.NegocioActivo(Negocio);
 
-        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo)
+        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase)
         : base(
           padre: null,
           id: $"Crud_{typeof(TElemento).Name}",
@@ -61,6 +61,7 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             var elemento = typeof(TElemento).Name.Replace("Dto", "");
+            RutaBase = rutaBase;
             Tipo = enumTipoControl.DescriptorDeCrud;
             Mnt = new DescriptorDeMantenimiento<TElemento>(crud: this, etiqueta: elemento);
             Controlador = controlador.Replace("Controller", "");

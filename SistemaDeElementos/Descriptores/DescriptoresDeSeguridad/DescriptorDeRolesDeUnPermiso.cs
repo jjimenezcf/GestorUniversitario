@@ -10,9 +10,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
 
         public DescriptorDeRolesDeUnPermiso(ModoDescriptor modo)
-        : base(nameof(RolesDeUnPermisoController), nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso), modo)
+        : base(nameof(RolesDeUnPermisoController), nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<RolesDeUnPermisoDto>(bloque: fltGeneral
                   , etiqueta: "Permiso"
@@ -47,7 +46,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/RolesDeUnPermiso.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/RolesDeUnPermiso.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDeRolesDeUnPermiso('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

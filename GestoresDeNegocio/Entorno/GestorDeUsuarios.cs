@@ -26,7 +26,8 @@ namespace GestoresDeNegocio.Entorno
         {
             public MapearUsuario()
             {
-                CreateMap<UsuarioDtm, UsuarioDto>();
+                CreateMap<UsuarioDtm, UsuarioDto>()
+                    .ForMember(dto => dto.NombreCompleto, dtm => dtm.MapFrom( x => $"({x.Login}) {x.Apellido} {x.Nombre}")) ;
                 CreateMap<UsuarioDto, UsuarioDtm>();
             }
         }
@@ -188,7 +189,7 @@ namespace GestoresDeNegocio.Entorno
 
         public bool TienePermisoDeDatos(UsuarioDtm usuarioConectado, enumModoDeAccesoDeDatos permisosNecesarios, object elemento)
         {
-            var gestorDeNegocio = GestorDeNegocio.Gestor(Contexto, Mapeador);
+            var gestorDeNegocio = GestorDeNegocios.Gestor(Contexto, Mapeador);
             return gestorDeNegocio.TienePermisos(usuarioConectado, permisosNecesarios, (enumNegocio)elemento);
         }
 

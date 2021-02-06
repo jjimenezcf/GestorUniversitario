@@ -9,10 +9,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePuestoDeTrabajo : DescriptorDeCrud<PuestoDto>
     {
         public DescriptorDePuestoDeTrabajo(ModoDescriptor modo)
-            : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo)
+            : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
-
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(UsuariosDeUnPuestoController)
                 , vista: nameof(UsuariosDeUnPuestoController.CrudUsuariosDeUnPuesto)
@@ -48,7 +46,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/PuestoDeTrabajo.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/PuestoDeTrabajo.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePuestosDeTrabajo('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

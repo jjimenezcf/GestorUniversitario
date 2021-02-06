@@ -16,7 +16,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeUsuario(ModoDescriptor modo)
         : base(controlador: nameof(UsuariosController)
                , vista: $"{nameof(UsuariosController.CrudUsuario)}"
-               , modo: modo)
+               , modo: modo
+              , rutaBase: "Entorno")
         {
             if (modo == ModoDescriptor.Mantenimiento)
             {
@@ -69,8 +70,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             }
             BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
-            RutaVista = "Entorno";
-
+            
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PuestosDeUnUsuarioController)
                 , vista: nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)
@@ -96,7 +96,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Entorno/Usuario.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/Usuario.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

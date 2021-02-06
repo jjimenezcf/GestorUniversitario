@@ -7,7 +7,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeVistaMvc : DescriptorDeCrud<VistaMvcDto>
     {
         public DescriptorDeVistaMvc(ModoDescriptor modo)
-            : base(nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo)
+            : base(nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo, "Entorno")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             
@@ -24,8 +24,6 @@ namespace MVCSistemaDeElementos.Descriptores
                 valorInicial: false,
                 filtrarPorFalse: false,
                 posicion: new Posicion(1, 1));
-
-            RutaVista = "Entorno";
         }
 
 
@@ -34,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Entorno/VistaMvc.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/VistaMvc.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');

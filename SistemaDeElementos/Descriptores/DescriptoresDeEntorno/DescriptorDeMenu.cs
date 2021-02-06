@@ -9,7 +9,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMenu(ModoDescriptor modo)
         : base(controlador: nameof(MenusController)
               , vista: nameof(MenusController.CrudMenu)
-              , modo: modo)
+              , modo: modo
+               , rutaBase: "Entorno")
         {
 
             var fltEspecificos = new BloqueDeFitro<MenuDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
@@ -31,15 +32,13 @@ namespace MVCSistemaDeElementos.Descriptores
                 valorInicial: false,
                 filtrarPorFalse: false,
                 posicion: new Posicion(0, 1));
-
-            RutaVista = "Entorno";
         }
     public override string RenderControl()
     {
         var render = base.RenderControl();
 
         render = render +
-                  $@"<script src=¨../../ts/Entorno/Menu.js¨></script>
+                  $@"<script src=¨../../ts/{RutaBase}/Menu.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDeMenus('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

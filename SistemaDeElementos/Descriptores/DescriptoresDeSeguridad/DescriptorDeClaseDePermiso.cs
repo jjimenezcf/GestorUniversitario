@@ -7,9 +7,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeClaseDePermiso : DescriptorDeCrud<ClasePermisoDto>
     {
         public DescriptorDeClaseDePermiso(ModoDescriptor modo)
-            : base(nameof(ClaseDePermisoController), nameof(ClaseDePermisoController.CrudClaseDePermiso), modo)
+            : base(nameof(ClaseDePermisoController), nameof(ClaseDePermisoController.CrudClaseDePermiso), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
         }
 
 
@@ -18,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/ClaseDePermiso.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/ClaseDePermiso.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDeClasesDePermiso('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

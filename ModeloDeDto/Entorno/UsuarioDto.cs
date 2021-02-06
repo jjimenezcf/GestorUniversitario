@@ -15,10 +15,21 @@ namespace ModeloDeDto.Entorno
            , ExpresionNombre = "([Login]) [Apellido], [Nombre]")]
     public class UsuarioDto : ElementoDto
     {
-        [IUPropiedad(SiempreVisible = false)]
-        public string NombreCompleto => $"({Login}) {Apellido}, {Nombre}";
+        public const string MostrarUsuario = "[NombreCompleto]";
 
         [IUPropiedad(
+            VisibleEnGrid = true,
+            VisibleEnEdicion = false,
+            Etiqueta = "Usuario",
+            Ordenar = true,
+            OrdenarPor = nameof(UsuarioDto.Login),
+            PorAnchoMnt = 35
+         )
+        ]
+        public string NombreCompleto { get; set; } // => $"({Login}) {Apellido}, {Nombre}";
+
+        [IUPropiedad(
+            VisibleEnGrid = false,
             Etiqueta = "Usuario",
             Ayuda = "Usuario de conexión", 
             Tipo = typeof(string), 
@@ -32,6 +43,7 @@ namespace ModeloDeDto.Entorno
 
 
         [IUPropiedad(
+            VisibleEnGrid = false,
             Etiqueta = "Apellidos",
             Ayuda = "Apellidos",
             Tipo = typeof(string),
@@ -45,6 +57,7 @@ namespace ModeloDeDto.Entorno
 
 
         [IUPropiedad(
+            VisibleEnGrid = false,
             Etiqueta = "Nombre",
             Ayuda = "Nombre",
             Tipo = typeof(string),

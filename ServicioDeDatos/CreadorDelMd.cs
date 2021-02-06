@@ -5,6 +5,7 @@ using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Callejero;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace ServicioDeDatos
 {
@@ -70,6 +71,8 @@ namespace ServicioDeDatos
 
             DefinirTablasDelCallejero(modelBuilder);
 
+            DefinirTablasDelEsquemaDeTrabajosSometidos(modelBuilder);
+
         }
 
         private static void DefinirEsquemaDeSeguridad(ModelBuilder modelBuilder)
@@ -128,5 +131,12 @@ namespace ServicioDeDatos
             VistaModoDeAccesoAlNegocio.Definir(modelBuilder);
         }
 
+        private static void DefinirTablasDelEsquemaDeTrabajosSometidos(ModelBuilder modelBuilder)
+        {
+            TablaTrabajo.Definir(modelBuilder);
+            TablaTrabajoDeUsuario.Definir(modelBuilder);
+            TablaTrabajoLog.Definir(modelBuilder);
+            TablaTrabajoError.Definir(modelBuilder);
+        }
     }
 }

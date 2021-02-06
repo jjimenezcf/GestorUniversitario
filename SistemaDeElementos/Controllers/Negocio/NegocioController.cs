@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Controllers
     public class NegocioController : EntidadController<ContextoSe, NegocioDtm, NegocioDto>
     {
 
-        public NegocioController(GestorDeNegocio gestorDeNegocios, GestorDeErrores gestorDeErrores)
+        public NegocioController(GestorDeNegocios gestorDeNegocios, GestorDeErrores gestorDeErrores)
         :base
         (
           gestorDeNegocios, 

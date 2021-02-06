@@ -8,10 +8,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeRol : DescriptorDeCrud<RolDto>
     {
         public DescriptorDeRol(ModoDescriptor modo)
-            : base(nameof(RolController), nameof(RolController.CrudRol), modo)
+            : base(nameof(RolController), nameof(RolController.CrudRol), modo, "Seguridad")
         {
-            RutaVista = "Seguridad";
-
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PuestosDeUnRolController)
                 , vista: nameof(PuestosDeUnRolController.CrudPuestosDeUnRol)
@@ -51,7 +49,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/Seguridad/Rol.js¨></script>
+                   $@"<script src=¨../../ts/{RutaBase}/Rol.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDeRoles('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

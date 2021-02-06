@@ -1,32 +1,38 @@
-﻿using ServicioDeDatos;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServicioDeDatos;
 using Gestor.Errores;
-using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
-using ServicioDeDatos.Seguridad;
-using GestoresDeNegocio.Seguridad;
-using ModeloDeDto.Seguridad;
+using GestoresDeNegocio.Negocio;
+using ModeloDeDto.Negocio;
+using ServicioDeDatos.Negocio;
+using ServicioDeDatos.TrabajosSometidos;
+using ModeloDeDto.TrabajosSometidos;
+using GestoresDeNegocio.TrabajosSometidos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
-using System.Collections.Generic;
 using GestoresDeNegocio.Entorno;
+using System.Collections.Generic;
+using ModeloDeDto.Seguridad;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class UsuariosDeUnPuestoController :  EntidadController<ContextoSe, PuestosDeUnUsuarioDtm, UsuariosDeUnPuestoDto>
+    public class TrabajosSometidoController : EntidadController<ContextoSe, TrabajoSometidoDtm, TrabajoSometidoDto>
     {
 
-        public UsuariosDeUnPuestoController(GestorDeUsuariosDeUnPuesto gestor, GestorDeErrores errores)
-         : base
-         (
-           gestor,
-           errores,
-           new DescriptorDeUsuariosDeUnPuesto(ModoDescriptor.Mantenimiento)
-         )
+        public TrabajosSometidoController(GestorDeTrabajosSometido gestorDeNegocios, GestorDeErrores gestorDeErrores)
+        :base
+        (
+          gestorDeNegocios, 
+          gestorDeErrores, 
+          new DescriptorDeTrabajosSometido(ModoDescriptor.Mantenimiento)
+        )
         {
+
         }
 
-        [HttpPost]
-        public IActionResult CrudUsuariosDeUnPuesto(string restrictor, string orden)
+        
+        public IActionResult CrudDeTrabajosSometido()
         {
             return ViewCrud();
         }
@@ -42,4 +48,5 @@ namespace MVCSistemaDeElementos.Controllers
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
     }
+
 }
