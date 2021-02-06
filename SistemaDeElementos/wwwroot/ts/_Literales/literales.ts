@@ -325,8 +325,8 @@ const Evento = {
         Cerrar: "cerrar-modal-de-borrado",
     },
     ListaDinamica: {
-        Cargar: 'cargar',
-        Seleccionar: 'seleccionar'
+        Cargar: 'cargar-lista-dinamica',
+        Seleccionar: 'seleccionar--lista-dinamica'
     },
     Mnt: {
         Crear: "crear-elemento",

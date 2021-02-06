@@ -8,6 +8,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
 
+    public static class TipoAccionDeListaDinamica
+    {
+        public const string cargar = "cargar-lista-dinamica";
+        public const string seleccionar = "seleccionar--lista-dinamica";
+    }
+
+
     public enum TipoDeLlamada { Post, Get }
     public static class TipoDeAccionDeMnt
     {

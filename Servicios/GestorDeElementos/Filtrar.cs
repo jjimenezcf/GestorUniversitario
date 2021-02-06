@@ -145,6 +145,11 @@ namespace GestorDeElementos
                 registros = registros.AplicarFiltroPorIdentificador(filtro, propiedad.Name);
             }
 
+            if (propiedad.PropertyType.Name == "Nullable`1" && propiedad.PropertyType.GetGenericArguments()[0].Name == "Int32" && propiedad.Name.ToLower().StartsWith("id") && propiedad.Name.Length > 2)
+            {
+                registros = registros.AplicarFiltroPorIdentificador(filtro, propiedad.Name);
+            }
+
             if (propiedad.PropertyType.Name.ToLower() == "int32" && !propiedad.Name.ToLower().StartsWith("id"))
             {
                 registros = registros.AplicarFiltroPorEntero(filtro, propiedad.Name);

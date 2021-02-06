@@ -49,8 +49,8 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Longitud"] = LongitudMinimaParaBuscar;
             valores["Cantidad"] = Cantidad;
             valores["CriterioDeFiltro"] = Criterio ;
-            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)";
-            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)";
+            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.cargar}',this)";
+            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.seleccionar}',this)";
             valores["Placeholder"] = $"Seleccionar ({Criterio}) ...";
 
             return PlantillasHtml.Render(PlantillasHtml.listaDinamicaFlt, valores);

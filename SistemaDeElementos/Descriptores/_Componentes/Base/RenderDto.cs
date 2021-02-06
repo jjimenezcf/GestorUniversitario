@@ -189,8 +189,8 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Longitud"] = 3;
             valores["Cantidad"] = 10;
             valores["CriterioDeFiltro"] = atributos.CriterioDeBusqueda;
-            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('cargar',this)";
-            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('seleccionar',this)";
+            valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.cargar}',this)";
+            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.seleccionar}',this)";
             valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
             valores["GuardarEn"] = atributos.GuardarEn;
 
