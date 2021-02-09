@@ -44,10 +44,13 @@ namespace MVCSistemaDeElementos.Controllers
             DatosDeConexion = datosDeConexion;
         }
 
-        protected ViewResult VistaNoDefinida(string vista)
+        protected ViewResult RenderMensaje(string mensaje)
         {
-            return View("VistaNoDefinida");
+            ViewBag.Mensaje = mensaje;
+            ViewBag.DatosDeConexion = DatosDeConexion;
+            return View(nameof(RenderMensaje));
         }
+
 
         public static JsonResult SubirArchivo(ContextoSe contexto, IMapper mapeador, HttpContext httpContext, IFormFile fichero, string rutaDestino, string extensionesValidas)
         {
@@ -58,7 +61,7 @@ namespace MVCSistemaDeElementos.Controllers
                 if (fichero == null)
                     GestorDeErrores.Emitir("No se ha identificado el fichero");
 
-                ApiController.CumplimentarDatosDeUsuarioDeConexion(contexto,mapeador,httpContext);
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(contexto, mapeador, httpContext);
                 ValidarExtension(fichero, extensionesValidas);
                 var rutaBase = @"..\SistemaDeElementos\wwwroot";
                 var rutaDeDescarga = $@"{rutaBase}\Archivos";
@@ -79,11 +82,21 @@ namespace MVCSistemaDeElementos.Controllers
 
                     if (!Directory.Exists(rutaDestino))
                         Directory.CreateDirectory(rutaDestino);
+                    int numero = 1;
+                    var ficheroSinExtension = Path.GetFileNameWithoutExtension(fichero.FileName).Replace(" ","_");
+                    var extension = Path.GetExtension(fichero.FileName);
+                    while (System.IO.File.Exists($@"{rutaDestino}\{ficheroSinExtension}{extension}"))
+                    {
+                        if (numero == 1)
+                            ficheroSinExtension = $"{ficheroSinExtension}_{numero}";
+                        else
+                            ficheroSinExtension = ficheroSinExtension.Replace($"_{numero - 1}", $"_{numero}");
+                        numero++;
+                    }
 
-                    if (!System.IO.File.Exists($@"{rutaDestino}\{fichero.FileName}"))
-                        System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{fichero.FileName}");
+                    System.IO.File.Move(rutaConFichero, $@"{rutaDestino}\{ficheroSinExtension}{extension}");
 
-                    r.Datos = fichero.FileName;
+                    r.Datos = $@"{ficheroSinExtension}{extension}";
                 }
 
                 r.Estado = enumEstadoPeticion.Ok;

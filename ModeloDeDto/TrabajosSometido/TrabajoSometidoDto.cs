@@ -38,7 +38,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Editor,
             Tipo = typeof(string),
             Fila = 2,
-            Columna = 0
+            Columna = 0,
+            Obligatorio = false
             )
         ]
         public string Dll { get; set; }
@@ -49,7 +50,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Editor,
             Tipo = typeof(string),
             Fila = 2,
-            Columna = 1
+            Columna = 1,
+            Obligatorio = false
             )
         ]
         public string Clase { get; set; }
@@ -60,7 +62,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Editor,
             Tipo = typeof(string),
             Fila = 2,
-            Columna = 2
+            Columna = 2,
+            Obligatorio = false
             )
         ]
         public string Metodo { get; set; }
@@ -71,7 +74,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Editor,
             Tipo = typeof(string),
             Fila = 3,
-            Columna = 0
+            Columna = 0,
+            Obligatorio = false
             )
         ]
         public string Esquema { get; set; }
@@ -82,7 +86,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Editor,
             Tipo = typeof(string),
             Fila = 3,
-            Columna = 1
+            Columna = 1,
+            Obligatorio = false
             )
         ]
         public string PA { get; set; }

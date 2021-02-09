@@ -8,6 +8,7 @@ using GestorDeElementos;
 using ModeloDeDto;
 using Utilidades;
 using System.Linq.Dynamic.Core;
+using System;
 
 namespace GestoresDeNegocio.Entorno
 {
@@ -46,5 +47,9 @@ namespace GestoresDeNegocio.Entorno
             new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
         }
 
+        internal string LeerVariable(string  variable)
+        {
+            return LeerRegistroCacheado(nameof(VariableDtm.Nombre), variable).Valor;
+        }
     }
 }

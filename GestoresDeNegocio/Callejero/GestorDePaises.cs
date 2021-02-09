@@ -33,5 +33,9 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDePaises(contexto, mapeador);
         }
 
+        public static void ImportarCallejero(string parametros)
+        { 
+        }
+
     }
 }

@@ -6,6 +6,12 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
+using System;
+using Utilidades;
+using Gestor.Errores;
+using GestoresDeNegocio.Entorno;
+using ServicioDeDatos.Elemento;
+using Microsoft.Extensions.Configuration;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -47,25 +53,40 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return registros;
         }
 
-
-        protected override void AntesDePersistir(TrabajoSometidoDtm registro, ParametrosDeNegocio parametros)
-        {
-            base.AntesDePersistir(registro, parametros);
-
-            if (parametros.Operacion == TipoOperacion.Insertar)
-            {
-            }
-
-            if (parametros.Operacion == TipoOperacion.Modificar)
-            {
-            }
-
-        }
-
         protected override void AntesDePersistirValidarRegistro(TrabajoSometidoDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
-            //Validar que existe dll.clase.metodo o esquema.pa
+
+            if (registro.Pa.IsNullOrEmpty() && registro.Esquema.IsNullOrEmpty() && registro.Dll.IsNullOrEmpty() && registro.Clase.IsNullOrEmpty() && registro.Metodo.IsNullOrEmpty())
+                GestorDeErrores.Emitir("Debe indicar una Dll o un PA");
+
+            if (!registro.EsDll && (registro.Pa.IsNullOrEmpty() || registro.Esquema.IsNullOrEmpty()))
+                GestorDeErrores.Emitir("Debe indicar el PA y su Esquema");
+
+            if (!registro.EsDll && (!registro.Dll.IsNullOrEmpty() || !registro.Clase.IsNullOrEmpty() || !registro.Metodo.IsNullOrEmpty()))
+                GestorDeErrores.Emitir("Si ha indicado que no es una dll los campos de ddl, clase y métodos han de ser nulos");
+
+            if (registro.EsDll && (!registro.Pa.IsNullOrEmpty() || !registro.Esquema.IsNullOrEmpty()))
+                GestorDeErrores.Emitir("Si ha indicado que es una dll los campos de PA y esquema han de ser nulos");
+
+            if (registro.EsDll && (registro.Dll.IsNullOrEmpty() || registro.Clase.IsNullOrEmpty() || registro.Metodo.IsNullOrEmpty()))
+                GestorDeErrores.Emitir("Si ha indicado que es una dll los campos de ddl, clase y métodos han de ser indicados");
+
+
+            if (registro.EsDll)
+            {
+                var ruta = GestorDeVariables.Gestor(Contexto, Mapeador).LeerVariable(Variable.Binarios);
+                Ensamblados.ValidarMetodo($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
+            }
+            else 
+            {
+                using (var c = ContextoSe.ObtenerContexto())
+                {
+                    if (!new ExistePa(c, registro.Pa).Existe)
+                        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
+                }
+            }
+
         }
 
     }

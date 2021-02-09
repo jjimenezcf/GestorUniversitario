@@ -40,20 +40,20 @@ namespace ServicioDeDatos
 
     }
 
-    //public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoSe>
-    //{
-    //    public ContextoSe CreateDbContext(string[] arg)
-    //    {
+    public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoSe>
+    {
+        public ContextoSe CreateDbContext(string[] arg)
+        {
 
-    //        var datosDeConexion = ContextoSe.ObtenerDatosDeConexion();
+            var datosDeConexion = ContextoSe.ObtenerDatosDeConexion();
 
-    //        var opciones = new DbContextOptionsBuilder<ContextoSe>();
-    //        opciones.UseSqlServer(datosDeConexion.CadenaConexion);
-    //        object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
+            var opciones = new DbContextOptionsBuilder<ContextoSe>();
+            opciones.UseSqlServer(datosDeConexion.CadenaConexion);
+            object[] parametros = { opciones.Options, datosDeConexion.Configuracion };
 
-    //        return (ContextoSe)Activator.CreateInstance(typeof(ContextoSe), parametros);
-    //    }
-    //}
+            return (ContextoSe)Activator.CreateInstance(typeof(ContextoSe), parametros);
+        }
+    }
 
     public static class Transaccion
     {
@@ -103,11 +103,11 @@ namespace ServicioDeDatos
 
         private InterceptadorDeConsultas _interceptadorDeConsultas;
 
-        //public static ContextoSe ObtenerContexto()
-        //{
-        //    //return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
-        //    return new ConstructorDelContexto().CreateDbContext(new string[] { });
-        //}
+        public static ContextoSe ObtenerContexto()
+        {
+           // return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
+            return new ConstructorDelContexto().CreateDbContext(new string[] { });
+        }
 
         public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerDatosDeConexion()
         {

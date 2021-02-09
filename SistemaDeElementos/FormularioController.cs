@@ -41,6 +41,11 @@ namespace MVCSistemaDeElementos.Controllers
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            ViewBag.DatosDeConexion = DatosDeConexion;
+
+            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
+            if (!this.ExisteLaVista(destino))
+                return RenderMensaje($"La vista {destino} no está definida");
 
             if (!Descriptor.UsuarioConectado.EsAdministrador)
             {
@@ -48,19 +53,8 @@ namespace MVCSistemaDeElementos.Controllers
                 string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
                 var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
-                    throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
+                    return RenderMensaje($"Solicite permisos de acceso a {destino}");
             }
-
-            ViewBag.DatosDeConexion = DatosDeConexion;
-
-            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
-
-            if (!this.ExisteLaVista(destino))
-            {
-                ViewBag.Vista = destino;
-                return VistaNoDefinida(destino);
-            }
-
 
             return base.View(destino, Descriptor);
         }

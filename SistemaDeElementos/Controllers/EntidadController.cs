@@ -447,30 +447,27 @@ namespace MVCSistemaDeElementos.Controllers
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
+            var destino = $"{(Descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaBase}/")}{Descriptor.Vista}";
+            if (!this.ExisteLaVista(destino))
+                return RenderMensaje($"La vista {destino} no está definida");
+
+            string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
+            string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
+
             if (!Descriptor.UsuarioConectado.EsAdministrador)
             {
-                string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
-                string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
                 var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
-                    throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de acceso a la vista {nombreDelControlador}.{nombreDeLaVista}");
+                    return RenderMensaje($"Solicite permisos de acceso a {destino}"); 
 
                 hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
                 if (!hayPermisos)
-                    throw new Exception($"El usuario {Descriptor.UsuarioConectado.Login} no tiene permisos de consulta sobre el negocio {Descriptor.Negocio}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {Descriptor.Negocio}");
             }
+
 
             Descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             ViewBag.DatosDeConexion = DatosDeConexion;
-
-            var destino = $"{(Descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaBase}/")}{Descriptor.Vista}";
-
-            if (!this.ExisteLaVista(destino))
-            {
-                ViewBag.Vista = destino;
-                return VistaNoDefinida(destino);
-            }
-
 
             return base.View(destino, Descriptor);
         }
