@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ServicioDeDatos.Elemento;
 using Gestor.Errores;
+using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos
 {
@@ -18,71 +19,57 @@ namespace ServicioDeDatos
 
     public class CacheDeVariable 
     {
-        public ContextoSe Contexto { get; private set; }
+        private static ConcurrentDictionary<string, object> cacheVariables = ServicioDeCaches.Obtener(nameof(CacheDeVariable));
 
-        private static ConcurrentDictionary<string, string> cacheVariables;
-
-        public string ServidorDeArchivos
+        public static string ServidorDeArchivos
         {
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Servidor_Archivos))
-                    cacheVariables[Variable.Servidor_Archivos] = Consultar(Variable.Servidor_Archivos);
-                return cacheVariables[Variable.Servidor_Archivos];
+                    cacheVariables[Variable.Servidor_Archivos] = LeerValor(Variable.Servidor_Archivos);
+                return cacheVariables[Variable.Servidor_Archivos].ToString();
             }
         }
 
-        public bool HayQueDebuggar
+        public static bool HayQueDebuggar
         {
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Debugar_Sqls))
-                    cacheVariables[Variable.Debugar_Sqls] = Consultar(Variable.Debugar_Sqls);
-                return cacheVariables[Variable.Debugar_Sqls]=="S";
+                    cacheVariables[Variable.Debugar_Sqls] = LeerValor(Variable.Debugar_Sqls);
+                return cacheVariables[Variable.Debugar_Sqls].ToString() =="S";
             }
         }
 
-        public string Version
+        public static string Version
         {
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Version))
-                    cacheVariables[Variable.Version] = Consultar(Variable.Version);
-                return cacheVariables[Variable.Version];
+                    cacheVariables[Variable.Version] = LeerValor(Variable.Version);
+                return cacheVariables[Variable.Version].ToString();
             }
         }
 
-        private string Consultar(string variable)
+        private static string LeerValor(string variable)
         {
-            var sentencia = $"Select * from {Literal.Tabla.Variable} where NOMBRE like '{variable}'";
-            var consulta = new ConsultaSql(Contexto, sentencia);
-            consulta.Ejecutar();
+            var sentencia = $"Select Id, Nombre, Descripcion, Valor  from ENTORNO.Variable where NOMBRE like '{variable}'";
+            var consulta = new ConsultaSql<VariableDtm>(sentencia);
+            var resultado = consulta.Ejecutar();
 
-            if (consulta == null)
-                GestorDeErrores.Emitir($"No se ha ejecutado la consulta {sentencia}");
+            if (resultado.Count == 0)
+                GestorDeErrores.Emitir($"No se localiza la variable {variable}");
 
-            if (consulta.Registros.Count == 0)
-                GestorDeErrores.Emitir($"No se han localizado registros para la {sentencia}");
+            if (resultado.Count > 1)
+                GestorDeErrores.Emitir($"Hay más de un registros para la {variable}");
 
-            if (consulta.Registros.Count > 1)
-                GestorDeErrores.Emitir($"Hay más de un registros para la {sentencia}");
-
-            return (string)consulta.Registros[0][3];
+            return resultado[0].Valor;
         }
 
-        public CacheDeVariable(ContextoSe contexto)
-        {
-            Contexto = contexto;
-            if (cacheVariables == null)
-                cacheVariables = new ConcurrentDictionary<string, string>();
-        }
 
-        public string BorrarCache(string variable)
+        public static void BorrarCache(string variable)
         {
-            var valor = "";
-            if (cacheVariables.ContainsKey(variable))
-                cacheVariables.Remove(variable, out valor);
-            return valor;
+            ServicioDeCaches.EliminarElemento(nameof(CacheDeVariable), variable);
         }
     }
 }

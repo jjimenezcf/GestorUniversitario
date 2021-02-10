@@ -22,10 +22,6 @@ namespace ServicioDeDatos
         {
             internal static string Catalogo = "CatalogoDelSe";
         }
-        internal class Tabla
-        {
-            internal static string Variable = "ENTORNO.Variable";
-        }
     }
     public class DatosDeConexion
     {
@@ -94,9 +90,9 @@ namespace ServicioDeDatos
 
         internal  IDbContextTransaction Transaccion { get; set; }
 
-        public bool Debuggar => new CacheDeVariable(this).HayQueDebuggar;
+        public bool Debuggar => CacheDeVariable.HayQueDebuggar;
 
-        private string ObtenerVersion => new CacheDeVariable(this).Version;
+        private string ObtenerVersion => CacheDeVariable.Version;
 
 
         public TrazaSql Traza { get; private set; }

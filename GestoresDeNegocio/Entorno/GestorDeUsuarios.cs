@@ -130,7 +130,7 @@ namespace GestoresDeNegocio.Entorno
             }
 
             if (parametros.Operacion == TipoOperacion.Insertar)
-                registro.password = new GenerarPassword(Contexto).Password;
+                registro.password = GestorDePassword.Generar(registro.Login);
 
             if (parametros.Operacion == TipoOperacion.Modificar)
                 registro.password = RegistroEnBD.password;
@@ -175,8 +175,7 @@ namespace GestoresDeNegocio.Entorno
             try
             {
                 usuariodtm = LeerRegistroCacheado(nameof(UsuarioDtm.Login), login, true, true);
-
-                if (new ObtenerPassword(Contexto, usuariodtm.Login).Password != password)
+                if (GestorDePassword.Leer(login) != password)
                     throw new Exception("Login/password incorrecto");
             }
             catch (Exception exc)
@@ -200,28 +199,55 @@ namespace GestoresDeNegocio.Entorno
         }
 
     }
-    public class ObtenerPassword : ConsultaSql
+
+    class GestorDePassword
     {
-        public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
-
-
-        public ObtenerPassword(ContextoSe contexto, string login)
-        : base(contexto, $"SELECT CONVERT(VARCHAR , DECRYPTBYPASSPHRASE('sistemaSe', password)) FROM entorno.usuario where login like '{login}'")
+        class Credenciales: Registro
         {
-            Ejecutar();
+            public string Password { get; set; }
+            public string Login { get; set; }
         }
+
+        public static string Leer(string login)
+        {
+            var consulta = new ConsultaSql<Credenciales>($@"SELECT LOGIN as Login, CONVERT(VARCHAR , DECRYPTBYPASSPHRASE('sistemaSe', password)) as Password
+                                                         FROM entorno.usuario
+                                                         where login like '{login}'");
+
+            var credenciales = consulta.Ejecutar();
+            if (credenciales.Count == 0)
+                throw new Exception($"Credenciales del usuario {login} no localizadas");
+
+            return credenciales[0].Password;
+        }
+
+        public static string Generar(string login)
+        {
+            var consulta = new ConsultaSql<Credenciales>($@"SELECT '{login}' as Login,  CONVERT(VARCHAR , ENCRYPTBYPASSPHRASE('sistemaSe', '12345678')) as Password");
+            var credenciales = consulta.Ejecutar();
+            return credenciales[0].Password;
+        }
+
+        //public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
+
+
+        //public Password(ContextoSe contexto, string login)
+        //: base(contexto, $"SELECT CONVERT(VARCHAR , DECRYPTBYPASSPHRASE('sistemaSe', password)) FROM entorno.usuario where login like '{login}'")
+        //{
+        //    Ejecutar();
+        //}
     }
 
 
-    public class GenerarPassword : ConsultaSql
-    {
-        public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
+    //class GenerarPassword : ConsultaSql
+    //{
+    //    public string Password => Leidos == 0 ? "" : (string)Registros[0][0];
 
 
-        public GenerarPassword(ContextoSe contexto)
-        : base(contexto, $"SELECT CONVERT(VARCHAR , ENCRYPTBYPASSPHRASE('sistemaSe', '12345678'))")
-        {
-            Ejecutar();
-        }
-    }
+    //    public GenerarPassword(ContextoSe contexto)
+    //    : base(contexto, $"SELECT CONVERT(VARCHAR , ENCRYPTBYPASSPHRASE('sistemaSe', '12345678'))")
+    //    {
+    //        Ejecutar();
+    //    }
+    //}
 }

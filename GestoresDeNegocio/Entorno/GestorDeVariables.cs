@@ -38,13 +38,13 @@ namespace GestoresDeNegocio.Entorno
         protected override void AntesMapearRegistroParaModificar(VariableDto elemento, ParametrosDeNegocio opciones)
         {
             base.AntesMapearRegistroParaModificar(elemento, opciones);
-            new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
+            CacheDeVariable.BorrarCache(elemento.Nombre);
         }
 
         protected override void AntesMapearRegistroParaEliminar(VariableDto elemento, ParametrosDeNegocio opciones)
         {
             base.AntesMapearRegistroParaEliminar(elemento, opciones);
-            new CacheDeVariable(Contexto).BorrarCache(elemento.Nombre);
+            CacheDeVariable.BorrarCache(elemento.Nombre);
         }
 
         internal string LeerVariable(string  variable)
