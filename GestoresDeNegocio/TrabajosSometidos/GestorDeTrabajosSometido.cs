@@ -12,6 +12,7 @@ using Gestor.Errores;
 using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Elemento;
 using Microsoft.Extensions.Configuration;
+using ServicioDeDatos.Entorno;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -80,11 +81,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
             else 
             {
-                using (var c = ContextoSe.ObtenerContexto())
-                {
-                    if (!new ExistePa(c, registro.Pa).Existe)
-                        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
-                }
+                var pas = GestorDePa.Leer(registro.Pa, registro.Esquema);
+                if (pas.Count == 0)
+                    GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
+
+                //using (var c = ContextoSe.ObtenerContexto())
+                //{
+                //    if (!new ExistePa(c, registro.Pa, registro.Esquema).Existe)
+                //        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
+                //}
             }
 
         }

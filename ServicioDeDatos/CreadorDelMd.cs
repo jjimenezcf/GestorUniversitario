@@ -53,13 +53,9 @@ namespace ServicioDeDatos
 
         #endregion
 
-        public DbSet<CatalogoDelSe> CatalogoDelSe { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<CatalogoDelSe>().ToView(Literal.Vista.Catalogo);
 
             DefinirTablasDelEsquemaDeEntorno(modelBuilder);
 
