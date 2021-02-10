@@ -27,10 +27,21 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Check,
             Fila = 1,
             Columna = 0,
-            ValorPorDefecto = true
+            ValorPorDefecto = true,
+            VisibleEnGrid = false
           )
         ]
         public string EsDll { get; set; }
+
+        [IUPropiedad(
+            Etiqueta = "Programa",
+            Tipo = typeof(string),
+            Obligatorio = false,
+            VisibleEnGrid = true,
+            VisibleEnEdicion = false
+            )
+        ]
+        public string Programa { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Dll",
@@ -39,7 +50,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Tipo = typeof(string),
             Fila = 2,
             Columna = 0,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string Dll { get; set; }
@@ -51,7 +63,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Tipo = typeof(string),
             Fila = 2,
             Columna = 1,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string Clase { get; set; }
@@ -63,7 +76,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Tipo = typeof(string),
             Fila = 2,
             Columna = 2,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string Metodo { get; set; }
@@ -75,7 +89,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Tipo = typeof(string),
             Fila = 3,
             Columna = 0,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string Esquema { get; set; }
@@ -87,7 +102,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Tipo = typeof(string),
             Fila = 3,
             Columna = 1,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string PA { get; set; }
@@ -99,7 +115,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Check,
             Fila = 4,
             Columna = 0,
-            ValorPorDefecto = false
+            ValorPorDefecto = false,
+            VisibleEnGrid = false
           )
         ]
         public string ComunicarFin { get; set; }
@@ -111,7 +128,8 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.Check,
             Fila = 5,
             Columna = 0,
-            ValorPorDefecto = true
+            ValorPorDefecto = true,
+            VisibleEnGrid = false
           )
         ]
         public string ComunicarError { get; set; }
@@ -133,7 +151,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Fila = 6,
             Columna = 0,
             Ordenar = false,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string Ejecutor { get; set; }
@@ -155,7 +174,8 @@ namespace ModeloDeDto.TrabajosSometidos
             Fila = 7,
             Columna = 0,
             Ordenar = false,
-            Obligatorio = false
+            Obligatorio = false,
+            VisibleEnGrid = false
             )
         ]
         public string InformarA { get; set; }

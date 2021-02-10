@@ -5,6 +5,7 @@
         private _idPanelCreacion: string;
 
         protected CrudDeMnt: CrudMnt;
+        Altura: number;
 
         protected get PanelDeCrear(): HTMLDivElement {
             return document.getElementById(this._idPanelCreacion) as HTMLDivElement;
@@ -14,6 +15,9 @@
             return this.PanelDeCrear.className === ClaseCss.contenedorModal;
         }
 
+        public get PanelDeContenidoModal(): HTMLDivElement {
+            return document.getElementById(`${this._idPanelCreacion}_contenido`) as HTMLDivElement;
+        }
         //private get Controlador(): string {
         //    return this.PanelDeCrear.getAttribute(literal.controlador);
         //}
@@ -49,12 +53,12 @@
 
         }
 
-        public ComenzarCreacion() {
+        public ComenzarCreacion(): void {
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.creando;
 
             if (this.EsModal) {
-                var ventana = document.getElementById(this._idPanelCreacion);
-                ventana.style.display = 'block';
+                this.PanelDeCrear.style.display = 'block';
+                this.Altura = this.PanelDeContenidoModal.getBoundingClientRect().height;
             }
             else {
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
@@ -64,6 +68,13 @@
                 ApiCrud.MostrarPanel(this.PanelDeCrear);
             }
             this.InicializarPanel();
+        }
+
+        public AjustarModal(): void {
+            if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
+                this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
+            else
+                this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
         }
 
         public PosicionarCreacion(): void {
@@ -87,6 +98,7 @@
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
                 ApiCrud.CerrarModal(this.PanelDeCrear);
+                EntornoSe.AjustarDivs();
             }
             else {
                 ApiCrud.OcultarPanel(this.PanelDeCrear);

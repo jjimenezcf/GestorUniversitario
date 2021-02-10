@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gestor.Errores;
 using ServicioDeDatos.Elemento;
 
 namespace ServicioDeDatos.Entorno
@@ -49,6 +50,14 @@ namespace ServicioDeDatos.Entorno
             var consulta = new ConsultaSql<ProcedimientoAlmacenadoDtm>(Sentencia.Replace("[Pa]", nombrePa).Replace("[Esquema]", esquema));
             return consulta.Ejecutar();
         }
+
+        public static void ValidarExistePa(string nombrePa, string esquema)
+        {
+            var pas = Leer(nombrePa, esquema);
+            if (pas.Count == 0)
+                GestorDeErrores.Emitir($"El {esquema}.{nombrePa} indicado no existe en la BD");
+        }
+
 
     }
 }

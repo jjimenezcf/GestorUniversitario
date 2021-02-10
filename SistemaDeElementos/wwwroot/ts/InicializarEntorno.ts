@@ -36,7 +36,7 @@
         let altura: number = AlturaFormulario();
 
         let alturaDelCuerpo: number = AlturaDelCuerpo(altura);
-        let cuerpo: HTMLDivElement = document.getElementById("cuerpo-de-pagina") as HTMLDivElement;
+        let cuerpo: HTMLDivElement = document.getElementById(LiteralMnt.idCuerpoDePagina) as HTMLDivElement;
         cuerpo.style.height = `${alturaDelCuerpo.toString()}px`;
 
         let { modalMenu, estadoMenu }: { modalMenu: HTMLDivElement; estadoMenu: HTMLElement; } = ArbolDeMenu.ObtenerDatosMenu();

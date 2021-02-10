@@ -272,7 +272,8 @@ const LiteralEdt = {
 
 const LiteralMnt = {
     posicion: "posicion",
-    postfijoDeCheckDeSeleccion: ".chksel"
+    postfijoDeCheckDeSeleccion: ".chksel",
+    idCuerpoDePagina: "cuerpo-de-pagina"
 };
 
 const Evento = {

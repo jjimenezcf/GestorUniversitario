@@ -10,7 +10,7 @@
 
 
         public get Cuerpo(): HTMLDivElement {
-            return document.getElementById("cuerpo-de-pagina") as HTMLDivElement;
+            return document.getElementById(LiteralMnt.idCuerpoDePagina) as HTMLDivElement;
         };
 
         private modoTrabajo: string;
@@ -60,8 +60,12 @@
                 this.PosicionarFiltro();
                 this.PosicionarGrid();
             }
-            if ((this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) && !this.crudDeEdicion.EsModal) 
-                this.crudDeEdicion.PosicionarEdicion();
+            if (this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) {
+                if (!this.crudDeEdicion.EsModal)
+                    this.crudDeEdicion.PosicionarEdicion();
+                else
+                    this.crudDeEdicion.AjustarModal()
+            }
             if ((this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) && !this.crudDeCreacion.EsModal)
                 this.crudDeCreacion.PosicionarCreacion();
         }

@@ -6,12 +6,9 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
-using System;
 using Utilidades;
 using Gestor.Errores;
 using GestoresDeNegocio.Entorno;
-using ServicioDeDatos.Elemento;
-using Microsoft.Extensions.Configuration;
 using ServicioDeDatos.Entorno;
 
 namespace GestoresDeNegocio.TrabajosSometidos
@@ -26,7 +23,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
             {
                 CreateMap<TrabajoSometidoDtm, TrabajoSometidoDto>()
                 .ForMember(dto => dto.Ejecutor, dtm => dtm.MapFrom(x => $"({x.Ejecutor.Login})- {x.Ejecutor.Nombre} {x.Ejecutor.Apellido}"))
-                .ForMember(dto => dto.InformarA, dtm => dtm.MapFrom(x => x.InformarA.Nombre));
+                .ForMember(dto => dto.InformarA, dtm => dtm.MapFrom(x => x.InformarA.Nombre))
+                .ForMember(dto => dto.Programa, dtm => dtm.MapFrom(x => x.EsDll ? $"{x.Dll}.{x.Clase}.{x.Metodo}" : $"{x.Esquema}.{x.Pa}"));
+
 
                 CreateMap<TrabajoSometidoDto, TrabajoSometidoDtm>()
                 .ForMember(dtm => dtm.Ejecutor, dto => dto.Ignore())
@@ -79,21 +78,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 var ruta = GestorDeVariables.Gestor(Contexto, Mapeador).LeerVariable(Variable.Binarios);
                 Ensamblados.ValidarMetodo($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
             }
-            else 
-            {
-                var pas = GestorDePa.Leer(registro.Pa, registro.Esquema);
-                if (pas.Count == 0)
-                    GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
-
-                //using (var c = ContextoSe.ObtenerContexto())
-                //{
-                //    if (!new ExistePa(c, registro.Pa, registro.Esquema).Existe)
-                //        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
-                //}
-            }
+            else
+                GestorDePa.ValidarExistePa(registro.Pa, registro.Esquema);
 
         }
 
     }
 }
+
+//Antigua forma, antes de usar Dapper
+//using (var c = ContextoSe.ObtenerContexto())
+//{
+//    if (!new ExistePa(c, registro.Pa, registro.Esquema).Existe)
+//        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
+//}
 

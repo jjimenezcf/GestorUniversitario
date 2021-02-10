@@ -7,6 +7,7 @@
 
         protected CrudDeMnt: CrudMnt;
         protected PanelDeMnt: HTMLDivElement;
+        private Altura: number;
 
         protected get PanelDeEditar(): HTMLDivElement {
             return document.getElementById(this._idPanelEdicion) as HTMLDivElement;
@@ -14,6 +15,10 @@
 
         public get EsModal(): boolean {
             return this.PanelDeEditar.className === ClaseCss.contenedorModal;
+        }
+
+        public get PanelDeContenidoModal(): HTMLDivElement {
+            return document.getElementById(`${this._idPanelEdicion}_contenido`) as HTMLDivElement;
         }
 
         private get InfoSelectorEdicion(): InfoSelector {
@@ -121,8 +126,8 @@
             this.InfoSelectorEdicion = infSel;
 
             if (this.EsModal) {
-                var ventana = document.getElementById(this._idPanelEdicion);
-                ventana.style.display = 'block';
+                this.PanelDeEditar.style.display = 'block';
+                this.Altura = this.PanelDeContenidoModal.getBoundingClientRect().height;
             }
             else {
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
@@ -132,6 +137,13 @@
                 ApiCrud.MostrarPanel(this.PanelDeEditar);
             }
             this.EditarSeleccionado(1);
+        }
+
+        public AjustarModal(): void {
+            if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
+                this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
+            else
+                this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
         }
 
         public PosicionarEdicion(): void {
@@ -168,6 +180,7 @@
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             if (this.EsModal) {
                 ApiCrud.CerrarModal(this.PanelDeEditar);
+                EntornoSe.AjustarDivs();
             }
             else {
                 ApiCrud.OcultarPanel(this.PanelDeEditar);
