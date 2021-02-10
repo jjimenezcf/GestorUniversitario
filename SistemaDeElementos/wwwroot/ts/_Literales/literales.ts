@@ -98,7 +98,7 @@ const atGrid = {
 };
 
 const atArchivo = {
-    id: "id-archivo",
+    idArchivo: "id-archivo",
     controlador: literal.controlador,
     nombre: "nombre-archivo",
     canvas: "canvas-vinculado",

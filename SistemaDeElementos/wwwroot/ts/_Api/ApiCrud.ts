@@ -126,7 +126,7 @@
 
     function MapearArchivoAlJson(archivo: HTMLInputElement, elementoJson: JSON): void {
         var propiedadDto = archivo.getAttribute(atControl.propiedad);
-        let valor: string = archivo.getAttribute(atArchivo.id);
+        let valor: string = archivo.getAttribute(atArchivo.idArchivo);
         let obligatorio: string = archivo.getAttribute(atControl.obligatorio);
 
         if (obligatorio === "S" && IsNullOrEmpty(valor)) {

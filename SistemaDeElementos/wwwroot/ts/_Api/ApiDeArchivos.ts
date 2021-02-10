@@ -14,9 +14,9 @@
     }
 
     export function BlanquearArchivo(archivo: HTMLInputElement, blanquearImagen: boolean) {
-        archivo.setAttribute(atArchivo.id, '0');
+        archivo.setAttribute(atArchivo.idArchivo, '0');
         archivo.value = "";
-        archivo.removeAttribute(atArchivo.id);
+        archivo.removeAttribute(atArchivo.idArchivo);
         archivo.removeAttribute(atArchivo.nombre);
         archivo.classList.remove(ClaseCss.crtlNoValido);
         archivo.classList.add(ClaseCss.crtlValido);
@@ -224,7 +224,7 @@
         VisualizarBarraDeOk(archivo);
         let tipo: string = archivo.getAttribute(atControl.tipo);
         if (tipo === TipoControl.Archivo)
-            archivo.setAttribute(atArchivo.id, peticion.resultado.datos);
+            archivo.setAttribute(atArchivo.idArchivo, peticion.resultado.datos);
         if (tipo === TipoControl.UrlDeArchivo)
             archivo.setAttribute(atArchivo.nombre, peticion.resultado.datos);
     }

@@ -233,7 +233,7 @@
                 let valor: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
                 if (valor !== null) {
                     let visorVinculado: string = selector.getAttribute(atArchivo.imagen);
-                    selector.setAttribute(atArchivo.id, valor.toString());
+                    selector.setAttribute(atArchivo.idArchivo, valor.toString());
                     this.MapearImagenes(elementoJson, visorVinculado);
                 }
             }
