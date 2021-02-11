@@ -46,7 +46,7 @@
 
         input.classList.remove(ClaseCss.crtlNoValido);
         input.classList.add(ClaseCss.crtlValido);
-        elementoJson[guardarEn] = valor.toString();
+        elementoJson[guardarEn] = valor ===0 ? '': valor.toString();
     }
 
     export function MapearListasDeElementosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {

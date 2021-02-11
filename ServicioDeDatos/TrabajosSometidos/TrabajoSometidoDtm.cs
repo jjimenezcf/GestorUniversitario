@@ -64,8 +64,8 @@ namespace ServicioDeDatos.TrabajosSometidos
             //modelBuilder.Entity<TrabajoDtm>().HasAlternateKey(p => new { p.Dll, p.Clase, p.Metodo });
             //modelBuilder.Entity<TrabajoDtm>().HasAlternateKey(p => new { p.Esquema, p.Pa });
 
-            modelBuilder.Entity<TrabajoSometidoDtm>().Property(p => p.ComunicarFin).IsRequired(true).HasDefaultValue(true);
-            modelBuilder.Entity<TrabajoSometidoDtm>().Property(p => p.ComunicarError).IsRequired(true).HasDefaultValue(true);
+            modelBuilder.Entity<TrabajoSometidoDtm>().Property(p => p.ComunicarFin).IsRequired(true);
+            modelBuilder.Entity<TrabajoSometidoDtm>().Property(p => p.ComunicarError).IsRequired(true);
 
             modelBuilder.Entity<TrabajoSometidoDtm>().HasOne(x => x.Ejecutor).WithMany().HasForeignKey(x => x.IdEjecutor).HasConstraintName("FK_TRABAJO_ID_EJECUTOR").OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<TrabajoSometidoDtm>().HasOne(x => x.InformarA).WithMany().HasForeignKey(x => x.IdInformarA).HasConstraintName("FK_TRABAJO_ID_INFORMAR_A").OnDelete(DeleteBehavior.Restrict);

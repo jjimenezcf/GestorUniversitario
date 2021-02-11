@@ -86,6 +86,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
 
+            if (parametros.Operacion == TipoOperacion.Eliminar)
+                return;
+
             if (registro.Pa.IsNullOrEmpty() && registro.Esquema.IsNullOrEmpty() && registro.Dll.IsNullOrEmpty() && registro.Clase.IsNullOrEmpty() && registro.Metodo.IsNullOrEmpty())
                 GestorDeErrores.Emitir("Debe indicar una Dll o un PA");
 
