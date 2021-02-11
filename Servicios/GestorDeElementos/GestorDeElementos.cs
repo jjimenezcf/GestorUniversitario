@@ -220,8 +220,32 @@ namespace GestorDeElementos
 
         protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            var registros = new List<TRegistro> { registro };
-            PersistirRegistros(registros, parametros);
+            var transaccion = Contexto.IniciarTransaccion();
+            try
+            {
+                AntesDePersistir(registro, parametros);
+
+                if (parametros.Operacion == TipoOperacion.Insertar)
+                    Contexto.Add(registro);
+                else
+                if (parametros.Operacion == TipoOperacion.Modificar)
+                    Contexto.Update(registro);
+                else
+                if (parametros.Operacion == TipoOperacion.Eliminar)
+                    Contexto.Remove(registro);
+                else
+                    throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
+                
+                Contexto.SaveChanges();
+
+                DespuesDePersistir(registro, parametros);
+                Contexto.Commit(transaccion);
+            }
+            catch (Exception)
+            {
+                Contexto.Rollback(transaccion);
+                throw;
+            }
         }
 
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
@@ -231,21 +255,7 @@ namespace GestorDeElementos
             {
                 foreach (var registro in registros)
                 {
-                    AntesDePersistir(registro, parametros);
-
-                    if (parametros.Operacion == TipoOperacion.Insertar)
-                        Contexto.Add(registro);
-                    else
-                    if (parametros.Operacion == TipoOperacion.Modificar)
-                        Contexto.Update(registro);
-                    else
-                    if (parametros.Operacion == TipoOperacion.Eliminar)
-                        Contexto.Remove(registro);
-                    else
-                        throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
-                    Contexto.SaveChanges();
-
-                    DespuesDePersistir(registro, parametros);
+                    PersistirRegistro(registro, parametros);
                 }
 
                 Contexto.Commit(transaccion);
@@ -278,6 +288,22 @@ namespace GestorDeElementos
         {
             AntesDePersistirValidarRegistro(registro, parametros);
 
+            if (typeof(TRegistro).GetInterfaces().Contains(typeof(IElementoDtm)))
+            {
+                var elemento = (IElementoDtm)registro;
+                if (parametros.Operacion == TipoOperacion.Insertar)
+                {
+                    elemento.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
+                    elemento.FechaCreacion = DateTime.Now;
+                }
+                else
+                if (parametros.Operacion == TipoOperacion.Modificar)
+                {
+                    elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
+                    elemento.FechaModificacion = DateTime.Now;
+                }
+            }
+
             if (parametros.Operacion != TipoOperacion.Insertar)
                 RegistroEnBD = LeerRegistroPorId(registro.Id);
         }
@@ -302,32 +328,6 @@ namespace GestorDeElementos
 
             if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
             {
-            }
-        }
-        protected void PersistirRegistro(Registro registro, ParametrosDeNegocio parametros) => PersistirRegistro(new List<Registro> { registro }, parametros);
-
-        protected void PersistirRegistro(List<Registro> registros, ParametrosDeNegocio parametros)
-        {
-
-            foreach (Registro registro in registros)
-            {
-                if (typeof(TRegistro).GetInterfaces().Contains(typeof(IElementoDtm)))
-                {
-                    var elemento = (ElementoDtm)registro;
-                    if (parametros.Operacion == TipoOperacion.Insertar)
-                    {
-                        elemento.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
-                        elemento.FechaCreacion = DateTime.Now;
-                    }
-                    else
-                    if (parametros.Operacion == TipoOperacion.Modificar)
-                    {
-                        elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
-                        elemento.FechaModificacion = DateTime.Now;
-                    }
-                }
-
-                PersistirRegistro(registro as TRegistro, parametros);
             }
         }
 

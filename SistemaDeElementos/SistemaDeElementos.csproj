@@ -166,6 +166,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\UsuariosDeUnPuesto.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrabajosDeUsuario.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrabajosSometido.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

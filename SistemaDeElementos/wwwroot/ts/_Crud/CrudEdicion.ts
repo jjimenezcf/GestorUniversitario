@@ -128,6 +128,7 @@
             if (this.EsModal) {
                 this.PanelDeEditar.style.display = 'block';
                 this.Altura = this.PanelDeContenidoModal.getBoundingClientRect().height;
+                this.AjustarModal();
             }
             else {
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);

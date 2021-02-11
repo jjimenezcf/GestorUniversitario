@@ -70,7 +70,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
             ts.Metodo = filtros[2].Valor;
             ts.ComunicarError = true;
             ts.ComunicarFin = false;
-            PersistirRegistro((ServicioDeDatos.Elemento.Registro)ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
+
+            PersistirRegistro(ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
             return LeerRegistroCacheado(filtros);
         }
 

@@ -44,6 +44,8 @@ namespace GestoresDeNegocio.Callejero
             var dll = Assembly.GetExecutingAssembly().GetName().Name;
             var clase = typeof(GestorDePaises).FullName;
             var ts = GestorDeTrabajosSometido.Obtener(contexto, mapeador, "Importar callejero", dll, clase, nameof(ImportarCallejero));
+            // crear trabajo de usuario
+            //liberarlo
         }
 
     }

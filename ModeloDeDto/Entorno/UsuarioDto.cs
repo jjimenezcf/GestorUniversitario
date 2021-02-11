@@ -15,7 +15,7 @@ namespace ModeloDeDto.Entorno
            , ExpresionNombre = "([Login]) [Apellido], [Nombre]")]
     public class UsuarioDto : ElementoDto
     {
-        public const string MostrarUsuario = "[NombreCompleto]";
+        public static new string ExpresionPorDefecto = "[NombreCompleto]";
 
         [IUPropiedad(
             VisibleEnGrid = true,

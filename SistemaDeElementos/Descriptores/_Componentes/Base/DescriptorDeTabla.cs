@@ -62,7 +62,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 return numero;
             }
         }
-        public int ColSpan => Tabla.NumeroDeColumnas - Fila.NumeroDeColumnas + 1;
+
+        private bool _conColSpan;
+        public int ColSpan => _conColSpan ? Tabla.NumeroDeColumnas - Fila.NumeroDeColumnas + 1: 0;
 
         public DescriptorDeColumna(DescriptorDeFila fila, short indice)
         {
@@ -80,6 +82,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     PosicionMaxima = pos;
 
                 NumeroDeControles = (short)(NumeroDeControles + 1);
+                _conColSpan = Controles[pos].atributos.ConSpanEnColumnas;
             }
             else
                 AnadirControl((short)(pos + 1), descriptor);
@@ -141,7 +144,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeTabla
     {
         private Dictionary<short, DescriptorDeFila> Filas = new Dictionary<short, DescriptorDeFila>();
-        private Type _Tipo;
+        public Type Tipo;
         public ModoDeTrabajo ModoDeTrabajo { get; private set; }
         public short NumeroDeFilas { get; private set; } = 0;
 
@@ -149,11 +152,11 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string Controlador { get; private set; }
 
-        public string IdHtml => $"table-{_Tipo.Name}-{ModoDeTrabajo}".ToLower();
+        public string IdHtml => $"table-{Tipo.Name}-{ModoDeTrabajo}".ToLower();
 
         public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo, string controlador)
         {
-            _Tipo = tipo;
+            Tipo = tipo;
             Controlador = controlador;
             ModoDeTrabajo = modoDeTrabajo;
             var propiedades = tipo.GetProperties();

@@ -28,6 +28,8 @@ namespace ModeloDeDto
 
         private string _ayuda = "";
 
+        public static string NombreConColSpan => "ConSpanEnColumnas";
+
         public string EtiquetaGrid
         {
             get
@@ -40,7 +42,7 @@ namespace ModeloDeDto
         }
 
         public string Etiqueta { get; set; } = "";
-        public string Ayuda { get { return _ayuda.IsNullOrEmpty() ? Etiqueta : _ayuda;} set { _ayuda = value; } } 
+        public string Ayuda { get { return _ayuda.IsNullOrEmpty() ? Etiqueta : _ayuda; } set { _ayuda = value; } }
         public bool SiempreVisible { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar && _visibleEnGrid; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = _visibleEnGrid = value; } }
         public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != enumTipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
         public bool VisibleEnEdicion { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = value; } }
@@ -49,6 +51,7 @@ namespace ModeloDeDto
         public bool VisibleAlConsultar { get; set; } = true;
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
+        public bool ConSpanEnColumnas { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
         public Type Tipo { get; set; } = typeof(string);
         public short Fila { get; set; }
@@ -102,13 +105,13 @@ namespace ModeloDeDto
 
             if (modo == ModoDeTrabajo.Edicion)
                 return VisibleAlEditar;
-            
+
             if (modo == ModoDeTrabajo.Nuevo)
                 return VisibleAlCrear;
-            
+
             if (modo == ModoDeTrabajo.Consulta)
                 return VisibleAlConsultar;
-            
+
             if (modo == ModoDeTrabajo.Mantenimiento)
                 return VisibleEnGrid;
 

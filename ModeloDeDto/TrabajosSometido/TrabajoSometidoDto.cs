@@ -147,7 +147,6 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(UsuarioDto),
             GuardarEn = nameof(idEjecutor),
-            MostrarExpresion = UsuarioDto.MostrarUsuario,
             Fila = 6,
             Columna = 0,
             Ordenar = false,
