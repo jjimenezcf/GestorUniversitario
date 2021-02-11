@@ -43,7 +43,7 @@ namespace GestoresDeNegocio.Callejero
                 GestorDeErrores.Emitir("No se han proporcionado los parámetros para someter el trabajo de importación");
             var dll = Assembly.GetExecutingAssembly().GetName().Name;
             var clase = typeof(GestorDePaises).FullName;
-            var ts = GestorDeTrabajosSometido.Obtener(contexto, mapeador, dll, clase, nameof(ImportarCallejero));
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, mapeador, "Importar callejero", dll, clase, nameof(ImportarCallejero));
         }
 
     }

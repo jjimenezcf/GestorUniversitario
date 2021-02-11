@@ -44,7 +44,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return new GestorDeTrabajosSometido(contexto, mapeador);
         }
 
-        internal static TrabajoSometidoDtm Obtener(ContextoSe contexto, IMapper mapeador,string dll, string clase, string metodo)
+        internal static TrabajoSometidoDtm Obtener(ContextoSe contexto, IMapper mapeador, string nombreTs ,string dll, string clase, string metodo)
         {
             var gestor = Gestor(contexto, mapeador);
             var filtroDll = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Dll), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = dll };
@@ -53,16 +53,25 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             var filtros = new List<ClausulaDeFiltrado>() { filtroDll, filtroClase, filtroMetodo };
 
-            var ts = gestor.LeerRegistroCacheado(filtros);
+            var ts = gestor.LeerRegistroCacheado(filtros, false, true);
             if (ts == null)
-              ts =  gestor.CrearTs(dll, clase, metodo);
+              ts =  gestor.CrearTs(nombreTs, filtros);
 
             return ts;
         }
 
-        private TrabajoSometidoDtm CrearTs(string dll, string clase, string metodo)
+        private TrabajoSometidoDtm CrearTs(string nombreTs, List<ClausulaDeFiltrado> filtros)
         {
-            throw new System.NotImplementedException();
+            var ts = new TrabajoSometidoDtm();
+            ts.Nombre = nombreTs;
+            ts.EsDll = true;
+            ts.Dll = filtros[0].Valor;
+            ts.Clase = filtros[1].Valor;
+            ts.Metodo = filtros[2].Valor;
+            ts.ComunicarError = true;
+            ts.ComunicarFin = false;
+            PersistirRegistro((ServicioDeDatos.Elemento.Registro)ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return LeerRegistroCacheado(filtros);
         }
 
         protected override IQueryable<TrabajoSometidoDtm> AplicarJoins(IQueryable<TrabajoSometidoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

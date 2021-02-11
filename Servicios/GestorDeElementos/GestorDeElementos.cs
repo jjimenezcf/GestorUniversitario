@@ -304,26 +304,30 @@ namespace GestorDeElementos
             {
             }
         }
-        protected void PersistirElementoDtm(ElementoDtm elementoDtm, ParametrosDeNegocio parametros) => PersistirElementosDtm(new List<ElementoDtm> { elementoDtm }, parametros);
+        protected void PersistirRegistro(Registro registro, ParametrosDeNegocio parametros) => PersistirRegistro(new List<Registro> { registro }, parametros);
 
-        protected void PersistirElementosDtm(List<ElementoDtm> elementosDtm, ParametrosDeNegocio parametros)
+        protected void PersistirRegistro(List<Registro> registros, ParametrosDeNegocio parametros)
         {
 
-            foreach (var elementoDtm in elementosDtm)
+            foreach (Registro registro in registros)
             {
-                if (parametros.Operacion == TipoOperacion.Insertar)
+                if (typeof(TRegistro).GetInterfaces().Contains(typeof(IElementoDtm)))
                 {
-                    elementoDtm.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
-                    elementoDtm.FechaCreacion = DateTime.Now;
-                }
-                else
-                if (parametros.Operacion == TipoOperacion.Modificar)
-                {
-                    elementoDtm.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
-                    elementoDtm.FechaModificacion = DateTime.Now;
+                    var elemento = (ElementoDtm)registro;
+                    if (parametros.Operacion == TipoOperacion.Insertar)
+                    {
+                        elemento.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
+                        elemento.FechaCreacion = DateTime.Now;
+                    }
+                    else
+                    if (parametros.Operacion == TipoOperacion.Modificar)
+                    {
+                        elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
+                        elemento.FechaModificacion = DateTime.Now;
+                    }
                 }
 
-                PersistirRegistro(elementoDtm as TRegistro, parametros);
+                PersistirRegistro(registro as TRegistro, parametros);
             }
         }
 
@@ -373,7 +377,7 @@ namespace GestorDeElementos
             var cache = ServicioDeCaches.Obtener($"{typeof(TRegistro).FullName}-ak");
             if (!cache.ContainsKey(indice))
             {
-                var registros = LeerRegistros(0,-1,filtros);
+                var registros = LeerRegistros(0, -1, filtros);
 
                 if (errorSiNoHay && registros.Count == 0)
                     GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el filtro proporcionado");
@@ -381,6 +385,11 @@ namespace GestorDeElementos
                 if (errorSiHayMasDeUno && registros.Count > 1)
                     GestorDeErrores.Emitir($"Hay más de un registro para el filtro proporcionado");
 
+                if (registros.Count == 0)
+                    return null;
+
+                if (registros.Count > 1)
+                    return registros[0];
 
                 cache[indice] = registros[0];
             }
@@ -411,7 +420,13 @@ namespace GestorDeElementos
             if (errorSiHayMasDeUno && registros.Count > 1)
                 GestorDeErrores.Emitir($"Hay más de un registro para el valor {valor} en la clase {typeof(TRegistro).Name}");
 
-            return registros.Count == 1 ? registros[0] : null;
+            if (registros.Count == 0)
+                return null;
+
+            if (registros.Count > 1)
+                return registros[0];
+
+            return registros[0];
         }
 
         private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado)

@@ -58,7 +58,7 @@ namespace GestoresDeNegocio.Archivos
             var tran = Contexto.IniciarTransaccion();
             try
             {
-                PersistirElementoDtm(archivo, parametros);
+                PersistirRegistro((ServicioDeDatos.Elemento.Registro)archivo, parametros);
                 File.Move(rutaConFichero, $@"{archivo.AlmacenadoEn}\{archivo.Id}.se", true);
                 Contexto.Commit(tran);
             }
