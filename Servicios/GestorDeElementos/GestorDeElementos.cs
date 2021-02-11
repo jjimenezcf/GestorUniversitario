@@ -271,6 +271,7 @@ namespace GestorDeElementos
                     ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}");
             }
 
+            ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
         }
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
@@ -330,7 +331,7 @@ namespace GestorDeElementos
 
         #region Métodos de lectura
 
-        public TElemento LeerElementoPorId(int id, Dictionary<string,object> opcionesDelMapeo = null)
+        public TElemento LeerElementoPorId(int id, Dictionary<string, object> opcionesDelMapeo = null)
         {
             TRegistro elementoDtm;
             var parametros = opcionesDelMapeo == null ? new ParametrosDeMapeo() : new ParametrosDeMapeo() { Opciones = opcionesDelMapeo };
@@ -343,7 +344,7 @@ namespace GestorDeElementos
         {
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
 
-            ParametrosDeMapeo parametrosDelMapeo = opcionesDeMapeo.Count > 0 ? new ParametrosDeMapeo() { Opciones = opcionesDeMapeo} : null;  
+            ParametrosDeMapeo parametrosDelMapeo = opcionesDeMapeo.Count > 0 ? new ParametrosDeMapeo() { Opciones = opcionesDeMapeo } : null;
 
             return MapearElementos(elementosDeBd, parametrosDelMapeo);
         }
@@ -363,6 +364,28 @@ namespace GestorDeElementos
             return LeerRegistroCacheado(nameof(Registro.Id), id.ToString());
         }
 
+
+        public TRegistro LeerRegistroCacheado(List<ClausulaDeFiltrado> filtros, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
+        {
+            string indice = "";
+            foreach (var filtro in filtros)
+                indice = indice.IsNullOrEmpty() ? filtro.Clausula : $"{indice}-{filtro.Clausula}";
+            var cache = ServicioDeCaches.Obtener($"{typeof(TRegistro).FullName}-ak");
+            if (!cache.ContainsKey(indice))
+            {
+                var registros = LeerRegistros(0,-1,filtros);
+
+                if (errorSiNoHay && registros.Count == 0)
+                    GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el filtro proporcionado");
+
+                if (errorSiHayMasDeUno && registros.Count > 1)
+                    GestorDeErrores.Emitir($"Hay más de un registro para el filtro proporcionado");
+
+
+                cache[indice] = registros[0];
+            }
+            return (TRegistro)cache[indice];
+        }
         public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
         {
             var indice = $"{propiedad}-{valor}";
@@ -415,7 +438,7 @@ namespace GestorDeElementos
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
             orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
 
-            return LeerRegistros(posicion,cantidad,filtros,orden);
+            return LeerRegistros(posicion, cantidad, filtros, orden);
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
@@ -450,7 +473,7 @@ namespace GestorDeElementos
             if (parametros.Operacion == TipoOperacion.Leer)
             {
                 if (orden == null) orden = new List<ClausulaDeOrdenacion>();
-               registros = AplicarOrden(registros, orden);
+                registros = AplicarOrden(registros, orden);
             }
 
             registros = registros.Skip(posicion);
@@ -493,7 +516,7 @@ namespace GestorDeElementos
                 if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
                 {
                     HayFiltroPorId = filtro.Criterio == CriteriosDeFiltrado.igual;
-                    return registros.AplicarFiltroPorIdentificador(filtro,nameof(Registro.Id));
+                    return registros.AplicarFiltroPorIdentificador(filtro, nameof(Registro.Id));
                 }
             }
 

@@ -7,6 +7,10 @@ using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
+using Gestor.Errores;
+using Utilidades;
+using GestoresDeNegocio.TrabajosSometidos;
+using System.Reflection;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -28,13 +32,18 @@ namespace GestoresDeNegocio.Callejero
         {
 
         }
-        internal static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePaises(contexto, mapeador);
         }
 
-        public static void ImportarCallejero(string parametros)
-        { 
+        public static void ImportarCallejero(ContextoSe contexto, IMapper mapeador, string parametros)
+        {
+            if (parametros.IsNullOrEmpty())
+                GestorDeErrores.Emitir("No se han proporcionado los parámetros para someter el trabajo de importación");
+            var dll = Assembly.GetExecutingAssembly().GetName().Name;
+            var clase = typeof(GestorDePaises).FullName;
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, mapeador, dll, clase, nameof(ImportarCallejero));
         }
 
     }

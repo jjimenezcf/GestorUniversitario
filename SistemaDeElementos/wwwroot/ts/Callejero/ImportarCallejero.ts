@@ -60,7 +60,7 @@
                 }
                 var parametrosSometer = JSON.stringify(arrayDeArchivos);
 
-                let url: string = `/importarCallejero/epSometerImportacion?${parametrosSometer}`;
+                let url: string = `/importarCallejero/epImportarCallejero?parametros=${parametrosSometer}`;
 
                 let a = new ApiDeAjax.DescriptorAjax(this
                     , 'epSometerImportacion'

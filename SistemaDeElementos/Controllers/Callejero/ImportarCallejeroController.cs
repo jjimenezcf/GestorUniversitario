@@ -30,5 +30,26 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewFormulario();
         }
 
+        // END-POIN: desde el Callejero.ImportarCallejero.ts. somete la importación de ficheros csv
+        public JsonResult epImportarCallejero(string parametros)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                GestorDePaises.ImportarCallejero(Contexto, Mapeador, parametros);
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = "Trabajo de importación sometido correctamente";
+            }
+            catch(Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = e.Message;
+                r.Mensaje = "Error al someter el trabajo de importación del callejero";
+            }
+
+            return new JsonResult(r);
+        }
+
     }
 }

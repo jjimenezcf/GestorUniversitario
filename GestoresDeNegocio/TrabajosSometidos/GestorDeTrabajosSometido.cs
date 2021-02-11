@@ -24,7 +24,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 CreateMap<TrabajoSometidoDtm, TrabajoSometidoDto>()
                 .ForMember(dto => dto.Ejecutor, dtm => dtm.MapFrom(x => $"({x.Ejecutor.Login})- {x.Ejecutor.Nombre} {x.Ejecutor.Apellido}"))
                 .ForMember(dto => dto.InformarA, dtm => dtm.MapFrom(x => x.InformarA.Nombre))
-                .ForMember(dto => dto.Programa, dtm => dtm.MapFrom(x => x.EsDll ? $"{x.Dll}.{x.Clase}.{x.Metodo}" : $"{x.Esquema}.{x.Pa}"));
+                .ForMember(dto => dto.Programa, dtm => dtm.MapFrom(x => x.EsDll ? $"{x.Clase}.{x.Metodo}" : $"{x.Esquema}.{x.Pa}"));
 
 
                 CreateMap<TrabajoSometidoDto, TrabajoSometidoDtm>()
@@ -38,12 +38,32 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
 
         }
+
         public static GestorDeTrabajosSometido Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeTrabajosSometido(contexto, mapeador);
         }
 
+        internal static TrabajoSometidoDtm Obtener(ContextoSe contexto, IMapper mapeador,string dll, string clase, string metodo)
+        {
+            var gestor = Gestor(contexto, mapeador);
+            var filtroDll = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Dll), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = dll };
+            var filtroClase = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Clase), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = clase };
+            var filtroMetodo = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Metodo), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = metodo };
 
+            var filtros = new List<ClausulaDeFiltrado>() { filtroDll, filtroClase, filtroMetodo };
+
+            var ts = gestor.LeerRegistroCacheado(filtros);
+            if (ts == null)
+              ts =  gestor.CrearTs(dll, clase, metodo);
+
+            return ts;
+        }
+
+        private TrabajoSometidoDtm CrearTs(string dll, string clase, string metodo)
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected override IQueryable<TrabajoSometidoDtm> AplicarJoins(IQueryable<TrabajoSometidoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
