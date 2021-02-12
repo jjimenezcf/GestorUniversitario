@@ -180,7 +180,7 @@ namespace GestorDeElementos
         public string CrearRelacion(int idElemento1, int idElemento2)
         {
             var registro = Registro.RegistroVacio<TRegistro>();
-            if (!registro.RegistroDeRelacion)
+            if (!registro.ImplementaUnaRelacion())
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
 
             var filtros = new List<ClausulaDeFiltrado>();
@@ -210,9 +210,11 @@ namespace GestorDeElementos
                     Clausula = propiedad.Name,
                     Criterio = CriteriosDeFiltrado.igual
                 };
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                
+                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())
                     c.Valor = InvertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+
+                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento2)).ToString())
                     c.Valor = InvertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
 
                 if (c.Valor.Entero() > 0)
@@ -278,7 +280,7 @@ namespace GestorDeElementos
             var propiedades = PropiedadesDelObjeto(registro);
             foreach (var propiedad in propiedades)
             {
-                if (typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)) && propiedad.Name == nameof(INombre.Nombre))
+                if (typeof(TRegistro).ImplementaNombre() && propiedad.Name == nameof(INombre.Nombre))
                     ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(INombre.Nombre)}-{registro.ValorPropiedad(nameof(INombre.Nombre))}");
 
                 if (propiedad.Name == nameof(registro.Id))
@@ -292,7 +294,7 @@ namespace GestorDeElementos
         {
             AntesDePersistirValidarRegistro(registro, parametros);
 
-            if (typeof(TRegistro).GetInterfaces().Contains(typeof(IElementoDtm)))
+            if (registro.ImplementaUnElemento())
             {
                 var elemento = (IElementoDtm)registro;
                 if (parametros.Operacion == TipoOperacion.Insertar)
@@ -455,7 +457,7 @@ namespace GestorDeElementos
                 throw new Exception($"se ha solicitado leer registros por nombre, el tipo {typeof(TRegistro).Name} no tiene dicho campo");
 
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
-            orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(IElementoDtm.Nombre), Modo = ModoDeOrdenancion.ascendente });
+            orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(INombre.Nombre), Modo = ModoDeOrdenancion.ascendente });
 
             return LeerRegistros(posicion, cantidad, filtros, orden);
         }
@@ -691,9 +693,10 @@ namespace GestorDeElementos
             var propiedades = PropiedadesDelObjeto(registro);
             foreach (var propiedad in propiedades)
             {
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento1)
+                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())
                     propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
-                if (propiedad.Name == registro.NombreDeLaPropiedadDelIdElemento2)
+
+                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento2)).ToString())
                     propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
             }
 

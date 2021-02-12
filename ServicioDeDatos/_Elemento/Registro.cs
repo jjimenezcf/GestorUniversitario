@@ -102,21 +102,8 @@ namespace ServicioDeDatos.Elemento
         public UsuarioDtm UsuarioModificador { get; set; }
     }
 
-
-    public class Registro
+    public interface IRelacion
     {
-        [Key]
-        [Column("ID", Order = 1, TypeName = "INT")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [IgnoreDataMember]
-        [NotMapped]
-        public bool RegistroDeRelacion { get; set; } = false;
-
-        [IgnoreDataMember]
-        [NotMapped]
-        public bool RegistroConAuditoria { get; set; } = false;
 
         [IgnoreDataMember]
         [NotMapped]
@@ -125,6 +112,15 @@ namespace ServicioDeDatos.Elemento
         [IgnoreDataMember]
         [NotMapped]
         public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
+    }
+
+
+    public class Registro
+    {
+        [Key]
+        [Column("ID", Order = 1, TypeName = "INT")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         public static TRegistro RegistroVacio<TRegistro>()
         {
@@ -138,15 +134,13 @@ namespace ServicioDeDatos.Elemento
             //Creamos el objeto de manera dinámica
             return (TRegistro)constructorSinParametros.Invoke(new object[] { });
         }
-
-
     }
 
     public static class RegistroExtensiones
     {
         public static object ValorPropiedad(this Registro registro, string propiedad)
         {
-            return registro.GetType().GetProperty(propiedad);
+            return registro.GetType().GetProperty(propiedad).GetValue(registro);
         }
 
         public static bool ImplementaNombre(this Registro registro)
@@ -157,9 +151,21 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(INombre));
         }
+        public static bool ImplementaUnaRelacion(this Registro registro)
+        {
+            return registro.GetType().GetInterfaces().Contains(typeof(IRelacion));
+        }
         public static bool ImplementaUnaRelacion(this Type tipoRegistro)
         {
-            return tipoRegistro.GetInterfaces().Contains(typeof(INombre));
+            return tipoRegistro.GetInterfaces().Contains(typeof(IRelacion));
+        }
+        public static bool ImplementaUnElemento(this Registro registro)
+        {
+            return registro.GetType().GetInterfaces().Contains(typeof(IElementoDtm));
+        }
+        public static bool ImplementaUnElemento(this Type tipoRegistro)
+        {
+            return tipoRegistro.GetInterfaces().Contains(typeof(IElementoDtm));
         }
     }
 
@@ -167,16 +173,18 @@ namespace ServicioDeDatos.Elemento
     {
         [Required]
         [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public string Nombre { get ; set; }
+        public string Nombre { get; set; }
     }
 
-
-    public class RegistroDeRelacion : Registro
+    public class RegistroDeRelacion : Registro, IRelacion
     {
-        public RegistroDeRelacion()
-        {
-            RegistroDeRelacion = true;
-        }
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento1 { get; set; }
+
+        [IgnoreDataMember]
+        [NotMapped]
+        public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
     }
 
     public class ElementoDtm : RegistroConNombre, IElementoDtm
@@ -197,11 +205,6 @@ namespace ServicioDeDatos.Elemento
         [Column("IDUSUMODI", Order = 1, TypeName = "INT")]
         public int? IdUsuaModi { get; set; }
         public virtual UsuarioDtm UsuarioModificador { get; set; }
-
-        public ElementoDtm()
-        {
-            RegistroConAuditoria = true;            
-        }
     }
 
 }
