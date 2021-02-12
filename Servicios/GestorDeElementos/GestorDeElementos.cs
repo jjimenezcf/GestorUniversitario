@@ -74,19 +74,21 @@ namespace GestorDeElementos
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         {
             Mapeador = mapeador;
+            Contexto = contexto;
+        }
 
-            IniciarClase(contexto);
+
+        public GestorDeElementos(TContexto contexto)
+        : this(contexto, contexto.Mapeador)
+        {
+            if (contexto.Mapeador == null)
+                throw new Exception("Falta definir el mapeador");
         }
 
 
         public GestorDeElementos(Func<TContexto> generadorDeContexto, IMapper mapeador)
         : this(generadorDeContexto(), mapeador)
         {
-        }
-
-        protected virtual void IniciarClase(TContexto contexto)
-        {
-            Contexto = contexto;
         }
 
         #region ASYNC

@@ -37,14 +37,16 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDePaises(contexto, mapeador);
         }
 
-        public static void ImportarCallejero(ContextoSe contexto, IMapper mapeador, string parametros)
+        public static void ImportarCallejero(ContextoSe contexto, string parametros)
         {
             if (parametros.IsNullOrEmpty())
                 GestorDeErrores.Emitir("No se han proporcionado los parámetros para someter el trabajo de importación");
             var dll = Assembly.GetExecutingAssembly().GetName().Name;
             var clase = typeof(GestorDePaises).FullName;
-            var ts = GestorDeTrabajosSometido.Obtener(contexto, mapeador, "Importar callejero", dll, clase, nameof(ImportarCallejero));
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(ImportarCallejero));
             // crear trabajo de usuario
+
+            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
             //liberarlo
         }
 

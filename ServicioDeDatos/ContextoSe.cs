@@ -9,6 +9,7 @@ using ServicioDeDatos.Utilidades;
 using Z.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
+using AutoMapper;
 
 namespace ServicioDeDatos
 {
@@ -87,6 +88,8 @@ namespace ServicioDeDatos
         //private static ConcurrentDictionary<string, ContextoSe> _CacheDeContextos { get; set; }
         public DatosDeConexion DatosDeConexion { get; private set; }
         public IConfiguration Configuracion { get; private set; }
+
+        public IMapper Mapeador { get; set; }
 
         internal  IDbContextTransaction Transaccion { get; set; }
 

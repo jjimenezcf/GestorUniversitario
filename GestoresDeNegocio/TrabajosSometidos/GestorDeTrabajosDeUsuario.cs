@@ -6,6 +6,7 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
+using System;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -31,14 +32,25 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
         public GestorDeTrabajosDeUsuario(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador)
+        {
+
+        }
+        public GestorDeTrabajosDeUsuario(ContextoSe contexto)
+        : base(contexto)
         {
 
         }
 
-        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
         {
-            return new GestorDeTrabajosDeUsuario(contexto, mapeador);
+            return new GestorDeTrabajosDeUsuario(contexto);
+        }
+
+        internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
+        {
+            var gestor = Gestor(contexto);
+            return (TrabajoDeUsuarioDtm)null;
         }
 
         protected override IQueryable<TrabajoDeUsuarioDtm> AplicarJoins(IQueryable<TrabajoDeUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

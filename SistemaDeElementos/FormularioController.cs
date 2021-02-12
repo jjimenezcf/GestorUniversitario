@@ -18,14 +18,14 @@ namespace MVCSistemaDeElementos.Controllers
         where TContexto : ContextoSe
     {
         public TContexto Contexto { get; }
-        public IMapper Mapeador { get; }
+        public IMapper Mapeador => Contexto.Mapeador;
         public DescriptorDeFormulario Descriptor { get; }
 
         public FormularioController(TContexto contexto, IMapper mapeador, DescriptorDeFormulario descriptor, GestorDeErrores gestorErrores)
         : base(gestorErrores, contexto.DatosDeConexion)
         {
             Contexto = contexto;
-            Mapeador = mapeador;
+            Contexto.Mapeador = mapeador;
             Descriptor = descriptor;
         }
 

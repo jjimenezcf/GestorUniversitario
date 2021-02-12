@@ -10,6 +10,7 @@ using Utilidades;
 using Gestor.Errores;
 using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Entorno;
+using System;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -33,20 +34,20 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
-        public GestorDeTrabajosSometido(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        public GestorDeTrabajosSometido(ContextoSe contexto)
+        :base(contexto)
         {
 
         }
 
-        public static GestorDeTrabajosSometido Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeTrabajosSometido Gestor(ContextoSe contexto)
         {
-            return new GestorDeTrabajosSometido(contexto, mapeador);
+            return new GestorDeTrabajosSometido(contexto);
         }
 
-        internal static TrabajoSometidoDtm Obtener(ContextoSe contexto, IMapper mapeador, string nombreTs ,string dll, string clase, string metodo)
+        internal static TrabajoSometidoDtm Obtener(ContextoSe contexto, string nombreTs ,string dll, string clase, string metodo)
         {
-            var gestor = Gestor(contexto, mapeador);
+            var gestor = Gestor(contexto);
             var filtroDll = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Dll), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = dll };
             var filtroClase = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Clase), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = clase };
             var filtroMetodo = new ClausulaDeFiltrado() { Clausula = nameof(TrabajoSometidoDtm.Metodo), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = metodo };

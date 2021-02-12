@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
-                GestorDePaises.ImportarCallejero(Contexto, Mapeador, parametros);
+                GestorDePaises.ImportarCallejero(Contexto, parametros);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo de importación sometido correctamente";
             }
