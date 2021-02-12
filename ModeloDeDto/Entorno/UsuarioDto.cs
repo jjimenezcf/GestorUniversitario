@@ -10,12 +10,10 @@ namespace ModeloDeDto.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
-    [IUDto(AnchoEtiqueta = 20
-           , AnchoSeparador = 5
-           , ExpresionNombre = "([Login]) [Apellido], [Nombre]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class UsuarioDto : ElementoDto
     {
-        public static new string ExpresionPorDefecto = "[NombreCompleto]";
+        public static string ExpresionElemento = nameof(NombreCompleto);
 
         [IUPropiedad(
             VisibleEnGrid = true,

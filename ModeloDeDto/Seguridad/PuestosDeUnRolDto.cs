@@ -2,9 +2,11 @@
 
 namespace ModeloDeDto.Seguridad
 {
-    [IUDto(ExpresionNombre = "[Puesto]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class PuestosDeUnRolDto : ElementoDto
     {
+        public static string ExpresionElemento = nameof(Puesto);
+
         [IUPropiedad(Etiqueta = "Rol",
             Ayuda = "Puesto de un rol",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,

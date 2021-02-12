@@ -2,9 +2,10 @@
 
 namespace ModeloDeDto.Seguridad
 {
-    [IUDto(ExpresionNombre = "[Puesto]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class PuestosDeUnUsuarioDto: ElementoDto
     {
+        public static string ExpresionElemento = nameof(Puesto);
 
         [IUPropiedad(
             Etiqueta = "Usuario",

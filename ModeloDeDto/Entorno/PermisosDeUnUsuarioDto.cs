@@ -5,9 +5,11 @@ using ModeloDeDto.Seguridad;
 
 namespace ModeloDeDto.Entorno
 {
-    [IUDto(ExpresionNombre = "[Permiso]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class PermisosDeUnUsuarioDto : ElementoDto
     {
+        public static string ExpresionElemento = nameof(Permiso);
+
         [IUPropiedad(Etiqueta = "Usuario",
             Ayuda = "permisos de un usuario",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,

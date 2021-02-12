@@ -4,16 +4,18 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.TrabajosSometidos
 {
-    [IUDto(AnchoEtiqueta = 20
-          , AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class TrabajoDeUsuarioDto : ElementoDto
     {
+        public static string ExpresionElemento = nameof(Trabajo);
+
         [IUPropiedad(
             Etiqueta = "Id del sometedor",
             SiempreVisible = false
             )
         ]
         public int IdSometedor { get; set; }
+
         [IUPropiedad(
             Etiqueta = "Sometido por",
             Ayuda = "Usuario sometedor",
@@ -92,7 +94,7 @@ namespace ModeloDeDto.TrabajosSometidos
            EditableAlEditar =false           
            )
         ]
-        public DateTime Entrada { get; set; }
+        public DateTime Encolado { get; set; }
 
         [IUPropiedad(
            Etiqueta = "Se iniciará",
@@ -103,7 +105,7 @@ namespace ModeloDeDto.TrabajosSometidos
            VisibleEnGrid = true
            )
         ]
-        public DateTime Panificado { get; set; }
+        public DateTime Planificado { get; set; }
 
         [IUPropiedad(
            Etiqueta = "Iniciado",

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Enumerados;
 using Gestor.Errores;
 using ModeloDeDto;
+using ServicioDeDatos.Elemento;
 using Utilidades;
 using UtilidadesParaIu;
 
@@ -17,8 +19,6 @@ namespace MVCSistemaDeElementos.Descriptores
         public List<ColumnaDelGrid<TElemento>> Columnas => Grid.columnas;
 
         private List<FilaDelGrid<TElemento>> Filas => Grid.filas;
-
-        public string ExpresionElemento { get; private set; } = (string) ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.ExpresionNombre)); 
 
         public int CantidadPorLeer { get; set; } = 10;
         public int PosicionInicial { get; set; } = 0;
@@ -114,8 +114,15 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         private string RenderZonaDeDatos()
         {
-            if (ExpresionElemento.IsNullOrEmpty())
+            var mostrarExpresion = $"[{nameof(INombre)}]";
+            
+            var expresionElemento = typeof(TElemento).GetField("ExpresionElemento");
+            if (expresionElemento != null)
+                mostrarExpresion = expresionElemento.GetValue(typeof(TElemento)).ToString();
+            else
+            if (typeof(TElemento).BaseType.Name != nameof(ElementoDto))
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
+
 
             var idHtmlZonaFiltro = ((DescriptorDeMantenimiento<TElemento>)Padre).Filtro.IdHtml;
             var htmlDiv = @$" <!-- ********************  grid de datos ******************** -->
@@ -123,7 +130,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                   class=¨{Css.Render(enumCssCuerpo.CuerpoDatosGrid)}¨ 
                                   seleccionables = ¨-1¨ 
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
-                                  expresion-elemento = ¨{ExpresionElemento}¨ 
+                                  expresion-elemento = ¨{mostrarExpresion}¨ 
                                   tabla-de-datos = ¨{Grid.IdHtmlTabla}¨ 
                                   zona-de-navegador = ¨{Mnt.IdHtmlZonaNavegador}¨
                                   cabecera-de-tabla = ¨{Grid.IdHtmlCabeceraDeTabla}¨

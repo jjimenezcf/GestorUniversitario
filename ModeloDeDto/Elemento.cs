@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Utilidades;
 using Enumerados;
+using ServicioDeDatos.Elemento;
 
 namespace ModeloDeDto
 {
@@ -86,7 +87,7 @@ namespace ModeloDeDto
         public string GuardarEn { get; set; }
         public string BuscarPor { get; set; } = CamposDeFiltrado.Nombre;
 
-        public string MostrarExpresion { get; set; } = ElementoDto.ExpresionPorDefecto;
+        public string MostrarExpresion { get; set; } 
 
         public bool CargaDinamica => TipoDeControl == enumTipoControl.ListaDinamica;
 
@@ -149,16 +150,10 @@ namespace ModeloDeDto
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
-
-        /// <summary>
-        /// indica las propiedades del dto con las que se conforma el nombre
-        /// </summary>
-        public string ExpresionNombre { get; set; } = ElementoDto.ExpresionPorDefecto;
     }
 
     public class ElementoDto
     {
-        public static string ExpresionPorDefecto = $"[{CamposDeFiltrado.Nombre}]";
         public static string DescargarGestionDocumental = "descargar-gestion-documental";
 
         [IUPropiedad(
@@ -191,7 +186,7 @@ namespace ModeloDeDto
             Attribute[] atributosDeDto = System.Attribute.GetCustomAttributes(clase);
 
             if (atributosDeDto == null || atributosDeDto.Length == 0)
-                Gestor.Errores.GestorDeErrores.Emitir($"No hay definido descriptores para el dto {clase.Name}");
+                Gestor.Errores.GestorDeErrores.Emitir($"No hay definido descriptores {nameof(IUDtoAttribute)} para el dto {clase.Name}");
 
             foreach (Attribute propiedad in atributosDeDto)
             {
@@ -205,9 +200,6 @@ namespace ModeloDeDto
 
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
-
-                        case nameof(IUDtoAttribute.ExpresionNombre):
-                            return a.ExpresionNombre;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

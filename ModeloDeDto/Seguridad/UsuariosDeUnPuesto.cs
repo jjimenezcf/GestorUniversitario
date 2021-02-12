@@ -3,9 +3,10 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.Seguridad
 {
-    [IUDto(ExpresionNombre = "[Usuario]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class UsuariosDeUnPuestoDto: ElementoDto
     {
+        public static string ExpresionElemento = nameof(Usuario);
 
         [IUPropiedad(
             Etiqueta = "Puesto",

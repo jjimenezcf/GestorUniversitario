@@ -4,9 +4,11 @@ using Enumerados;
 
 namespace ModeloDeDto.Seguridad
 {
-    [IUDto(ExpresionNombre = "[Permiso]")]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class PermisosDeUnPuestoDto : ElementoDto
     {
+        public static string ExpresionElemento = nameof(Permiso);
+
         [IUPropiedad(Etiqueta = "Id Puesto",
             Ayuda = "permisos de un puesto",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
