@@ -9,7 +9,7 @@ using ServicioDeDatos.Seguridad;
 namespace ServicioDeDatos.TrabajosSometidos
 {
     [Table("TRABAJO", Schema = "TRABAJO")]
-    public class TrabajoSometidoDtm : Registro,INombre
+    public class TrabajoSometidoDtm : RegistroConNombre
     {
         [Column("ES_DLL", TypeName = "BIT")]
         public bool EsDll { get; set; }
@@ -43,7 +43,6 @@ namespace ServicioDeDatos.TrabajosSometidos
         public int? IdInformarA { get; set; }
 
         public virtual PuestoDtm InformarA { get; set; }
-
     }
 
 

@@ -8,9 +8,9 @@ using ServicioDeDatos.Elemento;
 
 namespace ServicioDeDatos.Entorno
 {
-    public class ProcedimientoAlmacenadoDtm : Registro, INombre
+    public class ProcedimientoAlmacenadoDtm : RegistroConNombre
     {
-      public string Esquema { get; set; }
+        public string Esquema { get; set; }
     }
 
     //Antigua forma, antes de usar Dapper

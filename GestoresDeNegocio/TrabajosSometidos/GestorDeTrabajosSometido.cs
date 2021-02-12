@@ -72,8 +72,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             ts.ComunicarError = true;
             ts.ComunicarFin = false;
 
-            PersistirRegistro(ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
-            return LeerRegistroCacheado(filtros);
+            return PersistirRegistro(ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
         }
 
         protected override IQueryable<TrabajoSometidoDtm> AplicarJoins(IQueryable<TrabajoSometidoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

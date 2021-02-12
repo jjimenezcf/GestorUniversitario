@@ -7,7 +7,7 @@ namespace ServicioDeDatos.Seguridad
 {
 
     [Table("CLASE_PERMISO", Schema = "SEGURIDAD")]
-    public class ClasePermisoDtm : Registro, INombre
+    public class ClasePermisoDtm : RegistroConNombre
     {
         public virtual ICollection<PermisoDtm> Permisos { get; set; }
     }

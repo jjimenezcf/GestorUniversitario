@@ -220,7 +220,7 @@ namespace GestorDeElementos
             }
         }
 
-        protected void PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
+        protected TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var transaccion = Contexto.IniciarTransaccion();
             try
@@ -248,6 +248,7 @@ namespace GestorDeElementos
                 Contexto.Rollback(transaccion);
                 throw;
             }
+            return registro;
         }
 
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
@@ -277,8 +278,9 @@ namespace GestorDeElementos
             var propiedades = PropiedadesDelObjeto(registro);
             foreach (var propiedad in propiedades)
             {
-                if (propiedad.Name == nameof(registro.Nombre))
-                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Nombre)}-{registro.Nombre}");
+                if (typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)) && propiedad.Name == nameof(INombre.Nombre))
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(INombre.Nombre)}-{registro.ValorPropiedad(nameof(INombre.Nombre))}");
+
                 if (propiedad.Name == nameof(registro.Id))
                     ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}");
             }
@@ -314,12 +316,12 @@ namespace GestorDeElementos
             var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
             ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio);
 
-            if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.NombreObligatorio)
+            if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.ImplementaNombre())
             {
                 var propiedades = PropiedadesDelObjeto(registro);
                 foreach (var propiedad in propiedades)
                 {
-                    if (propiedad.Name == nameof(registro.Nombre))
+                    if (propiedad.Name == nameof(INombre.Nombre))
                     {
                         if (((string)propiedad.GetValue(registro)).IsNullOrEmpty())
                             GestorDeErrores.Emitir($"El nombre del objeto {typeof(TRegistro).Name} es obligatorio");
@@ -449,7 +451,7 @@ namespace GestorDeElementos
 
         public List<TRegistro> LeerRegistrosPorNombre(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null)
         {
-            if (!typeof(TRegistro).GetInterfaces().Contains(typeof(INombre)))
+            if (!typeof(TRegistro).ImplementaNombre())
                 throw new Exception($"se ha solicitado leer registros por nombre, el tipo {typeof(TRegistro).Name} no tiene dicho campo");
 
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
@@ -513,18 +515,14 @@ namespace GestorDeElementos
         {
             return registros.AplicarOrdenesBasicos(ordenacion);
         }
+
         protected static IQueryable<TRegistro> OrdenPorId(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
         {
             return orden.Modo == ModoDeOrdenancion.ascendente
                 ? registros.OrderBy(x => x.Id)
                 : registros.OrderByDescending(x => x.Id);
         }
-        protected static IQueryable<TRegistro> OrdenPorNombre(IQueryable<TRegistro> registros, ClausulaDeOrdenacion orden)
-        {
-            return orden.Modo == ModoDeOrdenancion.ascendente
-                ? registros.OrderBy(x => x.Nombre)
-                : registros.OrderByDescending(x => x.Nombre);
-        }
+
 
         protected virtual IQueryable<TRegistro> AplicarFiltros(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {

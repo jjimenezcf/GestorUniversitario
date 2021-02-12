@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
@@ -91,7 +92,7 @@ namespace ServicioDeDatos.Elemento
         public string Nombre { get; set; }
     }
 
-    public interface IElementoDtm: INombre
+    public interface IElementoDtm : INombre
     {
         public DateTime FechaCreacion { get; set; }
         public int IdUsuaCrea { get; set; }
@@ -111,18 +112,7 @@ namespace ServicioDeDatos.Elemento
 
         [IgnoreDataMember]
         [NotMapped]
-        public string Nombre { get; set; }
-
-
-        [IgnoreDataMember]
-        [NotMapped]
         public bool RegistroDeRelacion { get; set; } = false;
-
-
-        [IgnoreDataMember]
-        [NotMapped]
-        public bool NombreObligatorio { get; set; } = true;
-
 
         [IgnoreDataMember]
         [NotMapped]
@@ -149,6 +139,35 @@ namespace ServicioDeDatos.Elemento
             return (TRegistro)constructorSinParametros.Invoke(new object[] { });
         }
 
+
+    }
+
+    public static class RegistroExtensiones
+    {
+        public static object ValorPropiedad(this Registro registro, string propiedad)
+        {
+            return registro.GetType().GetProperty(propiedad);
+        }
+
+        public static bool ImplementaNombre(this Registro registro)
+        {
+            return registro.GetType().GetInterfaces().Contains(typeof(INombre));
+        }
+        public static bool ImplementaNombre(this Type tipoRegistro)
+        {
+            return tipoRegistro.GetInterfaces().Contains(typeof(INombre));
+        }
+        public static bool ImplementaUnaRelacion(this Type tipoRegistro)
+        {
+            return tipoRegistro.GetInterfaces().Contains(typeof(INombre));
+        }
+    }
+
+    public class RegistroConNombre : Registro, INombre
+    {
+        [Required]
+        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
+        public string Nombre { get ; set; }
     }
 
 
@@ -157,16 +176,11 @@ namespace ServicioDeDatos.Elemento
         public RegistroDeRelacion()
         {
             RegistroDeRelacion = true;
-            NombreObligatorio = false;
         }
     }
 
-    public class ElementoDtm : Registro, IElementoDtm, INombre
+    public class ElementoDtm : RegistroConNombre, IElementoDtm
     {
-        [Required]
-        [Column("NOMBRE", TypeName = "VARCHAR(250)")]
-        public new string Nombre { get; set; }
-
         [Required]
         [Column("FECCRE", Order = 1, TypeName = "DATETIME")]
         public DateTime FechaCreacion { get; set; }

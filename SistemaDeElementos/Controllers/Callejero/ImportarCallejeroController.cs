@@ -37,6 +37,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             try
             {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
                 GestorDePaises.ImportarCallejero(Contexto, parametros);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo de importación sometido correctamente";

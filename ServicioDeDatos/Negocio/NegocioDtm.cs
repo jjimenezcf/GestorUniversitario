@@ -8,7 +8,7 @@ using ServicioDeDatos.Seguridad;
 namespace ServicioDeDatos.Negocio
 {
     [Table("NEGOCIO", Schema = "NEGOCIO")]
-    public class NegocioDtm : Registro, INombre
+    public class NegocioDtm : RegistroConNombre
     {
         [Required]
         [Column("ELEMENTO", TypeName = "VARCHAR(250)")]

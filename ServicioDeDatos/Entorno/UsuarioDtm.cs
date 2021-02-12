@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ServicioDeDatos.Entorno
 {
     [Table("USUARIO", Schema = "ENTORNO")]
-    public class UsuarioDtm : Registro, INombre
+    public class UsuarioDtm : RegistroConNombre
     {
         [Required]
         [Column("LOGIN", TypeName = "VARCHAR(50)")]
@@ -40,7 +40,6 @@ namespace ServicioDeDatos.Entorno
         public virtual ICollection<PermisosDeUnUsuarioDtm> Permisos { get; private set; }
 
         public virtual ICollection<PuestosDeUnUsuarioDtm> Puestos { get; private set; }
-
     }
     public static class TablaUsuario
     {

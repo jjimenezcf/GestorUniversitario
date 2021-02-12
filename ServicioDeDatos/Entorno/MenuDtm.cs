@@ -7,7 +7,7 @@ using ServicioDeDatos.Elemento;
 namespace ServicioDeDatos.Entorno
 {
     [Table("MENU", Schema = "ENTORNO")]
-    public class MenuDtm : Registro
+    public class MenuDtm : RegistroConNombre
     {
         [Column("DESCRIPCION", TypeName = "VARCHAR(MAX)")]
         public string Descripcion { get; set; }

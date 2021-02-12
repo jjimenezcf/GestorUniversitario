@@ -6,7 +6,7 @@ using ServicioDeDatos.Elemento;
 namespace ServicioDeDatos.Entorno
 {
     [Table("MENU_SE", Schema = "ENTORNO")]
-    public class ArbolDeMenuDtm : Registro
+    public class ArbolDeMenuDtm : RegistroConNombre
     {
         [Column("PADRE", TypeName = "VARCHAR(250)")]
         public string Padre { get; set; }

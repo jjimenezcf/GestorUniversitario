@@ -8,7 +8,7 @@ namespace ServicioDeDatos.Seguridad
 {
 
     [Table("PERMISO", Schema = "SEGURIDAD")]
-    public class PermisoDtm : Registro, INombre
+    public class PermisoDtm : RegistroConNombre
     {
         //[Required]
         //[Column("NOMBRE", TypeName = "VARCHAR(250)")]

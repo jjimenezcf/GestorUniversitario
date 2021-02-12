@@ -10,8 +10,8 @@ namespace ServicioDeDatos.TrabajosSometidos
 {
     public enum enumEstadosDeUnTrabajo {pendiente, iniciado, terminado, conErrores, Error}
 
-    public static class enumEstadosDeUnTrabajoExtension { 
-        public static string ToBd(this enumEstadosDeUnTrabajo estado)
+    public static class TrabajoSometido { 
+        public static string ToDtm(this enumEstadosDeUnTrabajo estado)
         {
             switch(estado)
             {
@@ -24,6 +24,19 @@ namespace ServicioDeDatos.TrabajosSometidos
 
             throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
         }
+        public static string ToDto(string estado)
+        {
+            switch (estado)
+            {
+                case "TR": return "Con errores" ;
+                case "PT": return "Pendiente";
+                case "EJ": return "Iniciado";
+                case "OK": return "Terminado";
+                case "ER": return "Erroneo";
+            }
+
+            throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
+        }
     }
 
     [Table("USUARIO", Schema = "TRABAJO")]
@@ -32,11 +45,12 @@ namespace ServicioDeDatos.TrabajosSometidos
         public int IdTrabajo { get; set; }
         public int IdEjecutor { get; set; }
         public int IdSometedor { get; set; }
-        public DateTime Entrada { get; set; }
-        public DateTime Panificado { get; set; }
+        public DateTime Encolado { get; set; }
+        public DateTime Planificado { get; set; }
         public DateTime? Iniciado { get; set; }
         public DateTime? Terminado { get; set; }
-        public enumEstadosDeUnTrabajo Estado { get; set; }
+
+        public string Estado { get; set; }
         public string Parametros { get; set; }
         public int Periodicidad { get; set; }
         public virtual TrabajoSometidoDtm Trabajo { get; set; }
@@ -53,8 +67,8 @@ namespace ServicioDeDatos.TrabajosSometidos
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.IdTrabajo).HasColumnName("ID_TRABAJO").IsRequired(true).HasColumnType("INT");
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.IdEjecutor).HasColumnName("ID_EJECUTOR").IsRequired(true).HasColumnType("INT");
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.IdSometedor).HasColumnName("ID_SOMETEDOR").IsRequired(true).HasColumnType("INT");
-            mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Entrada).HasColumnName("ENTRADA").IsRequired(true).HasColumnType("DATETIME");
-            mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Panificado).HasColumnName("PLANIFICADO").IsRequired(true).HasColumnType("DATETIME");
+            mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Encolado).HasColumnName("ENTRADA").IsRequired(true).HasColumnType("DATETIME");
+            mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Planificado).HasColumnName("PLANIFICADO").IsRequired(true).HasColumnType("DATETIME");
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Iniciado).HasColumnName("INICIADO").IsRequired(false).HasColumnType("DATETIME");
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Terminado).HasColumnName("TERMINADO").IsRequired(false).HasColumnType("DATETIME");
             mb.Entity<TrabajoDeUsuarioDtm>().Property(p => p.Estado).HasColumnName("ESTADO").IsRequired(true).HasColumnType("CHAR(2)");
