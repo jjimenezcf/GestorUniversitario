@@ -118,7 +118,7 @@ namespace MVCSistemaDeElementos.Descriptores
             
             var expresionElemento = typeof(TElemento).GetField("ExpresionElemento");
             if (expresionElemento != null)
-                mostrarExpresion = expresionElemento.GetValue(typeof(TElemento)).ToString();
+                mostrarExpresion = $"[{expresionElemento.GetValue(typeof(TElemento))}]";
             else
             if (typeof(TElemento).BaseType.Name != nameof(ElementoDto))
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
@@ -130,7 +130,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                   class=¨{Css.Render(enumCssCuerpo.CuerpoDatosGrid)}¨ 
                                   seleccionables = ¨-1¨ 
                                   zona-de-filtro = ¨{idHtmlZonaFiltro}¨ 
-                                  expresion-elemento = ¨{mostrarExpresion}¨ 
+                                  expresion-elemento = ¨{mostrarExpresion.ToLower()}¨ 
                                   tabla-de-datos = ¨{Grid.IdHtmlTabla}¨ 
                                   zona-de-navegador = ¨{Mnt.IdHtmlZonaNavegador}¨
                                   cabecera-de-tabla = ¨{Grid.IdHtmlCabeceraDeTabla}¨
