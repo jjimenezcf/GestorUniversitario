@@ -62,7 +62,7 @@ namespace GestorDeElementos
         where TContexto : ContextoSe
     {
         public TContexto Contexto;
-        public IMapper Mapeador;
+        public IMapper Mapeador => Contexto.Mapeador;
 
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
 
@@ -72,17 +72,17 @@ namespace GestorDeElementos
         public bool HayFiltroPorId { get; private set; } = false;
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
+        : this(contexto)
         {
-            Mapeador = mapeador;
-            Contexto = contexto;
+            if (mapeador == null)
+                throw new Exception("Falta definir el mapeador");
+
+            Contexto.Mapeador = mapeador;
         }
 
-
         public GestorDeElementos(TContexto contexto)
-        : this(contexto, contexto.Mapeador)
         {
-            if (contexto.Mapeador == null)
-                throw new Exception("Falta definir el mapeador");
+            Contexto = contexto;
         }
 
 

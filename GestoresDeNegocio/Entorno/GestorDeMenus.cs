@@ -30,7 +30,7 @@ namespace GestoresDeNegocio.Entorno
         }
 
         public GestorDeMenus(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador)
         {
 
         }

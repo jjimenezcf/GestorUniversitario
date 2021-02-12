@@ -28,14 +28,11 @@ namespace GestoresDeNegocio.Callejero
         }
 
         public GestorDePaises(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador)
         {
 
         }
-        public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
-        {
-            return new GestorDePaises(contexto, mapeador);
-        }
+
 
         public static void ImportarCallejero(ContextoSe contexto, string parametros)
         {
