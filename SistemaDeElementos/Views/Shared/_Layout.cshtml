@@ -14,13 +14,15 @@
     <link rel="stylesheet" href="~/css/CrudBase.css" type="text/css">
     <link rel="stylesheet" href="~/css/CrudModal.css" type="text/css">
     <link rel="stylesheet" href="~/css/seMenu.css" type="text/css">
-    <link rel="stylesheet" href="~/css/bootstrap.min.css">
-    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-    <script src="~/js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
     <script src="~/ts/_Literales/Literales.js"></script>
     <script src="~/ts/_TiposDeDatos/TiposDeDatos.js"></script>
@@ -57,7 +59,7 @@
         var datosDeConexion = (DatosDeConexion)ViewBag.DatosDeConexion;
     }
 
-    <div id ="contenedor-pagina" class="pagina">
+    <div id="contenedor-pagina" class="pagina">
 
         <!--  Cabecera de la pagina -->
         <div id="cabecera-de-pagina" class="cabecera">
@@ -69,7 +71,7 @@
                      onclick="ArbolDeMenu.MostrarMenu()"
                      menu-abierto="false" />
 
-                <input id="id-producto" type="text" value="Sitema de elementos" readonly/>
+                <input id="id-producto" type="text" value="Sitema de elementos" readonly />
             </div>
             <div class="cabecera-separador"></div>
             <div class="cabecera-consultas">
@@ -122,7 +124,7 @@
         }
 
         window.onload = EntornoSe.IniciarEntorno;
-        window.onresize = Ajustar;        
+        window.onresize = Ajustar;
     </script>
 
 

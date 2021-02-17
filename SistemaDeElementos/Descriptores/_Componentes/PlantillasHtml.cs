@@ -78,6 +78,24 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 {checkInternoDto}
                                            </div>";
 
+        public static string selectorDeFechaDto = $@"
+        <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
+            <input {atributosComunesDeUnControlDto} 
+                   style=¨cursor: pointer¨
+                   type=¨text¨
+                   placeholder =¨[Placeholder]¨
+                   valorPorDefecto=¨[ValorPorDefecto]¨
+                   value=¨¨>
+            </input>
+            <button class=¨input-group-addon¨ style=¨cursor: pointer;
+                                                     border: ridge;
+                                                     width: 38.24px;
+                                                     height: 38.24px;¨>
+                <i class=¨fa fa-2x fa-calendar¨ style=¨font-size: 1rem;¨ aria-hidden=¨true¨></i>
+            </button>
+        </div>
+";
+
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {
             foreach (var indice in valores.Keys)

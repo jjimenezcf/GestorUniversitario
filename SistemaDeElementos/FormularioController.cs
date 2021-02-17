@@ -26,9 +26,15 @@ namespace MVCSistemaDeElementos.Controllers
         {
             Contexto = contexto;
             Contexto.Mapeador = mapeador;
+            Contexto.IniciarTraza();
             Descriptor = descriptor;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Contexto.CerrarTraza();
+            base.Dispose(disposing);
+        }
 
         public IActionResult Index()
         {

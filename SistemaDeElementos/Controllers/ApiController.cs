@@ -22,6 +22,7 @@ namespace MVCSistemaDeElementos.Controllers
             var usuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), contexto.DatosDeConexion.Login);
             contexto.DatosDeConexion.IdUsuario = usuario.Id;
             contexto.DatosDeConexion.EsAdministrador = usuario.EsAdministrador;
+            contexto.Mapeador = mapeador;
         }
 
         public static string ObtenerUsuarioDeLaRequest(HttpContext httpContext)

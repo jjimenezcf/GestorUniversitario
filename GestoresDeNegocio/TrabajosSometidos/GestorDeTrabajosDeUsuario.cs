@@ -39,20 +39,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
 
         }
-        public GestorDeTrabajosDeUsuario(ContextoSe contexto)
-        : base(contexto)
-        {
 
-        }
-
-        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
+        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            return new GestorDeTrabajosDeUsuario(contexto);
+            return new GestorDeTrabajosDeUsuario(contexto, mapeador); ;
         }
 
         internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
         {
-            var gestor = Gestor(contexto);
+            var gestor = Gestor(contexto, contexto.Mapeador);
             var tu = new TrabajoDeUsuarioDtm();
             tu.IdSometedor = contexto.DatosDeConexion.IdUsuario;
             tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor  : (int)ts.IdEjecutor;

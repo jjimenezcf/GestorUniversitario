@@ -912,9 +912,11 @@
 
         private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any, accion: string) {
             let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
-            let cuerpoDeLaTabla: HTMLTableSectionElement = accion !== atGrid.accion.siguiente ?
-                document.createElement("tbody") :
-                grid.Grid.querySelector("table").querySelector("tbody");
+            //let cuerpoDeLaTabla: HTMLTableSectionElement = accion !== atGrid.accion.siguiente ?
+            //    document.createElement("tbody") :
+            //    grid.Grid.querySelector("table").querySelector("tbody");
+
+            let cuerpoDeLaTabla: HTMLTableSectionElement = document.createElement("tbody") ;
 
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
@@ -931,8 +933,9 @@
             if (tbody === null || tbody === undefined)
                 tabla.append(cuerpoDeLaTabla);
             else {
-                if (accion !== atGrid.accion.siguiente)
-                    tabla.removeChild(tbody);
+                //if (accion !== atGrid.accion.siguiente)
+                //    tabla.removeChild(tbody);
+                tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
         }
