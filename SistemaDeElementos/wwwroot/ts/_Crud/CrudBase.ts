@@ -3,8 +3,6 @@
     export class HTMLSelector extends HTMLInputElement {
     }
 
-
-
     export class CrudBase {
 
         protected get Pagina(): string {
@@ -42,23 +40,30 @@
 
         //funciones de ayuda para la herencia
 
-        
-        protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
-        let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
-        for (let i = 0; i < listas.length; i++) {
-            if (listas[i].getAttribute(atListas.yaCargado) === "S")
-                continue;
 
-            let claseElemento: string = listas[i].getAttribute(atListas.claseElemento);
-            this.CargarListaDeElementos(controlador, claseElemento, listas[i].getAttribute(atControl.id));
+        protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
+            let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
+            for (let i = 0; i < listas.length; i++) {
+                if (listas[i].getAttribute(atListas.yaCargado) === "S")
+                    continue;
+
+                let claseElemento: string = listas[i].getAttribute(atListas.claseElemento);
+                this.CargarListaDeElementos(controlador, claseElemento, listas[i].getAttribute(atControl.id));
+            }
         }
-    }
 
         protected InicializarListasDinamicas(panel: HTMLDivElement) {
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < listas.length; i++) {
                 let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(listas[i]);
                 lista.Borrar();
+            }
+        }
+
+
+        protected InicializarSelectoresDeFecha(panel: HTMLDivElement, controlador: string) {
+            let selectoresDeFecha: NodeListOf<any> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<any>;
+            for (let i = 0; i < selectoresDeFecha.length; i++) {
             }
         }
 
@@ -277,7 +282,7 @@
         }
 
         protected MapearRestrictor(restrictores: NodeListOf<HTMLInputElement>, porpiedadRestrictora: string, valorMostrar: string, valorRestrictor: number) {
-            
+
             for (let i = 0; i < restrictores.length; i++) {
                 if (restrictores[i].getAttribute(atControl.propiedad) === porpiedadRestrictora) {
                     restrictores[i].setAttribute(atControl.valorInput, valorMostrar);
@@ -395,7 +400,7 @@
             throw new Error(`No se ha indicado que hacer para el modo de trabajo ${modoDeTrabajo} antes de mapear los datos de la IU`);
         }
 
-        
+
         public DespuesDeMapearDatosDeIU(crud: CrudBase, panel: HTMLDivElement, elementoJson: JSON, modoDeTrabajo: string): JSON {
             return elementoJson;
         }

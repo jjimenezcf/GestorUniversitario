@@ -47,7 +47,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/PuestosDeUnUsuario.js¨></script>
+                   $@"<script src=¨../../js/{RutaBase}/PuestosDeUnUsuario.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePuestosDeUnUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

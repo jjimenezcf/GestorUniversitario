@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
         var render = base.RenderControl();
 
         render = render +
-               $@"<script src=¨../../ts/{RutaBase}/Variables.js¨></script>
+               $@"<script src=¨../../js/{RutaBase}/Variables.js¨></script>
                       <script>
                          try {{      
                            Entorno.CrearCrudDeVariables('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

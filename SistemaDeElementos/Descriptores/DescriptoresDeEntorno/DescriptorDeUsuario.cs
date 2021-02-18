@@ -96,7 +96,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/Usuario.js¨></script>
+                   $@"<script src=¨../../js/{RutaBase}/Usuario.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

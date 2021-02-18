@@ -373,6 +373,7 @@ const TipoControl = {
     Check: "check",
     Selector: "selector",
     ListaDeElementos: "lista-de-elemento",
+    SelectorDeFecha: "selector-de-fecha",
     ListaDinamica: "lista-dinamica",
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo",

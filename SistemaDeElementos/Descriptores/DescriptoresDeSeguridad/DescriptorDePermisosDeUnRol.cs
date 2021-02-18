@@ -40,7 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/PermisosDeUnRol.js¨></script>
+                   $@"<script src=¨../../js/{RutaBase}/PermisosDeUnRol.js¨></script>
                       <script>
                          try {{                           
                             Seguridad.CrearCrudDePermisosDeUnRol('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

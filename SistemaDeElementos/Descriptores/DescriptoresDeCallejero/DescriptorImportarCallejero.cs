@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = RenderFormulario();
 
             render = render +
-                   $@"<script src=¨../../ts/Callejero/ImportarCallejero.js¨></script>
+                   $@"<script src=¨../../js/Callejero/ImportarCallejero.js¨></script>
                       <script>
                          try {{                           
                             {RutaVista}.CrearFormulario('{IdHtml}') 

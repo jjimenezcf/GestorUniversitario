@@ -1,9 +1,10 @@
-﻿module EntornoSe {
+﻿
+module EntornoSe {
 
     export class AlmacenDeMensajes {
-        private _id: string
+        private _id: string;
         private _errores: string[] = [];
-        private _mensajes: string[] = []
+        private _mensajes: string[] = [];
 
         constructor(id: string) {
             this._id = id;
@@ -28,7 +29,7 @@
         ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
         window.onpopstate = function (e) {
             console.log(e.state);
-        }
+        };
         AjustarDivs();
     }
 
@@ -44,7 +45,7 @@
             modalMenu.style.height = `${AlturaDelMenu(altura).toString()}px`;
 
         if (Crud.crudMnt !== null) {
-            Crud.crudMnt.PosicionarPanelesDelCuerpo()
+            Crud.crudMnt.PosicionarPanelesDelCuerpo();
         }
         else {
             Mensaje(TipoMensaje.Info, "No hay crud");
@@ -52,7 +53,7 @@
     }
 
     export function InicializarHistorial() {
-            Historial = new HistorialSe.HistorialDeNavegacion();
+        Historial = new HistorialSe.HistorialDeNavegacion();
     }
 
     export function NavegarAUrl(url: string) {

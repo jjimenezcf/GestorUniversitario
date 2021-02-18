@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/TrabajosDeUsuario.js¨></script>
+                   $@"<script src=¨../../js/{RutaBase}/TrabajosDeUsuario.js¨></script>
                       <script>
                          try {{                           
                             TrabajosSometido.CrearCrudDeTrabajosDeUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

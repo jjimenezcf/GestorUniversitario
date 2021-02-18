@@ -19,24 +19,39 @@
 
 
         <div class="container">
-            <div class="row">
-                <div class='col-sm-6'>
-                    <div class="form-group">
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span src="/images/menu/configuracion.svg"></span>
-                            </span>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type="date" name="fecha">
+                    <input type="time" name="fecha">
                 </div>
-                <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker();
-            });
-                </script>
             </div>
+
+            <!-- Año y mes -->
+            <time>2015-07</time>
+
+            <!-- Fecha -->
+            <time>2015-07-26</time>
+
+            <!-- Hora -->
+            <time>23:54</time>
+            <time>23:54:39</time>
+
+            <!-- Fecha y hora -->
+            <time>2015-07-26T23:44</time>
+            <time>2015-07-26T11:44:17</time>
+            <time>2015-07-26 23:44</time>
+            <time>2015-07-26 23:44:17</time>
+
+            <!-- Zona horaria -->
+            <time>Z</time>
+            <time>+0100</time>
+            <time>+01:00</time>
+            <time>-0800</time>
+            <time>-08:00</time>
+
+
         </div>
+        
     </body>
 </html>
 

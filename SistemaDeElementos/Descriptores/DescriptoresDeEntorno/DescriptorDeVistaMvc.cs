@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../ts/{RutaBase}/VistaMvc.js¨></script>
+                   $@"<script src=¨../../js/{RutaBase}/VistaMvc.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');

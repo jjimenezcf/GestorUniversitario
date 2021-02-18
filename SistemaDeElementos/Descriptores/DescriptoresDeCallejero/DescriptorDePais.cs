@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
         var render = base.RenderControl();
 
         render = render +
-               $@"<script src=¨../../ts/Callejero/Paises.js¨></script>
+               $@"<script src=¨../../js/Callejero/Paises.js¨></script>
                       <script>
                          try {{      
                            Callejero.CrearCrudDePaises('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

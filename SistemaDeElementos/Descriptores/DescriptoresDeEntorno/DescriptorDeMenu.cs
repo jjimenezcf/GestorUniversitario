@@ -38,7 +38,7 @@ namespace MVCSistemaDeElementos.Descriptores
         var render = base.RenderControl();
 
         render = render +
-                  $@"<script src=¨../../ts/{RutaBase}/Menu.js¨></script>
+                  $@"<script src=¨../../js/{RutaBase}/Menu.js¨></script>
                       <script>
                          try {{                           
                             Entorno.CrearCrudDeMenus('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 

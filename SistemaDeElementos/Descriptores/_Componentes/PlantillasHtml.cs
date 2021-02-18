@@ -82,17 +82,19 @@ namespace MVCSistemaDeElementos.Descriptores
         <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
             <input {atributosComunesDeUnControlDto} 
                    style=¨cursor: pointer¨
-                   type=¨text¨
+                   type=¨date¨
                    placeholder =¨[Placeholder]¨
                    valorPorDefecto=¨[ValorPorDefecto]¨
                    value=¨¨>
             </input>
+            <!--
             <button class=¨input-group-addon¨ style=¨cursor: pointer;
                                                      border: ridge;
                                                      width: 38.24px;
                                                      height: 38.24px;¨>
                 <i class=¨fa fa-2x fa-calendar¨ style=¨font-size: 1rem;¨ aria-hidden=¨true¨></i>
             </button>
+            -->
         </div>
 ";
 
