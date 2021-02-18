@@ -111,7 +111,6 @@ namespace MVCSistemaDeElementos.Descriptores
                     obligatorio=¨[Obligatorio]¨ 
                     [Readonly]
                     class=¨[CssHora]¨ 
-                    tipo=¨[Tipo]¨
                     style=¨cursor: pointer; width: 35%;¨
                     type=¨time¨
                     valorPorDefecto=¨[ValorPorDefecto]¨

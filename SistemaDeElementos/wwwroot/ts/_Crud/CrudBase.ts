@@ -31,7 +31,7 @@
         constructor() {
         }
 
-        public Inicializar(pagina: string) {
+        public Inicializar(pagina: string): void {
             if (EntornoSe.Historial.HayHistorial(pagina))
                 this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(pagina);
             else
@@ -41,7 +41,7 @@
         //funciones de ayuda para la herencia
 
 
-        protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string) {
+        protected InicializarListasDeElementos(panel: HTMLDivElement, controlador: string): void {
             let listas: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
             for (let i = 0; i < listas.length; i++) {
                 if (listas[i].getAttribute(atListas.yaCargado) === "S")
@@ -52,7 +52,7 @@
             }
         }
 
-        protected InicializarListasDinamicas(panel: HTMLDivElement) {
+        protected InicializarListasDinamicas(panel: HTMLDivElement): void {
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < listas.length; i++) {
                 let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(listas[i]);
@@ -61,15 +61,17 @@
         }
 
 
-        protected InicializarSelectoresDeFecha(panel: HTMLDivElement) {
-            let selectoresDeFecha: NodeListOf<any> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<any>;
+        protected InicializarSelectoresDeFecha(panel: HTMLDivElement): void {
+            let selectoresDeFecha: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < selectoresDeFecha.length; i++) {
+                this.InicializarFecha(selectoresDeFecha[i]);
             }
         }
 
-        protected InicializarSelectoresDeFechaHora(panel: HTMLDivElement) {
-            let selectoresDeFecha: NodeListOf<any> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<any>;
-            for (let i = 0; i < selectoresDeFecha.length; i++) {
+        protected InicializarFecha(fecha: HTMLInputElement): void {
+            let hora = fecha.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(hora)) {
+
             }
         }
 
@@ -93,6 +95,7 @@
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearFechas(panel, elementoJson);
         }
 
         private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
@@ -248,10 +251,38 @@
                     this.MapearImagenes(elementoJson, visorVinculado);
                 }
             }
-
         }
 
-        private MapearImagenes(elementoJson: JSON, visorVinculado: string) {
+        private MapearFechas(panel: HTMLDivElement, elementoJson: JSON): void {
+
+            let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < fechas.length; i++) {
+                let fecha: HTMLInputElement = fechas[i] as HTMLInputElement;
+                this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+
+            let fechasHoras: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < fechasHoras.length; i++) {
+                let fecha: HTMLInputElement = fechasHoras[i] as HTMLInputElement;
+                this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+        }
+
+        private MapearSelectorDeFecha(fecha: HTMLInputElement, elementoJson: JSON): void {
+            let propiedad: string = fecha.getAttribute(atControl.propiedad);
+            if (!IsNullOrEmpty(propiedad)) {
+                let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
+                if (!IsNullOrEmpty(valor)) {
+                    ApiControl.MapearFechaAlControl(fecha, valor);
+                    let tipo: string = fecha.getAttribute(atControl.tipo);
+                    if (tipo === TipoControl.SelectorDeFechaHora) {
+                        ApiControl.MapearHoraAlControl(fecha, valor);
+                    }
+                }
+            }
+        }
+
+        private MapearImagenes(elementoJson: JSON, visorVinculado: string): void {
             let visor: HTMLImageElement = document.getElementById(visorVinculado) as HTMLImageElement;
             let propiedadDelVisor: string = visor.getAttribute(atControl.propiedad);
             let url: string = this.BuscarValorEnJson(propiedadDelVisor, elementoJson) as string;

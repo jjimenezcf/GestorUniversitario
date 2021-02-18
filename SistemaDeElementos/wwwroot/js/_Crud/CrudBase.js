@@ -48,11 +48,12 @@ var Crud;
         InicializarSelectoresDeFecha(panel) {
             let selectoresDeFecha = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`);
             for (let i = 0; i < selectoresDeFecha.length; i++) {
+                this.InicializarFecha(selectoresDeFecha[i]);
             }
         }
-        InicializarSelectoresDeFechaHora(panel) {
-            let selectoresDeFecha = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`);
-            for (let i = 0; i < selectoresDeFecha.length; i++) {
+        InicializarFecha(fecha) {
+            let hora = fecha.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(hora)) {
             }
         }
         InicializarArchivos(panel) {
@@ -70,6 +71,7 @@ var Crud;
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearFechas(panel, elementoJson);
         }
         MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso) {
             let select = panel.getElementsByTagName('select');
@@ -189,6 +191,31 @@ var Crud;
                     let visorVinculado = selector.getAttribute(atArchivo.imagen);
                     selector.setAttribute(atArchivo.idArchivo, valor.toString());
                     this.MapearImagenes(elementoJson, visorVinculado);
+                }
+            }
+        }
+        MapearFechas(panel, elementoJson) {
+            let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
+            for (var i = 0; i < fechas.length; i++) {
+                let fecha = fechas[i];
+                this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+            let fechasHoras = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
+            for (var i = 0; i < fechasHoras.length; i++) {
+                let fecha = fechasHoras[i];
+                this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+        }
+        MapearSelectorDeFecha(fecha, elementoJson) {
+            let propiedad = fecha.getAttribute(atControl.propiedad);
+            if (!IsNullOrEmpty(propiedad)) {
+                let valor = this.BuscarValorEnJson(propiedad, elementoJson);
+                if (!IsNullOrEmpty(valor)) {
+                    ApiControl.MapearFechaAlControl(fecha, valor);
+                    let tipo = fecha.getAttribute(atControl.tipo);
+                    if (tipo === TipoControl.SelectorDeFechaHora) {
+                        ApiControl.MapearHoraAlControl(fecha, valor);
+                    }
                 }
             }
         }

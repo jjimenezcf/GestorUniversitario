@@ -1,5 +1,35 @@
 var ApiControl;
 (function (ApiControl) {
+    function MapearFechaAlControl(control, fecha) {
+        var fechaLeida = new Date(fecha);
+        if (fechaLeida.toString() !== "Invalid Date") {
+            let dia = fechaLeida.getDate();
+            let mes = fechaLeida.getMonth();
+            let ano = fechaLeida.getFullYear();
+            control.value = `${ano}-${PadLeft(mes.toString(), "00")}-${PadLeft(dia.toString(), "00")}`;
+        }
+        else {
+            var propiedad = control.getAttribute(atControl.propiedad);
+            Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+        }
+    }
+    ApiControl.MapearFechaAlControl = MapearFechaAlControl;
+    function MapearHoraAlControl(control, fechaHora) {
+        var fechaLeida = new Date(fechaHora);
+        if (fechaLeida.toString() !== "Invalid Date") {
+            let hora = fechaLeida.getHours();
+            let minuto = fechaLeida.getMinutes();
+            let idHora = control.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(idHora)) {
+                let controlHora = document.getElementById(idHora);
+                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}`;
+                return;
+            }
+        }
+        var propiedad = control.getAttribute(atControl.propiedad);
+        Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+    }
+    ApiControl.MapearHoraAlControl = MapearHoraAlControl;
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
         let columna = document.getElementById(columanDeOrdenacion.IdColumna);
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);

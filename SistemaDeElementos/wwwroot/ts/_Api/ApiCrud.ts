@@ -1,5 +1,35 @@
 ﻿namespace ApiControl {
 
+    export function MapearFechaAlControl(control: HTMLInputElement, fecha: string) {
+        var fechaLeida = new Date(fecha);
+        if (fechaLeida.toString() !== "Invalid Date") {
+            let dia: number = fechaLeida.getDate();
+            let mes: number = fechaLeida.getMonth();
+            let ano: number = fechaLeida.getFullYear();
+            control.value = `${ano}-${PadLeft(mes.toString(), "00")}-${PadLeft(dia.toString(), "00")}`;
+        }
+        else {
+            var propiedad: string = control.getAttribute(atControl.propiedad);
+            Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+        }
+    }
+
+    export function MapearHoraAlControl(control: HTMLInputElement, fechaHora: string) {
+        var fechaLeida = new Date(fechaHora);
+        if (fechaLeida.toString() !== "Invalid Date") {
+            let hora: number = fechaLeida.getHours();
+            let minuto: number = fechaLeida.getMinutes();
+            let idHora: string = control.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(idHora)) {
+                let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
+                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}`;
+                return;
+            }
+        }
+        var propiedad: string = control.getAttribute(atControl.propiedad);
+        Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+
+    }
     export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(columanDeOrdenacion.IdColumna) as HTMLTableHeaderCellElement;
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
@@ -46,7 +76,7 @@
 
         input.classList.remove(ClaseCss.crtlNoValido);
         input.classList.add(ClaseCss.crtlValido);
-        elementoJson[guardarEn] = valor ===0 ? '': valor.toString();
+        elementoJson[guardarEn] = valor === 0 ? '' : valor.toString();
     }
 
     export function MapearListasDeElementosAlJson(panel: HTMLDivElement, elementoJson: JSON): void {
@@ -221,7 +251,7 @@ namespace ApiCrud {
         for (let i = 0; i < crtls.length; i++) {
             crtls[i].classList.remove(ClaseCss.crtlNoValido);
         }
-        
+
     }
 
     function BlanquearEditores(panel: HTMLDivElement) {

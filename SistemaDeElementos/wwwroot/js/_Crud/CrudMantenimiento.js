@@ -33,7 +33,6 @@ var Crud;
                 this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
                 this.InicializarMenus();
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
-                this.InicializarSelectoresDeFechaHora(this.ZonaDeFiltro);
                 this.AplicarRestrictores();
                 this.Buscar(atGrid.accion.buscar, 0);
             }

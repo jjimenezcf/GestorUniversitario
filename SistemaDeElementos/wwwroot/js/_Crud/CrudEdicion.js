@@ -133,6 +133,7 @@ var Crud;
                 this.InicializarListasDeElementos(this.PanelDeEditar, this.Controlador);
                 this.InicializarListasDinamicas(this.PanelDeEditar);
                 this.InicializarArchivos(this.PanelDeEditar);
+                this.InicializarSelectoresDeFecha(this.PanelDeEditar);
                 this.Posicionador = seleccionado;
                 this.InicializarValores(seleccionado - 1);
             }

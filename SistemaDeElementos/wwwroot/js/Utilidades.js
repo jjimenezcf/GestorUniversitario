@@ -107,6 +107,11 @@ function IsNullOrEmpty(valor) {
         return true;
     return NoDefinida(valor);
 }
+function PadLeft(cadena, rellenarCon) {
+    if (cadena == null || NoDefinida(cadena))
+        return rellenarCon;
+    return (rellenarCon + cadena).slice(-rellenarCon.length);
+}
 function NumeroMayorDeCero(valor) {
     if (valor === null || valor === undefined)
         return false;

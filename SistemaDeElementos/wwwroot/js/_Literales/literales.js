@@ -125,6 +125,9 @@ const atSelector = {
     selector: "selector",
     propiedadParaFiltrar: "propiedadFiltrar"
 };
+const atSelectorDeFecha = {
+    hora: "idDeLaHora"
+};
 const atListas = {
     claseElemento: 'clase-elemento',
     mostrarExpresion: 'mostrar-expresion',

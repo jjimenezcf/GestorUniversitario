@@ -131,6 +131,14 @@ function IsNullOrEmpty(valor: string): boolean {
     return NoDefinida(valor);
 }
 
+
+function PadLeft(cadena: string, rellenarCon: string): string {
+
+    if (cadena == null || NoDefinida(cadena))
+        return rellenarCon;
+    return (rellenarCon + cadena).slice(-rellenarCon.length);
+}
+
 function NumeroMayorDeCero(valor: string): boolean {
 
     if (valor === null || valor === undefined)
