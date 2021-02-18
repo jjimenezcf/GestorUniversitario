@@ -81,7 +81,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string selectorDeFechaDto = $@"
         <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
             <input {atributosComunesDeUnControlDto} 
-                   style=¨cursor: pointer¨
+                   style=¨cursor: pointer; width: 100%;¨
                    type=¨date¨
                    placeholder =¨[Placeholder]¨
                    valorPorDefecto=¨[ValorPorDefecto]¨
@@ -97,6 +97,29 @@ namespace MVCSistemaDeElementos.Descriptores
             -->
         </div>
 ";
+        public static string selectorDeFechaHoraDto = $@"
+        <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
+            <input {atributosComunesDeUnControlDto} 
+                   style=¨cursor: pointer; width: 65%;¨
+                   type=¨date¨
+                   idDeLaHora=¨[IdHtml].hora¨
+                   placeholder =¨[Placeholder]¨
+                   valorPorDefecto=¨[ValorPorDefecto]¨
+                   value=¨¨>
+            </input>
+            <input id=¨[IdHtml].hora¨ 
+                    obligatorio=¨[Obligatorio]¨ 
+                    [Readonly]
+                    class=¨[CssHora]¨ 
+                    tipo=¨[Tipo]¨
+                    style=¨cursor: pointer; width: 35%;¨
+                    type=¨time¨
+                    valorPorDefecto=¨[ValorPorDefecto]¨
+                    value=¨¨>
+            </input>
+        </div>
+";
+
 
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {

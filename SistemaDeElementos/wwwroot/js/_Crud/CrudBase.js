@@ -45,8 +45,13 @@ var Crud;
                 lista.Borrar();
             }
         }
-        InicializarSelectoresDeFecha(panel, controlador) {
+        InicializarSelectoresDeFecha(panel) {
             let selectoresDeFecha = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`);
+            for (let i = 0; i < selectoresDeFecha.length; i++) {
+            }
+        }
+        InicializarSelectoresDeFechaHora(panel) {
+            let selectoresDeFecha = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`);
             for (let i = 0; i < selectoresDeFecha.length; i++) {
             }
         }

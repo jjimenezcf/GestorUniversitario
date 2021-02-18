@@ -140,6 +140,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumTipoControl.SelectorDeFecha:
                     htmdDescriptorControl = RenderSelectorDeFecha(tabla, descriptorControl);
                     break;
+                case enumTipoControl.SelectorDeFechaHora:
+                    htmdDescriptorControl = RenderSelectorDeFechaHora(tabla, descriptorControl);
+                    break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
                     break;
@@ -229,6 +232,20 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmSelectorDeFecha;
         }
 
+        private static string RenderSelectorDeFechaHora(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
+        {
+            var atributos = descriptorControl.atributos;
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFechaHora);
+            valores["Css"] = Css.Render(enumCssControlesDto.SelectorDeFecha);
+            valores["CssHora"] = Css.Render(enumCssControlesDto.SelectorDeHora);
+            valores["Placeholder"] = atributos.Ayuda;
+            valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+
+            var htmSelectorDeFechaHora = PlantillasHtml.Render(PlantillasHtml.selectorDeFechaHoraDto, valores);
+
+            return htmSelectorDeFechaHora;
+        }
 
         private static string RenderSelectorImagen(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {

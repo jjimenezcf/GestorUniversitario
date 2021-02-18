@@ -86,7 +86,7 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Entró",
            Ayuda = "Fecha de entrada",
-           TipoDeControl = enumTipoControl.SelectorDeFecha,
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
            Fila = 3,
            Columna = 0,
            VisibleEnGrid = true,
@@ -99,7 +99,7 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Se iniciará",
            Ayuda = "Fecha planificada de ejecución",
-           TipoDeControl = enumTipoControl.SelectorDeFecha,
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
            Fila = 3,
            Columna = 1,
            VisibleEnGrid = true
@@ -110,7 +110,7 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Iniciado",
            Ayuda = "Fecha de inicio",
-           TipoDeControl = enumTipoControl.SelectorDeFecha,
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
            Fila = 4,
            Columna = 0,
            VisibleEnGrid = true,
@@ -123,7 +123,7 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Terminado",
            Ayuda = "Fecha de fin",
-           TipoDeControl = enumTipoControl.SelectorDeFecha,
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
            Fila = 4,
            Columna = 1,
            VisibleEnGrid = true,

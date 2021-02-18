@@ -45,7 +45,8 @@
                 this.InicializarSelectores();
                 this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
                 this.InicializarMenus();
-                this.InicializarSelectoresDeFecha(this.ZonaDeFiltro, this.Navegador.Controlador)
+                this.InicializarSelectoresDeFecha(this.ZonaDeFiltro)
+                this.InicializarSelectoresDeFechaHora(this.ZonaDeFiltro)
 
                 this.AplicarRestrictores();
 

@@ -61,8 +61,14 @@
         }
 
 
-        protected InicializarSelectoresDeFecha(panel: HTMLDivElement, controlador: string) {
+        protected InicializarSelectoresDeFecha(panel: HTMLDivElement) {
             let selectoresDeFecha: NodeListOf<any> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<any>;
+            for (let i = 0; i < selectoresDeFecha.length; i++) {
+            }
+        }
+
+        protected InicializarSelectoresDeFechaHora(panel: HTMLDivElement) {
+            let selectoresDeFecha: NodeListOf<any> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<any>;
             for (let i = 0; i < selectoresDeFecha.length; i++) {
             }
         }

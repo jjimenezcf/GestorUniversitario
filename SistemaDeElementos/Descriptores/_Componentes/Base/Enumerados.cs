@@ -183,11 +183,13 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorEditor,
         ContenedorCheck,
         ContenedorFecha,
+        ContenedorFechaHora,
         ContenedorArchivo,
         TablaDeArchivo,
         FilaDeArchivo,
         ColumnaDeArchivo,
         SelectorDeFecha,
+        SelectorDeHora,
         Check,
         Selector,
         Editor,
@@ -277,7 +279,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
                 case enumCssControlesDto.ContenedorFecha: return "contenedor-fecha";
+                case enumCssControlesDto.ContenedorFechaHora: return "contenedor-fecha-hora";
                 case enumCssControlesDto.SelectorDeFecha: return "fecha-dto";
+                case enumCssControlesDto.SelectorDeHora: return "hora-dto";
                 case enumCssControlesDto.Check: return "check-dto";
                 case enumCssControlesDto.Selector: return "selector-dto";
                 case enumCssControlesDto.Editor: return "editor-dto";
