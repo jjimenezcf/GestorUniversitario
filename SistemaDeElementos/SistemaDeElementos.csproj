@@ -29,6 +29,7 @@
     <Content Remove="wwwroot\Extensiones\HtmlRender.cs" />
     <Content Remove="wwwroot\Extensiones\Selectores.cs" />
     <Content Remove="wwwroot\js\selectores.js" />
+    <Content Remove="wwwroot\SelectorDeFechaII.html" />
     <Content Remove="wwwroot\tsSelectores.ts" />
     <Content Remove="wwwroot\ts\Diccionario.ts" />
     <Content Remove="wwwroot\ts\Entorno\Variables.ts" />
