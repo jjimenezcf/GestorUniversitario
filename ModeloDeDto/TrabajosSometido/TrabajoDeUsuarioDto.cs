@@ -24,6 +24,7 @@ namespace ModeloDeDto.TrabajosSometidos
             GuardarEn = nameof(IdSometedor),
             Fila = 0,
             Columna = 0,
+            EditableAlEditar = false,
             VisibleEnGrid = false
             )
         ]
@@ -73,7 +74,7 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Estado",
            Ayuda = "estado del trabajo",
-           TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+           TipoDeControl = enumTipoControl.Editor,
            Fila = 2,
            Columna = 0,
            VisibleEnGrid = true,
@@ -136,12 +137,13 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Parametros",
            Ayuda = "Json con los parámetros de ejecución",
-           TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+           TipoDeControl = enumTipoControl.AreaDeTexto,
            Fila = 5,
            Columna = 0,
            VisibleEnGrid = false,
            EditableAlCrear = true,
-           EditableAlEditar = true
+           EditableAlEditar = true,
+           NumeroDeFilas = 5
            )
         ]
         public string Parametros { get; set; }
@@ -149,13 +151,14 @@ namespace ModeloDeDto.TrabajosSometidos
         [IUPropiedad(
            Etiqueta = "Periodicidad",
            Ayuda = "Tiempo en segundos de resometimiento",
-           TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+           TipoDeControl = enumTipoControl.Editor,
            Fila = 6,
            Columna = 0,
            VisibleEnGrid = false,
            EditableAlCrear = true,
            EditableAlEditar = true,
-           ConSpanEnColumnas = false
+           ConSpanEnColumnas = false,
+           AnchoMaximo = "200px"
            )
         ]
         public int Periodicidad { get; set; }

@@ -71,6 +71,7 @@ var Crud;
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearAreasDeTexto(panel, elementoJson);
             this.MapearFechas(panel, elementoJson);
         }
         MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso) {
@@ -194,6 +195,13 @@ var Crud;
                 }
             }
         }
+        MapearAreasDeTexto(panel, elementoJson) {
+            let areas = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`);
+            for (var i = 0; i < areas.length; i++) {
+                let area = areas[i];
+                this.MapearAreaDeTexto(area, elementoJson);
+            }
+        }
         MapearFechas(panel, elementoJson) {
             let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
             for (var i = 0; i < fechas.length; i++) {
@@ -204,6 +212,15 @@ var Crud;
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha = fechasHoras[i];
                 this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+        }
+        MapearAreaDeTexto(area, elementoJson) {
+            let propiedad = area.getAttribute(atControl.propiedad);
+            if (!IsNullOrEmpty(propiedad)) {
+                let texto = this.BuscarValorEnJson(propiedad, elementoJson);
+                if (!IsNullOrEmpty(texto)) {
+                    ApiControl.MapearTextoAlControl(area, texto);
+                }
             }
         }
         MapearSelectorDeFecha(fecha, elementoJson) {

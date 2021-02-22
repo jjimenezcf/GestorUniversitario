@@ -48,11 +48,21 @@ var Crud;
             if (this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) {
                 if (!this.crudDeEdicion.EsModal)
                     this.crudDeEdicion.PosicionarEdicion();
-                else
+                else {
+                    this.PosicionarFiltro();
+                    this.PosicionarGrid();
                     this.crudDeEdicion.AjustarModal();
+                }
             }
-            if ((this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) && !this.crudDeCreacion.EsModal)
-                this.crudDeCreacion.PosicionarCreacion();
+            if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) {
+                if (!this.crudDeCreacion.EsModal)
+                    this.crudDeCreacion.PosicionarCreacion();
+                else {
+                    this.PosicionarFiltro();
+                    this.PosicionarGrid();
+                    this.crudDeCreacion.AjustarModal();
+                }
+            }
         }
         PosicionarFiltro() {
             this.ZonaDeFiltro.style.position = 'fixed';

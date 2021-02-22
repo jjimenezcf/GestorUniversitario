@@ -33,7 +33,7 @@ namespace Gestor.Errores
             if (e != null)
                 RegistrarExcepcion(error,e);
 
-            var exc = new Exception(error);
+            var exc = new Exception(error,e);
             exc.Data[Datos.Mostrar] = true;
             throw exc;
         }

@@ -140,7 +140,8 @@ const atSelector = {
 };
 
 const atSelectorDeFecha = {
-    hora: "idDeLaHora"
+    hora: "idDeLaHora",
+    milisegundos: "milisegundos"
 };
 
 const atListas = {
@@ -379,6 +380,7 @@ const TipoControl = {
     ListaDeElementos: "lista-de-elemento",
     SelectorDeFecha: "selector-de-fecha",
     SelectorDeFechaHora: "selector-de-fecha-hora",
+    AreaDeTexto: "area-de-texto",
     ListaDinamica: "lista-dinamica",
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo",

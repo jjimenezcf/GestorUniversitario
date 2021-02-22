@@ -112,8 +112,11 @@ var Crud;
         AjustarModal() {
             if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
                 this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
-            else
+            else {
                 this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
+                let padding = (this.PanelDeEditar.getBoundingClientRect().height - this.PanelDeContenidoModal.getBoundingClientRect().height) / 2;
+                this.PanelDeEditar.style.paddingTop = `${padding}px`;
+            }
         }
         PosicionarEdicion() {
             this.PanelDeEditar.style.position = 'fixed';

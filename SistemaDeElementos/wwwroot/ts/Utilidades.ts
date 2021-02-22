@@ -158,6 +158,15 @@ function NoDefinida(valor: any) {
     return false;
 };
 
+function FechaValida(fecha: Date): boolean {
+    if (fecha === undefined || fecha === null)
+        return false;
+
+    if (fecha.toString() === "Invalid Date")
+        return false;
+
+    return true;
+}
 
 function Numero(valor: any): number {
     if (valor === undefined || valor === null)

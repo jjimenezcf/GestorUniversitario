@@ -292,6 +292,9 @@ namespace GestorDeElementos
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
+            if (parametros.Operacion != TipoOperacion.Insertar)
+                RegistroEnBD = LeerRegistroPorId(registro.Id);
+
             AntesDePersistirValidarRegistro(registro, parametros);
 
             if (registro.ImplementaUnElemento())
@@ -309,9 +312,6 @@ namespace GestorDeElementos
                     elemento.FechaModificacion = DateTime.Now;
                 }
             }
-
-            if (parametros.Operacion != TipoOperacion.Insertar)
-                RegistroEnBD = LeerRegistroPorId(registro.Id);
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {

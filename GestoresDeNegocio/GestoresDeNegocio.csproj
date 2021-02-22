@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ModeloDeDto\ModeloDeDto.csproj" />
     <ProjectReference Include="..\ServicioDeDatos\ServicioDeDatos.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj" />

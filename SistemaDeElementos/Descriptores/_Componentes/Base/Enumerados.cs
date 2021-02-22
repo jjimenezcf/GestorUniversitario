@@ -184,6 +184,7 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorCheck,
         ContenedorFecha,
         ContenedorFechaHora,
+        ContenedorAreaDeTexto,
         ContenedorArchivo,
         TablaDeArchivo,
         FilaDeArchivo,
@@ -196,6 +197,7 @@ namespace MVCSistemaDeElementos.Descriptores
         Etiqueta,
         ListaDeElementos,
         ListaDinamica,
+        AreaDeTexto,
         SelectorDeImagen,
         BarraAzulArchivo,
         EditorRestrictor
@@ -280,6 +282,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
                 case enumCssControlesDto.ContenedorFecha: return "contenedor-fecha";
                 case enumCssControlesDto.ContenedorFechaHora: return "contenedor-fecha-hora";
+                case enumCssControlesDto.ContenedorAreaDeTexto: return "contenedor-area-de-texto";
                 case enumCssControlesDto.SelectorDeFecha: return "fecha-dto";
                 case enumCssControlesDto.SelectorDeHora: return "hora-dto";
                 case enumCssControlesDto.Check: return "check-dto";
@@ -288,6 +291,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.EditorRestrictor: return "form-control";
                 case enumCssControlesDto.Etiqueta: return "etiqueta-dto";
                 case enumCssControlesDto.ListaDinamica: return "lista-dinamica";
+                case enumCssControlesDto.AreaDeTexto: return "area-de-texto-dto";
                 case enumCssControlesDto.ListaDeElementos: return "lista-de-elementos-dto";
                 case enumCssControlesDto.FormDeArchivo: return "form-archivo";
                 case enumCssControlesDto.TablaDeArchivo: return "tabla-archivo-subir";

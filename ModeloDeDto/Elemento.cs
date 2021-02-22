@@ -52,6 +52,7 @@ namespace ModeloDeDto
         public bool VisibleAlConsultar { get; set; } = true;
         public bool EditableAlCrear { get; set; } = true;
         public bool EditableAlEditar { get; set; } = true;
+        public int NumeroDeFilas { get; set; } = 5;
         public bool ConSpanEnColumnas { get; set; } = true;
         public bool Obligatorio { get; set; } = true;
         public Type Tipo { get; set; } = typeof(string);
@@ -61,6 +62,7 @@ namespace ModeloDeDto
         public object ValorPorDefecto { get; set; }
         public bool Ordenar { get; set; } = false;
         public string OrdenarPor { get; set; }
+        public string AnchoMaximo { get; set; }
         public int PosicionEnGrid { get; set; } = -1;
         public Aliniacion Alineada
         {

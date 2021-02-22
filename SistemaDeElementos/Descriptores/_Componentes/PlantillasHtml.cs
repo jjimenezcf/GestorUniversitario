@@ -9,7 +9,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string atributosComunesDeUnControl = @"id=¨[IdHtml]¨
                                        propiedad=¨[Propiedad]¨ 
                                        class=¨[Css]¨ 
-                                       tipo=¨[Tipo]¨";
+                                       tipo=¨[Tipo]¨
+                                       style=¨[Estilos]¨";
 
         private static string atributosComunesDeUnControlDto = $@"{atributosComunesDeUnControl}
                                        obligatorio=¨[Obligatorio]¨ 
@@ -96,7 +97,18 @@ namespace MVCSistemaDeElementos.Descriptores
             </button>
             -->
         </div>
-";
+        ";
+
+        public static string AreaDeTextoDto = $@"
+        <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
+            <textarea {atributosComunesDeUnControlDto} 
+                   placeholder =¨[Placeholder]¨
+                   valorPorDefecto=¨[ValorPorDefecto]¨
+                   value=¨¨>
+            </textarea>
+        </div>
+        ";
+
         public static string selectorDeFechaHoraDto = $@"
         <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
             <input {atributosComunesDeUnControlDto} 
@@ -126,6 +138,9 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 plantilla = plantilla.Replace($"[{indice}]", valores[indice] == null ? "" : valores[indice].ToString());
             }
+
+            plantilla = plantilla.Replace("style=¨[Estilos]¨", "");
+
             return plantilla;
         }
 

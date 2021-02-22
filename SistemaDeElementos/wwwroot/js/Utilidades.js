@@ -125,6 +125,13 @@ function NoDefinida(valor) {
     return false;
 }
 ;
+function FechaValida(fecha) {
+    if (fecha === undefined || fecha === null)
+        return false;
+    if (fecha.toString() === "Invalid Date")
+        return false;
+    return true;
+}
 function Numero(valor) {
     if (valor === undefined || valor === null)
         return 0;

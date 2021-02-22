@@ -4,7 +4,7 @@ var ApiControl;
         var fechaLeida = new Date(fecha);
         if (fechaLeida.toString() !== "Invalid Date") {
             let dia = fechaLeida.getDate();
-            let mes = fechaLeida.getMonth();
+            let mes = fechaLeida.getMonth() + 1;
             let ano = fechaLeida.getFullYear();
             control.value = `${ano}-${PadLeft(mes.toString(), "00")}-${PadLeft(dia.toString(), "00")}`;
         }
@@ -14,15 +14,22 @@ var ApiControl;
         }
     }
     ApiControl.MapearFechaAlControl = MapearFechaAlControl;
+    function MapearTextoAlControl(area, texto) {
+        area.textContent = texto;
+    }
+    ApiControl.MapearTextoAlControl = MapearTextoAlControl;
     function MapearHoraAlControl(control, fechaHora) {
         var fechaLeida = new Date(fechaHora);
         if (fechaLeida.toString() !== "Invalid Date") {
             let hora = fechaLeida.getHours();
             let minuto = fechaLeida.getMinutes();
+            let segundos = fechaLeida.getSeconds();
+            let milisegundos = fechaLeida.getMilliseconds();
             let idHora = control.getAttribute(atSelectorDeFecha.hora);
             if (!IsNullOrEmpty(idHora)) {
                 let controlHora = document.getElementById(idHora);
-                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}`;
+                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
+                controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
                 return;
             }
         }
@@ -115,6 +122,67 @@ var ApiControl;
         input.classList.add(ClaseCss.crtlValido);
         elementoJson[propiedadDto] = idRestrictor;
     }
+    function MapearFechasAlJson(panel, elementoJson) {
+        let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
+        for (var i = 0; i < fechas.length; i++) {
+            let fecha = fechas[i];
+            MapearFechaAlJson(fecha, elementoJson);
+        }
+        let fechasHoras = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
+        for (var i = 0; i < fechasHoras.length; i++) {
+            let fecha = fechasHoras[i];
+            MapearFechaAlJson(fecha, elementoJson);
+        }
+    }
+    ApiControl.MapearFechasAlJson = MapearFechasAlJson;
+    function MapearFechaAlJson(controlDeFecha, elementoJson) {
+        let propiedadDto = controlDeFecha.getAttribute(atControl.propiedad);
+        let obligatorio = controlDeFecha.getAttribute(atControl.obligatorio);
+        let valorDeFecha = controlDeFecha.value; //.replace(/\n/g, "\r\n");
+        if (obligatorio === "S" && NoDefinida(valorDeFecha)) {
+            controlDeFecha.classList.remove(ClaseCss.crtlValido);
+            controlDeFecha.classList.add(ClaseCss.crtlNoValido);
+            throw new Error(`El campo: ${propiedadDto}, es obligatorio`);
+        }
+        let fecha = new Date(valorDeFecha);
+        if (FechaValida(fecha)) {
+            let idHora = controlDeFecha.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(idHora)) {
+                let controlDeHora = document.getElementById(idHora);
+                let valorDeHora = controlDeHora.value.split(':');
+                let hora = Numero(valorDeHora[0]);
+                let minuto = Numero(valorDeHora[1]);
+                let segundos = Numero(valorDeHora[2]);
+                let milisegundos = Numero(controlDeHora.getAttribute(atSelectorDeFecha.milisegundos));
+                fecha.setHours(hora);
+                fecha.setMinutes(minuto);
+                fecha.setSeconds(segundos);
+                fecha.setMilliseconds(milisegundos);
+            }
+            var utcFecha = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), fecha.getHours(), fecha.getMinutes(), fecha.getSeconds(), fecha.getMilliseconds()));
+            elementoJson[propiedadDto] = utcFecha;
+        }
+        else
+            elementoJson[propiedadDto] = '';
+    }
+    function MapearTextosAlJson(panel, elementoJson) {
+        let areas = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`);
+        for (let i = 0; i < areas.length; i++) {
+            MapearTextoAlJson(areas[i], elementoJson);
+        }
+    }
+    ApiControl.MapearTextosAlJson = MapearTextosAlJson;
+    function MapearTextoAlJson(area, elementoJson) {
+        let propiedadDto = area.getAttribute(atControl.propiedad);
+        let obligatorio = area.getAttribute(atControl.obligatorio);
+        let valor = area.value; //.replace(/\n/g, "\r\n");
+        if (obligatorio === "S" && NoDefinida(valor)) {
+            area.classList.remove(ClaseCss.crtlValido);
+            area.classList.add(ClaseCss.crtlNoValido);
+            throw new Error(`El campo ${propiedadDto} es obligatorio`);
+        }
+        elementoJson[propiedadDto] = valor;
+    }
     function MapearEditoresAlJson(panel, elementoJson) {
         let editores = panel.querySelectorAll(`input[tipo="${TipoControl.Editor}"]`);
         for (let i = 0; i < editores.length; i++) {
@@ -195,9 +263,11 @@ var ApiCrud;
         ApiControl.MapearListasDinamicasAlJson(panel, elementoJson);
         ApiControl.MapearRestrictoresAlJson(panel, elementoJson);
         ApiControl.MapearEditoresAlJson(panel, elementoJson);
+        ApiControl.MapearTextosAlJson(panel, elementoJson);
         ApiControl.MapearArchivosAlJson(panel, elementoJson);
         ApiControl.MapearUrlArchivosAlJson(panel, elementoJson);
         ApiControl.MapearCheckesAlJson(panel, elementoJson);
+        ApiControl.MapearFechasAlJson(panel, elementoJson);
         return crud.DespuesDeMapearDatosDeIU(crud, panel, elementoJson, modoDeTrabajo);
     }
     ApiCrud.MapearControlesDesdeLaIuAlJson = MapearControlesDesdeLaIuAlJson;

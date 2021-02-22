@@ -143,6 +143,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumTipoControl.SelectorDeFechaHora:
                     htmdDescriptorControl = RenderSelectorDeFechaHora(tabla, descriptorControl);
                     break;
+                case enumTipoControl.AreaDeTexto:
+                    htmdDescriptorControl = RenderAreaDeTexto(tabla, descriptorControl);
+                    break;
                 default: 
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
                     break;
@@ -247,6 +250,22 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmSelectorDeFechaHora;
         }
 
+
+        private static string RenderAreaDeTexto(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
+        {
+            var atributos = descriptorControl.atributos;
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorAreaDeTexto);
+            valores["Css"] = Css.Render(enumCssControlesDto.AreaDeTexto);
+            valores["Placeholder"] = atributos.Ayuda;
+            valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+
+            var htmSelectorDeFechaHora = PlantillasHtml.Render(PlantillasHtml.AreaDeTextoDto, valores);
+
+            return htmSelectorDeFechaHora;
+        }
+
+
         private static string RenderSelectorImagen(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
@@ -335,8 +354,19 @@ namespace MVCSistemaDeElementos.Descriptores
         private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
         {
             Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
+            
+            if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
+                atributos.Obligatorio = false;
+
             valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
+            valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
+            string alto="";
+            if (atributos.TipoDeControl == enumTipoControl.AreaDeTexto)
+                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",",".");
+
+             valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty()?"":$" height: {alto}")}";
+
             return valores;
         }
 

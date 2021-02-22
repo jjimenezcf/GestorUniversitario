@@ -64,11 +64,21 @@
             if (this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) {
                 if (!this.crudDeEdicion.EsModal)
                     this.crudDeEdicion.PosicionarEdicion();
-                else
-                    this.crudDeEdicion.AjustarModal()
+                else {
+                    this.PosicionarFiltro();
+                    this.PosicionarGrid();
+                    this.crudDeEdicion.AjustarModal();
+                }
             }
-            if ((this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) && !this.crudDeCreacion.EsModal)
-                this.crudDeCreacion.PosicionarCreacion();
+            if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) {
+                if (!this.crudDeCreacion.EsModal)
+                    this.crudDeCreacion.PosicionarCreacion();
+                else {
+                    this.PosicionarFiltro();
+                    this.PosicionarGrid();
+                    this.crudDeCreacion.AjustarModal();
+                }
+            }
         }
 
         public PosicionarFiltro(): void {

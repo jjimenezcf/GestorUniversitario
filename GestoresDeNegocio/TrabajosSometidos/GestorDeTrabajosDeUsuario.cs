@@ -8,9 +8,62 @@ using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
 using System;
 using Utilidades;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Schema.Generation;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Linq;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
+    public class Parametro
+    {
+        public string parametro { get; set; }
+        public object valor { get; set; }
+    }
+    public class ParametrosJson
+    {
+        public List<Parametro> Parametros { get; private set; }
+        public ParametrosJson(string json)
+        {
+            try
+            {
+                ValidarJson(json);
+            }
+            catch(Exception e)
+            {
+                if (!e.Message.Contains("The free-quota limit of 10 schema generations per hour has been reached"))
+                    throw;
+            }
+            Parametros = JsonConvert.DeserializeObject<List<Parametro>>(json);
+        }
+
+        public static void ValidarJson(string json)
+        {
+            JSchemaGenerator generator = new JSchemaGenerator();
+            JSchema schema = generator.Generate(typeof(List<Parametro>));
+            try
+            {
+                JArray actualJson = JArray.Parse(json);
+                bool valid = actualJson.IsValid(schema, out IList<string> errorMessages);
+
+                if (!valid)
+                {
+                    var mensaje = "";
+                    foreach(var me in errorMessages)
+                    {
+                        mensaje = $"{mensaje}{Environment.NewLine}{me}";
+                    }
+                    GestorDeErrores.Emitir($"Parámetros Json mal definido.{Environment.NewLine}{json}{Environment.NewLine}{mensaje}");
+                }
+            }
+            catch(Exception exc)
+            {
+                GestorDeErrores.Emitir($"Json mal definido.{Environment.NewLine}{json}",exc);
+            }
+        }
+    }
+
 
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
@@ -30,7 +83,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 CreateMap<TrabajoDeUsuarioDto, TrabajoDeUsuarioDtm>()
                 .ForMember(dtm => dtm.Ejecutor, dto => dto.Ignore())
                 .ForMember(dtm => dtm.Sometedor, dto => dto.Ignore())
-                .ForMember(dtm => dtm.Sometedor, dto => dto.Ignore());
+                .ForMember(dtm => dtm.Trabajo, dto => dto.Ignore())
+                .ForMember(dtm => dtm.Estado, dto => dto.MapFrom(x => TrabajoSometido.ToDtm(x.Estado)));
             }
         }
 
@@ -50,11 +104,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var gestor = Gestor(contexto, contexto.Mapeador);
             var tu = new TrabajoDeUsuarioDtm();
             tu.IdSometedor = contexto.DatosDeConexion.IdUsuario;
-            tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor  : (int)ts.IdEjecutor;
+            tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor : (int)ts.IdEjecutor;
             tu.IdTrabajo = ts.Id;
             tu.Estado = enumEstadosDeUnTrabajo.pendiente.ToDtm();
             tu.Encolado = DateTime.Now;
-            tu.Planificado = DateTime.Now;
+            tu.Planificado = tu.Encolado;
             tu.Parametros = parametros;
             tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Insertar));
             return tu;
@@ -67,6 +121,27 @@ namespace GestoresDeNegocio.TrabajosSometidos
             registros = registros.Include(p => p.Sometedor);
             registros = registros.Include(p => p.Trabajo);
             return registros;
+        }
+        protected override void AntesDePersistir(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+
+            if (parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar)
+            {
+                new ParametrosJson(registro.Parametros);
+                if (registro.Planificado.Millisecond > 0 || registro.Planificado.Second > 0)
+                {
+                    registro.Planificado = registro.Planificado.AddMilliseconds(1000 - registro.Planificado.Millisecond);
+                    registro.Planificado = registro.Planificado.AddSeconds(60 - registro.Planificado.Second);
+                    registro.Planificado.AddMinutes(1);
+                }
+            }
+
+            if (parametros.Operacion == TipoOperacion.Eliminar || parametros.Operacion == TipoOperacion.Modificar)
+            {
+                if (RegistroEnBD.Iniciado.HasValue)
+                    GestorDeErrores.Emitir("Un trabajo en ejecución o finalizado no se puede suprimir ni modificar");
+            }
         }
 
     }

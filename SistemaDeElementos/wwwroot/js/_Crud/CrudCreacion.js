@@ -53,8 +53,11 @@ var Crud;
         AjustarModal() {
             if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
                 this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
-            else
+            else {
                 this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
+                let padding = (this.PanelDeCrear.getBoundingClientRect().height - this.PanelDeContenidoModal.getBoundingClientRect().height) / 2;
+                this.PanelDeCrear.style.paddingTop = `${padding}px`;
+            }
         }
         PosicionarCreacion() {
             this.PanelDeCrear.style.position = 'fixed';

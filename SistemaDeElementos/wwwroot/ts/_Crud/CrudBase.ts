@@ -95,6 +95,7 @@
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearAreasDeTexto(panel, elementoJson);
             this.MapearFechas(panel, elementoJson);
         }
 
@@ -252,6 +253,14 @@
                 }
             }
         }
+        private MapearAreasDeTexto(panel: HTMLDivElement, elementoJson: JSON): void {
+
+            let areas: NodeListOf<HTMLTextAreaElement> = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`) as NodeListOf<HTMLTextAreaElement>;
+            for (var i = 0; i < areas.length; i++) {
+                let area: HTMLTextAreaElement = areas[i] as HTMLTextAreaElement;
+                this.MapearAreaDeTexto(area, elementoJson);
+            }
+        } 
 
         private MapearFechas(panel: HTMLDivElement, elementoJson: JSON): void {
 
@@ -265,6 +274,16 @@
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha: HTMLInputElement = fechasHoras[i] as HTMLInputElement;
                 this.MapearSelectorDeFecha(fecha, elementoJson);
+            }
+        }
+
+        private MapearAreaDeTexto(area: HTMLTextAreaElement, elementoJson: JSON): void {
+            let propiedad: string = area.getAttribute(atControl.propiedad);
+            if (!IsNullOrEmpty(propiedad)) {
+                let texto: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
+                if (!IsNullOrEmpty(texto)) {
+                    ApiControl.MapearTextoAlControl(area, texto);
+                }
             }
         }
 

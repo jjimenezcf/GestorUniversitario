@@ -37,6 +37,19 @@ namespace ServicioDeDatos.TrabajosSometidos
 
             throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
         }
+        public static string ToDtm(string estado)
+        {
+            switch (estado)
+            {
+                case "Con errores" : return "TR";
+                case "Pendiente"   : return "PT";
+                case "Iniciado"    : return "EJ";
+                case "Terminado"   : return "OK";
+                case "Erroneo"     : return "ER";
+            }
+
+            throw new Exception($"El estado de un trabajo '{estado}' no es válido");
+        }
     }
 
     [Table("USUARIO", Schema = "TRABAJO")]

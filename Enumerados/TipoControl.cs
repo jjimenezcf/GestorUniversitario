@@ -48,6 +48,7 @@ namespace Enumerados
         , Lista
         , SelectorDeFecha
         , SelectorDeFechaHora
+        , AreaDeTexto
         , Plantilla
         , Mantenimiento
         , pnlCreador
@@ -90,6 +91,7 @@ namespace Enumerados
                 case enumTipoControl.Lista: return "lista";
                 case enumTipoControl.SelectorDeFecha: return "selector-de-fecha";
                 case enumTipoControl.SelectorDeFechaHora: return "selector-de-fecha-hora";
+                case enumTipoControl.AreaDeTexto: return "area-de-texto";
                 case enumTipoControl.Plantilla: return "plantilla";
                 case enumTipoControl.Mantenimiento: return "mantenimiento";
                 case enumTipoControl.pnlCreador: return "panel-creador";
