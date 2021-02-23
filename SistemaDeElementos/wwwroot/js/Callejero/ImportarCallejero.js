@@ -18,9 +18,13 @@ var Callejero;
                 return false;
             }
             if (super.AntesDeAceptar()) {
+                PonerCapa();
                 ApiDeArchivos.PrometoSubirLosArchivos(this.CuerpoDelFormulario)
                     .then(resultados => sometido = this.ArchivosSubidos(this, resultados))
-                    .catch(error => sometido = promesaNoResuelta(this, error));
+                    .catch(error => sometido = promesaNoResuelta(this, error))
+                    .finally(() => {
+                    QuitarCapa();
+                });
             }
             return sometido;
         }
@@ -46,8 +50,8 @@ var Callejero;
                     }
                 }
                 var parametrosSometer = JSON.stringify(arrayDeArchivos);
-                let url = `/importarCallejero/epImportarCallejero?parametros=${parametrosSometer}`;
-                let a = new ApiDeAjax.DescriptorAjax(this, 'epSometerImportacion', arrayDeArchivos, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                let url = `/${Ajax.Callejero.Importacion}/${Ajax.Callejero.accion.importar}?parametros=${parametrosSometer}`;
+                let a = new ApiDeAjax.DescriptorAjax(this, `${Ajax.Callejero.accion.importar}`, arrayDeArchivos, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
                     this.TrasSometer(peticion);
                     resolve(true);
                 }, (peticion) => {

@@ -12,7 +12,6 @@ namespace MVCSistemaDeElementos.Descriptores
                 ruta: "Callejero",
                 vista: nameof(ImportarCallejeroController.ImportarCallejero))
         {
-            Cabecera.Menu.Opciones.Add(new OpcionDeFormulario(Cabecera.Menu, "someter", "someter", enumAccionDeFormulario.Aceptar, "Someter trabajo de importación"));
             Cuerpo.Contenedores.Add(new ContenedorDeBloques(Cuerpo, "General", "Datos maestros"));
             var bloque = Cuerpo.Contenedores[0];
             bloque.Izquierdo.Add(new ControlDeArchivo(bloque, "csvPais", "Fichero de paises", "Selecciona un fichero para importar los paises", "*.csv"));

@@ -238,6 +238,19 @@ const Ajax = {
         password: "password",
         negocio: "negocio"
     },
+    Callejero: {
+        Importacion: 'importarCallejero',
+        accion: {
+            importar: 'epImportarCallejero'
+        }
+    },
+    TrabajosSometidos: {
+        TrabajosDeUsuario: 'TrabajosDeUsuario',
+        accion: {
+            iniciar: 'epIniciarTrabajoDeUsuario',
+            bloquear: 'epBloquearTrabajoDeUsuario'
+        }
+    },
     jsonResultError: 1,
     jsonResultOk: 0,
     jsonUndefined: undefined,
@@ -341,6 +354,10 @@ const Evento = {
         Aceptar: "aceptar",
         Cerrar: "cerrar",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
+    },
+    TrabajoDeUsuario: {
+        iniciar: "iniciar-trabajo",
+        bloquear: "bloquear-trabajo"
     }
 };
 const TipoControl = {

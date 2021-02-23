@@ -25,9 +25,13 @@
             }
 
             if (super.AntesDeAceptar()) {
+                PonerCapa();
                 ApiDeArchivos.PrometoSubirLosArchivos(this.CuerpoDelFormulario)
                     .then(resultados => sometido = this.ArchivosSubidos(this, resultados))
-                    .catch(error => sometido = promesaNoResuelta(this, error));
+                    .catch(error => sometido = promesaNoResuelta(this, error))
+                    .finally(() => {
+                        QuitarCapa();
+                    });
             }
 
 
@@ -60,10 +64,10 @@
                 }
                 var parametrosSometer = JSON.stringify(arrayDeArchivos);
 
-                let url: string = `/importarCallejero/epImportarCallejero?parametros=${parametrosSometer}`;
+                let url: string = `/${Ajax.Callejero.Importacion}/${Ajax.Callejero.accion.importar}?parametros=${parametrosSometer}`;
 
                 let a = new ApiDeAjax.DescriptorAjax(this
-                    , 'epSometerImportacion'
+                    , `${Ajax.Callejero.accion.importar}`
                     , arrayDeArchivos
                     , url
                     , ApiDeAjax.TipoPeticion.Asincrona

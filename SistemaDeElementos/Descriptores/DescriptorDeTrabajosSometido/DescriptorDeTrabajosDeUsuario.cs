@@ -9,18 +9,27 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public class IniciarTrabajo : AccionDeMenuMnt
         {
-            const string iniciar = "IniciarTrabajo";
+            const string iniciar = "iniciar-trabajo";
             public IniciarTrabajo()
             : base(iniciar,enumCssOpcionMenu.DeElemento, "Inicia un trabajo")
             {
             }
+
+            public override string RenderAccion()
+            {
+                return $"TrabajosSometido.Eventos('{TipoDeAccion}','')";
+            }
         }
         public class BloquearTrabajo : AccionDeMenuMnt
         {
-            const string bloquear = "BloquearTrabajo";
+            const string bloquear = "bloquear-trabajo";
             public BloquearTrabajo()
             : base(bloquear, enumCssOpcionMenu.DeElemento, "Bloquear un trabajo")
             {
+            }
+            public override string RenderAccion()
+            {
+                return $"javascript:TrabajosSometido.Eventos('{TipoDeAccion}','')";
             }
         }
 

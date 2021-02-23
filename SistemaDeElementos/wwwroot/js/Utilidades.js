@@ -30,17 +30,29 @@ function AlturaDelMenu(alturaFormulario) {
     return AlturaDelCuerpo(alturaFormulario) - 4;
 }
 function PonerCapa() {
-    var capa = document.getElementById("CapaDeBloqueo");
+    let capa = document.getElementById("CapaDeBloqueo");
     if (capa != null) {
-        capa.classList.remove(ClaseCss.sinCapaDeBloqueo);
-        capa.classList.add(ClaseCss.conCapaDeBloqueo);
+        let numero = Numero(capa.getAttribute('numero-de-capas'));
+        if (numero <= 0) {
+            capa.classList.remove(ClaseCss.sinCapaDeBloqueo);
+            capa.classList.add(ClaseCss.conCapaDeBloqueo);
+            numero = 0;
+        }
+        numero = numero + 1;
+        capa.setAttribute('numero-de-capas', numero.toString());
     }
 }
 function QuitarCapa() {
-    var capa = document.getElementById("CapaDeBloqueo");
+    let capa = document.getElementById("CapaDeBloqueo");
     if (capa != null) {
-        capa.classList.remove(ClaseCss.conCapaDeBloqueo);
-        capa.classList.add(ClaseCss.sinCapaDeBloqueo);
+        let numero = Numero(capa.getAttribute('numero-de-capas'));
+        if (numero <= 1) {
+            capa.classList.remove(ClaseCss.conCapaDeBloqueo);
+            capa.classList.add(ClaseCss.sinCapaDeBloqueo);
+            numero = 1;
+        }
+        numero = numero - 1;
+        capa.setAttribute('numero-de-capas', numero.toString());
     }
 }
 function BlanquearMensaje() {

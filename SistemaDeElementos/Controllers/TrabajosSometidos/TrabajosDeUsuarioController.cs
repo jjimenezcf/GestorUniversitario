@@ -45,16 +45,14 @@ namespace MVCSistemaDeElementos.Controllers
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
 
-        public JsonResult epIniciarTrabajoDeUsuario(string trabajoJson)
+        public JsonResult epIniciarTrabajoDeUsuario(int idTrabajoUsuario)
         {
             var r = new Resultado();
 
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var trabajoDto = JsonConvert.DeserializeObject<TrabajoDeUsuarioDto>(trabajoJson);
-                var trabajoDtm = GestorDeElementos.MapearRegistro(trabajoDto, new ParametrosDeNegocio(TipoOperacion.Modificar));
-                GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto,trabajoDtm);
+                GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto, idTrabajoUsuario);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo iniciado";
             }
@@ -63,6 +61,28 @@ namespace MVCSistemaDeElementos.Controllers
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Concatenar(e);
                 r.Mensaje = $"Error al iniciar el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+        }
+        public JsonResult epBloquearTrabajoDeUsuario(string trabajoJson)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
+                var trabajoDto = JsonConvert.DeserializeObject<TrabajoDeUsuarioDto>(trabajoJson);
+                var trabajoDtm = GestorDeElementos.MapearRegistro(trabajoDto, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                GestorDeTrabajosDeUsuario.Bloquear(GestorDeElementos.Contexto, trabajoDtm);
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = "Trabajo bloqueado";
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al bloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);

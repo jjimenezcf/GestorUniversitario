@@ -13,6 +13,7 @@ using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using Gestor.Errores;
+using ServicioDeDatos.Elemento;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -114,7 +115,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return tu;
         }
 
-        public static void Iniciar(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
+        public static void Iniciar(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var transaccion = contexto.IniciarTransaccion();
             try
@@ -122,16 +123,17 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
                                                         SET 
                                                           INICIADO = GETDATE(), 
-                                                          ESTADO = '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)}'
+                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)}
                                                         WHERE 
-                                                          ID = {tu.Id}
+                                                          ID = {idTrabajoDeUsuario}
                                                           AND INICIADO IS NULL 
-                                                          AND ESTADO LIKE '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}'
+                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
                                                        ");
+
                 if (i > 0)
                     contexto.Commit(transaccion);
                 else
-                    throw new Exception($"El trabajo ya estaba iniciado");
+                    throw new Exception("El trabajo ya estaba iniciado");
             }
             catch
             {
@@ -140,6 +142,30 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
+        public static void Bloquear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
+        {
+            var transaccion = contexto.IniciarTransaccion();
+            try
+            {
+                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
+                                                        SET  
+                                                          ESTADO = '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}'
+                                                        WHERE 
+                                                          ID = {tu.Id}
+                                                          AND INICIADO IS NULL 
+                                                          AND ESTADO LIKE '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}'
+                                                       ");
+                if (i > 0)
+                    contexto.Commit(transaccion);
+                else
+                    throw new Exception($"El trabajo no se puede bloquear");
+            }
+            catch
+            {
+                contexto.Rollback(transaccion);
+                throw;
+            }
+        }
         public static void Terminar(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
         {
             var transaccion = contexto.IniciarTransaccion();

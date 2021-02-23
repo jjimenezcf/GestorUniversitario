@@ -8,7 +8,7 @@ using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos.TrabajosSometidos
 {
-    public enum enumEstadosDeUnTrabajo {pendiente, iniciado, terminado, conErrores, Error}
+    public enum enumEstadosDeUnTrabajo {pendiente, iniciado, terminado, conErrores, Error, Bloqueado}
 
     public static class TrabajoSometido { 
         public static string ToDtm(this enumEstadosDeUnTrabajo estado)
@@ -17,6 +17,7 @@ namespace ServicioDeDatos.TrabajosSometidos
             {
                 case enumEstadosDeUnTrabajo.conErrores: return "TR";
                 case enumEstadosDeUnTrabajo.pendiente: return "PT";
+                case enumEstadosDeUnTrabajo.Bloqueado: return "BL";
                 case enumEstadosDeUnTrabajo.iniciado: return "EJ";
                 case enumEstadosDeUnTrabajo.terminado: return "OK";
                 case enumEstadosDeUnTrabajo.Error: return "ER";
@@ -30,6 +31,7 @@ namespace ServicioDeDatos.TrabajosSometidos
             {
                 case "TR": return "Con errores" ;
                 case "PT": return "Pendiente";
+                case "BL": return "Bloqueado";
                 case "EJ": return "Iniciado";
                 case "OK": return "Terminado";
                 case "ER": return "Erroneo";
@@ -43,6 +45,7 @@ namespace ServicioDeDatos.TrabajosSometidos
             {
                 case "Con errores" : return "TR";
                 case "Pendiente"   : return "PT";
+                case "Bloqueado"   : return "BL";
                 case "Iniciado"    : return "EJ";
                 case "Terminado"   : return "OK";
                 case "Erroneo"     : return "ER";

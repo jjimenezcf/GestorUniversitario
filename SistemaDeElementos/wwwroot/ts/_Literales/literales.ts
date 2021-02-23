@@ -21,7 +21,7 @@ const literal = {
 const atMenu = {
     abierto: "menu-abierto",
     plegado: "menu-plegado",
-}
+};
 
 const atControl = {
     propiedad: "propiedad",
@@ -50,7 +50,7 @@ const atControl = {
 
 const atCheck = {
     filtrarPorFalse: "filtrar-por-false"
-}
+};
 
 const atMantenimniento = {
     zonaDeFiltro: "zona-de-filtro",
@@ -58,7 +58,7 @@ const atMantenimniento = {
     negocio: literal.negocio,
     zonaMenu: "zona-de-menu",
     gridDelMnt: "grid-del-mnt"
-}
+};
 
 const ModoOrdenacion = {
     ascedente: "ascendente",
@@ -107,7 +107,7 @@ const atArchivo = {
     contenedorBarra: "contenedor-barra",
     infoArchivo: "info-archivo",
     estado: "estado-subida",
-    situacion : {
+    situacion: {
         subiendo: 'subiendo',
         subido: 'subido',
         error: 'error',
@@ -123,7 +123,7 @@ const atArchivo = {
 const atOpcionDeMenu = {
     permisosNecesarios: "permisos-necesarios",
     clase: "clase"
-}
+};
 
 const atSelector = {
     popiedadBuscar: "propiedadBuscar",
@@ -158,7 +158,7 @@ const atListasDeElemento = {
     mostrarExpresion: atListas.mostrarExpresion,
     yaCargado: atListas.yaCargado,
     expresionPorDefecto: atListas.expresionPorDefecto
-}
+};
 
 const atListasDinamicas = {
     claseElemento: atListas.claseElemento,
@@ -170,7 +170,7 @@ const atListasDinamicas = {
     cargando: 'cargando',
     expresionPorDefecto: atListas.expresionPorDefecto,
     ultimaCadenaBuscada: 'ultima-busqueda',
-    cantidad:'cantidad-a-leer'
+    cantidad: 'cantidad-a-leer'
 };
 
 
@@ -182,7 +182,7 @@ const atCriterio = {
     contiene: 'contiene',
     comienza: 'comienza',
     igual: 'igual'
-}
+};
 
 const atRelacion = {
     navegarAlCrud: 'navegar-al-crud',
@@ -262,6 +262,19 @@ const Ajax = {
         login: "login",
         password: "password",
         negocio: "negocio"
+    },
+    Callejero: {
+        Importacion: 'importarCallejero',
+        accion: {
+            importar: 'epImportarCallejero'
+        }
+    },
+    TrabajosSometidos: {
+        TrabajosDeUsuario: 'TrabajosDeUsuario',
+        accion: {
+            iniciar: 'epIniciarTrabajoDeUsuario',
+            bloquear: 'epBloquearTrabajoDeUsuario'
+        }
     },
     jsonResultError: 1,
     jsonResultOk: 0,
@@ -369,6 +382,10 @@ const Evento = {
         Aceptar: "aceptar",
         Cerrar: "cerrar",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
+    },
+    TrabajoDeUsuario: {
+        iniciar: "iniciar-trabajo",
+        bloquear: "bloquear-trabajo"
     }
 };
 
@@ -393,14 +410,14 @@ const ClaseDeOpcioDeMenu = {
     DeElemento: "opcion-menu-de-elemento",
     DeVista: "opcion-menu-de-vista",
     Basico: "opcion-menu-basica",
-}
+};
 
 const ModoDeAccesoDeDatos = {
     Administrador: "Administrador",
     Gestor: "gestor",
     Consultor: "Consultor",
     SinPermiso: "SinPermiso"
-}
+};
 
 const ModoTrabajo = {
     creando: "creando",
@@ -443,5 +460,5 @@ const GestorDeEventos = {
     deConsultaDeRelaciones: "Crud.EventosModalDeConsultaDeRelaciones",
     delMantenimiento: "Crud.EventosDelMantenimiento",
     deListaDinamica: "Crud.EventosDeListaDinamica"
-}
+};
 

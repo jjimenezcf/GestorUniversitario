@@ -862,6 +862,37 @@
             a.Ejecutar();
         }
 
+
+        protected PromesaDeCargarGrid(accion: string, posicion: number): Promise<boolean> {
+
+            if (this.Grid.getAttribute(atGrid.cargando) == 'S')
+                return null;
+
+            let promesa: Promise<boolean> = new Promise((resolve, reject) => {
+            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
+            var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerDatosParaElGrid
+                , datosDePeticion
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , (peticion) => {
+                    this.CrearFilasEnElGrid(peticion);
+                    resolve(true);
+                }
+                , (peticion) => {
+                    this.SiHayErrorAlCargarElGrid(peticion);
+                    reject(false);
+                }
+            );
+            this.Grid.setAttribute(atGrid.cargando, 'S');
+                a.Ejecutar();
+            });
+
+            return promesa;
+        }
+
         private DefinirPeticionDeBusqueda(endPoint: string, accion: string, posicion: number): string {
             var posicion = posicion;
             var cantidad = this.Navegador.Cantidad;

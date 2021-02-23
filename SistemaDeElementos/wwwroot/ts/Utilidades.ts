@@ -38,18 +38,30 @@ function AlturaDelMenu(alturaFormulario: number): number {
 }
 
 function PonerCapa() {
-    var capa = document.getElementById("CapaDeBloqueo");
+    let capa: HTMLDivElement = document.getElementById("CapaDeBloqueo") as HTMLDivElement;
     if (capa != null) {
-        capa.classList.remove(ClaseCss.sinCapaDeBloqueo);
-        capa.classList.add(ClaseCss.conCapaDeBloqueo);
+        let numero: number = Numero(capa.getAttribute('numero-de-capas'));
+        if (numero <= 0) {
+            capa.classList.remove(ClaseCss.sinCapaDeBloqueo);
+            capa.classList.add(ClaseCss.conCapaDeBloqueo);
+            numero = 0;
+        }
+        numero = numero + 1;
+        capa.setAttribute('numero-de-capas', numero.toString());
     }
 }
 
 function QuitarCapa() {
-    var capa = document.getElementById("CapaDeBloqueo");
+    let capa: HTMLDivElement = document.getElementById("CapaDeBloqueo") as HTMLDivElement;
     if (capa != null) {
-        capa.classList.remove(ClaseCss.conCapaDeBloqueo);
-        capa.classList.add(ClaseCss.sinCapaDeBloqueo);
+        let numero: number = Numero(capa.getAttribute('numero-de-capas'));
+        if (numero <= 1) {
+            capa.classList.remove(ClaseCss.conCapaDeBloqueo);
+            capa.classList.add(ClaseCss.sinCapaDeBloqueo);
+            numero = 1
+        }
+        numero = numero - 1;
+        capa.setAttribute('numero-de-capas', numero.toString());
     }
 }
 

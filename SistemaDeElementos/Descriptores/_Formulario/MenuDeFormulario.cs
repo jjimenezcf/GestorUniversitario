@@ -18,8 +18,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Opciones = new List<OpcionDeFormulario>();
             var opcionCerrar = new OpcionDeFormulario(this, "cerrar", "Cerrar", enumAccionDeFormulario.Cerrar, "Cerra sin procesar");
             var opcionAceptar = new OpcionDeFormulario(this, "aceptar", "Aceptar", enumAccionDeFormulario.Aceptar, "Cerrar y procesar formulario");
-            Opciones.Add(opcionAceptar);
             Opciones.Add(opcionCerrar);
+            Opciones.Add(opcionAceptar);
         }
 
         public string RenderMenu()

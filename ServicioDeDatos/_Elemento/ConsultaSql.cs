@@ -6,6 +6,11 @@ using Microsoft.Data.SqlClient;
 
 namespace ServicioDeDatos.Elemento
 {
+   public class RegistrosAfectados: Registro
+    {
+        public int cantidad { get; set; }
+    }
+
     public class ConsultaSql<T> where T : Registro
     {
         public string Conexion;

@@ -58,7 +58,14 @@
 
         public TrasLaPeticion: Function;
         public ProcesarError: Function;
-        constructor(llamante: any, peticion: string, datos: any, url: string, tipo: TipoPeticion, modo: ModoPeticion, trasLaPeticion: Function, siHayError: Function) {
+        constructor(llamante: any
+            , peticion: string
+            , datos: any
+            , url: string
+            , tipo: TipoPeticion
+            , modo: ModoPeticion
+            , trasLaPeticion: Function
+            , siHayError: Function) {
             this.llamador = llamante;
             this.nombre = peticion;
             this.DatosDeEntrada = datos;
@@ -106,6 +113,9 @@
                             descriptor.DespuesDeLaPeticion();
                     }
                 }
+                //catch (error) {
+                //   Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
+                //}
                 finally {
                     QuitarCapa();
                 }
@@ -137,29 +147,29 @@
 
         private ErrorEnPeticion() {
             this.Error = true;
-                if (this.Request.status === 404) {
-                    this.resultado = new ResultadoJson();
-                    this.resultado.mensaje = `Error al acceder al servidor`;
-                    console.error(`Error al ejecutar la peticion '${this.nombre}'. Petición no definida. No está definida la petición con los parámetros indicados: ${this.Url}`);
-                }
-                else if (this.Request.status === 500) {
+            if (this.Request.status === 404) {
+                this.resultado = new ResultadoJson();
+                this.resultado.mensaje = `Error al acceder al servidor`;
+                console.error(`Error al ejecutar la peticion '${this.nombre}'. Petición no definida. No está definida la petición con los parámetros indicados: ${this.Url}`);
+            }
+            else if (this.Request.status === 500) {
 
-                    this.resultado = new ResultadoJson();
-                    this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición ambigüa`;
-                    console.error(`Petición mal definida: ${this.Url}. ${this.Request.response}`);
-                }
-                else {
-                    this.resultado = JSON.parse(this.Request.response);
+                this.resultado = new ResultadoJson();
+                this.resultado.mensaje = `Error al ejecutar la peticion '${this.nombre}'. Petición ambigüa`;
+                console.error(`Petición mal definida: ${this.Url}. ${this.Request.response}`);
+            }
+            else {
+                this.resultado = JSON.parse(this.Request.response);
 
-                    if (IsNullOrEmpty(this.resultado.consola)) {
-                        this.resultado.consola = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
-                    }
-
-                    console.error(this.resultado.consola);
+                if (IsNullOrEmpty(this.resultado.consola)) {
+                    this.resultado.consola = `Error al ejecutar la peticion '${this.nombre}'. ${this.resultado.mensaje}`;
                 }
 
-                if (this.ProcesarError)
-                    this.ProcesarError(this);
+                console.error(this.resultado.consola);
+            }
+
+            if (this.ProcesarError)
+                this.ProcesarError(this);
         }
 
         private DespuesDeLaPeticion() {
@@ -176,7 +186,7 @@
                     this.TrasLaPeticion(this);
                 }
                 catch (error) {
-                    Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`,error);
+                    Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
                 }
         }
     }
