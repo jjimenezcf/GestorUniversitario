@@ -142,18 +142,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
-        public static void Bloquear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
+        public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var transaccion = contexto.IniciarTransaccion();
             try
             {
                 var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
                                                         SET  
-                                                          ESTADO = '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}'
+                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}
                                                         WHERE 
-                                                          ID = {tu.Id}
+                                                          ID = {idTrabajoDeUsuario}
                                                           AND INICIADO IS NULL 
-                                                          AND ESTADO LIKE '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}'
+                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
                                                        ");
                 if (i > 0)
                     contexto.Commit(transaccion);

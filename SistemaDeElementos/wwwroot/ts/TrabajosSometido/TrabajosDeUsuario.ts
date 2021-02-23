@@ -18,85 +18,63 @@
 
         public IniciarTrabajo(): boolean {
 
-            function promesaNoResuelta(motivo: string): boolean {
-                Mensaje(TipoMensaje.Error, motivo);
-                return false;
-            }
-
-            function promesaResuelta(mensaje: string): boolean {
-                Mensaje(TipoMensaje.Info, mensaje);
-                return true;
-            }
-
             if (this.InfoSelector.Cantidad != 1) {
                 Mensaje(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
                 return;
             }
 
-            let ejecutado: boolean;
-
-            PonerCapa();
-            this.EjecutarTrabajoDeUsuario()
-                .then(resultado => ejecutado = promesaResuelta(resultado))
-                .catch(error => ejecutado = promesaNoResuelta(error))
-                .finally(() => this.TrasEjecutarElTrabajo(ejecutado));
+            this.EjecutarTrabajoDeUsuario();
         }
 
         public BloquearTrabajo(): void {
-            Mensaje(TipoMensaje.Info, "bloquear Trabajo");
+            for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) 
+                this.BloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
+        }
+
+        private EjecutarTrabajoDeUsuario(): void {
+            let idTrabajoDeUsuario: number = this.InfoSelector.LeerId(0);
+
+            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.TrabajosSometidos.accion.iniciar
+                , idTrabajoDeUsuario
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasEjecutarTrabajo
+                , this.SiHayErrorDeEjecucion
+            );
+            a.Ejecutar();
         }
 
 
-        private TrasEjecutarElTrabajo(ejecutado: boolean) {
-            var promesa = this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
-            if (promesa != null)
-                promesa.then(() => {
-                    if (ejecutado)
-                        Mensaje(TipoMensaje.Info, 'trabajo finalizado');
-                    else
-                        Mensaje(TipoMensaje.Error, 'trabajo con errores, consulte el log de ejecución');
-                }).catch(() => {
-                    Mensaje(TipoMensaje.Error, 'Error al recargar el grid, consulte la consola');
-                }).finally(() => {
-                    QuitarCapa();
-                });
+        private BloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
+            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.TrabajosSometidos.accion.bloquear
+                , idTrabajoDeUsuario
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasEjecutarTrabajo
+                , this.SiHayErrorDeEjecucion
+            );
+            a.Ejecutar();
         }
 
-        public EjecutarTrabajoDeUsuario(): Promise<string> {
-            let promesa: Promise<string> = new Promise((resolve, reject) => {
-                let idTrabajoUsuario: number = this.InfoSelector.LeerId(0);
-
-                let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoUsuario}`;
-
-                let a = new ApiDeAjax.DescriptorAjax(this
-                    , 'epIniciarTrabajoDeUsuario'
-                    , idTrabajoUsuario
-                    , url
-                    , ApiDeAjax.TipoPeticion.Asincrona
-                    , ApiDeAjax.ModoPeticion.Get
-                    , (peticion) => {
-                        resolve(this.TrasEjecutarTrabajo(peticion));
-                    }
-                    , (peticion) => {
-                        reject(this.SiHayErrorDeEjecucion(peticion));
-                    }
-                );
-                a.Ejecutar();
-            });
-
-            return promesa;
-        }
-
-        public SiHayErrorDeEjecucion(peticion: ApiDeAjax.DescriptorAjax) {
-            return peticion.resultado.mensaje;
+        public SiHayErrorDeEjecucion(peticion: ApiDeAjax.DescriptorAjax): void {
+            Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
+            crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
 
         public TrasEjecutarTrabajo(peticion: ApiDeAjax.DescriptorAjax) {
-            return peticion.resultado.mensaje;
+            Mensaje(TipoMensaje.Info, peticion.resultado.mensaje);
+            let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
+            crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
-
-
-
     }
 
     export class CrudCreacionTrabajoDeUsuario extends Crud.CrudCreacion {

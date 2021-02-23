@@ -14,60 +14,36 @@ var TrabajosSometido;
             this.crudDeEdicion = new CrudEdicionTrabajoDeUsuario(this, idPanelEdicion);
         }
         IniciarTrabajo() {
-            function promesaNoResuelta(motivo) {
-                Mensaje(TipoMensaje.Error, motivo);
-                return false;
-            }
-            function promesaResuelta(mensaje) {
-                Mensaje(TipoMensaje.Info, mensaje);
-                return true;
-            }
             if (this.InfoSelector.Cantidad != 1) {
                 Mensaje(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
                 return;
             }
-            let ejecutado;
-            PonerCapa();
-            this.EjecutarTrabajoDeUsuario()
-                .then(resultado => ejecutado = promesaResuelta(resultado))
-                .catch(error => ejecutado = promesaNoResuelta(error))
-                .finally(() => this.TrasEjecutarElTrabajo(ejecutado));
+            this.EjecutarTrabajoDeUsuario();
         }
         BloquearTrabajo() {
-            Mensaje(TipoMensaje.Info, "bloquear Trabajo");
-        }
-        TrasEjecutarElTrabajo(ejecutado) {
-            var promesa = this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
-            if (promesa != null)
-                promesa.then(() => {
-                    if (ejecutado)
-                        Mensaje(TipoMensaje.Info, 'trabajo finalizado');
-                    else
-                        Mensaje(TipoMensaje.Error, 'trabajo con errores, consulte el log de ejecución');
-                }).catch(() => {
-                    Mensaje(TipoMensaje.Error, 'Error al recargar el grid, consulte la consola');
-                }).finally(() => {
-                    QuitarCapa();
-                });
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++)
+                this.BloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
         EjecutarTrabajoDeUsuario() {
-            let promesa = new Promise((resolve, reject) => {
-                let idTrabajoUsuario = this.InfoSelector.LeerId(0);
-                let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoUsuario}`;
-                let a = new ApiDeAjax.DescriptorAjax(this, 'epIniciarTrabajoDeUsuario', idTrabajoUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
-                    resolve(this.TrasEjecutarTrabajo(peticion));
-                }, (peticion) => {
-                    reject(this.SiHayErrorDeEjecucion(peticion));
-                });
-                a.Ejecutar();
-            });
-            return promesa;
+            let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
+            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.iniciar, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
+            a.Ejecutar();
+        }
+        BloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
+            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.bloquear, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
+            a.Ejecutar();
         }
         SiHayErrorDeEjecucion(peticion) {
-            return peticion.resultado.mensaje;
+            Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            let crudTu = peticion.llamador;
+            crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
         TrasEjecutarTrabajo(peticion) {
-            return peticion.resultado.mensaje;
+            Mensaje(TipoMensaje.Info, peticion.resultado.mensaje);
+            let crudTu = peticion.llamador;
+            crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
     }
     TrabajosSometido.CrudDeTrabajosDeUsuario = CrudDeTrabajosDeUsuario;

@@ -65,16 +65,14 @@ namespace MVCSistemaDeElementos.Controllers
 
             return new JsonResult(r);
         }
-        public JsonResult epBloquearTrabajoDeUsuario(string trabajoJson)
+        public JsonResult epBloquearTrabajoDeUsuario(int idTrabajoUsuario)
         {
             var r = new Resultado();
 
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var trabajoDto = JsonConvert.DeserializeObject<TrabajoDeUsuarioDto>(trabajoJson);
-                var trabajoDtm = GestorDeElementos.MapearRegistro(trabajoDto, new ParametrosDeNegocio(TipoOperacion.Modificar));
-                GestorDeTrabajosDeUsuario.Bloquear(GestorDeElementos.Contexto, trabajoDtm);
+                GestorDeTrabajosDeUsuario.Bloquear(GestorDeElementos.Contexto, idTrabajoUsuario);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo bloqueado";
             }
