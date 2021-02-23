@@ -36,8 +36,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDePermisosDeUnPuesto(ModoDescriptor.Consulta)
                               , propiedadRestrictora: nameof(PermisosDeUnPuestoDto.IdPuesto));
 
-            var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento, "Mostrar los permisos de un puesto de trabajo");
+            var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Mostrar los permisos de un puesto de trabajo");
+            var opcion = new OpcionDeMenu<PuestoDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 

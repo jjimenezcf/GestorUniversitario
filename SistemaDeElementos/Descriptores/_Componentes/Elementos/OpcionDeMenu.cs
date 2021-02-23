@@ -12,10 +12,15 @@ namespace MVCSistemaDeElementos.Descriptores
     {
 
         public string TipoDeAccion { get; private set; }
+        public enumCssOpcionMenu ClaseDeAccion { get; private set; }
 
-        public AccionDeMenu(string tipoDeAccion)
+        public string Ayuda { get; private set; }
+
+        public AccionDeMenu(string tipoDeAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         {
             TipoDeAccion = tipoDeAccion;
+            ClaseDeAccion = claseDeAccion;
+            Ayuda = ayuda;
         }
 
         public virtual string RenderAccion()
@@ -37,8 +42,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public string PropiedadQueRestringe { get; private set; }
         public string NavegarAlCrud { get; private set; }
 
-        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora)
-        : base(TipoDeAccionDeMnt.RelacionarElementos)
+        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
+        : base(TipoDeAccionDeMnt.RelacionarElementos, enumCssOpcionMenu.DeElemento, ayuda)
         {
             TipoAccion = TipoDeAccionDeMnt.RelacionarElementos;
             RelacionarCon = relacionarCon.ToLower();
@@ -62,8 +67,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         protected List<string> Parametros = new List<string>();
 
-        public AccionDeMenuMnt(string tipoAccion)
-        : base(tipoAccion)
+        public AccionDeMenuMnt(string tipoAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
+        : base(tipoAccion, claseDeAccion, ayuda)
         {
         }
 
@@ -80,7 +85,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CrearElemento : AccionDeMenuMnt
     {
         public CrearElemento()
-        : base(TipoDeAccionDeMnt.CrearElemento)
+        : base(TipoDeAccionDeMnt.CrearElemento, enumCssOpcionMenu.DeVista, "Crear nuevo elemento")
         {
         }
     }
@@ -88,7 +93,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class BorrarElemento : AccionDeMenuMnt
     {
         public BorrarElemento()
-        : base(TipoDeAccionDeMnt.EliminarElemento)
+        : base(TipoDeAccionDeMnt.EliminarElemento, enumCssOpcionMenu.DeElemento, "Borrar elemento")
         {
         }
     }
@@ -96,7 +101,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class EditarElemento : AccionDeMenuMnt
     {
         public EditarElemento()
-        : base(TipoDeAccionDeMnt.EditarElemento)
+        : base(TipoDeAccionDeMnt.EditarElemento, enumCssOpcionMenu.DeElemento, "Editar elemento")
         {
         }
     }
@@ -105,8 +110,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public string IdHtmlDeLaModalAsociada { get; private set; }
         public Func<string> RenderDeLaModal { get; private set; }
-        public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
-        : base(TipoDeAccionDeMnt.AbrirModalParaRelacionar)
+        public RelacionarElementos(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal, string ayuda)
+        : base(TipoDeAccionDeMnt.AbrirModalParaRelacionar, enumCssOpcionMenu.DeVista, ayuda)
         {
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);
@@ -123,8 +128,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public string IdHtmlDeLaModalAsociada { get; private set; }
         public Func<string> RenderDeLaModal { get; private set; }
-        public ConsultarRelaciones(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal)
-        : base(TipoDeAccionDeMnt.AbrirModalParaConsultarRelaciones)
+        public ConsultarRelaciones(string idHtmlDeLaModalAsociada, Func<string> renderDeLaModal, string ayuda)
+        : base(TipoDeAccionDeMnt.AbrirModalParaConsultarRelaciones, enumCssOpcionMenu.DeElemento, ayuda)
         {
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);
@@ -143,8 +148,8 @@ namespace MVCSistemaDeElementos.Descriptores
     /**********************************************************/
     public class AccionDeMenuCreacion : AccionDeMenu
     {
-        public AccionDeMenuCreacion(string tipoDeAccionDeCreacion)
-            : base(tipoDeAccionDeCreacion)
+        public AccionDeMenuCreacion(string tipoDeAccionDeCreacion, enumCssOpcionMenu claseAccion, string ayuda)
+            : base(tipoDeAccionDeCreacion, claseAccion, ayuda)
         {
         }
 
@@ -157,7 +162,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class NuevoElemento : AccionDeMenuCreacion
     {
         public NuevoElemento()
-        : base(TipoDeAccionDeCreacion.NuevoElemento)
+        : base(TipoDeAccionDeCreacion.NuevoElemento, enumCssOpcionMenu.DeElemento, "Crear un nuevo elemento")
         {
         }
     }
@@ -165,7 +170,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class CerrarCreacion : AccionDeMenuCreacion
     {
         public CerrarCreacion()
-        : base(TipoDeAccionDeCreacion.CerrarCreacion)
+        : base(TipoDeAccionDeCreacion.CerrarCreacion, enumCssOpcionMenu.Basico, "Cerrar creación")
         {
         }
     }
@@ -177,8 +182,8 @@ namespace MVCSistemaDeElementos.Descriptores
     /**********************************************************/
     public class AccionDeMenuEdicion : AccionDeMenu
     {
-        public AccionDeMenuEdicion(string tipoDeAccionDeEdicion)
-        : base(tipoDeAccionDeEdicion)
+        public AccionDeMenuEdicion(string tipoDeAccionDeEdicion, enumCssOpcionMenu claseAccion, string ayuda)
+        : base(tipoDeAccionDeEdicion, claseAccion, ayuda)
         {
         }
 
@@ -191,14 +196,14 @@ namespace MVCSistemaDeElementos.Descriptores
     public class ModificarElemento : AccionDeMenuEdicion
     {
         public ModificarElemento()
-        : base(TipoDeAccionDeEdicion.ModificarElemento)
+        : base(TipoDeAccionDeEdicion.ModificarElemento, enumCssOpcionMenu.DeElemento, "Modificar datos")
         {
         }
     }
     public class CancelarEdicion : AccionDeMenuEdicion
     {
         public CancelarEdicion()
-        : base(TipoDeAccionDeEdicion.CancelarEdicion)
+        : base(TipoDeAccionDeEdicion.CancelarEdicion, enumCssOpcionMenu.Basico, "Cancelar edicion")
         {
         }
     }
@@ -219,18 +224,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public enumCssOpcionMenu ClaseBoton { get; private set; }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase, string ayuda)
-        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, clase, ayuda)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios)
+        : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, accion.ClaseDeAccion)
         {
         }
 
-        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase, string ayuda)
+        public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, TipoDeLlamada tipoAccion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios, enumCssOpcionMenu clase)
         : base(
           padre: menu,
           id: $"{menu.Id}_{enumTipoControl.Opcion.Render()}_{menu.OpcionesDeMenu.Count}",
           etiqueta: titulo,
           propiedad: null,
-          ayuda: ayuda,
+          ayuda: accion.Ayuda,
           posicion: null
         )
         {

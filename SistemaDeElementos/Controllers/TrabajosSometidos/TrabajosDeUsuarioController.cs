@@ -10,6 +10,8 @@ using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using System.Collections.Generic;
 using ServicioDeDatos.Seguridad;
+using Newtonsoft.Json;
+using System;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -42,6 +44,30 @@ namespace MVCSistemaDeElementos.Controllers
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
+
+        public JsonResult epIniciarTrabajoDeUsuario(string trabajoJson)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
+                var trabajoDto = JsonConvert.DeserializeObject<TrabajoDeUsuarioDto>(trabajoJson);
+                var trabajoDtm = GestorDeElementos.MapearRegistro(trabajoDto, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto,trabajoDtm);
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = "Trabajo iniciado";
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al iniciar el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+        }
+
     }
 
 }

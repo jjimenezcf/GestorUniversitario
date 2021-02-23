@@ -23,7 +23,6 @@ namespace GestorDeElementos
 {
     public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
 
-
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
     {
@@ -593,7 +592,7 @@ namespace GestorDeElementos
             return registros;
         }
 
-        protected TRegistro MapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
+        public TRegistro MapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
         {
             var registro = Mapeador.Map<TElemento, TRegistro>(elemento,
                    opt =>

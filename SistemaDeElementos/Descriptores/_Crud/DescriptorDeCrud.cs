@@ -210,9 +210,10 @@ namespace MVCSistemaDeElementos.Descriptores
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
                   , propiedadQueRestringe: propiedadQueRestringe
-                  , propiedadRestrictora: propiedadRestrictora);
+                  , propiedadRestrictora: propiedadRestrictora
+                  , ayuda);
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento, ayuda);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }

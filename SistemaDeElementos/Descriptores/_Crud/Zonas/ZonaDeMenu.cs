@@ -89,13 +89,13 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeIrACrear()
         {
             var crearElemento = new CrearElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeVista, "Crear nuevo elemento");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeIrAEditarFilasSeleccionadas()
         {
             var editarElemento = new EditarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento, "Editar elementos seleccionados");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }
         #endregion
@@ -105,14 +105,14 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeNuevoElemento()
         {
             var nuevoElemento = new NuevoElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, nuevoElemento, $"Crear", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento, "Crear elemento");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, nuevoElemento, $"Crear", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
 
         internal void AnadirOpcionDeCerrarCreacion()
         {
             var cerrarCreacion = new CerrarCreacion();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cerrarCreacion, $"Cerrar", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.Basico, "Cerrar");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cerrarCreacion, $"Cerrar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }
         #endregion
@@ -121,13 +121,13 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeModificarElemento()
         {
             var modificarElemento = new ModificarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, modificarElemento, $"Modificar", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento, "Modificar elemento editado");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, modificarElemento, $"Modificar", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeCancelarEdicion()
         {
             var cancelarEdicion = new CancelarEdicion();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.Basico, "Cerrar");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }
         #endregion
@@ -136,7 +136,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeBorrarElemento()
         {
             var BorrarElemento = new BorrarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento, "Borrar el elemento");
+            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
 

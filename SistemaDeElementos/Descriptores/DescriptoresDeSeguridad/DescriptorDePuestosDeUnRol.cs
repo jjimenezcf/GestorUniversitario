@@ -26,8 +26,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               , crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(PuestosDeUnRolDto.IdRol));
 
-            var relacionarRoles = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl());
-            var opcion = new OpcionDeMenu<PuestosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Puestos", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeVista, "Seleccionar los puestos que han de tener un rol");
+            var relacionarRoles = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl(), "Seleccionar los puestos que han de tener un rol");
+            var opcion = new OpcionDeMenu<PuestosDeUnRolDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Puestos", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt

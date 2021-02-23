@@ -25,8 +25,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               , tituloModal: "Seleccione los roles a relacionar"
                               , crudModal: new DescriptorDeRol(ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(RolesDeUnPermisoDto.IdPermiso));
-            var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl());
-            var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", enumModoDeAccesoDeDatos.Gestor,enumCssOpcionMenu.DeVista, "Seleccionar los roles donde incluir el permiso");
+            var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl(), "Seleccionar los roles donde incluir el permiso");
+            var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
             AnadirOpciondeRelacion(Mnt

@@ -24,6 +24,7 @@ namespace ModeloDeDto.TrabajosSometidos
             GuardarEn = nameof(IdSometedor),
             Fila = 0,
             Columna = 0,
+            EditableAlCrear = false,
             EditableAlEditar = false,
             VisibleEnGrid = false
             )
