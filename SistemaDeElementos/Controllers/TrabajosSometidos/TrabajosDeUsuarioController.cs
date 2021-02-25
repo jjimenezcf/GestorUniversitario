@@ -85,6 +85,26 @@ namespace MVCSistemaDeElementos.Controllers
 
             return new JsonResult(r);
         }
+        public JsonResult epDesbloquearTrabajoDeUsuario(int idTrabajoUsuario)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
+                GestorDeTrabajosDeUsuario.Desbloquear(GestorDeElementos.Contexto, idTrabajoUsuario);
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = "Trabajo bloqueado";
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al desbloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+        }
 
     }
 

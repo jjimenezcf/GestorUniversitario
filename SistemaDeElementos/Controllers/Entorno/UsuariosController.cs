@@ -10,11 +10,17 @@ using ModeloDeDto.Seguridad;
 using ServicioDeDatos.Seguridad;
 using System.Collections.Generic;
 using GestoresDeNegocio.Seguridad;
+using System;
 
 namespace MVCSistemaDeElementos.Controllers
 {
     public class UsuariosController : EntidadController<ContextoSe, UsuarioDtm, UsuarioDto>
     {
+        class UsuarioConectado
+        {
+            public int id { get; set; }
+            public string login { get; set; }
+        }
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)
         :base
@@ -46,6 +52,30 @@ namespace MVCSistemaDeElementos.Controllers
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
+
+
+        public JsonResult epLeerUsuarioDeConexion()
+        {
+            var r = new Resultado();
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
+                var usuario = GestorDeElementos.LeerRegistroPorId(GestorDeElementos.Contexto.DatosDeConexion.IdUsuario);
+                
+                r.consola = $"registro de usuario de conexión leido correctamente";
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Datos = new UsuarioConectado() { login = usuario.Login, id = usuario.Id }; 
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Concatenar(e);
+                r.Mensaje = $"Error al leer el usuario de conexión. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+        }
+
 
 
     }

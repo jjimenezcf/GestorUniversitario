@@ -7,7 +7,7 @@
         protected CrudDeMnt: CrudMnt;
         Altura: number;
 
-        protected get PanelDeCrear(): HTMLDivElement {
+        public get PanelDeCrear(): HTMLDivElement {
             return document.getElementById(this._idPanelCreacion) as HTMLDivElement;
         }
 
@@ -140,11 +140,6 @@
             else {
                 crudCreador.CerrarCreacion();
             }
-        }
-
-        public MaperaRestrictorDeCreacion(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
-            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeCrear.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
-            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
 
     }

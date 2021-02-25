@@ -104,10 +104,6 @@ var Crud;
                 crudCreador.CerrarCreacion();
             }
         }
-        MaperaRestrictorDeCreacion(porpiedadRestrictora, valorRestrictor, valorMostrar) {
-            let restrictores = this.PanelDeCrear.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`);
-            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
-        }
     }
     Crud.CrudCreacion = CrudCreacion;
 })(Crud || (Crud = {}));

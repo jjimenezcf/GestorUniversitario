@@ -12,6 +12,7 @@ namespace ModeloDeDto.Seguridad
             Etiqueta = "Puesto",
             Ayuda = "Usuarios de un puesto",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Puesto),
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false

@@ -7,26 +7,20 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeTrabajosDeUsuario : DescriptorDeCrud<TrabajoDeUsuarioDto>
     {
-        public class IniciarTrabajo : AccionDeMenuMnt
+        public class AccionesDeTu : AccionDeMenuMnt
         {
+            const string desbloquear = "desbloquear-trabajo";
+            const string bloquear = "bloquear-trabajo";
             const string iniciar = "iniciar-trabajo";
-            public IniciarTrabajo()
-            : base(iniciar,enumCssOpcionMenu.DeElemento, "Inicia un trabajo")
+            public AccionesDeTu(string accion, string ayuda)
+            : base(accion, enumCssOpcionMenu.DeElemento, ayuda)
             {
             }
 
-            public override string RenderAccion()
-            {
-                return $"TrabajosSometido.Eventos('{TipoDeAccion}','')";
-            }
-        }
-        public class BloquearTrabajo : AccionDeMenuMnt
-        {
-            const string bloquear = "bloquear-trabajo";
-            public BloquearTrabajo()
-            : base(bloquear, enumCssOpcionMenu.DeElemento, "Bloquear un trabajo")
-            {
-            }
+            public static AccionesDeTu Desbloquear => new AccionesDeTu(desbloquear, "Desbloquear un trabajo");
+            public static AccionesDeTu Bloquear => new AccionesDeTu(bloquear, "Bloquear un trabajo");
+            public static AccionesDeTu Iniciar => new AccionesDeTu(iniciar, "Ejecutar un trabajo");
+
             public override string RenderAccion()
             {
                 return $"javascript:TrabajosSometido.Eventos('{TipoDeAccion}','')";
@@ -39,13 +33,14 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
                , rutaBase: "TrabajosSometido")
         {
-            var iniciarTrabajo = new IniciarTrabajo();
-            var opcion = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, iniciarTrabajo, $"Iniciar", enumModoDeAccesoDeDatos.Gestor);
+            var opcion = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Iniciar, $"Ejecutar", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
 
-            var bloquearTrabajo = new BloquearTrabajo();
-            var opcionBloquear = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, bloquearTrabajo, $"Bloquear", enumModoDeAccesoDeDatos.Gestor);
+            var opcionBloquear = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Bloquear, $"Bloquear", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcionBloquear);
+
+            var opcionDesbloquear = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Desbloquear, $"Desbloquear", enumModoDeAccesoDeDatos.Gestor);
+            Mnt.ZonaMenu.Menu.Add(opcionDesbloquear);
         }
 
         public override string RenderControl()

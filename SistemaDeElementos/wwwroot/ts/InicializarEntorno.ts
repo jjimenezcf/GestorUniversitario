@@ -61,4 +61,56 @@ module EntornoSe {
         Historial.Persistir();
         window.location.href = url;
     }
+
+    export function LeerCookie(nombre): any {
+        let lista: string[] = document.cookie.split(";");
+        let micookie: string = "";
+        let valor: string = "";
+        for (let i: number = 0; i < lista.length; i++) {
+            var busca = lista[i].search(nombre);
+            if (busca > -1) {
+                micookie = lista[i];
+                break;
+            }
+        }
+        if (!IsNullOrEmpty(micookie)) {
+            var igual = micookie.indexOf("=");
+            valor = micookie.substring(igual + 1);
+        }
+        return IsNullOrEmpty(valor) ? null : JSON.parse(valor);
+    }
+
+    export function GuardarCookie(nombre, valor): void {
+        document.cookie = `${nombre}=${JSON.stringify(valor)}`;
+    }
+
+    export function LeerUsuarioDeConexion(llamador: any): Promise<any> {
+
+        function RegistrarCookie(peticion: ApiDeAjax.DescriptorAjax) {
+            let registro: any = peticion.resultado.datos;
+            EntornoSe.GuardarCookie('UsuarioConectado', registro);
+        }
+        return new Promise((resolve, reject) => {
+
+
+            let url: string = `/Usuarios/epLeerUsuarioDeConexion`;
+
+            let a = new ApiDeAjax.DescriptorAjax(llamador
+                , 'LeerUsuarioDeConexion'
+                , llamador
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , (peticion) => {
+                    RegistrarCookie(peticion);
+                    resolve(peticion);
+                }
+                , () => {
+                    reject();
+                }
+            );
+            a.Ejecutar();
+        });
+    }
+
 }

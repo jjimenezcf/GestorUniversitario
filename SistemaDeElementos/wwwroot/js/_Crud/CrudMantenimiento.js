@@ -86,9 +86,10 @@ var Crud;
         AplicarRestrictores() {
             if (this.Estado.Contiene(Sesion.restrictor)) {
                 let restrictor = this.Estado.Obtener(Sesion.restrictor);
-                this.MapearRestrictorDeFiltro(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                this.crudDeCreacion.MaperaRestrictorDeCreacion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                this.crudDeEdicion.MaperaRestrictorDeEdicion(restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                this.ValidarRestrictorDeFiltrado();
+                ApiControl.MapearPropiedadRestrictoraAlFiltro(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
             }
         }
         InicializarSelectores() {
@@ -267,11 +268,10 @@ var Crud;
             else
                 modal.TextoSelectorCambiado();
         }
-        MapearRestrictorDeFiltro(porpiedadRestrictora, valorRestrictor, valorMostrar) {
+        ValidarRestrictorDeFiltrado() {
             let restrictoresDeFiltro = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`);
             if (restrictoresDeFiltro.length == 0)
                 throw new Error("No se ha definido un Editor del tipo Restrictor en la zona de filtrado");
-            this.MapearRestrictor(restrictoresDeFiltro, porpiedadRestrictora, valorMostrar, valorRestrictor);
         }
         OcultarMostrarFiltro() {
             if (NumeroMayorDeCero(this.ExpandirFiltro.value)) {

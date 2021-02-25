@@ -11,6 +11,7 @@ namespace ModeloDeDto.Seguridad
         [IUPropiedad(Etiqueta = "Puesto",
             Ayuda = "Roles de un puesto",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Puesto),
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false

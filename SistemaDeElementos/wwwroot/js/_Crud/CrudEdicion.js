@@ -196,10 +196,6 @@ var Crud;
                 crudEdicion.CerrarEdicion();
             }
         }
-        MaperaRestrictorDeEdicion(porpiedadRestrictora, valorRestrictor, valorMostrar) {
-            let restrictores = this.PanelDeEditar.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`);
-            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
-        }
     }
     Crud.CrudEdicion = CrudEdicion;
 })(Crud || (Crud = {}));

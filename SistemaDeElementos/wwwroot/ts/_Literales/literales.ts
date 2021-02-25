@@ -33,6 +33,8 @@ const atControl = {
     id: literal.id,
     crudModal: 'crud-modal',
     propiedadRestrictora: 'propiedad-restrictora',
+    propiedadMostrar: 'propiedad-mostrar',
+    mostrarExpresion: 'mostrar-expresion',
     controlador: literal.controlador,
     obligatorio: "obligatorio",
     modoOrdenacion: "modo-ordenacion",
@@ -130,7 +132,7 @@ const atSelector = {
     criterioBuscar: "criterioBuscar",
     idEditorMostrar: "ideditormostrar",
     idGridModal: "id-grid-modal",
-    propiedadmostrar: "propiedadmostrar",
+    propiedadmostrar: atControl.propiedadMostrar,
     refCheckDeSeleccion: "refCheckDeSeleccion",
     idModal: "id-modal",
     idBtnSelector: "idBtnSelector",
@@ -144,9 +146,13 @@ const atSelectorDeFecha = {
     milisegundos: "milisegundos"
 };
 
+const atRestrictor = {
+    mostrarExpresion: atControl.mostrarExpresion
+}
+
 const atListas = {
     claseElemento: 'clase-elemento',
-    mostrarExpresion: 'mostrar-expresion',
+    mostrarExpresion: atControl.mostrarExpresion,
     yaCargado: 'ya-cargada',
     idDeLaLista: 'list',
     identificador: 'identificador',
@@ -273,7 +279,8 @@ const Ajax = {
         TrabajosDeUsuario: 'TrabajosDeUsuario',
         accion: {
             iniciar: 'epIniciarTrabajoDeUsuario',
-            bloquear: 'epBloquearTrabajoDeUsuario'
+            bloquear: 'epBloquearTrabajoDeUsuario',
+            desbloquear: 'epDesbloquearTrabajoDeUsuario'
         }
     },
     jsonResultError: 1,
@@ -385,7 +392,8 @@ const Evento = {
     },
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",
-        bloquear: "bloquear-trabajo"
+        bloquear: "bloquear-trabajo",
+        desbloquear: "desbloquear-trabajo"
     }
 };
 

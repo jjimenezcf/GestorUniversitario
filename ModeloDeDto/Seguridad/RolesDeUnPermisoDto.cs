@@ -11,6 +11,7 @@ namespace ModeloDeDto.Seguridad
         [IUPropiedad(Etiqueta = "Permiso",
             Ayuda = "Roles de un permiso",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Permiso),
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false

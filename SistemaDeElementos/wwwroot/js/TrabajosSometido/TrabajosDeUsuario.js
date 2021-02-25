@@ -13,6 +13,23 @@ var TrabajosSometido;
             this.crudDeCreacion = new CrudCreacionTrabajoDeUsuario(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionTrabajoDeUsuario(this, idPanelEdicion);
         }
+        Inicializar(idPanelMnt) {
+            super.Inicializar(idPanelMnt);
+            this.MapearUsuarioConectado();
+        }
+        MapearUsuarioConectado() {
+            function mapearUsuario(peticion) {
+                var llamador = peticion.llamador;
+                var usuarioConectado = EntornoSe.LeerCookie('UsuarioConectado');
+                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, 'sometedor', usuarioConectado['login'], usuarioConectado['id']);
+            }
+            function usuarioNoLeido() {
+                console.error("no se ha podido leer");
+            }
+            EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
+                .then((peticion) => mapearUsuario(peticion))
+                .catch(() => usuarioNoLeido());
+        }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
                 Mensaje(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
@@ -24,6 +41,10 @@ var TrabajosSometido;
             for (let i = 0; i < this.InfoSelector.Cantidad; i++)
                 this.BloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
+        DesbloquearTrabajo() {
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++)
+                this.DesbloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
+        }
         EjecutarTrabajoDeUsuario() {
             let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
             let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
@@ -33,6 +54,11 @@ var TrabajosSometido;
         BloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
             let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.bloquear, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
+            a.Ejecutar();
+        }
+        DesbloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
+            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.desbloquear, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
             a.Ejecutar();
         }
         SiHayErrorDeEjecucion(peticion) {
@@ -68,6 +94,10 @@ var TrabajosSometido;
                 }
                 case Evento.TrabajoDeUsuario.bloquear: {
                     TrabajosSometido.crudTu.BloquearTrabajo();
+                    break;
+                }
+                case Evento.TrabajoDeUsuario.desbloquear: {
+                    TrabajosSometido.crudTu.DesbloquearTrabajo();
                     break;
                 }
                 default: {

@@ -157,7 +157,7 @@ a {
 
 .contenedor-editor {
     border-width: 2px;
-    /*margin-right: 20px;*/
+    margin-top: 5px;
 }
 
 .contenedor-area-de-texto {
@@ -230,6 +230,7 @@ a {
 
 .contenedor-editor > input[readonly] {
     background-color: #e9ecef;
+    height: calc(1.5em + .75rem + 2px);
     opacity: 1
 }
 

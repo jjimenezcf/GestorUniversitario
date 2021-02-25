@@ -18,6 +18,31 @@
         area.textContent = texto;
     }
 
+    export function MapearPropiedadRestrictoraAlFiltro(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
+
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                ApiControl.MapearRestrictorAlControl(restrictores[i], id, texto);
+            }
+        }
+    }
+
+    export function MapearPropiedadRestrictoraAlControl(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                ApiControl.MapearRestrictorAlControl(restrictores[i], id, texto);
+            }
+        }
+    }
+
+    export function MapearRestrictorAlControl(restrictor: HTMLInputElement, id: number, texto: string): void {
+        restrictor.setAttribute(atControl.valorInput, texto);
+        restrictor.setAttribute(atControl.restrictor, id.toString());
+    }
+
     export function MapearHoraAlControl(control: HTMLInputElement, fechaHora: string) {
         var fechaLeida = new Date(fechaHora);
         if (fechaLeida.toString() !== "Invalid Date") {

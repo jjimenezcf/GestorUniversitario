@@ -13,6 +13,7 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(Etiqueta = "Usuario",
             Ayuda = "permisos de un usuario",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Usuario),
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false

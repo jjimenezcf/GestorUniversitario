@@ -9,7 +9,7 @@
         protected PanelDeMnt: HTMLDivElement;
         private Altura: number;
 
-        protected get PanelDeEditar(): HTMLDivElement {
+        public get PanelDeEditar(): HTMLDivElement {
             return document.getElementById(this._idPanelEdicion) as HTMLDivElement;
         }
 
@@ -100,7 +100,7 @@
                         break;
                     }
                     case Evento.Edicion.MostrarAnterior: {
-                        this.EditarSeleccionado(this.Posicionador -1);
+                        this.EditarSeleccionado(this.Posicionador - 1);
                         break;
                     }
                     case Evento.Edicion.MostrarUltimo: {
@@ -121,7 +121,7 @@
         }
 
         public ComenzarEdicion(infSel: InfoSelector) {
-            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.editando;            
+            this.CrudDeMnt.ModoTrabajo = ModoTrabajo.editando;
 
             this.InfoSelectorEdicion = infSel;
 
@@ -134,7 +134,7 @@
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoDatos);
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoPie);
-                this.PosicionarEdicion()
+                this.PosicionarEdicion();
                 ApiCrud.MostrarPanel(this.PanelDeEditar);
             }
             this.EditarSeleccionado(1);
@@ -158,8 +158,8 @@
 
         private EditarSeleccionado(seleccionado: number) {
 
-            if (this.TotalSeleccionados === 0 ) {
-                Mensaje(TipoMensaje.Error, "No hay elementos a editar.")
+            if (this.TotalSeleccionados === 0) {
+                Mensaje(TipoMensaje.Error, "No hay elementos a editar.");
                 this.CerrarEdicion();
             }
 
@@ -175,7 +175,7 @@
                 this.InicializarArchivos(this.PanelDeEditar);
                 this.InicializarSelectoresDeFecha(this.PanelDeEditar);
                 this.Posicionador = seleccionado;
-                this.InicializarValores(seleccionado -1);
+                this.InicializarValores(seleccionado - 1);
             }
 
         }
@@ -200,7 +200,7 @@
 
         protected InicializarValores(seleccionado: number) {
             let infSel: InfoSelector = this.InfoSelectorEdicion;
-            let id: number = infSel.Seleccionados[seleccionado] as number;            
+            let id: number = infSel.Seleccionados[seleccionado] as number;
             this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }
@@ -259,14 +259,8 @@
         private DespuesDeModificar(peticion: ApiDeAjax.DescriptorAjax) {
             let crudEdicion: CrudEdicion = peticion.llamador as CrudEdicion;
             if (crudEdicion.TotalSeleccionados === 1) {
-                crudEdicion.CerrarEdicion()
+                crudEdicion.CerrarEdicion();
             }
         }
-
-        public MaperaRestrictorDeEdicion(porpiedadRestrictora: string, valorRestrictor: number, valorMostrar: string) {
-            let restrictores: NodeListOf<HTMLInputElement> = this.PanelDeEditar.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
-            this.MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor);
-        }
-
     }
 }

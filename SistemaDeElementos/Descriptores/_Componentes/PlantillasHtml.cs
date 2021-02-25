@@ -60,6 +60,16 @@ namespace MVCSistemaDeElementos.Descriptores
                                          valorPorDefecto=¨[ValorPorDefecto]¨
                                          value=¨¨>
                                   </input>
+                             </div>"; 
+        
+        public static string restrictorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                  <input {atributosComunesDeUnControlDto}
+                                         type=¨text¨
+                                         mostrar-expresion=¨[MostrarExpresion]¨
+                                         placeholder =¨[Placeholder]¨
+                                         valorPorDefecto=¨[ValorPorDefecto]¨
+                                         value=¨¨>
+                                  </input>
                              </div>";
 
 

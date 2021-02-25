@@ -92,11 +92,34 @@
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
+            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso)
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
             this.MapearAreasDeTexto(panel, elementoJson);
             this.MapearFechas(panel, elementoJson);
+        }
+
+        private MapearRestrictoresDelElemento(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
+
+            let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+            for (var i = 0; i < restrictores.length; i++) {
+                let restrictor: HTMLInputElement = restrictores[i] as HTMLInputElement;
+                this.MapearJsonAlRestrictor(restrictor, elementoJson);
+            }
+
+        }
+
+        private MapearJsonAlRestrictor(restrictor: HTMLInputElement, elementoJson: JSON): void {
+            let propiedad: string = restrictor.getAttribute(atControl.propiedad);
+            let mostrar: string = restrictor.getAttribute(atRestrictor.mostrarExpresion);
+            if (!IsNullOrEmpty(propiedad)) {
+                let idRestrictor: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
+                let texto: string = this.BuscarValorEnJson(mostrar, elementoJson) as string;
+                if (!IsNullOrEmpty(texto)) {
+                    ApiControl.MapearRestrictorAlControl(restrictor, idRestrictor, texto);
+                }
+            }
         }
 
         private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
@@ -335,16 +358,6 @@
                 return;
 
             this.MostrarImagenUrl(visor, valor);
-        }
-
-        protected MapearRestrictor(restrictores: NodeListOf<HTMLInputElement>, porpiedadRestrictora: string, valorMostrar: string, valorRestrictor: number) {
-
-            for (let i = 0; i < restrictores.length; i++) {
-                if (restrictores[i].getAttribute(atControl.propiedad) === porpiedadRestrictora) {
-                    restrictores[i].setAttribute(atControl.valorInput, valorMostrar);
-                    restrictores[i].setAttribute(atControl.restrictor, valorRestrictor.toString());
-                }
-            }
         }
 
         private MostrarImagenUrl(visor: HTMLImageElement, url: any) {

@@ -16,6 +16,30 @@
             this.crudDeEdicion = new CrudEdicionTrabajoDeUsuario(this, idPanelEdicion);
         }
 
+        public Inicializar(idPanelMnt: string) {
+            super.Inicializar(idPanelMnt);
+            this.MapearUsuarioConectado();
+        }
+
+
+        private MapearUsuarioConectado(): void {
+
+            function mapearUsuario(peticion: ApiDeAjax.DescriptorAjax): void {
+                var llamador = peticion.llamador as CrudCreacionTrabajoDeUsuario;
+                var usuarioConectado = EntornoSe.LeerCookie('UsuarioConectado');
+                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear,'sometedor', usuarioConectado['login'], usuarioConectado['id'])
+            }
+
+            function usuarioNoLeido(): void {
+                console.error("no se ha podido leer");
+            }
+
+            EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
+                .then((peticion) => mapearUsuario(peticion))
+                .catch(() => usuarioNoLeido());
+        }
+
+
         public IniciarTrabajo(): boolean {
 
             if (this.InfoSelector.Cantidad != 1) {
@@ -29,6 +53,11 @@
         public BloquearTrabajo(): void {
             for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) 
                 this.BloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
+        }
+
+        public DesbloquearTrabajo(): void {
+            for (let i: number = 0; i < this.InfoSelector.Cantidad; i++)
+                this.DesbloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
 
         private EjecutarTrabajoDeUsuario(): void {
@@ -54,6 +83,22 @@
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.TrabajosSometidos.accion.bloquear
+                , idTrabajoDeUsuario
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasEjecutarTrabajo
+                , this.SiHayErrorDeEjecucion
+            );
+            a.Ejecutar();
+        }
+
+
+        private DesbloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
+            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.TrabajosSometidos.accion.desbloquear
                 , idTrabajoDeUsuario
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
@@ -103,6 +148,10 @@
                 }
                 case Evento.TrabajoDeUsuario.bloquear: {
                     crudTu.BloquearTrabajo();
+                    break;
+                }
+                case Evento.TrabajoDeUsuario.desbloquear: {
+                    crudTu.DesbloquearTrabajo();
                     break;
                 }
                 default: {

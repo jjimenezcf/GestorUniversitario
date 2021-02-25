@@ -120,7 +120,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
                     break;
                 case enumTipoControl.RestrictorDeEdicion:
-                    htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderRestrictor(tabla, descriptorControl, ancho);
                     break;
                 case enumTipoControl.ListaDeElemento:
                     htmdDescriptorControl = RenderListaDeElemento(tabla, descriptorControl, ancho);
@@ -207,12 +207,28 @@ namespace MVCSistemaDeElementos.Descriptores
             return a;
         }
 
+
+        private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
+        {
+            var atributos = descriptorControl.atributos;
+            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
+            valores["Css"] = Css.Render(enumCssControlesDto.EditorRestrictor);
+            valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
+            valores["Placeholder"] = atributos.Ayuda;
+            valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+
+            var htmlEditor = PlantillasHtml.Render(PlantillasHtml.restrictorDto, valores);
+
+            return htmlEditor;
+        }
+
         private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
-            valores["Css"] = atributos.TipoDeControl == enumTipoControl.RestrictorDeEdicion ? Css.Render(enumCssControlesDto.EditorRestrictor): Css.Render(enumCssControlesDto.Editor);
+            valores["Css"] = Css.Render(enumCssControlesDto.Editor);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 

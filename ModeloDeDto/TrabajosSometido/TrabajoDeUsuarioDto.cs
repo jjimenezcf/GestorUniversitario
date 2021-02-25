@@ -9,19 +9,12 @@ namespace ModeloDeDto.TrabajosSometidos
     {
         public static string ExpresionElemento = nameof(Trabajo);
 
-        [IUPropiedad(
-            Etiqueta = "Id del sometedor",
-            SiempreVisible = false
-            )
-        ]
-        public int IdSometedor { get; set; }
-
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Sometido por",
             Ayuda = "Usuario sometedor",
-            TipoDeControl = enumTipoControl.ListaDinamica,
-            SeleccionarDe = nameof(UsuarioDto),
-            GuardarEn = nameof(IdSometedor),
+            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Sometedor),
             Fila = 0,
             Columna = 0,
             EditableAlCrear = false,
@@ -29,14 +22,25 @@ namespace ModeloDeDto.TrabajosSometidos
             VisibleEnGrid = false
             )
         ]
+        public int IdSometedor { get; set; }
+
+        //--------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "sometedor",
+            SiempreVisible = false
+            )
+        ]
         public string Sometedor { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Id del usuario ejecutor",
             SiempreVisible = false
             )
         ]
         public int? IdEjecutor { get; set; }
+
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Ejecutado por",
             Ayuda = "Usuario ejecutor",
@@ -50,13 +54,16 @@ namespace ModeloDeDto.TrabajosSometidos
             )
         ]
         public string Ejecutor { get; set; }
-       
+
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Id del trabajo",
             SiempreVisible = false
             )
         ]
         public int IdTrabajo { get; set; }
+
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Trabajo",
             Ayuda = "trabajo sometido",
@@ -72,6 +79,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string Trabajo { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Estado",
            Ayuda = "estado del trabajo",
@@ -85,6 +93,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string Estado { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Entró",
            Ayuda = "Fecha de entrada",
@@ -98,6 +107,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public DateTime Encolado { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Se iniciará",
            Ayuda = "Fecha planificada de ejecución",
@@ -109,6 +119,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public DateTime Planificado { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Iniciado",
            Ayuda = "Fecha de inicio",
@@ -122,6 +133,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public DateTime? Iniciado { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Terminado",
            Ayuda = "Fecha de fin",
@@ -135,6 +147,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public DateTime? Terminado { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Parametros",
            Ayuda = "Json con los parámetros de ejecución",
@@ -149,6 +162,7 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string Parametros { get; set; }
 
+        //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Periodicidad",
            Ayuda = "Tiempo en segundos de resometimiento",

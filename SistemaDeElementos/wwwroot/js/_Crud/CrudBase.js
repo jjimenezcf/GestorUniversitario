@@ -68,11 +68,30 @@ var Crud;
         // funciones para mapear un elemento Json a los controles de un panel
         MapearElementoLeido(panel, elementoJson, modoDeAcceso) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
+            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso);
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
             this.MapearAreasDeTexto(panel, elementoJson);
             this.MapearFechas(panel, elementoJson);
+        }
+        MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso) {
+            let restrictores = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`);
+            for (var i = 0; i < restrictores.length; i++) {
+                let restrictor = restrictores[i];
+                this.MapearJsonAlRestrictor(restrictor, elementoJson);
+            }
+        }
+        MapearJsonAlRestrictor(restrictor, elementoJson) {
+            let propiedad = restrictor.getAttribute(atControl.propiedad);
+            let mostrar = restrictor.getAttribute(atRestrictor.mostrarExpresion);
+            if (!IsNullOrEmpty(propiedad)) {
+                let idRestrictor = this.BuscarValorEnJson(propiedad, elementoJson);
+                let texto = this.BuscarValorEnJson(mostrar, elementoJson);
+                if (!IsNullOrEmpty(texto)) {
+                    ApiControl.MapearRestrictorAlControl(restrictor, idRestrictor, texto);
+                }
+            }
         }
         MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso) {
             let select = panel.getElementsByTagName('select');
@@ -262,14 +281,6 @@ var Crud;
             if (visor === null)
                 return;
             this.MostrarImagenUrl(visor, valor);
-        }
-        MapearRestrictor(restrictores, porpiedadRestrictora, valorMostrar, valorRestrictor) {
-            for (let i = 0; i < restrictores.length; i++) {
-                if (restrictores[i].getAttribute(atControl.propiedad) === porpiedadRestrictora) {
-                    restrictores[i].setAttribute(atControl.valorInput, valorMostrar);
-                    restrictores[i].setAttribute(atControl.restrictor, valorRestrictor.toString());
-                }
-            }
         }
         MostrarImagenUrl(visor, url) {
             visor.setAttribute('src', url);

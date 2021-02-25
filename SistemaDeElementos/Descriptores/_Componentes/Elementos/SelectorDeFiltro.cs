@@ -51,7 +51,7 @@ namespace MVCSistemaDeElementos.Descriptores
                               {base.RenderAtributos()} 
                               criterioBuscar=¨{CriteriosDeFiltrado.contiene}¨
                               propiedadBuscar=¨{CamposDeFiltrado.Nombre}¨
-                              propiedadMostrar=¨{propiedadParaMostrar}¨
+                              propiedad-mostrar=¨{propiedadParaMostrar}¨
                               propiedadFiltrar=¨{propiedadParaFiltrar}¨
                               id-modal=¨{Modal.IdHtml}¨
                               id-grid-modal=¨{CrudModal.Mnt.Datos.IdHtml}¨

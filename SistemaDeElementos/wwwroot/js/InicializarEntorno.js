@@ -53,5 +53,44 @@ var EntornoSe;
         window.location.href = url;
     }
     EntornoSe.NavegarAUrl = NavegarAUrl;
+    function LeerCookie(nombre) {
+        let lista = document.cookie.split(";");
+        let micookie = "";
+        let valor = "";
+        for (let i = 0; i < lista.length; i++) {
+            var busca = lista[i].search(nombre);
+            if (busca > -1) {
+                micookie = lista[i];
+                break;
+            }
+        }
+        if (!IsNullOrEmpty(micookie)) {
+            var igual = micookie.indexOf("=");
+            valor = micookie.substring(igual + 1);
+        }
+        return IsNullOrEmpty(valor) ? null : JSON.parse(valor);
+    }
+    EntornoSe.LeerCookie = LeerCookie;
+    function GuardarCookie(nombre, valor) {
+        document.cookie = `${nombre}=${JSON.stringify(valor)}`;
+    }
+    EntornoSe.GuardarCookie = GuardarCookie;
+    function LeerUsuarioDeConexion(llamador) {
+        function RegistrarCookie(peticion) {
+            let registro = peticion.resultado.datos;
+            EntornoSe.GuardarCookie('UsuarioConectado', registro);
+        }
+        return new Promise((resolve, reject) => {
+            let url = `/Usuarios/epLeerUsuarioDeConexion`;
+            let a = new ApiDeAjax.DescriptorAjax(llamador, 'LeerUsuarioDeConexion', llamador, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                RegistrarCookie(peticion);
+                resolve(peticion);
+            }, () => {
+                reject();
+            });
+            a.Ejecutar();
+        });
+    }
+    EntornoSe.LeerUsuarioDeConexion = LeerUsuarioDeConexion;
 })(EntornoSe || (EntornoSe = {}));
 //# sourceMappingURL=InicializarEntorno.js.map

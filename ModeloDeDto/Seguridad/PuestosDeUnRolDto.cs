@@ -10,6 +10,7 @@ namespace ModeloDeDto.Seguridad
         [IUPropiedad(Etiqueta = "Rol",
             Ayuda = "Puesto de un rol",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Rol),
             Fila = 0,
             Columna = 0,
             VisibleEnGrid = false

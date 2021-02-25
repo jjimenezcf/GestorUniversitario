@@ -166,6 +166,31 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 throw;
             }
         }
+
+
+        public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
+        {
+            var transaccion = contexto.IniciarTransaccion();
+            try
+            {
+                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
+                                                        SET  
+                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
+                                                        WHERE 
+                                                          ID = {idTrabajoDeUsuario}
+                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}
+                                                       ");
+                if (i > 0)
+                    contexto.Commit(transaccion);
+                else
+                    throw new Exception($"El trabajo no se puede bloquear");
+            }
+            catch
+            {
+                contexto.Rollback(transaccion);
+                throw;
+            }
+        }
         public static void Terminar(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
         {
             var transaccion = contexto.IniciarTransaccion();
