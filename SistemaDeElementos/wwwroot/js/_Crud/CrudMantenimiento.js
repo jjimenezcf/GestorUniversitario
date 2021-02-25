@@ -113,6 +113,8 @@ var Crud;
             let opcionesGenerales = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
             for (var i = 0; i < opcionesGenerales.length; i++) {
                 let opcion = opcionesGenerales[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
                 let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
                 if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
                     opcion.disabled = true;

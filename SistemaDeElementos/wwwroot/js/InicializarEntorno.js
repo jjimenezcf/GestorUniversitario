@@ -53,6 +53,9 @@ var EntornoSe;
         window.location.href = url;
     }
     EntornoSe.NavegarAUrl = NavegarAUrl;
+    EntornoSe.misCookies = {
+        UsuarioConectado: 'usuario-conectado'
+    };
     function LeerCookie(nombre) {
         let lista = document.cookie.split(";");
         let micookie = "";
@@ -78,15 +81,15 @@ var EntornoSe;
     function LeerUsuarioDeConexion(llamador) {
         function RegistrarCookie(peticion) {
             let registro = peticion.resultado.datos;
-            EntornoSe.GuardarCookie('UsuarioConectado', registro);
+            EntornoSe.GuardarCookie(EntornoSe.misCookies.UsuarioConectado, registro);
         }
         return new Promise((resolve, reject) => {
-            let url = `/Usuarios/epLeerUsuarioDeConexion`;
-            let a = new ApiDeAjax.DescriptorAjax(llamador, 'LeerUsuarioDeConexion', llamador, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+            let url = `/${Ajax.Usuarios.ruta}/${Ajax.Usuarios.accion.LeerUsuarioDeConexion}`;
+            let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.Usuarios.accion.LeerUsuarioDeConexion, llamador, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
                 RegistrarCookie(peticion);
                 resolve(peticion);
-            }, () => {
-                reject();
+            }, (peticion) => {
+                reject(peticion);
             });
             a.Ejecutar();
         });

@@ -13,7 +13,7 @@ namespace ModeloDeDto.Entorno
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class UsuarioDto : ElementoDto
     {
-        public static string ExpresionElemento = nameof(NombreCompleto);
+        internal const string ExpresionElemento = nameof(NombreCompleto);
 
         [IUPropiedad(
             VisibleEnGrid = true,

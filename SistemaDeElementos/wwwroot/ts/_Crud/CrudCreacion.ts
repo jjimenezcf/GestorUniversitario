@@ -4,7 +4,7 @@
 
         private _idPanelCreacion: string;
 
-        protected CrudDeMnt: CrudMnt;
+        public CrudDeMnt: CrudMnt;
         Altura: number;
 
         public get PanelDeCrear(): HTMLDivElement {

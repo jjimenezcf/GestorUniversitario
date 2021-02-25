@@ -100,6 +100,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return new GestorDeTrabajosDeUsuario(contexto, mapeador); ;
         }
 
+        protected override void AntesMapearRegistroParaInsertar(TrabajoDeUsuarioDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesMapearRegistroParaInsertar(elemento, opciones);
+            if (elemento.Estado.IsNullOrEmpty())
+                elemento.Estado = enumEstadosDeUnTrabajo.pendiente.ToDto();
+            if (elemento.Parametros.IsNullOrEmpty())
+                elemento.Parametros = "[]";
+        }
+
         internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
         {
             var tu = new TrabajoDeUsuarioDtm();
@@ -107,8 +116,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor : (int)ts.IdEjecutor;
             tu.IdTrabajo = ts.Id;
             tu.Estado = enumEstadosDeUnTrabajo.pendiente.ToDtm();
-            tu.Encolado = DateTime.Now;
-            tu.Planificado = tu.Encolado;
+            tu.Planificado = DateTime.Now;
             tu.Parametros = parametros;
             var gestor = Gestor(contexto, contexto.Mapeador);
             tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Insertar));
@@ -252,9 +260,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
         protected override void AntesDePersistir(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
+            if (parametros.Operacion == TipoOperacion.Insertar)
+            {
+                registro.Encolado = DateTime.Now;
+            }
 
             if (parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar)
             {
+
                 if (!registro.Iniciado.HasValue)
                 {
                     new ParametrosJson(registro.Parametros);

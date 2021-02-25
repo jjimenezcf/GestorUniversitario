@@ -8,6 +8,8 @@ namespace ModeloDeDto.TrabajosSometidos
           , AnchoSeparador = 5)]
     public class TrabajoSometidoDto : ElementoDto
     {
+        internal const string ExpresionElemento = nameof(Nombre);
+
         [IUPropiedad(
           Etiqueta = "Trabajo",
           Ayuda = "Indique el nombre del trabajo sometido",

@@ -419,8 +419,9 @@ var Crud;
                 let mostrarExpresion = input.getAttribute(atListasDinamicas.mostrarExpresion);
                 let expresion = "";
                 for (var i = 0; i < peticion.resultado.datos.length; i++) {
-                    if (expresionPorDefecto.toLowerCase() !== mostrarExpresion.toLowerCase())
+                    if (expresionPorDefecto.toLowerCase() !== mostrarExpresion.toLowerCase()) {
                         expresion = ParsearExpresion(peticion.resultado.datos[i], mostrarExpresion.toLowerCase());
+                    }
                     else
                         expresion = peticion.resultado.datos[i][expresionPorDefecto];
                     listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, expresion);

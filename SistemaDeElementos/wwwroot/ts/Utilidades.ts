@@ -58,7 +58,7 @@ function QuitarCapa() {
         if (numero <= 1) {
             capa.classList.remove(ClaseCss.conCapaDeBloqueo);
             capa.classList.add(ClaseCss.sinCapaDeBloqueo);
-            numero = 1
+            numero = 1;
         }
         numero = numero - 1;
         capa.setAttribute('numero-de-capas', numero.toString());
@@ -243,6 +243,12 @@ function Encriptar(clave: string, textoParaEncriptar: string) {
 
 function ParsearExpresion(elemento: any, patron: string): string {
     let mostrar: string = patron;
+    //se ha pasado una expresión a mostrar que es o debe ser el nombre de un campo de la tabla, para eso no hace falta corchetes
+    if (mostrar.indexOf('[') == -1 && mostrar.indexOf(']') == -1) {
+        mostrar = `[${patron}]`;
+        patron = mostrar;
+    }
+
     for (let i = 0; i < Object.keys(elemento).length; i++) {
         let propiedad = Object.keys(elemento)[i];
         if (patron.includes(`[${propiedad.toLowerCase()}]`))

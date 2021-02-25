@@ -189,6 +189,11 @@ function Encriptar(clave, textoParaEncriptar) {
 }
 function ParsearExpresion(elemento, patron) {
     let mostrar = patron;
+    //se ha pasado una expresión a mostrar que es o debe ser el nombre de un campo de la tabla, para eso no hace falta corchetes
+    if (mostrar.indexOf('[') == -1 && mostrar.indexOf(']') == -1) {
+        mostrar = `[${patron}]`;
+        patron = mostrar;
+    }
     for (let i = 0; i < Object.keys(elemento).length; i++) {
         let propiedad = Object.keys(elemento)[i];
         if (patron.includes(`[${propiedad.toLowerCase()}]`))

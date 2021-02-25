@@ -1,8 +1,19 @@
 var ApiControl;
 (function (ApiControl) {
+    function BloquearMenu(panel) {
+        let opciones = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`);
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            opcion.disabled = true;
+            opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
+        }
+    }
+    ApiControl.BloquearMenu = BloquearMenu;
+    function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
+    ApiControl.EstaBloqueada = EstaBloqueada;
     function MapearFechaAlControl(control, fecha) {
         var fechaLeida = new Date(fecha);
-        if (fechaLeida.toString() !== "Invalid Date") {
+        if (FechaValida(fechaLeida)) {
             let dia = fechaLeida.getDate();
             let mes = fechaLeida.getMonth() + 1;
             let ano = fechaLeida.getFullYear();
@@ -43,7 +54,7 @@ var ApiControl;
     ApiControl.MapearRestrictorAlControl = MapearRestrictorAlControl;
     function MapearHoraAlControl(control, fechaHora) {
         var fechaLeida = new Date(fechaHora);
-        if (fechaLeida.toString() !== "Invalid Date") {
+        if (FechaValida(fechaLeida)) {
             let hora = fechaLeida.getHours();
             let minuto = fechaLeida.getMinutes();
             let segundos = fechaLeida.getSeconds();
@@ -162,25 +173,34 @@ var ApiControl;
         let propiedadDto = controlDeFecha.getAttribute(atControl.propiedad);
         let obligatorio = controlDeFecha.getAttribute(atControl.obligatorio);
         let valorDeFecha = controlDeFecha.value; //.replace(/\n/g, "\r\n");
+        let fechaHoraFijada = false;
         if (obligatorio === "S" && NoDefinida(valorDeFecha)) {
-            controlDeFecha.classList.remove(ClaseCss.crtlValido);
-            controlDeFecha.classList.add(ClaseCss.crtlNoValido);
-            throw new Error(`El campo: ${propiedadDto}, es obligatorio`);
+            if (controlDeFecha.readOnly) {
+                valorDeFecha = new Date(Date.now()).toISOString();
+                fechaHoraFijada = true;
+            }
+            else {
+                controlDeFecha.classList.remove(ClaseCss.crtlValido);
+                controlDeFecha.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`El campo: ${propiedadDto}, es obligatorio`);
+            }
         }
         let fecha = new Date(valorDeFecha);
         if (FechaValida(fecha)) {
             let idHora = controlDeFecha.getAttribute(atSelectorDeFecha.hora);
             if (!IsNullOrEmpty(idHora)) {
                 let controlDeHora = document.getElementById(idHora);
-                let valorDeHora = controlDeHora.value.split(':');
-                let hora = Numero(valorDeHora[0]);
-                let minuto = Numero(valorDeHora[1]);
-                let segundos = Numero(valorDeHora[2]);
-                let milisegundos = Numero(controlDeHora.getAttribute(atSelectorDeFecha.milisegundos));
-                fecha.setHours(hora);
-                fecha.setMinutes(minuto);
-                fecha.setSeconds(segundos);
-                fecha.setMilliseconds(milisegundos);
+                if (!fechaHoraFijada) {
+                    let valorDeHora = controlDeHora.value.split(':');
+                    let hora = Numero(valorDeHora[0]);
+                    let minuto = Numero(valorDeHora[1]);
+                    let segundos = Numero(valorDeHora[2]);
+                    let milisegundos = Numero(controlDeHora.getAttribute(atSelectorDeFecha.milisegundos));
+                    fecha.setHours(hora);
+                    fecha.setMinutes(minuto);
+                    fecha.setSeconds(segundos);
+                    fecha.setMilliseconds(milisegundos);
+                }
             }
             var utcFecha = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), fecha.getHours(), fecha.getMinutes(), fecha.getSeconds(), fecha.getMilliseconds()));
             elementoJson[propiedadDto] = utcFecha;

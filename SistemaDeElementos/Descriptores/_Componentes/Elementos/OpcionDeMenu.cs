@@ -261,6 +261,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
                         <input type=¨button¨ 
+                               tipo=¨{Tipo.Render()}¨
                                clase=¨{Css.Render(ClaseBoton)}¨ 
                                permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
                                value=¨{Etiqueta}¨ 
@@ -274,6 +275,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmlOpcionMenu = $@"<input id=¨{IdHtml}¨
                                            type=¨button¨
+                                           tipo=¨{Tipo.Render()}¨
                                            clase=¨{Css.Render(ClaseBoton)}¨
                                            permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨
                                            value=¨{Etiqueta}¨

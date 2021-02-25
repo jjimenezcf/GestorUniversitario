@@ -40,7 +40,7 @@ namespace MVCSistemaDeElementos.Controllers
                 return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             if (claseElemento == nameof(TrabajoSometidoDto))
-                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeTrabajosSometido.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerTrabajos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }

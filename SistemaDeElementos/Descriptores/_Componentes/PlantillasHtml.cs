@@ -58,7 +58,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                          type=¨text¨
                                          placeholder =¨[Placeholder]¨
                                          valorPorDefecto=¨[ValorPorDefecto]¨
-                                         value=¨¨>
+                                         value=¨[ValorPorDefecto]¨>
                                   </input>
                              </div>"; 
         

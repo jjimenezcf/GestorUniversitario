@@ -148,6 +148,10 @@
             let opcionesGenerales: NodeListOf<HTMLButtonElement> = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
             for (var i = 0; i < opcionesGenerales.length; i++) {
                 let opcion: HTMLButtonElement = opcionesGenerales[i];
+
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
+
                 let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
                 if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
                     opcion.disabled = true;

@@ -47,6 +47,7 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(UsuarioDto),
             GuardarEn = nameof(IdEjecutor),
+            MostrarExpresion = UsuarioDto.ExpresionElemento,
             Fila = 0,
             Columna = 1,
             VisibleEnGrid = false,
@@ -69,6 +70,7 @@ namespace ModeloDeDto.TrabajosSometidos
             Ayuda = "trabajo sometido",
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(TrabajoSometidoDto),
+            MostrarExpresion = TrabajoSometidoDto.ExpresionElemento,
             GuardarEn = nameof(IdTrabajo),
             Fila = 1,
             Columna = 0,
@@ -101,8 +103,9 @@ namespace ModeloDeDto.TrabajosSometidos
            Fila = 3,
            Columna = 0,
            VisibleEnGrid = true,
-           EditableAlCrear =false,
-           EditableAlEditar =false           
+           EditableAlCrear = false,
+           EditableAlEditar = false,
+           Obligatorio = true
            )
         ]
         public DateTime Encolado { get; set; }
@@ -128,7 +131,8 @@ namespace ModeloDeDto.TrabajosSometidos
            Columna = 0,
            VisibleEnGrid = true,
            EditableAlCrear = false,
-           EditableAlEditar = false
+           EditableAlEditar = false,
+           Obligatorio = false
            )
         ]
         public DateTime? Iniciado { get; set; }
@@ -142,7 +146,8 @@ namespace ModeloDeDto.TrabajosSometidos
            Columna = 1,
            VisibleEnGrid = true,
            EditableAlCrear = false,
-           EditableAlEditar = false
+           EditableAlEditar = false,
+           Obligatorio = false
            )
         ]
         public DateTime? Terminado { get; set; }
@@ -157,6 +162,7 @@ namespace ModeloDeDto.TrabajosSometidos
            VisibleEnGrid = false,
            EditableAlCrear = true,
            EditableAlEditar = true,
+           Obligatorio = false,
            NumeroDeFilas = 5
            )
         ]
@@ -173,7 +179,8 @@ namespace ModeloDeDto.TrabajosSometidos
            EditableAlCrear = true,
            EditableAlEditar = true,
            ConSpanEnColumnas = false,
-           AnchoMaximo = "200px"
+           AnchoMaximo = "200px",
+           ValorPorDefecto = 0
            )
         ]
         public int Periodicidad { get; set; }

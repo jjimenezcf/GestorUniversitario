@@ -190,6 +190,10 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             var valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+
+            if (atributos.MostrarExpresion.IsNullOrEmpty())
+                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDinamica);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
             valores["ClaseElemento"] = atributos.SeleccionarDe;
@@ -371,8 +375,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
             
-            if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
-                atributos.Obligatorio = false;
+            //if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
+            //    atributos.Obligatorio = false;
 
             valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";

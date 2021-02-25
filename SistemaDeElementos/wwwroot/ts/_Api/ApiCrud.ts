@@ -1,10 +1,21 @@
 ﻿namespace ApiControl {
 
+    export function BloquearMenu(panel: HTMLDivElement): void {
+        let opciones: NodeListOf<HTMLButtonElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`) as NodeListOf<HTMLButtonElement>;
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            opcion.disabled = true;
+            opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
+        }
+    }
+
+    export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
+
     export function MapearFechaAlControl(control: HTMLInputElement, fecha: string) {
         var fechaLeida = new Date(fecha);
-        if (fechaLeida.toString() !== "Invalid Date") {
+        if (FechaValida(fechaLeida)) {
             let dia: number = fechaLeida.getDate();
-            let mes: number = fechaLeida.getMonth()+1;
+            let mes: number = fechaLeida.getMonth() + 1;
             let ano: number = fechaLeida.getFullYear();
             control.value = `${ano}-${PadLeft(mes.toString(), "00")}-${PadLeft(dia.toString(), "00")}`;
         }
@@ -45,7 +56,7 @@
 
     export function MapearHoraAlControl(control: HTMLInputElement, fechaHora: string) {
         var fechaLeida = new Date(fechaHora);
-        if (fechaLeida.toString() !== "Invalid Date") {
+        if (FechaValida(fechaLeida)) {
             let hora: number = fechaLeida.getHours();
             let minuto: number = fechaLeida.getMinutes();
             let segundos: number = fechaLeida.getSeconds();
@@ -174,10 +185,17 @@
         let propiedadDto: string = controlDeFecha.getAttribute(atControl.propiedad);
         let obligatorio: string = controlDeFecha.getAttribute(atControl.obligatorio);
         let valorDeFecha: string = controlDeFecha.value; //.replace(/\n/g, "\r\n");
+        let fechaHoraFijada = false;
         if (obligatorio === "S" && NoDefinida(valorDeFecha)) {
-            controlDeFecha.classList.remove(ClaseCss.crtlValido);
-            controlDeFecha.classList.add(ClaseCss.crtlNoValido);
-            throw new Error(`El campo: ${propiedadDto}, es obligatorio`);
+            if (controlDeFecha.readOnly) {
+                valorDeFecha = new Date(Date.now()).toISOString();
+                fechaHoraFijada = true;
+            }
+            else {
+                controlDeFecha.classList.remove(ClaseCss.crtlValido);
+                controlDeFecha.classList.add(ClaseCss.crtlNoValido);
+                throw new Error(`El campo: ${propiedadDto}, es obligatorio`);
+            }
         }
 
         let fecha: Date = new Date(valorDeFecha);
@@ -185,17 +203,20 @@
             let idHora = controlDeFecha.getAttribute(atSelectorDeFecha.hora);
             if (!IsNullOrEmpty(idHora)) {
                 let controlDeHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
-                let valorDeHora = controlDeHora.value.split(':');
-                let hora: number = Numero(valorDeHora[0]);
-                let minuto: number = Numero(valorDeHora[1]);
-                let segundos: number = Numero(valorDeHora[2]);
-                let milisegundos: number = Numero(controlDeHora.getAttribute(atSelectorDeFecha.milisegundos));
-                fecha.setHours(hora);
-                fecha.setMinutes(minuto);
-                fecha.setSeconds(segundos);
-                fecha.setMilliseconds(milisegundos);
+
+                if (!fechaHoraFijada) {
+                    let valorDeHora = controlDeHora.value.split(':');
+                    let hora: number = Numero(valorDeHora[0]);
+                    let minuto: number = Numero(valorDeHora[1]);
+                    let segundos: number = Numero(valorDeHora[2]);
+                    let milisegundos: number = Numero(controlDeHora.getAttribute(atSelectorDeFecha.milisegundos));
+                    fecha.setHours(hora);
+                    fecha.setMinutes(minuto);
+                    fecha.setSeconds(segundos);
+                    fecha.setMilliseconds(milisegundos);
+                }
             }
-            var utcFecha = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), fecha.getHours(), fecha.getMinutes(), fecha.getSeconds(), fecha.getMilliseconds()))
+            var utcFecha = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), fecha.getHours(), fecha.getMinutes(), fecha.getSeconds(), fecha.getMilliseconds()));
             elementoJson[propiedadDto] = utcFecha;
         }
         else

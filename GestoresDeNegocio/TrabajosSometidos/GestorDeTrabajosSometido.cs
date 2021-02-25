@@ -75,6 +75,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return PersistirRegistro(ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
         }
 
+        public List<TrabajoSometidoDto> LeerTrabajos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
+        }
+
         protected override IQueryable<TrabajoSometidoDtm> AplicarJoins(IQueryable<TrabajoSometidoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);

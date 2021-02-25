@@ -8,6 +8,8 @@
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
 
+    const idsometedor: string = 'idsometedor';
+
     export class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
@@ -26,17 +28,20 @@
 
             function mapearUsuario(peticion: ApiDeAjax.DescriptorAjax): void {
                 var llamador = peticion.llamador as CrudCreacionTrabajoDeUsuario;
-                var usuarioConectado = EntornoSe.LeerCookie('UsuarioConectado');
-                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear,'sometedor', usuarioConectado['login'], usuarioConectado['id'])
+                var usuarioConectado = EntornoSe.LeerCookie(EntornoSe.misCookies.UsuarioConectado);
+                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, idsometedor, usuarioConectado['id'] as number, usuarioConectado['login'] as string);
             }
 
-            function usuarioNoLeido(): void {
+            function usuarioNoLeido(peticion: ApiDeAjax.DescriptorAjax): void {
+                let llamador: CrudCreacionTrabajoDeUsuario = peticion.llamador as CrudCreacionTrabajoDeUsuario;
+                let zonaDeMenu: HTMLDivElement = llamador.CrudDeMnt.ZonaDeMenu;
+                ApiControl.BloquearMenu(zonaDeMenu)
                 console.error("no se ha podido leer");
             }
 
             EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
                 .then((peticion) => mapearUsuario(peticion))
-                .catch(() => usuarioNoLeido());
+                .catch((peticion) => usuarioNoLeido(peticion));
         }
 
 
@@ -63,7 +68,7 @@
         private EjecutarTrabajoDeUsuario(): void {
             let idTrabajoDeUsuario: number = this.InfoSelector.LeerId(0);
 
-            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.TrabajosSometidos.accion.iniciar
@@ -79,7 +84,7 @@
 
 
         private BloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
-            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.TrabajosSometidos.accion.bloquear
@@ -95,7 +100,7 @@
 
 
         private DesbloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
-            let url: string = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.TrabajosSometidos.accion.desbloquear

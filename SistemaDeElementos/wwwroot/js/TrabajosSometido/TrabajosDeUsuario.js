@@ -7,6 +7,7 @@ var TrabajosSometido;
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
     }
     TrabajosSometido.CrearCrudDeTrabajosDeUsuario = CrearCrudDeTrabajosDeUsuario;
+    const idsometedor = 'idsometedor';
     class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
         constructor(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
             super(idPanelMnt, idModalBorrar);
@@ -20,15 +21,18 @@ var TrabajosSometido;
         MapearUsuarioConectado() {
             function mapearUsuario(peticion) {
                 var llamador = peticion.llamador;
-                var usuarioConectado = EntornoSe.LeerCookie('UsuarioConectado');
-                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, 'sometedor', usuarioConectado['login'], usuarioConectado['id']);
+                var usuarioConectado = EntornoSe.LeerCookie(EntornoSe.misCookies.UsuarioConectado);
+                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, idsometedor, usuarioConectado['id'], usuarioConectado['login']);
             }
-            function usuarioNoLeido() {
+            function usuarioNoLeido(peticion) {
+                let llamador = peticion.llamador;
+                let zonaDeMenu = llamador.CrudDeMnt.ZonaDeMenu;
+                ApiControl.BloquearMenu(zonaDeMenu);
                 console.error("no se ha podido leer");
             }
             EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
                 .then((peticion) => mapearUsuario(peticion))
-                .catch(() => usuarioNoLeido());
+                .catch((peticion) => usuarioNoLeido(peticion));
         }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
@@ -47,17 +51,17 @@ var TrabajosSometido;
         }
         EjecutarTrabajoDeUsuario() {
             let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
-            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.iniciar, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
             a.Ejecutar();
         }
         BloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
-            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.bloquear, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
             a.Ejecutar();
         }
         DesbloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
-            let url = `/${Ajax.TrabajosSometidos.TrabajosDeUsuario}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+            let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.desbloquear, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
             a.Ejecutar();
         }

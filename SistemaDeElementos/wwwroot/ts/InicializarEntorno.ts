@@ -62,6 +62,10 @@ module EntornoSe {
         window.location.href = url;
     }
 
+    export const misCookies = {
+        UsuarioConectado : 'usuario-conectado'
+    }
+
     export function LeerCookie(nombre): any {
         let lista: string[] = document.cookie.split(";");
         let micookie: string = "";
@@ -84,19 +88,18 @@ module EntornoSe {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;
     }
 
-    export function LeerUsuarioDeConexion(llamador: any): Promise<any> {
+    export function LeerUsuarioDeConexion(llamador: any): Promise<ApiDeAjax.DescriptorAjax> {
 
         function RegistrarCookie(peticion: ApiDeAjax.DescriptorAjax) {
             let registro: any = peticion.resultado.datos;
-            EntornoSe.GuardarCookie('UsuarioConectado', registro);
+            EntornoSe.GuardarCookie(EntornoSe.misCookies.UsuarioConectado, registro);
         }
         return new Promise((resolve, reject) => {
 
-
-            let url: string = `/Usuarios/epLeerUsuarioDeConexion`;
+            let url: string = `/${Ajax.Usuarios.ruta}/${Ajax.Usuarios.accion.LeerUsuarioDeConexion}`;
 
             let a = new ApiDeAjax.DescriptorAjax(llamador
-                , 'LeerUsuarioDeConexion'
+                , Ajax.Usuarios.accion.LeerUsuarioDeConexion
                 , llamador
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
@@ -105,8 +108,8 @@ module EntornoSe {
                     RegistrarCookie(peticion);
                     resolve(peticion);
                 }
-                , () => {
-                    reject();
+                , (peticion) => {
+                    reject(peticion);
                 }
             );
             a.Ejecutar();

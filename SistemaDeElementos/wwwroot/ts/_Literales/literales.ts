@@ -124,7 +124,8 @@ const atArchivo = {
 
 const atOpcionDeMenu = {
     permisosNecesarios: "permisos-necesarios",
-    clase: "clase"
+    clase: "clase",
+    bloqueada: "bloqueada"
 };
 
 const atSelector = {
@@ -148,7 +149,7 @@ const atSelectorDeFecha = {
 
 const atRestrictor = {
     mostrarExpresion: atControl.mostrarExpresion
-}
+};
 
 const atListas = {
     claseElemento: 'clase-elemento',
@@ -276,11 +277,17 @@ const Ajax = {
         }
     },
     TrabajosSometidos: {
-        TrabajosDeUsuario: 'TrabajosDeUsuario',
+        rutaTu: 'TrabajosDeUsuario',
         accion: {
             iniciar: 'epIniciarTrabajoDeUsuario',
             bloquear: 'epBloquearTrabajoDeUsuario',
             desbloquear: 'epDesbloquearTrabajoDeUsuario'
+        }
+    },
+    Usuarios: {
+        ruta: 'usuarios',
+        accion: {
+            LeerUsuarioDeConexion: 'epLeerUsuarioDeConexion'
         }
     },
     jsonResultError: 1,
@@ -398,7 +405,7 @@ const Evento = {
 };
 
 const TipoControl = {
-    Tipo: "tipo",
+    Tipo: atControl.tipo,
     Editor: "editor",
     Check: "check",
     Selector: "selector",
@@ -411,7 +418,8 @@ const TipoControl = {
     VisorDeArchivo: "visor-archivo",
     UrlDeArchivo: "url-archivo",
     restrictorDeFiltro: "restrictor-filtro",
-    restrictorDeEdicion: "restrictor-edicion"
+    restrictorDeEdicion: "restrictor-edicion",
+    opcion: 'opcion'
 };
 
 const ClaseDeOpcioDeMenu = {

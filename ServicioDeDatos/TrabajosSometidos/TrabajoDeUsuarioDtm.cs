@@ -25,9 +25,23 @@ namespace ServicioDeDatos.TrabajosSometidos
 
             throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
         }
-        public static string ToDto(string estado)
+        public static string ToDto(this enumEstadosDeUnTrabajo estado)
         {
             switch (estado)
+            {
+                case enumEstadosDeUnTrabajo.conErrores: return "Con errores" ;
+                case enumEstadosDeUnTrabajo.pendiente:  return "Pendiente";
+                case enumEstadosDeUnTrabajo.Bloqueado:  return "Bloqueado";
+                case enumEstadosDeUnTrabajo.iniciado:   return "Iniciado";
+                case enumEstadosDeUnTrabajo.terminado:  return "Terminado";
+                case enumEstadosDeUnTrabajo.Error:      return "Erroneo";
+            }
+
+            throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
+        }
+        public static string ToDto(string estadoDtm)
+        {
+            switch (estadoDtm)
             {
                 case "TR": return "Con errores" ;
                 case "PT": return "Pendiente";
@@ -37,11 +51,11 @@ namespace ServicioDeDatos.TrabajosSometidos
                 case "ER": return "Erroneo";
             }
 
-            throw new Exception($"El estado de un trabajo {estado} no está definido en la BD");
+            throw new Exception($"El estado de un trabajo {estadoDtm} no está definido en la BD");
         }
-        public static string ToDtm(string estado)
+        public static string ToDtm(string estadoDto)
         {
-            switch (estado)
+            switch (estadoDto)
             {
                 case "Con errores" : return "TR";
                 case "Pendiente"   : return "PT";
@@ -51,7 +65,7 @@ namespace ServicioDeDatos.TrabajosSometidos
                 case "Erroneo"     : return "ER";
             }
 
-            throw new Exception($"El estado de un trabajo '{estado}' no es válido");
+            throw new Exception($"El estado de un trabajo '{estadoDto}' no es válido");
         }
     }
 

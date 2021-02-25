@@ -938,6 +938,8 @@ var Crud;
             let hacerLaInterseccion = mantenimiento.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesGenerales.length; i++) {
                 let opcion = opcionesGenerales[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
                 let estaDeshabilitado = opcion.disabled;
                 let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
                 if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
