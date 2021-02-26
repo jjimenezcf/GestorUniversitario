@@ -123,17 +123,41 @@
         </div>
     </div>
 
-    <div id="id-modal-historial" class="modal-historial">
-        <div id="id-contenedor-historial" class="historial-contenedor">
-            <textarea id="mensaje-historial" readonly value="">                
-            </textarea>
-            <img id="id-cerrar-historial"
-                 src="~/images/menu/bars-solid.svg"
-                 class="btn-menu fa-icono"
-                 modal-menu="id-modal-historial"
-                 onclick="EntornoSe.OcultarHistorial()"/>
+    <div id="id-modal-historial" class="contenedor-modal">
+        <div id="id-contenedor-historial" class="contenido-modal">
+            <div id="id-historial-cabecera" class="contenido-cabecera">
+                Historial de mensajes
+            </div>
+            <div id="id-historial-cuerpo" class="contenido-cuerpo">
+                <table id="id-historial-cuerpo.tabla" class="cuerpo-datos-tabla table table-striped" style="margin-bottom: 0px;">
+                    <thead id="id-historial-cuerpo.cabecera">
+                        <tr>
+                            <th class="columna-cabecera" width="10%" style="text-align: right">
+                                Fecha
+                            </th>
+                            <th class="columna-cabecera" width="10%" style="text-align: left">
+                                Origen
+                            </th>
+                            <th class="columna-cabecera" width="10%" style="text-align: left">
+                                tipo
+                            </th>
+                            <th class="columna-cabecera" width="70%" style="text-align: left">
+                                Mensaje
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="id-historial-cuerpo.body" class="cuerpo-datos-tbody">
+                        <!-- lineas de la clase: cuerpo-datos-tbody-tr-->
+                    </tbody>
+                </table>
+            </div>
+            <div id="{IdHtml}_pie" class="contenido-pie">
+                <input type="text" id="id-historial-cuerpo-cerrar" class="boton-modal" value="Cerrar" onclick="EntornoSe.CerrarHistorial()" readonly />
+                <input type="text" id="id-historial-cuerpo-borrar" class="boton-modal" value="Borrar" onclick="EntornoSe.BorrarHistorial()" readonly />
+            </div>
         </div>
     </div>
+
 
     @RenderSection("Scripts", required: false)
 

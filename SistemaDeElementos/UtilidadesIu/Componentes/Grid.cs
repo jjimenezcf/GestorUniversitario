@@ -324,7 +324,7 @@ namespace UtilidadesParaIu
 
         private static string RenderizarGrid(Grid<TElemento> grid)
         {
-            var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ class=¨cuerpo-datos-tabla table table-striped¨ style=¨margin-bottom: 0px¨;>
+            var htmlTabla = $@"<table id=¨{grid.IdHtmlTabla}¨ class=¨cuerpo-datos-tabla table table-striped¨ style=¨margin-bottom: 0px;¨>
                                     {RenderCabecera(grid)}
                                </table>
                              ";

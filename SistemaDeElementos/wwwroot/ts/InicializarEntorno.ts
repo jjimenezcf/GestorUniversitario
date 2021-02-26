@@ -50,6 +50,11 @@ module EntornoSe {
         else {
             Mensaje(TipoMensaje.Info, "No hay crud");
         }
+
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;        
+        if (modal.style.display === "block") {
+            modal.style.height = `${altura.toString()}px`;
+        }
     }
 
     export function InicializarHistorial() {
@@ -63,8 +68,8 @@ module EntornoSe {
     }
 
     export const misCookies = {
-        UsuarioConectado : 'usuario-conectado'
-    }
+        UsuarioConectado: 'usuario-conectado'
+    };
 
     export function LeerCookie(nombre): any {
         let lista: string[] = document.cookie.split(";");
@@ -84,16 +89,22 @@ module EntornoSe {
         return IsNullOrEmpty(valor) ? null : JSON.parse(valor);
     }
 
-    export function MostrarHistorial()
-    {
-        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement
-
-        if (!EsTrue(modal.getAttribute('abierto'))) {
-            modal.style.display = "block";
-            modal.style.height = `${AlturaDelMenu(AlturaFormulario()).toString()}px`;
-        }
+    export function MostrarHistorial() {
+        let altura: number = AlturaFormulario();
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        modal.style.display = "block";
+        modal.style.height = `${altura.toString()}px`;
     }
 
+    export function CerrarHistorial() {
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        modal.style.display = "none";
+    }
+
+    export function BorrarHistorial() {
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        //recorrer las lineas del body y borrar las
+    }
 
     export function GuardarCookie(nombre, valor): void {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;

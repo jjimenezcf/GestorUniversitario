@@ -41,6 +41,10 @@ var EntornoSe;
         else {
             Mensaje(TipoMensaje.Info, "No hay crud");
         }
+        let modal = document.getElementById("id-modal-historial");
+        if (modal.style.display === "block") {
+            modal.style.height = `${altura.toString()}px`;
+        }
     }
     EntornoSe.AjustarDivs = AjustarDivs;
     function InicializarHistorial() {
@@ -75,13 +79,22 @@ var EntornoSe;
     }
     EntornoSe.LeerCookie = LeerCookie;
     function MostrarHistorial() {
+        let altura = AlturaFormulario();
         let modal = document.getElementById("id-modal-historial");
-        if (!EsTrue(modal.getAttribute('abierto'))) {
-            modal.style.display = "block";
-            modal.style.height = `${AlturaDelMenu(AlturaFormulario()).toString()}px`;
-        }
+        modal.style.display = "block";
+        modal.style.height = `${altura.toString()}px`;
     }
     EntornoSe.MostrarHistorial = MostrarHistorial;
+    function CerrarHistorial() {
+        let modal = document.getElementById("id-modal-historial");
+        modal.style.display = "none";
+    }
+    EntornoSe.CerrarHistorial = CerrarHistorial;
+    function BorrarHistorial() {
+        let modal = document.getElementById("id-modal-historial");
+        //recorrer las lineas del body y borrar las
+    }
+    EntornoSe.BorrarHistorial = BorrarHistorial;
     function GuardarCookie(nombre, valor) {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;
     }
