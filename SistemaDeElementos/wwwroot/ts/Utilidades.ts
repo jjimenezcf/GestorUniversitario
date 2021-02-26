@@ -202,6 +202,22 @@ function Numero(valor: any): number {
     return 0;
 }
 
+function EsTrue(valor: any): boolean {
+    if (valor === undefined || valor === null)
+        return false;
+
+    if (IsString(valor))
+        return (valor as string).toLocaleLowerCase() === 's' || (valor as string).toLocaleLowerCase() === 'true';
+
+    if (IsBool(valor))
+        return valor;
+
+    if (IsNumber(valor))
+        return (valor as number) > 0;
+
+    return false;
+}
+
 function EsObjetoDe(objeto, constructor) {
     while (objeto != null) {
         if (objeto == constructor.prototype)

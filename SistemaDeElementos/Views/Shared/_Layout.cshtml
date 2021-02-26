@@ -95,7 +95,17 @@
         <!--  Pie de la pagina -->
         <div id="pie-de-pagina" class="pie">
             <div class="pie-mensaje">
-                <input id="Mensaje" readonly value="" />
+                <div class="pie-mensaje-contenedor-hitorial">
+                    <img id="id-abrir-historial"
+                         src="~/images/menu/bars-solid.svg"
+                         class="btn-menu fa-icono"
+                         modal-menu="id-modal-historial"
+                         onclick="EntornoSe.MostrarHistorial()"
+                         historial-abierto="false" />
+                </div>
+                <div class="pie-mensaje-contenedor">
+                    <input id="Mensaje" readonly value="" />
+                </div>
             </div>
             <div class="pie-conexion">
                 <div class="pie-conexion-datos">
@@ -110,6 +120,18 @@
 
     <div id="id-modal-menu" class="modal-menu">
         <div id="id-contenedor-menu" class="menu-contenedor">
+        </div>
+    </div>
+
+    <div id="id-modal-historial" class="modal-historial">
+        <div id="id-contenedor-historial" class="historial-contenedor">
+            <textarea id="mensaje-historial" readonly value="">                
+            </textarea>
+            <img id="id-cerrar-historial"
+                 src="~/images/menu/bars-solid.svg"
+                 class="btn-menu fa-icono"
+                 modal-menu="id-modal-historial"
+                 onclick="EntornoSe.OcultarHistorial()"/>
         </div>
     </div>
 

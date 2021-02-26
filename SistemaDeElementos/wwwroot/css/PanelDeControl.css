@@ -115,9 +115,10 @@
     /*margin-left: 10px;*/
     border: ridge;
 }
-.cuerpo-cabecera > h2{
-    margin-left: 10px;
-}
+
+    .cuerpo-cabecera > h2 {
+        margin-left: 10px;
+    }
 
 .cuerpo-datos {
     display: grid;
@@ -151,15 +152,16 @@
     margin-left: 20px;
     margin-top: 5px;
 }
+
     .cuerpo-pie-navegador > div {
         display: block;
         align-self: center;
     }
 
-    .cuerpo-pie-navegador > div > img {
-        width: 22px;
-        height: 22px;
-    }
+        .cuerpo-pie-navegador > div > img {
+            width: 22px;
+            height: 22px;
+        }
 
 .cuerpo-pie-opciones {
     grid-area: cuerpo-pie-opciones;
@@ -194,17 +196,42 @@
 
 .pie-mensaje {
     grid-area: pie-mensaje;
+    display: -webkit-inline-box;
 }
 
-    .pie-mensaje > input {
+.pie-mensaje-contenedor-hitorial {
+    width: 32px;
+    border: ridge;
+    text-align-last: center;
+    background-color: white;
+}
+
+    .pie-mensaje-contenedor-hitorial > img {
+        background-color: white;
+        padding-bottom: 2px;
+        vertical-align: baseline;
+    }
+
+.pie-mensaje-contenedor {
+    width: 100%;
+    /*text-align-last: center;*/
+    background-color: white;
+    border: ridge;
+}
+
+    .pie-mensaje-contenedor > input {
         width: -webkit-fill-available;
+        height: 100%;
+        padding-right: 5px;
         text-align: left;
         border: hidden;
         margin: 2px;
+        width: 100%;
     }
 
 .pie-conexion {
     display: grid;
+    border-top:ridge;
     grid-area: pie-conexion;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
@@ -234,3 +261,23 @@
         border: hidden;
         padding-right: 10px;
     }
+
+.modal-historial {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    margin-top: 0px; /* Location of the box */
+    margin-left: 3px;
+    top: 52px;
+    width: 300px;
+    height: 90%;
+    overflow: auto; /* Enable scroll if needed */
+    border: double;
+    background-color: #ffff;
+}
+
+.historial-contenedor {
+    width: 95%;
+    display: inline-block;
+    line-height: 18px;
+}

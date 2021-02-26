@@ -160,6 +160,17 @@ function Numero(valor) {
         valor;
     return 0;
 }
+function EsTrue(valor) {
+    if (valor === undefined || valor === null)
+        return false;
+    if (IsString(valor))
+        return valor.toLocaleLowerCase() === 's' || valor.toLocaleLowerCase() === 'true';
+    if (IsBool(valor))
+        return valor;
+    if (IsNumber(valor))
+        return valor > 0;
+    return false;
+}
 function EsObjetoDe(objeto, constructor) {
     while (objeto != null) {
         if (objeto == constructor.prototype)

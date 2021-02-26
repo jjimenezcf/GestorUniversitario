@@ -74,6 +74,14 @@ var EntornoSe;
         return IsNullOrEmpty(valor) ? null : JSON.parse(valor);
     }
     EntornoSe.LeerCookie = LeerCookie;
+    function MostrarHistorial() {
+        let modal = document.getElementById("id-modal-historial");
+        if (!EsTrue(modal.getAttribute('abierto'))) {
+            modal.style.display = "block";
+            modal.style.height = `${AlturaDelMenu(AlturaFormulario()).toString()}px`;
+        }
+    }
+    EntornoSe.MostrarHistorial = MostrarHistorial;
     function GuardarCookie(nombre, valor) {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;
     }

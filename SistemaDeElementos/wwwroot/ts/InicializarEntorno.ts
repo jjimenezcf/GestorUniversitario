@@ -84,6 +84,17 @@ module EntornoSe {
         return IsNullOrEmpty(valor) ? null : JSON.parse(valor);
     }
 
+    export function MostrarHistorial()
+    {
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement
+
+        if (!EsTrue(modal.getAttribute('abierto'))) {
+            modal.style.display = "block";
+            modal.style.height = `${AlturaDelMenu(AlturaFormulario()).toString()}px`;
+        }
+    }
+
+
     export function GuardarCookie(nombre, valor): void {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;
     }
