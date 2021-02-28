@@ -471,7 +471,7 @@
                         break;
                     }
                     default: {
-                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
+                        Notificar(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
 
                 }
@@ -739,7 +739,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                Mensaje(TipoMensaje.Error, error);
+                Notificar(TipoMensaje.Error, error);
                 return;
             }
         }
@@ -914,7 +914,7 @@
         private SiHayErrorAlCargarElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
             try {
-                Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+                Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');

@@ -21,7 +21,7 @@ var ApiControl;
         }
         else {
             var propiedad = control.getAttribute(atControl.propiedad);
-            Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+            Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
         }
     }
     ApiControl.MapearFechaAlControl = MapearFechaAlControl;
@@ -68,7 +68,7 @@ var ApiControl;
             }
         }
         var propiedad = control.getAttribute(atControl.propiedad);
-        Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
     }
     ApiControl.MapearHoraAlControl = MapearHoraAlControl;
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
@@ -388,9 +388,7 @@ var ApiRuote;
     function Navegar(crud, form, estado, valores) {
         crud.AntesDeNavegar(valores);
         EntornoSe.Historial.GuardarEstadoDePagina(estado);
-        EntornoSe.Historial.Persistir();
-        PonerCapa();
-        form.submit();
+        EntornoSe.Sumit(form);
     }
 })(ApiRuote || (ApiRuote = {}));
 ;

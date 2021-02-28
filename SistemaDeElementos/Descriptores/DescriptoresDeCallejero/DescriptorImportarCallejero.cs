@@ -39,7 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores
                             {RutaVista}.CrearFormulario('{IdHtml}') 
                          }}
                          catch(error) {{                           
-                            Mensaje(TipoMensaje.Error, error);
+                            Notificar(TipoMensaje.Error, error);
                          }}
                       </script>
                     ";

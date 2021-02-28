@@ -26,29 +26,29 @@
 
         private MapearUsuarioConectado(): void {
 
-            function mapearUsuario(peticion: ApiDeAjax.DescriptorAjax): void {
-                var llamador = peticion.llamador as CrudCreacionTrabajoDeUsuario;
-                var usuarioConectado = EntornoSe.LeerCookie(EntornoSe.misCookies.UsuarioConectado);
-                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, idsometedor, usuarioConectado['id'] as number, usuarioConectado['login'] as string);
-            }
-
-            function usuarioNoLeido(peticion: ApiDeAjax.DescriptorAjax): void {
-                let llamador: CrudCreacionTrabajoDeUsuario = peticion.llamador as CrudCreacionTrabajoDeUsuario;
+            function usuarioNoLeido(llamador: CrudCreacionTrabajoDeUsuario): void {
                 let zonaDeMenu: HTMLDivElement = llamador.CrudDeMnt.ZonaDeMenu;
-                ApiControl.BloquearMenu(zonaDeMenu)
+                ApiControl.BloquearMenu(zonaDeMenu);
                 console.error("no se ha podido leer");
             }
 
-            EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
-                .then((peticion) => mapearUsuario(peticion))
-                .catch((peticion) => usuarioNoLeido(peticion));
+
+            let usuarioConectado = Registro.UsuarioConectado();
+            if (usuarioConectado == null) {
+                usuarioNoLeido(this.crudDeCreacion);
+            }
+            else {
+                let idUsuario: number = usuarioConectado['id'] as number;
+                let usuario: string = usuarioConectado['login'] as string;
+                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
+            }
         }
 
 
         public IniciarTrabajo(): boolean {
 
             if (this.InfoSelector.Cantidad != 1) {
-                Mensaje(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
+                Notificar(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
                 return;
             }
 
@@ -56,7 +56,7 @@
         }
 
         public BloquearTrabajo(): void {
-            for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) 
+            for (let i: number = 0; i < this.InfoSelector.Cantidad; i++)
                 this.BloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
 
@@ -115,13 +115,13 @@
         }
 
         public SiHayErrorDeEjecucion(peticion: ApiDeAjax.DescriptorAjax): void {
-            Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
             let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
             crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
 
         public TrasEjecutarTrabajo(peticion: ApiDeAjax.DescriptorAjax) {
-            Mensaje(TipoMensaje.Info, peticion.resultado.mensaje);
+            Notificar(TipoMensaje.Info, peticion.resultado.mensaje);
             let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
             crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
@@ -160,13 +160,13 @@
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
 
     }

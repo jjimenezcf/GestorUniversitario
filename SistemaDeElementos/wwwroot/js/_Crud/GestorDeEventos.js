@@ -77,13 +77,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosDelMantenimiento = EventosDelMantenimiento;
@@ -91,7 +91,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalDeSeleccion(parIn[0]);
         if (modal === undefined) {
-            Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -147,13 +147,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeSeleccion = EventosModalDeSeleccion;
@@ -161,7 +161,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalParaRelacionar(parIn[0]);
         if (modal === undefined) {
-            Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -213,13 +213,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeCrearRelaciones = EventosModalDeCrearRelaciones;
@@ -227,7 +227,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalParaConsultarRelaciones(parIn[0]);
         if (modal === undefined) {
-            Mensaje(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -275,13 +275,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeConsultaDeRelaciones = EventosModalDeConsultaDeRelaciones;
@@ -297,13 +297,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeBorrar = EventosModalDeBorrar;
@@ -319,13 +319,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeCreacion = EventosModalDeCreacion;
@@ -341,13 +341,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosModalDeEdicion = EventosModalDeEdicion;
@@ -356,7 +356,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EjecutarMenuEdt = EjecutarMenuEdt;
@@ -365,7 +365,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosDeEdicion = EventosDeEdicion;
@@ -374,7 +374,7 @@ var Crud;
             Crud.crudMnt.crudDeCreacion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EjecutarMenuCrt = EjecutarMenuCrt;
@@ -390,13 +390,13 @@ var Crud;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     Crud.EventosDeListaDinamica = EventosDeListaDinamica;

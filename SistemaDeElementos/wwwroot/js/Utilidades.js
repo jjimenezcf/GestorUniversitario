@@ -1,4 +1,4 @@
-function Mensaje(tipo, mensaje, mensajeDeConsola) {
+function Notificar(tipo, mensaje, mensajeDeConsola) {
     var control = document.getElementById("Mensaje");
     var mensajeConTipo = `(${tipo}) ${mensaje}`;
     if (control)

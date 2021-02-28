@@ -1,4 +1,4 @@
-﻿function Mensaje(tipo: string, mensaje: string, mensajeDeConsola?: string) {
+﻿function Notificar(tipo: string, mensaje: string, mensajeDeConsola?: string) {
     var control = <HTMLInputElement>document.getElementById("Mensaje");
     var mensajeConTipo = `(${tipo}) ${mensaje}`;
     if (control)

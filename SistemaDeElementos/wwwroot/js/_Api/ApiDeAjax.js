@@ -47,7 +47,7 @@ var ApiDeAjax;
                 this.resultado = JSON.parse(this.Request.response);
             }
             catch {
-                Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
+                Notificar(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
             }
         }
         Inicializar(url, trasLaPeticion, siHayError) {
@@ -134,7 +134,7 @@ var ApiDeAjax;
                     this.TrasLaPeticion(this);
                 }
                 catch (error) {
-                    Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
+                    Notificar(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
                 }
         }
     }

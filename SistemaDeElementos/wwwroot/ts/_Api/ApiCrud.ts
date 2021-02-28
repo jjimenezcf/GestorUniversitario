@@ -21,7 +21,7 @@
         }
         else {
             var propiedad: string = control.getAttribute(atControl.propiedad);
-            Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+            Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
         }
     }
 
@@ -70,7 +70,7 @@
             }
         }
         var propiedad: string = control.getAttribute(atControl.propiedad);
-        Mensaje(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
 
     }
     export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
@@ -429,9 +429,7 @@ namespace ApiRuote {
     function Navegar(crud: Crud.GridDeDatos, form: HTMLFormElement, estado: HistorialSe.EstadoPagina, valores: Diccionario<any>) {
         crud.AntesDeNavegar(valores);
         EntornoSe.Historial.GuardarEstadoDePagina(estado);
-        EntornoSe.Historial.Persistir();
-        PonerCapa();
-        form.submit();
+        EntornoSe.Sumit(form);
     }
 };
 

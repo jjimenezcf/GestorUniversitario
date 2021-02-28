@@ -20,7 +20,7 @@
             let sometido: boolean;
 
             function promesaNoResuelta(form: ImportarCallejero, motivo: string): boolean {
-                form.Mensajes.Error(motivo);
+                MensajesSe.Error(motivo);
                 return false;
             }
 
@@ -39,7 +39,7 @@
         }
 
         private ArchivosSubidos(form: ImportarCallejero, resultados: string[]): boolean {
-            form.Mensajes.Info(`trabajo sometido con ${resultados.length.toString()} ficheros subidos`);
+            MensajesSe.Info(`trabajo sometido con ${resultados.length.toString()} ficheros subidos`);
             let sometido: boolean;
             this.SometerTrabajo()
                 .then(resultado => sometido = resultado)
@@ -90,12 +90,12 @@
 
         private TrasSometer(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: Archivo[] = peticion.DatosDeEntrada;
-            Mensaje(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
+            Notificar(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
         }
 
         private SiHayErrorAlSometer(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: Archivo[] = peticion.DatosDeEntrada;
-            Mensaje(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            Notificar(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
 

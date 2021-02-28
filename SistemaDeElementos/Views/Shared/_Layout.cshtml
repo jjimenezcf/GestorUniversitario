@@ -26,13 +26,16 @@
     <script src="~/js/_TiposDeDatos/TiposDeDatos.js"></script>
     <script src="~/js/Utilidades.js"></script>
     <script src="~/js/InfoSelector.js"></script>
+    <script src="~/js/Registro.js"></script>
+    <script src="~/js/Cookies.js"></script>
+    <script src="~/js/Mensajes.js"></script>
     <script src="~/js/Diccionario.js"></script>
     <script src="~/js/HistorialDeNavegacion.js"></script>
     <script src="~/js/_Api/ApiDeAjax.js"></script>
     <script src="~/js/_Api/ApiDeArchivos.js"></script>
     <script src="~/js/_Api/ApiCrud.js"></script>
     <script src="~/js/ArbolDeMenu.js"></script>
-    <script src="~/js/InicializarEntorno.js"></script>
+    <script src="~/js/EntornoSe.js"></script>
     <script src="~/js/_Formulario/FormularioBase.js"></script>
     <script src="~/js/_Crud/CrudBase.js"></script>
     <script src="~/js/_Crud/GridDeDatos.js"></script>
@@ -171,8 +174,13 @@
             EntornoSe.IniciarEntorno();
         }
 
+        function Navegar() {
+                console("location: " + document.location + ", state: " + JSON.stringify(event.state));
+        }
+
         window.onload = Inicializar;
         window.onresize = Ajustar;
+        window.onhashchange = Navegar;
     </script>
 
 

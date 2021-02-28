@@ -88,7 +88,7 @@
         let resultado = JSON.parse(req.response);
         var htmlContenedorMenu = document.getElementById(`${idContenedorMenu}`);
         if (!htmlContenedorMenu) {
-            Mensaje(TipoMensaje.Error, `No se ha localizado el contenedor ${idContenedorMenu}`);
+            Notificar(TipoMensaje.Error, `No se ha localizado el contenedor ${idContenedorMenu}`);
             return;
         }
         htmlContenedorMenu.innerHTML = resultado.html;
@@ -96,11 +96,11 @@
 
     function ErrorAlSolicitarMenu(req: XMLHttpRequest): void {
         if (IsNullOrEmpty(req.response)) {
-            Mensaje(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenuEnHtml} no está definida`);
+            Notificar(TipoMensaje.Error, `La peticion ${Ajax.EndPoint.SolicitarMenuEnHtml} no está definida`);
         }
         else {
             let resultado = JSON.parse(req.response);
-            Mensaje(TipoMensaje.Error, resultado.mensaje);
+            Notificar(TipoMensaje.Error, resultado.mensaje);
             console.error(resultado.consola);
         }
     }
@@ -113,7 +113,7 @@
         }
         catch
         {
-            Mensaje(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
+            Notificar(TipoMensaje.Error, `Error al procesar la respuesta de ${peticion}`);
             return undefined;
         }
         return resultado;

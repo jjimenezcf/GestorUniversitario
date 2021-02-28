@@ -371,7 +371,7 @@ var Crud;
                         break;
                     }
                     default: {
-                        Mensaje(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
+                        Notificar(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
                 }
                 if (clausula !== null)
@@ -598,7 +598,7 @@ var Crud;
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                Mensaje(TipoMensaje.Error, error);
+                Notificar(TipoMensaje.Error, error);
                 return;
             }
         }
@@ -720,7 +720,7 @@ var Crud;
         SiHayErrorAlCargarElGrid(peticion) {
             let grid = peticion.llamador;
             try {
-                Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+                Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');

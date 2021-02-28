@@ -54,7 +54,7 @@ namespace MVCSistemaDeElementos.Descriptores
                             TrabajosSometido.CrearCrudDeTrabajosDeUsuario('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
-                            Mensaje(TipoMensaje.Error, error);
+                            Notificar(TipoMensaje.Error, error);
                          }}
                       </script>
                     ";

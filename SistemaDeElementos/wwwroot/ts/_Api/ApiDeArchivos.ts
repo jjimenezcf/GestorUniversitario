@@ -82,7 +82,7 @@
 
         function ErrorAlVisializar() {
             ApiDeArchivos.BlanquearArchivo(archivo, true);
-            Mensaje(TipoMensaje.Error, "Fichero no válido para mostrar en un Canvas");
+            Notificar(TipoMensaje.Error, "Fichero no válido para mostrar en un Canvas");
         }
 
         BlanquearMensaje();
@@ -95,7 +95,7 @@
 
         var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
         if (extensiones.indexOf(ext) < 0) {
-            Mensaje(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
+            Notificar(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
             return;
         }
 
@@ -131,11 +131,11 @@
 
         var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
         if (extensiones.indexOf(ext) < 0) {
-            Mensaje(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
+            Notificar(TipoMensaje.Error, `Extensión no valida, sólo se permite extensiones del tipo '${extensiones}'`);
             return;
         }
         if (limite > 0 && limite < ficheros[0].size) {
-            Mensaje(TipoMensaje.Error, `Tamaño del fichero demasiado grande, el límite es ${limite} bytes`);
+            Notificar(TipoMensaje.Error, `Tamaño del fichero demasiado grande, el límite es ${limite} bytes`);
             return;
         }
 

@@ -19,24 +19,24 @@ var TrabajosSometido;
             this.MapearUsuarioConectado();
         }
         MapearUsuarioConectado() {
-            function mapearUsuario(peticion) {
-                var llamador = peticion.llamador;
-                var usuarioConectado = EntornoSe.LeerCookie(EntornoSe.misCookies.UsuarioConectado);
-                ApiControl.MapearPropiedadRestrictoraAlControl(llamador.PanelDeCrear, idsometedor, usuarioConectado['id'], usuarioConectado['login']);
-            }
-            function usuarioNoLeido(peticion) {
-                let llamador = peticion.llamador;
+            function usuarioNoLeido(llamador) {
                 let zonaDeMenu = llamador.CrudDeMnt.ZonaDeMenu;
                 ApiControl.BloquearMenu(zonaDeMenu);
                 console.error("no se ha podido leer");
             }
-            EntornoSe.LeerUsuarioDeConexion(this.crudDeCreacion)
-                .then((peticion) => mapearUsuario(peticion))
-                .catch((peticion) => usuarioNoLeido(peticion));
+            let usuarioConectado = Registro.UsuarioConectado();
+            if (usuarioConectado == null) {
+                usuarioNoLeido(this.crudDeCreacion);
+            }
+            else {
+                let idUsuario = usuarioConectado['id'];
+                let usuario = usuarioConectado['login'];
+                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
+            }
         }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
-                Mensaje(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
+                Notificar(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
                 return;
             }
             this.EjecutarTrabajoDeUsuario();
@@ -66,12 +66,12 @@ var TrabajosSometido;
             a.Ejecutar();
         }
         SiHayErrorDeEjecucion(peticion) {
-            Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+            Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
             let crudTu = peticion.llamador;
             crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
         TrasEjecutarTrabajo(peticion) {
-            Mensaje(TipoMensaje.Info, peticion.resultado.mensaje);
+            Notificar(TipoMensaje.Info, peticion.resultado.mensaje);
             let crudTu = peticion.llamador;
             crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }
@@ -105,13 +105,13 @@ var TrabajosSometido;
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
     TrabajosSometido.Eventos = Eventos;

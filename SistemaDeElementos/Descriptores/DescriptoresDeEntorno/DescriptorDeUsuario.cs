@@ -102,7 +102,7 @@ namespace MVCSistemaDeElementos.Descriptores
                             Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
-                            Mensaje(TipoMensaje.Error, error);
+                            Notificar(TipoMensaje.Error, error);
                          }}
                       </script>
                     ";

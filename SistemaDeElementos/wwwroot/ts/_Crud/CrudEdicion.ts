@@ -54,7 +54,7 @@
             var control = this.BuscarEditor(this.PanelDeEditar, literal.id);
 
             if (control == null) {
-                Mensaje(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
+                Notificar(TipoMensaje.Error, "No está definido el control para mostrar el id del elemento");
                 this.CerrarEdicion();
             }
 
@@ -113,7 +113,7 @@
                 }
             }
             catch (error) {
-                Mensaje(TipoMensaje.Error, error);
+                Notificar(TipoMensaje.Error, error);
             }
 
             if (cerrarEdicion)
@@ -159,7 +159,7 @@
         private EditarSeleccionado(seleccionado: number) {
 
             if (this.TotalSeleccionados === 0) {
-                Mensaje(TipoMensaje.Error, "No hay elementos a editar.");
+                Notificar(TipoMensaje.Error, "No hay elementos a editar.");
                 this.CerrarEdicion();
             }
 

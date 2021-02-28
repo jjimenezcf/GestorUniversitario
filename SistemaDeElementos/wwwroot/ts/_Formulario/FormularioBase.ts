@@ -11,11 +11,6 @@
             return this.Estado.Obtener(Sesion.paginaActual);
         }
 
-        private _mensajes: EntornoSe.AlmacenDeMensajes;
-        public get Mensajes(): EntornoSe.AlmacenDeMensajes {
-            return this._mensajes;
-        }
-
         protected get CuerpoDelFormulario(): HTMLDivElement {
             return document.getElementById(`datos-${this._idFormulario}`) as HTMLDivElement;
         }
@@ -42,8 +37,7 @@
         constructor(idFormulario: string) {
 
             this._idFormulario = idFormulario;
-            this._mensajes = new EntornoSe.AlmacenDeMensajes(this._idFormulario);
-            this.Mensajes.Info("Creado");
+            MensajesSe.Info("Creado");
         }
 
         public Inicializar(): void {
@@ -103,13 +97,13 @@
                     break;
                 }
                 default: {
-                    Mensaje(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Mensaje(TipoMensaje.Error, error);
+            Notificar(TipoMensaje.Error, error);
         }
     }
 

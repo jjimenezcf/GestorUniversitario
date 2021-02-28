@@ -90,7 +90,7 @@ class InfoSelector {
     }
     InsertarElemento(id, textoMostrar) {
         if (!id || isNaN(id)) {
-            Mensaje(TipoMensaje.Error, `Ha intentado insertar en la lista un id no válido ${id}`);
+            Notificar(TipoMensaje.Error, `Ha intentado insertar en la lista un id no válido ${id}`);
             return -1;
         }
         var pos = this.Buscar(id);

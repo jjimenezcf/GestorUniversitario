@@ -14,7 +14,7 @@ var Callejero;
         AntesDeAceptar() {
             let sometido;
             function promesaNoResuelta(form, motivo) {
-                form.Mensajes.Error(motivo);
+                MensajesSe.Error(motivo);
                 return false;
             }
             if (super.AntesDeAceptar()) {
@@ -29,7 +29,7 @@ var Callejero;
             return sometido;
         }
         ArchivosSubidos(form, resultados) {
-            form.Mensajes.Info(`trabajo sometido con ${resultados.length.toString()} ficheros subidos`);
+            MensajesSe.Info(`trabajo sometido con ${resultados.length.toString()} ficheros subidos`);
             let sometido;
             this.SometerTrabajo()
                 .then(resultado => sometido = resultado)
@@ -64,11 +64,11 @@ var Callejero;
         }
         TrasSometer(peticion) {
             let datos = peticion.DatosDeEntrada;
-            Mensaje(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
+            Notificar(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
         }
         SiHayErrorAlSometer(peticion) {
             let datos = peticion.DatosDeEntrada;
-            Mensaje(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            Notificar(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
     Callejero.ImportarCallejero = ImportarCallejero;
