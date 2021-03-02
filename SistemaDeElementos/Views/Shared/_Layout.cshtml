@@ -103,7 +103,7 @@
                          src="~/images/menu/bars-solid.svg"
                          class="btn-menu fa-icono"
                          modal-menu="id-modal-historial"
-                         onclick="EntornoSe.MostrarHistorial()"
+                         onclick="EntornoSe.MostrarMensajes()"
                          historial-abierto="false" />
                 </div>
                 <div class="pie-mensaje-contenedor">
@@ -134,22 +134,22 @@
             <div id="id-historial-cuerpo" class="contenido-cuerpo">
                 <table id="id-historial-cuerpo.tabla" class="cuerpo-datos-tabla table table-striped" style="margin-bottom: 0px;">
                     <thead id="id-historial-cuerpo.cabecera">
-                        <tr>
-                            <th class="columna-cabecera" width="10%" style="text-align: right">
-                                Fecha
-                            </th>
-                            <th class="columna-cabecera" width="10%" style="text-align: left">
+                        <tr id="id-historial-tabla.cabecera.fila">
+                            <th class="columna-cabecera" propiedad="origen" style="text-align: left; width: 10%">
                                 Origen
                             </th>
-                            <th class="columna-cabecera" width="10%" style="text-align: left">
+                            <th class="columna-cabecera" propiedad="fecha" style="text-align: right; width: 30%">
+                                Fecha
+                            </th>
+                            <th class="columna-cabecera" propiedad="tipo" style="text-align: left; width: 10%">
                                 tipo
                             </th>
-                            <th class="columna-cabecera" width="70%" style="text-align: left">
+                            <th class="columna-cabecera" propiedad="mensaje" style="text-align: left; width: 50%">
                                 Mensaje
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="id-historial-cuerpo.body" class="cuerpo-datos-tbody">
+                    <tbody id="id-historial-tabla.body" class="cuerpo-datos-tbody">
                         <!-- lineas de la clase: cuerpo-datos-tbody-tr-->
                     </tbody>
                 </table>

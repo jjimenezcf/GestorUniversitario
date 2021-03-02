@@ -60,6 +60,7 @@
             if (this.ModoTrabajo === ModoTrabajo.mantenimiento) {
                 this.PosicionarFiltro();
                 this.PosicionarGrid();
+                //EntornoSe.AjustarModalesAbiertas()
             }
             if (this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) {
                 if (!this.crudDeEdicion.EsModal)
@@ -67,7 +68,7 @@
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    this.crudDeEdicion.AjustarModal();
+                    //this.crudDeEdicion.AjustarModal();
                 }
             }
             if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) {
@@ -76,7 +77,7 @@
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    this.crudDeCreacion.AjustarModal();
+                    //this.crudDeCreacion.AjustarModal();
                 }
             }
         }
@@ -239,6 +240,7 @@
         private AbrirModalDeBorrar() {
             this.ModoTrabajo = ModoTrabajo.borrando;
             this.ModalDeBorrado.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
             let mensaje: HTMLInputElement = document.getElementById(`${this._idModalBorrar}-mensaje`) as HTMLInputElement;
             if (this.InfoSelector.Cantidad > 1) {
                 mensaje.value = "Seguro desea borrar todos los elementos seleccionados";

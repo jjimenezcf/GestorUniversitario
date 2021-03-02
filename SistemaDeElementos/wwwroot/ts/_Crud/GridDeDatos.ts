@@ -302,6 +302,13 @@
             return document.getElementById(this._idHtmlZonaMenu) as HTMLDivElement;
         }
 
+        private _idModal: string;
+        public set IdModal(idModal: string) { this._idModal = idModal; };
+        public get IdModal(): string { return this._idModal; };
+        protected get Modal(): HTMLDivElement {
+            return document.getElementById(this._idModal) as HTMLDivElement;
+        };
+
         constructor(idPanelMnt: string) {
             super();
             this._idCuerpoCabecera = idPanelMnt;
@@ -938,6 +945,10 @@
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
+                if (!grid.EsCrud) {
+                    grid.Modal.style.display = 'block';
+                    EntornoSe.AjustarModalesAbiertas();
+                }
             }
         }
 
@@ -952,7 +963,7 @@
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
             for (let i = 0; i < registros.length; i++) {
-                let fila = grid.crearFila(filaCabecera, registros[i], i);
+                let fila: HTMLTableRowElement = grid.crearFila(filaCabecera, registros[i], i);
                 cuerpoDeLaTabla.append(fila);
             }
             return cuerpoDeLaTabla;
@@ -997,7 +1008,7 @@
                     idDelElemento = Numero(valor);
                 }
 
-                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, registro, columnaCabecera, j, valor);
+                let celdaDelTd: HTMLTableCellElement = this.crearCelda(fila, columnaCabecera, j, valor);
                 fila.append(celdaDelTd);
             }
 
@@ -1005,12 +1016,11 @@
             return fila;
         }
 
-        private crearCelda(fila: HTMLTableRowElement, registro: any, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number, valor: string): HTMLTableCellElement {
+        private crearCelda(fila: HTMLTableRowElement, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number, valor: string): HTMLTableCellElement {
             let celdaDelTd: HTMLTableCellElement = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
-            celdaDelTd.style.width = `${columnaCabecera.anchoEnPixel}px`;
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
             celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;
 
@@ -1025,7 +1035,7 @@
             if (columnaCabecera.propiedad === 'chksel')
                 this.insertarCheckEnElTd(fila.id, celdaDelTd, columnaCabecera.propiedad);
             else {
-                this.insertarInputEnElTd(fila.id, registro, columnaCabecera, celdaDelTd, valor);
+                this.insertarInputEnElTd(fila.id, columnaCabecera, celdaDelTd, valor);
             }
             return celdaDelTd;
         }
@@ -1054,7 +1064,7 @@
             return a;
         }
 
-        private insertarInputEnElTd(idFila: string, registro: any, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement, valor: string) {
+        private insertarInputEnElTd(idFila: string, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement, valor: string) {
             let input = document.createElement("input");
             input.type = "text";
             input.id = `${idFila}.${columnaCabecera.propiedad}`;

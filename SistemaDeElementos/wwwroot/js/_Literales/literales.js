@@ -194,6 +194,7 @@ const ClaseCss = {
     barraRoja: "barra-roja",
     barraAzul: "barra-azul",
     contenedorModal: "contenedor-modal",
+    contenidoModal: 'contenido-modal',
     soloLectura: "solo-lectura",
     columnaOculta: "columna-oculta",
     filaDelGrid: "cuerpo-datos-tbody-tr",

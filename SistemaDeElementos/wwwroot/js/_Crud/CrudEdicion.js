@@ -98,7 +98,7 @@ var Crud;
             if (this.EsModal) {
                 this.PanelDeEditar.style.display = 'block';
                 this.Altura = this.PanelDeContenidoModal.getBoundingClientRect().height;
-                this.AjustarModal();
+                EntornoSe.AjustarModalesAbiertas();
             }
             else {
                 ApiCrud.OcultarPanel(this.CrudDeMnt.CuerpoCabecera);
@@ -109,15 +109,15 @@ var Crud;
             }
             this.EditarSeleccionado(1);
         }
-        AjustarModal() {
-            if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
-                this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
-            else {
-                this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
-                let padding = (this.PanelDeEditar.getBoundingClientRect().height - this.PanelDeContenidoModal.getBoundingClientRect().height) / 2;
-                this.PanelDeEditar.style.paddingTop = `${padding}px`;
-            }
-        }
+        //public AjustarModal(): void {
+        //    //if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
+        //    //    this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
+        //    //else {
+        //    //    this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
+        //    //    let padding: number = (this.PanelDeEditar.getBoundingClientRect().height - this.PanelDeContenidoModal.getBoundingClientRect().height) / 2;
+        //    //    this.PanelDeEditar.style.paddingTop = `${padding}px`;
+        //    //}
+        //}
         PosicionarEdicion() {
             this.PanelDeEditar.style.position = 'fixed';
             this.PanelDeEditar.style.top = `${AlturaCabeceraPnlControl()}px`;

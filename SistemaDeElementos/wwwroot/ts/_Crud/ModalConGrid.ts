@@ -2,16 +2,9 @@
 
     export class ModalConGrid extends GridDeDatos {
 
-
-        private _idModal: string;
-        public get IdModal(): string { return this._idModal; };
-        protected get Modal(): HTMLDivElement {
-            return document.getElementById(this._idModal) as HTMLDivElement;
-        };
-
         constructor(idModal: string, idCrudModal: string) {
             super(idCrudModal);
-            this._idModal = idModal;
+            this.IdModal = idModal;
         }
 
         protected InicializarModalConGrid() {
@@ -23,7 +16,6 @@
         protected AbrirModalConGrid() {
             BlanquearMensaje();
             this.RecargarGrid();
-            this.Modal.style.display = 'block';
         }
 
         protected CerrarModalConGrid() {

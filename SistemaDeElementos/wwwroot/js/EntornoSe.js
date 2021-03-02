@@ -23,15 +23,37 @@ var EntornoSe;
         if (Crud.crudMnt !== null) {
             Crud.crudMnt.PosicionarPanelesDelCuerpo();
         }
-        else {
-            Notificar(TipoMensaje.Info, "No hay crud");
-        }
-        let modal = document.getElementById("id-modal-historial");
-        if (modal.style.display === "block") {
-            modal.style.height = `${altura.toString()}px`;
-        }
+        EntornoSe.AjustarModalesAbiertas();
     }
     EntornoSe.AjustarDivs = AjustarDivs;
+    function AjustarModalesAbiertas() {
+        let modales = document.getElementsByClassName(ClaseCss.contenedorModal);
+        for (let i = 0; i < modales.length; i++) {
+            let modal = modales[i];
+            if (modal.style.display === 'block') {
+                let alturaCrud = AlturaFormulario() - AlturaCabeceraPnlControl();
+                AjustarModal(modales[i], alturaCrud);
+            }
+        }
+    }
+    EntornoSe.AjustarModalesAbiertas = AjustarModalesAbiertas;
+    function AjustarModal(modal, alturaMaxima) {
+        let contenido = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
+        let altura = contenido.getBoundingClientRect().height;
+        let alturaInicial = Numero(contenido.getAttribute('altura-inicial'));
+        if (alturaInicial === 0) {
+            alturaInicial = altura;
+            contenido.setAttribute('altura-inicial', alturaInicial.toString());
+        }
+        if (altura > alturaMaxima)
+            contenido.style.height = `${alturaMaxima}px`;
+        else {
+            contenido.style.height = `${alturaInicial}px`;
+            let padding = (alturaMaxima - altura) / 2;
+            modal.style.paddingTop = `${padding}px`;
+            modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
+        }
+    }
     function InicializarHistorial() {
         EntornoSe.Historial = new HistorialSe.HistorialDeNavegacion();
     }
@@ -60,13 +82,16 @@ var EntornoSe;
         }
     }
     EntornoSe.Sumit = Sumit;
-    function MostrarHistorial() {
+    function MostrarMensajes() {
         let altura = AlturaFormulario();
         let modal = document.getElementById("id-modal-historial");
+        MensajesSe.MostrarMensajes();
         modal.style.display = "block";
         modal.style.height = `${altura.toString()}px`;
+        let alturaContenedor = altura - AlturaCabeceraPnlControl();
+        AjustarModal(modal, alturaContenedor);
     }
-    EntornoSe.MostrarHistorial = MostrarHistorial;
+    EntornoSe.MostrarMensajes = MostrarMensajes;
     function CerrarHistorial() {
         let modal = document.getElementById("id-modal-historial");
         modal.style.display = "none";

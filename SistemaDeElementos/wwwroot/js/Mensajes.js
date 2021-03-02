@@ -14,6 +14,18 @@ var MensajesSe;
             this._fecha = new Date(Date.now());
             this._origen = origen;
         }
+        get tipo() {
+            return this._tipo.toString();
+        }
+        get mensaje() {
+            return this._mensaje;
+        }
+        get origen() {
+            return this._origen;
+        }
+        get fecha() {
+            return this._fecha.toISOString();
+        }
     }
     class AlmacenDeMensajes {
         constructor() {
@@ -21,6 +33,9 @@ var MensajesSe;
         }
         set Mensajes(mensajes) {
             this._mensajes = mensajes["_mensajes"];
+        }
+        get Mensajes() {
+            return this._mensajes;
         }
         Error(mensaje) {
             this._mensajes.push(new clsMensaje(enumTipoMensaje.error, EntornoSe.Llamador(), mensaje));
@@ -65,5 +80,37 @@ var MensajesSe;
         Notificar(TipoMensaje.Error, mensaje, consola);
     }
     MensajesSe.Error = Error;
+    function MostrarMensajes() {
+        function crearFila(filaCabecera, mensaje) {
+            function crearCelda(celdaCabecera, mensaje) {
+                let celda = document.createElement("td");
+                let propiedad = celdaCabecera.getAttribute('propiedad');
+                celda.style.width = celdaCabecera.style.width;
+                celda.style.textAlign = celdaCabecera.style.textAlign;
+                celda.textContent = mensaje[propiedad];
+                return celda;
+            }
+            let fila = document.createElement("tr");
+            ;
+            for (let i = 0; i < filaCabecera.cells.length; i++) {
+                let celda = crearCelda(filaCabecera.cells[i], mensaje);
+                fila.append(celda);
+            }
+            return fila;
+        }
+        let a = ObtenerAlmacen();
+        let tabla = document.getElementById('id-historial-cuerpo.tabla');
+        let cuerpoOld = document.getElementById('id-historial-tabla.body');
+        tabla.removeChild(cuerpoOld);
+        let cuerpo = document.createElement("tbody");
+        cuerpo.id = cuerpoOld.id;
+        let filaCabecera = document.getElementById('id-historial-tabla.cabecera.fila');
+        for (let i = 0; i < a.Mensajes.length; i++) {
+            let fila = crearFila(filaCabecera, a.Mensajes[i]);
+            cuerpo.append(fila);
+        }
+        tabla.append(cuerpo);
+    }
+    MensajesSe.MostrarMensajes = MostrarMensajes;
 })(MensajesSe || (MensajesSe = {}));
 //# sourceMappingURL=Mensajes.js.map

@@ -237,6 +237,14 @@ var Crud;
         get ZonaDeMenu() {
             return document.getElementById(this._idHtmlZonaMenu);
         }
+        set IdModal(idModal) { this._idModal = idModal; }
+        ;
+        get IdModal() { return this._idModal; }
+        ;
+        get Modal() {
+            return document.getElementById(this._idModal);
+        }
+        ;
         Inicializar(idPanelMnt) {
             super.Inicializar(idPanelMnt);
             this.InicializarNavegador();
@@ -742,6 +750,10 @@ var Crud;
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
+                if (!grid.EsCrud) {
+                    grid.Modal.style.display = 'block';
+                    EntornoSe.AjustarModalesAbiertas();
+                }
             }
         }
         CrearCuerpoDeLaTabla(grid, registros, accion) {
@@ -793,18 +805,17 @@ var Crud;
                         throw new Error("El id del elemento leido debe ser numérico");
                     idDelElemento = Numero(valor);
                 }
-                let celdaDelTd = this.crearCelda(fila, registro, columnaCabecera, j, valor);
+                let celdaDelTd = this.crearCelda(fila, columnaCabecera, j, valor);
                 fila.append(celdaDelTd);
             }
             fila.setAttribute(atControl.valorTr, idDelElemento.toString());
             return fila;
         }
-        crearCelda(fila, registro, columnaCabecera, numeroDeCelda, valor) {
+        crearCelda(fila, columnaCabecera, numeroDeCelda, valor) {
             let celdaDelTd = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
-            celdaDelTd.style.width = `${columnaCabecera.anchoEnPixel}px`;
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
             celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;
             let idCheckDeSeleccion = `${fila.id}.chksel`;
@@ -816,7 +827,7 @@ var Crud;
             if (columnaCabecera.propiedad === 'chksel')
                 this.insertarCheckEnElTd(fila.id, celdaDelTd, columnaCabecera.propiedad);
             else {
-                this.insertarInputEnElTd(fila.id, registro, columnaCabecera, celdaDelTd, valor);
+                this.insertarInputEnElTd(fila.id, columnaCabecera, celdaDelTd, valor);
             }
             return celdaDelTd;
         }
@@ -842,7 +853,7 @@ var Crud;
             }
             return a;
         }
-        insertarInputEnElTd(idFila, registro, columnaCabecera, celdaDelTd, valor) {
+        insertarInputEnElTd(idFila, columnaCabecera, celdaDelTd, valor) {
             let input = document.createElement("input");
             input.type = "text";
             input.id = `${idFila}.${columnaCabecera.propiedad}`;

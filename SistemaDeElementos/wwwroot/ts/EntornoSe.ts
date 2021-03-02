@@ -29,13 +29,36 @@ module EntornoSe {
         if (Crud.crudMnt !== null) {
             Crud.crudMnt.PosicionarPanelesDelCuerpo();
         }
-        else {
-            Notificar(TipoMensaje.Info, "No hay crud");
-        }
 
-        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
-        if (modal.style.display === "block") {
-            modal.style.height = `${altura.toString()}px`;
+        EntornoSe.AjustarModalesAbiertas();
+    }
+
+    export function AjustarModalesAbiertas() {
+        let modales = document.getElementsByClassName(ClaseCss.contenedorModal);
+        for (let i = 0; i < modales.length; i++) {
+            let modal: HTMLDivElement = modales[i] as HTMLDivElement;
+            if (modal.style.display === 'block') {
+                let alturaCrud: number = AlturaFormulario() - AlturaCabeceraPnlControl();
+                AjustarModal(modales[i] as HTMLDivElement, alturaCrud);
+            }
+        }
+    }
+
+    function AjustarModal(modal: HTMLDivElement, alturaMaxima: number): void {
+        let contenido: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
+        let altura: number = contenido.getBoundingClientRect().height;
+        let alturaInicial: number = Numero(contenido.getAttribute('altura-inicial'));
+        if (alturaInicial === 0) {
+            alturaInicial = altura;
+            contenido.setAttribute('altura-inicial', alturaInicial.toString());
+        }
+        if (altura > alturaMaxima)
+            contenido.style.height = `${alturaMaxima}px`;
+        else {
+            contenido.style.height = `${alturaInicial}px`;
+            let padding: number = (alturaMaxima - altura) / 2;
+            modal.style.paddingTop = `${padding}px`;
+            modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
         }
     }
 
@@ -67,11 +90,14 @@ module EntornoSe {
         }
     }
 
-    export function MostrarHistorial() {
+    export function MostrarMensajes() {
         let altura: number = AlturaFormulario();
         let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        MensajesSe.MostrarMensajes();
         modal.style.display = "block";
         modal.style.height = `${altura.toString()}px`;
+        let alturaContenedor: number = altura - AlturaCabeceraPnlControl();
+        AjustarModal(modal, alturaContenedor);
     }
 
     export function CerrarHistorial() {
