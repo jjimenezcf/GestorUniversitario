@@ -1,7 +1,8 @@
 ﻿namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
-          , AnchoSeparador = 5)]
+          , AnchoSeparador = 5
+          , MostrarExpresion = nameof(PaisDto.Nombre))]
     public class PaisDto : ElementoDto
     {
         [IUPropiedad(

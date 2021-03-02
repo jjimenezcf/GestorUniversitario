@@ -10,7 +10,7 @@ namespace ModeloDeDto.Entorno
        public static string Permisos = nameof(Permisos).ToLower();
     }
 
-    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, MostrarExpresion =nameof(NombreCompleto))]
     public class UsuarioDto : ElementoDto
     {
         internal const string ExpresionElemento = nameof(NombreCompleto);

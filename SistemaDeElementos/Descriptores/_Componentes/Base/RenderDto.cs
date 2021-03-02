@@ -173,6 +173,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
 
+            if (atributos.MostrarExpresion.IsNullOrEmpty())
+                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementos);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementos);
@@ -197,7 +200,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDinamica);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
             valores["ClaseElemento"] = atributos.SeleccionarDe;
-            valores["MostrarExpresion"] = atributos.MostrarExpresion;
+            valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["BuscarPor"] = atributos.BuscarPor;
             valores["Longitud"] = 3;
             valores["Cantidad"] = 10;
@@ -215,6 +218,9 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderRestrictor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
         {
             var atributos = descriptorControl.atributos;
+            if (atributos.MostrarExpresion.IsNullOrEmpty())
+                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
             valores["Css"] = Css.Render(enumCssControlesDto.EditorRestrictor);

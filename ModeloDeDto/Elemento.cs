@@ -152,6 +152,7 @@ namespace ModeloDeDto
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
+        public string MostrarExpresion { get; set; } = nameof(INombre.Nombre);
     }
 
     public class ElementoDto
@@ -202,6 +203,9 @@ namespace ModeloDeDto
 
                         case nameof(IUDtoAttribute.AnchoSeparador):
                             return a.AnchoSeparador;
+
+                        case nameof(IUDtoAttribute.MostrarExpresion):
+                            return a.MostrarExpresion;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");
