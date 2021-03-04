@@ -33,19 +33,27 @@ namespace GestoresDeNegocio.Callejero
 
         }
 
-
-        public static void ImportarCallejero(ContextoSe contexto, string parametros)
+        public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
         {
             if (parametros.IsNullOrEmpty())
                 GestorDeErrores.Emitir("No se han proporcionado los parámetros para someter el trabajo de importación");
+
             var dll = Assembly.GetExecutingAssembly().GetName().Name;
             var clase = typeof(GestorDePaises).FullName;
-            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(ImportarCallejero));
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(SometerImportarCallejero).Replace("Someter",""));
             // crear trabajo de usuario
 
             var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
             //liberarlo
         }
+
+        public static void ImportarCallejero(ContextoSe contexto, int idTrabajoDeUsuario)
+        {
+            var gestor = GestorDeTrabajosDeUsuario.Gestor(contexto, contexto.Mapeador);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario);
+            throw new System.Exception($"Falta implementar el proceso para el trabajo {tu.Trabajo.Nombre}");
+        }
+
 
     }
 }

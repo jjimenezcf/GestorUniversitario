@@ -31,56 +31,72 @@ var MensajesSe;
         constructor() {
             this._mensajes = [];
         }
-        set Mensajes(mensajes) {
-            this._mensajes = mensajes["_mensajes"];
-        }
         get Mensajes() {
+            let mensajesGuardados = sessionStorage.getItem('mensajes-guardados');
+            if (!(mensajesGuardados === null || mensajesGuardados == undefined)) {
+                this._mensajes = JSON.parse(mensajesGuardados);
+            }
+            ;
             return this._mensajes;
         }
-        Error(mensaje) {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.error, EntornoSe.Llamador(), mensaje));
+        Error(origen, mensaje) {
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.error, origen, mensaje));
+            this.Persistir();
         }
         Info(mensaje) {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.informativo, 'info', mensaje));
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.informativo, 'info', mensaje));
+            this.Persistir();
         }
         Advertencia(mensaje) {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.advertencia, EntornoSe.Llamador(), mensaje));
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.advertencia, EntornoSe.Llamador(), mensaje));
+            this.Persistir();
+        }
+        BorrarMensajes() {
+            this._mensajes.splice(0, this._mensajes.length);
+            this.Persistir();
+        }
+        Persistir() {
+            sessionStorage.setItem('mensajes-guardados', JSON.stringify(_Almacen._mensajes));
         }
     }
-    let _mensajes = null;
-    function ObtenerAlmacen() {
-        if (_mensajes != null)
-            return _mensajes;
-        let almacen = sessionStorage.getItem('almacen-mensajes');
-        if (almacen === null || almacen == undefined) {
-            _mensajes = new AlmacenDeMensajes();
-        }
-        else {
-            _mensajes = new AlmacenDeMensajes();
-            _mensajes.Mensajes = JSON.parse(almacen);
-        }
-        return _mensajes;
-    }
-    function Persistir() {
-        if (_mensajes != null)
-            sessionStorage.setItem('almacen-mensajes', JSON.stringify(_mensajes));
-    }
-    ;
+    let _Almacen = new AlmacenDeMensajes();
     function Info(mensaje, consola) {
-        let a = ObtenerAlmacen();
-        a.Info(mensaje);
-        Persistir();
+        _Almacen.Info(mensaje);
         Notificar(TipoMensaje.Info, mensaje, consola);
     }
     MensajesSe.Info = Info;
-    function Error(mensaje, consola) {
-        let a = ObtenerAlmacen();
-        a.Error(mensaje);
-        Persistir();
+    function Error(origen, mensaje, consola) {
+        _Almacen.Error(origen, mensaje);
         Notificar(TipoMensaje.Error, mensaje, consola);
     }
     MensajesSe.Error = Error;
     function MostrarMensajes() {
+        let modal = document.getElementById("id-modal-historial");
+        MapearMensajesAlGrid();
+        modal.style.display = "block";
+        EntornoSe.AjustarModalesAbiertas();
+        let contenedor = document.getElementById("id-contenedor-historial");
+        let tabla = document.getElementById('id-historial-cuerpo.tabla');
+        tabla.style.height = `${contenedor.getBoundingClientRect().height - 130}px`;
+    }
+    MensajesSe.MostrarMensajes = MostrarMensajes;
+    function CerrarHistorial() {
+        let modal = document.getElementById("id-modal-historial");
+        modal.style.display = "none";
+        modal.setAttribute('altura-inicial', "0");
+    }
+    MensajesSe.CerrarHistorial = CerrarHistorial;
+    function BorrarHistorial() {
+        _Almacen.BorrarMensajes();
+        CerrarHistorial();
+        let contenedor = document.getElementById("id-contenedor-historial");
+        let tabla = document.getElementById('id-historial-cuerpo.tabla');
+        tabla.style.height = ``;
+        contenedor.style.height = ``;
+        EntornoSe.AjustarModalesAbiertas();
+    }
+    MensajesSe.BorrarHistorial = BorrarHistorial;
+    function MapearMensajesAlGrid() {
         function crearFila(filaCabecera, mensaje) {
             function crearCelda(celdaCabecera, mensaje) {
                 let celda = document.createElement("td");
@@ -98,19 +114,18 @@ var MensajesSe;
             }
             return fila;
         }
-        let a = ObtenerAlmacen();
         let tabla = document.getElementById('id-historial-cuerpo.tabla');
         let cuerpoOld = document.getElementById('id-historial-tabla.body');
         tabla.removeChild(cuerpoOld);
         let cuerpo = document.createElement("tbody");
         cuerpo.id = cuerpoOld.id;
         let filaCabecera = document.getElementById('id-historial-tabla.cabecera.fila');
-        for (let i = 0; i < a.Mensajes.length; i++) {
-            let fila = crearFila(filaCabecera, a.Mensajes[i]);
+        for (let i = _Almacen.Mensajes.length - 1; i >= 0; i--) {
+            let fila = crearFila(filaCabecera, _Almacen.Mensajes[i]);
             cuerpo.append(fila);
         }
         tabla.append(cuerpo);
     }
-    MensajesSe.MostrarMensajes = MostrarMensajes;
+    MensajesSe.MapearMensajesAlGrid = MapearMensajesAlGrid;
 })(MensajesSe || (MensajesSe = {}));
 //# sourceMappingURL=Mensajes.js.map

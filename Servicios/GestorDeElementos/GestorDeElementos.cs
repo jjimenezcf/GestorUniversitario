@@ -33,13 +33,17 @@ namespace GestorDeElementos
 
     #region Extensiones a pasar a las operaciones a realizar
 
-    public enum EnumParametro { Creado }
+
+    public class EnumParametro
+    {
+        public static string accion = nameof(accion);
+    }
 
 
     public class ParametrosDeNegocio
     {
         public TipoOperacion Operacion { get; private set; }
-        public Dictionary<EnumParametro, object> Parametros = new Dictionary<EnumParametro, object>();
+        public Dictionary<string, object> Parametros = new Dictionary<string, object>();
 
         public ParametrosDeNegocio(TipoOperacion tipo)
         {

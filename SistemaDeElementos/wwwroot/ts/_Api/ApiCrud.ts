@@ -360,6 +360,7 @@ namespace ApiCrud {
 
     export function CerrarModal(modal: HTMLDivElement) {
         modal.style.display = "none";
+        modal.setAttribute('altura-inicial', "0");
         var body = document.getElementsByTagName("body")[0];
         body.style.position = "inherit";
         body.style.height = "auto";

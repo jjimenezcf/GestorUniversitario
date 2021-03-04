@@ -66,6 +66,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
     }
 
 
+    public class EnumParametroTu : EnumParametro
+    {
+        public static string terminando = nameof(terminando);
+    }
+
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
 
@@ -104,7 +109,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             base.AntesMapearRegistroParaInsertar(elemento, opciones);
             if (elemento.Estado.IsNullOrEmpty())
-                elemento.Estado = enumEstadosDeUnTrabajo.pendiente.ToDto();
+                elemento.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDto();
             if (elemento.Parametros.IsNullOrEmpty())
                 elemento.Parametros = "[]";
         }
@@ -115,7 +120,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             tu.IdSometedor = contexto.DatosDeConexion.IdUsuario;
             tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor : (int)ts.IdEjecutor;
             tu.IdTrabajo = ts.Id;
-            tu.Estado = enumEstadosDeUnTrabajo.pendiente.ToDtm();
+            tu.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
             tu.Planificado = DateTime.Now;
             tu.Parametros = parametros;
             var gestor = Gestor(contexto, contexto.Mapeador);
@@ -125,105 +130,61 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void Iniciar(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var transaccion = contexto.IniciarTransaccion();
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false); 
+            tu.Iniciado = DateTime.Now;
+            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
             try
             {
-                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
-                                                        SET 
-                                                          INICIADO = GETDATE(), 
-                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)}
-                                                        WHERE 
-                                                          ID = {idTrabajoDeUsuario}
-                                                          AND INICIADO IS NULL 
-                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
-                                                       ");
-
-                if (i > 0)
-                    contexto.Commit(transaccion);
-                else
-                    throw new Exception("El trabajo ya estaba iniciado");
+                tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
             }
+            catch(Exception e)
+            {
+
+            }
+
+            try
+            {
+                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(contexto, tu.Trabajo);
+                metodo.Invoke(null, new object[] {gestor.Contexto, tu.Id });
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado);            }
             catch
             {
-                contexto.Rollback(transaccion);
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 throw;
             }
+            finally
+            {
+                tu.Terminado = DateTime.Now;
+                var parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+                parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
+                gestor.PersistirRegistro(tu, parametros);
+            }
+
         }
 
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var transaccion = contexto.IniciarTransaccion();
-            try
-            {
-                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
-                                                        SET  
-                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}
-                                                        WHERE 
-                                                          ID = {idTrabajoDeUsuario}
-                                                          AND INICIADO IS NULL 
-                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
-                                                       ");
-                if (i > 0)
-                    contexto.Commit(transaccion);
-                else
-                    throw new Exception($"El trabajo no se puede bloquear");
-            }
-            catch
-            {
-                contexto.Rollback(transaccion);
-                throw;
-            }
-        }
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
 
+            if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
+                throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
+
+            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
+            gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+        }
 
         public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var transaccion = contexto.IniciarTransaccion();
-            try
-            {
-                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
-                                                        SET  
-                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
-                                                        WHERE 
-                                                          ID = {idTrabajoDeUsuario}
-                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado)}
-                                                       ");
-                if (i > 0)
-                    contexto.Commit(transaccion);
-                else
-                    throw new Exception($"El trabajo no se puede bloquear");
-            }
-            catch
-            {
-                contexto.Rollback(transaccion);
-                throw;
-            }
-        }
-        public static void Terminar(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
-        {
-            var transaccion = contexto.IniciarTransaccion();
-            try
-            {
-                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
-                                                        SET 
-                                                          TERMINADO = GETDATE(), 
-                                                          ESTADO = '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.terminado)}'
-                                                        WHERE 
-                                                          ID = {tu.Id}
-                                                          AND INICIADO IS NOT NULL 
-                                                          AND TERMINADO IS NULL 
-                                                          AND ESTADO LIKE '{TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)}'
-                                                       ");
-                if (i > 0)
-                    contexto.Commit(transaccion);
-                else
-                    throw new Exception($"El trabajo ya estaba terminado");
-            }
-            catch
-            {
-                contexto.Rollback(transaccion);
-                throw;
-            }
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+
+            if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
+                throw new Exception($"El trabajo no se puede desbloquear, ha de estar en estado bloqueado y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
+
+            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente);
+            gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
         }
 
         protected override IQueryable<TrabajoDeUsuarioDtm> AplicarJoins(IQueryable<TrabajoDeUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -242,7 +203,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
             if (parametros.Operacion == TipoOperacion.Eliminar || parametros.Operacion == TipoOperacion.Modificar)
             {
                 if (RegistroEnBD.Iniciado.HasValue)
+                {
+                    if (!(parametros.Operacion == TipoOperacion.Modificar
+                          && parametros.Parametros.ContainsKey(EnumParametro.accion)
+                          && (string)parametros.Parametros[EnumParametro.accion] == EnumParametroTu.terminando)
+                        )
                     GestorDeErrores.Emitir("Un trabajo en ejecución o finalizado no se puede suprimir ni modificar");
+                }
             }
 
             if (parametros.Operacion == TipoOperacion.Modificar)
@@ -290,4 +257,29 @@ namespace GestoresDeNegocio.TrabajosSometidos
 //    if (!new ExistePa(c, registro.Pa, registro.Esquema).Existe)
 //        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
 //}
+/*
+ * 
+            var transaccion = contexto.IniciarTransaccion();
+            try
+            {
+                var i = contexto.Database.ExecuteSqlInterpolated($@"UPDATE TRABAJO.USUARIO 
+                                                        SET 
+                                                          INICIADO = GETDATE(), 
+                                                          ESTADO = {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)}
+                                                        WHERE 
+                                                          ID = {idTrabajoDeUsuario}
+                                                          AND INICIADO IS NULL 
+                                                          AND ESTADO LIKE {TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.pendiente)}
+                                                       ");
 
+                if (i > 0)
+                    contexto.Commit(transaccion);
+                else
+                    throw new Exception("El trabajo ya estaba iniciado");
+            }
+            catch
+            {
+                contexto.Rollback(transaccion);
+                throw;
+            }
+ * */

@@ -103,7 +103,7 @@
                          src="~/images/menu/bars-solid.svg"
                          class="btn-menu fa-icono"
                          modal-menu="id-modal-historial"
-                         onclick="EntornoSe.MostrarMensajes()"
+                         onclick="MensajesSe.MostrarMensajes()"
                          historial-abierto="false" />
                 </div>
                 <div class="pie-mensaje-contenedor">
@@ -135,16 +135,16 @@
                 <table id="id-historial-cuerpo.tabla" class="cuerpo-datos-tabla table table-striped" style="margin-bottom: 0px;">
                     <thead id="id-historial-cuerpo.cabecera">
                         <tr id="id-historial-tabla.cabecera.fila">
-                            <th class="columna-cabecera" propiedad="origen" style="text-align: left; width: 10%">
+                            <th class="columna-cabecera" propiedad="_origen" style="text-align: left; width: 10%">
                                 Origen
                             </th>
-                            <th class="columna-cabecera" propiedad="fecha" style="text-align: right; width: 30%">
+                            <th class="columna-cabecera" propiedad="_fecha" style="text-align: right; width: 30%">
                                 Fecha
                             </th>
-                            <th class="columna-cabecera" propiedad="tipo" style="text-align: left; width: 10%">
+                            <th class="columna-cabecera" propiedad="_tipo" style="text-align: left; width: 10%">
                                 tipo
                             </th>
-                            <th class="columna-cabecera" propiedad="mensaje" style="text-align: left; width: 50%">
+                            <th class="columna-cabecera" propiedad="_mensaje" style="text-align: left; width: 50%">
                                 Mensaje
                             </th>
                         </tr>
@@ -155,8 +155,8 @@
                 </table>
             </div>
             <div id="{IdHtml}_pie" class="contenido-pie">
-                <input type="text" id="id-historial-cuerpo-cerrar" class="boton-modal" value="Cerrar" onclick="EntornoSe.CerrarHistorial()" readonly />
-                <input type="text" id="id-historial-cuerpo-borrar" class="boton-modal" value="Borrar" onclick="EntornoSe.BorrarHistorial()" readonly />
+                <input type="text" id="id-historial-cuerpo-cerrar" class="boton-modal" value="Cerrar" onclick="MensajesSe.CerrarHistorial()" readonly />
+                <input type="text" id="id-historial-cuerpo-borrar" class="boton-modal" value="Borrar" onclick="MensajesSe.BorrarHistorial()" readonly />
             </div>
         </div>
     </div>

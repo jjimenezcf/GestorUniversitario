@@ -10,7 +10,7 @@ namespace Utilidades
 {
     public static class Ensamblados
     {
-        public static void ValidarMetodo(string dll, string nombreCompletoDeClase, string nombreMetodo)
+        public static MethodInfo ValidarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo)
         {
             var assembly = Assembly.LoadFrom(dll);
 
@@ -23,9 +23,13 @@ namespace Utilidades
             MethodInfo[] metodos = tipo.GetMethods(BindingFlags.Public | BindingFlags.Static);
             foreach (var metodo in metodos)
                 if (metodo.Name.ToLower() == nombreMetodo.ToLower())
-                    return;
+                    return metodo;
             throw new Exception($"Hay que implementar el método estático {nombreMetodo} en la clase {nombreCompletoDeClase} en la ddl {nombreEnsamblado} antes de usarlo");
         }
-
+        public static void EjecutarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo, object parametros )
+        {
+            var metodo = ValidarMetodoEstatico(dll, nombreCompletoDeClase, nombreMetodo);
+            metodo.Invoke(null, new object[] { parametros });
+        }
     }
 }

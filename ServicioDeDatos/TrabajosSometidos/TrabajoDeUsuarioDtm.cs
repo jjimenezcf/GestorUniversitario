@@ -8,7 +8,7 @@ using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos.TrabajosSometidos
 {
-    public enum enumEstadosDeUnTrabajo {pendiente, iniciado, terminado, conErrores, Error, Bloqueado}
+    public enum enumEstadosDeUnTrabajo {Pendiente, iniciado, Terminado, conErrores, Error, Bloqueado}
 
     public static class TrabajoSometido { 
         public static string ToDtm(this enumEstadosDeUnTrabajo estado)
@@ -16,10 +16,10 @@ namespace ServicioDeDatos.TrabajosSometidos
             switch(estado)
             {
                 case enumEstadosDeUnTrabajo.conErrores: return "TR";
-                case enumEstadosDeUnTrabajo.pendiente: return "PT";
+                case enumEstadosDeUnTrabajo.Pendiente: return "PT";
                 case enumEstadosDeUnTrabajo.Bloqueado: return "BL";
                 case enumEstadosDeUnTrabajo.iniciado: return "EJ";
-                case enumEstadosDeUnTrabajo.terminado: return "OK";
+                case enumEstadosDeUnTrabajo.Terminado: return "OK";
                 case enumEstadosDeUnTrabajo.Error: return "ER";
             }
 
@@ -30,10 +30,10 @@ namespace ServicioDeDatos.TrabajosSometidos
             switch (estado)
             {
                 case enumEstadosDeUnTrabajo.conErrores: return "Con errores" ;
-                case enumEstadosDeUnTrabajo.pendiente:  return "Pendiente";
+                case enumEstadosDeUnTrabajo.Pendiente:  return "Pendiente";
                 case enumEstadosDeUnTrabajo.Bloqueado:  return "Bloqueado";
                 case enumEstadosDeUnTrabajo.iniciado:   return "Iniciado";
-                case enumEstadosDeUnTrabajo.terminado:  return "Terminado";
+                case enumEstadosDeUnTrabajo.Terminado:  return "Terminado";
                 case enumEstadosDeUnTrabajo.Error:      return "Erroneo";
             }
 
@@ -68,6 +68,7 @@ namespace ServicioDeDatos.TrabajosSometidos
             throw new Exception($"El estado de un trabajo '{estadoDto}' no es válido");
         }
     }
+
 
     [Table("USUARIO", Schema = "TRABAJO")]
     public class TrabajoDeUsuarioDtm : Registro

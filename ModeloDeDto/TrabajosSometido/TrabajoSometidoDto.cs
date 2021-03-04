@@ -148,6 +148,7 @@ namespace ModeloDeDto.TrabajosSometidos
             Ayuda = "Indique quién ejecuta el trabajo, si es distinto al sometedor",
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = nameof(UsuarioDto),
+            MostrarExpresion = UsuarioDto.ExpresionElemento,
             GuardarEn = nameof(idEjecutor),
             Fila = 6,
             Columna = 0,

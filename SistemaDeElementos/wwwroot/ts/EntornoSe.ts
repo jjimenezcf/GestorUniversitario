@@ -38,8 +38,8 @@ module EntornoSe {
         for (let i = 0; i < modales.length; i++) {
             let modal: HTMLDivElement = modales[i] as HTMLDivElement;
             if (modal.style.display === 'block') {
-                let alturaCrud: number = AlturaFormulario() - AlturaCabeceraPnlControl();
-                AjustarModal(modales[i] as HTMLDivElement, alturaCrud);
+                let alturaMaxima: number = AlturaFormulario() - AlturaCabeceraPnlControl();
+                AjustarModal(modales[i] as HTMLDivElement, alturaMaxima);
             }
         }
     }
@@ -47,19 +47,25 @@ module EntornoSe {
     function AjustarModal(modal: HTMLDivElement, alturaMaxima: number): void {
         let contenido: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
         let altura: number = contenido.getBoundingClientRect().height;
-        let alturaInicial: number = Numero(contenido.getAttribute('altura-inicial'));
+        let alturaInicial: number = Numero(modal.getAttribute('altura-inicial'));
         if (alturaInicial === 0) {
             alturaInicial = altura;
-            contenido.setAttribute('altura-inicial', alturaInicial.toString());
+            modal.setAttribute('altura-inicial', alturaInicial.toString());
         }
+
+        if (alturaInicial >= alturaMaxima - AlturaPiePnlControl()) {
+            alturaInicial = alturaMaxima - AlturaPiePnlControl() - 1;
+            modal.setAttribute('altura-inicial', "0");
+        }
+
         if (altura > alturaMaxima)
-            contenido.style.height = `${alturaMaxima}px`;
+            contenido.style.height = `${alturaMaxima - 2*AlturaPiePnlControl()}px`;
         else {
             contenido.style.height = `${alturaInicial}px`;
-            let padding: number = (alturaMaxima - altura) / 2;
-            modal.style.paddingTop = `${padding}px`;
-            modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
         }
+        let padding: number = (alturaMaxima - altura) / 2;
+        modal.style.paddingTop = `${padding}px`;
+        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
     }
 
     export function InicializarHistorial() {
@@ -88,26 +94,6 @@ module EntornoSe {
             QuitarCapa();
             throw error;
         }
-    }
-
-    export function MostrarMensajes() {
-        let altura: number = AlturaFormulario();
-        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
-        MensajesSe.MostrarMensajes();
-        modal.style.display = "block";
-        modal.style.height = `${altura.toString()}px`;
-        let alturaContenedor: number = altura - AlturaCabeceraPnlControl();
-        AjustarModal(modal, alturaContenedor);
-    }
-
-    export function CerrarHistorial() {
-        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
-        modal.style.display = "none";
-    }
-
-    export function BorrarHistorial() {
-        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
-        //recorrer las lineas del body y borrar las
     }
 
     export function Llamador(): string {

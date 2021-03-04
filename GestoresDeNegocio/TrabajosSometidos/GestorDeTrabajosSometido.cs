@@ -11,6 +11,7 @@ using Gestor.Errores;
 using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Entorno;
 using System;
+using System.Reflection;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -114,14 +115,17 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (registro.EsDll)
             {
-                var ruta = GestorDeVariables.Gestor(Contexto, Mapeador).LeerVariable(Variable.Binarios);
-                Ensamblados.ValidarMetodo($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
+                ValidarExisteTrabajoSometido(Contexto, registro);
             }
             else
                 GestorDePa.ValidarExistePa(registro.Pa, registro.Esquema);
-
         }
 
+        public static MethodInfo ValidarExisteTrabajoSometido(ContextoSe contexto, TrabajoSometidoDtm registro)
+        {
+            var ruta = GestorDeVariables.Gestor(contexto, contexto.Mapeador).LeerVariable(Variable.Binarios);
+            return Ensamblados.ValidarMetodoEstatico($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
+        }
     }
 }
 

@@ -33,66 +33,84 @@
     class AlmacenDeMensajes {
         private _mensajes: clsMensaje[] = [];
 
-        public set Mensajes(mensajes: clsMensaje[]) {
-            this._mensajes = mensajes["_mensajes"];
-        }
         public get Mensajes(): clsMensaje[] {
+            let mensajesGuardados: string = sessionStorage.getItem('mensajes-guardados');
+            if (!(mensajesGuardados === null || mensajesGuardados == undefined)) {
+                this._mensajes = JSON.parse(mensajesGuardados);
+            };
             return this._mensajes;
         }
 
         constructor() {
         }
 
-        public Error(mensaje: string): void {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.error, EntornoSe.Llamador(), mensaje));
+        public Error(origen: string, mensaje: string): void {
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.error, origen, mensaje));
+            this.Persistir();
         }
 
         public Info(mensaje: string): void {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.informativo, 'info', mensaje));
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.informativo, 'info', mensaje));
+            this.Persistir();
         }
 
         public Advertencia(mensaje: string): void {
-            this._mensajes.push(new clsMensaje(enumTipoMensaje.advertencia, EntornoSe.Llamador(), mensaje));
+            this.Mensajes.push(new clsMensaje(enumTipoMensaje.advertencia, EntornoSe.Llamador(), mensaje));
+            this.Persistir();
         }
+
+        public BorrarMensajes(): void {
+            this._mensajes.splice(0, this._mensajes.length);
+            this.Persistir();
+        }
+
+        private Persistir(): void {
+            sessionStorage.setItem('mensajes-guardados', JSON.stringify(_Almacen._mensajes));
+        }
+
     }
 
-    let _mensajes: AlmacenDeMensajes = null;
-
-    function ObtenerAlmacen(): AlmacenDeMensajes {
-        if (_mensajes != null)
-            return _mensajes;
-
-        let almacen: string = sessionStorage.getItem('almacen-mensajes');
-        if (almacen === null || almacen == undefined) {
-            _mensajes = new AlmacenDeMensajes();
-        }
-        else {
-            _mensajes = new AlmacenDeMensajes();
-            _mensajes.Mensajes = JSON.parse(almacen);
-        }
-        return _mensajes;
-    }
-
-    function Persistir(): void {
-        if (_mensajes != null)
-            sessionStorage.setItem('almacen-mensajes', JSON.stringify(_mensajes));
-    };
+    let _Almacen: AlmacenDeMensajes = new AlmacenDeMensajes();
 
     export function Info(mensaje: string, consola?: string) {
-        let a: AlmacenDeMensajes = ObtenerAlmacen();
-        a.Info(mensaje);
-        Persistir();
+        _Almacen.Info(mensaje);
         Notificar(TipoMensaje.Info, mensaje, consola);
     }
 
-    export function Error(mensaje: string, consola?: string) {
-        let a: AlmacenDeMensajes = ObtenerAlmacen();
-        a.Error(mensaje);
-        Persistir();
+    export function Error(origen: string, mensaje: string, consola?: string) {
+        _Almacen.Error(origen, mensaje);
         Notificar(TipoMensaje.Error, mensaje, consola);
     }
 
+
     export function MostrarMensajes() {
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        MapearMensajesAlGrid();
+        modal.style.display = "block";
+        EntornoSe.AjustarModalesAbiertas();
+        let contenedor: HTMLDivElement = document.getElementById("id-contenedor-historial") as HTMLDivElement;
+        let tabla: HTMLTableElement = document.getElementById('id-historial-cuerpo.tabla') as HTMLTableElement;
+        tabla.style.height = `${contenedor.getBoundingClientRect().height - 130}px`;
+    }
+
+    export function CerrarHistorial() {
+        let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
+        modal.style.display = "none";
+        modal.setAttribute('altura-inicial', "0");
+    }
+
+    export function BorrarHistorial() {
+        _Almacen.BorrarMensajes();
+        CerrarHistorial();
+        let contenedor: HTMLDivElement = document.getElementById("id-contenedor-historial") as HTMLDivElement;
+        let tabla: HTMLTableElement = document.getElementById('id-historial-cuerpo.tabla') as HTMLTableElement;
+        tabla.style.height = ``;
+        contenedor.style.height = ``;
+        EntornoSe.AjustarModalesAbiertas();
+    }
+
+
+    export function MapearMensajesAlGrid() {
 
         function crearFila(filaCabecera: HTMLTableRowElement, mensaje: clsMensaje): HTMLTableRowElement {
 
@@ -113,7 +131,6 @@
             return fila;
         }
 
-        let a: AlmacenDeMensajes = ObtenerAlmacen();
         let tabla: HTMLTableElement = document.getElementById('id-historial-cuerpo.tabla') as HTMLTableElement;
         let cuerpoOld: HTMLTableSectionElement = document.getElementById('id-historial-tabla.body') as HTMLTableSectionElement;
         tabla.removeChild(cuerpoOld);
@@ -121,8 +138,8 @@
         let cuerpo: HTMLTableSectionElement = document.createElement("tbody");
         cuerpo.id = cuerpoOld.id;
         let filaCabecera: HTMLTableRowElement = document.getElementById('id-historial-tabla.cabecera.fila') as HTMLTableRowElement;
-        for (let i: number = 0; i < a.Mensajes.length; i++) {
-            let fila: HTMLTableRowElement = crearFila(filaCabecera, a.Mensajes[i]);
+        for (let i: number = _Almacen.Mensajes.length - 1; i >= 0; i--) {
+            let fila: HTMLTableRowElement = crearFila(filaCabecera, _Almacen.Mensajes[i]);
             cuerpo.append(fila);
         }
         tabla.append(cuerpo);

@@ -20,7 +20,7 @@
             let sometido: boolean;
 
             function promesaNoResuelta(form: ImportarCallejero, motivo: string): boolean {
-                MensajesSe.Error(motivo);
+                MensajesSe.Error("PrometoSubirLosArchivos", motivo);
                 return false;
             }
 

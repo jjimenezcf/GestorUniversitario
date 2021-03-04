@@ -14,7 +14,7 @@ var Callejero;
         AntesDeAceptar() {
             let sometido;
             function promesaNoResuelta(form, motivo) {
-                MensajesSe.Error(motivo);
+                MensajesSe.Error("PrometoSubirLosArchivos", motivo);
                 return false;
             }
             if (super.AntesDeAceptar()) {

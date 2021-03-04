@@ -174,7 +174,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
 
             if (atributos.MostrarExpresion.IsNullOrEmpty())
-                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+                throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)} para la lista de elementos de la propiedad {descriptorControl.propiedad}");
 
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementos);
@@ -195,7 +195,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
 
             if (atributos.MostrarExpresion.IsNullOrEmpty())
-                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+                throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)} para la lista dinámica de la propiedad {descriptorControl.propiedad}");
 
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDinamica);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
@@ -219,7 +219,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             if (atributos.MostrarExpresion.IsNullOrEmpty())
-                throw new Exception($"no se ha definido la expresión a mostrar para la lista dinamca de la propiedad {descriptorControl.propiedad}");
+                throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)}  para el restrictor de la propiedad {descriptorControl.propiedad}");
 
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);

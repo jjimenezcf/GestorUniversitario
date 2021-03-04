@@ -115,7 +115,7 @@
         }
 
         public SiHayErrorDeEjecucion(peticion: ApiDeAjax.DescriptorAjax): void {
-            Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
+            MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
             let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
             crudTu.CargarGrid(atGrid.accion.buscar, 0);
         }

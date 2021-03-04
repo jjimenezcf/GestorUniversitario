@@ -331,6 +331,7 @@ var ApiCrud;
     ApiCrud.OcultarPanel = OcultarPanel;
     function CerrarModal(modal) {
         modal.style.display = "none";
+        modal.setAttribute('altura-inicial', "0");
         var body = document.getElementsByTagName("body")[0];
         body.style.position = "inherit";
         body.style.height = "auto";
