@@ -128,9 +128,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return tu;
         }
 
-        public static void Iniciar(ContextoSe contexto, int idTrabajoDeUsuario)
+        public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
+            var gestor = Gestor(contextoTu, contextoTu.Mapeador);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
 
             var tran = gestor.IniciarTransaccion();
@@ -141,11 +141,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 tu.Iniciado = DateTime.Now;
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
                 tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
-                contexto.Commit(tran);
+                contextoTu.Commit(tran);
             }
             catch
             {
-                contexto.Rollback(tran);
+                contextoTu.Rollback(tran);
                 GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
                 throw;
             }
@@ -153,9 +153,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
             tran = gestor.IniciarTransaccion();
             try
             {
-                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(contexto, tu.Trabajo);
-                var otroContexto = ContextoSe.ObtenerContexto(contexto);
-                metodo.Invoke(null, new object[] { otroContexto, tu.Id });
+                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(contextoTu, tu.Trabajo);
+                using (var contextoPr = ContextoSe.ObtenerContexto(contextoTu))
+                {
+                    metodo.Invoke(null, new object[] { contextoTu, contextoPr, tu.Id });
+                }
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado);
             }
             catch
@@ -170,7 +172,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
                 gestor.PersistirRegistro(tu, parametros);
                 GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
-                contexto.Commit(tran);
+                contextoTu.Commit(tran);
             }
         }
 

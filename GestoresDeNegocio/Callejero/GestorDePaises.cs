@@ -47,9 +47,9 @@ namespace GestoresDeNegocio.Callejero
             //liberarlo
         }
 
-        public static void ImportarCallejero(ContextoSe contexto, int idTrabajoDeUsuario)
+        public static void ImportarCallejero(ContextoSe contextoTu, ContextoSe contextoPr, int idTrabajoDeUsuario)
         {
-            var gestor = GestorDeTrabajosDeUsuario.Gestor(contexto, contexto.Mapeador);
+            var gestor = GestorDeTrabajosDeUsuario.Gestor(contextoPr, contextoPr.Mapeador);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario);
             throw new System.Exception($"Falta implementar el proceso para el trabajo {tu.Trabajo.Nombre}");
         }
