@@ -141,12 +141,16 @@ namespace ServicioDeDatos
             InicializarDatosDeConexion();
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
-        //    options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
-        //           .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
-        //}
+        /// <summary>
+        /// NECESARIO PARA EJECUTAR LAS MIGRACIONES EN UN PROYECTO APARTE
+        /// </summary>
+        /// <param name="options"></param>
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
+            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
+                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
+        }
 
         public void InicializarDatosDeConexion()
         {
