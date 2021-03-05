@@ -86,11 +86,11 @@
     export function MostrarMensajes() {
         let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
         MapearMensajesAlGrid();
-        modal.style.display = "block";
-        EntornoSe.AjustarModalesAbiertas();
         let contenedor: HTMLDivElement = document.getElementById("id-contenedor-historial") as HTMLDivElement;
         let tabla: HTMLTableElement = document.getElementById('id-historial-cuerpo.tabla') as HTMLTableElement;
         tabla.style.height = `${contenedor.getBoundingClientRect().height - 130}px`;
+        modal.style.display = "block";
+        EntornoSe.AjustarModalesAbiertas();
     }
 
     export function CerrarHistorial() {

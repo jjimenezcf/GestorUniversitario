@@ -73,11 +73,11 @@ var MensajesSe;
     function MostrarMensajes() {
         let modal = document.getElementById("id-modal-historial");
         MapearMensajesAlGrid();
-        modal.style.display = "block";
-        EntornoSe.AjustarModalesAbiertas();
         let contenedor = document.getElementById("id-contenedor-historial");
         let tabla = document.getElementById('id-historial-cuerpo.tabla');
         tabla.style.height = `${contenedor.getBoundingClientRect().height - 130}px`;
+        modal.style.display = "block";
+        EntornoSe.AjustarModalesAbiertas();
     }
     MensajesSe.MostrarMensajes = MostrarMensajes;
     function CerrarHistorial() {
