@@ -23,7 +23,8 @@ namespace ServicioDeDatos.TrabajosSometidos
         {
             mb.Entity<SemaforoDeTrabajosDtm>().Property(p => p.IdTrabajoUsuario).HasColumnName("ID_TRABAJO").IsRequired(true).HasColumnType("INT");
             mb.Entity<SemaforoDeTrabajosDtm>().Property(p => p.Iniciado).HasColumnName("INICIADO").IsRequired(true).HasColumnType("DATETIME");
-            mb.Entity<SemaforoDeTrabajosDtm>().Property(p => p.login).HasColumnName("LOGIN").IsRequired(true).HasColumnType("STRING");
+            mb.Entity<SemaforoDeTrabajosDtm>().Property(p => p.login).HasColumnName("LOGIN").IsRequired(true).HasColumnType("VARCHAR(50)");
+            mb.Entity<SemaforoDeTrabajosDtm>().HasAlternateKey(p => p.IdTrabajoUsuario).HasName($"AK_SEMAFORO_TRABAJO_ID_TRABAJO");
         }
     }
 }

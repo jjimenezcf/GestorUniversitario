@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using ServicioDeDatos.Utilidades;
 
 namespace ServicioDeDatos.Elemento
 {
-   public class RegistrosAfectados: Registro
+    public class RegistrosAfectados : Registro
     {
         public int cantidad { get; set; }
     }
@@ -16,6 +20,7 @@ namespace ServicioDeDatos.Elemento
         public string Conexion;
 
         public string Sentencia { get; private set; }
+        public TrazaSql Traza { get; set; }
 
         public static string CadenaDeConexion => ContextoSe.ObtenerDatosDeConexion().CadenaConexion;
 
@@ -24,15 +29,76 @@ namespace ServicioDeDatos.Elemento
             Sentencia = sentencia;
         }
 
-        public List<T> Ejecutar()
+        public ConsultaSql(TrazaSql traza, string sentencia)
         {
-            List<T> resultado = null;            
+            Sentencia = sentencia;
+            Traza = traza;
+        }
+        public List<T> LanzarConsulta()
+        {
+            List<T> resultado = null;
 
 
             using (IDbConnection db = new SqlConnection(CadenaDeConexion))
             {
                 db.Open();
-                resultado = db.Query<T>(Sentencia).ToList();
+                var cronometro = new Stopwatch();
+                try
+                {
+                    if (Traza != null)
+                        cronometro.Start();
+
+                    resultado = db.Query<T>(Sentencia).ToList();
+
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarTrazaSql(Sentencia, null, cronometro.ElapsedMilliseconds);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarExcepcion(e);
+                    }
+                    throw;
+                }
+            }
+            return resultado;
+        }
+
+        public int EjecutarConsulta()
+        {
+            int resultado = 0;
+
+            using (IDbConnection db = new SqlConnection(CadenaDeConexion))
+            {
+                var cronometro = new Stopwatch(); 
+                try
+                {
+                    if (Traza != null)
+                        cronometro.Start();
+                    db.Open();
+                    resultado = db.Execute(Sentencia);
+
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarTrazaSql(Sentencia, null, cronometro.ElapsedMilliseconds);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarMensaje("Sentencia que se ha intentado ejecutar", Sentencia);
+                        Traza.AnotarExcepcion(e);
+                    }
+                    throw;
+                }
             }
             return resultado;
         }

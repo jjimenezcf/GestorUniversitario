@@ -94,10 +94,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
+
         public GestorDeTrabajosDeUsuario(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
-
         }
 
         public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
@@ -131,23 +131,33 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Iniciar(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false); 
-            tu.Iniciado = DateTime.Now;
-            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+
+            var tran = gestor.IniciarTransaccion();
+
+            GestorDeSemaforoDeTrabajos.PonerSemaforo(tu);
             try
             {
+                tu.Iniciado = DateTime.Now;
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
                 tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                contexto.Commit(tran);
             }
-            catch(Exception e)
+            catch
             {
-
+                contexto.Rollback(tran);
+                GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
+                throw;
             }
 
+            tran = gestor.IniciarTransaccion();
             try
             {
                 var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(contexto, tu.Trabajo);
-                metodo.Invoke(null, new object[] {gestor.Contexto, tu.Id });
-                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado);            }
+                var otroContexto = ContextoSe.ObtenerContexto(contexto);
+                metodo.Invoke(null, new object[] { otroContexto, tu.Id });
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado);
+            }
             catch
             {
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
@@ -159,8 +169,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 var parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
                 parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
                 gestor.PersistirRegistro(tu, parametros);
+                GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
+                contexto.Commit(tran);
             }
-
         }
 
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
@@ -208,7 +219,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                           && parametros.Parametros.ContainsKey(EnumParametro.accion)
                           && (string)parametros.Parametros[EnumParametro.accion] == EnumParametroTu.terminando)
                         )
-                    GestorDeErrores.Emitir("Un trabajo en ejecución o finalizado no se puede suprimir ni modificar");
+                        GestorDeErrores.Emitir("Un trabajo en ejecución o finalizado no se puede suprimir ni modificar");
                 }
             }
 

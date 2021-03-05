@@ -34,7 +34,6 @@ namespace ServicioDeDatos
         public bool EsAdministrador { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
-
     }
 
     public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoSe>
@@ -89,6 +88,8 @@ namespace ServicioDeDatos
         public DatosDeConexion DatosDeConexion { get; private set; }
         public IConfiguration Configuracion { get; private set; }
 
+        public DbContextOptions OpcionesDelContexto { get; private set; }
+
         public IMapper Mapeador { get; set; }
 
         internal  IDbContextTransaction Transaccion { get; set; }
@@ -100,12 +101,21 @@ namespace ServicioDeDatos
 
         public TrazaSql Traza { get; private set; }
 
-        private InterceptadorDeConsultas _interceptadorDeConsultas;
+        private InterceptadorDeConsultas Interceptor;
 
-        public static ContextoSe ObtenerContexto()
+        public static ContextoSe ObtenerContexto(ContextoSe contexto)
         {
            // return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
-            return new ConstructorDelContexto().CreateDbContext(new string[] { });
+            //return new ConstructorDelContexto().CreateDbContext(new string[] { });
+            var opciones = new DbContextOptionsBuilder<ContextoSe>();
+            var datosDeConexion = ObtenerDatosDeConexion();
+            opciones.UseSqlServer(datosDeConexion.CadenaConexion);
+            var c = new ContextoSe(opciones.Options, datosDeConexion.Configuracion);
+            c.Mapeador = contexto.Mapeador;
+            c.DatosDeConexion = contexto.DatosDeConexion;
+            c.Traza = contexto.Traza;
+            c.Interceptor = contexto.Interceptor;
+            return c;
         }
 
         public static (IConfigurationRoot Configuracion, string CadenaConexion) ObtenerDatosDeConexion()
@@ -119,43 +129,24 @@ namespace ServicioDeDatos
             return (configuracion, cadenaDeConexion);
         }
 
-        /// <summary>
-        /// No se puede cachear la conexión, ya que si no compartirían la transacción a BD, el usuario de donexión etc..
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="configuracion"></param>
-        //protected static ContextoSe ObtenerContexto(string nombreContexto, Func<ContextoSe> crearContexto)
-        //{
-        //    if (!_CacheDeContextos.ContainsKey(nombreContexto))
-        //    {
-        //        var contexto = crearContexto();
-        //        _CacheDeContextos[nombreContexto] = contexto;
-        //    }
-
-        //    return _CacheDeContextos[nombreContexto];
-        //}
-
-        public ContextoSe(DbContextOptions options, IConfiguration configuracion) :
-        base(options)
+        public ContextoSe(DbContextOptions opcionesDelContexto, IConfiguration configuracion) :
+        base(opcionesDelContexto)
         {
             Configuracion = configuracion;
+            OpcionesDelContexto = opcionesDelContexto;
 
-            _interceptadorDeConsultas = new InterceptadorDeConsultas();
-            DbInterception.Add(_interceptadorDeConsultas);
-
-            //No se puede cachear el contexto por los datos que este compartiría (transacción, usuario, etc...)
-            //if (_CacheDeContextos == null)
-            //    _CacheDeContextos = new ConcurrentDictionary<string, ContextoSe>();
+            Interceptor = new InterceptadorDeConsultas();
+            DbInterception.Add(Interceptor);
 
             InicializarDatosDeConexion();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
-            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
-                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //{
+        //    var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
+        //    options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
+        //           .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
+        //}
 
         public void InicializarDatosDeConexion()
         {
@@ -166,7 +157,6 @@ namespace ServicioDeDatos
             DatosDeConexion.Login = null;
             DatosDeConexion.IdUsuario = 0;
             DatosDeConexion.Version = ObtenerVersion;
-
         }
 
         public void IniciarTraza()
@@ -195,7 +185,7 @@ namespace ServicioDeDatos
         private void CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
         {
             Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Login}");
-            _interceptadorDeConsultas.Traza = Traza;
+            Interceptor.Traza = Traza;
         }
 
 

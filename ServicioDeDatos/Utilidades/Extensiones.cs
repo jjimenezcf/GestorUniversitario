@@ -11,6 +11,9 @@ namespace ServicioDeDatos.Utilidades
         public static string ParsearParametros(this DbParameterCollection dbParametros)
         {
             var parametros = "";
+            if (dbParametros == null)
+                return "";
+
             foreach (DbParameter dbParametro in dbParametros)
             {
                 parametros = $"{parametros}{dbParametro.ParameterName}={dbParametro.ParsearValorParametro()}{Environment.NewLine}";

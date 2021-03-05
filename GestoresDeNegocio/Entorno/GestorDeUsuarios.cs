@@ -214,7 +214,7 @@ namespace GestoresDeNegocio.Entorno
                                                          FROM entorno.usuario
                                                          where login like '{login}'");
 
-            var credenciales = consulta.Ejecutar();
+            var credenciales = consulta.LanzarConsulta();
             if (credenciales.Count == 0)
                 throw new Exception($"Credenciales del usuario {login} no localizadas");
 
@@ -224,7 +224,7 @@ namespace GestoresDeNegocio.Entorno
         public static string Generar(string login)
         {
             var consulta = new ConsultaSql<Credenciales>($@"SELECT '{login}' as Login,  CONVERT(VARCHAR , ENCRYPTBYPASSPHRASE('sistemaSe', '12345678')) as Password");
-            var credenciales = consulta.Ejecutar();
+            var credenciales = consulta.LanzarConsulta();
             return credenciales[0].Password;
         }
 

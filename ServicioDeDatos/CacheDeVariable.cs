@@ -55,7 +55,7 @@ namespace ServicioDeDatos
         {
             var sentencia = $"Select Id, Nombre, Descripcion, Valor  from ENTORNO.Variable where NOMBRE like '{variable}'";
             var consulta = new ConsultaSql<VariableDtm>(sentencia);
-            var resultado = consulta.Ejecutar();
+            var resultado = consulta.LanzarConsulta();
 
             if (resultado.Count == 0)
                 GestorDeErrores.Emitir($"No se localiza la variable {variable}");

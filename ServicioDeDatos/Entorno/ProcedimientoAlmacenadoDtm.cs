@@ -48,7 +48,7 @@ namespace ServicioDeDatos.Entorno
         public static List<ProcedimientoAlmacenadoDtm> Leer(string nombrePa, string esquema)
         {
             var consulta = new ConsultaSql<ProcedimientoAlmacenadoDtm>(Sentencia.Replace("[Pa]", nombrePa).Replace("[Esquema]", esquema));
-            return consulta.Ejecutar();
+            return consulta.LanzarConsulta();
         }
 
         public static void ValidarExistePa(string nombrePa, string esquema)

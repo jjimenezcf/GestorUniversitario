@@ -133,6 +133,7 @@ namespace ServicioDeDatos
             TablaTrabajoDeUsuario.Definir(modelBuilder);
             TablaTrabajoLog.Definir(modelBuilder);
             TablaTrabajoError.Definir(modelBuilder);
+            TablaSemaforoDeTrabajos.Definir(modelBuilder);
         }
     }
 }
