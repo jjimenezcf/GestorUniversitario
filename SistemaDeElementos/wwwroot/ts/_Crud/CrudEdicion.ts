@@ -5,7 +5,7 @@
         private _idPanelEdicion: string;
         private _infoSelectorEdicion;
 
-        protected CrudDeMnt: CrudMnt;
+        public CrudDeMnt: CrudMnt;
         protected PanelDeMnt: HTMLDivElement;
         private Altura: number;
 

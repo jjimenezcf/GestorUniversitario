@@ -41,6 +41,28 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var opcionDesbloquear = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Desbloquear, $"Desbloquear", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcionDesbloquear);
+
+
+            AnadirOpciondeRelacion(Mnt
+                                 , controlador: nameof(TrazasDeUnTrabajoController)
+                                 , vista: nameof(TrazasDeUnTrabajoController.CrudDeTrazasDeUnTrabajo)
+                                 , relacionarCon: nameof(TrazaDeUnTrabajoDto)
+                                 , navegarAlCrud: DescriptorDeMantenimiento<TrazaDeUnTrabajoDto>.NombreMnt
+                                 , nombreOpcion: "Traza"
+                                 , propiedadQueRestringe: nameof(TrabajoDeUsuarioDto.Id)
+                                 , propiedadRestrictora: nameof(TrazaDeUnTrabajoDto.IdTrabajoDeUsuario)
+                                 , "Consultar la traza del trabajo de usuario");
+
+            AnadirOpciondeRelacion(Mnt
+                                 , controlador: nameof(ErroresDeUnTrabajoController)
+                                 , vista: nameof(ErroresDeUnTrabajoController.CrudDeErroresDeUnTrabajo)
+                                 , relacionarCon: nameof(ErrorDeUnTrabajoDto)
+                                 , navegarAlCrud: DescriptorDeMantenimiento<ErrorDeUnTrabajoDto>.NombreMnt
+                                 , nombreOpcion: "Errores"
+                                 , propiedadQueRestringe: nameof(TrabajoDeUsuarioDto.Id)
+                                 , propiedadRestrictora: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)
+                                 , "Consultar errores del trabajo de usuario");
+
         }
 
         public override string RenderControl()

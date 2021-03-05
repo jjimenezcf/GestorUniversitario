@@ -92,6 +92,8 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePaises>();
             services.AddScoped<GestorDeTrabajosSometido>();
             services.AddScoped<GestorDeTrabajosDeUsuario>();
+            services.AddScoped<GestorDeTrazasDeUnTrabajo>();
+            services.AddScoped<GestorDeErroresDeUnTrabajo>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

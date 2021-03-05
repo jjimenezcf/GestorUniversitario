@@ -401,7 +401,9 @@ const Evento = {
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",
         bloquear: "bloquear-trabajo",
-        desbloquear: "desbloquear-trabajo"
+        desbloquear: "desbloquear-trabajo",
+        traza: "traza-trabajo",
+        errores: "errores-trabajo"
     }
 };
 

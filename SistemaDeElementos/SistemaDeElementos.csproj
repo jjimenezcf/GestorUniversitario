@@ -166,10 +166,16 @@
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\UsuariosDeUnPuesto.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\ErroresDeUnTrabajo.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrabajosDeUsuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrabajosSometido.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrazasDeUnTrabajo.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\_Crud\ModalParaConsultarRelaciones.ts">

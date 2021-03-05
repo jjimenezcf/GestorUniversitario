@@ -11,7 +11,7 @@ namespace ServicioDeDatos.TrabajosSometidos
    public class TrazaDeUnTrabajoDtm : Registro
     {
         public int IdTrabajoDeUsuario { get; set; }
-        public string Log { get; set; }
+        public string Traza { get; set; }
         public virtual TrabajoDeUsuarioDtm TrabajoDeUsuario { get; set; }
     }
 
@@ -21,8 +21,8 @@ namespace ServicioDeDatos.TrabajosSometidos
         {
             mb.Entity<TrazaDeUnTrabajoDtm>().ToTable("LOG", "TRABAJO");
             mb.Entity<TrazaDeUnTrabajoDtm>().Property(p => p.IdTrabajoDeUsuario).HasColumnName("ID_TRABAJO_USUARIO").IsRequired(true).HasColumnType("INT");
-            mb.Entity<TrazaDeUnTrabajoDtm>().Property(p => p.Log).HasColumnName("LOG").IsRequired(true).HasColumnType("VARCHAR(MAX)");
-            mb.Entity<TrazaDeUnTrabajoDtm>().HasOne(x => x.TrabajoDeUsuario).WithMany().HasForeignKey(x => x.Id).HasConstraintName("FK_LOG_DE_TRABAJO_ID_TRABAJO_USUARIO").OnDelete(DeleteBehavior.Restrict);
+            mb.Entity<TrazaDeUnTrabajoDtm>().Property(p => p.Traza).HasColumnName("LOG").IsRequired(true).HasColumnType("VARCHAR(MAX)");
+            mb.Entity<TrazaDeUnTrabajoDtm>().HasOne(x => x.TrabajoDeUsuario).WithMany().HasForeignKey(x => x.IdTrabajoDeUsuario).HasConstraintName("FK_LOG_DE_TRABAJO_ID_TRABAJO_USUARIO").OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

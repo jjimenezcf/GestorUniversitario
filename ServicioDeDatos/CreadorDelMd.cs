@@ -131,8 +131,8 @@ namespace ServicioDeDatos
         {
             TablaTrabajo.Definir(modelBuilder);
             TablaTrabajoDeUsuario.Definir(modelBuilder);
-            TablaTrabajoLog.Definir(modelBuilder);
-            TablaTrabajoError.Definir(modelBuilder);
+            TablaDeLatrazaDeUnTrabajo.Definir(modelBuilder);
+            TablaDeErroresDeUnTrabajo.Definir(modelBuilder);
             TablaSemaforoDeTrabajos.Definir(modelBuilder);
         }
     }
