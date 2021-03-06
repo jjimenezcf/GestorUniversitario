@@ -93,6 +93,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
+                AntesDeEjecutar_CrearElemento(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Insertar));
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
@@ -107,6 +108,10 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        protected virtual void AntesDeEjecutar_CrearElemento(string elementoJson)
+        {
+        }
+
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epModificarPorId(string elementoJson)
         {
@@ -116,6 +121,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
+                AntesDeEjecutar_ModificarPorId(elementoJson);
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(TipoOperacion.Modificar));
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro modificado";
@@ -128,6 +134,10 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             return new JsonResult(r);
+        }
+
+        protected virtual void AntesDeEjecutar_ModificarPorId(string elementoJson)
+        {
         }
 
 
