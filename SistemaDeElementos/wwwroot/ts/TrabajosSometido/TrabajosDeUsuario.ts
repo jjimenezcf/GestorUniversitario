@@ -44,6 +44,29 @@
             }
         }
 
+        public AjustarOpcionesDeMenuDelElemento(elemento: any, modoAcceso: string): void {
+            super.AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso);
+            let estado: string = elemento['estado'];
+            switch (estado) {
+                case 'erroneo': {
+                    this.ActivarOpciones([]);
+                    this.DesactivarOpciones([]);
+                    break;
+                }
+                default: {
+                    MensajesSe.Error('AjustarOpcionesDeMenuDelElemento', `No está definido que hacer con el estado ${estado} de un trabajo`);
+                    this.DeshabilitarOpcionesDeMenuDeElemento();
+                    break;
+                }
+            }
+        }
+
+
+        public ActivarOpciones(opcionesDeMenu: string[]) {
+        }
+
+        public DesactivarOpciones(opcionesDeMenu: string[]) {
+        }
 
         public IniciarTrabajo(): boolean {
 

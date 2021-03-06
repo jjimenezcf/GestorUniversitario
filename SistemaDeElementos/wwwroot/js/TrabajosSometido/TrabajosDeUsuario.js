@@ -34,6 +34,26 @@ var TrabajosSometido;
                 ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
+        AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso) {
+            super.AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso);
+            let estado = elemento['estado'];
+            switch (estado) {
+                case 'erroneo': {
+                    this.ActivarOpciones([]);
+                    this.DesactivarOpciones([]);
+                    break;
+                }
+                default: {
+                    MensajesSe.Error('AjustarOpcionesDeMenuDelElemento', `No está definido que hacer con el estado ${estado} de un trabajo`);
+                    this.DeshabilitarOpcionesDeMenuDeElemento();
+                    break;
+                }
+            }
+        }
+        ActivarOpciones(opcionesDeMenu) {
+        }
+        DesactivarOpciones(opcionesDeMenu) {
+        }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
                 Notificar(TipoMensaje.Info, "Solo se puede iniciar un trabajo");

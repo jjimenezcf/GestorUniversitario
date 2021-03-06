@@ -669,7 +669,7 @@
             grid.InfoSelector.SincronizarCheck();
 
             if (grid.InfoSelector.Cantidad > 0)
-                grid.AjustarOpcionesDeMenu(this.InfoSelector.LeerElemento(0).Id);
+                grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
         }
 
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
@@ -1212,7 +1212,7 @@
             if (check.checked) {
                 this.AnadirAlInfoSelector(this, id, expresionElemento);
                 if (!(this instanceof ModalConGrid))
-                    this.AjustarOpcionesDeMenu(id);
+                    this.AccederAlModoDeAccesoAlElemento(id);
             }
             else {
                 this.QuitarDelSelector(this, id);
@@ -1231,7 +1231,7 @@
             }
         }
 
-        protected AjustarOpcionesDeMenu(id: number): void {
+        protected AccederAlModoDeAccesoAlElemento(id: number): void {
             let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlElemento(id);
             let datosDeEntrada = `{"Negocio":"${this.Negocio}","id":"${id}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
@@ -1249,27 +1249,8 @@
 
         private AplicarModoDeAccesoAlElemento(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
-            let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            let opcionesGenerales: NodeListOf<HTMLButtonElement> = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
-            let hacerLaInterseccion: boolean = mantenimiento.InfoSelector.Cantidad > 1;
-            for (var i = 0; i < opcionesGenerales.length; i++) {
-                let opcion: HTMLButtonElement = opcionesGenerales[i];
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-
-                let estaDeshabilitado = opcion.disabled;
-                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                        opcion.disabled = true;
-                    else
-                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                            opcion.disabled = true;
-                        else
-                            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
-            }
+            let modoDeAccesoDelUsuario: string = peticion.resultado.modoDeAcceso;
+            mantenimiento.AjustarOpcionesDeMenuDelElemento(peticion.resultado.datos, modoDeAccesoDelUsuario);
         }
 
 

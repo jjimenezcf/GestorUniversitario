@@ -138,6 +138,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected virtual void AntesDeEjecutar_ModificarPorId(string elementoJson)
         {
+            
         }
 
 
@@ -425,8 +426,15 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio), id);
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
+                var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio), id);
+                if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
+                    GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
+
+                r.Datos = elemento;
                 r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso} sobre el elemento seleccionado";
                 r.Estado = enumEstadoPeticion.Ok;

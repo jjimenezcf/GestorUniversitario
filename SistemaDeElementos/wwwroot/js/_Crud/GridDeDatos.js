@@ -539,7 +539,7 @@ var Crud;
             grid.MarcarElementos();
             grid.InfoSelector.SincronizarCheck();
             if (grid.InfoSelector.Cantidad > 0)
-                grid.AjustarOpcionesDeMenu(this.InfoSelector.LeerElemento(0).Id);
+                grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
         }
         obtenerValorDeLaFilaParaLaPropiedad(id, propiedad) {
             let fila = this.ObtenerFila(id);
@@ -969,7 +969,7 @@ var Crud;
             if (check.checked) {
                 this.AnadirAlInfoSelector(this, id, expresionElemento);
                 if (!(this instanceof Crud.ModalConGrid))
-                    this.AjustarOpcionesDeMenu(id);
+                    this.AccederAlModoDeAccesoAlElemento(id);
             }
             else {
                 this.QuitarDelSelector(this, id);
@@ -984,7 +984,7 @@ var Crud;
                 opcion.disabled = true;
             }
         }
-        AjustarOpcionesDeMenu(id) {
+        AccederAlModoDeAccesoAlElemento(id) {
             let url = this.DefinirPeticionDeLeerModoDeAccesoAlElemento(id);
             let datosDeEntrada = `{"Negocio":"${this.Negocio}","id":"${id}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerModoDeAccesoAlElemento, datosDeEntrada, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.AplicarModoDeAccesoAlElemento, this.SiHayErrorTrasPeticionAjax);
@@ -993,23 +993,7 @@ var Crud;
         AplicarModoDeAccesoAlElemento(peticion) {
             let mantenimiento = peticion.llamador;
             let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            let opcionesGenerales = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
-            let hacerLaInterseccion = mantenimiento.InfoSelector.Cantidad > 1;
-            for (var i = 0; i < opcionesGenerales.length; i++) {
-                let opcion = opcionesGenerales[i];
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-                let estaDeshabilitado = opcion.disabled;
-                let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                    opcion.disabled = true;
-                else
-                    opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
-            }
+            mantenimiento.AjustarOpcionesDeMenuDelElemento(peticion.resultado.datos, modoDeAccesoDelUsuario);
         }
         DefinirPeticionDeLeerModoDeAccesoAlElemento(id) {
             let url = `/${this.Controlador}/${Ajax.EndPoint.LeerModoDeAccesoAlElemento}`;

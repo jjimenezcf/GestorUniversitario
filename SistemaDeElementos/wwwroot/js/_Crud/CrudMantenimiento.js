@@ -101,6 +101,25 @@ var Crud;
                 this.ModalesDeSeleccion.push(modal);
             });
         }
+        AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso) {
+            let opcionesGenerales = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
+            let hacerLaInterseccion = this.InfoSelector.Cantidad > 1;
+            for (var i = 0; i < opcionesGenerales.length; i++) {
+                let opcion = opcionesGenerales[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
+                let estaDeshabilitado = opcion.disabled;
+                let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAcceso !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAcceso === ModoDeAccesoDeDatos.Consultor || modoAcceso === ModoDeAccesoDeDatos.SinPermiso))
+                    opcion.disabled = true;
+                else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAcceso === ModoDeAccesoDeDatos.SinPermiso)
+                    opcion.disabled = true;
+                else
+                    opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            }
+        }
         InicializarMenus() {
             this.DeshabilitarOpcionesDeMenuDeElemento();
             let url = this.DefinirPeticionDeLeerModoDeAccesoAlNegocio();
