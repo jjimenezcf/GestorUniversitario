@@ -81,7 +81,7 @@
             }
             catch
             {
-                Notificar(TipoMensaje.Error, `Error al procesar la respuesta de ${this.nombre}`);
+                MensajesSe.Error("ParsearRespuesta", `Error al procesar la respuesta de ${this.nombre}`);
             }
         }
 
@@ -186,7 +186,7 @@
                     this.TrasLaPeticion(this);
                 }
                 catch (error) {
-                    Notificar(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
+                    MensajesSe.Error("DespuesDeLaPeticion", `Error al procesar la peticion ${this.nombre}`, error);
                 }
         }
     }

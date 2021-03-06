@@ -6,6 +6,7 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
+using System;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -43,6 +44,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var t = new TrazaDeUnTrabajoDtm();
             t.IdTrabajoDeUsuario = tu.Id;
             t.Traza = Traza;
+            t.Fecha = DateTime.Now;
             return PersistirRegistro(t, new ParametrosDeNegocio(TipoOperacion.Insertar));
         }
 
@@ -54,6 +56,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
             registros = registros.Include(p => p.TrabajoDeUsuario.Sometedor);
             registros = registros.Include(p => p.TrabajoDeUsuario.Trabajo);
             return registros;
+        }
+        internal static void AnotarTraza(ContextoSe contextoTu, TrabajoDeUsuarioDtm tu, string mensaje)
+        {
+            var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
+            gestorTraza.CrearTraza(tu, mensaje);
         }
     }
 }

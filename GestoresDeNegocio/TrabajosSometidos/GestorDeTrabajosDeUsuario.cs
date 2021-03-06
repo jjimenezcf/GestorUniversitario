@@ -132,7 +132,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var gestor = Gestor(contextoTu, contextoTu.Mapeador);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
-
+            GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, $"Trabajo iniciado por el usuario {contextoTu.DatosDeConexion.Login}");
             var tran = gestor.IniciarTransaccion();
 
             GestorDeSemaforoDeTrabajos.PonerSemaforo(tu);
@@ -143,10 +143,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
                 contextoTu.Commit(tran);
             }
-            catch
+            catch (Exception e)
             {
                 contextoTu.Rollback(tran);
                 GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, "Iniciación cancelada");
+                GestorDeErroresDeUnTrabajo.AnotarError(contextoTu, tu, e);
                 throw;
             }
 
@@ -173,6 +175,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 gestor.PersistirRegistro(tu, parametros);
                 GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
                 contextoTu.Commit(tran);
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, $"Trabajo finalizado: {(tu.Estado == TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado) ? "sin errores" : "con errores")}");
             }
         }
 
@@ -180,24 +183,40 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
-
-            if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
-                throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
-
-            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
-            gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+            try
+            {
+                if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
+                    throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
+                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"Trabajo bloqueado por el usuario {contexto.DatosDeConexion.Login}");
+            }
+            catch (Exception e)
+            {
+                GestorDeErroresDeUnTrabajo.AnotarError(contexto, tu, e);
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"El usuario {contexto.DatosDeConexion.Login} no ha podido bloquear el trabajo");
+                throw;
+            }
         }
 
         public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
-
-            if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
-                throw new Exception($"El trabajo no se puede desbloquear, ha de estar en estado bloqueado y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
-
-            tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente);
-            gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+            try
+            {
+                if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
+                    throw new Exception($"El trabajo no se puede desbloquear, ha de estar en estado bloqueado y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
+                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente);
+                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"Trabajo desbloqueado por el usuario {contexto.DatosDeConexion.Login}");
+            }
+            catch (Exception e)
+            {
+                GestorDeErroresDeUnTrabajo.AnotarError(contexto, tu, e);
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"El usuario {contexto.DatosDeConexion.Login} no ha podido desbloquear el trabajo");
+                throw;
+            }
         }
 
         protected override IQueryable<TrabajoDeUsuarioDtm> AplicarJoins(IQueryable<TrabajoDeUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
@@ -260,7 +279,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 }
             }
         }
-
     }
 }
 

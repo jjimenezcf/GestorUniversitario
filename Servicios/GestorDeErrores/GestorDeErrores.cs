@@ -10,14 +10,18 @@ namespace Gestor.Errores
         {
         }
 
+        public static string Detalle(Exception e)
+        {
+            var retorno = Concatenar(e);
+
+            var s = e.StackTrace;
+            retorno = retorno + Environment.NewLine + s;
+            return retorno;
+        }
+
         public static string Concatenar(Exception e)
         {
             var retorno = "";
-
-            if (e == null)
-                return null; 
-
-            var s = e.StackTrace;
             while (e != null)
             {
                 if (!e.Message.Contains("See the inner exception for details"))
@@ -28,7 +32,6 @@ namespace Gestor.Errores
 
             }
 
-            retorno = retorno + Environment.NewLine + s;
             return retorno;
         }
 
@@ -57,7 +60,7 @@ namespace Gestor.Errores
 
         public static void EnviarExcepcionPorCorreo(string asunto, Exception e)
         {
-            var mensajeDeError = Concatenar(e);
+            var mensajeDeError = Detalle(e);
             Correo.GestorDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
         }
 

@@ -32,13 +32,25 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string TrabajoDeUsuario { get; set; }
 
-
+        //--------------------------------------------
+        [IUPropiedad(
+           Etiqueta = "Fecha",
+           Ayuda = "Fecha de la traza",
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
+           Fila = 1,
+           Columna = 0,
+           VisibleEnGrid = true,
+           EditableAlCrear = false,
+           EditableAlEditar = false
+           )
+        ]
+        public DateTime Fecha { get; set; }
         //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Traza",
            Ayuda = "Traza del trabajo",
            TipoDeControl = enumTipoControl.Editor,
-           Fila = 1,
+           Fila = 2,
            Columna = 0,
            VisibleEnGrid = true,
            EditableAlEditar = false,

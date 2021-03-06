@@ -191,7 +191,7 @@ const atCriterio = {
     igual: 'igual'
 };
 
-const atRelacion = {
+const atNavegar = {
     navegarAlCrud: 'navegar-al-crud',
     idRestrictor: atControl.restrictor,
     orden: 'orden'
@@ -367,6 +367,7 @@ const Evento = {
         Editar: "editar-elemento",
         Borrar: "eliminar-elemento",
         Relacionar: "relacionar-elementos",
+        Dependencias: "gestionar-dependencias",
         AbrirModalParaRelacionar: "abrir-modal-para-relacionar",
         AbrirModalParaConsultarRelaciones: "abrir-modal-para-consultar-relaciones",
         Buscar: "buscar-elementos",

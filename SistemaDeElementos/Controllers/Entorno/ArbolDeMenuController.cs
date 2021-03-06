@@ -49,7 +49,7 @@ namespace SistemaDeElementos.Controllers.Entorno
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = "No se ha podido leer el menú";
             }
             return new JsonResult(r);

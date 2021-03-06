@@ -197,4 +197,18 @@
         }
     }
 
+    export class DatosParaDependencias {
+        public idOpcionDeMenu: string;
+        public DatosDependientes: string;
+        public idSeleccionado: number;
+        public PropiedadQueRestringe: string;
+        public PropiedadRestrictora: string;
+        public MostrarEnElRestrictor: string;
+        public FiltroRestrictor: Tipos.DatosRestrictor;
+
+        constructor() {
+            this.FiltroRestrictor = null;
+        }
+    }
+
 }

@@ -21,7 +21,7 @@ var ApiControl;
         }
         else {
             var propiedad = control.getAttribute(atControl.propiedad);
-            Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+            MensajesSe.Error("MapearFechaAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
         }
     }
     ApiControl.MapearFechaAlControl = MapearFechaAlControl;
@@ -68,7 +68,7 @@ var ApiControl;
             }
         }
         var propiedad = control.getAttribute(atControl.propiedad);
-        Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
     }
     ApiControl.MapearHoraAlControl = MapearHoraAlControl;
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
@@ -372,9 +372,9 @@ var ApiRuote;
         if (form === null) {
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
         }
-        let navegarAlCrud = form.getAttribute(atRelacion.navegarAlCrud);
-        let idRestrictor = form.getAttribute(atRelacion.idRestrictor);
-        let idOrden = form.getAttribute(atRelacion.orden);
+        let navegarAlCrud = form.getAttribute(atNavegar.navegarAlCrud);
+        let idRestrictor = form.getAttribute(atNavegar.idRestrictor);
+        let idOrden = form.getAttribute(atNavegar.orden);
         let restrictor = document.getElementById(idRestrictor);
         restrictor.value = filtroJson;
         let ordenInput = document.getElementById(idOrden);
@@ -386,6 +386,26 @@ var ApiRuote;
         Navegar(crud, form, crud.Estado, valores);
     }
     ApiRuote.NavegarARelacionar = NavegarARelacionar;
+    function NavegarADependientes(crud, idOpcionDeMenu, idSeleccionado, filtroRestrictor) {
+        let filtroJson = ApiFiltro.DefinirRestrictorNumerico(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+        let form = document.getElementById(idOpcionDeMenu);
+        if (form === null) {
+            throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
+        }
+        let navegarAlCrud = form.getAttribute(atNavegar.navegarAlCrud);
+        let idRestrictor = form.getAttribute(atNavegar.idRestrictor);
+        let idOrden = form.getAttribute(atNavegar.orden);
+        let restrictor = document.getElementById(idRestrictor);
+        restrictor.value = filtroJson;
+        let ordenInput = document.getElementById(idOrden);
+        ordenInput.value = "";
+        let valores = new Diccionario();
+        valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
+        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
+        Navegar(crud, form, crud.Estado, valores);
+    }
+    ApiRuote.NavegarADependientes = NavegarADependientes;
     function Navegar(crud, form, estado, valores) {
         crud.AntesDeNavegar(valores);
         EntornoSe.Historial.GuardarEstadoDePagina(estado);

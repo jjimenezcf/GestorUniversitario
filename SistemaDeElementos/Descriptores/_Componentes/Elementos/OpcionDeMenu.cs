@@ -33,7 +33,7 @@ namespace MVCSistemaDeElementos.Descriptores
     // Acciones de menú de para navegar
     // renderiza llamada Crud.EventosDelMantenimiento(...)
     /**********************************************************/
-    public class AccionDeNavegarParaRelacionar : AccionDeMenu
+    public class AccionDeRelacionarElemenetos : AccionDeMenu
     {
         public string TipoAccion { get; private set; }
         public string UrlDelCrudDeRelacion { get; private set; }
@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string PropiedadQueRestringe { get; private set; }
         public string NavegarAlCrud { get; private set; }
 
-        public AccionDeNavegarParaRelacionar(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
+        public AccionDeRelacionarElemenetos(string urlDelCrud, string relacionarCon, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
         : base(TipoDeAccionDeMnt.RelacionarElementos, enumCssOpcionMenu.DeElemento, ayuda)
         {
             TipoAccion = TipoDeAccionDeMnt.RelacionarElementos;
@@ -57,6 +57,33 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             return $"Crud.EventosDelMantenimiento('{TipoAccion}','IdOpcionDeMenu==idDeOpcMenu#{nameof(RelacionarCon)}=={RelacionarCon}#{nameof(PropiedadQueRestringe)}=={PropiedadQueRestringe}#{nameof(PropiedadRestrictora)}=={PropiedadRestrictora}')";
         }
+    }
+
+    public class AccionDeGetionarDatosDependientes : AccionDeMenu
+    {
+        public string TipoAccion { get; private set; }
+        public string UrlDelCrudDeDependientes { get; private set; }
+        public string DatosDependientes { get; private set; }
+        public string PropiedadRestrictora { get; private set; }
+        public string PropiedadQueRestringe { get; private set; }
+        public string NavegarAlCrud { get; private set; }
+
+        public AccionDeGetionarDatosDependientes(string urlDelCrud, string datosDependientes, string nombreDelMnt, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
+        : base(TipoDeAccionDeMnt.GestionarDependencias, enumCssOpcionMenu.DeElemento, ayuda)
+        {
+            TipoAccion = TipoDeAccionDeMnt.GestionarDependencias;
+            DatosDependientes = datosDependientes.ToLower();
+            PropiedadRestrictora = propiedadRestrictora.ToLower();
+            PropiedadQueRestringe = propiedadQueRestringe.ToLower();
+            UrlDelCrudDeDependientes = urlDelCrud;
+            NavegarAlCrud = nombreDelMnt;
+        }
+
+        public override string RenderAccion()
+        {
+            return $"Crud.EventosDelMantenimiento('{TipoAccion}','IdOpcionDeMenu==idDeOpcMenu#{nameof(DatosDependientes)}=={DatosDependientes}#{nameof(PropiedadQueRestringe)}=={PropiedadQueRestringe}#{nameof(PropiedadRestrictora)}=={PropiedadRestrictora}')";
+        }
+
     }
 
     /**********************************************************/
@@ -256,20 +283,13 @@ namespace MVCSistemaDeElementos.Descriptores
 
             if (TipoDeLLamada == TipoDeLlamada.Post)
             {
-                var htmlFormPost = $@"
-                    <form id=¨{IdHtml}¨ action=¨{((AccionDeNavegarParaRelacionar)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeNavegarParaRelacionar)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
-                        <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
-                        <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
-                        <input type=¨button¨ 
-                               tipo=¨{Tipo.Render()}¨
-                               clase=¨{Css.Render(ClaseBoton)}¨ 
-                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
-                               value=¨{Etiqueta}¨ 
-                               onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
-                               title=¨{Ayuda}¨
-                               {disbled} />
-                    </form>
-                ";
+                var htmlFormPost = "";
+                if (Accion is AccionDeRelacionarElemenetos)
+                    htmlFormPost = RenderAccionDeRelacion(disbled);
+
+                if (Accion is AccionDeGetionarDatosDependientes)
+                    htmlFormPost = RenderAccionDeDependencias(disbled);
+
                 return htmlFormPost;
             }
 
@@ -283,6 +303,42 @@ namespace MVCSistemaDeElementos.Descriptores
                                            title=¨{Ayuda}¨
                                            {disbled} />";
             return htmlOpcionMenu;
+        }
+
+        private string RenderAccionDeRelacion(string disbled)
+        {
+
+            return $@"
+                    <form id=¨{IdHtml}¨ action=¨{((AccionDeRelacionarElemenetos)Accion).UrlDelCrudDeRelacion}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeRelacionarElemenetos)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
+                        <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
+                        <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
+                        <input type=¨button¨ 
+                               tipo=¨{Tipo.Render()}¨
+                               clase=¨{Css.Render(ClaseBoton)}¨ 
+                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
+                               value=¨{Etiqueta}¨ 
+                               onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
+                               title=¨{Ayuda}¨
+                               {disbled} />
+                    </form>
+                ";
+        }
+        private string RenderAccionDeDependencias(string disbled)
+        {
+            return $@"
+                    <form id=¨{IdHtml}¨ action=¨{((AccionDeGetionarDatosDependientes)Accion).UrlDelCrudDeDependientes}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeGetionarDatosDependientes)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
+                        <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
+                        <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
+                        <input type=¨button¨ 
+                               tipo=¨{Tipo.Render()}¨
+                               clase=¨{Css.Render(ClaseBoton)}¨ 
+                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
+                               value=¨{Etiqueta}¨ 
+                               onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
+                               title=¨{Ayuda}¨
+                               {disbled} />
+                    </form>
+                ";
         }
     }
 }

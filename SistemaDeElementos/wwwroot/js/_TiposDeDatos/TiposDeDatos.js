@@ -142,5 +142,11 @@ var Tipos;
         }
     }
     Tipos.DatosParaRelacionar = DatosParaRelacionar;
+    class DatosParaDependencias {
+        constructor() {
+            this.FiltroRestrictor = null;
+        }
+    }
+    Tipos.DatosParaDependencias = DatosParaDependencias;
 })(Tipos || (Tipos = {}));
 //# sourceMappingURL=TiposDeDatos.js.map

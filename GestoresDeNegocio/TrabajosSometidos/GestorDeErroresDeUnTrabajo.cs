@@ -46,6 +46,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             e.IdTrabajoDeUsuario = tu.Id;
             e.Error = error;
             e.Detalle = detalle;
+            e.Fecha = DateTime.Now;
             return PersistirRegistro(e, new ParametrosDeNegocio(TipoOperacion.Insertar));
         }
 
@@ -59,10 +60,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return registros;
         }
 
-        internal static void AnotarError(ContextoSe contextoPr, TrabajoDeUsuarioDtm tu, Exception e)
+        internal static void AnotarError(ContextoSe contextoTu, TrabajoDeUsuarioDtm tu, Exception e)
         {
-            var gestorEt = Gestor(contextoPr, contextoPr.Mapeador);     
-            gestorEt.CrearError(tu, e.Message, GestorDeErrores.Concatenar(e.InnerException));
+            var gestorEt = Gestor(contextoTu, contextoTu.Mapeador);     
+            gestorEt.CrearError(tu, e.Message, GestorDeErrores.Detalle(e));
         }
     }
 }

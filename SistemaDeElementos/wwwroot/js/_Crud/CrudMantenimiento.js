@@ -37,7 +37,7 @@ var Crud;
                 this.Buscar(atGrid.accion.buscar, 0);
             }
             catch (error) {
-                Notificar(TipoMensaje.Error, `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+                MensajesSe.Error("Inicializar", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
             }
         }
         PosicionarPanelesDelCuerpo() {
@@ -215,7 +215,7 @@ var Crud;
         }
         IraEditar() {
             if (this.InfoSelector.Cantidad == 0) {
-                Notificar(TipoMensaje.Info, "Debe marcar el elemento a editar");
+                MensajesSe.Error("IraEditar", "Debe marcar el elemento a editar");
                 return;
             }
             this.crudDeEdicion.ComenzarEdicion(this.InfoSelector);

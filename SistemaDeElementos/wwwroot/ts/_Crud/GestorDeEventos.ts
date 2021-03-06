@@ -15,9 +15,14 @@
                     crudMnt.AbrirModalBorrarElemento();
                     break;
                 }
+                case Evento.Mnt.Dependencias: {
+                    let parametrosParaDependencias: string = parametros;
+                    crudMnt.IrAlCrudDeDependencias(parametrosParaDependencias);
+                    break;
+                }
                 case Evento.Mnt.Relacionar: {
-                    let crudDeRelacion: string = parametros;
-                    crudMnt.RelacionarCon(crudDeRelacion);
+                    let parametrosParaRelacionar: string = parametros;
+                    crudMnt.IrAlCrudDeRelacionarCon(parametrosParaRelacionar);
                     break;
                 }
                 case Evento.Mnt.AbrirModalParaRelacionar: {
@@ -83,7 +88,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error);
         }
     }
 
@@ -155,7 +160,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error);
         }
     }
 
@@ -223,7 +228,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error);
         }
     }
 
@@ -287,7 +292,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error);
         }
     }
 
@@ -309,7 +314,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error);
         }
     }
 
@@ -331,7 +336,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error);
         }
     }
 
@@ -353,7 +358,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error);
         }
     }
 
@@ -362,7 +367,7 @@
             crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Edición, accion: ${accion}`, error);
         }
     }
 
@@ -371,7 +376,7 @@
             crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error);
         }
     }
 
@@ -380,7 +385,7 @@
             crudMnt.crudDeCreacion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Creacion, accion: ${accion}`, error);
         }
     }
 
@@ -403,7 +408,7 @@
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
         }
 
 

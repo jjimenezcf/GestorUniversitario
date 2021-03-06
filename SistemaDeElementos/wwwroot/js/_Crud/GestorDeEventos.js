@@ -15,9 +15,14 @@ var Crud;
                     Crud.crudMnt.AbrirModalBorrarElemento();
                     break;
                 }
+                case Evento.Mnt.Dependencias: {
+                    let parametrosParaDependencias = parametros;
+                    Crud.crudMnt.IrAlCrudDeDependencias(parametrosParaDependencias);
+                    break;
+                }
                 case Evento.Mnt.Relacionar: {
-                    let crudDeRelacion = parametros;
-                    Crud.crudMnt.RelacionarCon(crudDeRelacion);
+                    let parametrosParaRelacionar = parametros;
+                    Crud.crudMnt.IrAlCrudDeRelacionarCon(parametrosParaRelacionar);
                     break;
                 }
                 case Evento.Mnt.AbrirModalParaRelacionar: {
@@ -83,7 +88,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error);
         }
     }
     Crud.EventosDelMantenimiento = EventosDelMantenimiento;
@@ -153,7 +158,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeSeleccion = EventosModalDeSeleccion;
@@ -219,7 +224,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeCrearRelaciones = EventosModalDeCrearRelaciones;
@@ -281,7 +286,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeConsultaDeRelaciones = EventosModalDeConsultaDeRelaciones;
@@ -303,7 +308,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeBorrar = EventosModalDeBorrar;
@@ -325,7 +330,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeCreacion = EventosModalDeCreacion;
@@ -347,7 +352,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error);
         }
     }
     Crud.EventosModalDeEdicion = EventosModalDeEdicion;
@@ -356,7 +361,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Edición, accion: ${accion}`, error);
         }
     }
     Crud.EjecutarMenuEdt = EjecutarMenuEdt;
@@ -365,7 +370,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error);
         }
     }
     Crud.EventosDeEdicion = EventosDeEdicion;
@@ -374,7 +379,7 @@ var Crud;
             Crud.crudMnt.crudDeCreacion.EjecutarAcciones(accion);
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Creacion, accion: ${accion}`, error);
         }
     }
     Crud.EjecutarMenuCrt = EjecutarMenuCrt;
@@ -396,7 +401,7 @@ var Crud;
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
         }
     }
     Crud.EventosDeListaDinamica = EventosDeListaDinamica;

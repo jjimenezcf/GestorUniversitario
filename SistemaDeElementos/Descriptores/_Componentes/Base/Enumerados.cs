@@ -22,6 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string EditarElemento = "editar-elemento";
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
+        public const string GestionarDependencias = "gestionar-dependencias";
         public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
         public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
         public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";

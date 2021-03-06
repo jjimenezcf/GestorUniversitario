@@ -32,13 +32,26 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string TrabajoDeUsuario { get; set; }
 
-             
+        //--------------------------------------------
+        [IUPropiedad(
+           Etiqueta = "Fecha",
+           Ayuda = "Fecha del error",
+           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
+           Fila = 1,
+           Columna = 0,
+           VisibleEnGrid = true,
+           EditableAlCrear = false,
+           EditableAlEditar = false
+           )
+        ]
+        public DateTime Fecha { get; set; }
+
         //--------------------------------------------
         [IUPropiedad(
            Etiqueta = "Error",
            Ayuda = "error del trabajo",
            TipoDeControl = enumTipoControl.Editor,
-           Fila = 1,
+           Fila = 2,
            Columna = 0,
            VisibleEnGrid = true,
            EditableAlEditar = false,
@@ -52,7 +65,7 @@ namespace ModeloDeDto.TrabajosSometidos
            Etiqueta = "Detalle",
            Ayuda = "detalle del error",
            TipoDeControl = enumTipoControl.AreaDeTexto,
-           Fila = 1,
+           Fila = 3,
            Columna = 0,
            VisibleEnGrid = false,
            EditableAlEditar = false,

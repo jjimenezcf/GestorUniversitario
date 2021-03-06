@@ -205,7 +205,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal static void AnadirOpciondeRelacion(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
         {
-            var accionDeRelacion = new AccionDeNavegarParaRelacionar(
+            var accionDeRelacion = new AccionDeRelacionarElemenetos(
                     urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
@@ -214,6 +214,20 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda);
 
             var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeRelacion, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
+            Mnt.ZonaMenu.Menu.Add(opcion);
+        }
+
+        internal static void AnadirOpcionDeDependencias(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string datosDependientes, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
+        {
+            var accionDeDependencias = new AccionDeGetionarDatosDependientes(
+                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
+                  , datosDependientes: datosDependientes
+                  , nombreDelMnt: navegarAlCrud
+                  , propiedadQueRestringe: propiedadQueRestringe
+                  , propiedadRestrictora: propiedadRestrictora
+                  , ayuda);
+
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeDependencias, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }

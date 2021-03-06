@@ -85,7 +85,7 @@
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {
-            Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
+            MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje);
         }
 
         // funciones para mapear un elemento Json a los controles de un panel
@@ -549,7 +549,7 @@
             let datosDeEntrada: Tipos.DatosPeticionDinamica = JSON.parse(peticion.DatosDeEntrada);
             let input: HTMLDivElement = document.getElementById(datosDeEntrada.IdInput) as HTMLInputElement;
             try {
-                Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
+                MensajesSe.Error("SiHayErrorAlCargarListasDinamicas", peticion.resultado.mensaje);
             }
             finally {
                 input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');

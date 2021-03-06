@@ -65,7 +65,7 @@ namespace SistemaDeElementos.Controllers.Seguridad
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = Concatenar(e);
+                r.consola = Detalle(e);
 
                 if (e.Data.Contains(Datos.Mostrar) && (bool)e.Data[Datos.Mostrar])
                     r.Mensaje = e.Message;
@@ -94,7 +94,7 @@ namespace SistemaDeElementos.Controllers.Seguridad
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = Concatenar(e);
+                r.consola = Detalle(e);
                 r.Mensaje = "Error al validar usuario";
             }
             return new JsonResult(r);

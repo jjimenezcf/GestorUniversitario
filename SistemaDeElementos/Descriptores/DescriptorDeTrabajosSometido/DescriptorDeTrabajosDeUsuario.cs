@@ -43,20 +43,20 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.ZonaMenu.Menu.Add(opcionDesbloquear);
 
 
-            AnadirOpciondeRelacion(Mnt
+            AnadirOpcionDeDependencias(Mnt
                                  , controlador: nameof(TrazasDeUnTrabajoController)
                                  , vista: nameof(TrazasDeUnTrabajoController.CrudDeTrazasDeUnTrabajo)
-                                 , relacionarCon: nameof(TrazaDeUnTrabajoDto)
+                                 , datosDependientes: nameof(TrazaDeUnTrabajoDto)
                                  , navegarAlCrud: DescriptorDeMantenimiento<TrazaDeUnTrabajoDto>.NombreMnt
                                  , nombreOpcion: "Traza"
                                  , propiedadQueRestringe: nameof(TrabajoDeUsuarioDto.Id)
                                  , propiedadRestrictora: nameof(TrazaDeUnTrabajoDto.IdTrabajoDeUsuario)
                                  , "Consultar la traza del trabajo de usuario");
 
-            AnadirOpciondeRelacion(Mnt
+            AnadirOpcionDeDependencias(Mnt
                                  , controlador: nameof(ErroresDeUnTrabajoController)
                                  , vista: nameof(ErroresDeUnTrabajoController.CrudDeErroresDeUnTrabajo)
-                                 , relacionarCon: nameof(ErrorDeUnTrabajoDto)
+                                 , datosDependientes: nameof(ErrorDeUnTrabajoDto)
                                  , navegarAlCrud: DescriptorDeMantenimiento<ErrorDeUnTrabajoDto>.NombreMnt
                                  , nombreOpcion: "Errores"
                                  , propiedadQueRestringe: nameof(TrabajoDeUsuarioDto.Id)

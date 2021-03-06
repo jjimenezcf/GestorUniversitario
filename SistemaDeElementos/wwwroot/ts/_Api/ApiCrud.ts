@@ -21,7 +21,7 @@
         }
         else {
             var propiedad: string = control.getAttribute(atControl.propiedad);
-            Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+            MensajesSe.Error("MapearFechaAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
         }
     }
 
@@ -70,7 +70,7 @@
             }
         }
         var propiedad: string = control.getAttribute(atControl.propiedad);
-        Notificar(TipoMensaje.Error, `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
 
     }
     export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
@@ -409,9 +409,36 @@ namespace ApiRuote {
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
         }
 
-        let navegarAlCrud: string = form.getAttribute(atRelacion.navegarAlCrud);
-        let idRestrictor: string = form.getAttribute(atRelacion.idRestrictor) as string;
-        let idOrden: string = form.getAttribute(atRelacion.orden) as string;
+        let navegarAlCrud: string = form.getAttribute(atNavegar.navegarAlCrud);
+        let idRestrictor: string = form.getAttribute(atNavegar.idRestrictor) as string;
+        let idOrden: string = form.getAttribute(atNavegar.orden) as string;
+
+        let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
+        restrictor.value = filtroJson;
+        let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
+        ordenInput.value = "";
+
+        let valores: Diccionario<any> = new Diccionario<any>();
+        valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
+        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
+        Navegar(crud, form, crud.Estado, valores);
+    }
+
+
+    export function NavegarADependientes(crud: Crud.GridDeDatos, idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: Tipos.DatosRestrictor) {
+
+        let filtroJson: string = ApiFiltro.DefinirRestrictorNumerico(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+
+        let form: HTMLFormElement = document.getElementById(idOpcionDeMenu) as HTMLFormElement;
+
+        if (form === null) {
+            throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
+        }
+
+        let navegarAlCrud: string = form.getAttribute(atNavegar.navegarAlCrud);
+        let idRestrictor: string = form.getAttribute(atNavegar.idRestrictor) as string;
+        let idOrden: string = form.getAttribute(atNavegar.orden) as string;
 
         let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
         restrictor.value = filtroJson;

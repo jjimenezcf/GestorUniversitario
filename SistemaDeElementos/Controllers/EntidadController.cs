@@ -100,7 +100,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido crear. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -123,7 +123,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido modificar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -155,7 +155,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -187,7 +187,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 GestorDeElementos.Rollback(tran);
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -232,7 +232,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -280,7 +280,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -308,7 +308,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -332,7 +332,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -372,7 +372,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"Error en el proceso de relación. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -401,7 +401,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
@@ -424,7 +424,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Concatenar(e);
+                r.consola = GestorDeErrores.Detalle(e);
                 r.Mensaje = $"Error al obtener los permisos sobre el elemento {id} del {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 

@@ -594,12 +594,23 @@ var Crud;
             estadoPaginaDestino.Quitar(atGrid.nombreSeleccionado);
             EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
         }
+        IrAlCrudDeDependencias(parametrosDeEntrada) {
+            try {
+                let datos = this.PrepararParametrosDeDependencias(this._infoSelector, parametrosDeEntrada);
+                if (datos.FiltroRestrictor !== null)
+                    ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+            }
+            catch (error) {
+                Notificar(TipoMensaje.Error, error);
+                return;
+            }
+        }
         // permite relacionar un elemento con diferentes entidades
         // parametros de entrada:
         // idOpcionDeMenu --> id de la opción de menú que almacena los parámetros y la acción a someter
         // relacionarCon --> entidad con la que se relaciona
         // PropiedadRestrictora --> propiedad bindeada al control de filtro de la página de destino donde se mapea el restrictor seleccionado en el grid
-        RelacionarCon(parametrosDeEntrada) {
+        IrAlCrudDeRelacionarCon(parametrosDeEntrada) {
             try {
                 let datos = this.PrepararParametrosDeRelacionarCon(this._infoSelector, parametrosDeEntrada);
                 if (datos.FiltroRestrictor !== null)
@@ -609,6 +620,30 @@ var Crud;
                 Notificar(TipoMensaje.Error, error);
                 return;
             }
+        }
+        PrepararParametrosDeDependencias(infoSelector, parametros) {
+            if (infoSelector.Cantidad != 1)
+                throw new Error("Debe seleccionar un elemento para poder gestionar sus dependencias");
+            let partes = parametros.split('#');
+            if (partes.length != 4)
+                throw new Error("Los parámetros de dependencias están mal definidos");
+            let elemento = infoSelector.LeerElemento(0);
+            let datos = new Tipos.DatosParaDependencias();
+            datos.idOpcionDeMenu = partes[0].split('==')[1];
+            datos.DatosDependientes = partes[1].split('==')[1];
+            datos.PropiedadQueRestringe = partes[2].split('==')[1];
+            datos.PropiedadRestrictora = partes[3].split('==')[1];
+            datos.idSeleccionado = elemento.Id;
+            datos.MostrarEnElRestrictor = elemento.Texto;
+            let valorDeLaColumna = this.obtenerValorDeLaFilaParaLaPropiedad(datos.idSeleccionado, datos.PropiedadQueRestringe);
+            if (valorDeLaColumna === null)
+                this.LeerElementoParaGestionarSusDependencias(datos);
+            else {
+                let idRestrictor = Numero(valorDeLaColumna);
+                let filtro = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+                datos.FiltroRestrictor = filtro;
+            }
+            return datos;
         }
         PrepararParametrosDeRelacionarCon(infoSelector, parametros) {
             if (infoSelector.Cantidad != 1)
@@ -633,6 +668,19 @@ var Crud;
                 datos.FiltroRestrictor = filtro;
             }
             return datos;
+        }
+        LeerElementoParaGestionarSusDependencias(datos) {
+            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${datos.idSeleccionado}`;
+            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerPorId, datos, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasLeerNavegarParaGestionarSusDependencias, null);
+            a.Ejecutar();
+        }
+        TrasLeerNavegarParaGestionarSusDependencias(peticion) {
+            let grid = peticion.llamador;
+            let datos = peticion.DatosDeEntrada;
+            let idRestrictor = Numero(peticion.resultado.datos[datos.PropiedadQueRestringe]);
+            let filtro = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
+            datos.FiltroRestrictor = filtro;
+            ApiRuote.NavegarADependientes(grid, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
         }
         LeerElementoParaRelacionar(datos) {
             let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${datos.idSeleccionado}`;
