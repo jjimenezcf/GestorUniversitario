@@ -11,6 +11,7 @@ using Gestor.Errores;
 using Utilidades;
 using GestoresDeNegocio.TrabajosSometidos;
 using System.Reflection;
+using System;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -33,6 +34,11 @@ namespace GestoresDeNegocio.Callejero
 
         }
 
+        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
+        {
+            return new GestorDeTrabajosDeUsuario(contexto, mapeador); ;
+        }
+
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
         {
             if (parametros.IsNullOrEmpty())
@@ -49,9 +55,21 @@ namespace GestoresDeNegocio.Callejero
 
         public static void ImportarCallejero(ContextoSe contextoTu, ContextoSe contextoPr, int idTrabajoDeUsuario)
         {
-            var gestor = GestorDeTrabajosDeUsuario.Gestor(contextoPr, contextoPr.Mapeador);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario);
-            throw new System.Exception($"Falta implementar el proceso para el trabajo {tu.Trabajo.Nombre}");
+            var gestorTu = GestorDeTrabajosDeUsuario.Gestor(contextoTu, contextoTu.Mapeador);
+            var tu = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario);
+            var gestorPr = GestorDePaises.Gestor(contextoPr, contextoPr.Mapeador);
+            var tran = gestorPr.IniciarTransaccion();
+            try
+            {
+                GestorDeErrores.Emitir($"Falta implementar el proceso para el trabajo {tu.Trabajo.Nombre}");
+                contextoPr.Commit(tran);
+            }
+            catch(Exception e)
+            {
+                contextoPr.Rollback(tran);
+                GestorDeErroresDeUnTrabajo.AnotarError(gestorTu.Contexto, tu, e);
+                throw;
+            }
         }
 
 

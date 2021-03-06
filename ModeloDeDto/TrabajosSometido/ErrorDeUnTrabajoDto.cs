@@ -47,5 +47,21 @@ namespace ModeloDeDto.TrabajosSometidos
         ]
         public string Error { get; set; }
 
+        //--------------------------------------------
+        [IUPropiedad(
+           Etiqueta = "Detalle",
+           Ayuda = "detalle del error",
+           TipoDeControl = enumTipoControl.AreaDeTexto,
+           Fila = 1,
+           Columna = 0,
+           VisibleEnGrid = false,
+           EditableAlEditar = false,
+           VisibleAlCrear = false,
+           Obligatorio = false,
+           NumeroDeFilas = 5
+           )
+        ]
+        public string Detalle { get; set; }
+
     }
 }

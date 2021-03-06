@@ -12,6 +12,16 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
                , rutaBase: "TrabajosSometido")
         {
+            Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.CrearElemento);
+            Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.EliminarElemento);
+
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            new RestrictorDeFiltro<ErrorDeUnTrabajoDto>(bloque: fltGeneral
+                  , etiqueta: "Trabajo de Usuario"
+                  , propiedad: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)
+                  , ayuda: "buscar por trabajo de usuario"
+                  , new Posicion { fila = 0, columna = 0 });
+
         }
 
         public override string RenderControl()

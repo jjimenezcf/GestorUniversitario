@@ -6,6 +6,8 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
+using System;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -38,11 +40,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        public ErrorDeUnTrabajoDtm CrearError(TrabajoDeUsuarioDtm tu, string error)
+        public ErrorDeUnTrabajoDtm CrearError(TrabajoDeUsuarioDtm tu, string error, string detalle)
         {
             var e = new ErrorDeUnTrabajoDtm();
             e.IdTrabajoDeUsuario = tu.Id;
             e.Error = error;
+            e.Detalle = detalle;
             return PersistirRegistro(e, new ParametrosDeNegocio(TipoOperacion.Insertar));
         }
 
@@ -54,6 +57,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
             registros = registros.Include(p => p.TrabajoDeUsuario.Sometedor);
             registros = registros.Include(p => p.TrabajoDeUsuario.Trabajo);
             return registros;
+        }
+
+        internal static void AnotarError(ContextoSe contextoPr, TrabajoDeUsuarioDtm tu, Exception e)
+        {
+            var gestorEt = Gestor(contextoPr, contextoPr.Mapeador);     
+            gestorEt.CrearError(tu, e.Message, GestorDeErrores.Concatenar(e.InnerException));
         }
     }
 }

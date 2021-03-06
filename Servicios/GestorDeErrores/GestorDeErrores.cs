@@ -13,6 +13,10 @@ namespace Gestor.Errores
         public static string Concatenar(Exception e)
         {
             var retorno = "";
+
+            if (e == null)
+                return null; 
+
             var s = e.StackTrace;
             while (e != null)
             {
