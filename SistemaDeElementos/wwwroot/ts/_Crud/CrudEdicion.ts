@@ -200,7 +200,7 @@
 
         protected InicializarValores(seleccionado: number) {
             let infSel: InfoSelector = this.InfoSelectorEdicion;
-            let id: number = infSel.Seleccionados[seleccionado] as number;
+            let id: number = infSel.Seleccionados[seleccionado].Id as number;
             this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }

@@ -197,6 +197,69 @@
         }
     }
 
+    class PaginaDelGrid {
+        private _elementos: Elemento[] = [];
+        private _pagina: number;
+        private _posicion: number;
+        private _catidad: number;
+        private _fecha: Date;
+        public get fecha(): string {
+            return this._fecha.toISOString();
+        }
+        public get Pagina(): number {
+            return this._pagina;
+        }
+        public get Posicion(): number {
+            return this._posicion;
+        }
+        public get Cantidad(): number {
+            return this._catidad;
+        }
+        public get Elementos(): Elemento[] {
+            return this._elementos;
+        }
+
+        constructor(pagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
+            this._elementos = elementos;
+            this._pagina = pagina;
+            this._catidad = cantidad;
+            this._posicion = posicion;
+            this._fecha = new Date(Date.now());
+        };
+    }
+
+    class DatosDelGrid {
+        private _paginas: PaginaDelGrid[] = [];
+
+        public AnadirPagina(pagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
+            let i: number = this.Buscar(pagina);
+            if (i >= 0) {
+                this._paginas.splice(i, 1);
+            }
+            let p: PaginaDelGrid = new PaginaDelGrid(pagina, posicion, cantidad, elementos);
+            this._paginas.push(p);
+        }
+
+        public Inicializar() {
+            this._paginas.splice(0, this._paginas.length);
+        }
+
+        public Pagina(pagina: number): PaginaDelGrid {
+            let i: number = this.Buscar(pagina);
+            if (i >= 0) {
+                return this._paginas[i];
+            }
+            return null;
+        }
+
+        private Buscar(pagina: number): number {
+            for (let i: number = 0; i < this._paginas.length; i++)
+                if (this._paginas[i].Pagina === pagina)
+                    return i;
+            return -1;
+        }
+    }
+
     export class GridDeDatos extends CrudBase {
 
         protected Ordenacion: Tipos.Ordenacion;
@@ -206,6 +269,8 @@
         public get InfoSelector(): InfoSelector {
             return this._infoSelector;
         }
+
+        public DatosDelGrid: DatosDelGrid = new DatosDelGrid();
 
         private _idGrid: string;
         protected get IdGrid(): string {
@@ -377,7 +442,7 @@
          */
         public FijarAlturaCuerpoDeLaTabla(alturaDelGrid: number): void {
             let alturaCabecera = this.CabeceraTablaGrid.getBoundingClientRect().height;
-            this.CuerpoTablaGrid.style.height = `${alturaDelGrid - alturaCabecera -9}px`;
+            this.CuerpoTablaGrid.style.height = `${alturaDelGrid - alturaCabecera - 9}px`;
         }
 
         protected ActualizarNavegadorDelGrid(accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
@@ -602,8 +667,8 @@
             return fila;
         }
 
-        protected AnadirAlInfoSelector(grid: GridDeDatos, id: number, expresionElemento: string): void {
-            grid.InfoSelector.InsertarElemento(id, expresionElemento);
+        protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
+            grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
         }
 
@@ -658,9 +723,8 @@
             grid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
 
             if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
-                let idSeleccionado: number = grid.Estado.Obtener(atGrid.idSeleccionado);
-                let nombreSeleccionado: string = grid.Estado.Obtener(atGrid.nombreSeleccionado);
-                grid.AnadirAlInfoSelector(grid, idSeleccionado, nombreSeleccionado);
+                let elemento: Elemento = grid.Estado.Obtener(atGrid.idSeleccionado);
+                grid.AnadirAlInfoSelector(grid, elemento);
                 grid.Estado.Quitar(atGrid.idSeleccionado);
                 grid.Estado.Quitar(atGrid.nombreSeleccionado);
             }
@@ -668,8 +732,8 @@
             grid.MarcarElementos();
             grid.InfoSelector.SincronizarCheck();
 
-            if (grid.InfoSelector.Cantidad > 0)
-                grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
+            //if (grid.InfoSelector.Cantidad > 0)
+            //    grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
         }
 
         protected obtenerValorDeLaFilaParaLaPropiedad(id: number, propiedad: string): string {
@@ -888,7 +952,13 @@
             if (posicion >= total)
                 return;
 
-            this.CargarGrid(atGrid.accion.ultima, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(ultimaPagina + 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.ultima, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.ultima, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.ultima, posicion);
         }
 
         public ObtenerAnteriores() {
@@ -902,8 +972,15 @@
             if (posicion < 0)
                 posicion = 0;
 
-            this.CargarGrid(atGrid.accion.anterior, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(pagina - 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.anterior, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.anterior, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.anterior, posicion);
         }
+
         public ObtenerSiguientes() {
             let cantidad: number = this.Navegador.Cantidad;
             let pagina: number = this.Navegador.Pagina;
@@ -912,8 +989,15 @@
             if (posicion >= total)
                 return;
 
-            this.CargarGrid(atGrid.accion.siguiente, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(pagina + 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.siguiente, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.siguiente, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
+
 
         protected CargarGrid(accion: string, posicion: number) {
 
@@ -942,24 +1026,24 @@
                 return null;
 
             let promesa: Promise<boolean> = new Promise((resolve, reject) => {
-            let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
-            var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
-            let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.LeerDatosParaElGrid
-                , datosDePeticion
-                , url
-                , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , (peticion) => {
-                    this.CrearFilasEnElGrid(peticion);
-                    resolve(true);
-                }
-                , (peticion) => {
-                    this.SiHayErrorAlCargarElGrid(peticion);
-                    reject(false);
-                }
-            );
-            this.Grid.setAttribute(atGrid.cargando, 'S');
+                let url: string = this.DefinirPeticionDeBusqueda(Ajax.EndPoint.LeerDatosParaElGrid, accion, posicion);
+                var datosDePeticion = new DatosPeticionNavegarGrid(this, accion, posicion);
+                let a = new ApiDeAjax.DescriptorAjax(this
+                    , Ajax.EndPoint.LeerDatosParaElGrid
+                    , datosDePeticion
+                    , url
+                    , ApiDeAjax.TipoPeticion.Asincrona
+                    , ApiDeAjax.ModoPeticion.Get
+                    , (peticion) => {
+                        this.CrearFilasEnElGrid(peticion);
+                        resolve(true);
+                    }
+                    , (peticion) => {
+                        this.SiHayErrorAlCargarElGrid(peticion);
+                        reject(false);
+                    }
+                );
+                this.Grid.setAttribute(atGrid.cargando, 'S');
                 a.Ejecutar();
             });
 
@@ -1003,11 +1087,9 @@
                 if (datosDeEntrada.Accion === atGrid.accion.buscar)
                     grid.Navegador.Total = infoObtenida.total;
 
-                var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros, datosDeEntrada.Accion);
-                grid.AnadirCuerpoALaTabla(grid, cuerpo, datosDeEntrada.Accion);
                 grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-                grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
-                grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros);
+                grid.MapearPaginaCacheada(grid, registros, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
@@ -1018,13 +1100,16 @@
             }
         }
 
-        private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any, accion: string) {
-            let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
-            //let cuerpoDeLaTabla: HTMLTableSectionElement = accion !== atGrid.accion.siguiente ?
-            //    document.createElement("tbody") :
-            //    grid.Grid.querySelector("table").querySelector("tbody");
+        protected MapearPaginaCacheada(grid: GridDeDatos, registros: Elemento[], accion: string, posicion: number): void {
+            var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
+            grid.AnadirCuerpoALaTabla(grid, cuerpo);
+            grid.AjustarTamanoDelCuerpoDeLaTabla(grid, cuerpo);
+            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+        }
 
-            let cuerpoDeLaTabla: HTMLTableSectionElement = document.createElement("tbody") ;
+        private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
+            let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
+            let cuerpoDeLaTabla: HTMLTableSectionElement = document.createElement("tbody");
 
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
@@ -1035,20 +1120,18 @@
             return cuerpoDeLaTabla;
         }
 
-        private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement, accion: string) {
+        private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
             let tabla: HTMLTableElement = grid.Grid.querySelector("table");
             let tbody: HTMLTableSectionElement = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
                 tabla.append(cuerpoDeLaTabla);
             else {
-                //if (accion !== atGrid.accion.siguiente)
-                //    tabla.removeChild(tbody);
                 tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
         }
 
-        private RecalcularTamanoDelCuerpoDeLaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
+        private AjustarTamanoDelCuerpoDeLaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
             if (grid.EsCrud) {
                 let posicion: number = grid.PosicionGrid();
                 let altura: number = grid.AlturaDelGrid(posicion);
@@ -1210,9 +1293,7 @@
 
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             if (check.checked) {
-                this.AnadirAlInfoSelector(this, id, expresionElemento);
-                if (!(this instanceof ModalConGrid))
-                    this.AccederAlModoDeAccesoAlElemento(id);
+                this.LeerElementoSeleccionado(id);
             }
             else {
                 this.QuitarDelSelector(this, id);
@@ -1222,6 +1303,25 @@
 
         }
 
+        protected LeerElementoSeleccionado(id: number): void {
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.EndPoint.LeerPorId
+                , id
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasLeerElementoSeleccionado
+                , null
+            );
+
+            a.Ejecutar();
+        }
+
+        private TrasLeerElementoSeleccionado(peticion: ApiDeAjax.DescriptorAjax) {
+            let grid: GridDeDatos = peticion.llamador as GridDeDatos;
+            grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
+        }
 
         protected DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;

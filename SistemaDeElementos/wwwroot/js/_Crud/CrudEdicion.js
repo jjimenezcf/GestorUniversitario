@@ -159,7 +159,7 @@ var Crud;
         }
         InicializarValores(seleccionado) {
             let infSel = this.InfoSelectorEdicion;
-            let id = infSel.Seleccionados[seleccionado];
+            let id = infSel.Seleccionados[seleccionado].Id;
             this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }

@@ -43,8 +43,7 @@ var Crud;
                 var listaNombres = this.Selector.value.split('|');
                 var listaIds = seleccionados.split(';');
                 for (var i = 0; i < listaIds.length; i++) {
-                    let e = new Elemento(Numero(listaIds[i]), listaNombres[i]);
-                    elementos.push(e);
+                    this.LeerElementoSeleccionado(Numero(listaIds[i]));
                 }
             }
             return elementos;
@@ -108,7 +107,7 @@ var Crud;
                 for (let key in registro) {
                     if (key === propiedadmostrar) {
                         this.Selector.value = '';
-                        this.mapearElementoAlHtmlSelector(new Elemento(registro['id'], registro[key]));
+                        this.mapearElementoAlHtmlSelector(new Elemento(registro));
                         return;
                     }
                 }

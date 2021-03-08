@@ -360,11 +360,13 @@
         }
 
         public Buscar(accion: string, posicion: number) {
-
+            this.DatosDelGrid.Inicializar();
             if (this.Navegador.EsRestauracion) {
                 this.RestaurarPagina();
             }
             else {
+                this.Navegador.Pagina = 1;
+                this.Navegador.Posicion = 0;
                 this.CargarGrid(accion, posicion);
             }
         }

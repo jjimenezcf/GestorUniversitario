@@ -56,8 +56,7 @@
                 var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
                 var listaIds = seleccionados.split(';');
                 for (var i = 0; i < listaIds.length; i++) {
-                    let e: Elemento = new Elemento(Numero(listaIds[i]), listaNombres[i]);
-                    elementos.push(e);
+                    this.LeerElementoSeleccionado(Numero(listaIds[i]))
                 }
             }
             return elementos;
@@ -137,7 +136,7 @@
             return clausula;
         };
 
-        private ProcesarRegistrosLeidos(registros: Array<any>) {
+        private ProcesarRegistrosLeidos(registros: Array<Elemento>) {
             this.InicializarModalDeSeleccion();
             var propiedadmostrar = this.Selector.getAttribute(atSelector.propiedadmostrar);
             if (registros.length === 1) {
@@ -145,7 +144,7 @@
                 for (let key in registro) {
                     if (key === propiedadmostrar) {
                         this.Selector.value = '';
-                        this.mapearElementoAlHtmlSelector(new Elemento(registro['id'], registro[key]));
+                        this.mapearElementoAlHtmlSelector(new Elemento(registro));
                         return;
                     }
                 }

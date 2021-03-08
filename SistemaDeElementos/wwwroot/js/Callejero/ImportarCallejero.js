@@ -20,7 +20,7 @@ var Callejero;
             if (super.AntesDeAceptar()) {
                 PonerCapa();
                 ApiDeArchivos.PrometoSubirLosArchivos(this.CuerpoDelFormulario)
-                    .then(resultados => sometido = this.ArchivosSubidos(this, resultados))
+                    .then(resultados => sometido = this.ArchivosSubidos(resultados))
                     .catch(error => sometido = promesaNoResuelta(this, error))
                     .finally(() => {
                     QuitarCapa();
@@ -28,7 +28,7 @@ var Callejero;
             }
             return sometido;
         }
-        ArchivosSubidos(form, resultados) {
+        ArchivosSubidos(resultados) {
             MensajesSe.Info(`trabajo sometido con ${resultados.length.toString()} ficheros subidos`);
             let sometido;
             this.SometerTrabajo()

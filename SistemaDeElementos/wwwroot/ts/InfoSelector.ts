@@ -5,29 +5,39 @@
 
 //************************************************************************************************************************************************************************************/
 class Elemento {
-    public Id: number;
-    public Texto: string;
+    private datos: any = null;
+    public modoDeAcceso: string;
+    public expresionMostrar: string;
 
-    public static get ElementoVacio(): Elemento { return new Elemento(0, ''); }
+    public get Id(): number { return this.datos["id"]; }
+    public get Texto(): string { return this.mostrar(); }
 
-    constructor(id: number, texto: string) {
-        this.Id = id;
-        this.Texto = texto;
+    public static get ElementoVacio(): Elemento { return new Elemento(null); }
+
+    constructor(elemento: Elemento) {
+        if (elemento !== null) {
+            this.datos = elemento.datos;
+            this.modoDeAcceso = elemento.datos;
+            this.expresionMostrar = elemento.datos;
+        }
     }
 
     EsVacio(): boolean {
-        if (this.Id === 0 || this.Texto === '')
-            return true;
+        return this.datos === null;
+    }
+
+    private mostrar(): string {
+        // recorre el datos y compone la expresione
+        return "pendiente";
     }
 }
 
 class InfoSelector {
 
     private idGrid: string;
-    private seleccionados: Array<number>;
-    private paraMostrarEnSelector: Array<string>;
     private _Seleccionables: number;
     private htmlGrid: HTMLElement;
+    private elementos: Elemento[] = [];
 
     private get Seleccionables(): number {
         return this._Seleccionables == NaN
@@ -46,16 +56,14 @@ class InfoSelector {
     }
 
     public get Id(): string { return this.idGrid; }
-    public get Cantidad(): number { return this.seleccionados.length; }
-    public get Seleccionados(): number[] { return this.seleccionados; }
-   
+    public get Cantidad(): number { return this.elementos.length; }
+    public get Seleccionados(): Elemento[] { return this.elementos; }
+
 
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
         this.Seleccionables = Numero(this.htmlGrid.getAttribute("seleccionables"));
-        this.seleccionados = new Array();
-        this.paraMostrarEnSelector = new Array();
     }
 
     constructor(idGrid) {
@@ -88,8 +96,7 @@ class InfoSelector {
         }
     }
 
-    public Contiene(id: number): boolean
-    {
+    public Contiene(id: number): boolean {
         if (this.Buscar(id) < 0)
             return false;
         else
@@ -98,41 +105,24 @@ class InfoSelector {
 
     public LeerId(pos: number): number {
         if (pos >= 0 && pos < this.Cantidad) {
-            return this.seleccionados[pos];
+            return this.elementos[pos].Id as number;
         }
         console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return 0;
     }
 
     public LeerElemento(pos: number): Elemento {
-        var id = this.LeerId(pos);
-        if (id > 0) {
-            var texto = this.paraMostrarEnSelector[pos];
-            return new Elemento(id, texto);
+        if (pos >= 0 && pos < this.Cantidad) {
+            return this.elementos[pos] as Elemento;
         }
+        console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return Elemento.ElementoVacio;
     }
 
-    private InsertarId(id: number) {
-        if (this.PuedeSeleccionarMas) {
-            this.seleccionados.push(id);
-        }
-
-        this.deshabilitarCheck(true);
-        return this.Cantidad;
-    }
-
-    public InsertarElemento(id: number, textoMostrar: string): number {
-        if (!id || isNaN(id)) {
-            Notificar(TipoMensaje.Error,`Ha intentado insertar en la lista un id no válido ${id}`);
-            return -1;
-        }
-        var pos = this.Buscar(id);
+    public InsertarElemento(elemento: Elemento): number {
+        var pos = this.Buscar(elemento.Id);
         if (pos < 0) {
-            pos = this.InsertarId(id);
-            if (pos === this.seleccionados.length) {
-                this.paraMostrarEnSelector.push(textoMostrar);
-            }
+            this.elementos.push(elemento);
         }
         return pos;
     }
@@ -141,8 +131,7 @@ class InfoSelector {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 let e: Elemento = elementos[i];
-                if (this.seleccionados.indexOf(e.Id) < 0)
-                    this.InsertarElemento(e.Id, e.Texto);
+                    this.InsertarElemento(e);
             }
         }
         else {
@@ -153,14 +142,16 @@ class InfoSelector {
     }
 
     public Buscar(id: number): number {
-        return this.seleccionados.indexOf(id);
+        for (let i: number = 0; i < this.elementos.length; i++)
+            if (Numero(this.elementos[i].Id) === id)
+                return (i);
+        return -1;
     }
 
     public Quitar(idSeleccionado: number) {
-        var pos = this.seleccionados.indexOf(idSeleccionado);
+        var pos = this.Buscar(idSeleccionado);
         if (pos >= 0) {
-            this.seleccionados.splice(pos, 1);
-            this.paraMostrarEnSelector.splice(pos, 1);
+            this.elementos.splice(pos, 1);
             console.log(`Ha quitado de la lista el ${idSeleccionado}`);
             this.deshabilitarCheck(false);
         }
@@ -169,15 +160,14 @@ class InfoSelector {
     }
 
     public QuitarTodos(): void {
-        this.seleccionados.splice(0, this.seleccionados.length);
-        this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
+        this.elementos.splice(0, this.elementos.length);
     }
 
     public ToString(): string {
         let ids: string = "";
-        for (var i = 0; i < this.seleccionados.length; i++) {
-            ids = ids + this.seleccionados[i];
-            if (i < this.seleccionados.length - 1)
+        for (var i = 0; i < this.elementos.length; i++) {
+            ids = ids + this.elementos[i].Id;
+            if (i < this.elementos.length - 1)
                 ids = ids + ';';
         }
         return ids;

@@ -145,9 +145,65 @@ var Crud;
             this.Mensaje = `Seleccionados ${seleccionados} de ${this.Total}`;
         }
     }
+    class PaginaDelGrid {
+        constructor(pagina, posicion, cantidad, elementos) {
+            this._elementos = [];
+            this._elementos = elementos;
+            this._pagina = pagina;
+            this._catidad = cantidad;
+            this._posicion = posicion;
+            this._fecha = new Date(Date.now());
+        }
+        get fecha() {
+            return this._fecha.toISOString();
+        }
+        get Pagina() {
+            return this._pagina;
+        }
+        get Posicion() {
+            return this._posicion;
+        }
+        get Cantidad() {
+            return this._catidad;
+        }
+        get Elementos() {
+            return this._elementos;
+        }
+        ;
+    }
+    class DatosDelGrid {
+        constructor() {
+            this._paginas = [];
+        }
+        AnadirPagina(pagina, posicion, cantidad, elementos) {
+            let i = this.Buscar(pagina);
+            if (i >= 0) {
+                this._paginas.splice(i, 1);
+            }
+            let p = new PaginaDelGrid(pagina, posicion, cantidad, elementos);
+            this._paginas.push(p);
+        }
+        Inicializar() {
+            this._paginas.splice(0, this._paginas.length);
+        }
+        Pagina(pagina) {
+            let i = this.Buscar(pagina);
+            if (i >= 0) {
+                return this._paginas[i];
+            }
+            return null;
+        }
+        Buscar(pagina) {
+            for (let i = 0; i < this._paginas.length; i++)
+                if (this._paginas[i].Pagina === pagina)
+                    return i;
+            return -1;
+        }
+    }
     class GridDeDatos extends Crud.CrudBase {
         constructor(idPanelMnt) {
             super();
+            this.DatosDelGrid = new DatosDelGrid();
             this._idCuerpoCabecera = idPanelMnt;
             if (this.CuerpoCabecera === null)
                 throw Error(`No se puede crear el Crud ${idPanelMnt}`);
@@ -482,8 +538,8 @@ var Crud;
             let fila = document.getElementById(idFila);
             return fila;
         }
-        AnadirAlInfoSelector(grid, id, expresionElemento) {
-            grid.InfoSelector.InsertarElemento(id, expresionElemento);
+        AnadirAlInfoSelector(grid, elemento) {
+            grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
         }
         QuitarDelSelector(grid, id) {
@@ -530,16 +586,15 @@ var Crud;
         ActualizarInformacionDelGrid(grid, accion, posicionDesdeLaQueSeLeyo, registrosLeidos) {
             grid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
             if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
-                let idSeleccionado = grid.Estado.Obtener(atGrid.idSeleccionado);
-                let nombreSeleccionado = grid.Estado.Obtener(atGrid.nombreSeleccionado);
-                grid.AnadirAlInfoSelector(grid, idSeleccionado, nombreSeleccionado);
+                let elemento = grid.Estado.Obtener(atGrid.idSeleccionado);
+                grid.AnadirAlInfoSelector(grid, elemento);
                 grid.Estado.Quitar(atGrid.idSeleccionado);
                 grid.Estado.Quitar(atGrid.nombreSeleccionado);
             }
             grid.MarcarElementos();
             grid.InfoSelector.SincronizarCheck();
-            if (grid.InfoSelector.Cantidad > 0)
-                grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
+            //if (grid.InfoSelector.Cantidad > 0)
+            //    grid.AccederAlModoDeAccesoAlElemento(this.InfoSelector.LeerElemento(0).Id);
         }
         obtenerValorDeLaFilaParaLaPropiedad(id, propiedad) {
             let fila = this.ObtenerFila(id);
@@ -709,7 +764,13 @@ var Crud;
             let posicion = (ultimaPagina - 1) * cantidad;
             if (posicion >= total)
                 return;
-            this.CargarGrid(atGrid.accion.ultima, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(ultimaPagina + 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.ultima, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.ultima, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.ultima, posicion);
         }
         ObtenerAnteriores() {
             let cantidad = this.Navegador.Cantidad;
@@ -719,7 +780,13 @@ var Crud;
             let posicion = (pagina - 2) * cantidad;
             if (posicion < 0)
                 posicion = 0;
-            this.CargarGrid(atGrid.accion.anterior, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(pagina - 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.anterior, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.anterior, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.anterior, posicion);
         }
         ObtenerSiguientes() {
             let cantidad = this.Navegador.Cantidad;
@@ -728,7 +795,13 @@ var Crud;
             let posicion = pagina * cantidad;
             if (posicion >= total)
                 return;
-            this.CargarGrid(atGrid.accion.siguiente, posicion);
+            let paginaDeDatos = this.DatosDelGrid.Pagina(pagina + 1);
+            if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
+                this.ActualizarInformacionDelGrid(this, atGrid.accion.siguiente, posicion, paginaDeDatos.Elementos.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.siguiente, paginaDeDatos.Posicion);
+            }
+            else
+                this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
         CargarGrid(accion, posicion) {
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')
@@ -790,11 +863,9 @@ var Crud;
                 var registros = infoObtenida.registros;
                 if (datosDeEntrada.Accion === atGrid.accion.buscar)
                     grid.Navegador.Total = infoObtenida.total;
-                var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros, datosDeEntrada.Accion);
-                grid.AnadirCuerpoALaTabla(grid, cuerpo, datosDeEntrada.Accion);
                 grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-                grid.RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpo);
-                grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros);
+                grid.MapearPaginaCacheada(grid, registros, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
@@ -804,11 +875,14 @@ var Crud;
                 }
             }
         }
-        CrearCuerpoDeLaTabla(grid, registros, accion) {
+        MapearPaginaCacheada(grid, registros, accion, posicion) {
+            var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
+            grid.AnadirCuerpoALaTabla(grid, cuerpo);
+            grid.AjustarTamanoDelCuerpoDeLaTabla(grid, cuerpo);
+            grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+        }
+        CrearCuerpoDeLaTabla(grid, registros) {
             let filaCabecera = grid.obtenerDescriptorDeLaCabecera(grid);
-            //let cuerpoDeLaTabla: HTMLTableSectionElement = accion !== atGrid.accion.siguiente ?
-            //    document.createElement("tbody") :
-            //    grid.Grid.querySelector("table").querySelector("tbody");
             let cuerpoDeLaTabla = document.createElement("tbody");
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
@@ -818,19 +892,17 @@ var Crud;
             }
             return cuerpoDeLaTabla;
         }
-        AnadirCuerpoALaTabla(grid, cuerpoDeLaTabla, accion) {
+        AnadirCuerpoALaTabla(grid, cuerpoDeLaTabla) {
             let tabla = grid.Grid.querySelector("table");
             let tbody = tabla.querySelector("tbody");
             if (tbody === null || tbody === undefined)
                 tabla.append(cuerpoDeLaTabla);
             else {
-                //if (accion !== atGrid.accion.siguiente)
-                //    tabla.removeChild(tbody);
                 tabla.removeChild(tbody);
                 tabla.append(cuerpoDeLaTabla);
             }
         }
-        RecalcularTamanoDelCuerpoDeLaTabla(grid, cuerpoDeLaTabla) {
+        AjustarTamanoDelCuerpoDeLaTabla(grid, cuerpoDeLaTabla) {
             if (grid.EsCrud) {
                 let posicion = grid.PosicionGrid();
                 let altura = grid.AlturaDelGrid(posicion);
@@ -967,15 +1039,22 @@ var Crud;
             }
             let id = this.ObtenerElIdDelElementoDelaFila(idCheck);
             if (check.checked) {
-                this.AnadirAlInfoSelector(this, id, expresionElemento);
-                if (!(this instanceof Crud.ModalConGrid))
-                    this.AccederAlModoDeAccesoAlElemento(id);
+                this.LeerElementoSeleccionado(id);
             }
             else {
                 this.QuitarDelSelector(this, id);
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof Crud.ModalConGrid) === false)
                     this.DeshabilitarOpcionesDeMenuDeElemento();
             }
+        }
+        LeerElementoSeleccionado(id) {
+            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
+            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerPorId, id, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasLeerElementoSeleccionado, null);
+            a.Ejecutar();
+        }
+        TrasLeerElementoSeleccionado(peticion) {
+            let grid = peticion.llamador;
+            grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
         }
         DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);

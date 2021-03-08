@@ -154,7 +154,7 @@ namespace MVCSistemaDeElementos.Controllers
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
 
                 var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
-                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, elemento);
+                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), id);
                 if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
@@ -208,6 +208,8 @@ namespace MVCSistemaDeElementos.Controllers
         public class ResultadoDeLectura
         {
             public List<Dictionary<string, object>> registros { get; set; }
+            public int posicion;
+            public int cantidad;
             public int total { get; set; }
         }
 
@@ -236,6 +238,8 @@ namespace MVCSistemaDeElementos.Controllers
 
                 infoObtenida.registros = ElementosLeidos(elementos.ToList());
                 infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
+                infoObtenida.posicion = pos;
+                infoObtenida.cantidad = can;
 
                 r.Datos = infoObtenida;
                 r.Estado = enumEstadoPeticion.Ok;
@@ -266,6 +270,7 @@ namespace MVCSistemaDeElementos.Controllers
                         object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
                         registro[propiedad.Name] = valor == null ? "" : valor;
                     }
+                    registro[nameof(Resultado.ModoDeAcceso)] = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), registro[nameof(ElementoDto.Id)].ToString().Entero());
                     listaDeElementos.Add(registro);
                 }
             }

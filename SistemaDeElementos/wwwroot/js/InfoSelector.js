@@ -2,18 +2,28 @@
 /// Gestión de los info selectores
 //************************************************************************************************************************************************************************************/
 class Elemento {
-    constructor(id, texto) {
-        this.Id = id;
-        this.Texto = texto;
+    constructor(elemento) {
+        this.datos = null;
+        if (elemento !== null) {
+            this.datos = elemento.datos;
+            this.modoDeAcceso = elemento.datos;
+            this.expresionMostrar = elemento.datos;
+        }
     }
-    static get ElementoVacio() { return new Elemento(0, ''); }
+    get Id() { return this.datos["id"]; }
+    get Texto() { return this.mostrar(); }
+    static get ElementoVacio() { return new Elemento(null); }
     EsVacio() {
-        if (this.Id === 0 || this.Texto === '')
-            return true;
+        return this.datos === null;
+    }
+    mostrar() {
+        // recorre el datos y compone la expresione
+        return "pendiente";
     }
 }
 class InfoSelector {
     constructor(idGrid) {
+        this.elementos = [];
         this.iniciarClase(idGrid);
         console.log(`Ha creado el infoselector ${idGrid}`);
     }
@@ -31,14 +41,12 @@ class InfoSelector {
         this._Seleccionables = seleccionables;
     }
     get Id() { return this.idGrid; }
-    get Cantidad() { return this.seleccionados.length; }
-    get Seleccionados() { return this.seleccionados; }
+    get Cantidad() { return this.elementos.length; }
+    get Seleccionados() { return this.elementos; }
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
         this.Seleccionables = Numero(this.htmlGrid.getAttribute("seleccionables"));
-        this.seleccionados = new Array();
-        this.paraMostrarEnSelector = new Array();
     }
     deshabilitarCheck(deshabilitar) {
         var ejecutar = false;
@@ -68,37 +76,22 @@ class InfoSelector {
     }
     LeerId(pos) {
         if (pos >= 0 && pos < this.Cantidad) {
-            return this.seleccionados[pos];
+            return this.elementos[pos].Id;
         }
         console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return 0;
     }
     LeerElemento(pos) {
-        var id = this.LeerId(pos);
-        if (id > 0) {
-            var texto = this.paraMostrarEnSelector[pos];
-            return new Elemento(id, texto);
+        if (pos >= 0 && pos < this.Cantidad) {
+            return this.elementos[pos];
         }
+        console.log(`Ha intentado leer la posición ${pos} en una lista de longitud ${this.Cantidad}`);
         return Elemento.ElementoVacio;
     }
-    InsertarId(id) {
-        if (this.PuedeSeleccionarMas) {
-            this.seleccionados.push(id);
-        }
-        this.deshabilitarCheck(true);
-        return this.Cantidad;
-    }
-    InsertarElemento(id, textoMostrar) {
-        if (!id || isNaN(id)) {
-            Notificar(TipoMensaje.Error, `Ha intentado insertar en la lista un id no válido ${id}`);
-            return -1;
-        }
-        var pos = this.Buscar(id);
+    InsertarElemento(elemento) {
+        var pos = this.Buscar(elemento.Id);
         if (pos < 0) {
-            pos = this.InsertarId(id);
-            if (pos === this.seleccionados.length) {
-                this.paraMostrarEnSelector.push(textoMostrar);
-            }
+            this.elementos.push(elemento);
         }
         return pos;
     }
@@ -106,8 +99,7 @@ class InfoSelector {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 let e = elementos[i];
-                if (this.seleccionados.indexOf(e.Id) < 0)
-                    this.InsertarElemento(e.Id, e.Texto);
+                this.InsertarElemento(e);
             }
         }
         else {
@@ -116,13 +108,15 @@ class InfoSelector {
         return this.Cantidad;
     }
     Buscar(id) {
-        return this.seleccionados.indexOf(id);
+        for (let i = 0; i < this.elementos.length; i++)
+            if (Numero(this.elementos[i].Id) === id)
+                return (i);
+        return -1;
     }
     Quitar(idSeleccionado) {
-        var pos = this.seleccionados.indexOf(idSeleccionado);
+        var pos = this.Buscar(idSeleccionado);
         if (pos >= 0) {
-            this.seleccionados.splice(pos, 1);
-            this.paraMostrarEnSelector.splice(pos, 1);
+            this.elementos.splice(pos, 1);
             console.log(`Ha quitado de la lista el ${idSeleccionado}`);
             this.deshabilitarCheck(false);
         }
@@ -130,14 +124,13 @@ class InfoSelector {
             console.error(`No se ha localizado el elemento con id  ${idSeleccionado}`);
     }
     QuitarTodos() {
-        this.seleccionados.splice(0, this.seleccionados.length);
-        this.paraMostrarEnSelector.splice(0, this.paraMostrarEnSelector.length);
+        this.elementos.splice(0, this.elementos.length);
     }
     ToString() {
         let ids = "";
-        for (var i = 0; i < this.seleccionados.length; i++) {
-            ids = ids + this.seleccionados[i];
-            if (i < this.seleccionados.length - 1)
+        for (var i = 0; i < this.elementos.length; i++) {
+            ids = ids + this.elementos[i].Id;
+            if (i < this.elementos.length - 1)
                 ids = ids + ';';
         }
         return ids;

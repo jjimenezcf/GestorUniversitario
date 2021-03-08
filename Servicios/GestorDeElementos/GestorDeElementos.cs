@@ -213,7 +213,7 @@ namespace GestorDeElementos
                     Clausula = propiedad.Name,
                     Criterio = CriteriosDeFiltrado.igual
                 };
-                
+
                 if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())
                     c.Valor = InvertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
 
@@ -242,7 +242,7 @@ namespace GestorDeElementos
                     Contexto.Remove(registro);
                 else
                     throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
-                
+
                 Contexto.SaveChanges();
 
                 DespuesDePersistir(registro, parametros);
@@ -738,12 +738,6 @@ namespace GestorDeElementos
             return (bool)cache[indice];
         }
 
-        public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, TElemento elemento)
-        {
-            var m = LeerModoDeAccesoAlElemento(idUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), elemento.Id);
-            return m;
-        }
-
         public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, enumNegocio negocio, int id)
         {
             var m = LeerModoDeAccesoAlNegocio(idUsuario, negocio);
@@ -760,30 +754,29 @@ namespace GestorDeElementos
             if (!NegociosDeSe.UsaSeguridad(negocio) || negocio == enumNegocio.No_Definido)
                 return enumModoDeAccesoDeDatos.Administrador;
 
-            if (Contexto.DatosDeConexion.EsAdministrador)
-                modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
-            else
             if (NegociosDeSe.EsDeParametrizacion(negocio) && !Contexto.DatosDeConexion.EsAdministrador)
-                modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
-            else
-            {
-                var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
-                foreach (var modoLeido in modosLeidos)
-                {
-                    if (modoLeido.Administrador)
-                    {
-                        modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
-                        break;
-                    }
+                return enumModoDeAccesoDeDatos.Consultor;
 
-                    if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
-                        modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
-                    else
-                    if (modoLeido.Consultor)
-                        modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
-                }
+            if (Contexto.DatosDeConexion.EsAdministrador)
+                return enumModoDeAccesoDeDatos.Administrador;
+
+            if (!NegocioActivo(negocio))
+                return enumModoDeAccesoDeDatos.Consultor;
+
+            var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
+            foreach (var modoLeido in modosLeidos)
+            {
+                if (modoLeido.Administrador)
+                    return enumModoDeAccesoDeDatos.Administrador;
+
+                if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
+                    modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
+                else
+                if (modoLeido.Consultor)
+                    modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
             }
-            return NegocioActivo(negocio) ? modoDelUsuario : enumModoDeAccesoDeDatos.Consultor;
+
+            return modoDelUsuario;
         }
 
         private bool NegocioActivo(enumNegocio negocio)
