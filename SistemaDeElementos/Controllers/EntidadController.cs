@@ -159,7 +159,7 @@ namespace MVCSistemaDeElementos.Controllers
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
                 r.Datos = elemento;
-                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
+                r.ModoDeAcceso = modoDeAcceso.Render(); 
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"registro leido";
             }
@@ -270,7 +270,8 @@ namespace MVCSistemaDeElementos.Controllers
                         object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
                         registro[propiedad.Name] = valor == null ? "" : valor;
                     }
-                    registro[nameof(Resultado.ModoDeAcceso)] = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), registro[nameof(ElementoDto.Id)].ToString().Entero());
+                    var ma = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), registro[nameof(ElementoDto.Id)].ToString().Entero());
+                    registro[nameof(Resultado.ModoDeAcceso)] = ma.Render();
                     listaDeElementos.Add(registro);
                 }
             }
@@ -410,7 +411,7 @@ namespace MVCSistemaDeElementos.Controllers
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio));
 
-                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
+                r.ModoDeAcceso = modoDeAcceso.Render();
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -440,7 +441,7 @@ namespace MVCSistemaDeElementos.Controllers
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
                 r.Datos = elemento;
-                r.ModoDeAcceso = ModoDeAcceso.ToString(modoDeAcceso);
+                r.ModoDeAcceso = modoDeAcceso.Render();
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso} sobre el elemento seleccionado";
                 r.Estado = enumEstadoPeticion.Ok;
             }

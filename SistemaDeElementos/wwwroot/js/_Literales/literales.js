@@ -112,6 +112,7 @@ const atArchivo = {
 };
 const atOpcionDeMenu = {
     permisosNecesarios: "permisos-necesarios",
+    permiteMultiSeleccion: "permite-multi-seleccion",
     clase: "clase",
     bloqueada: "bloqueada"
 };
@@ -401,10 +402,10 @@ const ClaseDeOpcioDeMenu = {
     Basico: "opcion-menu-basica",
 };
 const ModoDeAccesoDeDatos = {
-    Administrador: "Administrador",
+    Administrador: "administrador",
     Gestor: "gestor",
-    Consultor: "Consultor",
-    SinPermiso: "SinPermiso"
+    Consultor: "consultor",
+    SinPermiso: "sinpermiso"
 };
 const ModoTrabajo = {
     creando: "creando",

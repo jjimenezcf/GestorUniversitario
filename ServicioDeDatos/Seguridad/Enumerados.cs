@@ -52,6 +52,11 @@ namespace ServicioDeDatos.Seguridad
             throw new Exception($"El modo de acceso de datos '{modoDeAcceso}' no está definido, no se puede parsear");
         }
 
+        public static string Render(this enumModoDeAccesoDeDatos modoDeAcceso)
+        {
+            return ToString(modoDeAcceso).ToLower();
+        }
+
         public static string ToString(enumModoDeAccesoFuncional modoDeAcceso)
         {
             switch (modoDeAcceso)

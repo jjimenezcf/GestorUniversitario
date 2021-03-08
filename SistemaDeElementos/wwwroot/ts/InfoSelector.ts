@@ -5,25 +5,26 @@
 
 //************************************************************************************************************************************************************************************/
 class Elemento {
-    private datos: any = null;
-    public modoDeAcceso: string;
+    private _datos: any = null;
+    private _modoDeAcceso: string;
     public expresionMostrar: string;
 
-    public get Id(): number { return this.datos["id"]; }
+    public get Id(): number { return this._datos["id"]; }
     public get Texto(): string { return this.mostrar(); }
+    public get ModoDeAcceso(): string { return this._modoDeAcceso; }
 
     public static get ElementoVacio(): Elemento { return new Elemento(null); }
 
     constructor(elemento: Elemento) {
         if (elemento !== null) {
-            this.datos = elemento.datos;
-            this.modoDeAcceso = elemento.datos;
-            this.expresionMostrar = elemento.datos;
+            this._datos = elemento._datos;
+            this._modoDeAcceso = (elemento._datos["ModoDeAcceso"] as string).toLowerCase();
+            this.expresionMostrar = elemento._datos;
         }
     }
 
     EsVacio(): boolean {
-        return this.datos === null;
+        return this._datos === null;
     }
 
     private mostrar(): string {

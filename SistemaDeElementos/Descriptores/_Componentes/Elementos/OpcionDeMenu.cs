@@ -15,6 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public enumCssOpcionMenu ClaseDeAccion { get; private set; }
 
         public string Ayuda { get; private set; }
+        public bool PermiteMultiSeleccion { get; set; } = false;
 
         public AccionDeMenu(string tipoDeAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         {
@@ -93,7 +94,6 @@ namespace MVCSistemaDeElementos.Descriptores
     public class AccionDeMenuMnt : AccionDeMenu
     {
         protected List<string> Parametros = new List<string>();
-
         public AccionDeMenuMnt(string tipoAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         : base(tipoAccion, claseDeAccion, ayuda)
         {
@@ -122,6 +122,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public BorrarElemento()
         : base(TipoDeAccionDeMnt.EliminarElemento, enumCssOpcionMenu.DeElemento, "Borrar elemento")
         {
+            PermiteMultiSeleccion = false;
         }
     }
 
@@ -130,6 +131,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public EditarElemento()
         : base(TipoDeAccionDeMnt.EditarElemento, enumCssOpcionMenu.DeElemento, "Editar elemento")
         {
+            PermiteMultiSeleccion = true;
         }
     }
 
@@ -143,6 +145,7 @@ namespace MVCSistemaDeElementos.Descriptores
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);
             RenderDeLaModal = renderDeLaModal;
+            PermiteMultiSeleccion = false;
         }
 
         public override string RenderAccion()
@@ -161,6 +164,7 @@ namespace MVCSistemaDeElementos.Descriptores
             IdHtmlDeLaModalAsociada = idHtmlDeLaModalAsociada;
             Parametros.Add(idHtmlDeLaModalAsociada);
             RenderDeLaModal = renderDeLaModal;
+            PermiteMultiSeleccion = false;
         }
 
         public override string RenderAccion()
@@ -293,11 +297,13 @@ namespace MVCSistemaDeElementos.Descriptores
                 return htmlFormPost;
             }
 
+            var permite = Accion.PermiteMultiSeleccion ? "S" : "N";
             var htmlOpcionMenu = $@"<input id=¨{IdHtml}¨
                                            type=¨button¨
                                            tipo=¨{Tipo.Render()}¨
                                            clase=¨{Css.Render(ClaseBoton)}¨
-                                           permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨
+                                           permisos-necesarios=¨{PermisosNecesarios.Render()}¨
+                                           permite-multi-seleccion=¨{permite}¨
                                            value=¨{Etiqueta}¨
                                            onClick=¨{Accion.RenderAccion()}¨
                                            title=¨{Ayuda}¨
@@ -315,7 +321,8 @@ namespace MVCSistemaDeElementos.Descriptores
                         <input type=¨button¨ 
                                tipo=¨{Tipo.Render()}¨
                                clase=¨{Css.Render(ClaseBoton)}¨ 
-                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
+                               permisos-necesarios=¨{PermisosNecesarios.Render()}¨ 
+                               permite-multi-seleccion=¨N¨
                                value=¨{Etiqueta}¨ 
                                onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
                                title=¨{Ayuda}¨
@@ -332,7 +339,8 @@ namespace MVCSistemaDeElementos.Descriptores
                         <input type=¨button¨ 
                                tipo=¨{Tipo.Render()}¨
                                clase=¨{Css.Render(ClaseBoton)}¨ 
-                               permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(PermisosNecesarios)}¨ 
+                               permisos-necesarios=¨{PermisosNecesarios.Render()}¨ 
+                               permite-multi-seleccion=¨N¨
                                value=¨{Etiqueta}¨ 
                                onClick=¨{Accion.RenderAccion().Replace("idDeOpcMenu", IdHtml)}¨ 
                                title=¨{Ayuda}¨

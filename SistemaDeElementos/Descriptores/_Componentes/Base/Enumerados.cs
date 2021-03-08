@@ -450,12 +450,4 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
-
-    public partial class ModoDeAccesoDeDatos
-    {
-        public static string Render(enumModoDeAccesoDeDatos modoDeAcceso)
-        {
-            return ModoDeAcceso.ToString(modoDeAcceso).ToLower();
-        }
-    }
 }

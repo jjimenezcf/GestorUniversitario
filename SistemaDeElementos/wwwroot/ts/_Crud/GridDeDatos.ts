@@ -226,17 +226,29 @@
             this._posicion = posicion;
             this._fecha = new Date(Date.now());
         };
+
+        public Obtener(id: number): Elemento {
+            for (let i: number = 0; i < this._elementos.length; i++) {
+                if (this._elementos[i].Id === id)
+                    return this._elementos[i];
+            }
+            return null;
+        }
     }
 
     class DatosDelGrid {
         private _paginas: PaginaDelGrid[] = [];
+        private _paginaActual: number;
+        public set PaginaActual(numeroDePagina: number) {
+            this._paginaActual = numeroDePagina;
+        }
 
-        public AnadirPagina(pagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
-            let i: number = this.Buscar(pagina);
+        public AnadirPagina(numeroDePagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
+            let i: number = this.Buscar(numeroDePagina);
             if (i >= 0) {
                 this._paginas.splice(i, 1);
             }
-            let p: PaginaDelGrid = new PaginaDelGrid(pagina, posicion, cantidad, elementos);
+            let p: PaginaDelGrid = new PaginaDelGrid(numeroDePagina, posicion, cantidad, elementos);
             this._paginas.push(p);
         }
 
@@ -244,17 +256,28 @@
             this._paginas.splice(0, this._paginas.length);
         }
 
-        public Pagina(pagina: number): PaginaDelGrid {
-            let i: number = this.Buscar(pagina);
+        public Pagina(numeroDePagina: number): PaginaDelGrid {
+            let i: number = this.Buscar(numeroDePagina);
             if (i >= 0) {
                 return this._paginas[i];
             }
             return null;
         }
 
-        private Buscar(pagina: number): number {
+        public Obtener(id: number) {
+            let p: PaginaDelGrid = this.Pagina(this._paginaActual);
+            if (p === null)
+                throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`)
+
+            let e: Elemento = p.Obtener(id);
+            if (e === null)
+                throw Error(`El elemento con id ${id} no se encuentra en la página actual del grid`)
+            return e;
+        }
+
+        private Buscar(numeroDePagina: number): number {
             for (let i: number = 0; i < this._paginas.length; i++)
-                if (this._paginas[i].Pagina === pagina)
+                if (this._paginas[i].Pagina === numeroDePagina)
                     return i;
             return -1;
         }
@@ -1123,12 +1146,10 @@
         private AnadirCuerpoALaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
             let tabla: HTMLTableElement = grid.Grid.querySelector("table");
             let tbody: HTMLTableSectionElement = tabla.querySelector("tbody");
-            if (tbody === null || tbody === undefined)
-                tabla.append(cuerpoDeLaTabla);
-            else {
+            if (!(tbody === null || tbody === undefined))
                 tabla.removeChild(tbody);
-                tabla.append(cuerpoDeLaTabla);
-            }
+            tabla.append(cuerpoDeLaTabla);
+            grid.DatosDelGrid.PaginaActual = grid.Navegador.Pagina;
         }
 
         private AjustarTamanoDelCuerpoDeLaTabla(grid: GridDeDatos, cuerpoDeLaTabla: HTMLTableSectionElement) {
@@ -1282,7 +1303,7 @@
             return "";
         }
 
-        public FilaPulsada(infoSelector: InfoSelector, idCheck: string, idDelInput: string) {
+        public FilaPulsada(idCheck: string, idDelInput: string) {
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
@@ -1293,15 +1314,52 @@
 
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             if (check.checked) {
-                this.LeerElementoSeleccionado(id);
+                let elemento: Elemento = this.DatosDelGrid.Obtener(id);
+                this.AnadirAlInfoSelector(this, elemento);
+                this.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso)
             }
             else {
                 this.QuitarDelSelector(this, id);
+                for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) {
+                    let e: Elemento = this.InfoSelector.LeerElemento(i);
+                    this.AjustarOpcionesDeMenu(e, e.ModoDeAcceso);
+                }
+
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
                     this.DeshabilitarOpcionesDeMenuDeElemento();
             }
 
         }
+
+        public AjustarOpcionesDeMenu(elemento: any, modoAcceso: string): void {
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion: HTMLButtonElement = opcionesDeElemento[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
+
+                let estaDeshabilitado = opcion.disabled;
+                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+                let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+                if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion ) {
+                    opcion.disabled = true;
+                    continue
+                }
+
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAcceso !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else
+                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAcceso === ModoDeAccesoDeDatos.Consultor || modoAcceso === ModoDeAccesoDeDatos.SinPermiso))
+                        opcion.disabled = true;
+                    else
+                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAcceso === ModoDeAccesoDeDatos.SinPermiso)
+                            opcion.disabled = true;
+                        else
+                            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            }
+        }
+
 
         protected LeerElementoSeleccionado(id: number): void {
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
@@ -1322,6 +1380,8 @@
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
             grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
         }
+
+        public Ajustar
 
         protected DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
@@ -1349,8 +1409,7 @@
 
         private AplicarModoDeAccesoAlElemento(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
-            let modoDeAccesoDelUsuario: string = peticion.resultado.modoDeAcceso;
-            mantenimiento.AjustarOpcionesDeMenuDelElemento(peticion.resultado.datos, modoDeAccesoDelUsuario);
+            let modoDeAccesoDelUsuario: string = peticion.resultado.modoDeAcceso;            
         }
 
 

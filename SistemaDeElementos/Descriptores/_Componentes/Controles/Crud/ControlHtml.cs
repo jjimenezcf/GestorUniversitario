@@ -73,7 +73,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlOpcion = "";
             if (!opcion.IsNullOrEmpty() && !accion.IsNullOrEmpty())
             {
-                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ clase=¨{Css.Render(claseBoton)}¨ permisos-necesarios=¨{ModoDeAccesoDeDatos.Render(permisosNecesarios)}¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
+                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ clase=¨{Css.Render(claseBoton)}¨ permisos-necesarios=¨{permisosNecesarios.Render()}¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
             }
 
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>

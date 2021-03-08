@@ -53,7 +53,7 @@ var Crud;
                 }
                 case Evento.Mnt.FilaPulsada: {
                     let parIn = parametros.split("#");
-                    Crud.crudMnt.FilaPulsada(Crud.crudMnt.InfoSelector, parIn[0], parIn[1]);
+                    Crud.crudMnt.FilaPulsada(parIn[0], parIn[1]);
                     break;
                 }
                 case Evento.Mnt.OrdenarPor: {
@@ -116,7 +116,7 @@ var Crud;
                 case Evento.ModalSeleccion.FilaPulsada: {
                     let idCheck = parIn[1];
                     let idOrigen = parIn[2]; // si se ha pulsado en el check o en la fila
-                    modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
                 case Evento.ModalSeleccion.Buscar: {
@@ -203,7 +203,7 @@ var Crud;
                 case Evento.ModalParaRelacionar.FilaPulsada: {
                     let idCheck = parIn[1];
                     let idOrigen = parIn[2]; // si se ha pulsado en el check o en la fila
-                    modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
                 case Evento.ModalParaRelacionar.MostrarSoloSeleccionadas: {
@@ -265,7 +265,7 @@ var Crud;
                 case Evento.ModalParaConsultaDeRelaciones.FilaPulsada: {
                     let idCheck = parIn[1];
                     let idOrigen = parIn[2]; // si se ha pulsado en el check o en la fila
-                    modal.FilaPulsada(modal.InfoSelector, idCheck, idOrigen);
+                    modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
                 case Evento.ModalParaConsultaDeRelaciones.MostrarSoloSeleccionadas: {

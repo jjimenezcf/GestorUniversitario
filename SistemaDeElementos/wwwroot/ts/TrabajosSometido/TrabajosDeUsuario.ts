@@ -10,6 +10,24 @@
 
     const idsometedor: string = 'idsometedor';
 
+    class TrabajoDeUsuario {
+        Ejecutor: string;
+        Encolado: Date;
+        Estado: string;
+        Id: number;
+        IdEjecutor: number;
+        IdSometedor: number;
+        IdTrabajo: number;
+        Iniciado: Date;
+        ModoDeAcceso: string;
+        Parametros: string;
+        Periodicidad: number;
+        Planificado: Date;
+        Sometedor: string;
+        Terminado: Date;
+        Trabajo: string;
+    }
+
     export class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
@@ -44,9 +62,9 @@
             }
         }
 
-        public AjustarOpcionesDeMenuDelElemento(elemento: any, modoAcceso: string): void {
-            super.AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso);
-            let estado: string = elemento['estado'];
+        public AjustarOpcionesDeMenu(elemento: TrabajoDeUsuario, modoAcceso: string): void {
+            super.AjustarOpcionesDeMenu(elemento, modoAcceso);
+            let estado: string = elemento.Estado.toLowerCase();
             switch (estado) {
                 case 'erroneo': {
                     this.ActivarOpciones([]);

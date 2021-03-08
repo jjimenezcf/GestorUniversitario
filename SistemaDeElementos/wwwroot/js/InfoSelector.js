@@ -3,18 +3,19 @@
 //************************************************************************************************************************************************************************************/
 class Elemento {
     constructor(elemento) {
-        this.datos = null;
+        this._datos = null;
         if (elemento !== null) {
-            this.datos = elemento.datos;
-            this.modoDeAcceso = elemento.datos;
-            this.expresionMostrar = elemento.datos;
+            this._datos = elemento._datos;
+            this._modoDeAcceso = elemento._datos["ModoDeAcceso"].toLowerCase();
+            this.expresionMostrar = elemento._datos;
         }
     }
-    get Id() { return this.datos["id"]; }
+    get Id() { return this._datos["id"]; }
     get Texto() { return this.mostrar(); }
+    get ModoDeAcceso() { return this._modoDeAcceso; }
     static get ElementoVacio() { return new Elemento(null); }
     EsVacio() {
-        return this.datos === null;
+        return this._datos === null;
     }
     mostrar() {
         // recorre el datos y compone la expresione

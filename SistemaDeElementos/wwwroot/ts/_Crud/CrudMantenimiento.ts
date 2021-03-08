@@ -124,30 +124,6 @@
             });
         }
 
-        public AjustarOpcionesDeMenuDelElemento(elemento: any, modoAcceso: string): void {
-            let opcionesGenerales: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
-            let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
-            for (var i = 0; i < opcionesGenerales.length; i++) {
-                let opcion: HTMLButtonElement = opcionesGenerales[i];
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-
-                let estaDeshabilitado = opcion.disabled;
-                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAcceso !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAcceso === ModoDeAccesoDeDatos.Consultor || modoAcceso === ModoDeAccesoDeDatos.SinPermiso))
-                        opcion.disabled = true;
-                    else
-                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAcceso === ModoDeAccesoDeDatos.SinPermiso)
-                            opcion.disabled = true;
-                        else
-                            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
-            }
-        }
-
-
         private InicializarMenus() {
 
             this.DeshabilitarOpcionesDeMenuDeElemento();

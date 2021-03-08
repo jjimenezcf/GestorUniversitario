@@ -12,14 +12,15 @@ namespace MVCSistemaDeElementos.Descriptores
             const string desbloquear = "desbloquear-trabajo";
             const string bloquear = "bloquear-trabajo";
             const string iniciar = "iniciar-trabajo";
-            public AccionesDeTu(string accion, string ayuda)
+            public AccionesDeTu(string accion, string ayuda, bool permiteMultiSeleccion)
             : base(accion, enumCssOpcionMenu.DeElemento, ayuda)
             {
+                PermiteMultiSeleccion = permiteMultiSeleccion;
             }
 
-            public static AccionesDeTu Desbloquear => new AccionesDeTu(desbloquear, "Desbloquear un trabajo");
-            public static AccionesDeTu Bloquear => new AccionesDeTu(bloquear, "Bloquear un trabajo");
-            public static AccionesDeTu Iniciar => new AccionesDeTu(iniciar, "Ejecutar un trabajo");
+            public static AccionesDeTu Desbloquear => new AccionesDeTu(desbloquear, "Desbloquear un trabajo", true);
+            public static AccionesDeTu Bloquear => new AccionesDeTu(bloquear, "Bloquear un trabajo", true);
+            public static AccionesDeTu Iniciar => new AccionesDeTu(iniciar, "Ejecutar un trabajo", false);
 
             public override string RenderAccion()
             {

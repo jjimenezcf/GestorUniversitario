@@ -8,6 +8,8 @@ var TrabajosSometido;
     }
     TrabajosSometido.CrearCrudDeTrabajosDeUsuario = CrearCrudDeTrabajosDeUsuario;
     const idsometedor = 'idsometedor';
+    class TrabajoDeUsuario {
+    }
     class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
         constructor(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
             super(idPanelMnt, idModalBorrar);
@@ -34,9 +36,9 @@ var TrabajosSometido;
                 ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
-        AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso) {
-            super.AjustarOpcionesDeMenuDelElemento(elemento, modoAcceso);
-            let estado = elemento['estado'];
+        AjustarOpcionesDeMenu(elemento, modoAcceso) {
+            super.AjustarOpcionesDeMenu(elemento, modoAcceso);
+            let estado = elemento.Estado.toLowerCase();
             switch (estado) {
                 case 'erroneo': {
                     this.ActivarOpciones([]);
