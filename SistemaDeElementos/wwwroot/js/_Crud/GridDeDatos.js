@@ -555,7 +555,7 @@ var Crud;
         AnadirAlInfoSelector(grid, elemento) {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
-            grid.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso);
+            grid.AjustarOpcionesDeMenu(elemento);
         }
         QuitarDelSelector(grid, id) {
             grid.InfoSelector.Quitar(id);
@@ -1060,13 +1060,14 @@ var Crud;
                 this.QuitarDelSelector(this, id);
                 for (let i = 0; i < this.InfoSelector.Cantidad; i++) {
                     let e = this.InfoSelector.LeerElemento(i);
-                    this.AjustarOpcionesDeMenu(e, e.ModoDeAcceso);
+                    this.AjustarOpcionesDeMenu(e);
                 }
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof Crud.ModalConGrid) === false)
                     this.DeshabilitarOpcionesDeMenuDeElemento();
             }
         }
-        AjustarOpcionesDeMenu(elemento, modoAcceso) {
+        AjustarOpcionesDeMenu(elemento) {
+            let modoAcceso = elemento.ModoDeAcceso;
             let opcionesDeElemento = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
             let hacerLaInterseccion = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {

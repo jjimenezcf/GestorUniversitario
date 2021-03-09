@@ -4,7 +4,6 @@ var Entorno;
         Crud.crudMnt = new Entorno.CrudDePermisosDeUnUsuario(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
         window.onbeforeunload = function () {
-            MensajesSe.Info('llendo a trás');
             Crud.crudMnt.NavegarDesdeElBrowser();
         };
     }

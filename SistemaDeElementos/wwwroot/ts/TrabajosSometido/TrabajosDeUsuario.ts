@@ -45,7 +45,6 @@
             this.MapearUsuarioConectado();
         }
 
-
         private MapearUsuarioConectado(): void {
 
             function usuarioNoLeido(llamador: CrudCreacionTrabajoDeUsuario): void {
@@ -66,13 +65,25 @@
             }
         }
 
-        public AjustarOpcionesDeMenu(elemento: TrabajoDeUsuario, modoAcceso: string): void {
-            super.AjustarOpcionesDeMenu(elemento, modoAcceso);
-            let estado: string = elemento.Estado.toLowerCase();
+        public AjustarOpcionesDeMenu(elemento: Elemento): void {
+            super.AjustarOpcionesDeMenu(elemento);
+            let trabajo: TrabajoDeUsuario = elemento.Registro;
+            let estado: string = trabajo.Estado.toLowerCase();
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             switch (estado) {
                 case 'erroneo': {
-                    this.ActivarOpciones([]);
-                    this.DesactivarOpciones([]);
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
+                    break;
+                }
+                case 'pendiente': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'bloquear', 'ejecutar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['desbloquear']);
+                    break;
+                }
+                case 'bloqueado': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'desbloquear'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'borrar', 'ejecutar']);
                     break;
                 }
                 default: {
@@ -81,13 +92,7 @@
                     break;
                 }
             }
-        }
-
-
-        public ActivarOpciones(opcionesDeMenu: string[]) {
-        }
-
-        public DesactivarOpciones(opcionesDeMenu: string[]) {
+            ApiCrud.DesactivarConMultiSeleccion(opcionesDeElemento, this.InfoSelector.Cantidad);
         }
 
         public IniciarTrabajo(): boolean {
@@ -127,7 +132,6 @@
             a.Ejecutar();
         }
 
-
         private BloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
             let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
 
@@ -142,7 +146,6 @@
             );
             a.Ejecutar();
         }
-
 
         private DesbloquearTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
             let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.desbloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;

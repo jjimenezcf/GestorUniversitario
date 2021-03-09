@@ -375,6 +375,62 @@ namespace ApiCrud {
 
     }
 
+    export function ActivarOpciones(opciones: NodeListOf<HTMLButtonElement>, activas: string[], seleccionadas: number): void {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let literal: string = opcion.value.toLowerCase();
+            if (activas.indexOf(literal) >= 0) {
+
+                let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+                if (!EsTrue(permiteMultiSeleccion))
+                    opcion.disabled = !(seleccionadas === 1);
+                else {
+                    if (seleccionadas === 1)
+                        opcion.disabled = false;
+                }
+            }
+        }
+    }
+
+    export function DesactivarOpciones(opciones: NodeListOf<HTMLButtonElement>, desactivas: string[]): void {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let literal: string = opcion.value.toLowerCase();
+            if (desactivas.indexOf(literal) >= 0)
+                opcion.disabled = true;
+        }
+    }
+
+    export function DesactivarConMultiSeleccion(opciones: NodeListOf<HTMLButtonElement>, seleccionadas: number): void {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+            if (!EsTrue(permiteMultiSeleccion) && !opcion.disabled)
+                opcion.disabled = !(seleccionadas === 1);
+        }
+    }
+
+    export function CambiarLiteralOpcion(opciones: NodeListOf<HTMLButtonElement>, antiguo: string, nuevo: string): void {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let literal: string = opcion.value.toLowerCase();
+            if (literal.toLowerCase() === antiguo)
+                opcion.value = nuevo;
+        }
+    }
+
     function BlanquearEditores(panel: HTMLDivElement) {
         let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < editores.length; i++) {

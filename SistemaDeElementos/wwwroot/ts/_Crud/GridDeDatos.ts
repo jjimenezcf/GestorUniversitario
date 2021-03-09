@@ -685,7 +685,7 @@
         protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
-            grid.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso)
+            grid.AjustarOpcionesDeMenu(elemento)
         }
 
         protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
@@ -1315,7 +1315,7 @@
                 this.QuitarDelSelector(this, id);
                 for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) {
                     let e: Elemento = this.InfoSelector.LeerElemento(i);
-                    this.AjustarOpcionesDeMenu(e, e.ModoDeAcceso);
+                    this.AjustarOpcionesDeMenu(e);
                 }
 
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
@@ -1324,7 +1324,8 @@
 
         }
 
-        public AjustarOpcionesDeMenu(elemento: any, modoAcceso: string): void {
+        public AjustarOpcionesDeMenu(elemento: Elemento): void {
+            let modoAcceso: string = elemento.ModoDeAcceso;
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
@@ -1352,7 +1353,6 @@
                             opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
             }
         }
-
 
         protected LeerElementoSeleccionado(id: number): void {
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;

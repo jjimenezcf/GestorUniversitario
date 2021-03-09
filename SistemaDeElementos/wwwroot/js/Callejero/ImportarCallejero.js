@@ -4,7 +4,6 @@ var Callejero;
         Formulario.formulario = new Callejero.ImportarCallejero(idFormulario);
         window.addEventListener("load", function () { Formulario.formulario.Inicializar(); }, false);
         window.onbeforeunload = function () {
-            MensajesSe.Info('llendo a trás');
             Formulario.formulario.NavegarDesdeElBrowser();
         };
     }

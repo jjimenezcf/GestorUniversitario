@@ -345,6 +345,57 @@ var ApiCrud;
         }
     }
     ApiCrud.QuitarClaseDeCtrlNoValido = QuitarClaseDeCtrlNoValido;
+    function ActivarOpciones(opciones, activas, seleccionadas) {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+            let literal = opcion.value.toLowerCase();
+            if (activas.indexOf(literal) >= 0) {
+                let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+                if (!EsTrue(permiteMultiSeleccion))
+                    opcion.disabled = !(seleccionadas === 1);
+                else {
+                    if (seleccionadas === 1)
+                        opcion.disabled = false;
+                }
+            }
+        }
+    }
+    ApiCrud.ActivarOpciones = ActivarOpciones;
+    function DesactivarOpciones(opciones, desactivas) {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+            let literal = opcion.value.toLowerCase();
+            if (desactivas.indexOf(literal) >= 0)
+                opcion.disabled = true;
+        }
+    }
+    ApiCrud.DesactivarOpciones = DesactivarOpciones;
+    function DesactivarConMultiSeleccion(opciones, seleccionadas) {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+            let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+            if (!EsTrue(permiteMultiSeleccion) && !opcion.disabled)
+                opcion.disabled = !(seleccionadas === 1);
+        }
+    }
+    ApiCrud.DesactivarConMultiSeleccion = DesactivarConMultiSeleccion;
+    function CambiarLiteralOpcion(opciones, antiguo, nuevo) {
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+            let literal = opcion.value.toLowerCase();
+            if (literal.toLowerCase() === antiguo)
+                opcion.value = nuevo;
+        }
+    }
+    ApiCrud.CambiarLiteralOpcion = CambiarLiteralOpcion;
     function BlanquearEditores(panel) {
         let editores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`);
         for (let i = 0; i < editores.length; i++) {

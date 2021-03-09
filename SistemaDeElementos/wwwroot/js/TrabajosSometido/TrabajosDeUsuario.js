@@ -6,7 +6,6 @@ var TrabajosSometido;
         TrabajosSometido.crudTu = Crud.crudMnt;
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
         window.onbeforeunload = function () {
-            MensajesSe.Info('llendo a trás');
             Crud.crudMnt.NavegarDesdeElBrowser();
         };
     }
@@ -40,13 +39,25 @@ var TrabajosSometido;
                 ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
-        AjustarOpcionesDeMenu(elemento, modoAcceso) {
-            super.AjustarOpcionesDeMenu(elemento, modoAcceso);
-            let estado = elemento.Estado.toLowerCase();
+        AjustarOpcionesDeMenu(elemento) {
+            super.AjustarOpcionesDeMenu(elemento);
+            let trabajo = elemento.Registro;
+            let estado = trabajo.Estado.toLowerCase();
+            let opcionesDeElemento = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
             switch (estado) {
                 case 'erroneo': {
-                    this.ActivarOpciones([]);
-                    this.DesactivarOpciones([]);
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
+                    break;
+                }
+                case 'pendiente': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'bloquear', 'ejecutar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['desbloquear']);
+                    break;
+                }
+                case 'bloqueado': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'desbloquear'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'borrar', 'ejecutar']);
                     break;
                 }
                 default: {
@@ -55,10 +66,7 @@ var TrabajosSometido;
                     break;
                 }
             }
-        }
-        ActivarOpciones(opcionesDeMenu) {
-        }
-        DesactivarOpciones(opcionesDeMenu) {
+            ApiCrud.DesactivarConMultiSeleccion(opcionesDeElemento, this.InfoSelector.Cantidad);
         }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
