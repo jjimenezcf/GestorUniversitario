@@ -8,7 +8,6 @@
         }, false);
 
         window.onbeforeunload = function () {
-            MensajesSe.Info('llendo a trás');
             Crud.crudMnt.NavegarDesdeElBrowser();
         };
     }
