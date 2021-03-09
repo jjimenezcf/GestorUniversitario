@@ -310,8 +310,8 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 case enumCssFiltro.ListaDinamica: return "lista-dinamica";
                 case enumCssFiltro.ListaDeElementos: return "lista-de-elementos";
-                case enumCssFiltro.ContenedorListaDinamica: return "contenedor-listas";
-                case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-listas";
+                case enumCssFiltro.ContenedorListaDinamica: return "contenedor-listas-filtro";
+                case enumCssFiltro.ContenedorListaDeElementos: return "contenedor-listas-filtro";
                 case enumCssFiltro.ContenedorCheck: return "contenedor-check";
                 case enumCssFiltro.ContenedorEditor: return "contenedor-editor-filtro";
                 case enumCssFiltro.ContenedorSelector: return "contenedor-selector-filtro";

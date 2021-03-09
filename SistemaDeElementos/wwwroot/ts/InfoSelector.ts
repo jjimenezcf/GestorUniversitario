@@ -5,31 +5,54 @@
 
 //************************************************************************************************************************************************************************************/
 class Elemento {
-    private _datos: any = null;
-    private _modoDeAcceso: string;
-    public expresionMostrar: string;
+    private _registro: any = null;
+    public ExpresionMostrar: string;
 
-    public get Id(): number { return this._datos["id"]; }
-    public get Texto(): string { return this.mostrar(); }
-    public get ModoDeAcceso(): string { return this._modoDeAcceso; }
+    public get Registro(): any {
+        return this._registro;
+    }
+    public get Id(): number {
+        return this._registro["Id"];
+    }
+    public get Texto(): string {
+        return this.mostrar();
+    }
+    public get ModoDeAcceso(): string {
+        if (this._registro.hasOwnProperty("ModoDeAcceso"))
+            return (this._registro["ModoDeAcceso"] as string).toLowerCase();
+
+        return ModoDeAccesoDeDatos.Administrador;
+    }
 
     public static get ElementoVacio(): Elemento { return new Elemento(null); }
 
-    constructor(elemento: Elemento) {
-        if (elemento !== null) {
-            this._datos = elemento._datos;
-            this._modoDeAcceso = (elemento._datos["ModoDeAcceso"] as string).toLowerCase();
-            this.expresionMostrar = elemento._datos;
+    constructor(registro: any, expresionMostrar?: string) {
+        if (registro !== null) {
+            this._registro = registro;
+            this.ExpresionMostrar = expresionMostrar === null ? "Nombre" : expresionMostrar;
         }
     }
 
     EsVacio(): boolean {
-        return this._datos === null;
+        return this._registro === null;
     }
 
     private mostrar(): string {
-        // recorre el datos y compone la expresione
-        return "pendiente";
+        if (this._registro.hasOwnProperty(this.ExpresionMostrar))
+            return this._registro[this.ExpresionMostrar];
+
+        let expresion: string = this.ExpresionMostrar.toLowerCase();
+        let propiedades: string[] = Object.keys(this._registro);
+        for (let j = 0; j < propiedades.length; j++) {
+            let propiedad: string = propiedades[j];
+            if (expresion.includes(`[${propiedad.toLowerCase()}]`)) {
+                expresion = expresion.replace(`[${propiedad.toLowerCase()}]`, `${this._registro[propiedad]}`);
+            }
+            if (!expresion.includes('['))
+                break;
+        }
+
+        return expresion;
     }
 }
 
@@ -132,7 +155,7 @@ class InfoSelector {
         if (!elementos || elementos.length > 0) {
             for (var i = 0; i < elementos.length; i++) {
                 let e: Elemento = elementos[i];
-                    this.InsertarElemento(e);
+                this.InsertarElemento(e);
             }
         }
         else {

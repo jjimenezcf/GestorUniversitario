@@ -2,24 +2,45 @@
 /// Gestión de los info selectores
 //************************************************************************************************************************************************************************************/
 class Elemento {
-    constructor(elemento) {
-        this._datos = null;
-        if (elemento !== null) {
-            this._datos = elemento._datos;
-            this._modoDeAcceso = elemento._datos["ModoDeAcceso"].toLowerCase();
-            this.expresionMostrar = elemento._datos;
+    constructor(registro, expresionMostrar) {
+        this._registro = null;
+        if (registro !== null) {
+            this._registro = registro;
+            this.ExpresionMostrar = expresionMostrar === null ? "Nombre" : expresionMostrar;
         }
     }
-    get Id() { return this._datos["id"]; }
-    get Texto() { return this.mostrar(); }
-    get ModoDeAcceso() { return this._modoDeAcceso; }
+    get Registro() {
+        return this._registro;
+    }
+    get Id() {
+        return this._registro["Id"];
+    }
+    get Texto() {
+        return this.mostrar();
+    }
+    get ModoDeAcceso() {
+        if (this._registro.hasOwnProperty("ModoDeAcceso"))
+            return this._registro["ModoDeAcceso"].toLowerCase();
+        return ModoDeAccesoDeDatos.Administrador;
+    }
     static get ElementoVacio() { return new Elemento(null); }
     EsVacio() {
-        return this._datos === null;
+        return this._registro === null;
     }
     mostrar() {
-        // recorre el datos y compone la expresione
-        return "pendiente";
+        if (this._registro.hasOwnProperty(this.ExpresionMostrar))
+            return this._registro[this.ExpresionMostrar];
+        let expresion = this.ExpresionMostrar.toLowerCase();
+        let propiedades = Object.keys(this._registro);
+        for (let j = 0; j < propiedades.length; j++) {
+            let propiedad = propiedades[j];
+            if (expresion.includes(`[${propiedad.toLowerCase()}]`)) {
+                expresion = expresion.replace(`[${propiedad.toLowerCase()}]`, `${this._registro[propiedad]}`);
+            }
+            if (!expresion.includes('['))
+                break;
+        }
+        return expresion;
     }
 }
 class InfoSelector {

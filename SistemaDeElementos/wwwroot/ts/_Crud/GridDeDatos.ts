@@ -201,7 +201,7 @@
         private _elementos: Elemento[] = [];
         private _pagina: number;
         private _posicion: number;
-        private _catidad: number;
+        private _cantidad: number;
         private _fecha: Date;
         public get fecha(): string {
             return this._fecha.toISOString();
@@ -213,16 +213,24 @@
             return this._posicion;
         }
         public get Cantidad(): number {
-            return this._catidad;
+            return this._cantidad;
         }
         public get Elementos(): Elemento[] {
             return this._elementos;
         }
+        public get Registros(): any[] {
+            let registros: any[] = [];
+            for (let i: number = 0; i < this.Elementos.length; i++) {
+                let registro: any = this.Elementos[i].Registro;
+                registros.push(registro);
+            }
+            return registros;
+        }
 
-        constructor(pagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
-            this._elementos = elementos;
+        constructor(pagina: number, posicion: number, cantidad: number, registros: [], expresionMostrar: string) {
+            this.anadirElementos(registros, expresionMostrar);
             this._pagina = pagina;
-            this._catidad = cantidad;
+            this._cantidad = cantidad;
             this._posicion = posicion;
             this._fecha = new Date(Date.now());
         };
@@ -234,6 +242,13 @@
             }
             return null;
         }
+
+        private anadirElementos(registros: [], expresionMostrar: string) {
+            for (let i: number = 0; i < registros.length; i++) {
+                let e: Elemento = new Elemento(registros[i], expresionMostrar);
+                this._elementos.push(e);
+            }
+        }
     }
 
     class DatosDelGrid {
@@ -243,12 +258,12 @@
             this._paginaActual = numeroDePagina;
         }
 
-        public AnadirPagina(numeroDePagina: number, posicion: number, cantidad: number, elementos: Elemento[]) {
+        public AnadirPagina(numeroDePagina: number, posicion: number, cantidad: number, registros: [], expresionMostrar: string) {
             let i: number = this.Buscar(numeroDePagina);
             if (i >= 0) {
                 this._paginas.splice(i, 1);
             }
-            let p: PaginaDelGrid = new PaginaDelGrid(numeroDePagina, posicion, cantidad, elementos);
+            let p: PaginaDelGrid = new PaginaDelGrid(numeroDePagina, posicion, cantidad, registros, expresionMostrar);
             this._paginas.push(p);
         }
 
@@ -264,7 +279,7 @@
             return null;
         }
 
-        public Obtener(id: number) {
+        public Obtener(id: number): Elemento {
             let p: PaginaDelGrid = this.Pagina(this._paginaActual);
             if (p === null)
                 throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`)
@@ -501,29 +516,6 @@
 
         }
 
-        protected ObtenerExpresionMostrar(idCheck: string): string {
-            let expresion: string = this.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
-
-            if (!IsNullOrEmpty(expresion)) {
-                let fila: HTMLTableRowElement = this.ObtenerlaFila(idCheck);
-                let columnas: HTMLCollectionOf<HTMLTableCellElement> = fila.getElementsByTagName('td') as HTMLCollectionOf<HTMLTableCellElement>;
-                for (let j = 0; j < columnas.length; j++) {
-                    let input: HTMLInputElement = columnas[j].getElementsByTagName('input')[0] as HTMLInputElement;
-                    if (input !== undefined) {
-                        let propiedad: string = input.getAttribute(atControl.propiedad).toLowerCase();
-                        if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
-                            expresion = expresion.replace(`[${propiedad}]`, input.value);
-                        }
-                    }
-                }
-            }
-
-            if (expresion === '[nombre]')
-                throw new Error('No se ha definido la expresión del elemento');
-
-            return expresion;
-        }
-
         protected ObtenerOrdenacion() {
             var clausulas = new Array<ClausulaDeOrdenacion>();
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
@@ -693,6 +685,7 @@
         protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
+            grid.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso)
         }
 
         protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
@@ -742,11 +735,10 @@
             this.InfoSelector.QuitarTodos();
         }
 
-        protected ActualizarInformacionDelGrid(grid: GridDeDatos, accion: string, posicionDesdeLaQueSeLeyo: number, registrosLeidos: number) {
-            grid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
-
+        protected ActualizarInformacionDelGrid(grid: GridDeDatos) {
             if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
-                let elemento: Elemento = grid.Estado.Obtener(atGrid.idSeleccionado);
+                let idSeleccionado: number = Numero(grid.Estado.Obtener(atGrid.idSeleccionado));
+                let elemento: Elemento = this.DatosDelGrid.Obtener(idSeleccionado);
                 grid.AnadirAlInfoSelector(grid, elemento);
                 grid.Estado.Quitar(atGrid.idSeleccionado);
                 grid.Estado.Quitar(atGrid.nombreSeleccionado);
@@ -977,8 +969,8 @@
 
             let paginaDeDatos = this.DatosDelGrid.Pagina(ultimaPagina + 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.ultima, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.ultima, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.ultima, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.ultima, posicion);
@@ -997,8 +989,8 @@
 
             let paginaDeDatos = this.DatosDelGrid.Pagina(pagina - 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.anterior, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.anterior, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.anterior, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.anterior, posicion);
@@ -1014,8 +1006,8 @@
 
             let paginaDeDatos = this.DatosDelGrid.Pagina(pagina + 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.siguiente, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.siguiente, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.siguiente, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
@@ -1110,9 +1102,10 @@
                 if (datosDeEntrada.Accion === atGrid.accion.buscar)
                     grid.Navegador.Total = infoObtenida.total;
 
-                grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros);
-                grid.MapearPaginaCacheada(grid, registros, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee);
+                grid.ActualizarNavegadorDelGrid(datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+                let expresionMostrar: string = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
+                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
+                grid.MapearPaginaCacheada(grid, registros);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
@@ -1123,11 +1116,13 @@
             }
         }
 
-        protected MapearPaginaCacheada(grid: GridDeDatos, registros: Elemento[], accion: string, posicion: number): void {
+        protected MapearPaginaCacheada(grid: GridDeDatos, registros: Elemento[]): void {
             var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
             grid.AnadirCuerpoALaTabla(grid, cuerpo);
+            grid.ActualizarInformacionDelGrid(grid);
             grid.AjustarTamanoDelCuerpoDeLaTabla(grid, cuerpo);
             grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
+
         }
 
         private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
@@ -1306,7 +1301,6 @@
         public FilaPulsada(idCheck: string, idDelInput: string) {
 
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
-            let expresionElemento: string = this.ObtenerExpresionMostrar(idCheck);
             //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
             if (idCheck !== idDelInput) {
                 check.checked = !check.checked;
@@ -1316,7 +1310,6 @@
             if (check.checked) {
                 let elemento: Elemento = this.DatosDelGrid.Obtener(id);
                 this.AnadirAlInfoSelector(this, elemento);
-                this.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso)
             }
             else {
                 this.QuitarDelSelector(this, id);

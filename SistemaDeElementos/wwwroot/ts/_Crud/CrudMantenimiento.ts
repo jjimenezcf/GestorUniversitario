@@ -35,7 +35,7 @@
         }
 
         public Inicializar(idPanelMnt: string) {
-            try {
+           try {
 
                 if (IsNullOrEmpty(idPanelMnt))
                     idPanelMnt = this.IdCuerpoCabecera;
@@ -48,11 +48,11 @@
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
 
                 this.AplicarRestrictores();
-
+                
                 this.Buscar(atGrid.accion.buscar, 0);
             }
             catch (error) {
-                MensajesSe.Error("Inicializar", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+               MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
             }
         }
 

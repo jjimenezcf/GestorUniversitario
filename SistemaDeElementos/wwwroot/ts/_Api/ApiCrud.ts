@@ -422,7 +422,7 @@ namespace ApiRuote {
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictor, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
-        Navegar(crud, form, crud.Estado, valores);
+        Navegar(crud, form, valores);
     }
 
 
@@ -449,14 +449,14 @@ namespace ApiRuote {
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictor, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
-        Navegar(crud, form, crud.Estado, valores);
+        Navegar(crud, form, valores);
     }
 
 
 
-    function Navegar(crud: Crud.GridDeDatos, form: HTMLFormElement, estado: HistorialSe.EstadoPagina, valores: Diccionario<any>) {
+    function Navegar(crud: Crud.GridDeDatos, form: HTMLFormElement, valores: Diccionario<any>) {
         crud.AntesDeNavegar(valores);
-        EntornoSe.Historial.GuardarEstadoDePagina(estado);
+        EntornoSe.Historial.GuardarEstadoDePagina(crud.Estado);
         EntornoSe.Sumit(form);
     }
 };

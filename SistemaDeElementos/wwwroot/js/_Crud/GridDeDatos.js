@@ -146,11 +146,11 @@ var Crud;
         }
     }
     class PaginaDelGrid {
-        constructor(pagina, posicion, cantidad, elementos) {
+        constructor(pagina, posicion, cantidad, registros, expresionMostrar) {
             this._elementos = [];
-            this._elementos = elementos;
+            this.anadirElementos(registros, expresionMostrar);
             this._pagina = pagina;
-            this._catidad = cantidad;
+            this._cantidad = cantidad;
             this._posicion = posicion;
             this._fecha = new Date(Date.now());
         }
@@ -164,10 +164,18 @@ var Crud;
             return this._posicion;
         }
         get Cantidad() {
-            return this._catidad;
+            return this._cantidad;
         }
         get Elementos() {
             return this._elementos;
+        }
+        get Registros() {
+            let registros = [];
+            for (let i = 0; i < this.Elementos.length; i++) {
+                let registro = this.Elementos[i].Registro;
+                registros.push(registro);
+            }
+            return registros;
         }
         ;
         Obtener(id) {
@@ -177,6 +185,12 @@ var Crud;
             }
             return null;
         }
+        anadirElementos(registros, expresionMostrar) {
+            for (let i = 0; i < registros.length; i++) {
+                let e = new Elemento(registros[i], expresionMostrar);
+                this._elementos.push(e);
+            }
+        }
     }
     class DatosDelGrid {
         constructor() {
@@ -185,12 +199,12 @@ var Crud;
         set PaginaActual(numeroDePagina) {
             this._paginaActual = numeroDePagina;
         }
-        AnadirPagina(numeroDePagina, posicion, cantidad, elementos) {
+        AnadirPagina(numeroDePagina, posicion, cantidad, registros, expresionMostrar) {
             let i = this.Buscar(numeroDePagina);
             if (i >= 0) {
                 this._paginas.splice(i, 1);
             }
-            let p = new PaginaDelGrid(numeroDePagina, posicion, cantidad, elementos);
+            let p = new PaginaDelGrid(numeroDePagina, posicion, cantidad, registros, expresionMostrar);
             this._paginas.push(p);
         }
         Inicializar() {
@@ -392,25 +406,6 @@ var Crud;
             this.Ordenacion.Actualizar(idcolumna, propiedad, modo, ordenarPor);
             //htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
         }
-        ObtenerExpresionMostrar(idCheck) {
-            let expresion = this.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
-            if (!IsNullOrEmpty(expresion)) {
-                let fila = this.ObtenerlaFila(idCheck);
-                let columnas = fila.getElementsByTagName('td');
-                for (let j = 0; j < columnas.length; j++) {
-                    let input = columnas[j].getElementsByTagName('input')[0];
-                    if (input !== undefined) {
-                        let propiedad = input.getAttribute(atControl.propiedad).toLowerCase();
-                        if (!IsNullOrEmpty(propiedad) && expresion.includes(`[${propiedad}]`)) {
-                            expresion = expresion.replace(`[${propiedad}]`, input.value);
-                        }
-                    }
-                }
-            }
-            if (expresion === '[nombre]')
-                throw new Error('No se ha definido la expresión del elemento');
-            return expresion;
-        }
         ObtenerOrdenacion() {
             var clausulas = new Array();
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
@@ -560,6 +555,7 @@ var Crud;
         AnadirAlInfoSelector(grid, elemento) {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
+            grid.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso);
         }
         QuitarDelSelector(grid, id) {
             grid.InfoSelector.Quitar(id);
@@ -602,10 +598,10 @@ var Crud;
             }
             this.InfoSelector.QuitarTodos();
         }
-        ActualizarInformacionDelGrid(grid, accion, posicionDesdeLaQueSeLeyo, registrosLeidos) {
-            grid.ActualizarNavegadorDelGrid(accion, posicionDesdeLaQueSeLeyo, registrosLeidos);
+        ActualizarInformacionDelGrid(grid) {
             if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
-                let elemento = grid.Estado.Obtener(atGrid.idSeleccionado);
+                let idSeleccionado = Numero(grid.Estado.Obtener(atGrid.idSeleccionado));
+                let elemento = this.DatosDelGrid.Obtener(idSeleccionado);
                 grid.AnadirAlInfoSelector(grid, elemento);
                 grid.Estado.Quitar(atGrid.idSeleccionado);
                 grid.Estado.Quitar(atGrid.nombreSeleccionado);
@@ -785,8 +781,8 @@ var Crud;
                 return;
             let paginaDeDatos = this.DatosDelGrid.Pagina(ultimaPagina + 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.ultima, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.ultima, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.ultima, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.ultima, posicion);
@@ -801,8 +797,8 @@ var Crud;
                 posicion = 0;
             let paginaDeDatos = this.DatosDelGrid.Pagina(pagina - 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.anterior, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.anterior, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.anterior, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.anterior, posicion);
@@ -816,8 +812,8 @@ var Crud;
                 return;
             let paginaDeDatos = this.DatosDelGrid.Pagina(pagina + 1);
             if (paginaDeDatos !== null && paginaDeDatos.Posicion === posicion && paginaDeDatos.Cantidad === cantidad) {
-                this.ActualizarInformacionDelGrid(this, atGrid.accion.siguiente, posicion, paginaDeDatos.Elementos.length);
-                this.MapearPaginaCacheada(this, paginaDeDatos.Elementos, atGrid.accion.siguiente, paginaDeDatos.Posicion);
+                this.ActualizarNavegadorDelGrid(atGrid.accion.siguiente, posicion, paginaDeDatos.Registros.length);
+                this.MapearPaginaCacheada(this, paginaDeDatos.Registros);
             }
             else
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
@@ -882,9 +878,10 @@ var Crud;
                 var registros = infoObtenida.registros;
                 if (datosDeEntrada.Accion === atGrid.accion.buscar)
                     grid.Navegador.Total = infoObtenida.total;
-                grid.ActualizarInformacionDelGrid(grid, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
-                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros);
-                grid.MapearPaginaCacheada(grid, registros, datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee);
+                grid.ActualizarNavegadorDelGrid(datosDeEntrada.Accion, datosDeEntrada.PosicionDesdeLaQueSeLee, registros.length);
+                let expresionMostrar = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
+                grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
+                grid.MapearPaginaCacheada(grid, registros);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
@@ -894,9 +891,10 @@ var Crud;
                 }
             }
         }
-        MapearPaginaCacheada(grid, registros, accion, posicion) {
+        MapearPaginaCacheada(grid, registros) {
             var cuerpo = grid.CrearCuerpoDeLaTabla(grid, registros);
             grid.AnadirCuerpoALaTabla(grid, cuerpo);
+            grid.ActualizarInformacionDelGrid(grid);
             grid.AjustarTamanoDelCuerpoDeLaTabla(grid, cuerpo);
             grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
         }
@@ -1049,7 +1047,6 @@ var Crud;
         }
         FilaPulsada(idCheck, idDelInput) {
             let check = document.getElementById(idCheck);
-            let expresionElemento = this.ObtenerExpresionMostrar(idCheck);
             //Se hace porque antes ha pasado por aquí por haber pulsado en la fila
             if (idCheck !== idDelInput) {
                 check.checked = !check.checked;
@@ -1058,7 +1055,6 @@ var Crud;
             if (check.checked) {
                 let elemento = this.DatosDelGrid.Obtener(id);
                 this.AnadirAlInfoSelector(this, elemento);
-                this.AjustarOpcionesDeMenu(elemento, elemento.ModoDeAcceso);
             }
             else {
                 this.QuitarDelSelector(this, id);

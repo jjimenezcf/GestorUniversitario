@@ -38,7 +38,7 @@ namespace MVCSistemaDeElementos.Descriptores
                             Entorno.CrearCrudVistaMvc('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}');
                          }}
                          catch(error) {{                           
-                            Notificar(TipoMensaje.Error, error);
+                            MensajesSe.Error('Creando el crud', error);
                          }}
                       </script>
                     ";

@@ -383,7 +383,7 @@ var ApiRuote;
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictor, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
-        Navegar(crud, form, crud.Estado, valores);
+        Navegar(crud, form, valores);
     }
     ApiRuote.NavegarARelacionar = NavegarARelacionar;
     function NavegarADependientes(crud, idOpcionDeMenu, idSeleccionado, filtroRestrictor) {
@@ -403,12 +403,12 @@ var ApiRuote;
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictor, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
-        Navegar(crud, form, crud.Estado, valores);
+        Navegar(crud, form, valores);
     }
     ApiRuote.NavegarADependientes = NavegarADependientes;
-    function Navegar(crud, form, estado, valores) {
+    function Navegar(crud, form, valores) {
         crud.AntesDeNavegar(valores);
-        EntornoSe.Historial.GuardarEstadoDePagina(estado);
+        EntornoSe.Historial.GuardarEstadoDePagina(crud.Estado);
         EntornoSe.Sumit(form);
     }
 })(ApiRuote || (ApiRuote = {}));
