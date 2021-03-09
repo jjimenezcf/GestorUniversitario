@@ -99,7 +99,7 @@ namespace MVCSistemaDeElementos.Descriptores
                    $@"<script src=¨../../js/{RutaBase}/Usuario.js¨></script>
                       <script>
                          try {{                           
-                            Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                           Entorno.CrearCrudDeUsuarios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
                             MensajesSe.Error('Creando el crud', error);

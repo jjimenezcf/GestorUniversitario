@@ -3,6 +3,11 @@
     export function CrearCrudDeMenus(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Entorno.CrudDeMenus(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
 
     export class CrudDeMenus extends Crud.CrudMnt {

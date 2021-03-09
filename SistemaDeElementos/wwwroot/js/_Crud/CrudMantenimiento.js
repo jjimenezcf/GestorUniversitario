@@ -23,6 +23,9 @@ var Crud;
             return document.getElementById(this._idModalBorrar);
         }
         ;
+        NavegarDesdeElBrowser() {
+            MensajesSe.Info('Ha llamado al método navegar');
+        }
         Inicializar(idPanelMnt) {
             try {
                 if (IsNullOrEmpty(idPanelMnt))

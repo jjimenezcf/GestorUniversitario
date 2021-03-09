@@ -3,6 +3,10 @@ var Negocio;
     function CrearCrudDeNegocios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Negocio.CrudDeNegocios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Negocio.CrearCrudDeNegocios = CrearCrudDeNegocios;
     class CrudDeNegocios extends Crud.CrudMnt {

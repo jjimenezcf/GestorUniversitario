@@ -6,6 +6,11 @@
         Crud.crudMnt = new TrabajosSometido.CrudDeTrabajosDeUsuario(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         crudTu = Crud.crudMnt as TrabajosSometido.CrudDeTrabajosDeUsuario;
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
 
     const idsometedor: string = 'idsometedor';

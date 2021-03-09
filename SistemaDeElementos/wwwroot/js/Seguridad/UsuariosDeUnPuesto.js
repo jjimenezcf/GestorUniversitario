@@ -3,6 +3,10 @@ var Seguridad;
     function CrearCrudDeUsuariosDeUnPuesto(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Seguridad.CrudDeUsuariosDeUnPuesto(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Seguridad.CrearCrudDeUsuariosDeUnPuesto = CrearCrudDeUsuariosDeUnPuesto;
     class CrudDeUsuariosDeUnPuesto extends Crud.CrudMnt {

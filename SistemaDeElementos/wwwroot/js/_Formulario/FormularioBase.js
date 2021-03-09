@@ -25,6 +25,9 @@ var Formulario;
         get Controlador() {
             return this._controlador;
         }
+        NavegarDesdeElBrowser() {
+            MensajesSe.Info('Ha llamado al método navegar');
+        }
         Inicializar() {
             if (EntornoSe.Historial.HayHistorial(this._idFormulario))
                 this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this._idFormulario);

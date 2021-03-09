@@ -40,6 +40,10 @@
             MensajesSe.Info("Creado");
         }
 
+        public NavegarDesdeElBrowser() {
+            MensajesSe.Info('Ha llamado al método navegar');
+        }
+
         public Inicializar(): void {
             if (EntornoSe.Historial.HayHistorial(this._idFormulario))
                 this._estado = EntornoSe.Historial.ObtenerEstadoDePagina(this._idFormulario);

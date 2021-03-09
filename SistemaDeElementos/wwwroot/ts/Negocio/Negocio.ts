@@ -3,6 +3,11 @@
     export function CrearCrudDeNegocios(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
         Crud.crudMnt = new Negocio.CrudDeNegocios(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
 
        export class CrudDeNegocios extends Crud.CrudMnt {

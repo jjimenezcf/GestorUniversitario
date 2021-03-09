@@ -3,6 +3,10 @@ var Seguridad;
     function CrearCrudDeRoles(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Seguridad.CrudDeRoles(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Seguridad.CrearCrudDeRoles = CrearCrudDeRoles;
     class CrudDeRoles extends Crud.CrudMnt {

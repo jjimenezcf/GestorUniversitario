@@ -3,6 +3,10 @@ var Entorno;
     function CrearCrudDeMenus(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Entorno.CrudDeMenus(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Entorno.CrearCrudDeMenus = CrearCrudDeMenus;
     class CrudDeMenus extends Crud.CrudMnt {

@@ -3,6 +3,10 @@ var TrabajosSometido;
     function CrearCrudDeErroresDeUnTrabajo(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new TrabajosSometido.CrudDeErroresDeUnTrabajo(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     TrabajosSometido.CrearCrudDeErroresDeUnTrabajo = CrearCrudDeErroresDeUnTrabajo;
     class CrudDeErroresDeUnTrabajo extends Crud.CrudMnt {

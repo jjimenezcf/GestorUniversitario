@@ -3,6 +3,10 @@ var Entorno;
     function CrearCrudVistaMvc(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Entorno.CrudMntVistaMvc(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Entorno.CrearCrudVistaMvc = CrearCrudVistaMvc;
     class CrudMntVistaMvc extends Crud.CrudMnt {

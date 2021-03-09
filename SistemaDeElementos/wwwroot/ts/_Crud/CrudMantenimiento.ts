@@ -34,6 +34,10 @@
             this._idModalBorrar = idModalDeBorrado;
         }
 
+        public NavegarDesdeElBrowser() {
+            MensajesSe.Info('Ha llamado al método navegar');
+        }
+
         public Inicializar(idPanelMnt: string) {
            try {
 

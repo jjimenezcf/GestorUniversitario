@@ -3,6 +3,10 @@ var Entorno;
     function CrearCrudDePermisosDeUnUsuario(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
         Crud.crudMnt = new Entorno.CrudDePermisosDeUnUsuario(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar);
         window.addEventListener("load", function () { Crud.crudMnt.Inicializar(idPanelMnt); }, false);
+        window.onbeforeunload = function () {
+            MensajesSe.Info('llendo a trás');
+            Crud.crudMnt.NavegarDesdeElBrowser();
+        };
     }
     Entorno.CrearCrudDePermisosDeUnUsuario = CrearCrudDePermisosDeUnUsuario;
     class CrudDePermisosDeUnUsuario extends Crud.CrudMnt {
