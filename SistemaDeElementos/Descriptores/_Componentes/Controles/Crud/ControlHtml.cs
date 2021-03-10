@@ -73,8 +73,22 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlOpcion = "";
             if (!opcion.IsNullOrEmpty() && !accion.IsNullOrEmpty())
             {
-                htmlOpcion = $"<input type=¨text¨ id=¨{idOpcion}¨ class=¨boton-modal¨ clase=¨{Css.Render(claseBoton)}¨ permisos-necesarios=¨{permisosNecesarios.Render()}¨ value=¨{opcion}¨ readonly onclick=¨{accion}¨ />";
+                htmlOpcion = $@"<input id=¨{idOpcion}¨ 
+                                       type=¨button¨ 
+                                       tipo=¨{enumTipoControl.Opcion.Render()}¨
+                                       clase=¨{Css.Render(claseBoton)}¨ 
+                                       permisos-necesarios=¨{permisosNecesarios.Render()}¨ 
+                                       value=¨{opcion}¨ 
+                                       onclick=¨{accion}¨ />";
             }
+
+            var htmlCerrar = $@"<input id=¨{idHtml}-cerrar¨ 
+                                       type=¨button¨ 
+                                       tipo=¨{enumTipoControl.Opcion.Render()}¨
+                                       clase=¨{Css.Render(enumCssOpcionMenu.Basico)}¨ 
+                                       permisos-necesarios=¨{enumModoDeAccesoDeDatos.SinPermiso.Render()}¨ 
+                                       value=¨Cerrar¨
+                                       onclick=¨{cerrar}¨ />";
 
             var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
                               		<div id=¨{idHtml}_contenido¨ class=¨contenido-modal¨>
@@ -85,8 +99,10 @@ namespace MVCSistemaDeElementos.Descriptores
                                         {cuerpo}
                                         </div>
                                         <div id=¨{idHtml}_pie¨ class=¨contenido-pie¨>
+                                          <div id=¨{idHtml}_menu¨ class=¨contenido-modal-pie-menu¨>
                                            {htmlOpcion}
-                                           <input type=¨text¨ id=¨{idHtml}-cerrar¨  class=¨boton-modal¨ clase=¨{Css.Render(enumCssOpcionMenu.Basico)}¨ value=¨Cerrar¨  readonly onclick=¨{cerrar}¨ />
+                                           {htmlCerrar}
+                                          </div>
                                            {navegador}
                                         </div>
                                       </div>

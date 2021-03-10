@@ -173,6 +173,25 @@ var Crud;
             let edicion = peticion.llamador;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
+            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.datos);
+        }
+        AjustarOpcionesDeMenuDeEdicion(elemento) {
+            let opcionesDeElemento = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
+            let permisosDelUsuario = elemento.ModoDeAcceso;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion = opcionesDeElemento[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
+                let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && permisosDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (permisosDelUsuario === ModoDeAccesoDeDatos.Consultor || permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                    opcion.disabled = true;
+                else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                    opcion.disabled = true;
+                else
+                    opcion.disabled = false;
+            }
         }
         SiHayErrorAlLeerElemento(peticion) {
             let edicion = peticion.llamador;

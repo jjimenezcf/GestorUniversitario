@@ -59,7 +59,6 @@
             }
 
             return control as HTMLInputElement;
-
         }
 
         //private get Controlador(): string {
@@ -226,7 +225,33 @@
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
+            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.datos)
         }
+
+
+        public AjustarOpcionesDeMenuDeEdicion(elemento: any): void {
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            let permisosDelUsuario: string = elemento.ModoDeAcceso;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion: HTMLButtonElement = opcionesDeElemento[i];
+                if (ApiControl.EstaBloqueada(opcion))
+                    continue;
+
+                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && permisosDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                    opcion.disabled = true;
+                else
+                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (permisosDelUsuario === ModoDeAccesoDeDatos.Consultor || permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                        opcion.disabled = true;
+                    else
+                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                            opcion.disabled = true;
+                        else
+                            opcion.disabled = false;
+            }
+        }
+
 
         private SiHayErrorAlLeerElemento(peticion: ApiDeAjax.DescriptorAjax) {
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;

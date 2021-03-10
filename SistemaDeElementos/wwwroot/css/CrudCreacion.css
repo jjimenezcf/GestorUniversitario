@@ -13,11 +13,11 @@
 }
 
 .contenedor-opciones-creacion {
-    /*float: right;*/
-    /*padding-top: 15px;*/
-    /*padding-right: 10px;
-    width: 200px;
-    text-align: right;*/
+    float: right;
+    padding-right: 10px;
+    text-align: right;
+    width: 50%;
+    min-width:210px;
 }
 
 .tabla-creacion {

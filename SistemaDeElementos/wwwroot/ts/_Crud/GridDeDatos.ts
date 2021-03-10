@@ -1374,8 +1374,6 @@
             grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
         }
 
-        public Ajustar
-
         protected DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             for (var i = 0; i < opcionesDeElemento.length; i++) {

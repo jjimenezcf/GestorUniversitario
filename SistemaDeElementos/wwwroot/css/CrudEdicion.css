@@ -37,25 +37,30 @@
     grid-template-areas: "contenedor-pie-navegador contenedor-id";
 }
 
+.contenido-modal-pie-menu {
+    float: left;
+    display: inline-block;
+    width: 50%;
+    min-width: 210px;
+}
+
 .contenido-modal-pie-navegador {
     text-align: right;
-  /*  margin-top: 1px;*/
- /*   margin-right: 11px;*/
     float: right;
     display: inline-block;
     width: 50%;
+    min-width: 210px;
 }
 
     .contenido-modal-pie-navegador > img {
         width: 22px;
         height: 22px;
-        vertical-align: top;
+        vertical-align: sub;
     }
 
 
     .contenido-modal-pie-navegador > input {
         width: 50px;
-        margin-top: -5px;
         align-content: center;
         border-radius: 10px;
         text-align: right;
