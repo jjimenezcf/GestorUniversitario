@@ -20,10 +20,10 @@
 }
 
 .cuerpo-datos-tabla {
-/*    border-bottom: ridge;
-    border-top: ridge;*/
-    display: block;
-    width: 1fr;
+    /*    border-bottom: ridge;
+    border-top: ridge;
+    display: block;*/
+    width: 100%;
 }
 
 .cuerpo-datos-tbody {

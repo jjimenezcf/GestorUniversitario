@@ -191,6 +191,10 @@
         }
     }
 
+    export function ErrorTrasPeticion(origen: string, peticion: ApiDeAjax.DescriptorAjax) {
+        MensajesSe.Error(origen, peticion.resultado.mensaje, peticion.resultado.consola);
+    }
+
 
 
 

@@ -71,17 +71,7 @@
             this.InicializarPanel();
         }
 
-        //public AjustarModal(): void {
-        //    //if (this.Altura > this.CrudDeMnt.Cuerpo.getBoundingClientRect().height)
-        //    //    this.PanelDeContenidoModal.style.height = `${this.CrudDeMnt.Cuerpo.getBoundingClientRect().height}px`;
-        //    //else {
-        //    //    this.PanelDeContenidoModal.style.height = `${this.Altura}px`;
-        //    //    let padding: number = (this.PanelDeCrear.getBoundingClientRect().height - this.PanelDeContenidoModal.getBoundingClientRect().height) / 2;
-        //    //    this.PanelDeCrear.style.paddingTop = `${padding}px`;
-        //    //}
-        //}
-
-        public PosicionarCreacion(): void {
+              public PosicionarCreacion(): void {
             this.PanelDeCrear.style.position = 'fixed';
             this.PanelDeCrear.style.top = `${AlturaCabeceraPnlControl()}px`;
             this.PanelDeCrear.style.height = `${AlturaFormulario() - AlturaPiePnlControl() - AlturaCabeceraPnlControl()}px`;
@@ -91,6 +81,18 @@
             this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
             this.InicializarListasDinamicas(this.PanelDeCrear);
             this.InicializarArchivos(this.PanelDeCrear);
+            ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.CrudDeMnt.Negocio)
+                .then((peticion) => this.AjustarMenuDeCreacion(peticion))
+                .catch((peticion) => this.DesactivarMenuDeCreacion(peticion));
+        }
+
+        protected DesactivarMenuDeCreacion(peticion: any): void {
+            ApiDeAjax.ErrorTrasPeticion("Al leer el modo de acceso al negocio", peticion);
+            ApiControl.BloquearMenu(this.PanelDeCrear);
+        }
+
+        protected AjustarMenuDeCreacion(peticion: ApiDeAjax.DescriptorAjax): void {
+            MensajesSe.Info(`Permisos sobre el negocio ${peticion.DatosDeEntrada["negocio"]} leidos`, peticion.resultado.consola);
         }
 
         private Crear() {

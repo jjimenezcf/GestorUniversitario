@@ -139,5 +139,9 @@ var ApiDeAjax;
         }
     }
     ApiDeAjax.DescriptorAjax = DescriptorAjax;
+    function ErrorTrasPeticion(origen, peticion) {
+        MensajesSe.Error(origen, peticion.resultado.mensaje, peticion.resultado.consola);
+    }
+    ApiDeAjax.ErrorTrasPeticion = ErrorTrasPeticion;
 })(ApiDeAjax || (ApiDeAjax = {}));
 //# sourceMappingURL=ApiDeAjax.js.map

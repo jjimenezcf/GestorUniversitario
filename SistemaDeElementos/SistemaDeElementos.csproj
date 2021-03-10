@@ -178,6 +178,9 @@
     <TypeScriptCompile Update="wwwroot\ts\TrabajosSometido\TrazasDeUnTrabajo.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\_Api\ApiDeSeguridad.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\_Crud\ModalParaConsultarRelaciones.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

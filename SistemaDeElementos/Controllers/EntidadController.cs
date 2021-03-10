@@ -410,7 +410,6 @@ namespace MVCSistemaDeElementos.Controllers
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio));
-
                 r.ModoDeAcceso = modoDeAcceso.Render();
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
                 r.Estado = enumEstadoPeticion.Ok;

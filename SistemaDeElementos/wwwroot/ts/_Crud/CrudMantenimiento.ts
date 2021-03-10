@@ -132,19 +132,14 @@
 
             this.DeshabilitarOpcionesDeMenuDeElemento();
 
-            let url: string = this.DefinirPeticionDeLeerModoDeAccesoAlNegocio();
-            let datosDeEntrada = `{"negocio":"${this.Negocio}"}`;
-            let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.LeerModoDeAccesoAlNegocio
-                , datosDeEntrada
-                , url
-                , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.AplicarModoDeAccesoAlNegocio
-                , this.SiHayErrorTrasPeticionAjax
-            );
+            ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
+                .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
+                .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
+        }
 
-            a.Ejecutar();
+        protected ErrorAlLeerModoAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax): void {
+            ApiDeAjax.ErrorTrasPeticion("Leer modo de acceso al negocio", peticion);
+            ApiControl.BloquearMenu(this.Cuerpo);
         }
 
         private AplicarModoDeAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax) {

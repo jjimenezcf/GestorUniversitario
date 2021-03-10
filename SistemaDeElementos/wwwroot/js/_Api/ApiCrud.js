@@ -4,6 +4,9 @@ var ApiControl;
         let opciones = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`);
         for (var i = 0; i < opciones.length; i++) {
             let opcion = opciones[i];
+            let clase = opcion.getAttribute(atOpcionDeMenu.clase);
+            if (clase === ClaseDeOpcioDeMenu.Basico)
+                continue;
             opcion.disabled = true;
             opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
         }

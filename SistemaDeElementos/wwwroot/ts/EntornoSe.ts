@@ -50,7 +50,7 @@ module EntornoSe {
         let alturaInicial: number = Numero(modal.getAttribute('altura-inicial'));
         if (alturaInicial === 0) {
             alturaInicial = altura;
-            modal.setAttribute('altura-inicial', alturaInicial.toString());
+            modal.setAttribute('altura-inicial', `${alturaInicial}px`);
         }
 
         if (alturaInicial >= alturaMaxima - AlturaPiePnlControl()) {

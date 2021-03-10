@@ -3,7 +3,10 @@
     export function BloquearMenu(panel: HTMLDivElement): void {
         let opciones: NodeListOf<HTMLButtonElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`) as NodeListOf<HTMLButtonElement>;
         for (var i = 0; i < opciones.length; i++) {
-            let opcion: HTMLButtonElement = opciones[i];
+                let opcion: HTMLButtonElement = opciones[i];
+            let clase: string = opcion.getAttribute(atOpcionDeMenu.clase);
+            if (clase === ClaseDeOpcioDeMenu.Basico)
+                continue;
             opcion.disabled = true;
             opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
         }

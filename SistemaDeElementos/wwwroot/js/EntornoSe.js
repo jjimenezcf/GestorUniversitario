@@ -43,7 +43,7 @@ var EntornoSe;
         let alturaInicial = Numero(modal.getAttribute('altura-inicial'));
         if (alturaInicial === 0) {
             alturaInicial = altura;
-            modal.setAttribute('altura-inicial', alturaInicial.toString());
+            modal.setAttribute('altura-inicial', `${alturaInicial}px`);
         }
         if (alturaInicial >= alturaMaxima - AlturaPiePnlControl()) {
             alturaInicial = alturaMaxima - AlturaPiePnlControl() - 1;

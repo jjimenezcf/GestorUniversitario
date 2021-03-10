@@ -1374,6 +1374,15 @@
             grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
         }
 
+        protected DeshabilitarOpcionesDeMenuDeNegocio() {
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion: HTMLButtonElement = opcionesDeElemento[i];
+                opcion.disabled = true;
+            }
+            this.DeshabilitarOpcionesDeMenuDeElemento();
+        }
+
         protected DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             for (var i = 0; i < opcionesDeElemento.length; i++) {

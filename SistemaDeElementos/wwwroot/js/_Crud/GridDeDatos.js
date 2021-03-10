@@ -1100,6 +1100,14 @@ var Crud;
             let grid = peticion.llamador;
             grid.AnadirAlInfoSelector(grid, peticion.resultado.datos);
         }
+        DeshabilitarOpcionesDeMenuDeNegocio() {
+            let opcionesDeElemento = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
+            for (var i = 0; i < opcionesDeElemento.length; i++) {
+                let opcion = opcionesDeElemento[i];
+                opcion.disabled = true;
+            }
+            this.DeshabilitarOpcionesDeMenuDeElemento();
+        }
         DeshabilitarOpcionesDeMenuDeElemento() {
             let opcionesDeElemento = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
             for (var i = 0; i < opcionesDeElemento.length; i++) {
