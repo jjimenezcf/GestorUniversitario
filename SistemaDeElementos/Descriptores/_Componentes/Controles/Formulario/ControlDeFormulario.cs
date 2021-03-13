@@ -28,12 +28,13 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        public static string RenderAtributos(string idHtml, enumTipoControl tipo, enumCssControlesFormulario clase, string ayuda,  string otrosAtributos = "")
+        public static string RenderAtributos(string propiedad, string idHtml, enumTipoControl tipo, enumCssControlesFormulario clase, string ayuda,  string otrosAtributos = "")
         {
             var atributos = $@"id=¨{idHtml}¨ {otrosAtributos}
                             tipo=¨{tipo.Render()}¨
                             class=¨{Css.Render(clase)}¨
-                            title=¨{ayuda}¨";
+                            title=¨{ayuda}¨
+                            propiedad=¨{propiedad}¨";
             return atributos;
         }
 

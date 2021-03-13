@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderEditor()
         {
-            return $@"<input {RenderAtributos(IdHtml, Tipo, ClaseCss, Ayuda, $"type = ¨text¨")}></input>";
+            return $@"<input {RenderAtributos(Id, IdHtml, Tipo, ClaseCss, Ayuda, $"type = ¨text¨")}></input>";
         }
     }
 }

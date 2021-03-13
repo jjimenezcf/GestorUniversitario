@@ -28,6 +28,12 @@ namespace GestoresDeNegocio.Archivos
             return gestor.SubirArchivoInterno(rutaConFichero);
         }
 
+        public static string DescargarArchivo(ContextoSe contexto, int idArchivo)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.DescargarArchivoInterno(idArchivo);
+        }
+
 
         public GestorDocumental(ContextoSe contexto, IMapper mapeador) 
         : base(contexto, mapeador)
@@ -38,6 +44,14 @@ namespace GestoresDeNegocio.Archivos
         private static GestorDocumental Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDocumental(contexto, mapeador);
+        }
+
+
+        private string DescargarArchivoInterno(int idArchivo)
+        {
+            var archivo = LeerRegistroPorId(idArchivo);
+            var rutaConFichero =  GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn);
+            return rutaConFichero;
         }
 
         private int SubirArchivoInterno(string rutaConFichero)

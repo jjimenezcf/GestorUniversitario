@@ -47,7 +47,7 @@ var Callejero;
                     let idArchivo = Numero(archivos[i].getAttribute(atArchivo.idArchivo));
                     if (idArchivo > 0) {
                         let archivo = new Archivo();
-                        archivo.parametro = archivos[i].getAttribute(literal.id);
+                        archivo.parametro = archivos[i].getAttribute(atControl.propiedad);
                         archivo.valor = idArchivo;
                         arrayDeArchivos.push(archivo);
                     }

@@ -225,7 +225,7 @@ namespace GestorDeElementos
             }
         }
 
-        protected TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
+        public TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var transaccion = Contexto.IniciarTransaccion();
             try

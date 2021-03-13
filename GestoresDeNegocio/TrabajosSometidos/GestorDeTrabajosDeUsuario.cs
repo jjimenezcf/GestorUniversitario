@@ -71,6 +71,70 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static string terminando = nameof(terminando);
     }
 
+    public class EntornoDeTrabajo
+    {
+        public GestorDeTrabajosDeUsuario Gestor { get; private set; }
+        public TrabajoDeUsuarioDtm Trabajo { get; private set; }
+        public ContextoSe contextoPr { get; set; }
+
+        public bool HayErrores
+        {
+            get 
+            {
+                var gestor = GestorDeErroresDeUnTrabajo.Gestor(Gestor.Contexto, Gestor.Contexto.Mapeador);
+                var filtro = new ClausulaDeFiltrado { Clausula = nameof(ErrorDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = Trabajo.Id.ToString() };
+                return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> {filtro}).Count > 0 ;
+            }
+        }
+
+        public EntornoDeTrabajo( GestorDeTrabajosDeUsuario gestor, TrabajoDeUsuarioDtm trabajoUsuario)
+        {
+            Gestor = gestor;
+            Trabajo = trabajoUsuario;
+        }
+
+        public int AnotarTraza(string traza)
+        {
+           return AnotarTraza(0, traza);
+        }
+
+        public int AnotarTraza(int id, string traza)
+        {
+            return GestorDeTrazasDeUnTrabajo.AnotarTraza(Gestor.Contexto, Trabajo, id, traza);
+        }
+
+        public void AnotarError(Exception e)
+        {
+            GestorDeErroresDeUnTrabajo.AnotarError(Gestor.Contexto, Trabajo, e);
+        }
+
+        public bool IniciarTransaccion()
+        {
+            return Gestor.IniciarTransaccion();
+        }
+        public void RollBack(bool transaccion)
+        {
+            Gestor.Rollback(transaccion);
+        }
+        public void Commit(bool transaccion)
+        {
+            Gestor.Commit(transaccion);
+        }
+
+        public void PonerSemaforo()
+        {
+            GestorDeSemaforoDeTrabajos.PonerSemaforo(Trabajo);
+            AnotarTraza($"Trabajo iniciado por el usuario {Gestor.Contexto.DatosDeConexion.Login}");
+        }
+
+        public void QuitarSemaforo(string traza)
+        {
+            GestorDeSemaforoDeTrabajos.QuitarSemaforo(Trabajo);
+            AnotarTraza(traza);
+        }
+    }
+
+
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
 
@@ -130,53 +194,62 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario)
         {
-            var gestor = Gestor(contextoTu, contextoTu.Mapeador);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
-            GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, $"Trabajo iniciado por el usuario {contextoTu.DatosDeConexion.Login}");
-            var tran = gestor.IniciarTransaccion();
+            var gestorTu = Gestor(contextoTu, contextoTu.Mapeador);
+            var tu = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, false);
+            var entorno = new EntornoDeTrabajo(gestorTu, tu);
 
-            GestorDeSemaforoDeTrabajos.PonerSemaforo(tu);
+            entorno.PonerSemaforo();
+            var tran = entorno.IniciarTransaccion();
+
             try
             {
                 tu.Iniciado = DateTime.Now;
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
-                tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
-                contextoTu.Commit(tran);
+                tu = entorno.Gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                entorno.Commit(tran);
             }
             catch (Exception e)
             {
-                contextoTu.Rollback(tran);
-                GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
-                GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, "Iniciación cancelada");
-                GestorDeErroresDeUnTrabajo.AnotarError(contextoTu, tu, e);
+                entorno.RollBack(tran);
+                entorno.AnotarError(e);
+                entorno.QuitarSemaforo("Iniciación cancelada");
                 throw;
             }
 
-            tran = gestor.IniciarTransaccion();
+            EjecutarTrabajo(entorno);
+        }
+
+        private static bool EjecutarTrabajo(EntornoDeTrabajo entorno)
+        {
+            bool tran = entorno.Gestor.IniciarTransaccion();
             try
             {
-                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(contextoTu, tu.Trabajo);
-                using (var contextoPr = ContextoSe.ObtenerContexto(contextoTu))
+                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.Gestor.Contexto, entorno.Trabajo.Trabajo);
+                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.Gestor.Contexto))
                 {
-                    metodo.Invoke(null, new object[] { contextoTu, contextoPr, tu.Id });
+                    entorno.contextoPr = contextoPr;
+                    metodo.Invoke(null, new object[] { entorno });
                 }
-                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado);
+                entorno.Trabajo.Estado = !entorno.HayErrores 
+                    ? TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado)
+                    : TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores);
             }
             catch
             {
-                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
+                entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 throw;
             }
             finally
             {
-                tu.Terminado = DateTime.Now;
+                entorno.Trabajo.Terminado = DateTime.Now;
                 var parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
                 parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
-                gestor.PersistirRegistro(tu, parametros);
-                GestorDeSemaforoDeTrabajos.QuitarSemaforo(tu);
-                contextoTu.Commit(tran);
-                GestorDeTrazasDeUnTrabajo.AnotarTraza(contextoTu, tu, $"Trabajo finalizado: {(tu.Estado == TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado) ? "sin errores" : "con errores")}");
+                entorno.Gestor.PersistirRegistro(entorno.Trabajo, parametros);
+                entorno.Gestor.Commit(tran);
+                entorno.QuitarSemaforo($"Trabajo finalizado: {(entorno.Trabajo.Estado == TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado) ? "sin errores" : "con errores")}");
             }
+
+            return tran;
         }
 
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)

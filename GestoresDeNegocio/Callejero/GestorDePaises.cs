@@ -12,12 +12,23 @@ using Utilidades;
 using GestoresDeNegocio.TrabajosSometidos;
 using System.Reflection;
 using System;
+using Newtonsoft.Json;
+using GestoresDeNegocio.Archivos;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
 
     public class GestorDePaises : GestorDeElementos<ContextoSe, PaisDtm, PaisDto>
     {
+
+        class Archivo
+        {
+            public string parametro { get; set; }
+            public int valor { get; set; }
+        }
+
+        public const string ParametroPais = "csvPais";
 
         public class MapearVariables : Profile
         {
@@ -34,9 +45,9 @@ namespace GestoresDeNegocio.Callejero
 
         }
 
-        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
         {
-            return new GestorDeTrabajosDeUsuario(contexto, mapeador); ;
+            return new GestorDePaises(contexto, mapeador); ;
         }
 
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
@@ -46,32 +57,72 @@ namespace GestoresDeNegocio.Callejero
 
             var dll = Assembly.GetExecutingAssembly().GetName().Name;
             var clase = typeof(GestorDePaises).FullName;
-            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(SometerImportarCallejero).Replace("Someter",""));
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(SometerImportarCallejero).Replace("Someter", ""));
             // crear trabajo de usuario
 
             var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
             //liberarlo
         }
 
-        public static void ImportarCallejero(ContextoSe contextoTu, ContextoSe contextoPr, int idTrabajoDeUsuario)
+        public static void ImportarCallejero(EntornoDeTrabajo entorno)
         {
-            var gestorTu = GestorDeTrabajosDeUsuario.Gestor(contextoTu, contextoTu.Mapeador);
-            var tu = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario);
-            var gestorPr = GestorDePaises.Gestor(contextoPr, contextoPr.Mapeador);
-            var tran = gestorPr.IniciarTransaccion();
-            try
+            var archivos = JsonConvert.DeserializeObject<List<Archivo>>(entorno.Trabajo.Parametros);
+            foreach (Archivo archivo in archivos)
             {
-                GestorDeErrores.Emitir($"Falta implementar el proceso para el trabajo {tu.Trabajo.Nombre}");
-                contextoPr.Commit(tran);
-            }
-            catch(Exception e)
-            {
-                contextoPr.Rollback(tran);
-                GestorDeErroresDeUnTrabajo.AnotarError(gestorTu.Contexto, tu, e);
-                throw;
+                if (archivo.parametro.Equals(ParametroPais))
+                    ImportarFicheroDePaises(entorno, archivo.valor);
+
             }
         }
 
+
+        private static void ImportarFicheroDePaises(EntornoDeTrabajo entorno, int idArchivo)
+        {
+            var gestor = GestorDePaises.Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
+            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoPr, idArchivo);
+            var fichero = new FicheroCsv(rutaFichero);
+            var linea = 0;
+            entorno.AnotarTraza($"Inicio del proceso");
+            var idTraza = entorno.AnotarTraza($"Procesando la fila {linea}");
+            foreach (var fila in fichero)
+            {
+                var tran = gestor.IniciarTransaccion();
+                try
+                {
+                    linea++;
+                    if (fila.EnBlanco)
+                        continue;
+
+                    if (fila.Columnas != 2)
+                        throw new Exception($"la fila {linea} solo debe tener 2 columnas");
+
+                    if (fila["A"].IsNullOrEmpty() || fila["B"].IsNullOrEmpty())
+                        throw new Exception($"El contenido de la fila {linea} debe ser código y nombre del pais");
+
+                    CrearPais(gestor, fila["A"], fila["B"]);
+                    gestor.Commit(tran);
+                }
+                catch (Exception e)
+                {
+                    gestor.Rollback(tran);
+                    entorno.AnotarError(e);
+                }
+                finally
+                {
+                    entorno.AnotarTraza(idTraza, $"Procesando la fila {linea}");
+                }
+            }
+
+            entorno.AnotarTraza($"Procesadas un total de {linea} filas");
+        }
+
+        private static PaisDtm CrearPais(GestorDePaises gestor, string codigoPais, string NombrePais)
+        {
+            var pais = new PaisDtm();
+            pais.Codigo = codigoPais;
+            pais.Nombre = NombrePais;
+            return gestor.PersistirRegistro(pais, new ParametrosDeNegocio(TipoOperacion.Insertar));
+        }
 
     }
 }

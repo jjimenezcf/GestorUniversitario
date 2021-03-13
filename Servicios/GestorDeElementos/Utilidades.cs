@@ -12,30 +12,36 @@ namespace GestorDeElementos
 {
     public static class Utilidades
     {
+        public static string DescargarUrlDeArchivo(int id, string nombreFichero, string almacenadoEn)
+        {
+            var rutaUrlBase = "/Archivos";
+            var archivo = DescargarArchivo(id, nombreFichero, almacenadoEn);
+            string urlArchivoRelativa = $@"{rutaUrlBase}/{Path.GetFileName(archivo)}";
+            return urlArchivoRelativa;
+        }
+
         public static string DescargarArchivo(int id, string nombreFichero, string almacenadoEn)
         {
             var rutaDeDescarga = $@".\wwwroot\Archivos";
             var ficheroCacheado = $"{id}.se";
-            var rutaUrlBase = "/Archivos";
             var ficheroConRutaEnLaGd = $@"{almacenadoEn}\{ficheroCacheado}";
             var ficheroConRutaCacheado = $@"{rutaDeDescarga}\{ficheroCacheado}";
 
             if (!File.Exists(ficheroConRutaEnLaGd))
-                return $@"{rutaUrlBase}/FicheroNoEncontrado.png";
+                return $@"{rutaDeDescarga}\FicheroNoEncontrado.png";
 
 
             if (!File.Exists(ficheroConRutaCacheado))
             {
                 if (!CopiarFichero(ficheroConRutaEnLaGd, ficheroConRutaCacheado))
-                    return $@"{rutaUrlBase}/FicheroBloqueado.png";
+                    return $@"{rutaDeDescarga}\FicheroBloqueado.png";
             }
 
             var ficherpParaDevolverConRuta = $@"{rutaDeDescarga}\{Path.GetFileNameWithoutExtension(nombreFichero)}_{DateTime.Now.Ticks}{Path.GetExtension(nombreFichero)}";
             if (!CopiarFichero(ficheroConRutaCacheado, ficherpParaDevolverConRuta))
-                return $@"{rutaUrlBase}/FicheroBloqueado.png";
+                return $@"{rutaDeDescarga}/FicheroBloqueado.png";
 
-            string urlArchivoRelativa = $@"{rutaUrlBase}/{Path.GetFileName(ficherpParaDevolverConRuta)}";
-            return urlArchivoRelativa;
+            return ficherpParaDevolverConRuta;
         }
 
         private static bool EstaEnUso(string ficheroConRuta)

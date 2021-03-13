@@ -60,6 +60,16 @@ var TrabajosSometido;
                     ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'borrar', 'ejecutar']);
                     break;
                 }
+                case 'terminado': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
+                    break;
+                }
+                case 'con errores': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
+                    break;
+                }
                 default: {
                     MensajesSe.Error('AjustarOpcionesDeMenuDelElemento', `No está definido que hacer con el estado ${estado} de un trabajo`);
                     this.DeshabilitarOpcionesDeMenuDeElemento();

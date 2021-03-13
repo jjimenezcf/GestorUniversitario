@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Emuasa.Libreria
+namespace Utilidades
 {
     /// <summary>
     /// Para procesar ficheros CSV fácilmente.
@@ -123,6 +121,11 @@ namespace Emuasa.Libreria
         public bool EnBlanco
         {
             get { return _campos.All(c => c == ""); }
+        }
+
+        public int Columnas
+        {
+            get { return _campos.Length; }
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string RenderArchivo()
         {
             var htmlArchivo = $@"<form method=¨post¨ action=¨SubirArchivo¨ enctype=¨multipart/form-data¨>
-                                   <input  {RenderAtributos(IdHtml, Tipo, ClaseCss, Ayuda)}
+                                   <input  {RenderAtributos(Id, IdHtml, Tipo, ClaseCss, Ayuda)}
                                        type=¨{enumInputType.file.Render()}¨ 
                                        name=¨fichero¨  
                                        style=¨display: none;¨
@@ -36,7 +36,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                        limite-en-byte = {LimiteEnByte}
                                        barra-vinculada = ¨{IdHtmlBarra}¨ 
                                        onChange=¨ApiDeArchivos.MostrarArchivo('{IdHtml}','{IdHtmlNombre}')¨ />
-                                   <input {RenderAtributos($"{IdHtmlNombre}"
+                                   <input {RenderAtributos(propiedad: ""
+                                       , IdHtmlNombre
                                        , enumTipoControl.Editor
                                        , enumCssControlesFormulario.InfoArchivo
                                        , ayuda: ""
