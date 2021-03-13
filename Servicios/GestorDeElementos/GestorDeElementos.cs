@@ -21,7 +21,7 @@ using Utilidades;
 
 namespace GestorDeElementos
 {
-    public enum TipoOperacion { Insertar, Modificar, Leer, NoDefinida, Eliminar, Contar };
+    public enum TipoOperacion { Insertar, Modificar, LeerConBloqueo, Leer, NoDefinida, Eliminar, Contar };
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -471,7 +471,21 @@ namespace GestorDeElementos
 
             IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins, parametros);
 
-            elementosDeBd = registros.AsNoTracking().ToList();
+            if (parametros.Operacion == TipoOperacion.Leer)
+            {
+                var transactionOptions = new System.Transactions.TransactionOptions();
+                transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted;
+                using (var transactionScope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required, transactionOptions))
+                {
+                    elementosDeBd = registros.AsNoTracking().ToList();
+                    transactionScope.Complete();
+                }
+            }
+            else
+            if (parametros.Operacion == TipoOperacion.LeerConBloqueo)
+                elementosDeBd = registros.AsNoTracking().ToList();
+            else
+                throw new Exception($"Se intenta acceder a leer a la BD y la operación {parametros.Operacion} no se está implementada");
 
             return elementosDeBd;
         }
