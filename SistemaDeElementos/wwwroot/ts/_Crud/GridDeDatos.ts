@@ -267,7 +267,7 @@
             this._paginas.push(p);
         }
 
-        public Inicializar() {
+        public BlanquearCache() {
             this._paginas.splice(0, this._paginas.length);
         }
 
@@ -1013,6 +1013,9 @@
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
 
+        public RecargarGrid(): void {
+
+        }
 
         protected CargarGrid(accion: string, posicion: number) {
 

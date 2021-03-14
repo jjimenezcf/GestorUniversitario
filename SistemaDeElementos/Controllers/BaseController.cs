@@ -106,7 +106,10 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Detalle(e);
-                r.Mensaje = $"No se ha podido subir el fichero. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = $"No se ha podido subir el fichero. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
 

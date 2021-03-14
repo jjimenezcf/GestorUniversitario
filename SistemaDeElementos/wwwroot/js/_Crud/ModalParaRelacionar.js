@@ -54,7 +54,6 @@ var Crud;
             let modlParaRelacionar = peticion.llamador;
             modlParaRelacionar.InfoSelector.QuitarTodos();
             modlParaRelacionar.RecargarGrid();
-            modlParaRelacionar.Crud.Buscar(atGrid.accion.buscar, 0);
         }
         FiltrosExcluyentes(clausulas) {
             clausulas = super.FiltrosExcluyentes(clausulas);

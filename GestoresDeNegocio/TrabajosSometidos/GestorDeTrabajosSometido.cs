@@ -73,7 +73,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             ts.ComunicarError = true;
             ts.ComunicarFin = false;
 
-            return PersistirRegistro(ts, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return PersistirRegistro(ts, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
         }
 
         public List<TrabajoSometidoDto> LeerTrabajos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
@@ -94,7 +94,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
 
-            if (parametros.Operacion == TipoOperacion.Eliminar)
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
                 return;
 
             if (registro.Pa.IsNullOrEmpty() && registro.Esquema.IsNullOrEmpty() && registro.Dll.IsNullOrEmpty() && registro.Clase.IsNullOrEmpty() && registro.Metodo.IsNullOrEmpty())

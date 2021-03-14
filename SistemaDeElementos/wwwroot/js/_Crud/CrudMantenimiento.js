@@ -242,6 +242,7 @@ var Crud;
             this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Cerrar);
         }
         RestaurarPagina() {
+            this.DatosDelGrid.BlanquearCache();
             this.Navegador.EsRestauracion = false;
             let cantidad = this.Navegador.Cantidad;
             let pagina = this.Navegador.Pagina;
@@ -263,13 +264,15 @@ var Crud;
             return peticion;
         }
         Buscar(accion, posicion) {
-            this.DatosDelGrid.Inicializar();
             if (this.Navegador.EsRestauracion) {
                 this.RestaurarPagina();
             }
             else {
-                this.Navegador.Pagina = 1;
-                this.Navegador.Posicion = 0;
+                this.DatosDelGrid.BlanquearCache();
+                if (accion !== atGrid.accion.restaurar) {
+                    this.Navegador.Pagina = 1;
+                    this.Navegador.Posicion = 0;
+                }
                 this.CargarGrid(accion, posicion);
             }
         }

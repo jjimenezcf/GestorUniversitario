@@ -52,10 +52,6 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-
-
-
-
                 GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto, idTrabajoUsuario);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo iniciado";
@@ -64,7 +60,10 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Detalle(e);
-                r.Mensaje = $"Error al iniciar el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = $"Error al iniciar el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -84,7 +83,10 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Detalle(e);
-                r.Mensaje = $"Error al bloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = $"Error al bloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);
@@ -104,7 +106,10 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = GestorDeErrores.Detalle(e);
-                r.Mensaje = $"Error al desbloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = $"Error al desbloquear el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
             }
 
             return new JsonResult(r);

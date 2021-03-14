@@ -188,7 +188,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             tu.Planificado = DateTime.Now;
             tu.Parametros = parametros;
             var gestor = Gestor(contexto, contexto.Mapeador);
-            tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return tu;
         }
 
@@ -205,7 +205,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             {
                 tu.Iniciado = DateTime.Now;
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
-                tu = entorno.Gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                tu = entorno.Gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 entorno.Commit(tran);
             }
             catch (Exception e)
@@ -234,15 +234,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     ? TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado)
                     : TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores);
             }
-            catch
+            catch(Exception e)
             {
                 entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
+                if (e.InnerException != null)
+                    throw e.InnerException;
+
                 throw;
             }
             finally
             {
                 entorno.Trabajo.Terminado = DateTime.Now;
-                var parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+                var parametros = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
                 parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
                 entorno.Gestor.PersistirRegistro(entorno.Trabajo, parametros);
                 entorno.Gestor.Commit(tran);
@@ -261,7 +264,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
                     throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
-                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"Trabajo bloqueado por el usuario {contexto.DatosDeConexion.Login}");
             }
             catch (Exception e)
@@ -281,7 +284,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
                     throw new Exception($"El trabajo no se puede desbloquear, ha de estar en estado bloqueado y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente);
-                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(TipoOperacion.Modificar));
+                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"Trabajo desbloqueado por el usuario {contexto.DatosDeConexion.Login}");
             }
             catch (Exception e)
@@ -305,11 +308,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
 
-            if (parametros.Operacion == TipoOperacion.Eliminar || parametros.Operacion == TipoOperacion.Modificar)
+            if (parametros.Operacion == enumTipoOperacion.Eliminar || parametros.Operacion == enumTipoOperacion.Modificar)
             {
                 if (RegistroEnBD.Iniciado.HasValue)
                 {
-                    if (!(parametros.Operacion == TipoOperacion.Modificar
+                    if (!(parametros.Operacion == enumTipoOperacion.Modificar
                           && parametros.Parametros.ContainsKey(EnumParametro.accion)
                           && (string)parametros.Parametros[EnumParametro.accion] == EnumParametroTu.terminando)
                         )
@@ -317,7 +320,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 }
             }
 
-            if (parametros.Operacion == TipoOperacion.Modificar)
+            if (parametros.Operacion == enumTipoOperacion.Modificar)
             {
                 if (RegistroEnBD.IdSometedor != registro.IdSometedor)
                     GestorDeErrores.Emitir("No se puede modificar el sometedor de un trabajo");
@@ -332,12 +335,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
         protected override void AntesDePersistir(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
-            if (parametros.Operacion == TipoOperacion.Insertar)
+            if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
                 registro.Encolado = DateTime.Now;
             }
 
-            if (parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar)
+            if (parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar)
             {
 
                 if (!registro.Iniciado.HasValue)

@@ -68,7 +68,7 @@ namespace GestoresDeNegocio.Archivos
             var fichero = Path.GetFileName(rutaConFichero);
 
             var archivo = new ArchivoDtm { Nombre = fichero, AlmacenadoEn = almacenarEn };
-            var parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+            var parametros = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
             var tran = Contexto.IniciarTransaccion();
             try
             {

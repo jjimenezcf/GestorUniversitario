@@ -37,7 +37,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             var registro = new ClasePermisoDtm();
             registro.Nombre = nombreDeClase.ToString();
-            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return registro;
         }
     }

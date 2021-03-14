@@ -45,7 +45,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             t.IdTrabajoDeUsuario = tu.Id;
             t.Traza = Traza;
             t.Fecha = DateTime.Now;
-            return PersistirRegistro(t, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return PersistirRegistro(t, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
         }
 
 
@@ -76,7 +76,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             //nuevaTraza.Fecha = t.Fecha;
             //nuevaTraza.Traza = traza;
             t.Traza = traza;
-            gestorTraza.PersistirRegistro(t, new ParametrosDeNegocio(TipoOperacion.Modificar));
+            gestorTraza.PersistirRegistro(t, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
 
             return id;
         }

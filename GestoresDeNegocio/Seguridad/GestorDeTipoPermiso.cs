@@ -32,7 +32,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             var registro = new TipoPermisoDtm();
             registro.Nombre = ModoDeAcceso.ToString(acceso);
-            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return registro;
         }
 
@@ -40,7 +40,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             var registro = new TipoPermisoDtm();
             registro.Nombre = ModoDeAcceso.ToString(acceso);
-            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return registro;
         }
     }

@@ -129,10 +129,10 @@ namespace GestoresDeNegocio.Entorno
                 registro.Archivo = null;
             }
 
-            if (parametros.Operacion == TipoOperacion.Insertar)
+            if (parametros.Operacion == enumTipoOperacion.Insertar)
                 registro.password = GestorDePassword.Generar(registro.Login);
 
-            if (parametros.Operacion == TipoOperacion.Modificar)
+            if (parametros.Operacion == enumTipoOperacion.Modificar)
                 registro.password = RegistroEnBD.password;
 
         }
@@ -140,7 +140,7 @@ namespace GestoresDeNegocio.Entorno
         protected override void DespuesDePersistir(UsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
-            if (parametros.Operacion != TipoOperacion.Insertar)
+            if (parametros.Operacion != enumTipoOperacion.Insertar)
                 ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}");
         }
 

@@ -47,7 +47,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             e.Error = error;
             e.Detalle = detalle;
             e.Fecha = DateTime.Now;
-            return PersistirRegistro(e, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return PersistirRegistro(e, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
         }
 
 

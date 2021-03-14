@@ -163,12 +163,12 @@ namespace GestoresDeNegocio.Entorno
         protected override void AntesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
-            if (parametros.Operacion == TipoOperacion.Insertar)
+            if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
                 var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista);
                 registro.IdPermiso = permiso.Id;
             }
-            if (parametros.Operacion == TipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
+            if (parametros.Operacion == enumTipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
             {
                 registro.IdPermiso = RegistroEnBD.IdPermiso;
             }
@@ -178,10 +178,10 @@ namespace GestoresDeNegocio.Entorno
         {
             base.DespuesDePersistir(registro, parametros);
 
-            if (parametros.Operacion == TipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
+            if (parametros.Operacion == enumTipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.ModificarPermisoFuncional(Contexto, Mapeador, RegistroEnBD.Permiso, registro.Nombre, enumClaseDePermiso.Vista);
 
-            if (parametros.Operacion == TipoOperacion.Eliminar)
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
                 GestorDePermisos.Eliminar(Contexto, Mapeador, RegistroEnBD.Permiso);
 
             ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");

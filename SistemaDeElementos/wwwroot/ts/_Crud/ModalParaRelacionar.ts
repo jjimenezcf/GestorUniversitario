@@ -80,7 +80,6 @@
             let modlParaRelacionar: ModalParaRelacionar = peticion.llamador as ModalParaRelacionar;
             modlParaRelacionar.InfoSelector.QuitarTodos();
             modlParaRelacionar.RecargarGrid();
-            modlParaRelacionar.Crud.Buscar(atGrid.accion.buscar, 0);
         }
 
         protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]): ClausulaDeFiltrado[] {

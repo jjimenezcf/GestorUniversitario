@@ -53,6 +53,7 @@ namespace ServicioDeDatos
 
     public static class Transaccion
     {
+        
         public static bool IniciarTransaccion(this ContextoSe contexto)
         {
             if (contexto.Database.CurrentTransaction == null)
@@ -93,6 +94,8 @@ namespace ServicioDeDatos
         public IMapper Mapeador { get; set; }
 
         internal  IDbContextTransaction Transaccion { get; set; }
+
+        public bool HayTransaccion => Transaccion != null;
 
         public bool Debuggar => CacheDeVariable.HayQueDebuggar;
 

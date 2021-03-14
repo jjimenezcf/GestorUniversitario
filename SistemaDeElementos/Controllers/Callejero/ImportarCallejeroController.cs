@@ -46,7 +46,10 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 r.Estado = enumEstadoPeticion.Error;
                 r.consola = e.Message;
-                r.Mensaje = "Error al someter el trabajo de importación del callejero";
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = "Error al someter el trabajo de importación del callejero";
             }
 
             return new JsonResult(r);

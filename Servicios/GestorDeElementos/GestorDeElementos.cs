@@ -21,7 +21,26 @@ using Utilidades;
 
 namespace GestorDeElementos
 {
-    public enum TipoOperacion { Insertar, Modificar, LeerConBloqueo, Leer, NoDefinida, Eliminar, Contar };
+    public enum enumTipoOperacion { Insertar, Modificar, LeerConBloqueo, LeerSinBloqueo, NoDefinida, Eliminar, Contar };
+
+    public static class TipoOperacion
+    {
+        public static enumTipoOperacion ToTipoOperacion(this object tipo)
+        {
+            switch (tipo.ToString())
+            {
+                case nameof(enumTipoOperacion.Insertar): return enumTipoOperacion.Insertar;
+                case nameof(enumTipoOperacion.Modificar): return enumTipoOperacion.Modificar;
+                case nameof(enumTipoOperacion.LeerConBloqueo): return enumTipoOperacion.LeerConBloqueo;
+                case nameof(enumTipoOperacion.LeerSinBloqueo): return enumTipoOperacion.LeerSinBloqueo;
+                case nameof(enumTipoOperacion.NoDefinida): return enumTipoOperacion.NoDefinida;
+                case nameof(enumTipoOperacion.Eliminar): return enumTipoOperacion.Eliminar;
+                case nameof(enumTipoOperacion.Contar): return enumTipoOperacion.Contar;
+            }
+
+            throw new Exception($"No se ha definido el tipo de operación {tipo}");
+        }
+    }
 
     #region Extensiones para filtrar, hacer joins y ordenar
     public class ClausulaDeJoin
@@ -42,10 +61,10 @@ namespace GestorDeElementos
 
     public class ParametrosDeNegocio
     {
-        public TipoOperacion Operacion { get; private set; }
+        public enumTipoOperacion Operacion { get; private set; }
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
 
-        public ParametrosDeNegocio(TipoOperacion tipo)
+        public ParametrosDeNegocio(enumTipoOperacion tipo)
         {
             Operacion = tipo;
         }
@@ -101,7 +120,7 @@ namespace GestorDeElementos
         public async Task InsertarElementoAsync(TElemento elemento, ParametrosDeNegocio parametros = null)
         {
             if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Insertar);
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
 
             TRegistro elementoBD = MapearRegistro(elemento, parametros);
             Contexto.Add(elementoBD);
@@ -115,7 +134,7 @@ namespace GestorDeElementos
         public async Task ModificarElementoAsync(TElemento elemento, ParametrosDeNegocio parametros = null)
         {
             if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
 
             TRegistro registro = MapearRegistro(elemento, parametros);
             await ModificarRegistroAsync(registro);
@@ -124,7 +143,7 @@ namespace GestorDeElementos
         protected async Task ModificarRegistroAsync(TRegistro registro, ParametrosDeNegocio parametros = null)
         {
             if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Modificar);
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
 
             Contexto.Update(registro);
             await Contexto.SaveChangesAsync();
@@ -193,7 +212,7 @@ namespace GestorDeElementos
                 return $"El registro {registro} ya existe";
 
             MapearDatosDeRelacion(registro, idElemento1, idElemento2);
-            PersistirRegistro(registro, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
 
             return "";
         }
@@ -232,16 +251,16 @@ namespace GestorDeElementos
             {
                 AntesDePersistir(registro, parametros);
 
-                if (parametros.Operacion == TipoOperacion.Insertar)
+                if (parametros.Operacion == enumTipoOperacion.Insertar)
                     Contexto.Add(registro);
                 else
-                if (parametros.Operacion == TipoOperacion.Modificar)
+                if (parametros.Operacion == enumTipoOperacion.Modificar)
                     Contexto.Update(registro);
                 else
-                if (parametros.Operacion == TipoOperacion.Eliminar)
+                if (parametros.Operacion == enumTipoOperacion.Eliminar)
                     Contexto.Remove(registro);
                 else
-                    throw new Exception($"Solo se pueden persistir operaciones del tipo {TipoOperacion.Insertar} o  {TipoOperacion.Modificar} o {TipoOperacion.Eliminar}");
+                    throw new Exception($"Solo se pueden persistir operaciones del tipo {enumTipoOperacion.Insertar} o  {enumTipoOperacion.Modificar} o {enumTipoOperacion.Eliminar}");
 
                 Contexto.SaveChanges();
 
@@ -295,7 +314,7 @@ namespace GestorDeElementos
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            if (parametros.Operacion != TipoOperacion.Insertar)
+            if (parametros.Operacion != enumTipoOperacion.Insertar)
                 RegistroEnBD = LeerRegistroPorId(registro.Id);
 
             AntesDePersistirValidarRegistro(registro, parametros);
@@ -303,13 +322,13 @@ namespace GestorDeElementos
             if (registro.ImplementaUnElemento())
             {
                 var elemento = (IElementoDtm)registro;
-                if (parametros.Operacion == TipoOperacion.Insertar)
+                if (parametros.Operacion == enumTipoOperacion.Insertar)
                 {
                     elemento.IdUsuaCrea = Contexto.DatosDeConexion.IdUsuario;
                     elemento.FechaCreacion = DateTime.Now;
                 }
                 else
-                if (parametros.Operacion == TipoOperacion.Modificar)
+                if (parametros.Operacion == enumTipoOperacion.Modificar)
                 {
                     elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
                     elemento.FechaModificacion = DateTime.Now;
@@ -321,7 +340,7 @@ namespace GestorDeElementos
             var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
             ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio);
 
-            if ((parametros.Operacion == TipoOperacion.Insertar || parametros.Operacion == TipoOperacion.Modificar) && registro.ImplementaNombre())
+            if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
                 var propiedades = PropiedadesDelObjeto(registro);
                 foreach (var propiedad in propiedades)
@@ -335,7 +354,7 @@ namespace GestorDeElementos
                 }
             }
 
-            if (parametros.Operacion == TipoOperacion.Modificar || parametros.Operacion == TipoOperacion.Eliminar)
+            if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Eliminar)
             {
             }
         }
@@ -355,7 +374,12 @@ namespace GestorDeElementos
 
         public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo)
         {
-            List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden);
+            if (!opcionesDeMapeo.ContainsKey(nameof(ParametrosDeNegocio.Operacion)))
+                opcionesDeMapeo.Add(nameof(ParametrosDeNegocio.Operacion), enumTipoOperacion.LeerSinBloqueo.ToString());
+            var to = opcionesDeMapeo[nameof(ParametrosDeNegocio.Operacion)].ToTipoOperacion();
+            var p = new ParametrosDeNegocio(to);
+
+            List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden, null, p);
 
             ParametrosDeMapeo parametrosDelMapeo = opcionesDeMapeo.Count > 0 ? new ParametrosDeMapeo() { Opciones = opcionesDeMapeo } : null;
 
@@ -369,10 +393,10 @@ namespace GestorDeElementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true)
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true, bool conBloqueo = false)
         {
             if (!usarLaCache)
-                return LeerRegistro(nameof(Registro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache);
+                return LeerRegistro(nameof(Registro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache, conBloqueo);
 
             return LeerRegistroCacheado(nameof(Registro.Id), id.ToString());
         }
@@ -410,7 +434,7 @@ namespace GestorDeElementos
             var cache = ServicioDeCaches.Obtener(typeof(TRegistro).FullName);
             if (!cache.ContainsKey(indice))
             {
-                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno, traqueado: false);
+                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno, traqueado: false, conBloqueo: false);
                 if (a == null)
                     return null;
 
@@ -419,9 +443,9 @@ namespace GestorDeElementos
             return (TRegistro)cache[indice];
         }
 
-        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool traqueado)
+        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool traqueado, bool conBloqueo)
         {
-            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor, traqueado);
+            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor, traqueado, conBloqueo);
 
             if (errorSiNoHay && registros.Count == 0)
                 GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
@@ -438,7 +462,7 @@ namespace GestorDeElementos
             return registros[0];
         }
 
-        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado)
+        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado, bool ConBloqueo)
         {
             var filtro = new ClausulaDeFiltrado()
             {
@@ -447,7 +471,8 @@ namespace GestorDeElementos
                 Valor = valor
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
-            IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, null);
+            var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, parametros);
             if (!traqueado)
                 registros = registros.AsNoTracking();
             return registros.ToList();
@@ -468,10 +493,11 @@ namespace GestorDeElementos
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
             List<TRegistro> elementosDeBd;
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
 
             IQueryable<TRegistro> registros = DefinirConsulta(posicion, cantidad, filtros, orden, joins, parametros);
-
-            if (parametros.Operacion == TipoOperacion.Leer)
+            if (!Contexto.HayTransaccion && parametros.Operacion == enumTipoOperacion.LeerSinBloqueo)
             {
                 var transactionOptions = new System.Transactions.TransactionOptions();
                 transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted;
@@ -482,19 +508,13 @@ namespace GestorDeElementos
                 }
             }
             else
-            if (parametros.Operacion == TipoOperacion.LeerConBloqueo)
-                elementosDeBd = registros.AsNoTracking().ToList();
-            else
-                throw new Exception($"Se intenta acceder a leer a la BD y la operación {parametros.Operacion} no se está implementada");
+            elementosDeBd = registros.AsNoTracking().ToList();
 
             return elementosDeBd;
         }
 
         private IQueryable<TRegistro> DefinirConsulta(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Leer);
-
             if (joins == null)
                 joins = new List<ClausulaDeJoin>();
 
@@ -508,7 +528,7 @@ namespace GestorDeElementos
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
 
-            if (parametros.Operacion == TipoOperacion.Leer)
+            if (parametros.Operacion == enumTipoOperacion.LeerSinBloqueo)
             {
                 if (orden == null) orden = new List<ClausulaDeOrdenacion>();
                 registros = AplicarOrden(registros, orden);
@@ -575,7 +595,7 @@ namespace GestorDeElementos
         {
 
             if (parametros == null)
-                parametros = new ParametrosDeNegocio(TipoOperacion.Contar);
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.Contar);
 
             var registros = DefinirConsulta(0, -1, filtros, null, joins, parametros);
             var total = registros.Count();
@@ -625,20 +645,20 @@ namespace GestorDeElementos
 
         protected virtual void DespuesDeMapearRegistro(TElemento elemento, TRegistro registro, ParametrosDeNegocio opciones)
         {
-            if (TipoOperacion.Insertar == opciones.Operacion)
+            if (enumTipoOperacion.Insertar == opciones.Operacion)
                 registro.Id = 0;
         }
 
         private void AntesMapearRegistro(TElemento elemento, ParametrosDeNegocio opciones)
         {
 
-            if (opciones.Operacion == TipoOperacion.Insertar)
+            if (opciones.Operacion == enumTipoOperacion.Insertar)
                 AntesMapearRegistroParaInsertar(elemento, opciones);
             else
-            if (opciones.Operacion == TipoOperacion.Modificar)
+            if (opciones.Operacion == enumTipoOperacion.Modificar)
                 AntesMapearRegistroParaModificar(elemento, opciones);
             else
-            if (opciones.Operacion == TipoOperacion.Eliminar)
+            if (opciones.Operacion == enumTipoOperacion.Eliminar)
                 AntesMapearRegistroParaEliminar(elemento, opciones);
         }
 
@@ -724,7 +744,7 @@ namespace GestorDeElementos
 
         #region  Métodos de seguridad
 
-        public bool ValidarPermisosDePersistencia(int idUsuario, TipoOperacion operacion, enumNegocio negocio)
+        public bool ValidarPermisosDePersistencia(int idUsuario, enumTipoOperacion operacion, enumNegocio negocio)
         {
             if (Contexto.DatosDeConexion.EsAdministrador || negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;

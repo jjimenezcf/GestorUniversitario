@@ -75,9 +75,6 @@ var ApiDeAjax;
                             descriptor.DespuesDeLaPeticion();
                     }
                 }
-                //catch (error) {
-                //   Mensaje(TipoMensaje.Error, `Error al procesar la peticion ${this.nombre}`, error);
-                //}
                 finally {
                     QuitarCapa();
                 }

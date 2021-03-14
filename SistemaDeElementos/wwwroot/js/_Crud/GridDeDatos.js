@@ -207,7 +207,7 @@ var Crud;
             let p = new PaginaDelGrid(numeroDePagina, posicion, cantidad, registros, expresionMostrar);
             this._paginas.push(p);
         }
-        Inicializar() {
+        BlanquearCache() {
             this._paginas.splice(0, this._paginas.length);
         }
         Pagina(numeroDePagina) {
@@ -817,6 +817,8 @@ var Crud;
             }
             else
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
+        }
+        RecargarGrid() {
         }
         CargarGrid(accion, posicion) {
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')

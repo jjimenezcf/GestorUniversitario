@@ -67,11 +67,23 @@ namespace GestoresDeNegocio.Callejero
         public static void ImportarCallejero(EntornoDeTrabajo entorno)
         {
             var archivos = JsonConvert.DeserializeObject<List<Archivo>>(entorno.Trabajo.Parametros);
+
+            if (archivos.Count == 0)
+                GestorDeErrores.Emitir("No se ha sometido ningún fichero a cargar");
+
+
+
             foreach (Archivo archivo in archivos)
             {
-                if (archivo.parametro.Equals(ParametroPais))
-                    ImportarFicheroDePaises(entorno, archivo.valor);
-
+                switch (archivo.parametro)
+                {
+                    case ParametroPais:
+                        ImportarFicheroDePaises(entorno, archivo.valor);
+                        break;
+                    default:
+                        GestorDeErrores.Emitir($"No es valido el parámetro {archivo.parametro} en el proceso {nameof(ImportarCallejero)}");
+                        break;
+                }
             }
         }
 
@@ -121,7 +133,7 @@ namespace GestoresDeNegocio.Callejero
             var pais = new PaisDtm();
             pais.Codigo = codigoPais;
             pais.Nombre = NombrePais;
-            return gestor.PersistirRegistro(pais, new ParametrosDeNegocio(TipoOperacion.Insertar));
+            return gestor.PersistirRegistro(pais, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
         }
 
     }

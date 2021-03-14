@@ -83,7 +83,10 @@ var TrabajosSometido;
                 Notificar(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
                 return;
             }
-            this.EjecutarTrabajoDeUsuario();
+            let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
+            this.EjecutarTrabajoDeUsuario(idTrabajoDeUsuario)
+                .then((peticion) => this.TrasEjecutarTrabajo(peticion))
+                .catch((peticion) => this.SiHayErrorDeEjecucion(peticion));
         }
         BloquearTrabajo() {
             for (let i = 0; i < this.InfoSelector.Cantidad; i++)
@@ -93,11 +96,16 @@ var TrabajosSometido;
             for (let i = 0; i < this.InfoSelector.Cantidad; i++)
                 this.DesbloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
-        EjecutarTrabajoDeUsuario() {
-            let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
-            let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
-            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.iniciar, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.TrasEjecutarTrabajo, this.SiHayErrorDeEjecucion);
-            a.Ejecutar();
+        EjecutarTrabajoDeUsuario(idTrabajoDeUsuario) {
+            return new Promise((resolve, reject) => {
+                let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.iniciar}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+                let a = new ApiDeAjax.DescriptorAjax(this, Ajax.TrabajosSometidos.accion.iniciar, idTrabajoDeUsuario, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                    resolve(peticion);
+                }, (peticion) => {
+                    reject(peticion);
+                });
+                a.Ejecutar();
+            });
         }
         BloquearTrabajoDeUsuario(idTrabajoDeUsuario) {
             let url = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.bloquear}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
@@ -112,12 +120,12 @@ var TrabajosSometido;
         SiHayErrorDeEjecucion(peticion) {
             MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
             let crudTu = peticion.llamador;
-            crudTu.CargarGrid(atGrid.accion.buscar, 0);
+            crudTu.RestaurarPagina();
         }
         TrasEjecutarTrabajo(peticion) {
             Notificar(TipoMensaje.Info, peticion.resultado.mensaje);
             let crudTu = peticion.llamador;
-            crudTu.CargarGrid(atGrid.accion.buscar, 0);
+            crudTu.RestaurarPagina();
         }
     }
     TrabajosSometido.CrudDeTrabajosDeUsuario = CrudDeTrabajosDeUsuario;
