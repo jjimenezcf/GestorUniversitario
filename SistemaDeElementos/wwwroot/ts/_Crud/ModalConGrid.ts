@@ -14,7 +14,6 @@
         };
 
         protected AbrirModalConGrid() {
-            BlanquearMensaje();
             this.RecargarGrid();
         }
 
@@ -34,7 +33,7 @@
         }
 
         public RecargarGrid() {
-            BlanquearMensaje();
+            this.DatosDelGrid.InicializarCache();
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
 

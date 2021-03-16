@@ -1,6 +1,23 @@
 ﻿module MensajesSe {
 
-    enum enumTipoMensaje { informativo, advertencia, error };
+    export enum enumTipoMensaje { informativo, advertencia, error };
+
+
+    export class clsNotificacion {
+        _tipo: enumTipoMensaje;
+        public get tipo(): enumTipoMensaje {
+            return this._tipo;
+        }
+
+        _mensaje: string;
+        public get mensaje(): string {
+            return this._mensaje;
+        }
+        constructor(tipo: enumTipoMensaje, mensaje: string) {
+            this._tipo = tipo;
+            this._mensaje = mensaje;
+        }
+    }
 
     class clsMensaje {
         _tipo: enumTipoMensaje;
@@ -74,14 +91,13 @@
 
     export function Info(mensaje: string, consola?: string) {
         _Almacen.Info(mensaje);
-        Notificar(TipoMensaje.Info, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
     }
 
     export function Error(origen: string, mensaje: string, consola?: string) {
         _Almacen.Error(origen, mensaje);
-        Notificar(TipoMensaje.Error, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
     }
-
 
     export function MostrarMensajes() {
         let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
@@ -109,7 +125,6 @@
         EntornoSe.AjustarModalesAbiertas();
     }
 
-
     export function MapearMensajesAlGrid() {
 
         function crearFila(filaCabecera: HTMLTableRowElement, mensaje: clsMensaje): HTMLTableRowElement {
@@ -119,7 +134,7 @@
                 let propiedad: string = celdaCabecera.getAttribute('propiedad');
                 celda.style.width = celdaCabecera.style.width;
                 celda.style.textAlign = celdaCabecera.style.textAlign;
-                celda.textContent = mensaje[propiedad]
+                celda.textContent = mensaje[propiedad];
                 return celda;
             }
 
@@ -145,6 +160,55 @@
         tabla.append(cuerpo);
     }
 
+    export let Notificaciones: clsNotificacion[];
 
+    export function Apilar(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
+        let n: clsNotificacion = new clsNotificacion(tipo, mensaje);
+        Notificaciones.push(n);
+        MostrarMensaje(tipo, mensaje, mensajeDeConsola);
+    }
 
+    export function Sacar() {
+        if (Notificaciones.length > 0) {
+            let n = Notificaciones.pop();
+            MostrarMensaje(n.tipo, n.mensaje);
+        }
+        else {
+            let cadena = 'No hay más mensajes';
+            if (mensajeMostrado().indexOf(cadena) > 0)
+                blanquearMensajeMostrado();
+            else
+                MostrarMensaje(enumTipoMensaje.informativo, cadena);
+        }
+    }
+
+    function MostrarMensaje(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
+        var control = <HTMLInputElement>document.getElementById("Mensaje");
+        var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
+        if (control)
+            control.value = `${mensajeConTipo}`;
+
+        if (IsNullOrEmpty(mensajeDeConsola))
+            mensajeDeConsola = mensajeConTipo;
+        else
+            mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
+
+        if (enumTipoMensaje.error === tipo)
+            console.error(mensajeDeConsola);
+        else
+            console.log(mensajeDeConsola);
+    }
+
+    function mensajeMostrado(): string {
+        var control = <HTMLInputElement>document.getElementById("Mensaje");
+        if (control)
+            return control.value;
+        else "";
+    }
+
+    function blanquearMensajeMostrado(): void {
+        var control = <HTMLInputElement>document.getElementById("Mensaje");
+        if (control)
+            control.value = "";
+    }
 }

@@ -1,17 +1,3 @@
-function Notificar(tipo, mensaje, mensajeDeConsola) {
-    var control = document.getElementById("Mensaje");
-    var mensajeConTipo = `(${tipo}) ${mensaje}`;
-    if (control)
-        control.value = `${mensajeConTipo}`;
-    if (IsNullOrEmpty(mensajeDeConsola))
-        mensajeDeConsola = mensajeConTipo;
-    else
-        mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
-    if (TipoMensaje.Error === tipo)
-        console.error(mensajeDeConsola);
-    else
-        console.log(mensajeDeConsola);
-}
 function AlturaCabeceraPnlControl() {
     let cabecera = document.getElementById("cabecera-de-pagina");
     return cabecera.getBoundingClientRect().height;
@@ -54,11 +40,6 @@ function QuitarCapa() {
         numero = numero - 1;
         capa.setAttribute('numero-de-capas', numero.toString());
     }
-}
-function BlanquearMensaje() {
-    var control = document.getElementById("Mensaje");
-    if (control)
-        control.value = "";
 }
 function StringBuilder(value) {
     this.strings = new Array();

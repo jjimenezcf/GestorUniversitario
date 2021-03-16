@@ -193,7 +193,7 @@ var ApiDeArchivos;
         CambiarEstado(archivo, atArchivo.situacion.error);
         BlanquearArchivo(archivo, true);
         VisualizarBarraDeError(archivo);
-        //Mensaje(TipoMensaje.Error, peticion.resultado.mensaje);
+        //Mensaje(MensajesSe.enumTipoMensaje.error, peticion.resultado.mensaje);
     }
     function BlanquearImagen(archivo) {
         let canvasHtml = document.getElementById(archivo.getAttribute(atArchivo.canvas));

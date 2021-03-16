@@ -94,12 +94,12 @@
 
         private TrasSometer(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: Archivo[] = peticion.DatosDeEntrada;
-            Notificar(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
         }
 
         private SiHayErrorAlSometer(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: Archivo[] = peticion.DatosDeEntrada;
-            Notificar(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
 

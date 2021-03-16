@@ -12,7 +12,6 @@ var Crud;
         }
         ;
         AbrirModalConGrid() {
-            BlanquearMensaje();
             this.RecargarGrid();
         }
         CerrarModalConGrid() {
@@ -28,7 +27,7 @@ var Crud;
             });
         }
         RecargarGrid() {
-            BlanquearMensaje();
+            this.DatosDelGrid.InicializarCache();
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
     }

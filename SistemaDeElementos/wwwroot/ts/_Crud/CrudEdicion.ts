@@ -191,7 +191,6 @@
                 ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoCabecera);
                 ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoDatos);
                 ApiCrud.MostrarPanel(this.CrudDeMnt.CuerpoPie);
-                BlanquearMensaje();
             }
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;
             this.CrudDeMnt.Buscar(atGrid.accion.buscar, 0);

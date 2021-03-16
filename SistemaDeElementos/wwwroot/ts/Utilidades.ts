@@ -1,20 +1,4 @@
-﻿function Notificar(tipo: string, mensaje: string, mensajeDeConsola?: string) {
-    var control = <HTMLInputElement>document.getElementById("Mensaje");
-    var mensajeConTipo = `(${tipo}) ${mensaje}`;
-    if (control)
-        control.value = `${mensajeConTipo}`;
-
-    if (IsNullOrEmpty(mensajeDeConsola))
-        mensajeDeConsola = mensajeConTipo;
-    else
-        mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
-
-    if (TipoMensaje.Error === tipo)
-        console.error(mensajeDeConsola);
-    else
-        console.log(mensajeDeConsola);
-}
-
+﻿
 function AlturaCabeceraPnlControl(): number {
     let cabecera: HTMLDivElement = document.getElementById("cabecera-de-pagina") as HTMLDivElement;
     return cabecera.getBoundingClientRect().height;
@@ -63,12 +47,6 @@ function QuitarCapa() {
         numero = numero - 1;
         capa.setAttribute('numero-de-capas', numero.toString());
     }
-}
-
-function BlanquearMensaje() {
-    var control = <HTMLInputElement>document.getElementById("Mensaje");
-    if (control)
-        control.value = "";
 }
 
 function StringBuilder(value) {

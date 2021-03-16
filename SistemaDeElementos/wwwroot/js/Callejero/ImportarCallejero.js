@@ -67,11 +67,11 @@ var Callejero;
         }
         TrasSometer(peticion) {
             let datos = peticion.DatosDeEntrada;
-            Notificar(TipoMensaje.Info, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Se ha sometido el trabajo de importación con ${datos.length} archivos`);
         }
         SiHayErrorAlSometer(peticion) {
             let datos = peticion.DatosDeEntrada;
-            Notificar(TipoMensaje.Info, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
     Callejero.ImportarCallejero = ImportarCallejero;

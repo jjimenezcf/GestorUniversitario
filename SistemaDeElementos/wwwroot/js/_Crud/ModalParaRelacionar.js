@@ -43,7 +43,7 @@ var Crud;
             a.Ejecutar();
         }
         DefinirPeticionDeCrearRelaciones() {
-            let idsJson = JSON.stringify(this.InfoSelector.Seleccionados);
+            let idsJson = JSON.stringify(this.InfoSelector.IdsSeleccionados);
             let url = `/${this.Crud.Controlador}/${Ajax.EndPoint.CrearRelaciones}`;
             let parametros = `&${Ajax.Param.id}=${this.IdRestrictor}` +
                 `&${Ajax.Param.idsJson}=${idsJson}`;
@@ -54,6 +54,7 @@ var Crud;
             let modlParaRelacionar = peticion.llamador;
             modlParaRelacionar.InfoSelector.QuitarTodos();
             modlParaRelacionar.RecargarGrid();
+            modlParaRelacionar.Crud.RestaurarPagina();
         }
         FiltrosExcluyentes(clausulas) {
             clausulas = super.FiltrosExcluyentes(clausulas);

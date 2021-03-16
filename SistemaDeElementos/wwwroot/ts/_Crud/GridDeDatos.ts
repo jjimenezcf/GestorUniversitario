@@ -189,10 +189,10 @@
                         }
             this.Pagina = paginaNueva <= 0 ? 1 : paginaNueva;
             this.Info = `Pagina ${this.Pagina} de ${paginasTotales}`;
-            this.ActualizarMensaje(seleccionados);
+            this.InformarElementosSeleccionados(seleccionados);
         }
 
-        public ActualizarMensaje(seleccionados: number): void {
+        public InformarElementosSeleccionados(seleccionados: number): void {
             this.Mensaje = `Seleccionados ${seleccionados} de ${this.Total}`;
         }
     }
@@ -267,7 +267,7 @@
             this._paginas.push(p);
         }
 
-        public BlanquearCache() {
+        public InicializarCache() {
             this._paginas.splice(0, this._paginas.length);
         }
 
@@ -558,7 +558,7 @@
                         break;
                     }
                     default: {
-                        Notificar(TipoMensaje.Error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
+                        MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
 
                 }
@@ -684,13 +684,13 @@
 
         protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.InsertarElemento(elemento);
-            grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
+            grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
             grid.AjustarOpcionesDeMenu(elemento)
         }
 
         protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
             grid.InfoSelector.Quitar(id);
-            grid.Navegador.ActualizarMensaje(grid.InfoSelector.Cantidad);
+            grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
         }
 
         protected EstaMarcado(idCheck: string): boolean {
@@ -820,7 +820,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                Notificar(TipoMensaje.Error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
                 return;
             }
         }
@@ -837,7 +837,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                Notificar(TipoMensaje.Error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
                 return;
             }
         }
@@ -1013,10 +1013,6 @@
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
 
-        public RecargarGrid(): void {
-
-        }
-
         protected CargarGrid(accion: string, posicion: number) {
 
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')
@@ -1089,7 +1085,7 @@
         private SiHayErrorAlCargarElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
             try {
-                Notificar(TipoMensaje.Error, peticion.resultado.mensaje);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, peticion.resultado.mensaje);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
@@ -1329,6 +1325,11 @@
 
         public AjustarOpcionesDeMenu(elemento: Elemento): void {
             let modoAcceso: string = elemento.ModoDeAcceso;
+
+            //En las modales no hay menús
+            if (this.ZonaDeMenu === null)
+                return;
+
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
@@ -1425,6 +1426,7 @@
 
         public OrdenarPor(columna: string): void {
             this.EstablecerOrdenacion(columna);
+            this.DatosDelGrid.InicializarCache();
             this.CargarGrid(atGrid.accion.buscar, 0);
         }
 

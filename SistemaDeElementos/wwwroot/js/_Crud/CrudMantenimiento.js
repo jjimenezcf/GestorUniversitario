@@ -242,7 +242,7 @@ var Crud;
             this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Cerrar);
         }
         RestaurarPagina() {
-            this.DatosDelGrid.BlanquearCache();
+            this.DatosDelGrid.InicializarCache();
             this.Navegador.EsRestauracion = false;
             let cantidad = this.Navegador.Cantidad;
             let pagina = this.Navegador.Pagina;
@@ -256,7 +256,7 @@ var Crud;
             }
         }
         DefinirPeticionDeBorrado() {
-            let idsJson = JSON.stringify(this.InfoSelector.Seleccionados);
+            let idsJson = JSON.stringify(this.InfoSelector.IdsSeleccionados);
             var controlador = this.Navegador.Controlador;
             let url = `/${controlador}/${Ajax.EndPoint.Borrar}`;
             let parametros = `${Ajax.Param.idsJson}=${idsJson}`;
@@ -268,7 +268,7 @@ var Crud;
                 this.RestaurarPagina();
             }
             else {
-                this.DatosDelGrid.BlanquearCache();
+                this.DatosDelGrid.InicializarCache();
                 if (accion !== atGrid.accion.restaurar) {
                     this.Navegador.Pagina = 1;
                     this.Navegador.Posicion = 0;

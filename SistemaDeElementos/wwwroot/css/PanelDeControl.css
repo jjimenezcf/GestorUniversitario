@@ -196,11 +196,16 @@
 
 .pie-mensaje {
     grid-area: pie-mensaje;
-    display: -webkit-inline-box;
+    display: grid;
+    background: #00b9ff;
+    grid-template-columns: 32px auto 32px;
+    grid-template-rows: 100%;
+    grid-template-areas: "pie-mensaje-contenedor-hitorial pie-mensaje-contenedor pie-mensaje-contenedor-borrado";
+    /*display: -webkit-inline-box;*/
 }
 
 .pie-mensaje-contenedor-hitorial {
-    width: 32px;
+    /*width: 32px;*/
     border: ridge;
     text-align-last: center;
     background-color: white;
@@ -213,7 +218,7 @@
     }
 
 .pie-mensaje-contenedor {
-    width: 100%;
+    /*width: 100%;*/
     /*text-align-last: center;*/
     background-color: white;
     border: ridge;
@@ -227,6 +232,20 @@
         border: hidden;
         margin: 2px;
         width: 100%;
+    }
+
+
+.pie-mensaje-contenedor-borrado {
+    /*width: 32px;*/
+    border: ridge;
+    text-align-last: center;
+    background-color: white;
+}
+
+    .pie-mensaje-contenedor-Borrado > img {
+        background-color: white;
+        padding-bottom: 2px;
+        vertical-align: baseline;
     }
 
 .pie-conexion {

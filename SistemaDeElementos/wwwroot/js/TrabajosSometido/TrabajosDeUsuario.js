@@ -80,7 +80,7 @@ var TrabajosSometido;
         }
         IniciarTrabajo() {
             if (this.InfoSelector.Cantidad != 1) {
-                Notificar(TipoMensaje.Info, "Solo se puede iniciar un trabajo");
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, "Solo se puede iniciar un trabajo");
                 return;
             }
             let idTrabajoDeUsuario = this.InfoSelector.LeerId(0);
@@ -123,7 +123,7 @@ var TrabajosSometido;
             crudTu.RestaurarPagina();
         }
         TrasEjecutarTrabajo(peticion) {
-            Notificar(TipoMensaje.Info, peticion.resultado.mensaje);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, peticion.resultado.mensaje);
             let crudTu = peticion.llamador;
             crudTu.RestaurarPagina();
         }
@@ -157,13 +157,13 @@ var TrabajosSometido;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
         }
     }
     TrabajosSometido.Eventos = Eventos;

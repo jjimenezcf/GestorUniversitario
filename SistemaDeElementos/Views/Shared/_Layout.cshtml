@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/css/CrudBase.css" type="text/css">
     <link rel="stylesheet" href="~/css/CrudModal.css" type="text/css">
     <link rel="stylesheet" href="~/css/seMenu.css" type="text/css">
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">*@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="~/js/popper.min.js"></script>
@@ -109,6 +110,14 @@
                 </div>
                 <div class="pie-mensaje-contenedor">
                     <input id="Mensaje" readonly value="" />
+                </div>
+                <div class="pie-mensaje-contenedor-borrado">
+                    @*<i class="fa fa-trash" aria-hidden="true"  onclick="MensajesSe.MostrarMensajes()"></i>*@
+                    <img id="id-borrar-mensaje"
+                         src="~/images/menu/papelera.svg"
+                         style="width:32px; height:32px; padding-bottom: 10px; "
+                         class="btn-menu"
+                         onclick="MensajesSe.Sacar()"/>
                 </div>
             </div>
             <div class="pie-conexion">

@@ -59,7 +59,7 @@ var Crud;
                 if (!elemento.EsVacio())
                     this.mapearElementoAlHtmlSelector(elemento);
                 else
-                    Notificar(TipoMensaje.Error, `Se ha leido mal el elemento del selector ${this.IdGrid} de la posición ${x}`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Se ha leido mal el elemento del selector ${this.IdGrid} de la posición ${x}`);
             }
             this.CerrarModalDeSeleccion();
         }

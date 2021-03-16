@@ -101,13 +101,13 @@
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
         }
         catch (error) {
-            Notificar(TipoMensaje.Error, error);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
         }
     }
 

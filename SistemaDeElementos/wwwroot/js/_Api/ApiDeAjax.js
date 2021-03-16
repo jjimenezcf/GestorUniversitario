@@ -57,7 +57,7 @@ var ApiDeAjax;
             this.ProcesarError = siHayError;
         }
         Ejecutar() {
-            BlanquearMensaje();
+            MensajesSe.BlanquearMensaje();
             this.PeticionAjax();
             if (this.Error)
                 throw `${this.resultado.mensaje}`;
@@ -125,7 +125,7 @@ var ApiDeAjax;
             if (!IsNullOrEmpty(this.resultado.consola))
                 console.log(this.resultado.consola);
             if (!IsNullOrEmpty(this.resultado.mensaje))
-                console.log(TipoMensaje.Info, this.resultado.mensaje);
+                console.log(this.resultado.mensaje);
             if (this.TrasLaPeticion)
                 try {
                     this.TrasLaPeticion(this);

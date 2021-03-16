@@ -8,8 +8,9 @@ var EntornoSe;
             ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
         })
             .catch(() => {
-            Notificar(TipoMensaje.Error, "Error al leer el usuario de conexión");
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
         });
+        MensajesSe.Notificaciones = [];
     }
     EntornoSe.IniciarEntorno = IniciarEntorno;
     function AjustarDivs() {

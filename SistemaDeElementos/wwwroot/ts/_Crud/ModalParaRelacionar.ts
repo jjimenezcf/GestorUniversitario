@@ -67,7 +67,7 @@
         }
 
         private DefinirPeticionDeCrearRelaciones(): string {
-            let idsJson: string = JSON.stringify(this.InfoSelector.Seleccionados);
+            let idsJson: string = JSON.stringify(this.InfoSelector.IdsSeleccionados);
             let url: string = `/${this.Crud.Controlador}/${Ajax.EndPoint.CrearRelaciones}`;
             let parametros: string =
                 `&${Ajax.Param.id}=${this.IdRestrictor}` +
@@ -80,6 +80,7 @@
             let modlParaRelacionar: ModalParaRelacionar = peticion.llamador as ModalParaRelacionar;
             modlParaRelacionar.InfoSelector.QuitarTodos();
             modlParaRelacionar.RecargarGrid();
+            modlParaRelacionar.Crud.RestaurarPagina();
         }
 
         protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]): ClausulaDeFiltrado[] {

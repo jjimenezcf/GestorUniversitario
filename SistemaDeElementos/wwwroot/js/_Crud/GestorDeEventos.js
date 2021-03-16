@@ -82,7 +82,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;
                 }
             }
@@ -96,7 +96,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalDeSeleccion(parIn[0]);
         if (modal === undefined) {
-            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -152,7 +152,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
                     break;
                 }
             }
@@ -166,7 +166,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalParaRelacionar(parIn[0]);
         if (modal === undefined) {
-            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -218,7 +218,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
                 }
             }
@@ -232,7 +232,7 @@ var Crud;
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalParaConsultarRelaciones(parIn[0]);
         if (modal === undefined) {
-            Notificar(TipoMensaje.Error, `Modal ${parIn[0]} no definida`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Modal ${parIn[0]} no definida`);
             return;
         }
         try {
@@ -280,7 +280,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
                     break;
                 }
             }
@@ -302,7 +302,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
@@ -324,7 +324,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
@@ -346,7 +346,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }
@@ -395,7 +395,7 @@ var Crud;
                     break;
                 }
                 default: {
-                    Notificar(TipoMensaje.Error, `la opción ${accion} no está definida`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
                 }
             }

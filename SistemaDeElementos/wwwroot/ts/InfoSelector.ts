@@ -82,6 +82,12 @@ class InfoSelector {
     public get Id(): string { return this.idGrid; }
     public get Cantidad(): number { return this.elementos.length; }
     public get Seleccionados(): Elemento[] { return this.elementos; }
+    public get IdsSeleccionados(): number[] {
+        let ids: number[] = [];
+        for (let i: number = 0; i < this.Seleccionados.length; i++)
+            ids.push(this.Seleccionados[i].Id);
+        return ids;
+    }
 
 
     iniciarClase(idGrid) {

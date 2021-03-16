@@ -4,7 +4,7 @@
         UsuarioConectado: 'usuario-conectado'
     };
 
-    export function Guardar(nombre, valor): void {
+    export function Guardar(nombre: string, valor: any): void {
         document.cookie = `${nombre}=${JSON.stringify(valor)}`;
     }
 

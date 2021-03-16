@@ -5,8 +5,21 @@ var MensajesSe;
         enumTipoMensaje[enumTipoMensaje["informativo"] = 0] = "informativo";
         enumTipoMensaje[enumTipoMensaje["advertencia"] = 1] = "advertencia";
         enumTipoMensaje[enumTipoMensaje["error"] = 2] = "error";
-    })(enumTipoMensaje || (enumTipoMensaje = {}));
+    })(enumTipoMensaje = MensajesSe.enumTipoMensaje || (MensajesSe.enumTipoMensaje = {}));
     ;
+    class clsNotificacion {
+        constructor(tipo, mensaje) {
+            this._tipo = tipo;
+            this._mensaje = mensaje;
+        }
+        get tipo() {
+            return this._tipo;
+        }
+        get mensaje() {
+            return this._mensaje;
+        }
+    }
+    MensajesSe.clsNotificacion = clsNotificacion;
     class clsMensaje {
         constructor(tipo, origen, mensaje) {
             this._tipo = tipo;
@@ -62,12 +75,12 @@ var MensajesSe;
     let _Almacen = new AlmacenDeMensajes();
     function Info(mensaje, consola) {
         _Almacen.Info(mensaje);
-        Notificar(TipoMensaje.Info, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
     }
     MensajesSe.Info = Info;
     function Error(origen, mensaje, consola) {
         _Almacen.Error(origen, mensaje);
-        Notificar(TipoMensaje.Error, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
     }
     MensajesSe.Error = Error;
     function MostrarMensajes() {
@@ -127,5 +140,51 @@ var MensajesSe;
         tabla.append(cuerpo);
     }
     MensajesSe.MapearMensajesAlGrid = MapearMensajesAlGrid;
+    function Apilar(tipo, mensaje, mensajeDeConsola) {
+        let n = new clsNotificacion(tipo, mensaje);
+        MensajesSe.Notificaciones.push(n);
+        MostrarMensaje(tipo, mensaje, mensajeDeConsola);
+    }
+    MensajesSe.Apilar = Apilar;
+    function Sacar() {
+        if (MensajesSe.Notificaciones.length > 0) {
+            let n = MensajesSe.Notificaciones.pop();
+            MostrarMensaje(n.tipo, n.mensaje);
+        }
+        else {
+            let cadena = 'No hay más mensajes';
+            if (mensajeMostrado().indexOf(cadena) > 0)
+                blanquearMensajeMostrado();
+            else
+                MostrarMensaje(enumTipoMensaje.informativo, cadena);
+        }
+    }
+    MensajesSe.Sacar = Sacar;
+    function MostrarMensaje(tipo, mensaje, mensajeDeConsola) {
+        var control = document.getElementById("Mensaje");
+        var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
+        if (control)
+            control.value = `${mensajeConTipo}`;
+        if (IsNullOrEmpty(mensajeDeConsola))
+            mensajeDeConsola = mensajeConTipo;
+        else
+            mensajeDeConsola = mensaje + newLine + mensajeDeConsola;
+        if (enumTipoMensaje.error === tipo)
+            console.error(mensajeDeConsola);
+        else
+            console.log(mensajeDeConsola);
+    }
+    function mensajeMostrado() {
+        var control = document.getElementById("Mensaje");
+        if (control)
+            return control.value;
+        else
+            "";
+    }
+    function blanquearMensajeMostrado() {
+        var control = document.getElementById("Mensaje");
+        if (control)
+            control.value = "";
+    }
 })(MensajesSe || (MensajesSe = {}));
 //# sourceMappingURL=Mensajes.js.map

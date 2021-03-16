@@ -65,6 +65,12 @@ class InfoSelector {
     get Id() { return this.idGrid; }
     get Cantidad() { return this.elementos.length; }
     get Seleccionados() { return this.elementos; }
+    get IdsSeleccionados() {
+        let ids = [];
+        for (let i = 0; i < this.Seleccionados.length; i++)
+            ids.push(this.Seleccionados[i].Id);
+        return ids;
+    }
     iniciarClase(idGrid) {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
