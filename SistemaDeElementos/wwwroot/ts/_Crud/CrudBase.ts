@@ -92,7 +92,7 @@
 
         protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
             this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
-            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso)
+            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso);
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
             this.MapearSelectoresDeArchivo(panel, elementoJson);
@@ -283,7 +283,7 @@
                 let area: HTMLTextAreaElement = areas[i] as HTMLTextAreaElement;
                 this.MapearAreaDeTexto(area, elementoJson);
             }
-        } 
+        }
 
         private MapearFechas(panel: HTMLDivElement, elementoJson: JSON): void {
 
@@ -321,8 +321,12 @@
                         ApiControl.MapearHoraAlControl(fecha, valor);
                     }
                 }
+                else 
+                    ApiControl.BlanquearFecha(fecha)
             }
         }
+
+
 
         private MapearImagenes(elementoJson: JSON, visorVinculado: string): void {
             let visor: HTMLImageElement = document.getElementById(visorVinculado) as HTMLImageElement;

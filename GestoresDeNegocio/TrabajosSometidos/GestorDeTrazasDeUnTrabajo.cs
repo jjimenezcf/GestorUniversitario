@@ -70,15 +70,16 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
             var t = gestorTraza.LeerRegistroPorId(id, false);
-            //var nuevaTraza = new TrazaDeUnTrabajoDtm();
-            //nuevaTraza.Id = id;
-            //nuevaTraza.IdTrabajoDeUsuario = t.IdTrabajoDeUsuario;
-            //nuevaTraza.Fecha = t.Fecha;
-            //nuevaTraza.Traza = traza;
             t.Traza = traza;
             gestorTraza.PersistirRegistro(t, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
 
             return id;
+        }
+
+        internal static void EliminarTrazas(ContextoSe contexto, int id)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            gestor.Contexto.Database.ExecuteSqlInterpolated($"delete from trabajo.traza where id_trabajo_usuario = {id}");
         }
     }
 }

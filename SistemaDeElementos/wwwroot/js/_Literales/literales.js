@@ -257,7 +257,8 @@ const Ajax = {
         accion: {
             iniciar: 'epIniciarTrabajoDeUsuario',
             bloquear: 'epBloquearTrabajoDeUsuario',
-            desbloquear: 'epDesbloquearTrabajoDeUsuario'
+            desbloquear: 'epDesbloquearTrabajoDeUsuario',
+            resometer: 'epResometerTrabajoDeUsuario'
         }
     },
     Usuarios: {
@@ -375,6 +376,7 @@ const Evento = {
         iniciar: "iniciar-trabajo",
         bloquear: "bloquear-trabajo",
         desbloquear: "desbloquear-trabajo",
+        resometer: "resometer-trabajo",
         traza: "traza-trabajo",
         errores: "errores-trabajo"
     }

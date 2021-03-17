@@ -13,7 +13,6 @@ module EntornoSe {
             .catch(() => {
                 MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
             });
-        MensajesSe.Notificaciones = [] as MensajesSe.clsNotificacion[];
     }
 
     export function AjustarDivs() {

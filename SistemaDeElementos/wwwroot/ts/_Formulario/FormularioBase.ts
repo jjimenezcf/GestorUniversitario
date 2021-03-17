@@ -35,7 +35,6 @@
         }
 
         constructor(idFormulario: string) {
-
             this._idFormulario = idFormulario;
             MensajesSe.Info("Creado");
         }

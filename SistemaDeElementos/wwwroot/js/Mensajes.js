@@ -142,11 +142,15 @@ var MensajesSe;
     MensajesSe.MapearMensajesAlGrid = MapearMensajesAlGrid;
     function Apilar(tipo, mensaje, mensajeDeConsola) {
         let n = new clsNotificacion(tipo, mensaje);
+        if (IsNull(MensajesSe.Notificaciones))
+            AsignarMemoria();
         MensajesSe.Notificaciones.push(n);
         MostrarMensaje(tipo, mensaje, mensajeDeConsola);
     }
     MensajesSe.Apilar = Apilar;
     function Sacar() {
+        if (IsNull(MensajesSe.Notificaciones))
+            return;
         if (MensajesSe.Notificaciones.length > 0) {
             let n = MensajesSe.Notificaciones.pop();
             MostrarMensaje(n.tipo, n.mensaje);
@@ -160,6 +164,9 @@ var MensajesSe;
         }
     }
     MensajesSe.Sacar = Sacar;
+    function AsignarMemoria() {
+        MensajesSe.Notificaciones = [];
+    }
     function MostrarMensaje(tipo, mensaje, mensajeDeConsola) {
         var control = document.getElementById("Mensaje");
         var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;

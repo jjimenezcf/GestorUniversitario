@@ -45,8 +45,8 @@ namespace ModeloDeDto.Entorno
             Etiqueta = "Apellidos",
             Ayuda = "Apellidos",
             Tipo = typeof(string),
-            Fila = 2,
-            Columna = 1,
+            Fila = 3,
+            Columna = 0,
             Ordenar = true,
             PorAnchoMnt = 45
             )
@@ -87,7 +87,7 @@ namespace ModeloDeDto.Entorno
             VisibleAlConsultar = true,
             Tipo = typeof(DateTime),
             EditableAlEditar = false,
-            Fila = 3,
+            Fila = 4,
             Columna = 0,
             Ordenar = true
             )
@@ -103,7 +103,7 @@ namespace ModeloDeDto.Entorno
             TipoDeControl= enumTipoControl.Archivo,
             ExtensionesValidas = ".png, .jpg",
             UrlDelArchivo = nameof(Foto),
-            Fila = 4,
+            Fila = 5,
             Columna = 0)]
         public int? IdArchivo { get; set; }
 

@@ -113,13 +113,28 @@ function IsNumber(obj: any): boolean {
     }
 }
 
-function IsNullOrEmpty(valor: string): boolean {
 
-    if (valor == null || NoDefinida(valor))
+function IsNull(objeto: any): boolean {
+    if (objeto == null)
         return true;
 
+    return false;
+}
+
+function NoDefinida(valor: any) {
+    if (IsNull(valor) || valor === undefined)
+        return true;
+
+    if (IsString(valor) && valor === '')
+        return true;
+
+    return false;
+};
+
+function IsNullOrEmpty(valor: string): boolean {
     return NoDefinida(valor);
 }
+
 
 
 function PadLeft(cadena: string, rellenarCon: string): string {
@@ -137,16 +152,6 @@ function NumeroMayorDeCero(valor: string): boolean {
     return Numero(valor) > 0;
 }
 
-
-function NoDefinida(valor: any) {
-    if (valor === null || valor === undefined)
-        return true;
-
-    if (IsString(valor) && valor === '')
-        return true;
-
-    return false;
-};
 
 function FechaValida(fecha: Date): boolean {
     if (fecha === undefined || fecha === null)

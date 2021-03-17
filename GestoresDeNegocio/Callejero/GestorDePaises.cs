@@ -71,8 +71,6 @@ namespace GestoresDeNegocio.Callejero
             if (archivos.Count == 0)
                 GestorDeErrores.Emitir("No se ha sometido ningún fichero a cargar");
 
-
-
             foreach (Archivo archivo in archivos)
             {
                 switch (archivo.parametro)
@@ -105,13 +103,15 @@ namespace GestoresDeNegocio.Callejero
                     if (fila.EnBlanco)
                         continue;
 
-                    if (fila.Columnas != 2)
-                        throw new Exception($"la fila {linea} solo debe tener 2 columnas");
+                    if (fila.Columnas != 5)
+                        throw new Exception($"la fila {linea} solo debe tener 5 columnas");
 
-                    if (fila["A"].IsNullOrEmpty() || fila["B"].IsNullOrEmpty())
-                        throw new Exception($"El contenido de la fila {linea} debe ser código y nombre del pais");
+                    if (fila["A"].IsNullOrEmpty() || fila["B"].IsNullOrEmpty() ||
+                        fila["C"].IsNullOrEmpty() || fila["D"].IsNullOrEmpty() ||
+                        fila["E"].IsNullOrEmpty())
+                        throw new Exception($"El contenido de la fila {linea} debe ser: nombre del país, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
 
-                    CrearPais(gestor, fila["A"], fila["B"]);
+                    CrearPais(gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"]);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -128,12 +128,35 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static PaisDtm CrearPais(GestorDePaises gestor, string codigoPais, string NombrePais)
+        private static PaisDtm CrearPais(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )
         {
-            var pais = new PaisDtm();
-            pais.Codigo = codigoPais;
-            pais.Nombre = NombrePais;
-            return gestor.PersistirRegistro(pais, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+            ParametrosDeNegocio operacion;
+            var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, true, true);
+            if (p == null)
+            {
+                p = new PaisDtm();
+                p.Codigo = codigoPais;
+                p.Nombre = nombrePais;
+                p.Name = nombreEnIngles;
+                p.ISO2 = Iso2;
+                p.Prefijo = prefijoTelefono;
+                operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
+            }
+            else
+            {
+                if (p.Nombre != nombrePais || p.ISO2 != Iso2 || p.Name != nombreEnIngles || p.Prefijo != prefijoTelefono)
+                {
+                    p.Nombre = nombrePais;
+                    p.Name = nombreEnIngles;
+                    p.ISO2 = Iso2;
+                    p.Prefijo = prefijoTelefono;
+                    operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
+                }
+                else
+                   return p;
+            }
+
+            return gestor.PersistirRegistro(p, operacion);
         }
 
     }

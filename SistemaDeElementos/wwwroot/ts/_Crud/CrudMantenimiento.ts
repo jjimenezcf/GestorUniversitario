@@ -8,6 +8,13 @@
         public crudDeEdicion: CrudEdicion;
         private _idModalBorrar: string;
 
+        private _modoAccesoDelUsuario: string;
+        public get ModoAccesoDelUsuario(): string {
+            return this._modoAccesoDelUsuario;
+        }
+        public set ModoAccesoDelUsuario(modoDeAcceso: string) {
+            this._modoAccesoDelUsuario = modoDeAcceso;
+        }
 
         public get Cuerpo(): HTMLDivElement {
             return document.getElementById(LiteralMnt.idCuerpoDePagina) as HTMLDivElement;
@@ -17,10 +24,10 @@
         public get ModoTrabajo(): string {
             return this.modoTrabajo;
         }
-
         public set ModoTrabajo(modo: string) {
             this.modoTrabajo = modo;
         }
+
         protected get ModalDeBorrado(): HTMLDivElement {
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };
@@ -28,6 +35,10 @@
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
+
+        public get OpcionesGenerales(): NodeListOf<HTMLButtonElement> {
+            return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
+        }
 
         constructor(idPanelMnt: string, idModalDeBorrado: string) {
             super(idPanelMnt);
@@ -39,7 +50,7 @@
         }
 
         public Inicializar(idPanelMnt: string) {
-           try {
+            try {
 
                 if (IsNullOrEmpty(idPanelMnt))
                     idPanelMnt = this.IdCuerpoCabecera;
@@ -52,11 +63,11 @@
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
 
                 this.AplicarRestrictores();
-                
+
                 this.Buscar(atGrid.accion.buscar, 0);
             }
             catch (error) {
-               MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
             }
         }
 
@@ -72,7 +83,6 @@
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    //this.crudDeEdicion.AjustarModal();
                 }
             }
             if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) {
@@ -81,7 +91,6 @@
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    //this.crudDeCreacion.AjustarModal();
                 }
             }
         }
@@ -124,17 +133,19 @@
                 let idModal: string = selector.getAttribute(atSelector.idModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal);
                 this.ModalesDeSeleccion.push(modal);
-
             });
         }
 
         private InicializarMenus() {
-
             this.DeshabilitarOpcionesDeMenuDeElemento();
-
-            ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
-                .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
-                .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
+            if (IsNullOrEmpty(this.ModoAccesoDelUsuario)) {
+                ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
+                    .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
+                    .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
+            }
+            else {
+                ApiCrud.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
+            }
         }
 
         protected ErrorAlLeerModoAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax): void {
@@ -145,34 +156,10 @@
         private AplicarModoDeAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
             let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            let opcionesGenerales: NodeListOf<HTMLButtonElement> = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
-            for (var i = 0; i < opcionesGenerales.length; i++) {
-                let opcion: HTMLButtonElement = opcionesGenerales[i];
-
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-
-                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                        opcion.disabled = true;
-                    else
-                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                            opcion.disabled = true;
-                        else
-                            opcion.disabled = false;
-            }
+            mantenimiento.ModoAccesoDelUsuario = peticion.resultado.modoDeAcceso;
+            ApiCrud.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
 
-
-        private DefinirPeticionDeLeerModoDeAccesoAlNegocio(): string {
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerModoDeAccesoAlNegocio}`;
-            let parametros: string = `${Ajax.Param.negocio}=${this.Negocio}`;
-            let peticion: string = url + '?' + parametros;
-            return peticion;
-        }
 
         public ObtenerModalDeSeleccion(idModal: string): ModalSeleccion {
             for (let i: number = 0; i < this.ModalesDeSeleccion.length; i++) {

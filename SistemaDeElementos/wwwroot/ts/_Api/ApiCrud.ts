@@ -76,6 +76,21 @@
         MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
 
     }
+
+    export function BlanquearFecha(fecha: HTMLInputElement) {
+        fecha.value = "";
+        let tipo: string = fecha.getAttribute(atControl.tipo);
+        if (tipo === TipoControl.SelectorDeFechaHora) {
+            let idHora: string = fecha.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(idHora)) {
+                let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
+                controlHora.value = '';
+                controlHora.setAttribute(atSelectorDeFecha.milisegundos, '0');
+            }
+        }
+    }
+
+
     export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(columanDeOrdenacion.IdColumna) as HTMLTableHeaderCellElement;
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
@@ -376,6 +391,51 @@ namespace ApiCrud {
             crtls[i].classList.remove(ClaseCss.crtlNoValido);
         }
 
+    }
+
+    export function AplicarModoDeAccesoAlNegocio(opcionesGenerales: NodeListOf<HTMLButtonElement>, modoDeAccesoDelUsuario: string): void {
+        for (var i = 0; i < opcionesGenerales.length; i++) {
+            let opcion: HTMLButtonElement = opcionesGenerales[i];
+
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+            if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                opcion.disabled = true;
+            else
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                    opcion.disabled = true;
+                else
+                    if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                        opcion.disabled = true;
+                    else
+                        opcion.disabled = false;
+        }
+    }
+
+    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hacerLaInterseccion: boolean, modoAccesoDelUsuarioAlElemento) {
+        if (ApiControl.EstaBloqueada(opcion))
+            return;
+
+        let estaDeshabilitado = opcion.disabled;
+        let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+        let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
+            opcion.disabled = true;
+            return;
+        }
+
+        if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAccesoDelUsuarioAlElemento !== ModoDeAccesoDeDatos.Administrador)
+            opcion.disabled = true;
+        else
+            if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.Consultor || modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso))
+                opcion.disabled = true;
+            else
+                if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso)
+                    opcion.disabled = true;
+                else
+                    opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
     }
 
     export function ActivarOpciones(opciones: NodeListOf<HTMLButtonElement>, activas: string[], seleccionadas: number): void {

@@ -65,34 +65,39 @@
             }
         }
 
-        public AjustarOpcionesDeMenu(elemento: Elemento): void {
-            super.AjustarOpcionesDeMenu(elemento);
+        public AplicarModoAccesoAlElemento(elemento: Elemento): void {
+            super.AplicarModoAccesoAlElemento(elemento);
             let trabajo: TrabajoDeUsuario = elemento.Registro;
             let estado: string = trabajo.Estado.toLowerCase();
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
             switch (estado) {
                 case 'erroneo': {
-                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'resometer'], this.InfoSelector.Cantidad);
                     ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
                     break;
                 }
                 case 'pendiente': {
                     ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'bloquear', 'ejecutar'], this.InfoSelector.Cantidad);
-                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['desbloquear']);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['desbloquear', 'resometer']);
                     break;
                 }
                 case 'bloqueado': {
                     ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'desbloquear'], this.InfoSelector.Cantidad);
-                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'borrar', 'ejecutar']);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'borrar', 'ejecutar', 'resometer']);
+                    break;
+                }
+                case 'iniciado': {
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'resometer'], this.InfoSelector.Cantidad);
+                    ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
                     break;
                 }
                 case 'terminado': {
-                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'resometer'], this.InfoSelector.Cantidad);
                     ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
                     break;
                 }
                 case 'con errores': {
-                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar'], this.InfoSelector.Cantidad);
+                    ApiCrud.ActivarOpciones(opcionesDeElemento, ['errores', 'traza', 'editar', 'resometer'], this.InfoSelector.Cantidad);
                     ApiCrud.DesactivarOpciones(opcionesDeElemento, ['bloquear', 'desbloquear', 'ejecutar']);
                     break;
                 }
@@ -127,6 +132,11 @@
         public DesbloquearTrabajo(): void {
             for (let i: number = 0; i < this.InfoSelector.Cantidad; i++)
                 this.DesbloquearTrabajoDeUsuario(this.InfoSelector.LeerId(i));
+        }
+
+        public ResometerTrabajo(): void {
+            for (let i: number = 0; i < this.InfoSelector.Cantidad; i++)
+                this.ResometerTrabajoDeUsuario(this.InfoSelector.LeerId(i));
         }
 
         private EjecutarTrabajoDeUsuario(idTrabajoDeUsuario: number): Promise<ApiDeAjax.DescriptorAjax> {
@@ -183,6 +193,21 @@
             a.Ejecutar();
         }
 
+        private ResometerTrabajoDeUsuario(idTrabajoDeUsuario: number): void {
+            let url: string = `/${Ajax.TrabajosSometidos.rutaTu}/${Ajax.TrabajosSometidos.accion.resometer}?idTrabajoUsuario=${idTrabajoDeUsuario}`;
+
+            let a = new ApiDeAjax.DescriptorAjax(this
+                , Ajax.TrabajosSometidos.accion.resometer
+                , idTrabajoDeUsuario
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , this.TrasEjecutarTrabajo
+                , this.SiHayErrorDeEjecucion
+            );
+            a.Ejecutar();
+        }
+
         public SiHayErrorDeEjecucion(peticion: ApiDeAjax.DescriptorAjax): void {
             MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
             let crudTu: CrudDeTrabajosDeUsuario = peticion.llamador as CrudDeTrabajosDeUsuario;
@@ -226,6 +251,10 @@
                 }
                 case Evento.TrabajoDeUsuario.desbloquear: {
                     crudTu.DesbloquearTrabajo();
+                    break;
+                }
+                case Evento.TrabajoDeUsuario.resometer: {
+                    crudTu.ResometerTrabajo();
                     break;
                 }
                 default: {

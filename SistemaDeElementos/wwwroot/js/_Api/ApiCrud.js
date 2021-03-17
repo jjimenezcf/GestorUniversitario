@@ -74,6 +74,19 @@ var ApiControl;
         MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
     }
     ApiControl.MapearHoraAlControl = MapearHoraAlControl;
+    function BlanquearFecha(fecha) {
+        fecha.value = "";
+        let tipo = fecha.getAttribute(atControl.tipo);
+        if (tipo === TipoControl.SelectorDeFechaHora) {
+            let idHora = fecha.getAttribute(atSelectorDeFecha.hora);
+            if (!IsNullOrEmpty(idHora)) {
+                let controlHora = document.getElementById(idHora);
+                controlHora.value = '';
+                controlHora.setAttribute(atSelectorDeFecha.milisegundos, '0');
+            }
+        }
+    }
+    ApiControl.BlanquearFecha = BlanquearFecha;
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
         let columna = document.getElementById(columanDeOrdenacion.IdColumna);
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
@@ -348,6 +361,43 @@ var ApiCrud;
         }
     }
     ApiCrud.QuitarClaseDeCtrlNoValido = QuitarClaseDeCtrlNoValido;
+    function AplicarModoDeAccesoAlNegocio(opcionesGenerales, modoDeAccesoDelUsuario) {
+        for (var i = 0; i < opcionesGenerales.length; i++) {
+            let opcion = opcionesGenerales[i];
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+            let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+            if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
+                opcion.disabled = true;
+            else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
+                opcion.disabled = true;
+            else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
+                opcion.disabled = true;
+            else
+                opcion.disabled = false;
+        }
+    }
+    ApiCrud.AplicarModoDeAccesoAlNegocio = AplicarModoDeAccesoAlNegocio;
+    function AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAccesoDelUsuarioAlElemento) {
+        if (ApiControl.EstaBloqueada(opcion))
+            return;
+        let estaDeshabilitado = opcion.disabled;
+        let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+        let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
+            opcion.disabled = true;
+            return;
+        }
+        if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAccesoDelUsuarioAlElemento !== ModoDeAccesoDeDatos.Administrador)
+            opcion.disabled = true;
+        else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.Consultor || modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso))
+            opcion.disabled = true;
+        else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso)
+            opcion.disabled = true;
+        else
+            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+    }
+    ApiCrud.AplicarModoAccesoAlElemento = AplicarModoAccesoAlElemento;
     function ActivarOpciones(opciones, activas, seleccionadas) {
         for (var i = 0; i < opciones.length; i++) {
             let opcion = opciones[i];

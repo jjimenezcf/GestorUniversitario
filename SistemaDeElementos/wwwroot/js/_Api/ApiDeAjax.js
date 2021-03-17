@@ -57,7 +57,6 @@ var ApiDeAjax;
             this.ProcesarError = siHayError;
         }
         Ejecutar() {
-            MensajesSe.BlanquearMensaje();
             this.PeticionAjax();
             if (this.Error)
                 throw `${this.resultado.mensaje}`;

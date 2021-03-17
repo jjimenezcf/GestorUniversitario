@@ -114,6 +114,29 @@ namespace MVCSistemaDeElementos.Controllers
 
             return new JsonResult(r);
         }
+        public JsonResult epResometerTrabajoDeUsuario(int idTrabajoUsuario)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
+                GestorDeTrabajosDeUsuario.Resometer(GestorDeElementos.Contexto, idTrabajoUsuario);
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = "Trabajo resometido";
+            }
+            catch (Exception e)
+            {
+                r.Estado = enumEstadoPeticion.Error;
+                r.consola = GestorDeErrores.Detalle(e);
+                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
+                    r.Mensaje = e.Message;
+                else
+                    r.Mensaje = $"Error al resometer el trabajo. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+            }
+
+            return new JsonResult(r);
+        }
 
     }
 

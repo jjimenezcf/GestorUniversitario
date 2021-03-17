@@ -95,9 +95,20 @@ function IsNumber(obj) {
         return false;
     }
 }
-function IsNullOrEmpty(valor) {
-    if (valor == null || NoDefinida(valor))
+function IsNull(objeto) {
+    if (objeto == null)
         return true;
+    return false;
+}
+function NoDefinida(valor) {
+    if (IsNull(valor) || valor === undefined)
+        return true;
+    if (IsString(valor) && valor === '')
+        return true;
+    return false;
+}
+;
+function IsNullOrEmpty(valor) {
     return NoDefinida(valor);
 }
 function PadLeft(cadena, rellenarCon) {
@@ -110,14 +121,6 @@ function NumeroMayorDeCero(valor) {
         return false;
     return Numero(valor) > 0;
 }
-function NoDefinida(valor) {
-    if (valor === null || valor === undefined)
-        return true;
-    if (IsString(valor) && valor === '')
-        return true;
-    return false;
-}
-;
 function FechaValida(fecha) {
     if (fecha === undefined || fecha === null)
         return false;

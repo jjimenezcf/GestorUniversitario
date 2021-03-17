@@ -9,6 +9,12 @@ var Crud;
             this.ModalesParaConsultarRelaciones = new Array();
             this._idModalBorrar = idModalDeBorrado;
         }
+        get ModoAccesoDelUsuario() {
+            return this._modoAccesoDelUsuario;
+        }
+        set ModoAccesoDelUsuario(modoDeAcceso) {
+            this._modoAccesoDelUsuario = modoDeAcceso;
+        }
         get Cuerpo() {
             return document.getElementById(LiteralMnt.idCuerpoDePagina);
         }
@@ -23,6 +29,9 @@ var Crud;
             return document.getElementById(this._idModalBorrar);
         }
         ;
+        get OpcionesGenerales() {
+            return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
+        }
         NavegarDesdeElBrowser() {
             MensajesSe.Info('Ha llamado al método navegar');
         }
@@ -55,7 +64,6 @@ var Crud;
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    //this.crudDeEdicion.AjustarModal();
                 }
             }
             if (this.ModoTrabajo === ModoTrabajo.creando || this.ModoTrabajo === ModoTrabajo.copiando) {
@@ -64,7 +72,6 @@ var Crud;
                 else {
                     this.PosicionarFiltro();
                     this.PosicionarGrid();
-                    //this.crudDeCreacion.AjustarModal();
                 }
             }
         }
@@ -106,9 +113,14 @@ var Crud;
         }
         InicializarMenus() {
             this.DeshabilitarOpcionesDeMenuDeElemento();
-            ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
-                .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
-                .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
+            if (IsNullOrEmpty(this.ModoAccesoDelUsuario)) {
+                ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
+                    .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
+                    .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
+            }
+            else {
+                ApiCrud.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
+            }
         }
         ErrorAlLeerModoAccesoAlNegocio(peticion) {
             ApiDeAjax.ErrorTrasPeticion("Leer modo de acceso al negocio", peticion);
@@ -117,27 +129,8 @@ var Crud;
         AplicarModoDeAccesoAlNegocio(peticion) {
             let mantenimiento = peticion.llamador;
             let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            let opcionesGenerales = mantenimiento.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
-            for (var i = 0; i < opcionesGenerales.length; i++) {
-                let opcion = opcionesGenerales[i];
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-                let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                    opcion.disabled = true;
-                else
-                    opcion.disabled = false;
-            }
-        }
-        DefinirPeticionDeLeerModoDeAccesoAlNegocio() {
-            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerModoDeAccesoAlNegocio}`;
-            let parametros = `${Ajax.Param.negocio}=${this.Negocio}`;
-            let peticion = url + '?' + parametros;
-            return peticion;
+            mantenimiento.ModoAccesoDelUsuario = peticion.resultado.modoDeAcceso;
+            ApiCrud.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
         ObtenerModalDeSeleccion(idModal) {
             for (let i = 0; i < this.ModalesDeSeleccion.length; i++) {

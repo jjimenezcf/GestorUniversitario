@@ -6,6 +6,19 @@
     public class PaisDto : ElementoDto
     {
         [IUPropiedad(
+          Etiqueta = "Código",
+          Ayuda = "Código de país de 3",
+          Tipo = typeof(string),
+          Fila = 1,
+          Columna = 0,
+          Ordenar = true
+          )
+        ]
+        public string Codigo { get; set; }
+
+        //----------------------------------------------
+
+        [IUPropiedad(
           Etiqueta = "País",
           Ayuda = "Indique el nombre del país",
           Tipo = typeof(string),
@@ -17,15 +30,45 @@
         ]
         public string Nombre { get; set; }
 
+        //----------------------------------------------
 
         [IUPropiedad(
-          Etiqueta = "Código",
-          Ayuda = "Asigne el código de país",
+          Etiqueta = "Iso 2",
+          Ayuda = "Código de país de 2",
           Tipo = typeof(string),
-          Fila = 2,
-          Columna = 0
+          Fila = 1,
+          Columna = 1
           )
         ]
-        public string Codigo { get; set; }
+        public string ISO2 { get; set; }
+
+        //----------------------------------------------
+
+        [IUPropiedad(
+          Etiqueta = "Prefijo telefónico",
+          Ayuda = "Asigne el prefijo telefónico del país",
+          Tipo = typeof(string),
+          Fila = 1,
+          Columna = 2
+          )
+        ]
+        public string Prefijo { get; set; }
+
+        //----------------------------------------------
+
+        [IUPropiedad(
+          Etiqueta = "Nombre en Inglés",
+          Ayuda = "Indique el nombre en inglés",
+          Tipo = typeof(string),
+          Fila = 2,
+          Columna = 0,
+          VisibleEnGrid = false
+          )
+        ]
+        public string Name { get; set; }
+
+        //----------------------------------------------
+
+
     }
 }

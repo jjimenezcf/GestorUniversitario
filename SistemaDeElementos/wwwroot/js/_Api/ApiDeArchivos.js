@@ -71,7 +71,6 @@ var ApiDeArchivos;
             ApiDeArchivos.BlanquearArchivo(archivo, true);
             MensajesSe.Error("ErrorAlVisializar", "Fichero no válido para mostrar en un Canvas");
         }
-        BlanquearMensaje();
         let archivo = document.getElementById(idArchivo);
         InicializarBarra(archivo);
         let ficheros = archivo.files;
@@ -97,7 +96,6 @@ var ApiDeArchivos;
     }
     ApiDeArchivos.SeleccionarArchivo = SeleccionarArchivo;
     function MostrarArchivo(idArchivo, idInfoArchivo) {
-        BlanquearMensaje();
         let archivo = document.getElementById(idArchivo);
         if (archivo.files === undefined || archivo.files.length === 0 || IsNullOrEmpty(archivo.files[0].name)) {
             BlanquearInfoArchivo(archivo);

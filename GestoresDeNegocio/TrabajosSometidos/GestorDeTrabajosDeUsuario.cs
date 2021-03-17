@@ -79,15 +79,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public bool HayErrores
         {
-            get 
+            get
             {
                 var gestor = GestorDeErroresDeUnTrabajo.Gestor(Gestor.Contexto, Gestor.Contexto.Mapeador);
                 var filtro = new ClausulaDeFiltrado { Clausula = nameof(ErrorDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = Trabajo.Id.ToString() };
-                return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> {filtro}).Count > 0 ;
+                return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> { filtro }).Count > 0;
             }
         }
 
-        public EntornoDeTrabajo( GestorDeTrabajosDeUsuario gestor, TrabajoDeUsuarioDtm trabajoUsuario)
+        public EntornoDeTrabajo(GestorDeTrabajosDeUsuario gestor, TrabajoDeUsuarioDtm trabajoUsuario)
         {
             Gestor = gestor;
             Trabajo = trabajoUsuario;
@@ -95,7 +95,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public int AnotarTraza(string traza)
         {
-           return AnotarTraza(0, traza);
+            return AnotarTraza(0, traza);
         }
 
         public int AnotarTraza(int id, string traza)
@@ -187,6 +187,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
             tu.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
             tu.Planificado = DateTime.Now;
             tu.Parametros = parametros;
+            return Crear(contexto, tu);
+        }
+
+        internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
+        {
             var gestor = Gestor(contexto, contexto.Mapeador);
             tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return tu;
@@ -230,11 +235,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     entorno.contextoPr = contextoPr;
                     metodo.Invoke(null, new object[] { entorno });
                 }
-                entorno.Trabajo.Estado = !entorno.HayErrores 
+                entorno.Trabajo.Estado = !entorno.HayErrores
                     ? TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado)
                     : TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 if (e.InnerException != null)
@@ -295,6 +300,28 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
+        public static void Resometer(ContextoSe contexto, int idTrabajoDeUsuario)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+
+            if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error) &&
+                tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores) &&
+                tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado) &&
+                tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado)
+               )
+                throw new Exception($"El trabajo no se puede resometer, ha de estar en estado terminado, iniciado, con errores o erroneo y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
+
+            var tr = new TrabajoDeUsuarioDtm();
+            tr.IdSometedor = contexto.DatosDeConexion.IdUsuario;
+            tr.IdEjecutor = tu.IdEjecutor;
+            tr.IdTrabajo = tu.IdTrabajo;
+            tr.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
+            tr.Planificado = DateTime.Now;
+            tr.Parametros = tu.Parametros;
+            Crear(contexto, tr);
+        }
+
         protected override IQueryable<TrabajoDeUsuarioDtm> AplicarJoins(IQueryable<TrabajoDeUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
@@ -308,28 +335,46 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
 
-            if (parametros.Operacion == enumTipoOperacion.Eliminar || parametros.Operacion == enumTipoOperacion.Modificar)
-            {
-                if (RegistroEnBD.Iniciado.HasValue)
-                {
-                    if (!(parametros.Operacion == enumTipoOperacion.Modificar
-                          && parametros.Parametros.ContainsKey(EnumParametro.accion)
-                          && (string)parametros.Parametros[EnumParametro.accion] == EnumParametroTu.terminando)
-                        )
-                        GestorDeErrores.Emitir("Un trabajo en ejecución o finalizado no se puede suprimir ni modificar");
-                }
-            }
-
             if (parametros.Operacion == enumTipoOperacion.Modificar)
-            {
-                if (RegistroEnBD.IdSometedor != registro.IdSometedor)
-                    GestorDeErrores.Emitir("No se puede modificar el sometedor de un trabajo");
-                if (RegistroEnBD.Encolado != registro.Encolado)
-                    GestorDeErrores.Emitir("No se puede modificar la fecha de entrada de un trabajo en la cola");
-                if (!registro.Iniciado.HasValue && registro.Terminado.HasValue)
-                    GestorDeErrores.Emitir("No se se puede terminar un trabajo que aun no se ha iniciado");
-            }
+                ValidarAntesDeModificar(registro, parametros);
 
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
+                ValidarAntesDeEliminar(registro, parametros);
+        }
+
+        
+        private void ValidarAntesDeEliminar(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            if (RegistroEnBD.Iniciado.HasValue && !RegistroEnBD.Terminado.HasValue)
+            {
+                GestorDeErrores.Emitir("Un trabajo en ejecución no se puede eliminar");
+            }
+        }
+
+        private void ValidarAntesDeModificar(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
+        {
+            if (RegistroEnBD.IdSometedor != registro.IdSometedor)
+                GestorDeErrores.Emitir("No se puede modificar el sometedor de un trabajo");
+
+            if (RegistroEnBD.Encolado != registro.Encolado)
+                GestorDeErrores.Emitir("No se puede modificar la fecha de entrada de un trabajo en la cola");
+
+            if (!registro.Iniciado.HasValue && registro.Terminado.HasValue)
+                GestorDeErrores.Emitir("No se se puede terminar un trabajo que aun no se ha iniciado");
+
+            if (registro.Terminado.HasValue && !SeEstaTerminando(parametros.Parametros))
+                GestorDeErrores.Emitir("No se se puede modificar un trabajo terminado");
+
+            if (RegistroEnBD.Iniciado.HasValue && !SeEstaTerminando(parametros.Parametros))
+                GestorDeErrores.Emitir("Un trabajo en ejecución no se puede modificar");
+        }
+
+        private bool SeEstaTerminando(Dictionary<string, object> parametros)
+        {
+            if (!parametros.ContainsKey(EnumParametro.accion))
+                return false;
+
+            return (string)parametros[EnumParametro.accion] == EnumParametroTu.terminando;
         }
 
         protected override void AntesDePersistir(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
@@ -342,7 +387,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar)
             {
-
                 if (!registro.Iniciado.HasValue)
                 {
                     new ParametrosJson(registro.Parametros);
@@ -353,6 +397,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
                         registro.Planificado.AddMinutes(1);
                     }
                 }
+            }
+
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
+            {
+                GestorDeTrazasDeUnTrabajo.EliminarTrazas(Contexto, RegistroEnBD.Id);
+                GestorDeErroresDeUnTrabajo.EliminarErrores(Contexto, RegistroEnBD.Id);
             }
         }
     }

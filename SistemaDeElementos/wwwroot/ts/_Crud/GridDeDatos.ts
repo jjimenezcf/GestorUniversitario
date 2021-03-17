@@ -405,6 +405,10 @@
             return document.getElementById(this._idHtmlZonaMenu) as HTMLDivElement;
         }
 
+        public get OpcionesPorElemento(): NodeListOf<HTMLButtonElement> {
+            return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+        }
+
         private _idModal: string;
         public set IdModal(idModal: string) { this._idModal = idModal; };
         public get IdModal(): string { return this._idModal; };
@@ -682,10 +686,18 @@
             return fila;
         }
 
+        protected ActualizarInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
+            grid.InfoSelector.Quitar(elemento.Id);
+            elemento = grid.DatosDelGrid.Obtener(elemento.Id);
+            grid.InfoSelector.InsertarElemento(elemento);
+            grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
+            grid.AplicarModoAccesoAlElemento(elemento);
+        }
+
         protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
-            grid.AjustarOpcionesDeMenu(elemento)
+            grid.AplicarModoAccesoAlElemento(elemento)
         }
 
         protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
@@ -713,11 +725,12 @@
             var len = celdasId.length;
             for (var i = 0; i < this.InfoSelector.Cantidad; i++) {
                 for (var j = 0; j < len; j++) {
-                    let id: number = this.InfoSelector.LeerId(i);
-                    if (Numero((<HTMLInputElement>celdasId[j]).value) == id) {
+                    let elemento: Elemento = this.InfoSelector.LeerElemento(i);
+                    if (Numero((<HTMLInputElement>celdasId[j]).value) == elemento.Id) {
                         var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                         var check = document.getElementById(idCheck);
                         (<HTMLInputElement>check).checked = true;
+                        this.ActualizarInfoSelector(this, elemento);
                         break;
                     }
                 }
@@ -1314,7 +1327,7 @@
                 this.QuitarDelSelector(this, id);
                 for (let i: number = 0; i < this.InfoSelector.Cantidad; i++) {
                     let e: Elemento = this.InfoSelector.LeerElemento(i);
-                    this.AjustarOpcionesDeMenu(e);
+                    this.AplicarModoAccesoAlElemento(e);
                 }
 
                 if (this.InfoSelector.Cantidad === 0 && (this instanceof ModalConGrid) === false)
@@ -1323,38 +1336,18 @@
 
         }
 
-        public AjustarOpcionesDeMenu(elemento: Elemento): void {
+        public AplicarModoAccesoAlElemento(elemento: Elemento): void {
             let modoAcceso: string = elemento.ModoDeAcceso;
 
             //En las modales no hay menús
             if (this.ZonaDeMenu === null)
                 return;
 
-            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
+            let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.OpcionesPorElemento;
             let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
-                if (ApiControl.EstaBloqueada(opcion))
-                    continue;
-
-                let estaDeshabilitado = opcion.disabled;
-                let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-                if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion ) {
-                    opcion.disabled = true;
-                    continue
-                }
-
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAcceso !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAcceso === ModoDeAccesoDeDatos.Consultor || modoAcceso === ModoDeAccesoDeDatos.SinPermiso))
-                        opcion.disabled = true;
-                    else
-                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAcceso === ModoDeAccesoDeDatos.SinPermiso)
-                            opcion.disabled = true;
-                        else
-                            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+                ApiCrud.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
             }
         }
 

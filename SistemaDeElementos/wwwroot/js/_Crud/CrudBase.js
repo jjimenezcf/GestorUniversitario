@@ -253,6 +253,8 @@ var Crud;
                         ApiControl.MapearHoraAlControl(fecha, valor);
                     }
                 }
+                else
+                    ApiControl.BlanquearFecha(fecha);
             }
         }
         MapearImagenes(elementoJson, visorVinculado) {

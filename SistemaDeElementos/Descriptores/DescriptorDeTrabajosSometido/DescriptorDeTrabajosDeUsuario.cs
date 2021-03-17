@@ -12,6 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
             const string desbloquear = "desbloquear-trabajo";
             const string bloquear = "bloquear-trabajo";
             const string iniciar = "iniciar-trabajo";
+            const string resometer = "resometer-trabajo";
             public AccionesDeTu(string accion, string ayuda, bool permiteMultiSeleccion)
             : base(accion, enumCssOpcionMenu.DeElemento, ayuda)
             {
@@ -21,6 +22,7 @@ namespace MVCSistemaDeElementos.Descriptores
             public static AccionesDeTu Desbloquear => new AccionesDeTu(desbloquear, "Desbloquear un trabajo", true);
             public static AccionesDeTu Bloquear => new AccionesDeTu(bloquear, "Bloquear un trabajo", true);
             public static AccionesDeTu Iniciar => new AccionesDeTu(iniciar, "Ejecutar un trabajo", false);
+            public static AccionesDeTu Resometer => new AccionesDeTu(resometer, "Resometer un trabajo", false);
 
             public override string RenderAccion()
             {
@@ -43,6 +45,8 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcionDesbloquear = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Desbloquear, $"Desbloquear", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcionDesbloquear);
 
+            var opcionResometer = new OpcionDeMenu<TrabajoDeUsuarioDto>(Mnt.ZonaMenu.Menu, AccionesDeTu.Resometer, $"Resometer", enumModoDeAccesoDeDatos.Gestor);
+            Mnt.ZonaMenu.Menu.Add(opcionResometer);
 
             AnadirOpcionDeDependencias(Mnt
                                  , controlador: nameof(TrazasDeUnTrabajoController)

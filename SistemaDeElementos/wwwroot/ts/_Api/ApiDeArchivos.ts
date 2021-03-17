@@ -85,7 +85,6 @@
             MensajesSe.Error("ErrorAlVisializar", "Fichero no válido para mostrar en un Canvas");
         }
 
-        BlanquearMensaje();
         let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
         InicializarBarra(archivo);
         let ficheros = archivo.files;
@@ -115,7 +114,6 @@
 
     export function MostrarArchivo(idArchivo: string, idInfoArchivo: string): void {
 
-        BlanquearMensaje();
         let archivo: HTMLInputElement = document.getElementById(idArchivo) as HTMLInputElement;
         if (archivo.files === undefined || archivo.files.length === 0 || IsNullOrEmpty(archivo.files[0].name)) {
             BlanquearInfoArchivo(archivo);

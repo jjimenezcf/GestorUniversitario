@@ -65,6 +65,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var gestorEt = Gestor(contextoTu, contextoTu.Mapeador);     
             gestorEt.CrearError(tu, e.Message, GestorDeErrores.Detalle(e));
         }
+
+        internal static void EliminarErrores(ContextoSe contexto, int id)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            gestor.Contexto.Database.ExecuteSqlInterpolated($"delete from TRABAJO.ERROR where id_trabajo_usuario = {id}");
+        }
     }
 }
 

@@ -164,11 +164,17 @@
 
     export function Apilar(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
         let n: clsNotificacion = new clsNotificacion(tipo, mensaje);
+        if (IsNull(Notificaciones))
+            AsignarMemoria();
+        
         Notificaciones.push(n);
         MostrarMensaje(tipo, mensaje, mensajeDeConsola);
     }
 
     export function Sacar() {
+        if (IsNull(Notificaciones))
+            return;
+
         if (Notificaciones.length > 0) {
             let n = Notificaciones.pop();
             MostrarMensaje(n.tipo, n.mensaje);
@@ -180,6 +186,10 @@
             else
                 MostrarMensaje(enumTipoMensaje.informativo, cadena);
         }
+    }
+
+    function AsignarMemoria() {
+            MensajesSe.Notificaciones = [] as MensajesSe.clsNotificacion[];
     }
 
     function MostrarMensaje(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
