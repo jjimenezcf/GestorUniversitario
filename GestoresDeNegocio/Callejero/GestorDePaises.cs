@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
-using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
@@ -14,7 +11,6 @@ using System.Reflection;
 using System;
 using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
-using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -22,7 +18,7 @@ namespace GestoresDeNegocio.Callejero
     public class GestorDePaises : GestorDeElementos<ContextoSe, PaisDtm, PaisDto>
     {
 
-        class Archivo
+        class archivoParaImportar
         {
             public string parametro { get; set; }
             public int valor { get; set; }
@@ -66,12 +62,12 @@ namespace GestoresDeNegocio.Callejero
 
         public static void ImportarCallejero(EntornoDeTrabajo entorno)
         {
-            var archivos = JsonConvert.DeserializeObject<List<Archivo>>(entorno.Trabajo.Parametros);
+            var archivos = JsonConvert.DeserializeObject<List<archivoParaImportar>>(entorno.Trabajo.Parametros);
 
             if (archivos.Count == 0)
                 GestorDeErrores.Emitir("No se ha sometido ningún fichero a cargar");
 
-            foreach (Archivo archivo in archivos)
+            foreach (archivoParaImportar archivo in archivos)
             {
                 switch (archivo.parametro)
                 {
@@ -111,7 +107,7 @@ namespace GestoresDeNegocio.Callejero
                         fila["E"].IsNullOrEmpty())
                         throw new Exception($"El contenido de la fila {linea} debe ser: nombre del país, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
 
-                    CrearPais(gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"]);
+                    ProcesarPaisLeido(gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"]);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -128,7 +124,12 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static PaisDtm CrearPais(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )
+        internal static PaisDtm LeerPais(ContextoSe contexto, ClausulaDeFiltrado clausulaDeFiltrado)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static PaisDtm ProcesarPaisLeido(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )
         {
             ParametrosDeNegocio operacion;
             var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, true, true);
@@ -137,17 +138,17 @@ namespace GestoresDeNegocio.Callejero
                 p = new PaisDtm();
                 p.Codigo = codigoPais;
                 p.Nombre = nombrePais;
-                p.Name = nombreEnIngles;
+                p.NombreIngles = nombreEnIngles;
                 p.ISO2 = Iso2;
                 p.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
             }
             else
             {
-                if (p.Nombre != nombrePais || p.ISO2 != Iso2 || p.Name != nombreEnIngles || p.Prefijo != prefijoTelefono)
+                if (p.Nombre != nombrePais || p.ISO2 != Iso2 || p.NombreIngles != nombreEnIngles || p.Prefijo != prefijoTelefono)
                 {
                     p.Nombre = nombrePais;
-                    p.Name = nombreEnIngles;
+                    p.NombreIngles = nombreEnIngles;
                     p.ISO2 = Iso2;
                     p.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);

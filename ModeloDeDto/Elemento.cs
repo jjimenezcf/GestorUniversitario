@@ -89,7 +89,7 @@ namespace ModeloDeDto
         public string GuardarEn { get; set; }
         public string BuscarPor { get; set; } = CamposDeFiltrado.Nombre;
 
-        public string MostrarExpresion { get; set; } 
+        public string MostrarExpresion { get; set; }
 
         public bool CargaDinamica => TipoDeControl == enumTipoControl.ListaDinamica;
 
@@ -137,7 +137,7 @@ namespace ModeloDeDto
             return false;
         }
 
-
+        public int LongitudMaxima {get; set;}
 
     }
 

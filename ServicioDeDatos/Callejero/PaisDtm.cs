@@ -10,7 +10,7 @@ namespace ServicioDeDatos.Callejero
     [Table("PAIS", Schema = "CALLEJERO")]
     public class PaisDtm : ElementoDtm
     {
-        public string Name { get; set; }
+        public string NombreIngles { get; set; }
         public string Codigo { get; set; }
         public string ISO2 { get; set; }
         public string Prefijo {get; set;}
@@ -26,8 +26,8 @@ namespace ServicioDeDatos.Callejero
                 .HasColumnType("VARCHAR(3)")
                 .IsRequired(true);
 
-            modelBuilder.Entity<PaisDtm>().Property(v => v.Name)
-                .HasColumnName("NAME")
+            modelBuilder.Entity<PaisDtm>().Property(v => v.NombreIngles)
+                .HasColumnName("NOMBRE_INGLES")
                 .HasColumnType("VARCHAR(250)")
                 .IsRequired(true);
 
@@ -40,6 +40,13 @@ namespace ServicioDeDatos.Callejero
                 .HasColumnName("PREFIJO")
                 .HasColumnType("VARCHAR(10)")
                 .IsRequired(true);
+
+            modelBuilder.Entity<PaisDtm>().HasAlternateKey(p => p.Codigo).HasName("AK_PAIS_CODIGO");
+            modelBuilder.Entity<PaisDtm>().HasAlternateKey(p => p.ISO2).HasName("AK_PAIS_ISO2");
+
+            modelBuilder.Entity<PaisDtm>().HasAlternateKey(p => p.NombreIngles).HasName("AK_PAIS_NAME");
+
+
         }
     }
 

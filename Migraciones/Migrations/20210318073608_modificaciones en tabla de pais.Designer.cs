@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210318073608_modificaciones en tabla de pais")]
+    partial class modificacionesentabladepais
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,80 +139,6 @@ namespace Migraciones.Migrations
                         .HasDatabaseName("I_PAIS_NOMBRE");
 
                     b.ToTable("PAIS", "CALLEJERO");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.Callejero.ProvinciaDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(2)")
-                        .HasColumnName("CODIGO");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("FECCRE");
-
-                    b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("FECMOD");
-
-                    b.Property<int>("IdPais")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_PAIS");
-
-                    b.Property<int>("IdUsuaCrea")
-                        .HasColumnType("INT")
-                        .HasColumnName("IDUSUCREA");
-
-                    b.Property<int?>("IdUsuaModi")
-                        .HasColumnType("INT")
-                        .HasColumnName("IDUSUMODI");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(250)")
-                        .HasColumnName("NOMBRE");
-
-                    b.Property<string>("Prefijo")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(10)")
-                        .HasColumnName("PREFIJO");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(3)")
-                        .HasColumnName("SIGLA");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Codigo")
-                        .HasName("AK_PROVINCIA_CODIGO");
-
-                    b.HasAlternateKey("Prefijo")
-                        .HasName("AK_PROVINCIA_PREFIJO");
-
-                    b.HasAlternateKey("Sigla")
-                        .HasName("AK_PROVINCIA_SIGLA");
-
-                    b.HasIndex("IdPais")
-                        .HasDatabaseName("I_PROVINCIA_ID_PAIS");
-
-                    b.HasIndex("IdUsuaCrea")
-                        .HasDatabaseName("I_PROVINCIA_IDUSUCREA");
-
-                    b.HasIndex("IdUsuaModi")
-                        .HasDatabaseName("I_PROVINCIA_IDUSUMODI");
-
-                    b.HasIndex("Nombre")
-                        .HasDatabaseName("I_PROVINCIA_NOMBRE");
-
-                    b.ToTable("PROVINCIA", "CALLEJERO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Entorno.ArbolDeMenuDtm", b =>
@@ -1117,35 +1045,6 @@ namespace Migraciones.Migrations
                         .HasForeignKey("IdUsuaModi")
                         .HasConstraintName("FK_PAIS_IDUSUMODI")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("UsuarioCreador");
-
-                    b.Navigation("UsuarioModificador");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.Callejero.ProvinciaDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.Callejero.PaisDtm", "Pais")
-                        .WithMany()
-                        .HasForeignKey("IdPais")
-                        .HasConstraintName("FK_PROVINCIA_ID_PAIS")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "UsuarioCreador")
-                        .WithMany()
-                        .HasForeignKey("IdUsuaCrea")
-                        .HasConstraintName("FK_PROVINCIA_IDUSUCREA")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "UsuarioModificador")
-                        .WithMany()
-                        .HasForeignKey("IdUsuaModi")
-                        .HasConstraintName("FK_PROVINCIA_IDUSUMODI")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Pais");
 
                     b.Navigation("UsuarioCreador");
 

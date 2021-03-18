@@ -78,7 +78,7 @@ namespace ModeloDeDto.Entorno
         ]
         public List<MenuDto> Submenus { get; set; }
 
-
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = nameof(VistaMvc),
             Ayuda = "Seleccione la vista",
@@ -96,7 +96,7 @@ namespace ModeloDeDto.Entorno
             SiempreVisible = false)]
         public int? idVistaMvc { get; set; }
 
-
+        //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Orden",
             Ayuda = "orden del menú",

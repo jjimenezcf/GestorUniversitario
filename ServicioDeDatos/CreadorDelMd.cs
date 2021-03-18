@@ -118,6 +118,7 @@ namespace ServicioDeDatos
         private static void DefinirTablasDelCallejero(ModelBuilder modelBuilder)
         {
             TablaPais.Definir(modelBuilder);
+            TablaProvincia.Definir(modelBuilder);
         }
 
 
