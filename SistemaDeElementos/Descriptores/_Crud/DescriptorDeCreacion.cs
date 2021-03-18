@@ -107,16 +107,6 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        private string RendelDivDeCreacion()
-        {
-            var htmlModal = $@"
-                               {htmlRenderObjetoVacio()}
-                               {htmlDeCreacionEspecifico}
-                               {(AbrirEnModal ? "":htmlRenderOpciones())}
-            ";
-            return htmlModal;
-        }
-
         private string htmlRenderOpciones()
         {
 
@@ -126,7 +116,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var htmContenedorPie =
                    $@"
-                   <Div id=¨opciones-{IdHtml}¨ class=¨contenedor-opciones-creacion¨>
+                   <Div id=¨opciones-{IdHtml}¨ class=¨{(!AbrirEnModal ? Css.Render(enumCssCreacion.ContenedorPieOpciones) : Css.Render(enumCssCreacion.ContenedorPieModalOpciones))}¨>
                     {htmdDescriptorControl}
                   </Div>
                 ";

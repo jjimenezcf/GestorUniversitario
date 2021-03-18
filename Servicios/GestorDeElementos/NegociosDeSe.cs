@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ModeloDeDto.Archivos;
+using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Seguridad;
@@ -34,7 +35,9 @@ namespace GestorDeElementos
         RolesDeUnPermiso,
         RolesDeUnPuesto,
         TipoPermiso,
-        Archivos
+        Archivos,
+        Pais,
+        Provincia
     }
 
     public static class NegociosDeSe
@@ -49,7 +52,9 @@ namespace GestorDeElementos
            enumNegocio.Negocio,
            enumNegocio.Permiso,
            enumNegocio.Puesto,
-           enumNegocio.Rol
+           enumNegocio.Rol,
+           enumNegocio.Pais,
+           enumNegocio.Provincia
         };
 
         private static List<enumNegocio> _negociosDeParametrizacion = new List<enumNegocio>
@@ -83,6 +88,8 @@ namespace GestorDeElementos
                 case enumNegocio.Negocio: return "Negocios";
                 case enumNegocio.Permiso: return "Permisos";
                 case enumNegocio.Rol: return "Roles";
+                case enumNegocio.Pais: return "Paises";
+                case enumNegocio.Provincia: return "Provincias";
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
@@ -99,6 +106,8 @@ namespace GestorDeElementos
                 case nameof(PermisoDto): return enumNegocio.Permiso;
                 case nameof(RolDto): return enumNegocio.Rol;
                 case nameof(PuestoDto): return enumNegocio.Puesto;
+                case nameof(PaisDto): return enumNegocio.Pais;
+                case nameof(ProvinciaDto): return enumNegocio.Provincia;
             }
 
             return enumNegocio.No_Definido;
@@ -134,6 +143,8 @@ namespace GestorDeElementos
                 case "Negocio": return enumNegocio.Negocio;
                 case "Puesto": return enumNegocio.Puesto;
                 case "Rol": return enumNegocio.Rol;
+                case "Pais": return enumNegocio.Pais;
+                case "Provincia": return enumNegocio.Provincia;
             }
             return enumNegocio.No_Definido;
         }

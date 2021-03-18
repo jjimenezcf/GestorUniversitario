@@ -11,6 +11,7 @@ using System.Reflection;
 using System;
 using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
+using System.Linq;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -44,6 +45,12 @@ namespace GestoresDeNegocio.Callejero
         public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDePaises(contexto, mapeador); ;
+        }
+
+        public List<PaisDto> LeerPaises(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)

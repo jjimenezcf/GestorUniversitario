@@ -146,11 +146,11 @@ a {
 
 .contenedor-selector-filtro {
     display: flex;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .contenedor-listas-filtro {
     margin-top: 5px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
     .contenedor-listas-filtro > select, input.lista-de-elemento, input.lista-dinamica {
@@ -306,7 +306,7 @@ a {
 }
 
 
-    .contenedor-listas > select, input.lista-de-elemento {
+    .contenedor-listas > select {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;
@@ -321,7 +321,7 @@ a {
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
-    .contenedor-listas > select, input.lista-dinamica {
+    .contenedor-listas > input.lista-dinamica {
         width: 100%;
         height: calc(1.5em + .75rem + 2px);
         padding: .375rem .75rem;

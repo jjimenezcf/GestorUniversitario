@@ -55,7 +55,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string editorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControlDto}
-                                         type=¨text¨
+                                         type=¨text¨ [LongitudMaxima]
                                          placeholder =¨[Placeholder]¨
                                          valorPorDefecto=¨[ValorPorDefecto]¨
                                          value=¨[ValorPorDefecto]¨>

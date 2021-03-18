@@ -12,12 +12,17 @@
     grid-template-areas: "contenedor-edicion-cabecera" "contenedor-edicion-cuerpo" "contenedor-edicion-pie";
 }
 
-.contenedor-opciones-creacion {
+.contenedor-pie-opciones {
+    width: 50%;
+    min-width: 210px;
+}
+
+.contenedor-pie-modal-opciones {
     float: right;
     padding-right: 10px;
     text-align: right;
     width: 50%;
-    min-width:210px;
+    min-width: 210px;
 }
 
 .tabla-creacion {

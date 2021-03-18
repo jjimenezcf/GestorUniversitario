@@ -18,7 +18,7 @@ using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
-    class GestorDeProvincias : GestorDeElementos<ContextoSe, ProvinciaDtm, ProvinciaDto>
+    public class GestorDeProvincias : GestorDeElementos<ContextoSe, ProvinciaDtm, ProvinciaDto>
     {
         class archivoParaImportar
         {

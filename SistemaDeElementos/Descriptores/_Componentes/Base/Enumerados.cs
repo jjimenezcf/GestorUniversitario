@@ -149,7 +149,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public enum enumCssCreacion
     {
         TablaDeCreacion,
-        CuerpoDeCrearcion
+        CuerpoDeCrearcion,
+        ContenedorPieOpciones,
+        ContenedorPieModalOpciones
     }
 
     public enum enumCssEdicion
@@ -339,6 +341,8 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 case enumCssCreacion.TablaDeCreacion: return "tabla-creacion";
                 case enumCssCreacion.CuerpoDeCrearcion: return "cuerpo-creacion";
+                case enumCssCreacion.ContenedorPieOpciones: return "contenedor-pie-opciones";
+                case enumCssCreacion.ContenedorPieModalOpciones: return "contenedor-pie-modal-opciones";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

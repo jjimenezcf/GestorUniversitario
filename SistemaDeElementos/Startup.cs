@@ -90,6 +90,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDePermisosDeUnPuesto>();
             services.AddScoped<GestorDeNegocios>();
             services.AddScoped<GestorDePaises>();
+            services.AddScoped<GestorDeProvincias>();
             services.AddScoped<GestorDeTrabajosSometido>();
             services.AddScoped<GestorDeTrabajosDeUsuario>();
             services.AddScoped<GestorDeTrazasDeUnTrabajo>();

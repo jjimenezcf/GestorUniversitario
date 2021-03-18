@@ -117,7 +117,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmdDescriptorControl = "";
             switch(atributos.TipoDeControl) {
                 case enumTipoControl.Editor:
-                    htmdDescriptorControl = RenderEditor(tabla, descriptorControl, ancho);
+                    htmdDescriptorControl = RenderEditor(tabla, descriptorControl);
                     break;
                 case enumTipoControl.RestrictorDeEdicion:
                     htmdDescriptorControl = RenderRestrictor(tabla, descriptorControl, ancho);
@@ -233,7 +233,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlEditor;
         }
 
-        private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, double ancho)
+        private static string RenderEditor(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
         {
             var atributos = descriptorControl.atributos;
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
@@ -241,6 +241,9 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssControlesDto.Editor);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+            valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ? 
+                    $"{Environment.NewLine}maxlength=¨{atributos.LongitudMaxima}¨"
+                    : "";
 
             var htmlEditor = PlantillasHtml.Render(PlantillasHtml.editorDto, valores);
 

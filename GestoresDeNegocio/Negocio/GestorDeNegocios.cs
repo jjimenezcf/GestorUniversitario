@@ -194,7 +194,9 @@ namespace GestoresDeNegocio.Negocio
             if (!NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
-            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio),false,true);
+            if (registro == null)
+                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.ToString(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
             return registro.Activo;
         }
     }
