@@ -2,9 +2,10 @@
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
-          , MostrarExpresion = nameof(PaisDto.Nombre))]
+          , MostrarExpresion = "([Codigo]) [Nombre]")]
     public class PaisDto : ElementoDto
     {
+
         [IUPropiedad(
             Etiqueta = "Código",
             Ayuda = "Código de país de 3",

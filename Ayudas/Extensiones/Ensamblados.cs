@@ -31,5 +31,24 @@ namespace Utilidades
             var metodo = ValidarMetodoEstatico(dll, nombreCompletoDeClase, nombreMetodo);
             metodo.Invoke(null, new object[] { parametros });
         }
+
+
+        public static PropertyInfo ObtenerPropiedad(string dll, string nombreCompletoDeClase, string nombrePropiedad)
+        {
+            var assembly = Assembly.LoadFrom(dll);
+
+            var rutaBinarios = Path.GetDirectoryName(dll);
+            var nombreEnsamblado = Path.GetFileNameWithoutExtension(dll);
+            var tipo = assembly.GetType(nombreCompletoDeClase);
+            if (tipo == null)
+                throw new Exception($"la clase {nombreCompletoDeClase} no se encuentra en la dll {nombreEnsamblado} dentro de la ruta de binarios {rutaBinarios}");
+
+            PropertyInfo[] propiedades = tipo.GetProperties(BindingFlags.Public | BindingFlags.Static);
+            foreach (var propiedad in propiedades)
+                if (propiedad.Name.ToLower() == nombrePropiedad.ToLower())
+                    return propiedad;
+            throw new Exception($"Hay que implementar el método estático {nombrePropiedad} en la clase {nombreCompletoDeClase} en la ddl {nombreEnsamblado} antes de usarlo");
+        }
+
     }
 }

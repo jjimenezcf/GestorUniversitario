@@ -31,8 +31,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private static string RenderColumnaParaElDto(DescriptorDeTabla tabla, short i, short j, double anchoColumna)
         {
             var visible = tabla.ObtenerFila(i).ObtenerColumna(j).NumeroControlesVisibles > 0;
-            
-            var td = $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td-propiedad¨ class=¨td-propiedad¨ colspan=¨{tabla.ObtenerFila(i).ObtenerColumna(j).ColSpan}¨ style=¨width:{anchoColumna}%; {(visible ? "": "display:none")}¨>
+
+            var td = $@"<td id=¨{tabla.IdHtml}_{i}_{j}¨ name=¨td-propiedad¨ class=¨td-propiedad¨ colspan=¨{tabla.ObtenerFila(i).ObtenerColumna(j).ColSpan}¨ style=¨width:{anchoColumna}%; {(visible ? "" : "display:none")}¨>
                          <div id=¨{tabla.IdHtml}_{i}_{j}_celda¨ name=¨div-propiedad¨ class=¨div-propiedad¨>
                               {RenderControlesParaMapearElDto(tabla, i, j)}
                          </div>
@@ -103,7 +103,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
                            name=¨lbl_propiedad¨
                            class=¨div-lbl-propiedad¨ 
-                           style=¨{ (descriptorControl.atributos.TipoDeControl == enumTipoControl.Archivo ? "; margin-top: 11px":"")}¨>
+                           style=¨{ (descriptorControl.atributos.TipoDeControl == enumTipoControl.Archivo ? "; margin-top: 11px" : "")}¨>
                            <label for=¨{descriptorControl.IdHtml}¨>{descriptorControl.atributos.Etiqueta}:</label>
                        </div>
                       ";
@@ -115,7 +115,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
             var htmdDescriptorControl = "";
-            switch(atributos.TipoDeControl) {
+            switch (atributos.TipoDeControl)
+            {
                 case enumTipoControl.Editor:
                     htmdDescriptorControl = RenderEditor(tabla, descriptorControl);
                     break;
@@ -146,7 +147,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumTipoControl.AreaDeTexto:
                     htmdDescriptorControl = RenderAreaDeTexto(tabla, descriptorControl);
                     break;
-                default: 
+                default:
                     GestorDeErrores.Emitir($"No se ha implementado como renderizar una propiedad del tipo {atributos.TipoDeControl}");
                     break;
             }
@@ -173,14 +174,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var atributos = descriptorControl.atributos;
 
-            if (atributos.MostrarExpresion.IsNullOrEmpty())
-                throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)} para la lista de elementos de la propiedad {descriptorControl.propiedad}");
-
             Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDeElementos);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDeElementos);
-            valores["ClaseElemento"] = atributos.SeleccionarDe;
-            valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
+            valores["ClaseElemento"] = atributos.SeleccionarDe.Name;
+            valores["MostrarExpresion"] = atributos.MostrarExpresion.IsNullOrEmpty() ?
+                ElementoDto.ValorDelAtributo(atributos.SeleccionarDe, nameof(IUDtoAttribute.MostrarExpresion)) :
+                atributos.MostrarExpresion;
             valores["GuardarEn"] = atributos.GuardarEn;
 
             var htmlSelect = PlantillasHtml.Render(PlantillasHtml.listaDeElementosDto, valores);
@@ -194,13 +194,14 @@ namespace MVCSistemaDeElementos.Descriptores
             var atributos = descriptorControl.atributos;
             var valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
 
-            if (atributos.MostrarExpresion.IsNullOrEmpty())
-                throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)} para la lista dinámica de la propiedad {descriptorControl.propiedad}");
+            //throw new Exception($"no se ha definido el atributo {nameof(atributos.MostrarExpresion)} para la lista dinámica de la propiedad {descriptorControl.propiedad}");
 
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorListaDinamica);
             valores["Css"] = Css.Render(enumCssControlesDto.ListaDinamica);
-            valores["ClaseElemento"] = atributos.SeleccionarDe;
-            valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
+            valores["ClaseElemento"] = atributos.SeleccionarDe.Name;
+            valores["MostrarExpresion"] = atributos.MostrarExpresion.IsNullOrEmpty() ?
+                ElementoDto.ValorDelAtributo(atributos.SeleccionarDe, nameof(IUDtoAttribute.MostrarExpresion)) :
+                atributos.MostrarExpresion;
             valores["BuscarPor"] = atributos.BuscarPor;
             valores["Longitud"] = 3;
             valores["Cantidad"] = 10;
@@ -241,7 +242,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssControlesDto.Editor);
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
-            valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ? 
+            valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ?
                     $"{Environment.NewLine}maxlength=¨{atributos.LongitudMaxima}¨"
                     : "";
 
@@ -337,7 +338,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        <div style=¨display: none;¨>
                            <img id=¨{idHtmlImg}¨
                                     tipo=¨{enumTipoControl.VisorDeArchivo.Render()}¨  
-                                    propiedad=¨{(atributos.TipoDeControl == enumTipoControl.UrlDeArchivo ? descriptorControl.propiedad: atributos.UrlDelArchivo.ToLower())}¨ 
+                                    propiedad=¨{(atributos.TipoDeControl == enumTipoControl.UrlDeArchivo ? descriptorControl.propiedad : atributos.UrlDelArchivo.ToLower())}¨ 
                                     src=¨¨>
                            <input id=¨{idHtmlInfoArchivo}¨> </input>
                        </div>
@@ -383,18 +384,18 @@ namespace MVCSistemaDeElementos.Descriptores
         private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
         {
             Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
-            
+
             //if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
             //    atributos.Obligatorio = false;
 
             valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
             valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
-            string alto="";
+            string alto = "";
             if (atributos.TipoDeControl == enumTipoControl.AreaDeTexto)
-                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",",".");
+                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",", ".");
 
-             valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty()?"":$" height: {alto}")}";
+            valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty() ? "" : $" height: {alto}")}";
 
             return valores;
         }

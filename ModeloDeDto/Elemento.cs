@@ -82,7 +82,7 @@ namespace ModeloDeDto
         /// <summary>
         /// Dto del que se van a seleccionar los valores
         /// </summary>
-        public string SeleccionarDe { get; set; }
+        public Type SeleccionarDe { get; set; }
 
         public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.contiene;
 
@@ -205,6 +205,7 @@ namespace ModeloDeDto
                             return a.AnchoSeparador;
 
                         case nameof(IUDtoAttribute.MostrarExpresion):
+
                             return a.MostrarExpresion;
                     }
                     if (obligatorio)

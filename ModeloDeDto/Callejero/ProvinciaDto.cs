@@ -4,16 +4,15 @@ namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
-          , MostrarExpresion = nameof(ProvinciaDto.Nombre))]
+          , MostrarExpresion = "(Codigo) Nombre")]
     public class ProvinciaDto : ElementoDto
     {
         [IUPropiedad(
             Etiqueta = nameof(Pais),
             Ayuda = "Seleccione el pais",
             TipoDeControl = enumTipoControl.ListaDinamica,
-            SeleccionarDe = nameof(PaisDto),
+            SeleccionarDe = typeof(PaisDto),
             GuardarEn = nameof(IdPais),
-            MostrarExpresion = nameof(Nombre),
             Fila = 0,
             Columna = 0,
             Obligatorio = true
