@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Enumerados;
 using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
+using Utilidades;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -12,6 +14,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
         public ZonaDeMenu<TElemento> MenuDeEdicion { get; private set; }
         public bool AbrirEnModal { set; get; }
+
+        public List<DescriptorDeExpansor> Expanes = new List<DescriptorDeExpansor>();
 
 
         public DescriptorDeEdicion(DescriptorDeCrud<TElemento> crud, string etiqueta)
@@ -89,10 +93,22 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderContenedorDeEdicionCuerpo(DescriptorDeTabla tabla)
         {
+            var htmlExpanes = RenderExpanes();
             var htmlModal = $@"<div id=¨contenedor_edicion_cuerpo_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
                                  {htmlRenderObjetoVacio(tabla)}
+                                 {htmlExpanes}
                                </div>";
             return htmlModal;
+        }
+
+        private string RenderExpanes()
+        {
+            string html = "";
+            foreach(var expan in Expanes)
+            {
+                html = $"{(html.IsNullOrEmpty()? "": html + Environment.NewLine)}{expan.RenderControl()}";
+            }
+            return html;
         }
 
         private string RenderContenedorDeEdicionPie(DescriptorDeTabla tabla)

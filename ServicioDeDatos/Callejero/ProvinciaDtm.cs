@@ -14,7 +14,7 @@ namespace ServicioDeDatos.Callejero
         public string Sigla { get; set; }
         public string Prefijo { get; set; }
         public int IdPais { get; set; }
-        public virtual PaisDtm Pais { get; set; }
+        public PaisDtm Pais { get; set; }
     }
     public static class TablaProvincia
     {
@@ -43,7 +43,6 @@ namespace ServicioDeDatos.Callejero
 
             modelBuilder.Entity<ProvinciaDtm>().HasAlternateKey(p => p.Codigo).HasName("AK_PROVINCIA_CODIGO");
             modelBuilder.Entity<ProvinciaDtm>().HasAlternateKey(p => p.Sigla).HasName("AK_PROVINCIA_SIGLA");
-            modelBuilder.Entity<ProvinciaDtm>().HasAlternateKey(p => p.Prefijo).HasName("AK_PROVINCIA_PREFIJO");
 
             modelBuilder.Entity<ProvinciaDtm>()
                         .HasIndex(p => p.IdPais)

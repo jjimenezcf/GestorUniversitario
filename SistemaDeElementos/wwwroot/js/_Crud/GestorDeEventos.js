@@ -405,5 +405,28 @@ var Crud;
         }
     }
     Crud.EventosDeListaDinamica = EventosDeListaDinamica;
+    function EventosDeExpansores(accion, parametros) {
+        try {
+            switch (accion) {
+                case Evento.Expansores.OcultarMostrarBloque: {
+                    let partes = parametros.split(';');
+                    if (partes.length != 2)
+                        throw Error(`El parametro ${parametros} ha de definir el bloque expansor y el bloque que expande`);
+                    let idHtmlExpansor = partes[0];
+                    let idHtmlBloque = partes[1];
+                    ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+        }
+    }
+    Crud.EventosDeExpansores = EventosDeExpansores;
 })(Crud || (Crud = {}));
 //# sourceMappingURL=GestorDeEventos.js.map

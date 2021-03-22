@@ -150,7 +150,7 @@
                     break;
                 }
                 case Evento.ModalSeleccion.TeclaPulsada: {
-                    modal.TeclaPulsada(modal,event);
+                    modal.TeclaPulsada(modal, event);
                     break;
                 }
                 default: {
@@ -390,7 +390,6 @@
     }
 
     export function EventosDeListaDinamica(accion: string, selector: HTMLInputElement) {
-
         try {
             switch (accion) {
                 case Evento.ListaDinamica.Cargar: {
@@ -410,8 +409,28 @@
         catch (error) {
             MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
         }
+    }
 
-
-
+    export function EventosDeExpansores(accion: string, parametros: string) {
+        try {
+            switch (accion) {
+                case Evento.Expansores.OcultarMostrarBloque: {
+                    let partes: string[] = parametros.split(';');
+                    if (partes.length != 2)
+                        throw Error(`El parametro ${parametros} ha de definir el bloque expansor y el bloque que expande`);
+                    let idHtmlExpansor: string = partes[0];
+                    let idHtmlBloque: string = partes[1];
+                    ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+        }
     }
 }

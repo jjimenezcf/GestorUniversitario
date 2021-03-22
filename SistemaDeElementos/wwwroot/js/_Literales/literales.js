@@ -372,6 +372,9 @@ const Evento = {
         Cerrar: "cerrar",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
     },
+    Expansores: {
+        OcultarMostrarBloque: "ocultar-mostrar-bloque"
+    },
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",
         bloquear: "bloquear-trabajo",

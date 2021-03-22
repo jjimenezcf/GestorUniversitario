@@ -78,8 +78,11 @@ namespace GestoresDeNegocio.Callejero
             {
                 switch (archivo.parametro)
                 {
-                    case ParametroPais:
-                        ImportarFicheroDePaises(entorno, archivo.valor);
+                    case GestorDePaises.ParametroPais:
+                        GestorDePaises.ImportarFicheroDePaises(entorno, archivo.valor);
+                        break;
+                    case GestorDeProvincias.ParametroProvincia:
+                        GestorDeProvincias.ImportarFicheroDeProvincias(entorno, archivo.valor);
                         break;
                     default:
                         GestorDeErrores.Emitir($"No es valido el parámetro {archivo.parametro} en el proceso {nameof(ImportarCallejero)}");
@@ -131,9 +134,10 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        internal static PaisDtm LeerPais(ContextoSe contexto, ClausulaDeFiltrado clausulaDeFiltrado)
+        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string codigoPais)
         {
-            throw new NotImplementedException();
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), codigoPais, true,true, false,false);
         }
 
         private static PaisDtm ProcesarPaisLeido(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )

@@ -330,6 +330,8 @@ namespace GestorDeElementos
                 else
                 if (parametros.Operacion == enumTipoOperacion.Modificar)
                 {
+                    elemento.IdUsuaCrea = ((IElementoDtm)RegistroEnBD).IdUsuaCrea;
+                    elemento.FechaCreacion = ((IElementoDtm)RegistroEnBD).FechaCreacion;
                     elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
                     elemento.FechaModificacion = DateTime.Now;
                 }

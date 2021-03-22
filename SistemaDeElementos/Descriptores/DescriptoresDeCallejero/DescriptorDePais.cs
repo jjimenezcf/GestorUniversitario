@@ -18,6 +18,11 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedad: nameof(PaisDto.Codigo)
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 1, columna = 0 });
+
+            var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
+            Editor.Expanes.Add(expanDeAuditoria);
+
+
         }
 
 

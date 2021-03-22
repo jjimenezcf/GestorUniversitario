@@ -1,5 +1,17 @@
 var ApiControl;
 (function (ApiControl) {
+    function OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque) {
+        let extensor = document.getElementById(`${idHtmlExpansor}`);
+        if (NumeroMayorDeCero(extensor.value)) {
+            extensor.value = "0";
+            ApiCrud.OcultarPanel(document.getElementById(`${idHtmlBloque}`));
+        }
+        else {
+            extensor.value = "1";
+            ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`));
+        }
+    }
+    ApiControl.OcultarMostrarExpansor = OcultarMostrarExpansor;
     function BloquearMenu(panel) {
         let opciones = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`);
         for (var i = 0; i < opciones.length; i++) {

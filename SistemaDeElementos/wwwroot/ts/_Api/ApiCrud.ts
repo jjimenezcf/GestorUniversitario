@@ -1,9 +1,21 @@
 ﻿namespace ApiControl {
 
+    export function OcultarMostrarExpansor(idHtmlExpansor: string, idHtmlBloque: string): void {
+        let extensor: HTMLInputElement = document.getElementById(`${idHtmlExpansor}`) as HTMLInputElement;
+        if (NumeroMayorDeCero(extensor.value)) {
+            extensor.value = "0";
+            ApiCrud.OcultarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+        }
+        else {
+            extensor.value = "1";
+            ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
+        }
+    }
+
     export function BloquearMenu(panel: HTMLDivElement): void {
         let opciones: NodeListOf<HTMLButtonElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`) as NodeListOf<HTMLButtonElement>;
         for (var i = 0; i < opciones.length; i++) {
-                let opcion: HTMLButtonElement = opciones[i];
+            let opcion: HTMLButtonElement = opciones[i];
             let clase: string = opcion.getAttribute(atOpcionDeMenu.clase);
             if (clase === ClaseDeOpcioDeMenu.Basico)
                 continue;

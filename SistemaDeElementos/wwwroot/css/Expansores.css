@@ -1,0 +1,40 @@
+﻿.grid-span
+{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-row-gap: 5px
+}
+
+.grid-span-cabecera {
+    background: blue;
+    text-align: center;
+    border: black 5px solid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.grid-span-cuerpo {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 0.5fr 1fr 0.5fr 1fr;
+    grid-gap: 5px;
+}
+
+.grid-span-cuerpo-control {
+    background: grey;
+    text-align: center;
+    border: black 5px solid;
+}
+
+.grid-span-pie {
+    background: red;
+    text-align: center;
+    border: black 5px solid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.span-expansor {
+    margin-left: 20px;
+}

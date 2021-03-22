@@ -15,6 +15,7 @@ using System;
 using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
 using ServicioDeDatos.TrabajosSometidos;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -26,14 +27,18 @@ namespace GestoresDeNegocio.Callejero
             public int valor { get; set; }
         }
 
-        public const string ParametroPais = "csvProvincia";
+        public const string ParametroProvincia = "csvProvincia";
 
         public class MapearVariables : Profile
         {
             public MapearVariables()
             {
-                CreateMap<PaisDtm, PaisDto>();
-                CreateMap<PaisDto, PaisDtm>();
+                CreateMap<ProvinciaDtm, ProvinciaDto>()
+                    .ForMember(dto => dto.Pais, dtm => dtm.MapFrom(dtm => $"({dtm.Pais.Codigo}) {dtm.Pais.Nombre}"));
+
+                CreateMap<ProvinciaDto, ProvinciaDtm>()
+                .ForMember(dtm => dtm.Pais, dto => dto.Ignore());
+
             }
         }
 
@@ -49,7 +54,7 @@ namespace GestoresDeNegocio.Callejero
         }
 
 
-        private static void ImportarFicheroDeProvincias(EntornoDeTrabajo entorno, int idArchivo)
+        public static void ImportarFicheroDeProvincias(EntornoDeTrabajo entorno, int idArchivo)
         {
             var gestor = GestorDeProvincias.Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
             var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoPr, idArchivo);
@@ -74,7 +79,12 @@ namespace GestoresDeNegocio.Callejero
                         fila["E"].IsNullOrEmpty())
                         throw new Exception($"El contenido de la fila {linea} debe ser: nombre de la provincia, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
 
-                    ProcesarProvinciaLeida(gestor, fila["A"], fila["B"], fila["C"], fila["D"], fila["E"], fila["F"]);
+                    ProcesarProvinciaLeida(gestor,
+                        codigoPais:fila["E"],
+                        nombreProvincia: fila["C"],
+                        sigla: fila["A"], 
+                        codigo: fila["B"],
+                        prefijoTelefono: fila["D"]);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -91,13 +101,20 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static ProvinciaDtm ProcesarProvinciaLeida(GestorDeProvincias gestor, string codigoPais, string nombreProvincia, string sigla, string nombre, string codigo, string prefijoTelefono)
+        protected override IQueryable<ProvinciaDtm> AplicarJoins(IQueryable<ProvinciaDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Pais);
+            return registros;
+        }
+
+        private static ProvinciaDtm ProcesarProvinciaLeida(GestorDeProvincias gestor, string codigoPais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono)
         {
             ParametrosDeNegocio operacion;
             var p = gestor.LeerRegistro(nameof(ProvinciaDtm.Codigo), codigo, false, true, true, true);
-            var pais = GestorDePaises.LeerPais(gestor.Contexto,new ClausulaDeFiltrado() { Clausula = nameof(PaisDtm.Codigo), Criterio= ModeloDeDto.CriteriosDeFiltrado.igual, Valor=codigoPais});
             if (p == null)
             {
+                var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, codigoPais);
                 p = new ProvinciaDtm();
                 p.Codigo = codigo;
                 p.Nombre = nombreProvincia;

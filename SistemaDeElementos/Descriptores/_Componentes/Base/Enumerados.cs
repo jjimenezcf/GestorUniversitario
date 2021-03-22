@@ -37,6 +37,11 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string Aceptar = "aceptar";
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
     }
+    public static class TipoDeAccionExpansor
+    {
+        public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
+    }
+
     public static class TipoDeAccionDeCreacion
     {
         public const string NuevoElemento = "nuevo-elemento";
@@ -178,6 +183,16 @@ namespace MVCSistemaDeElementos.Descriptores
         Menu
     }
 
+    public enum enumCssExpansor
+    {
+        Contenedor,
+        Cabecera,
+        Cuerpo,
+        Pie,
+        ContenedorDeControl,
+        Expansor
+    }
+
     public enum enumCssControlesDto
     {
         FormDeArchivo,
@@ -273,6 +288,20 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario");
         }
 
+
+        public static string Render(enumCssExpansor clase)
+        {
+            switch (clase)
+            {
+                case enumCssExpansor.Contenedor: return "grid-span";
+                case enumCssExpansor.Cuerpo: return "grid-span-cuerpo";
+                case enumCssExpansor.Pie: return "grid-span-pie";
+                case enumCssExpansor.Cabecera: return "grid-span-cabecera";
+                case enumCssExpansor.ContenedorDeControl: return "grid-span-cuerpo-control";
+                case enumCssExpansor.Expansor: return "span-expansor";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase}");
+        }
 
         public static string Render(enumCssControlesDto clase)
         {
