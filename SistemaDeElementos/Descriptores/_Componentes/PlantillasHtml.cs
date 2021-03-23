@@ -20,14 +20,14 @@ namespace MVCSistemaDeElementos.Descriptores
                                        control-de-filtro=¨S¨";
 
 
-        public static string span = $@"
+        public static string Expansor = $@"
         <div id=¨[IdHtml]¨ tipo=¨span-de-controles¨ class=¨[cssClase]¨>
-           <div id=¨[IdHtml]-cabecera¨ class=¨[cssCabecera]¨>[RenderCabeceraDelSpan]</div>
-           <div id=¨[IdHtml]-cuerpo¨ class=¨[cssCuerpo]¨>[RenderCuerpoDelSpan]</div>
-           <div id=¨[IdHtml]-pie¨ class=¨[cssPie]¨>[RenderPieDelSpan]</div>
+           <div id=¨[IdHtml]-cabecera¨ class=¨[cssCabecera]¨>[RenderCabeceraDelExpansor]</div>
+           <div id=¨[IdHtml]-cuerpo¨ class=¨[cssCuerpo]¨>[RenderCuerpoDelExpansor]</div>
+           <div id=¨[IdHtml]-pie¨ class=¨[cssPie]¨>[RenderPieDelExpansor]</div>
         </div>";
 
-        public static string expansor = $@"	 
+        public static string CabeceraExpansor = $@"	 
             <a id=¨mostrar.[IdHtml].ref¨
                class=¨[cssClase]¨
                href=¨javascript:[Evento];¨>
@@ -35,9 +35,17 @@ namespace MVCSistemaDeElementos.Descriptores
             </a>
             <input id=¨expandir.[IdHtml].input¨ type=¨hidden¨ value=¨1¨ />";
 
-        public static string contenedorGridControl = $@"
-             <div id=¨contenedor.[IdHtml].etiqueta¨ class=¨[cssClase]¨>[RenderEtiqueta]</div>
-             <div id=¨contenedor.[IdHtml].control¨  class=¨[cssClase]¨>[RenderControl]</div>
+        //public static string ContenedorDelControlDelExpansor = $@"
+        //     <div id=¨contenedor.[IdHtml].etiqueta¨ class=¨[cssClase]¨>[RenderEtiqueta]</div>
+        //     <div id=¨contenedor.[IdHtml].control¨ class=¨[cssClase]¨>[RenderControl]</div>
+        //";
+
+        public static string ControlDelExpansor = $@"[RenderEtiqueta][RenderControl]";
+
+        public static string Etiqueta = $@"
+        <div id=¨[IdHtml]-etiqueta¨ name=¨contenedor-etiqueta¨ class=¨[CssContenedor]¨>
+        <label id=¨[idEtiqueta]¨ for=¨[IdDeControl]¨ class=¨[CssEtiqueta]¨>[Etiqueta]</label>
+        </div>
         ";
 
 
@@ -143,7 +151,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string selectorDeFechaHoraDto = $@"
         <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
             <input {atributosComunesDeUnControlDto} 
-                   style=¨cursor: pointer; width: 65%;¨
+                   style=¨cursor: pointer;¨
                    type=¨date¨
                    idDeLaHora=¨[IdHtml].hora¨
                    placeholder =¨[Placeholder]¨
@@ -154,14 +162,13 @@ namespace MVCSistemaDeElementos.Descriptores
                     obligatorio=¨[Obligatorio]¨ 
                     [Readonly]
                     class=¨[CssHora]¨ 
-                    style=¨cursor: pointer; width: 35%;¨
+                    style=¨cursor: pointer;¨
                     type=¨time¨
                     valorPorDefecto=¨[ValorPorDefecto]¨
                     value=¨¨>
             </input>
         </div>
-";
-
+        ";
 
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {

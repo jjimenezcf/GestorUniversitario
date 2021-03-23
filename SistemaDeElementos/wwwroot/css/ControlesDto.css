@@ -173,9 +173,26 @@ a {
     margin-top: 5px;
 }
 
+
+.contenedor-etiqueta {
+    border-width: 2px;
+    margin-top: 5px;
+}
+
 .contenedor-area-de-texto {
     border-width: 2px;
     /*margin-right: 20px;*/
+}
+
+
+.etiqueta-dto {
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    text-align: left;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #495057;
 }
 
 .editor-dto {
@@ -255,7 +272,7 @@ a {
 .fecha-dto {
     /*    margin-top: 20px;
     margin-left: 20px;*/
-    /*width: 60%;*/
+    width: 60%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
     font-size: 1rem;
@@ -272,7 +289,7 @@ a {
 .hora-dto {
     /*    margin-top: 20px;
     margin-left: 20px;*/
-    /*width: 40%;*/
+    width: 40%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
     font-size: 1rem;

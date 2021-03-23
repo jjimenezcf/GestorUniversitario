@@ -1,4 +1,6 @@
-﻿using Enumerados;
+﻿using System.Collections.Generic;
+using Enumerados;
+using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
 using Utilidades;
 
@@ -20,6 +22,37 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    public class AtributosHtml
+    {
+        public string IdHtmlContenedor { get; set; }
+        public string IdHtml { get; set; }
+        public string Propiedad { get; set; }
+        public enumTipoControl TipoDeControl { get; set; }
+        public bool Visible { get; set; }
+        public bool Editable { get; set; }
+        public bool Obligatorio { get; set; }
+        public string AnchoMaximo { get; set; }
+        public int NumeroDeFilas { get; set; }
+        public object Ayuda { get; internal set; }
+        public object ValorPorDefecto { get; internal set; }
+
+        public AtributosHtml(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl, bool visible, bool editable, bool obligatorio, string anchoMaximo, int numeroDeFilas, string ayuda, object valorPorDefecto)
+        {
+            IdHtmlContenedor = idHtmlContenedor;
+            IdHtml = idHtml;
+            Propiedad = propiedad;
+            TipoDeControl = tipoDeControl;
+            Visible = visible;
+            Editable = editable;
+            Obligatorio = obligatorio;
+            AnchoMaximo = anchoMaximo;
+            NumeroDeFilas = numeroDeFilas;
+            Ayuda = ayuda;
+            ValorPorDefecto = valorPorDefecto;
+        }
+    }
+
+
     public abstract class ControlHtml
     {
         public string Id { get; private set; }
@@ -30,6 +63,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public string Ayuda { get; set; }
         public Posicion Posicion { get; private set; }
         public enumTipoControl Tipo { get; protected set; }
+
+        public bool Visible { get; set; } = true;
+        public bool Editable { get; set; } = true;
+        public bool Obligatorio { get; set; } = false;
 
         public ControlHtml Padre { get; set; }
 
@@ -66,6 +103,19 @@ namespace MVCSistemaDeElementos.Descriptores
             Id = $"{Padre.Id}_{Tipo.Render()}_{propiedad}";
             Propiedad = propiedad;
             Ayuda = ayuda;
+        }
+
+        public static string RenderEtiqueta(string idControl, string etiqueta, string cssContenedor, string cssEtiqueta)
+        {
+            Dictionary<string, object> valores = new Dictionary<string, object>();
+            valores["CssContenedor"] = cssContenedor;
+            valores["CssEtiqueta"] = cssEtiqueta;
+            valores["IdDeControl"] = idControl;
+            valores["idEtiqueta"] = $"etiqueta-{idControl}";
+            valores["Etiqueta"] = etiqueta;
+
+            return PlantillasHtml.Render(PlantillasHtml.Etiqueta, valores);
+
         }
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)
@@ -109,6 +159,25 @@ namespace MVCSistemaDeElementos.Descriptores
                               </div>";
 
             return htmlModal;
+        }
+
+        internal static Dictionary<string, object> ValoresDeAtributosComunes(AtributosHtml atributos)
+        {
+            Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(atributos.IdHtmlContenedor, atributos.IdHtml, atributos.Propiedad, atributos.TipoDeControl);
+
+            //if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
+            //    atributos.Obligatorio = false;
+
+            valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
+            valores["Readonly"] = !atributos.Editable ? "readonly" : "";
+            valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
+            string alto = "";
+            if (atributos.TipoDeControl == enumTipoControl.AreaDeTexto)
+                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",", ".");
+
+            valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty() ? "" : $" height: {alto}")}";
+
+            return valores;
         }
     }
 

@@ -29,11 +29,11 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["cssCabecera"] = Css.Render(enumCssExpansor.Cabecera);
             valores["cssCuerpo"] = Css.Render(enumCssExpansor.Cuerpo);
             valores["cssPie"] = Css.Render(enumCssExpansor.Pie);
-            valores["RenderCabeceraDelSpan"] = RenderCabeceraExpansor();
-            valores["RenderCuerpoDelSpan"] = RenderCuerpoExpansor();
-            valores["RenderPieDelSpan"] = "";
+            valores["RenderCabeceraDelExpansor"] = RenderCabeceraExpansor();
+            valores["RenderCuerpoDelExpansor"] = RenderCuerpoExpansor();
+            valores["RenderPieDelExpansor"] = "";
 
-            return PlantillasHtml.Render(PlantillasHtml.span, valores);
+            return PlantillasHtml.Render(PlantillasHtml.Expansor, valores);
         }
 
         private string RenderCabeceraExpansor()
@@ -44,18 +44,18 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Evento"] = $"Crud.EventosDeExpansores('{TipoDeAccionExpansor.OcultarMostrarBloque}','expandir.{IdHtml}.input;{IdHtml}-cuerpo')";
             valores["Titulo"] = Etiqueta;
 
-            return PlantillasHtml.Render(PlantillasHtml.expansor, valores);
+            return PlantillasHtml.Render(PlantillasHtml.CabeceraExpansor, valores);
         }
 
         private string RenderCuerpoExpansor()
         {
-            var html = "";
+            var htmlCuerpoDelExpansor = "";
             foreach(var control in Controles)
             {
-                html = $"{(html.IsNullOrEmpty() ? "" : html + Environment.NewLine)}{RenderControlDelCuerpo(control)}";
+                htmlCuerpoDelExpansor = $"{(htmlCuerpoDelExpansor.IsNullOrEmpty() ? "" : htmlCuerpoDelExpansor + Environment.NewLine)}{RenderControlDelCuerpo(control)}";
             }
 
-            return html;
+            return htmlCuerpoDelExpansor;
         }
 
         private object RenderControlDelCuerpo(ControlHtml control)
@@ -63,9 +63,10 @@ namespace MVCSistemaDeElementos.Descriptores
             var valores = new Dictionary<string, object>();
             valores["IdHtml"] = control.IdHtml;
             valores["cssClase"] = Css.Render(enumCssExpansor.ContenedorDeControl);
-            valores["RenderEtiqueta"] = Etiqueta;
+            valores["RenderEtiqueta"] = RenderEtiqueta(IdHtml, control.Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
+            valores["RenderControl"] = control.RenderControl();
 
-            return PlantillasHtml.Render(PlantillasHtml.contenedorGridControl, valores);
+            return PlantillasHtml.Render(PlantillasHtml.ControlDelExpansor, valores);
         }
     }
 }

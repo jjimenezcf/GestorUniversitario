@@ -198,6 +198,7 @@ namespace MVCSistemaDeElementos.Descriptores
         FormDeArchivo,
         ContenedorListaDeElementos,
         ContenedorListaDinamica,
+        ContenedorEtiqueta,
         ContenedorEditor,
         ContenedorCheck,
         ContenedorFecha,
@@ -294,9 +295,9 @@ namespace MVCSistemaDeElementos.Descriptores
             switch (clase)
             {
                 case enumCssExpansor.Contenedor: return "grid-span";
-                case enumCssExpansor.Cuerpo: return "grid-span-cuerpo";
                 case enumCssExpansor.Pie: return "grid-span-pie";
                 case enumCssExpansor.Cabecera: return "grid-span-cabecera";
+                case enumCssExpansor.Cuerpo: return "grid-span-cuerpo";
                 case enumCssExpansor.ContenedorDeControl: return "grid-span-cuerpo-control";
                 case enumCssExpansor.Expansor: return "span-expansor";
             }
@@ -310,6 +311,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorListaDeElementos: return "contenedor-listas";
                 case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-listas";
                 case enumCssControlesDto.ContenedorEditor: return "contenedor-editor";
+                case enumCssControlesDto.ContenedorEtiqueta: return "contenedor-etiqueta";
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
                 case enumCssControlesDto.ContenedorFecha: return "contenedor-fecha";

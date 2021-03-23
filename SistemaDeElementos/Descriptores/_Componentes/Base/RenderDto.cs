@@ -267,17 +267,34 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string RenderSelectorDeFechaHora(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl)
         {
+
             var atributos = descriptorControl.atributos;
-            Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
-            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFechaHora);
-            valores["Css"] = Css.Render(enumCssControlesDto.SelectorDeFecha);
-            valores["CssHora"] = Css.Render(enumCssControlesDto.SelectorDeHora);
-            valores["Placeholder"] = atributos.Ayuda;
-            valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
-            var htmSelectorDeFechaHora = PlantillasHtml.Render(PlantillasHtml.selectorDeFechaHoraDto, valores);
+            var a = new AtributosHtml(
+                idHtmlContenedor: descriptorControl.IdHtmlContenedor,
+                idHtml: descriptorControl.IdHtml,
+                propiedad: descriptorControl.propiedad,
+                tipoDeControl: atributos.TipoDeControl,
+                visible: atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio,
+                editable: atributos.EsEditable(tabla.ModoDeTrabajo),
+                obligatorio: atributos.Obligatorio,
+                anchoMaximo: atributos.AnchoMaximo,
+                numeroDeFilas: -1,
+                ayuda: atributos.Ayuda,
+                valorPorDefecto: atributos.ValorPorDefecto);
 
-            return htmSelectorDeFechaHora;
+            return EditorDeFecha.RenderSelectorDeFechaHora(a);
+
+            //Dictionary<string, object> valores = ValoresDeAtributosComunes(tabla, descriptorControl, atributos);
+            //valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFechaHora);
+            //valores["Css"] = Css.Render(enumCssControlesDto.SelectorDeFecha);
+            //valores["CssHora"] = Css.Render(enumCssControlesDto.SelectorDeHora);
+            //valores["Placeholder"] = atributos.Ayuda;
+            //valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+
+            //var htmSelectorDeFechaHora = PlantillasHtml.Render(PlantillasHtml.selectorDeFechaHoraDto, valores);
+
+            //return htmSelectorDeFechaHora;
         }
 
 
@@ -290,9 +307,9 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
-            var htmSelectorDeFechaHora = PlantillasHtml.Render(PlantillasHtml.AreaDeTextoDto, valores);
+            var htmlArea = PlantillasHtml.Render(PlantillasHtml.AreaDeTextoDto, valores);
 
-            return htmSelectorDeFechaHora;
+            return htmlArea;
         }
 
 

@@ -22,11 +22,16 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
             var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
             Editor.Expanes.Add(expanDeAuditoria);
 
+            var fechaCreacion = new EditorDeFecha(expanDeAuditoria, $"{expanDeAuditoria.Id}-feccre", "Creado el", "fecCre", "fecha de cuando se creó el elemento");
+            expanDeAuditoria.Controles.Add(fechaCreacion);
+
+            var fechaModificacion = new EditorDeFecha(expanDeAuditoria, $"{expanDeAuditoria.Id}-fecmod", "Modificado el", "fecMod", "fecha de cuando se modificó por última vez");
+            expanDeAuditoria.Controles.Add(fechaModificacion);
 
         }
 
 
-    public override string RenderControl()
+        public override string RenderControl()
     {
         var render = base.RenderControl();
 

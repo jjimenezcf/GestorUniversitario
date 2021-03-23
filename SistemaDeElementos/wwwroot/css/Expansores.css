@@ -3,38 +3,36 @@
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
-    grid-row-gap: 5px
+    grid-row-gap: 2px
 }
 
 .grid-span-cabecera {
-    background: blue;
-    text-align: center;
-    border: black 5px solid;
+    text-align: left;
     grid-column-start: 1;
     grid-column-end: 5;
+    margin-top: 10px;
+    background-color: gainsboro;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
 }
 
 .grid-span-cuerpo {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 0.5fr 1fr 0.5fr 1fr;
-    grid-gap: 5px;
+    grid-gap: 2px;
 }
 
 .grid-span-cuerpo-control {
-    background: grey;
-    text-align: center;
-    border: black 5px solid;
+    text-align: left;
 }
 
 .grid-span-pie {
-    background: red;
-    text-align: center;
-    border: black 5px solid;
+    text-align: left;
     grid-column-start: 1;
     grid-column-end: 5;
 }
 
 .span-expansor {
-    margin-left: 20px;
+    margin-left: 10px;
 }
