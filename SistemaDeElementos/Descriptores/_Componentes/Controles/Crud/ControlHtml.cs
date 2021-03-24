@@ -35,6 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public int NumeroDeFilas { get; set; }
         public object Ayuda { get; internal set; }
         public object ValorPorDefecto { get; internal set; }
+        public int LongitudMaxima { get; internal set; } = 0;
 
         public AtributosHtml(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl, bool visible, bool editable, bool obligatorio, string anchoMaximo, int numeroDeFilas, string ayuda, object valorPorDefecto)
         {
