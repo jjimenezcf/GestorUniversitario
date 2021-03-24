@@ -40,6 +40,12 @@ namespace ServicioDeDatos.Entorno
         public virtual ICollection<PermisosDeUnUsuarioDtm> Permisos { get; private set; }
 
         public virtual ICollection<PuestosDeUnUsuarioDtm> Puestos { get; private set; }
+
+        public static string NombreCompleto(UsuarioDtm x)
+        {
+            return x == null ? "" : $"({x.Login}) {x.Apellido} {x.Nombre}";
+        }
+
     }
     public static class TablaUsuario
     {
@@ -67,8 +73,6 @@ namespace ServicioDeDatos.Entorno
             GeneradorMd.DefinirCampoArchivo<UsuarioDtm>(modelBuilder);            
 
         }
-
-
     }
 
 }

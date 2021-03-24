@@ -27,13 +27,14 @@ namespace GestoresDeNegocio.Entorno
             public MapearUsuario()
             {
                 CreateMap<UsuarioDtm, UsuarioDto>()
-                    .ForMember(dto => dto.NombreCompleto, dtm => dtm.MapFrom( x => $"({x.Login}) {x.Apellido} {x.Nombre}")) ;
+                .ForMember(dto => dto.NombreCompleto, dtm => dtm.MapFrom( x => UsuarioDtm.NombreCompleto(x)));
                 CreateMap<UsuarioDto, UsuarioDtm>();
             }
+
         }
 
         public GestorDeUsuarios(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador)
         {
 
         }
@@ -42,6 +43,7 @@ namespace GestoresDeNegocio.Entorno
         {
             return new GestorDeUsuarios(contexto, mapeador);
         }
+
 
         protected override IQueryable<UsuarioDtm> AplicarJoins(IQueryable<UsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
