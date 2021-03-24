@@ -1,9 +1,11 @@
-﻿namespace ModeloDeDto.Callejero
+﻿using System;
+
+namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
           , MostrarExpresion = "([Codigo]) [Nombre]")]
-    public class PaisDto : ElementoDto
+    public class PaisDto : ElementoDto, IAuditadoDto
     {
 
         [IUPropiedad(
@@ -72,6 +74,22 @@
           )
         ]
         public string NombreIngles { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public DateTime CreadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public DateTime? ModificadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public string Creador { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public string Modificador { get; set; }
 
         //----------------------------------------------
 

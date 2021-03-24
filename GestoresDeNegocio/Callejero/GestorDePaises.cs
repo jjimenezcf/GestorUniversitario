@@ -12,6 +12,7 @@ using System;
 using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
 using System.Linq;
+using GestoresDeNegocio.Entorno;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -32,7 +33,12 @@ namespace GestoresDeNegocio.Callejero
             public MapearVariables()
             {
                 CreateMap<PaisDtm, PaisDto>();
-                CreateMap<PaisDto, PaisDtm>();
+
+                CreateMap<PaisDto, PaisDtm>()
+                .ForMember(dtm => dtm.FechaCreacion, dto => dto.Ignore())
+                .ForMember(dtm => dtm.FechaModificacion, dto => dto.Ignore())
+                .ForMember(dtm => dtm.IdUsuaCrea, dto => dto.Ignore())
+                .ForMember(dtm => dtm.IdUsuaModi, dto => dto.Ignore());
             }
         }
 
@@ -46,6 +52,7 @@ namespace GestoresDeNegocio.Callejero
         {
             return new GestorDePaises(contexto, mapeador); ;
         }
+
 
         public List<PaisDto> LeerPaises(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {

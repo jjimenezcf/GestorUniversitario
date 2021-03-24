@@ -155,6 +155,30 @@ namespace ModeloDeDto
         public string MostrarExpresion { get; set; } = nameof(INombre.Nombre);
     }
 
+    public interface IAuditadoDto
+    {
+        [IUPropiedad(
+            SiempreVisible = false
+          )
+        ]
+        public DateTime CreadoEl { get; set; }
+        [IUPropiedad(
+            SiempreVisible = false
+          )
+        ]
+        public DateTime? ModificadoEl { get; set; }
+        [IUPropiedad(
+            SiempreVisible = false
+          )
+        ]
+        public string Creador { get; set; }
+        [IUPropiedad(
+            SiempreVisible = false
+          )
+        ]
+        public string Modificador { get; set; }
+    }
+
     public class ElementoDto
     {
         public static string DescargarGestionDocumental = "descargar-gestion-documental";

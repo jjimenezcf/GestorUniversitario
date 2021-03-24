@@ -510,7 +510,7 @@ namespace GestorDeElementos
                 }
             }
             else
-            elementosDeBd = registros.AsNoTracking().ToList();
+                elementosDeBd = registros.AsNoTracking().ToList();
 
             return elementosDeBd;
         }
@@ -581,6 +581,11 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
+            if (RegistroExtensiones.ImplementaUnElemento(typeof(TRegistro)))
+            {
+                registros = registros.Include(e => ((IElementoDtm)e).UsuarioCreador);
+                registros = registros.Include(e => ((IElementoDtm)e).UsuarioModificador);
+            }
             return registros;
         }
 
@@ -724,7 +729,14 @@ namespace GestorDeElementos
 
         protected virtual void DespuesDeMapearElemento(TRegistro registro, TElemento elemento, ParametrosDeMapeo parametros)
         {
+            if (registro.ImplementaUnElemento())
+            {
+                ((IAuditadoDto)elemento).CreadoEl = ((IElementoDtm)registro).FechaCreacion;
+                ((IAuditadoDto)elemento).ModificadoEl = ((IElementoDtm)registro).FechaModificacion;
 
+                ((IAuditadoDto)elemento).Creador = ((IElementoDtm)registro).UsuarioCreador == null ? "" : UsuarioDtm.NombreCompleto(((IElementoDtm)registro).UsuarioCreador);
+                ((IAuditadoDto)elemento).Modificador = ((IElementoDtm)registro).UsuarioModificador == null ? "" : UsuarioDtm.NombreCompleto(((IElementoDtm)registro).UsuarioModificador);
+            }
         }
 
         private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
