@@ -148,6 +148,7 @@ a {
     display: flex;
     margin-right: 5px;
 }
+
 .contenedor-listas-filtro {
     margin-top: 5px;
     margin-right: 5px;
@@ -176,7 +177,8 @@ a {
 
 .contenedor-etiqueta {
     border-width: 2px;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
+    height: calc(1.5em + .75rem + 2px);
 }
 
 .contenedor-area-de-texto {
@@ -187,12 +189,13 @@ a {
 
 .etiqueta-dto {
     width: 100%;
-    height: calc(1.5em + .75rem + 2px);
+    height: calc(1.5em + .75rem);
     text-align: left;
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
     color: #495057;
+    overflow: hidden;
 }
 
 .editor-dto {
@@ -254,13 +257,16 @@ a {
 }
 
 .contenedor-fecha {
-    /*    margin-top: 20px;
-    margin-left: 20px;*/
+    height: calc(1.5em + .75rem + 2px);
 }
 
+    .contenedor-fecha > .fecha-dto[readonly], .hora-dto[readonly] {
+        background-color: #e9ecef;
+        opacity: 1
+    }
+
 .contenedor-fecha-hora {
-    /*    margin-top: 20px;
-    margin-left: 20px;*/
+    height: max-content;
 }
 
     .contenedor-fecha-hora > .fecha-dto[readonly], .hora-dto[readonly] {
@@ -353,17 +359,17 @@ a {
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
 
-        .contenedor-listas > select.lista-de-elemento.propiedad-no-valida, input.lista-dinamica.propiedad-no-valida {
-            background: #f58eb1;
-        }
+    .contenedor-listas > select.lista-de-elemento.propiedad-no-valida, input.lista-dinamica.propiedad-no-valida {
+        background: #f58eb1;
+    }
 
-        .contenedor-listas > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
-            /* background: #dcd6d6;*/
-        }
+    .contenedor-listas > select.lista-de-elemento.propiedad-valida, input.lista-dinamica.propiedad-valida {
+        /* background: #dcd6d6;*/
+    }
 
-        .contenedor-listas > select.lista-de-elemento.solo-lectura, input.lista-dinamica.solo-lectura {
-            background: #ffd800;
-        }
+    .contenedor-listas > select.lista-de-elemento.solo-lectura, input.lista-dinamica.solo-lectura {
+        background: #ffd800;
+    }
 
     .contenedor-listas > input.lista-dinamica[readonly] {
         background-color: #e9ecef;
