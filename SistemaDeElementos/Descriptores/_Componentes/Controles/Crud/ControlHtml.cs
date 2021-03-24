@@ -80,12 +80,9 @@ namespace MVCSistemaDeElementos.Descriptores
             Posicion = posicion;
         }
 
-        public string RenderLabel(string idHtml)
+        public string RenderEtiqueta()
         {
-            return $@"<div¨>
-                         <label for=¨{idHtml}¨>{Etiqueta}</label>
-                      </div>
-                  ";
+            return RenderEtiqueta(IdHtml, Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
         }
 
         public abstract string RenderControl();
@@ -111,7 +108,6 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["CssContenedor"] = cssContenedor;
             valores["CssEtiqueta"] = cssEtiqueta;
             valores["IdDeControl"] = idControl;
-            valores["idEtiqueta"] = $"etiqueta-{idControl}";
             valores["Etiqueta"] = etiqueta;
 
             return PlantillasHtml.Render(PlantillasHtml.Etiqueta, valores);

@@ -43,8 +43,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string ControlDelExpansor = $@"[RenderEtiqueta][RenderControl]";
 
         public static string Etiqueta = $@"
-        <div id=¨[IdHtml]-etiqueta¨ name=¨contenedor-etiqueta¨ class=¨[CssContenedor]¨>
-        <label id=¨[idEtiqueta]¨ for=¨[IdDeControl]¨ class=¨[CssEtiqueta]¨>[Etiqueta]</label>
+        <div id=¨etiqueta-[IdDeControl]-contenedor¨ name=¨contenedor-etiqueta¨ class=¨[CssContenedor]¨>
+        <label id=¨etiqueta-[IdDeControl]¨ for=¨[IdDeControl]¨ class=¨[CssEtiqueta]¨>[Etiqueta]</label>
         </div>
         ";
 

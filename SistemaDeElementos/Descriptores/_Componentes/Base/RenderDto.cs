@@ -99,14 +99,12 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             if (descriptorControl.atributos.TipoDeControl == enumTipoControl.Check)
                 return "";
-            //17.01.2021 --> al poner el display en bloqk no hace falta width: {ancho}%
-            return $@"<div id=¨{tabla.IdHtml}_{i}_{j}_lbl¨
-                           name=¨lbl_propiedad¨
-                           class=¨div-lbl-propiedad¨ 
-                           style=¨{ (descriptorControl.atributos.TipoDeControl == enumTipoControl.Archivo ? "; margin-top: 11px" : "")}¨>
-                           <label for=¨{descriptorControl.IdHtml}¨>{descriptorControl.atributos.Etiqueta}:</label>
-                       </div>
-                      ";
+
+            var cssDelContenedor = Css.Render(enumCssControlesDto.ContenedorEtiqueta); //"div-lbl-propiedad";//
+            var cssDeLaEtiqueta = Css.Render(enumCssControlesDto.Etiqueta);
+
+
+            return ControlHtml.RenderEtiqueta($"{tabla.IdHtml}_{i}_{j}_lbl", descriptorControl.atributos.Etiqueta, cssDelContenedor, cssDeLaEtiqueta);
         }
 
         //
