@@ -45,6 +45,29 @@ module EntornoSe {
     }
 
     function AjustarModal(modal: HTMLDivElement, alturaMaxima: number): void {
+        let contenedor: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
+        let cabecera: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.cabeceraModal}"]`);
+        let cuerpo: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.cuerpoModal}"]`);
+        let pie: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.pieModal}"]`);
+
+        let alturaCabecera: number = cabecera.getBoundingClientRect().height;
+        let alturaCuerpo: number = cuerpo.getBoundingClientRect().height;
+        let alturaPie: number = pie.getBoundingClientRect().height;
+        contenedor.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
+
+
+        let altura = alturaCabecera + alturaCuerpo + alturaPie;
+        if (altura < alturaMaxima) {
+            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
+            contenedor.style.height = `${altura + 200 - 2 * AlturaPiePnlControl()}px`;
+        }
+
+        //let padding: number = (alturaMaxima - altura) / 2;
+        //modal.style.paddingTop = `${padding}px`;
+        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
+    }
+
+    function AjustarModalOld(modal: HTMLDivElement, alturaMaxima: number): void {
         let contenido: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
         let altura: number = contenido.getBoundingClientRect().height;
         let alturaInicial: number = Numero(modal.getAttribute('altura-inicial'));
@@ -59,7 +82,7 @@ module EntornoSe {
         }
 
         if (altura > alturaMaxima)
-            contenido.style.height = `${alturaMaxima - 2*AlturaPiePnlControl()}px`;
+            contenido.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
         else {
             contenido.style.height = `${alturaInicial}px`;
         }

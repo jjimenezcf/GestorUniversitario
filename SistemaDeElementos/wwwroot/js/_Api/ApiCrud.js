@@ -10,6 +10,7 @@ var ApiControl;
             extensor.value = "1";
             ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`));
         }
+        EntornoSe.AjustarModalesAbiertas();
     }
     ApiControl.OcultarMostrarExpansor = OcultarMostrarExpansor;
     function BloquearMenu(panel) {

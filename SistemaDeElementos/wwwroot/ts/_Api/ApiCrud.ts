@@ -10,6 +10,7 @@
             extensor.value = "1";
             ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
         }
+        EntornoSe.AjustarModalesAbiertas();
     }
 
     export function BloquearMenu(panel: HTMLDivElement): void {

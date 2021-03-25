@@ -38,6 +38,24 @@ var EntornoSe;
     }
     EntornoSe.AjustarModalesAbiertas = AjustarModalesAbiertas;
     function AjustarModal(modal, alturaMaxima) {
+        let contenedor = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
+        let cabecera = modal.querySelector(`div[class="${ClaseCss.cabeceraModal}"]`);
+        let cuerpo = modal.querySelector(`div[class="${ClaseCss.cuerpoModal}"]`);
+        let pie = modal.querySelector(`div[class="${ClaseCss.pieModal}"]`);
+        let alturaCabecera = cabecera.getBoundingClientRect().height;
+        let alturaCuerpo = cuerpo.getBoundingClientRect().height;
+        let alturaPie = pie.getBoundingClientRect().height;
+        contenedor.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
+        let altura = alturaCabecera + alturaCuerpo + alturaPie;
+        if (altura < alturaMaxima) {
+            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
+            contenedor.style.height = `${altura + 200 - 2 * AlturaPiePnlControl()}px`;
+        }
+        //let padding: number = (alturaMaxima - altura) / 2;
+        //modal.style.paddingTop = `${padding}px`;
+        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
+    }
+    function AjustarModalOld(modal, alturaMaxima) {
         let contenido = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
         let altura = contenido.getBoundingClientRect().height;
         let alturaInicial = Numero(modal.getAttribute('altura-inicial'));
