@@ -10,7 +10,7 @@ var ApiControl;
             extensor.value = "1";
             ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`));
         }
-        EntornoSe.AjustarModalesAbiertas();
+        //EntornoSe.AjustarModalesAbiertas();
     }
     ApiControl.OcultarMostrarExpansor = OcultarMostrarExpansor;
     function BloquearMenu(panel) {
@@ -360,11 +360,12 @@ var ApiCrud;
     ApiCrud.OcultarPanel = OcultarPanel;
     function CerrarModal(modal) {
         modal.style.display = "none";
-        modal.setAttribute('altura-inicial', "0");
-        var body = document.getElementsByTagName("body")[0];
-        body.style.position = "inherit";
-        body.style.height = "auto";
-        body.style.overflow = "visible";
+        //modal.setAttribute('altura-inicial', "0");
+        //modal.setAttribute('ratio-inicial', "0");
+        //var body = document.getElementsByTagName("body")[0];
+        //body.style.position = "inherit";
+        //body.style.height = "auto";
+        //body.style.overflow = "visible";
     }
     ApiCrud.CerrarModal = CerrarModal;
     function QuitarClaseDeCtrlNoValido(panel) {

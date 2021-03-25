@@ -95,8 +95,7 @@ var MensajesSe;
     MensajesSe.MostrarMensajes = MostrarMensajes;
     function CerrarHistorial() {
         let modal = document.getElementById("id-modal-historial");
-        modal.style.display = "none";
-        modal.setAttribute('altura-inicial', "0");
+        ApiCrud.CerrarModal(modal);
     }
     MensajesSe.CerrarHistorial = CerrarHistorial;
     function BorrarHistorial() {

@@ -39,6 +39,31 @@ var EntornoSe;
     EntornoSe.AjustarModalesAbiertas = AjustarModalesAbiertas;
     function AjustarModal(modal, alturaMaxima) {
         let contenedor = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
+        let alturaCuerpoPagina = AlturaDelCuerpo(AlturaFormulario());
+        let alturaModal = contenedor.getBoundingClientRect().height;
+        if (alturaCuerpoPagina < alturaModal)
+            contenedor.style.height = `${alturaCuerpoPagina}px`;
+        else {
+            let ratio = Numero(modal.getAttribute('ratio-inicial'));
+            if (ratio > 0) {
+                let alturaInicial = Numero(modal.getAttribute('altura-inicial'));
+                if (alturaMaxima < alturaInicial)
+                    contenedor.style.height = `${alturaMaxima * ratio / 100}px`;
+                else
+                    contenedor.style.height = "auto";
+            }
+            else {
+                ratio = alturaModal * 100 / alturaMaxima;
+                modal.setAttribute('ratio-inicial', ratio.toString());
+                modal.setAttribute('altura-inicial', alturaMaxima.toString());
+            }
+        }
+        let altura = contenedor.getBoundingClientRect().height;
+        let padding = (AlturaFormulario() - altura) / 2;
+        modal.style.paddingTop = `${padding}px`;
+    }
+    function AjustarModal2(modal, alturaMaxima) {
+        let contenedor = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
         let cabecera = modal.querySelector(`div[class="${ClaseCss.cabeceraModal}"]`);
         let cuerpo = modal.querySelector(`div[class="${ClaseCss.cuerpoModal}"]`);
         let pie = modal.querySelector(`div[class="${ClaseCss.pieModal}"]`);
@@ -47,9 +72,13 @@ var EntornoSe;
         let alturaPie = pie.getBoundingClientRect().height;
         contenedor.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
         let altura = alturaCabecera + alturaCuerpo + alturaPie;
-        if (altura < alturaMaxima) {
+        if (altura < alturaMaxima - 200) {
             //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
             contenedor.style.height = `${altura + 200 - 2 * AlturaPiePnlControl()}px`;
+        }
+        else {
+            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
+            contenedor.style.height = `${alturaMaxima - 200 - 2 * AlturaPiePnlControl()}px`;
         }
         //let padding: number = (alturaMaxima - altura) / 2;
         //modal.style.paddingTop = `${padding}px`;

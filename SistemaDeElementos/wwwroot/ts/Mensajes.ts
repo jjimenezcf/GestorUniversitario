@@ -111,8 +111,7 @@
 
     export function CerrarHistorial() {
         let modal: HTMLDivElement = document.getElementById("id-modal-historial") as HTMLDivElement;
-        modal.style.display = "none";
-        modal.setAttribute('altura-inicial', "0");
+        ApiCrud.CerrarModal(modal);
     }
 
     export function BorrarHistorial() {

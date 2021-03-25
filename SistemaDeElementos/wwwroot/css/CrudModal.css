@@ -15,21 +15,36 @@
     background-color: rgba(0,0,0,0.4);
 }
 
-    .contenedor-modal > div {
+/*    .contenedor-modal > div {
         background-color: #fff;
         margin: auto;
         padding: 20px;
         border: 10px solid #888;
         width: 60%;
         overflow-y: auto;
-    }
+    }*/
+
+.contenido-modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px auto 50px;
+    grid-template-areas: "contenido-cabecera" "contenido-cuerpo" "contenido-pie";
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 10px solid #888;
+    width: 60%;
+    overflow-y: auto;
+}
 
 .contenido-cabecera {
+    grid-area: contenido-cabecera;
     width: 100%;
     margin-left: 5px;
 }
 
 .contenido-cuerpo {
+    grid-area: contenido-cuerpo;
     width: 100%;
 }
 
@@ -40,6 +55,7 @@
     }
 
 .contenido-pie {
+    grid-area: contenido-pie;
     width: 100%;
     margin-top: 20px;
     display: inline-block;

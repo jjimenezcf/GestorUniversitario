@@ -10,7 +10,7 @@
             extensor.value = "1";
             ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`) as HTMLDivElement);
         }
-        EntornoSe.AjustarModalesAbiertas();
+        //EntornoSe.AjustarModalesAbiertas();
     }
 
     export function BloquearMenu(panel: HTMLDivElement): void {
@@ -391,11 +391,12 @@ namespace ApiCrud {
 
     export function CerrarModal(modal: HTMLDivElement) {
         modal.style.display = "none";
-        modal.setAttribute('altura-inicial', "0");
-        var body = document.getElementsByTagName("body")[0];
-        body.style.position = "inherit";
-        body.style.height = "auto";
-        body.style.overflow = "visible";
+        //modal.setAttribute('altura-inicial', "0");
+        //modal.setAttribute('ratio-inicial', "0");
+        //var body = document.getElementsByTagName("body")[0];
+        //body.style.position = "inherit";
+        //body.style.height = "auto";
+        //body.style.overflow = "visible";
     }
 
     export function QuitarClaseDeCtrlNoValido(panel: HTMLDivElement) {
