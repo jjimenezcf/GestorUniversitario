@@ -3,8 +3,8 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class EditorDeFecha : ControlHtml
     {
-        public EditorDeFecha(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda):
-        base(padre: padre,id, etiqueta, propiedad, ayuda, null )
+        public EditorDeFecha(ControlHtml padre, string etiqueta, string propiedad, string ayuda):
+        base(padre: padre,$"{padre.Id}-{propiedad}", etiqueta, propiedad, ayuda, null )
         {
             Tipo = Enumerados.enumTipoControl.SelectorDeFechaHora;
         }

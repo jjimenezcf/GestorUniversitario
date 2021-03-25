@@ -6,8 +6,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         int LongitudMaxima { get; set; }
 
-        public EditorDeTexto(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, int longitudMaxima = 0) :
-        base(padre: padre, id, etiqueta, propiedad, ayuda, null)
+        public EditorDeTexto(ControlHtml padre, string etiqueta, string propiedad, string ayuda, int longitudMaxima = 0) :
+        base(padre: padre, $"{padre.Id}-{propiedad}", etiqueta, propiedad, ayuda, null)
         {
             Tipo = Enumerados.enumTipoControl.Editor;
             LongitudMaxima = longitudMaxima;

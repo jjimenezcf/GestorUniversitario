@@ -1,4 +1,5 @@
-﻿using ModeloDeDto.Callejero;
+﻿using ModeloDeDto;
+using ModeloDeDto.Callejero;
 using MVCSistemaDeElementos.Controllers.Callejero;
 using UtilidadesParaIu;
 
@@ -22,13 +23,20 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
             var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
             Editor.Expanes.Add(expanDeAuditoria);
 
-            var fechaCreacion = new EditorDeFecha(expanDeAuditoria, $"{expanDeAuditoria.Id}-feccre", "Creado el", "CreadoEl", "fecha de cuando se creó el elemento");
+            var fechaCreacion = new EditorDeFecha(expanDeAuditoria, "Creado el", nameof(IAuditadoDto.CreadoEl), "fecha de cuando se creó el elemento");
             expanDeAuditoria.Controles.Add(fechaCreacion);
 
-            var fechaModificacion = new EditorDeFecha(expanDeAuditoria, $"{expanDeAuditoria.Id}-fecmod", "Modificado el", "ModificadoEl", "fecha de cuando se modificó por última vez");
+            var fechaModificacion = new EditorDeFecha(expanDeAuditoria,"Modificado el", nameof(IAuditadoDto.ModificadoEl), "fecha de cuando se modificó por última vez");
             fechaCreacion.Editable = false;
             fechaModificacion.Editable = false;
             expanDeAuditoria.Controles.Add(fechaModificacion);
+
+            var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
+            var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
+            var divEnBlanco = new DivEnBlanco(expanDeAuditoria);
+            expanDeAuditoria.Controles.Add(creador);
+            expanDeAuditoria.Controles.Add(divEnBlanco);
+            expanDeAuditoria.Controles.Add(modificador);
 
         }
 

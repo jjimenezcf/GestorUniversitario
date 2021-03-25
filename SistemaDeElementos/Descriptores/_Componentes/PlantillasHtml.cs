@@ -170,6 +170,11 @@ namespace MVCSistemaDeElementos.Descriptores
         </div>
         ";
 
+        public static string DivEnBlanco = $@"
+        <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=[CssContenedor]¨>
+        </div>
+        ";
+
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {
             foreach (var indice in valores.Keys)
