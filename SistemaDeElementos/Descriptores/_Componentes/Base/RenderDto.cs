@@ -305,6 +305,9 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
+            string alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",", ".");
+            valores["Estilos"] = $"{valores["Estilos"]}{$" height: {alto}"}";
+
             var htmlArea = PlantillasHtml.Render(PlantillasHtml.AreaDeTextoDto, valores);
 
             return htmlArea;
@@ -398,21 +401,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static Dictionary<string, object> ValoresDeAtributosComunes(DescriptorDeTabla tabla, DescriptorDeControlDeLaTabla descriptorControl, IUPropiedadAttribute atributos)
         {
-            Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
+            var a = AtributosHtml.AtributosComunes(descriptorControl.IdHtmlContenedor, descriptorControl.IdHtml, descriptorControl.propiedad, atributos.TipoDeControl);
+            a.Obligatorio = atributos.Obligatorio;
+            a.Editable = atributos.EsEditable(tabla.ModoDeTrabajo);
+            a.AnchoMaximo = atributos.AnchoMaximo;
 
-            //if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
-            //    atributos.Obligatorio = false;
-
-            valores["Obligatorio"] = atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio ? "S" : "N";
-            valores["Readonly"] = !atributos.EsEditable(tabla.ModoDeTrabajo) ? "readonly" : "";
-            valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
-            string alto = "";
-            if (atributos.TipoDeControl == enumTipoControl.AreaDeTexto)
-                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",", ".");
-
-            valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty() ? "" : $" height: {alto}")}";
-
-            return valores;
+            return ControlHtml.ValoresDeAtributosComunes(a);
         }
 
     }

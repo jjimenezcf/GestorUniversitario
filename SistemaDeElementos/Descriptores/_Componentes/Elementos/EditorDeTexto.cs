@@ -4,10 +4,13 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class EditorDeTexto : ControlHtml
     {
-        public EditorDeTexto(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda) :
+        int LongitudMaxima { get; set; }
+
+        public EditorDeTexto(ControlHtml padre, string id, string etiqueta, string propiedad, string ayuda, int longitudMaxima = 0) :
         base(padre: padre, id, etiqueta, propiedad, ayuda, null)
         {
             Tipo = Enumerados.enumTipoControl.Editor;
+            LongitudMaxima = longitudMaxima;
         }
 
         public override string RenderControl()
@@ -20,10 +23,12 @@ namespace MVCSistemaDeElementos.Descriptores
                 visible: Visible,
                 editable: Editable,
                 obligatorio: Obligatorio,
-                anchoMaximo: null,
+                anchoMaximo: AnchoMaximo,
                 numeroDeFilas: -1,
                 ayuda: Ayuda,
                 valorPorDefecto: null);
+
+            a.LongitudMaxima = LongitudMaxima;
 
             return RenderEditorDeTexto(a);
         }
@@ -31,33 +36,17 @@ namespace MVCSistemaDeElementos.Descriptores
         public static string RenderEditorDeTexto(AtributosHtml atributos)
         {
             Dictionary<string, object> valores = ValoresDeAtributosComunes(atributos);
-            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFecha);
-            valores["Css"] = Css.Render(enumCssControlesDto.SelectorDeFecha);
-            valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ?
-                    $"{Environment.NewLine}maxlength=¨{atributos.LongitudMaxima}¨"
-                    : "";
+            valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
+            valores["Css"] = Css.Render(enumCssControlesDto.Editor);
+            valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ? $"{Environment.NewLine}maxlength=¨{atributos.LongitudMaxima}¨"   : "";
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
 
-            var htmSelectorDeFecha = PlantillasHtml.Render(PlantillasHtml.editorDto, valores);
+            var htmlEditorTexto = PlantillasHtml.Render(PlantillasHtml.editorDto, valores);
 
-            return htmSelectorDeFecha;
+            return htmlEditorTexto;
         }
 
-        /*
-         atributos comunes
-            valores["IdHtmlContenedor"] = idHtmlContenedor;
-            valores["IdHtml"] = idHtml;
-            valores["Propiedad"] = propiedad;
-            valores["Tipo"] = tipoDeControl.Render();
-
-        
-            valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
-            valores["Readonly"] = !atributos.Editable ? "readonly" : "";
-
-
-
-         */
 
     }
 }

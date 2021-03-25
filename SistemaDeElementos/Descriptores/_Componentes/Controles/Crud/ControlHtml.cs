@@ -36,6 +36,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public object Ayuda { get; internal set; }
         public object ValorPorDefecto { get; internal set; }
         public int LongitudMaxima { get; internal set; } = 0;
+        public AtributosHtml()
+        {
+
+        }
 
         public AtributosHtml(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl, bool visible, bool editable, bool obligatorio, string anchoMaximo, int numeroDeFilas, string ayuda, object valorPorDefecto)
         {
@@ -50,6 +54,17 @@ namespace MVCSistemaDeElementos.Descriptores
             NumeroDeFilas = numeroDeFilas;
             Ayuda = ayuda;
             ValorPorDefecto = valorPorDefecto;
+        }
+
+        public static AtributosHtml AtributosComunes(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl)
+        {
+            var a = new AtributosHtml();
+            a.IdHtmlContenedor = idHtmlContenedor;
+            a.IdHtml = idHtml;
+            a.Propiedad = propiedad;
+            a.TipoDeControl = tipoDeControl;
+
+            return a;
         }
     }
 
@@ -68,6 +83,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public bool Visible { get; set; } = true;
         public bool Editable { get; set; } = true;
         public bool Obligatorio { get; set; } = false;
+        public string AnchoMaximo { get; set; }
 
         public ControlHtml Padre { get; set; }
 
@@ -162,18 +178,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(atributos.IdHtmlContenedor, atributos.IdHtml, atributos.Propiedad, atributos.TipoDeControl);
 
-            //if (!atributos.EditableAlCrear && !atributos.EditableAlEditar)
-            //    atributos.Obligatorio = false;
-
             valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
             valores["Readonly"] = !atributos.Editable ? "readonly" : "";
             valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
-            string alto = "";
-            if (atributos.TipoDeControl == enumTipoControl.AreaDeTexto)
-                alto = $"calc({(double)(1.5 * atributos.NumeroDeFilas)}em + .75rem + 2px);".Replace(",", ".");
-
-            valores["Estilos"] = $"{valores["Estilos"]}{(alto.IsNullOrEmpty() ? "" : $" height: {alto}")}";
-
             return valores;
         }
     }
