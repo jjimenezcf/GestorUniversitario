@@ -1,11 +1,12 @@
-﻿using Enumerados;
+﻿using System;
+using Enumerados;
 
 namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
           , MostrarExpresion = "(Codigo) Nombre")]
-    public class ProvinciaDto : ElementoDto
+    public class ProvinciaDto : ElementoDto, IAuditadoDto
     {
         [IUPropiedad(
             Etiqueta = nameof(Pais),
@@ -82,7 +83,25 @@ namespace ModeloDeDto.Callejero
         ]
         public string Prefijo { get; set; }
 
+
         //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public DateTime CreadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public DateTime? ModificadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public string Creador { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(SiempreVisible = false)]
+        public string Modificador { get; set; }
+
+        //----------------------------------------------
+
 
     }
 }

@@ -77,6 +77,28 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.ZonaMenu.AnadirOpcionDeIrAEditarFilasSeleccionadas();
             Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
 
+            if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
+            {
+                var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
+
+                var fechaCreacion = new EditorDeFecha(expanDeAuditoria, "Creado el", nameof(IAuditadoDto.CreadoEl), "fecha de cuando se creó el elemento");
+                var fechaModificacion = new EditorDeFecha(expanDeAuditoria, "Modificado el", nameof(IAuditadoDto.ModificadoEl), "fecha de cuando se modificó por última vez");
+                fechaCreacion.Editable = false;
+                fechaModificacion.Editable = false;
+
+                var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
+                var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
+                creador.Editable = false;
+                modificador.Editable = false;
+                var divEnBlanco = new DivEnBlanco(expanDeAuditoria);
+
+                Editor.Expanes.Add(expanDeAuditoria);
+                expanDeAuditoria.Controles.Add(fechaCreacion);
+                expanDeAuditoria.Controles.Add(fechaModificacion);
+                expanDeAuditoria.Controles.Add(creador);
+                expanDeAuditoria.Controles.Add(divEnBlanco);
+                expanDeAuditoria.Controles.Add(modificador);
+            }
 
         }
 

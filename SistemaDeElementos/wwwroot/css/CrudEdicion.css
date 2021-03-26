@@ -7,7 +7,7 @@
     grid-area: cuerpo-edicion;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 100px 1fr 50px;
+    grid-template-rows: 80px 1fr 50px;
     grid-template-areas: "contenedor-edicion-cabecera" "contenedor-edicion-cuerpo" "contenedor-edicion-pie";
 }
 .contenedor-edicion-cabecera {

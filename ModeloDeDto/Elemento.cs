@@ -241,4 +241,12 @@ namespace ModeloDeDto
 
         }
     }
+
+    public static class ElementoDtoExtensiones
+    {
+        public static bool ImplementaAuditoria(this Type tipoElemento)
+        {
+            return tipoElemento.GetInterfaces().Contains(typeof(IAuditadoDto));
+        }
+    }
 }
