@@ -418,7 +418,7 @@ var Crud;
                     break;
                 }
                 case Evento.Expansores.AbrirPestana: {
-                    EntornoSe.AbrirPestana(parametros);
+                    Crud.crudMnt.NavegarDesdeLaEdicion(parametros);
                     break;
                 }
                 default: {

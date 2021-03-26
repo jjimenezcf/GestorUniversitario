@@ -27,7 +27,7 @@ class Elemento {
     public static get ElementoVacio(): Elemento { return new Elemento(null); }
 
     constructor(registro: any, expresionMostrar?: string) {
-        if (registro !== null) {
+        if (!NoDefinida(registro)) {
             this._registro = registro;
             this.ExpresionMostrar = expresionMostrar === null ? "Nombre" : expresionMostrar;
         }
@@ -89,17 +89,16 @@ class InfoSelector {
         return ids;
     }
 
+    constructor(idGrid) {
+        this.iniciarClase(idGrid);
+    }
 
-    iniciarClase(idGrid) {
+    private iniciarClase(idGrid): void  {
         this.idGrid = idGrid;
         this.htmlGrid = document.getElementById(idGrid);
         this.Seleccionables = Numero(this.htmlGrid.getAttribute("seleccionables"));
     }
 
-    constructor(idGrid) {
-        this.iniciarClase(idGrid);
-        console.log(`Ha creado el infoselector ${idGrid}`);
-    }
 
     private deshabilitarCheck(deshabilitar: boolean) {
 

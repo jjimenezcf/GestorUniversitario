@@ -424,7 +424,7 @@
                     break;
                 }
                 case Evento.Expansores.AbrirPestana: {
-                    EntornoSe.AbrirPestana(parametros);
+                    crudMnt.NavegarDesdeLaEdicion(parametros);
                     break;
                 }
                 default: {

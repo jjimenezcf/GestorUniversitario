@@ -244,7 +244,6 @@ var Crud;
             this._idGrid = this.CuerpoCabecera.getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
             this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
-            this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.Ordenacion = new Tipos.Ordenacion();
         }
@@ -342,6 +341,15 @@ var Crud;
             this.InicializarNavegador();
         }
         InicializarNavegador() {
+            let elementos = this.Estado.Obtener("elementos_seleccionados");
+            this._infoSelector = new InfoSelector(this.IdGrid);
+            if (elementos !== undefined) {
+                for (var i = 0; i < elementos.length; i++) {
+                    let e = new Elemento(elementos[i]["_registro"]);
+                    this.InfoSelector.InsertarElemento(e);
+                }
+                this.Estado.Quitar("elementos_seleccionados");
+            }
             this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden = this.Ordenacion.Leer(i);

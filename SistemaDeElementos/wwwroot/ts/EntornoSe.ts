@@ -72,56 +72,6 @@ module EntornoSe {
         modal.style.paddingTop = `${padding}px`;
     }
 
-    function AjustarModal2(modal: HTMLDivElement, alturaMaxima: number): void {
-        let contenedor: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
-        let cabecera: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.cabeceraModal}"]`);
-        let cuerpo: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.cuerpoModal}"]`);
-        let pie: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.pieModal}"]`);
-
-        let alturaCabecera: number = cabecera.getBoundingClientRect().height;
-        let alturaCuerpo: number = cuerpo.getBoundingClientRect().height;
-        let alturaPie: number = pie.getBoundingClientRect().height;
-        contenedor.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
-
-
-        let altura = alturaCabecera + alturaCuerpo + alturaPie;
-        if (altura < alturaMaxima - 200) {
-            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
-            contenedor.style.height = `${altura + 200 - 2 * AlturaPiePnlControl()}px`;
-        }
-        else {
-            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
-            contenedor.style.height = `${alturaMaxima - 200 - 2 * AlturaPiePnlControl()}px`;
-        }
-
-        //let padding: number = (alturaMaxima - altura) / 2;
-        //modal.style.paddingTop = `${padding}px`;
-        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
-    }
-
-    function AjustarModalOld(modal: HTMLDivElement, alturaMaxima: number): void {
-        let contenido: HTMLDivElement = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
-        let altura: number = contenido.getBoundingClientRect().height;
-        let alturaInicial: number = Numero(modal.getAttribute('altura-inicial'));
-        if (alturaInicial === 0) {
-            alturaInicial = altura;
-            modal.setAttribute('altura-inicial', `${alturaInicial}px`);
-        }
-
-        if (alturaInicial >= alturaMaxima - AlturaPiePnlControl()) {
-            alturaInicial = alturaMaxima - AlturaPiePnlControl() - 1;
-            modal.setAttribute('altura-inicial', "0");
-        }
-
-        if (altura > alturaMaxima)
-            contenido.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
-        else {
-            contenido.style.height = `${alturaInicial}px`;
-        }
-        let padding: number = (alturaMaxima - altura) / 2;
-        modal.style.paddingTop = `${padding}px`;
-        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
-    }
 
     export function InicializarHistorial() {
         Historial = new HistorialSe.HistorialDeNavegacion();
@@ -140,11 +90,12 @@ module EntornoSe {
     }
 
 
-    export function AbrirPestana(url: string) {
+    export function AbrirPestana(url: string): Window {
         var pattern = /^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/gi;
-        if (url.match(pattern))
+        if (!url.match(pattern))
             throw Error(`La url ${url} no es válida`);
-        window.open(url);
+        let v: Window = window.open(url);
+        return v;
     }
 
 
