@@ -112,7 +112,7 @@
                 }
             }
             catch (error) {
-                MensajesSe.Error("EjecutarAcciones", error);
+                MensajesSe.Error("EjecutarAcciones", error.message);
             }
 
             if (cerrarEdicion)

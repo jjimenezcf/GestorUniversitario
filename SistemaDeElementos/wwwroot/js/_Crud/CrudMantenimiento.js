@@ -49,7 +49,7 @@ var Crud;
                 this.Buscar(atGrid.accion.buscar, 0);
             }
             catch (error) {
-                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
             }
         }
         PosicionarPanelesDelCuerpo() {

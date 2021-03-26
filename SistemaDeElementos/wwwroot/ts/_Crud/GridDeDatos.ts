@@ -833,7 +833,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }
@@ -850,7 +850,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }

@@ -264,7 +264,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
         }
 
     }

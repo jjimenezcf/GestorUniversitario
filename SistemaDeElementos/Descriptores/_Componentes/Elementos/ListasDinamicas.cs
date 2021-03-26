@@ -40,7 +40,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var valores = PlantillasHtml.ValoresDeAtributesComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            var valores = a.MapearComunes();
+
             valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorListaDinamica);
             valores["Css"] = Css.Render(enumCssFiltro.ListaDinamica);
             valores["ClaseElemento"] = SeleccionarDe;

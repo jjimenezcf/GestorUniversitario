@@ -1,5 +1,4 @@
-﻿using GestorDeElementos;
-using ModeloDeDto;
+﻿using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {

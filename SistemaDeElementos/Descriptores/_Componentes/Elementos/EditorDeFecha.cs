@@ -31,7 +31,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderSelectorDeFechaHora(AtributosHtml atributos)
         {
-            Dictionary<string, object> valores = ValoresDeAtributosComunes(atributos);
+            var valores = atributos.MapearComunes(); 
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFecha);
             valores["Css"] = Css.Render(enumCssControlesDto.SelectorDeFecha);
             valores["CssHora"] = Css.Render(enumCssControlesDto.SelectorDeHora);

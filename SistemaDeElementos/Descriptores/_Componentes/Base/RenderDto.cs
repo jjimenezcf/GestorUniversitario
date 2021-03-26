@@ -406,7 +406,7 @@ namespace MVCSistemaDeElementos.Descriptores
             a.Editable = atributos.EsEditable(tabla.ModoDeTrabajo);
             a.AnchoMaximo = atributos.AnchoMaximo;
 
-            return ControlHtml.ValoresDeAtributosComunes(a);
+            return a.MapearComunes();
         }
 
     }

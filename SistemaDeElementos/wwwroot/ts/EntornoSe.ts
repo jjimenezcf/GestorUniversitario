@@ -139,6 +139,16 @@ module EntornoSe {
         window.location.href = url;
     }
 
+
+    export function AbrirPestana(url: string) {
+        var pattern = /^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/gi;
+        if (url.match(pattern))
+            throw Error(`La url ${url} no es válida`);
+        window.open(url);
+    }
+
+
+
     export function Sumit(form: HTMLFormElement) {
         PonerCapa();
         try {

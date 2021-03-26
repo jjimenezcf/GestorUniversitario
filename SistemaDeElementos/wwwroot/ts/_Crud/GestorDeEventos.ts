@@ -88,7 +88,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error);
+            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error.message);
         }
     }
 
@@ -160,7 +160,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error.message);
         }
     }
 
@@ -228,7 +228,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error.message);
         }
     }
 
@@ -292,7 +292,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error.message);
         }
     }
 
@@ -314,7 +314,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error.message);
         }
     }
 
@@ -336,7 +336,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error.message);
         }
     }
 
@@ -358,7 +358,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
         }
     }
 
@@ -367,7 +367,7 @@
             crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Edición, accion: ${accion}`, error.message);
         }
     }
 
@@ -376,7 +376,7 @@
             crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error.message);
         }
     }
 
@@ -385,7 +385,7 @@
             crudMnt.crudDeCreacion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Creacion, accion: ${accion}`, error);
+            MensajesSe.Error(`Creacion, accion: ${accion}`, error.message);
         }
     }
 
@@ -407,7 +407,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error.message);
         }
     }
 
@@ -423,6 +423,10 @@
                     ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
                     break;
                 }
+                case Evento.Expansores.AbrirPestana: {
+                    EntornoSe.AbrirPestana(parametros);
+                    break;
+                }
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
@@ -430,7 +434,7 @@
             }
         }
         catch (error) {
-            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+            MensajesSe.Error(`Expansor, accion: ${accion}`, error.message);
         }
     }
 }

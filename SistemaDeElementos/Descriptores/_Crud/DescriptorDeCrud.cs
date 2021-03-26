@@ -88,16 +88,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
                 var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
+                var mostrarHistorico = new AbrirEnPestana(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", "http://wwww.google.es");
                 creador.Editable = false;
                 modificador.Editable = false;
-                var divEnBlanco = new DivEnBlanco(expanDeAuditoria);
 
                 Editor.Expanes.Add(expanDeAuditoria);
                 expanDeAuditoria.Controles.Add(fechaCreacion);
                 expanDeAuditoria.Controles.Add(fechaModificacion);
                 expanDeAuditoria.Controles.Add(creador);
-                expanDeAuditoria.Controles.Add(divEnBlanco);
+                expanDeAuditoria.Controles.Add(new DivEnBlanco(expanDeAuditoria));
                 expanDeAuditoria.Controles.Add(modificador);
+                expanDeAuditoria.Controles.Add(new DivEnBlanco(expanDeAuditoria));
+                expanDeAuditoria.Controles.Add(mostrarHistorico);
             }
 
         }

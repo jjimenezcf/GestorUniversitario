@@ -36,6 +36,9 @@ namespace MVCSistemaDeElementos.Descriptores
         public object Ayuda { get; internal set; }
         public object ValorPorDefecto { get; internal set; }
         public int LongitudMaxima { get; internal set; } = 0;
+        public string Etiqueta { get; set; }
+        public string Url { get; set; }
+
         public AtributosHtml()
         {
 
@@ -64,8 +67,32 @@ namespace MVCSistemaDeElementos.Descriptores
             a.Propiedad = propiedad;
             a.TipoDeControl = tipoDeControl;
 
+            a.Editable = true;
+            a.Visible = true;
+            a.Obligatorio = false;
+
             return a;
         }
+
+    }
+
+    public static class AtributosHtmlExtension
+    {
+        public static Dictionary<string, object> MapearComunes(this AtributosHtml atributos)
+        {
+            var valores = new Dictionary<string, object>();
+
+            valores["IdHtmlContenedor"] = atributos.IdHtmlContenedor;
+            valores["IdHtml"] = atributos.IdHtml;
+            valores["Propiedad"] = atributos.Propiedad;
+            valores["Tipo"] = atributos.TipoDeControl.Render();
+            valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
+            valores["Readonly"] = !atributos.Editable ? "readonly" : "";
+            valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
+            valores["Etiqueta"] = atributos.Etiqueta;
+            return valores;
+        }
+
     }
 
 
@@ -174,15 +201,6 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlModal;
         }
 
-        internal static Dictionary<string, object> ValoresDeAtributosComunes(AtributosHtml atributos)
-        {
-            Dictionary<string, object> valores = PlantillasHtml.ValoresDeAtributesComunes(atributos.IdHtmlContenedor, atributos.IdHtml, atributos.Propiedad, atributos.TipoDeControl);
-
-            valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
-            valores["Readonly"] = !atributos.Editable ? "readonly" : "";
-            valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
-            return valores;
-        }
     }
 
 }

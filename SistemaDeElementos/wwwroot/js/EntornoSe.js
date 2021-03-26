@@ -121,6 +121,13 @@ var EntornoSe;
         window.location.href = url;
     }
     EntornoSe.NavegarAUrl = NavegarAUrl;
+    function AbrirPestana(url) {
+        var pattern = /^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/gi;
+        if (url.match(pattern))
+            throw Error(`La url ${url} no es válida`);
+        window.open(url);
+    }
+    EntornoSe.AbrirPestana = AbrirPestana;
     function Sumit(form) {
         PonerCapa();
         try {

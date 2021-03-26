@@ -682,7 +682,7 @@ var Crud;
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }
@@ -698,7 +698,7 @@ var Crud;
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }
