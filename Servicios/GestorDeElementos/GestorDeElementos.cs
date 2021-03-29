@@ -327,7 +327,7 @@ namespace GestorDeElementos
 
             ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
 
-            if (typeof(TRegistro).ImplementaAuditoria())
+            if (RegistroExtensiones.ImplementaAuditoria(typeof(TRegistro)))
             {
                 var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? RegistroEnBD : registro;
                 RegistrarAuditoria<TRegistro>(parametros.Operacion, (IElementoDtm)auditar);
