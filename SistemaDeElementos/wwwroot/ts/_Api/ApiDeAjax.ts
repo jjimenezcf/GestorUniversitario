@@ -182,7 +182,7 @@
                     this.TrasLaPeticion(this);
                 }
                 catch (error) {
-                    MensajesSe.Error("DespuesDeLaPeticion", `Error al procesar la peticion ${this.nombre}`, error);
+                    MensajesSe.Error("DespuesDeLaPeticion", `Error al procesar la peticion ${this.nombre}`, error.message);
                 }
         }
     }

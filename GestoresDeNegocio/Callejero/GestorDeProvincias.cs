@@ -1,20 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ServicioDeDatos.Entorno;
 using ServicioDeDatos;
-using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
-using Gestor.Errores;
 using Utilidades;
 using GestoresDeNegocio.TrabajosSometidos;
-using System.Reflection;
 using System;
-using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
-using ServicioDeDatos.TrabajosSometidos;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestoresDeNegocio.Callejero
@@ -37,7 +31,11 @@ namespace GestoresDeNegocio.Callejero
                     .ForMember(dto => dto.Pais, dtm => dtm.MapFrom(dtm => $"({dtm.Pais.Codigo}) {dtm.Pais.Nombre}"));
 
                 CreateMap<ProvinciaDto, ProvinciaDtm>()
-                .ForMember(dtm => dtm.Pais, dto => dto.Ignore());
+                .ForMember(dtm => dtm.Pais, dto => dto.Ignore())
+                .ForMember(dtm => dtm.FechaCreacion, dto => dto.Ignore())
+                .ForMember(dtm => dtm.FechaModificacion, dto => dto.Ignore())
+                .ForMember(dtm => dtm.IdUsuaCrea, dto => dto.Ignore())
+                .ForMember(dtm => dtm.IdUsuaModi, dto => dto.Ignore());
 
             }
         }

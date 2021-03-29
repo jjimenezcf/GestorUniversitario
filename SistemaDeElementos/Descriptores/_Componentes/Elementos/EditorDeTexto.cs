@@ -35,7 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderEditorDeTexto(AtributosHtml atributos)
         {
-            Dictionary<string, object> valores = ValoresDeAtributosComunes(atributos);
+            var valores = atributos.MapearComunes();
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
             valores["Css"] = Css.Render(enumCssControlesDto.Editor);
             valores["LongitudMaxima"] = atributos.LongitudMaxima > 0 ? $"{Environment.NewLine}maxlength=¨{atributos.LongitudMaxima}¨"   : "";

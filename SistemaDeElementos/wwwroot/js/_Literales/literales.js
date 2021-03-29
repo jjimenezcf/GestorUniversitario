@@ -376,7 +376,8 @@ const Evento = {
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
     },
     Expansores: {
-        OcultarMostrarBloque: "ocultar-mostrar-bloque"
+        OcultarMostrarBloque: "ocultar-mostrar-bloque",
+        AbrirPestana: "abrir-pestana"
     },
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",

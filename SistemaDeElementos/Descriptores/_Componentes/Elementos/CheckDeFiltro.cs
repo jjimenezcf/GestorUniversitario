@@ -33,7 +33,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderCheck()
         {
-            var valores = PlantillasHtml.ValoresDeAtributesComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            var valores = a.MapearComunes();
             valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorCheck);
             valores["Css"] = Css.Render(enumCssFiltro.Check);
             valores["Etiqueta"] = Etiqueta;

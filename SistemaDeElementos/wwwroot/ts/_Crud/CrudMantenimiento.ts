@@ -64,11 +64,34 @@
 
                 this.AplicarRestrictores();
 
-                this.Buscar(atGrid.accion.buscar, 0);
+                if (this.Navegador.EsRestauracion) {
+                    this.RestaurarPagina()
+                        .then((valor) => this.TrasRestaurar(valor));
+                }
+                else {
+                    this.Buscar(atGrid.accion.buscar, 0);
+                }
             }
             catch (error) {
-                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
             }
+        }
+
+        private TrasRestaurar(valor: boolean): void {
+            if (valor && this.Estado.Obtener("EditarAlVolver")) {
+                this.Estado.Quitar("EditarAlVolver");
+                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+                EntornoSe.Historial.Persistir();
+                this.IraEditar();
+            }
+        }
+
+        public NavegarDesdeLaEdicion(url: string): void {
+            crudMnt.Estado.Agregar("EditarAlVolver", true);
+            crudMnt.Estado.Agregar(atGrid.id, this.Navegador.Datos);
+            crudMnt.Estado.Agregar("elementos_seleccionados", this.InfoSelector.Seleccionados);
+            EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+            EntornoSe.NavegarAUrl(url);
         }
 
         public PosicionarPanelesDelCuerpo(): void {
@@ -298,19 +321,18 @@
             this.crudDeCreacion.EjecutarAcciones(Evento.Creacion.Cerrar);
         }
 
-        public RestaurarPagina() {
+        public RestaurarPagina(): Promise<boolean> {
             this.DatosDelGrid.InicializarCache();
             this.Navegador.EsRestauracion = false;
             let cantidad: number = this.Navegador.Cantidad;
             let pagina: number = this.Navegador.Pagina;
-            if (pagina <= 1)
-                this.CargarGrid(atGrid.accion.buscar, 0);
-            else {
-                let posicion: number = (pagina - 1) * cantidad;
-                if (posicion < 0)
-                    posicion = 0;
-                this.Buscar(atGrid.accion.restaurar, posicion);
+            let posicion: number = 0;
+            let accion: string = atGrid.accion.buscar;
+            if (pagina > 1) {
+                posicion = (pagina - 1) * cantidad;
+                accion = atGrid.accion.restaurar;
             }
+            return this.PromesaDeCargarGrid(accion, posicion);
         }
 
         private DefinirPeticionDeBorrado(): string {
@@ -323,17 +345,12 @@
         }
 
         public Buscar(accion: string, posicion: number) {
-            if (this.Navegador.EsRestauracion) {
-                this.RestaurarPagina();
+            this.DatosDelGrid.InicializarCache();
+            if (accion !== atGrid.accion.restaurar) {
+                this.Navegador.Pagina = 1;
+                this.Navegador.Posicion = 0;
             }
-            else {
-                this.DatosDelGrid.InicializarCache();
-                if (accion !== atGrid.accion.restaurar) {
-                    this.Navegador.Pagina = 1;
-                    this.Navegador.Posicion = 0;
-                }
-                this.CargarGrid(accion, posicion);
-            }
+            this.CargarGrid(accion, posicion);
         }
 
         public CambiarSelector(idSelector: string) {

@@ -4,7 +4,7 @@
 class Elemento {
     constructor(registro, expresionMostrar) {
         this._registro = null;
-        if (registro !== null) {
+        if (!NoDefinida(registro)) {
             this._registro = registro;
             this.ExpresionMostrar = expresionMostrar === null ? "Nombre" : expresionMostrar;
         }
@@ -47,7 +47,6 @@ class InfoSelector {
     constructor(idGrid) {
         this.elementos = [];
         this.iniciarClase(idGrid);
-        console.log(`Ha creado el infoselector ${idGrid}`);
     }
     get Seleccionables() {
         return this._Seleccionables == NaN

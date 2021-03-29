@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderDivEnBlanco(AtributosHtml atributos)
         {
-            Dictionary<string, object> valores = ValoresDeAtributosComunes(atributos);
+            var valores = atributos.MapearComunes();
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorFecha);
 
             var htmlDivEnBlanco = PlantillasHtml.Render(PlantillasHtml.DivEnBlanco, valores);

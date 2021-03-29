@@ -82,6 +82,20 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string listaDeElementosFlt = listaDeElementos.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
+        public static string abrirEnPestana = @$" 
+                           <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                    <input id=¨[IdHtml]¨
+                                           type=¨button¨
+                                           tipo=¨[Tipo]¨
+                                           clase=¨[Css]¨
+                                           permisos-necesarios=¨[PermisosNecesarios]¨
+                                           value=¨[Etiqueta]¨
+                                           onClick=¨[Accion]¨
+                                           title=¨[Ayuda]¨
+                                           [disbled] />
+                           </div>";
+
+
         public static string editorDto = @$" <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                   <input {atributosComunesDeUnControlDto}
                                          type=¨text¨ [LongitudMaxima]
@@ -187,14 +201,5 @@ namespace MVCSistemaDeElementos.Descriptores
             return plantilla;
         }
 
-        public static Dictionary<string, object> ValoresDeAtributesComunes(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl)
-        {
-            var valores = new Dictionary<string, object>();
-            valores["IdHtmlContenedor"] = idHtmlContenedor;
-            valores["IdHtml"] = idHtml;
-            valores["Propiedad"] = propiedad;
-            valores["Tipo"] = tipoDeControl.Render();
-            return valores;
-        }
     }
 }

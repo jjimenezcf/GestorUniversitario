@@ -44,7 +44,7 @@ namespace MVCSistemaDeElementos.Descriptores
                             Seguridad.CrearCrudDeUsuariosDeUnPuesto('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
-                            MensajesSe.Error('Creando el crud', error);
+                            MensajesSe.Error('Creando el crud', error.message);
                          }}
                       </script>
                     ";

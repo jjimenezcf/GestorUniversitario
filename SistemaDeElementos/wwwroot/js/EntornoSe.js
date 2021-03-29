@@ -62,49 +62,6 @@ var EntornoSe;
         let padding = (AlturaFormulario() - altura) / 2;
         modal.style.paddingTop = `${padding}px`;
     }
-    function AjustarModal2(modal, alturaMaxima) {
-        let contenedor = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
-        let cabecera = modal.querySelector(`div[class="${ClaseCss.cabeceraModal}"]`);
-        let cuerpo = modal.querySelector(`div[class="${ClaseCss.cuerpoModal}"]`);
-        let pie = modal.querySelector(`div[class="${ClaseCss.pieModal}"]`);
-        let alturaCabecera = cabecera.getBoundingClientRect().height;
-        let alturaCuerpo = cuerpo.getBoundingClientRect().height;
-        let alturaPie = pie.getBoundingClientRect().height;
-        contenedor.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
-        let altura = alturaCabecera + alturaCuerpo + alturaPie;
-        if (altura < alturaMaxima - 200) {
-            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
-            contenedor.style.height = `${altura + 200 - 2 * AlturaPiePnlControl()}px`;
-        }
-        else {
-            //cuerpo.style.height = `${alturaMaxima - alturaCabecera - alturaPie - 2 * AlturaPiePnlControl()}px`;
-            contenedor.style.height = `${alturaMaxima - 200 - 2 * AlturaPiePnlControl()}px`;
-        }
-        //let padding: number = (alturaMaxima - altura) / 2;
-        //modal.style.paddingTop = `${padding}px`;
-        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
-    }
-    function AjustarModalOld(modal, alturaMaxima) {
-        let contenido = modal.querySelector(`div[class="${ClaseCss.contenidoModal}"]`);
-        let altura = contenido.getBoundingClientRect().height;
-        let alturaInicial = Numero(modal.getAttribute('altura-inicial'));
-        if (alturaInicial === 0) {
-            alturaInicial = altura;
-            modal.setAttribute('altura-inicial', `${alturaInicial}px`);
-        }
-        if (alturaInicial >= alturaMaxima - AlturaPiePnlControl()) {
-            alturaInicial = alturaMaxima - AlturaPiePnlControl() - 1;
-            modal.setAttribute('altura-inicial', "0");
-        }
-        if (altura > alturaMaxima)
-            contenido.style.height = `${alturaMaxima - 2 * AlturaPiePnlControl()}px`;
-        else {
-            contenido.style.height = `${alturaInicial}px`;
-        }
-        let padding = (alturaMaxima - altura) / 2;
-        modal.style.paddingTop = `${padding}px`;
-        modal.style.height = `${alturaMaxima + AlturaPiePnlControl()}px`;
-    }
     function InicializarHistorial() {
         EntornoSe.Historial = new HistorialSe.HistorialDeNavegacion();
     }
@@ -121,6 +78,14 @@ var EntornoSe;
         window.location.href = url;
     }
     EntornoSe.NavegarAUrl = NavegarAUrl;
+    function AbrirPestana(url) {
+        var pattern = /^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/gi;
+        if (!url.match(pattern))
+            throw Error(`La url ${url} no es válida`);
+        let v = window.open(url);
+        return v;
+    }
+    EntornoSe.AbrirPestana = AbrirPestana;
     function Sumit(form) {
         PonerCapa();
         try {

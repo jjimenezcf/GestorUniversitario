@@ -282,11 +282,11 @@
         public Obtener(id: number): Elemento {
             let p: PaginaDelGrid = this.Pagina(this._paginaActual);
             if (p === null)
-                throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`)
+                throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`);
 
             let e: Elemento = p.Obtener(id);
             if (e === null)
-                throw Error(`El elemento con id ${id} no se encuentra en la página actual del grid`)
+                throw Error(`El elemento con id ${id} no se encuentra en la página actual del grid`);
             return e;
         }
 
@@ -428,7 +428,6 @@
             this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
             this._idHtmlFiltro = this.Grid.getAttribute(atMantenimniento.zonaDeFiltro);
 
-            this._infoSelector = new InfoSelector(this.IdGrid);
             this.Navegador = new Navegador(this.IdGrid);
             this.Ordenacion = new Tipos.Ordenacion();
         }
@@ -439,6 +438,18 @@
         }
 
         private InicializarNavegador() {
+
+            let elementos: Elemento[] = this.Estado.Obtener("elementos_seleccionados") as Elemento[];
+
+            this._infoSelector = new InfoSelector(this.IdGrid);
+            if (elementos !== undefined) {
+                for (var i = 0; i < elementos.length; i++) {
+                    let e: Elemento = new Elemento(elementos[i]["_registro"]);
+                    this.InfoSelector.InsertarElemento(e);
+                }
+                this.Estado.Quitar("elementos_seleccionados");
+            }
+
             this.Navegador.RestaurarDatos(this.Estado.Obtener(atGrid.id));
             for (var i = 0; i < this.Ordenacion.Count(); i++) {
                 let orden: Tipos.Orden = this.Ordenacion.Leer(i);
@@ -697,7 +708,7 @@
         protected AnadirAlInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
-            grid.AplicarModoAccesoAlElemento(elemento)
+            grid.AplicarModoAccesoAlElemento(elemento);
         }
 
         protected QuitarDelSelector(grid: GridDeDatos, id: number): void {
@@ -833,7 +844,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }
@@ -850,7 +861,7 @@
                     ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error);
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
                 return;
             }
         }
@@ -1406,7 +1417,7 @@
 
         private AplicarModoDeAccesoAlElemento(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
-            let modoDeAccesoDelUsuario: string = peticion.resultado.modoDeAcceso;            
+            let modoDeAccesoDelUsuario: string = peticion.resultado.modoDeAcceso;
         }
 
 

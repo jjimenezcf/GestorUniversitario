@@ -63,7 +63,11 @@ namespace MVCSistemaDeElementos.Descriptores
             var valores = new Dictionary<string, object>();
             valores["IdHtml"] = control.IdHtml;
             valores["cssClase"] = Css.Render(enumCssExpansor.ContenedorDeControl);
-            valores["RenderEtiqueta"] = RenderEtiqueta(IdHtml, control.Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
+            
+            valores["RenderEtiqueta"] = control.Tipo == Enumerados.enumTipoControl.Opcion 
+                   ? "" : 
+                   RenderEtiqueta(IdHtml, control.Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
+            
             valores["RenderControl"] = control.RenderControl();
 
             return PlantillasHtml.Render(PlantillasHtml.ControlDelExpansor, valores);

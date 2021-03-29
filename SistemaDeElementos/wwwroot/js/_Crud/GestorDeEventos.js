@@ -88,7 +88,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error);
+            MensajesSe.Error(`Mantenimiento, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosDelMantenimiento = EventosDelMantenimiento;
@@ -158,7 +158,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeSeleccion = EventosModalDeSeleccion;
@@ -224,7 +224,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeCrearRelaciones = EventosModalDeCrearRelaciones;
@@ -286,7 +286,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de consulta de relaciones, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeConsultaDeRelaciones = EventosModalDeConsultaDeRelaciones;
@@ -308,7 +308,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de borrado, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeBorrar = EventosModalDeBorrar;
@@ -330,7 +330,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de creación, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeCreacion = EventosModalDeCreacion;
@@ -352,7 +352,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosModalDeEdicion = EventosModalDeEdicion;
@@ -361,7 +361,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Edición, accion: ${accion}`, error.message);
         }
     }
     Crud.EjecutarMenuEdt = EjecutarMenuEdt;
@@ -370,7 +370,7 @@ var Crud;
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error);
+            MensajesSe.Error(`Eventos de edición, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosDeEdicion = EventosDeEdicion;
@@ -379,7 +379,7 @@ var Crud;
             Crud.crudMnt.crudDeCreacion.EjecutarAcciones(accion);
         }
         catch (error) {
-            MensajesSe.Error(`Creacion, accion: ${accion}`, error);
+            MensajesSe.Error(`Creacion, accion: ${accion}`, error.message);
         }
     }
     Crud.EjecutarMenuCrt = EjecutarMenuCrt;
@@ -401,7 +401,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosDeListaDinamica = EventosDeListaDinamica;
@@ -417,6 +417,10 @@ var Crud;
                     ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
                     break;
                 }
+                case Evento.Expansores.AbrirPestana: {
+                    Crud.crudMnt.NavegarDesdeLaEdicion(parametros);
+                    break;
+                }
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
@@ -424,7 +428,7 @@ var Crud;
             }
         }
         catch (error) {
-            MensajesSe.Error(`Lista dinámica, accion: ${accion}`, error);
+            MensajesSe.Error(`Expansor, accion: ${accion}`, error.message);
         }
     }
     Crud.EventosDeExpansores = EventosDeExpansores;

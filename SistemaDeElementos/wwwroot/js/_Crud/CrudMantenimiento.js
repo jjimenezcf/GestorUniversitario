@@ -46,11 +46,32 @@ var Crud;
                 this.InicializarMenus();
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
                 this.AplicarRestrictores();
-                this.Buscar(atGrid.accion.buscar, 0);
+                if (this.Navegador.EsRestauracion) {
+                    this.RestaurarPagina()
+                        .then((valor) => this.TrasRestaurar(valor));
+                }
+                else {
+                    this.Buscar(atGrid.accion.buscar, 0);
+                }
             }
             catch (error) {
-                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error);
+                MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
             }
+        }
+        TrasRestaurar(valor) {
+            if (valor && this.Estado.Obtener("EditarAlVolver")) {
+                this.Estado.Quitar("EditarAlVolver");
+                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+                EntornoSe.Historial.Persistir();
+                this.IraEditar();
+            }
+        }
+        NavegarDesdeLaEdicion(url) {
+            Crud.crudMnt.Estado.Agregar("EditarAlVolver", true);
+            Crud.crudMnt.Estado.Agregar(atGrid.id, this.Navegador.Datos);
+            Crud.crudMnt.Estado.Agregar("elementos_seleccionados", this.InfoSelector.Seleccionados);
+            EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+            EntornoSe.NavegarAUrl(url);
         }
         PosicionarPanelesDelCuerpo() {
             if (this.ModoTrabajo === ModoTrabajo.mantenimiento) {
@@ -239,14 +260,13 @@ var Crud;
             this.Navegador.EsRestauracion = false;
             let cantidad = this.Navegador.Cantidad;
             let pagina = this.Navegador.Pagina;
-            if (pagina <= 1)
-                this.CargarGrid(atGrid.accion.buscar, 0);
-            else {
-                let posicion = (pagina - 1) * cantidad;
-                if (posicion < 0)
-                    posicion = 0;
-                this.Buscar(atGrid.accion.restaurar, posicion);
+            let posicion = 0;
+            let accion = atGrid.accion.buscar;
+            if (pagina > 1) {
+                posicion = (pagina - 1) * cantidad;
+                accion = atGrid.accion.restaurar;
             }
+            return this.PromesaDeCargarGrid(accion, posicion);
         }
         DefinirPeticionDeBorrado() {
             let idsJson = JSON.stringify(this.InfoSelector.IdsSeleccionados);
@@ -257,17 +277,12 @@ var Crud;
             return peticion;
         }
         Buscar(accion, posicion) {
-            if (this.Navegador.EsRestauracion) {
-                this.RestaurarPagina();
+            this.DatosDelGrid.InicializarCache();
+            if (accion !== atGrid.accion.restaurar) {
+                this.Navegador.Pagina = 1;
+                this.Navegador.Posicion = 0;
             }
-            else {
-                this.DatosDelGrid.InicializarCache();
-                if (accion !== atGrid.accion.restaurar) {
-                    this.Navegador.Pagina = 1;
-                    this.Navegador.Posicion = 0;
-                }
-                this.CargarGrid(accion, posicion);
-            }
+            this.CargarGrid(accion, posicion);
         }
         CambiarSelector(idSelector) {
             var htmlSelector = document.getElementById(idSelector);
