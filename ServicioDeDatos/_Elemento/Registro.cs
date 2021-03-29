@@ -13,7 +13,7 @@ namespace ServicioDeDatos.Elemento
 {
     public class GeneradorMd
     {
-        private static string NombreDeTabla(Type t)
+        public static string NombreDeTabla(Type t)
         {
 
             Attribute[] attrs = Attribute.GetCustomAttributes(t);
@@ -28,6 +28,23 @@ namespace ServicioDeDatos.Elemento
             }
 
             throw new Exception($"No se ha definido el nombre de la tabla de la clase {t.Name}");
+        }
+
+        public static string EsquemaDeTabla(Type t)
+        {
+
+            Attribute[] attrs = Attribute.GetCustomAttributes(t);
+
+            foreach (Attribute attr in attrs)
+            {
+                if (attr is TableAttribute)
+                {
+                    var tabla = (TableAttribute)attr;
+                    return tabla.Schema;
+                }
+            }
+
+            throw new Exception($"No se ha definido el esquema de la tabla de la clase {t.Name}");
         }
 
         internal static void DefinirCampoArchivo<TEntity>(ModelBuilder modelBuilder) where TEntity : Registro
@@ -85,6 +102,42 @@ namespace ServicioDeDatos.Elemento
                         .HasDatabaseName($"I_{nombreDeTabla}_IDUSUMODI");
 
         }
+
+        internal static void DefinirCamposDeAuditoriaDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : AuditoriaDtm
+        {
+            var nombreDeTabla = NombreDeTabla(typeof(TEntity));
+
+
+            modelBuilder.Entity<TEntity>().Property(p => p.IdElemento).HasColumnName("ID_ELEMENTO");
+            modelBuilder.Entity<TEntity>().Property(p => p.IdElemento).HasColumnType("INT");
+            modelBuilder.Entity<TEntity>().Property(p => p.IdElemento).IsRequired(true);
+            modelBuilder.Entity<TEntity>().HasIndex(p => p.IdElemento).HasDatabaseName($"I_{nombreDeTabla}_ID_ELEMENTO");
+
+            modelBuilder.Entity<TEntity>().Property(p => p.IdUsuario).HasColumnName("ID_USUARIO");
+            modelBuilder.Entity<TEntity>().Property(p => p.IdUsuario).HasColumnType("INT");
+            modelBuilder.Entity<TEntity>().Property(p => p.IdUsuario).IsRequired(true);
+            modelBuilder.Entity<TEntity>().HasIndex(p => p.IdUsuario).HasDatabaseName($"I_{nombreDeTabla}_ID_USUARIO");
+            modelBuilder.Entity<TEntity>()
+            .HasOne(p => p.Usuario)
+            .WithMany()
+            .HasForeignKey(p => p.IdUsuario)
+            .HasConstraintName($"FK_{nombreDeTabla}_ID_USUARIO")
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TEntity>().Property(p => p.Operacion).HasColumnName("OPERACION");
+            modelBuilder.Entity<TEntity>().Property(p => p.Operacion).HasColumnType("CHAR(1)");
+            modelBuilder.Entity<TEntity>().Property(p => p.Operacion).IsRequired(true);
+
+            modelBuilder.Entity<TEntity>().Property(p => p.registroJson).HasColumnName("REGISTRO");
+            modelBuilder.Entity<TEntity>().Property(p => p.registroJson).HasColumnType("VARCHAR(MAX)");
+            modelBuilder.Entity<TEntity>().Property(p => p.registroJson).IsRequired(true);
+
+            modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).HasColumnName("AUDITADO_EL");
+            modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).HasColumnType("DATETIME");
+            modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).IsRequired(true);
+
+
+        }
     }
 
     public interface INombre
@@ -112,6 +165,11 @@ namespace ServicioDeDatos.Elemento
         [IgnoreDataMember]
         [NotMapped]
         public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
+    }
+
+    public interface IAuditoria
+    {
+
     }
 
 
@@ -167,6 +225,14 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(IElementoDtm));
         }
+        public static bool ImplementaAuditoria(this Type tipoRegistro)
+        {
+            return tipoRegistro.GetInterfaces().Contains(typeof(IAuditoria));
+        }
+        public static bool ImplementaAuditoria(this Registro registro)
+        {
+            return registro.GetType().GetInterfaces().Contains(typeof(IAuditoria));
+        }
     }
 
     public class RegistroConNombre : Registro, INombre
@@ -205,6 +271,23 @@ namespace ServicioDeDatos.Elemento
         [Column("IDUSUMODI", Order = 1, TypeName = "INT")]
         public int? IdUsuaModi { get; set; }
         public virtual UsuarioDtm UsuarioModificador { get; set; }
+    }
+
+    public class AuditoriaDtm : Registro
+    {
+        public int IdElemento { get; set; }
+
+        public Registro Elemento { get; set; }
+
+        public int IdUsuario { get; set; }
+
+        public virtual UsuarioDtm Usuario { get; set; }
+
+        public string Operacion { get; set; }
+
+        public string registroJson { get; set; }
+
+        public DateTime AuditadoEl { get; set; }
     }
 
 }

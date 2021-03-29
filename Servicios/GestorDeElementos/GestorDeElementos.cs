@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
+using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
@@ -39,6 +40,21 @@ namespace GestorDeElementos
             }
 
             throw new Exception($"No se ha definido el tipo de operación {tipo}");
+        }
+        public static string ToBd(this enumTipoOperacion tipo)
+        {
+            switch (tipo)
+            {
+                case enumTipoOperacion.Insertar: return "I";
+                case enumTipoOperacion.Modificar: return "M";
+                case enumTipoOperacion.LeerConBloqueo: return "L";
+                case enumTipoOperacion.LeerSinBloqueo: return "X";
+                case enumTipoOperacion.NoDefinida: return "N";
+                case enumTipoOperacion.Eliminar: return "E";
+                case enumTipoOperacion.Contar: return "C";
+            }
+
+            throw new Exception($"No se ha definidocomo registrar en la BD la operación {tipo}");
         }
     }
 
@@ -310,6 +326,34 @@ namespace GestorDeElementos
             }
 
             ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
+
+            if (typeof(TRegistro).ImplementaAuditoria())
+            {
+                var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? RegistroEnBD : registro;
+                RegistrarAuditoria<TRegistro>(parametros.Operacion, (IElementoDtm)auditar);
+            }
+        }
+
+        private void RegistrarAuditoria<T>(enumTipoOperacion operacion, IElementoDtm auditar) where T : TRegistro
+        {
+            auditar.UsuarioModificador = auditar.UsuarioCreador = null;
+            var json = JsonConvert.SerializeObject(auditar);
+            var valor = json
+                .Replace("{", "")
+                .Replace(",\"", Environment.NewLine)
+                .Replace("\",", Environment.NewLine)
+                .Replace("\"", "")
+                .Replace("null,", Environment.NewLine)
+                .Replace("}", "");
+
+            var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(typeof(T))}.{GeneradorMd.NombreDeTabla(typeof(T))}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
+                               values ({((ElementoDtm)auditar).Id}
+                                      ,{Contexto.DatosDeConexion.IdUsuario}
+                                      ,'{operacion.ToBd()}'
+                                      ,'{valor}'
+                                      ,'{DateTime.Now}')";
+
+            Contexto.Database.ExecuteSqlRaw(sentencia);
         }
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)

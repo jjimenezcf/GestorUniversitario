@@ -16,9 +16,16 @@ namespace ServicioDeDatos.Callejero
         public int IdPais { get; set; }
         public PaisDtm Pais { get; set; }
     }
-    public static class TablaProvincia
+
+    [Table("PROVINCIA_AUDITORIA", Schema = "CALLEJERO")]
+    public class AuditoriaDeUnaProvinciaDtm: AuditoriaDtm
     {
-        public static void Definir(ModelBuilder modelBuilder)
+        public new virtual ProvinciaDtm Elemento { get; set; }
+    }
+
+    public static class ModeloDeProvinvia
+    {
+        public static void Provincia(ModelBuilder modelBuilder)
         {
             GeneradorMd.DefinirCamposDelElementoDtm<ProvinciaDtm>(modelBuilder);
             modelBuilder.Entity<ProvinciaDtm>().Property(v => v.Codigo)
@@ -55,22 +62,19 @@ namespace ServicioDeDatos.Callejero
             .HasConstraintName($"FK_PROVINCIA_ID_PAIS")
             .OnDelete(DeleteBehavior.Restrict);
         }
+
+        public static void Auditoria(ModelBuilder modelBuilder)
+        {
+            GeneradorMd.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnaProvinciaDtm>(modelBuilder);
+
+            modelBuilder.Entity<AuditoriaDeUnaProvinciaDtm>()
+            .HasOne(p => p.Elemento)
+            .WithMany()
+            .HasForeignKey(p => p.IdElemento)
+            .HasConstraintName($"FK_PROVINCIA_AUDITORIA_ID_ELEMENTO")
+            .OnDelete(DeleteBehavior.Restrict);
+        }
     }
+
 }
 
-/*            modelBuilder.Entity<TEntity>()
-            .HasOne(p => p.UsuarioModificador)
-            .WithMany()
-            .HasForeignKey(p => p.IdUsuaModi)
-            .HasConstraintName($"FK_{nombreDeTabla}_IDUSUMODI")
-            .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<TEntity>()
-                        .HasIndex(p => p.IdUsuaCrea)
-                        .HasDatabaseName($"I_{nombreDeTabla}_IDUSUCREA");
-
-            modelBuilder.Entity<TEntity>()
-                        .HasIndex(p => p.IdUsuaModi)
-                        .HasDatabaseName($"I_{nombreDeTabla}_IDUSUMODI");
- * */

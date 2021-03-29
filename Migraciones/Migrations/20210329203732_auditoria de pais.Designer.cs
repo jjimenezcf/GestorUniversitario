@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210329203732_auditoria de pais")]
+    partial class auditoriadepais
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,47 +108,6 @@ namespace Migraciones.Migrations
                         .HasDatabaseName("I_PAIS_AUDITORIA_ID_USUARIO");
 
                     b.ToTable("PAIS_AUDITORIA", "CALLEJERO");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.Callejero.AuditoriaDeUnaProvinciaDtm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("AuditadoEl")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("AUDITADO_EL");
-
-                    b.Property<int>("IdElemento")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_ELEMENTO");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("INT")
-                        .HasColumnName("ID_USUARIO");
-
-                    b.Property<string>("Operacion")
-                        .IsRequired()
-                        .HasColumnType("CHAR(1)")
-                        .HasColumnName("OPERACION");
-
-                    b.Property<string>("registroJson")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("REGISTRO");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdElemento")
-                        .HasDatabaseName("I_PROVINCIA_AUDITORIA_ID_ELEMENTO");
-
-                    b.HasIndex("IdUsuario")
-                        .HasDatabaseName("I_PROVINCIA_AUDITORIA_ID_USUARIO");
-
-                    b.ToTable("PROVINCIA_AUDITORIA", "CALLEJERO");
                 });
 
             modelBuilder.Entity("ServicioDeDatos.Callejero.PaisDtm", b =>
@@ -1184,7 +1145,7 @@ namespace Migraciones.Migrations
 
             modelBuilder.Entity("ServicioDeDatos.Callejero.AuditoriaDeUnPaisDtm", b =>
                 {
-                    b.HasOne("ServicioDeDatos.Callejero.PaisDtm", "Elemento")
+                    b.HasOne("ServicioDeDatos.Callejero.PaisDtm", "Pais")
                         .WithMany()
                         .HasForeignKey("IdElemento")
                         .HasConstraintName("FK_PAIS_AUDITORIA_ID_ELEMENTO")
@@ -1198,28 +1159,7 @@ namespace Migraciones.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Elemento");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("ServicioDeDatos.Callejero.AuditoriaDeUnaProvinciaDtm", b =>
-                {
-                    b.HasOne("ServicioDeDatos.Callejero.ProvinciaDtm", "Elemento")
-                        .WithMany()
-                        .HasForeignKey("IdElemento")
-                        .HasConstraintName("FK_PROVINCIA_AUDITORIA_ID_ELEMENTO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ServicioDeDatos.Entorno.UsuarioDtm", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario")
-                        .HasConstraintName("FK_PROVINCIA_AUDITORIA_ID_USUARIO")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Elemento");
+                    b.Navigation("Pais");
 
                     b.Navigation("Usuario");
                 });

@@ -8,7 +8,7 @@ using ServicioDeDatos.Entorno;
 namespace ServicioDeDatos.Callejero
 {
     [Table("PAIS", Schema = "CALLEJERO")]
-    public class PaisDtm : ElementoDtm
+    public class PaisDtm : ElementoDtm, IAuditoria
     {
         public string NombreIngles { get; set; }
         public string Codigo { get; set; }
@@ -16,9 +16,16 @@ namespace ServicioDeDatos.Callejero
         public string Prefijo {get; set;}
     }
 
-    public static class TablaPais
+    [Table("PAIS_AUDITORIA", Schema = "CALLEJERO")]
+    public class AuditoriaDeUnPaisDtm : AuditoriaDtm
     {
-        public static void Definir(ModelBuilder modelBuilder)
+        public new virtual PaisDtm Elemento { get; set; }
+
+    }
+
+    public static class ModeloDePais
+    {
+        public static void Pais(ModelBuilder modelBuilder)
         {
             GeneradorMd.DefinirCamposDelElementoDtm<PaisDtm>(modelBuilder);
             modelBuilder.Entity<PaisDtm>().Property(v => v.Codigo)
@@ -47,6 +54,18 @@ namespace ServicioDeDatos.Callejero
             modelBuilder.Entity<PaisDtm>().HasAlternateKey(p => p.NombreIngles).HasName("AK_PAIS_NAME");
 
 
+        }
+
+        public static void Auditoria(ModelBuilder modelBuilder)
+        {
+            GeneradorMd.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnPaisDtm>(modelBuilder);
+
+            modelBuilder.Entity<AuditoriaDeUnPaisDtm>()
+            .HasOne(p => p.Elemento)
+            .WithMany()
+            .HasForeignKey(p => p.IdElemento)
+            .HasConstraintName($"FK_PAIS_AUDITORIA_ID_ELEMENTO")
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 

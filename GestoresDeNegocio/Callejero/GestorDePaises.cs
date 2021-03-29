@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
 using System.Linq;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Negocio;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -60,6 +61,12 @@ namespace GestoresDeNegocio.Callejero
             return MapearElementos(registros).ToList();
         }
 
+        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string codigoPais)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), codigoPais, true, true, false, false);
+        }
+
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
         {
             if (parametros.IsNullOrEmpty())
@@ -97,7 +104,6 @@ namespace GestoresDeNegocio.Callejero
                 }
             }
         }
-
 
         private static void ImportarFicheroDePaises(EntornoDeTrabajo entorno, int idArchivo)
         {
@@ -139,12 +145,6 @@ namespace GestoresDeNegocio.Callejero
             }
 
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
-        }
-
-        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string codigoPais)
-        {
-            var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), codigoPais, true,true, false,false);
         }
 
         private static PaisDtm ProcesarPaisLeido(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )
