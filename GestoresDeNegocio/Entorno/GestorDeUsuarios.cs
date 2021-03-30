@@ -135,7 +135,7 @@ namespace GestoresDeNegocio.Entorno
                 registro.password = GestorDePassword.Generar(registro.Login);
 
             if (parametros.Operacion == enumTipoOperacion.Modificar)
-                registro.password = RegistroEnBD.password;
+                registro.password = ((UsuarioDtm)parametros.registroEnBd).password;
 
         }
 

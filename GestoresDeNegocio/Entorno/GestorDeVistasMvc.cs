@@ -170,14 +170,14 @@ namespace GestoresDeNegocio.Entorno
             }
             if (parametros.Operacion == enumTipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
             {
-                registro.IdPermiso = RegistroEnBD.IdPermiso;
+                registro.IdPermiso = ((VistaMvcDtm)parametros.registroEnBd).IdPermiso;
             }
         }
 
         protected override void DespuesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
-
+            var RegistroEnBD = ((VistaMvcDtm)parametros.registroEnBd);
             if (parametros.Operacion == enumTipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.ModificarPermisoFuncional(Contexto, Mapeador, RegistroEnBD.Permiso, registro.Nombre, enumClaseDePermiso.Vista);
 

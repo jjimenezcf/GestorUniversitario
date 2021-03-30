@@ -79,6 +79,7 @@ namespace GestorDeElementos
     {
         public enumTipoOperacion Operacion { get; private set; }
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
+        public Registro registroEnBd = null;
 
         public ParametrosDeNegocio(enumTipoOperacion tipo)
         {
@@ -104,7 +105,7 @@ namespace GestorDeElementos
 
         private static readonly ConcurrentDictionary<string, bool> _CacheDeRecuentos = new ConcurrentDictionary<string, bool>();
 
-        public TRegistro RegistroEnBD { get; private set; }
+        //private TRegistro RegistroEnBD { get; set; }
 
         protected bool InvertirMapeoDeRelacion { get; set; } = false;
         public bool HayFiltroPorId { get; private set; } = false;
@@ -259,38 +260,6 @@ namespace GestorDeElementos
                     filtros.Add(c);
             }
         }
-
-        public TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
-        {
-            var transaccion = Contexto.IniciarTransaccion();
-            try
-            {
-                AntesDePersistir(registro, parametros);
-
-                if (parametros.Operacion == enumTipoOperacion.Insertar)
-                    Contexto.Add(registro);
-                else
-                if (parametros.Operacion == enumTipoOperacion.Modificar)
-                    Contexto.Update(registro);
-                else
-                if (parametros.Operacion == enumTipoOperacion.Eliminar)
-                    Contexto.Remove(registro);
-                else
-                    throw new Exception($"Solo se pueden persistir operaciones del tipo {enumTipoOperacion.Insertar} o  {enumTipoOperacion.Modificar} o {enumTipoOperacion.Eliminar}");
-
-                Contexto.SaveChanges();
-
-                DespuesDePersistir(registro, parametros);
-                Contexto.Commit(transaccion);
-            }
-            catch (Exception)
-            {
-                Contexto.Rollback(transaccion);
-                throw;
-            }
-            return registro;
-        }
-
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
         {
             var transaccion = Contexto.IniciarTransaccion();
@@ -310,6 +279,47 @@ namespace GestorDeElementos
             }
         }
 
+        public TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
+        {
+            if (parametros.Operacion != enumTipoOperacion.Insertar)
+                parametros.registroEnBd = LeerRegistroPorId(registro.Id);
+
+            var transaccion = Contexto.IniciarTransaccion();
+            try
+            {
+                AntesDePersistir(registro, parametros);
+
+                if (parametros.Operacion == enumTipoOperacion.Insertar)
+                    Contexto.Add(registro);
+                else
+                if (parametros.Operacion == enumTipoOperacion.Modificar)
+                    Contexto.Update(registro);
+                else
+                if (parametros.Operacion == enumTipoOperacion.Eliminar)
+                    Contexto.Remove(registro);
+                else
+                    throw new Exception($"Solo se pueden persistir operaciones del tipo {enumTipoOperacion.Insertar} o  {enumTipoOperacion.Modificar} o {enumTipoOperacion.Eliminar}");
+
+                Contexto.SaveChanges();
+
+                if (RegistroExtensiones.ImplementaAuditoria(typeof(TRegistro)))
+                {
+                    var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
+                    RegistrarAuditoria<TRegistro>(parametros.Operacion, (IElementoDtm)auditar);
+                }
+
+                DespuesDePersistir(registro, parametros);
+                Contexto.Commit(transaccion);
+            }
+            catch (Exception)
+            {
+                Contexto.Rollback(transaccion);
+                throw;
+            }
+            return registro;
+        }
+
+
         protected virtual void DespuesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var indice = typeof(TRegistro).FullName;
@@ -326,12 +336,6 @@ namespace GestorDeElementos
             }
 
             ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
-
-            if (RegistroExtensiones.ImplementaAuditoria(typeof(TRegistro)))
-            {
-                var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? RegistroEnBD : registro;
-                RegistrarAuditoria<TRegistro>(parametros.Operacion, (IElementoDtm)auditar);
-            }
         }
 
         private void RegistrarAuditoria<T>(enumTipoOperacion operacion, IElementoDtm auditar) where T : TRegistro
@@ -358,9 +362,6 @@ namespace GestorDeElementos
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            if (parametros.Operacion != enumTipoOperacion.Insertar)
-                RegistroEnBD = LeerRegistroPorId(registro.Id);
-
             AntesDePersistirValidarRegistro(registro, parametros);
 
             if (registro.ImplementaUnElemento())
@@ -374,8 +375,8 @@ namespace GestorDeElementos
                 else
                 if (parametros.Operacion == enumTipoOperacion.Modificar)
                 {
-                    elemento.IdUsuaCrea = ((IElementoDtm)RegistroEnBD).IdUsuaCrea;
-                    elemento.FechaCreacion = ((IElementoDtm)RegistroEnBD).FechaCreacion;
+                    elemento.IdUsuaCrea = ((IElementoDtm)parametros.registroEnBd).IdUsuaCrea;
+                    elemento.FechaCreacion = ((IElementoDtm)parametros.registroEnBd).FechaCreacion;
                     elemento.IdUsuaModi = Contexto.DatosDeConexion.IdUsuario;
                     elemento.FechaModificacion = DateTime.Now;
                 }

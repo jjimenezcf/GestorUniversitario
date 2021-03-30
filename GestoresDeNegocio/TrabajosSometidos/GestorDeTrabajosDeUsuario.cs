@@ -345,6 +345,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         
         private void ValidarAntesDeEliminar(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
+            var RegistroEnBD = ((TrabajoDeUsuarioDtm)parametros.registroEnBd);
             if (RegistroEnBD.Iniciado.HasValue && !RegistroEnBD.Terminado.HasValue)
             {
                 GestorDeErrores.Emitir("Un trabajo en ejecución no se puede eliminar");
@@ -353,6 +354,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         private void ValidarAntesDeModificar(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
+            var RegistroEnBD = ((TrabajoDeUsuarioDtm)parametros.registroEnBd);
             if (RegistroEnBD.IdSometedor != registro.IdSometedor)
                 GestorDeErrores.Emitir("No se puede modificar el sometedor de un trabajo");
 
@@ -401,8 +403,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
             {
-                GestorDeTrazasDeUnTrabajo.EliminarTrazas(Contexto, RegistroEnBD.Id);
-                GestorDeErroresDeUnTrabajo.EliminarErrores(Contexto, RegistroEnBD.Id);
+                GestorDeTrazasDeUnTrabajo.EliminarTrazas(Contexto, ((TrabajoDeUsuarioDtm)parametros.registroEnBd).Id);
+                GestorDeErroresDeUnTrabajo.EliminarErrores(Contexto, ((TrabajoDeUsuarioDtm)parametros.registroEnBd).Id);
             }
         }
     }
