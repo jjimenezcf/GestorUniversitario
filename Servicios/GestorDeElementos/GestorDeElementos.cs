@@ -305,7 +305,7 @@ namespace GestorDeElementos
                 if (RegistroExtensiones.ImplementaAuditoria(typeof(TRegistro)))
                 {
                     var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
-                    RegistrarAuditoria<TRegistro>(parametros.Operacion, (IElementoDtm)auditar);
+                    GestorDeAuditoria<TRegistro>.RegistrarAuditoria(Contexto, parametros.Operacion, (IElementoDtm)auditar);
                 }
 
                 DespuesDePersistir(registro, parametros);
@@ -336,28 +336,6 @@ namespace GestorDeElementos
             }
 
             ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
-        }
-
-        private void RegistrarAuditoria<T>(enumTipoOperacion operacion, IElementoDtm auditar) where T : TRegistro
-        {
-            auditar.UsuarioModificador = auditar.UsuarioCreador = null;
-            var json = JsonConvert.SerializeObject(auditar);
-            var valor = json
-                .Replace("{", "")
-                .Replace(",\"", Environment.NewLine)
-                .Replace("\",", Environment.NewLine)
-                .Replace("\"", "")
-                .Replace("null,", Environment.NewLine)
-                .Replace("}", "");
-
-            var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(typeof(T))}.{GeneradorMd.NombreDeTabla(typeof(T))}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
-                               values ({((ElementoDtm)auditar).Id}
-                                      ,{Contexto.DatosDeConexion.IdUsuario}
-                                      ,'{operacion.ToBd()}'
-                                      ,'{valor}'
-                                      ,'{DateTime.Now}')";
-
-            Contexto.Database.ExecuteSqlRaw(sentencia);
         }
 
         protected virtual void AntesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
