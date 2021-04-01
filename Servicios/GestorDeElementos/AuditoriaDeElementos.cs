@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto.Negocio;
 using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
@@ -8,16 +10,24 @@ using ServicioDeDatos.Negocio;
 
 namespace GestorDeElementos
 {
-    class GestorDeAuditoria<T> where T : Registro
+    public class AuditoriaDeElementos
     {
         private string esquemaDeAuditoria { get; set; }
         private string tablaDeAuditoria { get; set; }
         public ContextoSe Contexto { get; }
-
-        public GestorDeAuditoria(ContextoSe contexto)
+        public class MapearAuditoria : Profile
         {
-            tablaDeAuditoria = GeneradorMd.NombreDeTabla(typeof(T));
-            esquemaDeAuditoria = GeneradorMd.EsquemaDeTabla(typeof(T));
+            public MapearAuditoria()
+            {
+                CreateMap<AuditoriaDtm, AuditoriaDto>();
+                CreateMap<AuditoriaDto, AuditoriaDtm>();
+            }
+        }
+        public AuditoriaDeElementos(ContextoSe contexto, enumNegocio negocio)
+        {
+            Type dtm = negocio.TipoDtm();
+            tablaDeAuditoria = GeneradorMd.NombreDeTabla(dtm);
+            esquemaDeAuditoria = GeneradorMd.EsquemaDeTabla(dtm);
             Contexto = contexto;
         }
 
@@ -30,7 +40,7 @@ namespace GestorDeElementos
             return auditoria;
         }
 
-        public static void RegistrarAuditoria(ContextoSe contexto, enumTipoOperacion operacion, IElementoDtm auditar)
+        public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)
         {
             auditar.UsuarioModificador = auditar.UsuarioCreador = null;
             var json = JsonConvert.SerializeObject(auditar);
@@ -42,7 +52,7 @@ namespace GestorDeElementos
                 .Replace("null,", Environment.NewLine)
                 .Replace("}", "");
 
-            var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(typeof(T))}.{GeneradorMd.NombreDeTabla(typeof(T))}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
+            var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(negocio.TipoDtm())}.{GeneradorMd.NombreDeTabla(negocio.TipoDtm())}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
                                values ({((ElementoDtm)auditar).Id}
                                       ,{contexto.DatosDeConexion.IdUsuario}
                                       ,'{operacion.ToBd()}'

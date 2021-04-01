@@ -79,7 +79,7 @@ namespace GestorDeElementos
     {
         public enumTipoOperacion Operacion { get; private set; }
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
-        public Registro registroEnBd = null;
+        public IRegistro registroEnBd = null;
 
         public ParametrosDeNegocio(enumTipoOperacion tipo)
         {
@@ -218,7 +218,7 @@ namespace GestorDeElementos
 
         public string CrearRelacion(int idElemento1, int idElemento2)
         {
-            var registro = Registro.RegistroVacio<TRegistro>();
+            var registro = ApiDeRegistro.RegistroVacio<TRegistro>();
             if (!registro.ImplementaUnaRelacion())
                 throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
 
@@ -304,8 +304,9 @@ namespace GestorDeElementos
 
                 if (Auditoria.ImplementaAuditoria(typeof(TRegistro)))
                 {
+                    var negocio = NegociosDeSe.ParsearDtm(typeof(TRegistro).Name);
                     var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
-                    GestorDeAuditoria<TRegistro>.RegistrarAuditoria(Contexto, parametros.Operacion, (IElementoDtm)auditar);
+                    AuditoriaDeElementos.RegistrarAuditoria(Contexto,negocio, parametros.Operacion, (IElementoDtm)auditar);
                 }
 
                 DespuesDePersistir(registro, parametros);
@@ -421,9 +422,9 @@ namespace GestorDeElementos
         public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true, bool conBloqueo = false)
         {
             if (!usarLaCache)
-                return LeerRegistro(nameof(Registro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache, conBloqueo);
+                return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache, conBloqueo);
 
-            return LeerRegistroCacheado(nameof(Registro.Id), id.ToString());
+            return LeerRegistroCacheado(nameof(IRegistro.Id), id.ToString());
         }
 
 
@@ -592,10 +593,10 @@ namespace GestorDeElementos
         {
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(Registro.Id).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
+                if (filtro.Clausula.ToLower() == nameof(IRegistro.Id).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
                 {
                     HayFiltroPorId = filtro.Criterio == CriteriosDeFiltrado.igual;
-                    return registros.AplicarFiltroPorIdentificador(filtro, nameof(Registro.Id));
+                    return registros.AplicarFiltroPorIdentificador(filtro, nameof(IRegistro.Id));
                 }
             }
 
@@ -604,7 +605,7 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            if (RegistroExtensiones.ImplementaUnElemento(typeof(TRegistro)))
+            if (ApiDeRegistro.ImplementaUnElemento(typeof(TRegistro)))
             {
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioCreador);
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioModificador);

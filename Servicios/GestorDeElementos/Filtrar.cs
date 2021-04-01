@@ -163,7 +163,7 @@ namespace GestorDeElementos
             return registros;
         }
 
-        public static IQueryable<TRegistro> AplicarFiltroPorPropiedades<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : Registro
+        public static IQueryable<TRegistro> AplicarFiltroPorPropiedades<TRegistro>(this IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros) where TRegistro : IRegistro
         {
             var propiedades = typeof(TRegistro).GetProperties();
 
@@ -175,7 +175,7 @@ namespace GestorDeElementos
                     if (!propiedad.Name.ToLower().Equals(filtro.Clausula.ToLower()))
                         continue;
 
-                    if (propiedad.Name.ToLower().Equals(nameof(Registro.Id).ToLower()) && filtro.Criterio == CriteriosDeFiltrado.igual)
+                    if (propiedad.Name.ToLower().Equals(nameof(IRegistro.Id).ToLower()) && filtro.Criterio == CriteriosDeFiltrado.igual)
                         continue;
 
                     registros = registros.AplicarFiltroPorPropiedad(filtro, propiedad);

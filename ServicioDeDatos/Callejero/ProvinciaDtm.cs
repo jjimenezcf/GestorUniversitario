@@ -21,7 +21,7 @@ namespace ServicioDeDatos.Callejero
     [Table("PROVINCIA_AUDITORIA", Schema = "CALLEJERO")]
     public class AuditoriaDeUnaProvinciaDtm: AuditoriaDtm
     {
-        public new virtual ProvinciaDtm Elemento { get; set; }
+        //public new virtual ProvinciaDtm Elemento { get; set; }
     }
 
     public static class ModeloDeProvinvia
@@ -68,12 +68,12 @@ namespace ServicioDeDatos.Callejero
         {
             Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnaProvinciaDtm>(modelBuilder);
 
-            modelBuilder.Entity<AuditoriaDeUnaProvinciaDtm>()
-            .HasOne(p => p.Elemento)
-            .WithMany()
-            .HasForeignKey(p => p.IdElemento)
-            .HasConstraintName($"FK_PROVINCIA_AUDITORIA_ID_ELEMENTO")
-            .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<AuditoriaDeUnaProvinciaDtm>()
+            //.HasOne(p => p.Elemento)
+            //.WithMany()
+            //.HasForeignKey(p => p.IdElemento)
+            //.HasConstraintName($"FK_PROVINCIA_AUDITORIA_ID_ELEMENTO")
+            //.OnDelete(DeleteBehavior.Restrict);
         }
     }
 

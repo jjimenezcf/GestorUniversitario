@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 }
                 return _negocio;
             }
-            private set { _negocio = value; }
+            set { _negocio = value; }
         }
 
         public string Vista { get; private set; }
@@ -88,7 +88,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
                 var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
-                var mostrarHistorico = new AbrirEnPestana(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", "http://wwww.google.es");
+                var mostrarHistorico = new AbrirEnPestana(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", $"/Auditoria/CrudDeAuditoria/?negocio={Negocio}");
                 creador.Editable = false;
                 modificador.Editable = false;
 

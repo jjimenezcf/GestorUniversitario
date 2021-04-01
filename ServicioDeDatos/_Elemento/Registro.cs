@@ -103,7 +103,6 @@ namespace ServicioDeDatos.Elemento
 
         }
 
-
     }
 
     public interface INombre
@@ -132,15 +131,21 @@ namespace ServicioDeDatos.Elemento
         [NotMapped]
         public string NombreDeLaPropiedadDelIdElemento2 { get; set; }
     }
+    public interface IRegistro
+    {
+        public int Id { get; set; }
+    }
 
-
-    public class Registro
+    public class Registro: IRegistro
     {
         [Key]
         [Column("ID", Order = 1, TypeName = "INT")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+    }
 
+    public static class ApiDeRegistro
+    {
         public static TRegistro RegistroVacio<TRegistro>()
         {
             var className = typeof(TRegistro).FullName;
@@ -153,16 +158,13 @@ namespace ServicioDeDatos.Elemento
             //Creamos el objeto de manera dinámica
             return (TRegistro)constructorSinParametros.Invoke(new object[] { });
         }
-    }
 
-    public static class RegistroExtensiones
-    {
-        public static object ValorPropiedad(this Registro registro, string propiedad)
+        public static object ValorPropiedad(this IRegistro registro, string propiedad)
         {
             return registro.GetType().GetProperty(propiedad).GetValue(registro);
         }
 
-        public static bool ImplementaNombre(this Registro registro)
+        public static bool ImplementaNombre(this IRegistro registro)
         {
             return registro.GetType().GetInterfaces().Contains(typeof(INombre));
         }
@@ -170,7 +172,7 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(INombre));
         }
-        public static bool ImplementaUnaRelacion(this Registro registro)
+        public static bool ImplementaUnaRelacion(this IRegistro registro)
         {
             return registro.GetType().GetInterfaces().Contains(typeof(IRelacion));
         }
@@ -178,7 +180,7 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(IRelacion));
         }
-        public static bool ImplementaUnElemento(this Registro registro)
+        public static bool ImplementaUnElemento(this IRegistro registro)
         {
             return registro.GetType().GetInterfaces().Contains(typeof(IElementoDtm));
         }

@@ -20,8 +20,6 @@ namespace ServicioDeDatos.Callejero
     [Table("PAIS_AUDITORIA", Schema = "CALLEJERO")]
     public class AuditoriaDeUnPaisDtm : AuditoriaDtm
     {
-        public new virtual PaisDtm Elemento { get; set; }
-
     }
 
     public static class ModeloDePais
@@ -61,12 +59,12 @@ namespace ServicioDeDatos.Callejero
         {
             Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnPaisDtm>(modelBuilder);
 
-            modelBuilder.Entity<AuditoriaDeUnPaisDtm>()
-            .HasOne(p => p.Elemento)
-            .WithMany()
-            .HasForeignKey(p => p.IdElemento)
-            .HasConstraintName($"FK_PAIS_AUDITORIA_ID_ELEMENTO")
-            .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<AuditoriaDeUnPaisDtm>()
+            //.HasOne(p => p.Elemento)
+            //.WithMany()
+            //.HasForeignKey(p => p.IdElemento)
+            //.HasConstraintName($"FK_PAIS_AUDITORIA_ID_ELEMENTO")
+            //.OnDelete(DeleteBehavior.Restrict);
         }
     }
 

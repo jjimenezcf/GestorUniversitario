@@ -15,7 +15,7 @@ namespace ServicioDeDatos.Elemento
         public int cantidad { get; set; }
     }
 
-    public class ConsultaSql<T> where T : Registro
+    public class ConsultaSql<T> where T : IRegistro
     {
         public string Conexion;
 

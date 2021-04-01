@@ -36,17 +36,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
+            if (!Crud.NegocioActivo || !(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.RenderCreacion)))
+            {
+                MenuCreacion.QuitarOpcionDeMenu(TipoDeAccionDeCreacion.NuevoElemento);
+            }
+
             string htmContenedorCreacion;
             if ( AbrirEnModal)
             {
-                htmContenedorCreacion = RendelModal();
+                htmContenedorCreacion = RendelModalDeCreacion();
             }
             else
             {
-                if (!Crud.NegocioActivo)
-                    MenuCreacion.QuitarOpcionDeMenu(TipoDeAccionDeCreacion.NuevoElemento);
-
-                htmContenedorCreacion = 
+               htmContenedorCreacion = 
                 $@"
                    <div id=¨{IdHtml}¨ 
                          class=¨{Css.Render(enumCssDiv.DivOculto)} {Css.Render(enumCssCreacion.CuerpoDeCrearcion)}¨
@@ -62,7 +64,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        private string RendelModal()
+        private string RendelModalDeCreacion()
         {
             var htmlModal = RenderizarModal(
                 idHtml: IdHtml

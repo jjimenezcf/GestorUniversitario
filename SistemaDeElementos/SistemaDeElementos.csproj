@@ -142,6 +142,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Entorno\Variables.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Negocio\Auditoria.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Negocio\Negocio.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -199,7 +202,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\Users\jjimenezc\desarrollo\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\Users\jjime\Documents\Programas\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>

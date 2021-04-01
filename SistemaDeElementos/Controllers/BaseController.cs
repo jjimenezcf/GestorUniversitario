@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using AutoMapper;
 using Gestor.Errores;
@@ -31,6 +32,15 @@ namespace MVCSistemaDeElementos.Controllers
     {
         public string Html { get; set; }
     }
+
+    public class ResultadoDeLectura
+    {
+        public List<Dictionary<string, object>> registros { get; set; }
+        public int posicion;
+        public int cantidad;
+        public int total { get; set; }
+    }
+
 
     public class BaseController : Controller
     {

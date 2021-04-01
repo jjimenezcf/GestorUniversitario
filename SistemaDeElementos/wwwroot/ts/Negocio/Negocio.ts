@@ -19,15 +19,12 @@
     }
 
     export class CrudCreacionNegocio extends Crud.CrudCreacion {
-
         constructor(crud: Crud.CrudMnt, idPanelCreacion: string) {
             super(crud, idPanelCreacion);
         }
-
     }
 
     export class CrudEdicionNegocio extends Crud.CrudEdicion {
-
         constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
             super(crud, idPanelEdicion);
         }

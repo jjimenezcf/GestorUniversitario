@@ -202,22 +202,3 @@ namespace GestoresDeNegocio.Negocio
         }
     }
 }
-
-/*  Recorrer todos los assembly del dominio de la aplicación por reflexión y ver si hay una clase
- *
-            //AppDomain currentDomain = AppDomain.CurrentDomain;
-            //var a = currentDomain.GetAssemblies();
-            //foreach (var ensamblado in a)
-            //{
-            //    foreach (var t in ensamblado.GetTypes())
-            //    {
-            //        if (t.Name == registro.Elemento)
-            //        {
-            //            encontrado = true;
-            //            break;
-            //        }
-            //    }
-            //    if (encontrado)
-            //        break;
-            //}
- * */

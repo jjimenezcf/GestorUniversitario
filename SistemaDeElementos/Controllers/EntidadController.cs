@@ -217,14 +217,6 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        public class ResultadoDeLectura
-        {
-            public List<Dictionary<string, object>> registros { get; set; }
-            public int posicion;
-            public int cantidad;
-            public int total { get; set; }
-        }
-
         //END-POINT: Desde GridDeDatos.ts
         public JsonResult epLeerDatosParaElGrid(string modo, string accion, string posicion, string cantidad, string filtro, string orden)
         {
@@ -589,94 +581,6 @@ namespace MVCSistemaDeElementos.Controllers
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
         }
-
-
-
-        //END-POINT: Desde ModalSeleccion.ts
-        //public JsonResult epRecargarModalEnHtml(string idModal, string posicion, string cantidad, string filtro, string orden)
-        //{
-        //    var r = new ResultadoHtml();
-        //    int pos = posicion.Entero();
-        //    int can = cantidad.Entero();
-        //    try
-        //    {
-        //        //si me pide leer los últimos registros
-        //        if (pos == -1)
-        //        {
-        //            var total = Contar();
-        //            pos = total - can;
-        //            if (pos < 0) pos = 0;
-        //            posicion = pos.ToString();
-        //        }
-
-        //        var elementos = Leer(pos, can, filtro, orden);
-        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
-        //        if (pos > 0 && elementos.ToList().Count() == 0)
-        //        {
-        //            pos = pos - can;
-        //            if (pos < 0) pos = 0;
-        //            elementos = Leer(pos, can, filtro, orden);
-        //            r.Mensaje = "No hay más elementos";
-        //        }
-
-        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
-        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGridModal(idModal);
-        //        r.Datos = elementos.Count();
-        //        r.Estado = EstadoPeticion.Ok;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        r.Estado = EstadoPeticion.Error;
-        //        r.consola = GestorDeErrores.Concatenar(e);
-        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
-        //    }
-
-        //    return new JsonResult(r);
-        //}
-
-
-        //END-POINT: Desde CrudMantenimiento.ts (Obsoleto)
-        //public JsonResult epLeerGridHtml(string modo, string posicion, string cantidad, string filtro, string orden)
-        //{
-        //    var r = new ResultadoHtml();
-        //    int pos = posicion.Entero();
-        //    int can = cantidad.Entero();
-        //    try
-        //    {
-        //        //si me pide leer los últimos registros
-        //        if (pos == -1)
-        //        {
-        //            var total = Contar();
-        //            pos = total - can;
-        //            if (pos < 0) pos = 0;
-        //            posicion = pos.ToString();
-        //        }
-
-        //        var elementos = Leer(pos, can, filtro, orden);
-        //        //si no he leido nada por estar al final, vuelvo a leer los últimos
-        //        if (pos > 0 && elementos.ToList().Count() == 0)
-        //        {
-        //            pos -= can;
-        //            if (pos < 0) pos = 0;
-        //            elementos = Leer(pos, can, filtro, orden);
-        //            r.Mensaje = "No hay más elementos";
-        //        }
-
-        //        GestorDelCrud.Descriptor.MapearElementosAlGrid(elementos, can, pos);
-        //        r.Html = GestorDelCrud.Descriptor.Mnt.Datos.RenderDelGrid(DescriptorDeCrud<TElemento>.ParsearModo(modo));
-        //        r.Datos = elementos.Count();
-        //        r.Estado = EstadoPeticion.Ok;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        r.Estado = EstadoPeticion.Error;
-        //        r.consola = GestorDeErrores.Concatenar(e);
-        //        r.Mensaje = "No se ha podido recuperar datos para el grid";
-        //    }
-
-        //    return new JsonResult(r);
-        //}
-
 
     }
 
