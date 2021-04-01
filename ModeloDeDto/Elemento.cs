@@ -44,7 +44,7 @@ namespace ModeloDeDto
 
         public string Etiqueta { get; set; } = "";
         public string Ayuda { get { return _ayuda.IsNullOrEmpty() ? Etiqueta : _ayuda; } set { _ayuda = value; } }
-        public bool SiempreVisible { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar && _visibleEnGrid; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = _visibleEnGrid = value; } }
+        public bool Visible { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar && _visibleEnGrid; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = _visibleEnGrid = value; } }
         public bool VisibleEnGrid { get { return _visibleEnGrid && TipoDeControl != enumTipoControl.UrlDeArchivo; } set { _visibleEnGrid = value; } }
         public bool VisibleEnEdicion { get { return VisibleAlCrear && VisibleAlEditar && VisibleAlConsultar; } set { VisibleAlCrear = VisibleAlEditar = VisibleAlConsultar = value; } }
         public bool VisibleAlCrear { get; set; } = true;
@@ -103,7 +103,7 @@ namespace ModeloDeDto
             if (enumTipoControl.ImagenDelCanvas == TipoDeControl)
                 return false;
 
-            if (SiempreVisible)
+            if (Visible)
                 return true;
 
             if (modo == ModoDeTrabajo.Edicion)
@@ -158,22 +158,22 @@ namespace ModeloDeDto
     public interface IAuditadoDto
     {
         [IUPropiedad(
-            SiempreVisible = false
+            Visible = false
           )
         ]
         public DateTime CreadoEl { get; set; }
         [IUPropiedad(
-            SiempreVisible = false
+            Visible = false
           )
         ]
         public DateTime? ModificadoEl { get; set; }
         [IUPropiedad(
-            SiempreVisible = false
+            Visible = false
           )
         ]
         public string Creador { get; set; }
         [IUPropiedad(
-            SiempreVisible = false
+            Visible = false
           )
         ]
         public string Modificador { get; set; }
@@ -187,7 +187,7 @@ namespace ModeloDeDto
             Etiqueta = "Id",
             Ayuda = "id del elemento",
             Tipo = typeof(int),
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public int Id { get; set; }

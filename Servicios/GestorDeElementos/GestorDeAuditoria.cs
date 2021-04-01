@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Negocio;
 
 namespace GestorDeElementos
 {
@@ -23,9 +24,8 @@ namespace GestorDeElementos
         public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento)
         {
             var auditoria = Contexto.Auditoria
-                .FromSqlInterpolated($@"select T1.ID, T1.ID_ELEMENTO, T1.ID_USUARIO, T2.LOGIN AS USUARIO, T1.OPERACION, T1.REGISTRO, T1.AUDITADO_EL
+                .FromSqlInterpolated($@"select ID, ID_ELEMENTO, ID_USUARIO, OPERACION, REGISTRO, AUDITADO_EL
                  from {esquemaDeAuditoria}.{tablaDeAuditoria} T1 WITH(NOLOCK)
-                 inner join entorno.usuario t2 on t2.id = t1.ID_USUARIO WITH(NOLOCK)
                  where ID_ELEMENTO = {idElemento}");
             return auditoria;
         }

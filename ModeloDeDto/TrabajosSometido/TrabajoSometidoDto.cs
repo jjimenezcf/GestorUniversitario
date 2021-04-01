@@ -138,7 +138,7 @@ namespace ModeloDeDto.TrabajosSometidos
 
         [IUPropiedad(
           Etiqueta = "Id del usuario ejecutor",
-          SiempreVisible = false
+          Visible = false
           )
         ]
         public int? idEjecutor { get; set; }
@@ -161,7 +161,7 @@ namespace ModeloDeDto.TrabajosSometidos
 
         [IUPropiedad(
           Etiqueta = "Id del puesto de trabajo a informar",
-          SiempreVisible = false
+          Visible = false
           )
         ]
         public int? idInformarA { get; set; }

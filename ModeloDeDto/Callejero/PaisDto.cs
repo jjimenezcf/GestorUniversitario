@@ -76,19 +76,19 @@ namespace ModeloDeDto.Callejero
         public string NombreIngles { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public DateTime CreadoEl { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public DateTime? ModificadoEl { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public string Creador { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public string Modificador { get; set; }
 
         //----------------------------------------------

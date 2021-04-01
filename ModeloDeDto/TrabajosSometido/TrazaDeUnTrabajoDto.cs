@@ -27,7 +27,7 @@ namespace ModeloDeDto.TrabajosSometidos
         //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "trabajo de usuario",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public string TrabajoDeUsuario { get; set; }

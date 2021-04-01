@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
+using ServicioDeDatos.Negocio;
 
 namespace ServicioDeDatos.Callejero
 {
@@ -58,7 +59,7 @@ namespace ServicioDeDatos.Callejero
 
         public static void Auditoria(ModelBuilder modelBuilder)
         {
-            GeneradorMd.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnPaisDtm>(modelBuilder);
+            Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnPaisDtm>(modelBuilder);
 
             modelBuilder.Entity<AuditoriaDeUnPaisDtm>()
             .HasOne(p => p.Elemento)

@@ -27,7 +27,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Id de la clase de permiso",
-            SiempreVisible = false
+            Visible = false
             )
         ]
 
@@ -52,7 +52,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Id del tipo de permiso",
-            SiempreVisible = false
+            Visible = false
             )
         ]
 

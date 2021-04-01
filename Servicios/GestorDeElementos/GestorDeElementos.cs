@@ -302,7 +302,7 @@ namespace GestorDeElementos
 
                 Contexto.SaveChanges();
 
-                if (RegistroExtensiones.ImplementaAuditoria(typeof(TRegistro)))
+                if (Auditoria.ImplementaAuditoria(typeof(TRegistro)))
                 {
                     var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
                     GestorDeAuditoria<TRegistro>.RegistrarAuditoria(Contexto, parametros.Operacion, (IElementoDtm)auditar);

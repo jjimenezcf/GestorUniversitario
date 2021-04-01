@@ -90,7 +90,7 @@ namespace ModeloDeDto.Entorno
         ]
         public string Permiso { get; set; }
 
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public List<MenuDto> Menus { get; set; }
     }
 }

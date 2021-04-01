@@ -23,7 +23,7 @@ namespace ModeloDeDto.Entorno
 
         [IUPropiedad(
             Etiqueta = "Usuario",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public string Usuario { get; set; }
@@ -31,7 +31,7 @@ namespace ModeloDeDto.Entorno
 
         [IUPropiedad(
             Etiqueta = "Id del permiso",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public int IdPermiso { get; set; }

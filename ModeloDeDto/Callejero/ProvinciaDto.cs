@@ -22,7 +22,7 @@ namespace ModeloDeDto.Callejero
         public string Pais { get; set; }
 
         [IUPropiedad(Etiqueta = "Id del pais",
-            SiempreVisible = false)]
+            Visible = false)]
         public int IdPais { get; set; }
 
         //----------------------------------------------
@@ -85,19 +85,19 @@ namespace ModeloDeDto.Callejero
 
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public DateTime CreadoEl { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public DateTime? ModificadoEl { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public string Creador { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(SiempreVisible = false)]
+        [IUPropiedad(Visible = false)]
         public string Modificador { get; set; }
 
         //----------------------------------------------

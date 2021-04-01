@@ -7,7 +7,6 @@ namespace ModeloDeDto.TrabajosSometidos
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class ErrorDeUnTrabajoDto : ElementoDto
     {
-        public static string ExpresionElemento = nameof(TrabajoDeUsuario);
 
         //--------------------------------------------
         [IUPropiedad(
@@ -27,7 +26,7 @@ namespace ModeloDeDto.TrabajosSometidos
         //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "trabajo de usuario",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public string TrabajoDeUsuario { get; set; }

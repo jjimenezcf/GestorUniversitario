@@ -22,7 +22,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Puesto",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public string Puesto { get; set; }
@@ -30,7 +30,7 @@ namespace ModeloDeDto.Seguridad
 
         [IUPropiedad(
             Etiqueta = "Id del permiso",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public int IdPermiso { get; set; }

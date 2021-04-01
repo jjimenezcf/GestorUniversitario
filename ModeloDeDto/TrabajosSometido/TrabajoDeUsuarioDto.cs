@@ -27,7 +27,7 @@ namespace ModeloDeDto.TrabajosSometidos
         //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "sometedor",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public string Sometedor { get; set; }
@@ -35,7 +35,7 @@ namespace ModeloDeDto.TrabajosSometidos
         //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Id del usuario ejecutor",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public int? IdEjecutor { get; set; }
@@ -59,7 +59,7 @@ namespace ModeloDeDto.TrabajosSometidos
         //--------------------------------------------
         [IUPropiedad(
             Etiqueta = "Id del trabajo",
-            SiempreVisible = false
+            Visible = false
             )
         ]
         public int IdTrabajo { get; set; }
