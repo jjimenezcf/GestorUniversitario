@@ -48,6 +48,17 @@ namespace GestoresDeNegocio.Negocio
             return new GestorDeNegocios(contexto, mapeador);
         }
 
+        public static NegocioDtm LeerNegocio(ContextoSe contexto, enumNegocio negocio)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerRegistro(nameof(NegocioDtm.Nombre),NegociosDeSe.ToString(negocio),true,true,false,false);
+        }
+
+        public static NegocioDtm LeerNegocio(ContextoSe contexto, int idNegocio)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerRegistroPorId(idNegocio);
+        }
 
         protected override IQueryable<NegocioDtm> AplicarFiltros(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
         {

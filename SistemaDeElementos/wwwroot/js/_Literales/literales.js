@@ -2,6 +2,7 @@ const newLine = "\n";
 const TipoMensaje = { Info: "informativo", Error: "Error", Warning: "Revision" };
 const literal = {
     controlador: "controlador",
+    idNegocio: "id-negocio",
     negocio: "negocio",
     id: "id",
     true: "true",
@@ -51,6 +52,7 @@ const atMantenimniento = {
     zonaDeFiltro: "zona-de-filtro",
     controlador: literal.controlador,
     negocio: literal.negocio,
+    idNegocio: literal.idNegocio,
     zonaMenu: "zona-de-menu",
     gridDelMnt: "grid-del-mnt"
 };

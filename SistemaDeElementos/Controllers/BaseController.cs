@@ -8,7 +8,9 @@ using GestoresDeNegocio.Entorno;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModeloDeDto;
 using ModeloDeDto.Entorno;
+using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
@@ -42,11 +44,13 @@ namespace MVCSistemaDeElementos.Controllers
     }
 
 
-    public class BaseController : Controller
+    public class BaseController<TElemento> : Controller
+        where TElemento : ElementoDto
     {
         protected GestorDeErrores GestorDeErrores { get; }
         public ILogger Logger { get; set; }
         protected DatosDeConexion DatosDeConexion { get; private set; }
+        protected DescriptorDeCrud<TElemento> Descriptor { get; set; }
 
         public BaseController(GestorDeErrores gestorDeErrores, DatosDeConexion datosDeConexion)
         {

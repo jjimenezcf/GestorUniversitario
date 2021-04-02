@@ -7,6 +7,11 @@ using Enumerados;
 
 namespace ModeloDeDto.Negocio
 {
+    public static class NegocioPor
+    {
+        public static string idNegocio = nameof(idNegocio).ToLower();
+    }
+
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, RenderCreacion = false)]
     public class AuditoriaDto : ElementoDto
     {

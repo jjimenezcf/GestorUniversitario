@@ -21,11 +21,10 @@ using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class AuditoriaController : BaseController
+    public class AuditoriaController : BaseController<AuditoriaDto>
     {
         private ContextoSe Contexto { get; }
         private IMapper Mapeador { get; }
-        private DescriptorDeAuditoria Descriptor {get;}
 
         public AuditoriaController(ContextoSe contexto, IMapper mapeador, GestorDeErrores gestorDeErrores)
         : base(gestorDeErrores, contexto.DatosDeConexion)
@@ -59,12 +58,13 @@ namespace MVCSistemaDeElementos.Controllers
 
                 hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {Descriptor.Negocio}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(Descriptor.Negocio)}");
             }
 
 
             Descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(Contexto, Mapeador);
-            Descriptor.Negocio = NegociosDeSe.ParsearNegocio(negocio);
+            Descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, NegociosDeSe.Negocio(negocio));
+
             ViewBag.DatosDeConexion = DatosDeConexion;
 
             return base.View(destino, Descriptor);
@@ -94,7 +94,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var infoObtenida = new ResultadoDeLectura();
 
                 infoObtenida.registros = ElementosLeidos(elementos.ToList());
-                infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
+                infoObtenida.total = infoObtenida.registros.Count; //accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
                 infoObtenida.posicion = pos;
                 infoObtenida.cantidad = can;
 
@@ -115,27 +115,28 @@ namespace MVCSistemaDeElementos.Controllers
             return a;
         }
 
-        private IEnumerable<AuditoriaDtm> LeerAuditoria(int pos, int can, string filtro, string orden, Dictionary<string, object> opcionesDeMapeo)
+        private IEnumerable<AuditoriaDto> LeerAuditoria(int pos, int can, string filtro, string orden, Dictionary<string, object> opcionesDeMapeo)
         {
             List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
-            enumNegocio negocio = enumNegocio.No_Definido;
+            var idNegocio = 0;
             var idElemento  = 0;
 
             foreach (var f in filtros)
             {
-                if (f.Clausula == "negocio")
-                    negocio = NegociosDeSe.ParsearNegocio(f.Valor);
-                if (f.Clausula == "idElemento")
+                if (f.Clausula == NegocioPor.idNegocio)
+                    idNegocio = f.Valor.Entero();
+                if (f.Clausula == nameof(AuditoriaDto.IdElemento).ToLower())
                     idElemento = f.Valor.Entero();
             }
 
-            if (negocio == enumNegocio.No_Definido)
+            if (idNegocio == 0)
                GestorDeErrores.Emitir("Debe indicar el negocio del que se quiere obtener la auditoria");
             if (idElemento == 0)
                 GestorDeErrores.Emitir("Debe indicar el elemento del que se quiere obtener la auditoria");
 
-            var a = new AuditoriaDeElementos(Contexto, negocio);
-            return a.LeerRegistros(idElemento);
+            var negocioDtm =  GestorDeNegocios.LeerNegocio(Contexto, idNegocio);
+
+            return AuditoriaDeNegocio.LeerElementos( Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre),  idElemento);
         }
 
         private int Recontar(string filtro)
@@ -148,14 +149,14 @@ namespace MVCSistemaDeElementos.Controllers
             throw new NotImplementedException();
         }
 
-        private List<Dictionary<string, object>> ElementosLeidos(List<AuditoriaDtm> auditorias)
+        private List<Dictionary<string, object>> ElementosLeidos(List<AuditoriaDto> auditorias)
         {
             var listaDeElementos = new List<Dictionary<string, object>>();
             if (auditorias.Count > 0)
             {
                 PropertyInfo[] propiedades = auditorias[0].GetType().GetProperties();
 
-                foreach (AuditoriaDtm elemento in auditorias)
+                foreach (AuditoriaDto elemento in auditorias)
                 {
                     var registro = new Dictionary<string, object>();
                     foreach (PropertyInfo propiedad in propiedades)
@@ -171,6 +172,11 @@ namespace MVCSistemaDeElementos.Controllers
             return listaDeElementos;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Contexto.CerrarTraza();
+            base.Dispose(disposing);
+        }
 
     }
 

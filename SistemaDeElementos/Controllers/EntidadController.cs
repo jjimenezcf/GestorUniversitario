@@ -27,7 +27,7 @@ namespace MVCSistemaDeElementos.Controllers
     enum epAcciones { buscar, siguiente, anterior, ultima, ordenar }
 
     [Authorize]
-    public class EntidadController<TContexto, TRegistro, TElemento> : BaseController
+    public class EntidadController<TContexto, TRegistro, TElemento> : BaseController<TElemento>
         where TContexto : ContextoSe
         where TRegistro : Registro
         where TElemento : ElementoDto
@@ -35,13 +35,13 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
 
-        private DescriptorDeCrud<TElemento> Descriptor { get; set; }
-
 
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
         : this(gestorDeElementos, gestorErrores)
         {
             Descriptor = descriptor;
+            if (NegociosDeSe.ParsearDto(typeof(TElemento).Name) != enumNegocio.No_Definido)
+                Descriptor.negocioDtm =  GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.ParsearDto(typeof(TElemento).Name));
 
             var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             var vista = gestorDeVista.LeerVistaMvc($"{Descriptor.Controlador}.{Descriptor.Vista}");
@@ -428,7 +428,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio));
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio));
                 r.ModoDeAcceso = modoDeAcceso.Render();
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
                 r.Estado = enumEstadoPeticion.Ok;
@@ -457,7 +457,7 @@ namespace MVCSistemaDeElementos.Controllers
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
                 var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
-                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearNegocio(negocio), id);
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio), id);
                 if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
@@ -510,7 +510,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {Descriptor.Negocio}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(Descriptor.Negocio)}");
             }
 
 

@@ -217,7 +217,7 @@ var Crud;
             this.CrudDeMnt.Estado.Agregar("elementos_seleccionados", this.CrudDeMnt.InfoSelector.Seleccionados);
             EntornoSe.Historial.GuardarEstadoDePagina(this.CrudDeMnt.Estado);
             let datos = [];
-            let negocio = new Tipos.DatosRestrictor('negocio', 0, this.CrudDeMnt.Negocio);
+            let negocio = new Tipos.DatosRestrictor('idnegocio', Numero(this.CrudDeMnt.IdNegocio), this.CrudDeMnt.Negocio);
             let elemento = new Tipos.DatosRestrictor('idelemento', this.Elemento.Id, this.Elemento.Texto);
             datos.push(negocio);
             datos.push(elemento);

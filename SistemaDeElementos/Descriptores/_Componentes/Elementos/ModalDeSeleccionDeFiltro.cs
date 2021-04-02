@@ -1,4 +1,5 @@
 ﻿using Enumerados;
+using GestorDeElementos;
 using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -30,7 +31,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderModalDeSeleccionDeFiltro()
         {
             string _htmlMiModal = $@"
-                                    <!--  ******************  Modal de selección de filtro para {CrudModal.Negocio} ********************************* -->
+                                    <!--  ******************  Modal de selección de filtro para {CrudModal.RenderNegocio} ********************************* -->
                                     <div id=¨{IdHtml}¨ class=¨contenedor-modal¨ selector=¨idSelector¨ crud-modal=¨{CrudModal.Mnt.IdHtml}¨>
                               		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal¨ >
                               		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>

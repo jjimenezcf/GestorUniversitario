@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : BaseController<UsuarioDto>
     {
 
         public HomeController(ContextoSe contexto, GestorDeErrores gestorDeErrores):

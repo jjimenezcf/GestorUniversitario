@@ -10,16 +10,17 @@ using ServicioDeDatos.Entorno;
 using AutoMapper;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
     [Authorize]
-    public class FormularioController<TContexto>: BaseController
+    public class FormularioController<TContexto>: BaseController<UsuarioDto>
         where TContexto : ContextoSe
     {
         public TContexto Contexto { get; }
         public IMapper Mapeador => Contexto.Mapeador;
-        public DescriptorDeFormulario Descriptor { get; }
+        public DescriptorDeFormulario Formulario { get; }
 
         public FormularioController(TContexto contexto, IMapper mapeador, DescriptorDeFormulario descriptor, GestorDeErrores gestorErrores)
         : base(gestorErrores, contexto.DatosDeConexion)
@@ -27,7 +28,7 @@ namespace MVCSistemaDeElementos.Controllers
             Contexto = contexto;
             Contexto.Mapeador = mapeador;
             Contexto.IniciarTraza();
-            Descriptor = descriptor;
+            Formulario = descriptor;
         }
 
         protected override void Dispose(bool disposing)
@@ -45,24 +46,24 @@ namespace MVCSistemaDeElementos.Controllers
         public ViewResult ViewFormulario()
         {
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-            Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            Formulario.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
+            Formulario.UsuarioConectado = Formulario.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            var destino = $"{(Descriptor.RutaVista.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaVista}/")}{Descriptor.Vista}";
+            var destino = $"{(Formulario.RutaVista.IsNullOrEmpty() ? "" : $"../{Formulario.RutaVista}/")}{Formulario.Vista}";
             if (!this.ExisteLaVista(destino))
                 return RenderMensaje($"La vista {destino} no está definida");
 
-            if (!Descriptor.UsuarioConectado.EsAdministrador)
+            if (!Formulario.UsuarioConectado.EsAdministrador)
             {
                 string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
                 string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
-                var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
+                var hayPermisos = Formulario.GestorDeUsuario.TienePermisoFuncional(Formulario.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
                     return RenderMensaje($"Solicite permisos de acceso a {destino}");
             }
 
-            return base.View(destino, Descriptor);
+            return base.View(destino, Formulario);
         }
 
         /// <summary>

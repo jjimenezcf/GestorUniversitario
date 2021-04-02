@@ -63,7 +63,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               id=¨{idBtnSelectorHtml}¨ 
                               class=¨boton-de-seleccion¨ 
                               value=¨...¨ 
-                              onclick=¨Crud.EventosModalDeSeleccion('abrir-modal-seleccion', '{Modal.IdHtml}')¨       />
+                              onclick=¨Crud.EventosModalDeSeleccion('abrir-modal-seleccion', '{Modal.IdHtml}')¨  
+                              readonly />
                     </div>
                   ";
         }

@@ -38,22 +38,18 @@ namespace ServicioDeDatos
 
         #endregion
 
-
         #region dbSets del esquema de SISDOC
 
         public DbSet<ArchivoDtm> Archivos { get; set; }
 
         #endregion
 
-
         #region dbSets del esquema de NEGOCIO
 
         public DbSet<NegocioDtm> Negocio { get; set; }
         public DbSet<ModoDeAccesoAlNegocioDtm> ModoAccesoAlNegocio { get; set; }
 
-        public DbSet<AuditoriaDtm> Auditoria { get; set; }
-
-        #endregion
+        #endregion        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

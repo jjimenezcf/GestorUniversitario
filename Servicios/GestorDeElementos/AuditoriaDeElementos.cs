@@ -23,21 +23,32 @@ namespace GestorDeElementos
                 CreateMap<AuditoriaDto, AuditoriaDtm>();
             }
         }
+        Type Dtm;
+        Type Dto;
         public AuditoriaDeElementos(ContextoSe contexto, enumNegocio negocio)
         {
-            Type dtm = negocio.TipoDtm();
-            tablaDeAuditoria = GeneradorMd.NombreDeTabla(dtm);
-            esquemaDeAuditoria = GeneradorMd.EsquemaDeTabla(dtm);
+            Dtm = negocio.TipoDtm();
+            Dto = negocio.TipoDto();
+            tablaDeAuditoria = $"{GeneradorMd.NombreDeTabla(Dtm)}_AUDITORIA";
+            esquemaDeAuditoria = GeneradorMd.EsquemaDeTabla(Dtm);
             Contexto = contexto;
         }
 
+
         public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento)
         {
-            var auditoria = Contexto.Auditoria
-                .FromSqlInterpolated($@"select ID, ID_ELEMENTO, ID_USUARIO, OPERACION, REGISTRO, AUDITADO_EL
-                 from {esquemaDeAuditoria}.{tablaDeAuditoria} T1 WITH(NOLOCK)
-                 where ID_ELEMENTO = {idElemento}");
-            return auditoria;
+            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza,  
+                 $@"
+select ID as Id
+     , ID_ELEMENTO as IdElemento
+     , ID_USUARIO as IdUsuario
+     , OPERACION as Operacion
+     , REGISTRO as registroJson
+     , AUDITADO_EL as AuditadoEl
+from {esquemaDeAuditoria}.{tablaDeAuditoria} T1 WITH(NOLOCK)
+where ID_ELEMENTO = {idElemento}");
+            var registros = consulta.LanzarConsulta();
+            return registros;
         }
 
         public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)

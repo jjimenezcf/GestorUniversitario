@@ -6,6 +6,7 @@ using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
 using ServicioDeDatos.Entorno;
+using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -16,20 +17,6 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
         internal static string NombreCrud = $"Crud_{typeof(TElemento).Name}".ToLower();
-
-        private enumNegocio _negocio = enumNegocio.No_Definido;
-        public enumNegocio Negocio
-        {
-            get
-            {
-                if (_negocio == enumNegocio.No_Definido)
-                {
-                    _negocio = NegociosDeSe.ParsearDto(typeof(TElemento).Name);
-                }
-                return _negocio;
-            }
-            set { _negocio = value; }
-        }
 
         public string Vista { get; private set; }
 
@@ -48,7 +35,27 @@ namespace MVCSistemaDeElementos.Descriptores
         public UsuarioDtm UsuarioConectado { get; internal set; }
         public GestorDeUsuarios GestorDeUsuario { get; internal set; }
         public GestorDeNegocios GestorDeNegocio { get; internal set; }
-        public bool NegocioActivo => GestorDeNegocio.NegocioActivo(Negocio);
+        public bool NegocioActivo => GestorDeNegocio.NegocioActivo(_negocio);
+
+        private enumNegocio _negocio = enumNegocio.No_Definido;
+        public enumNegocio Negocio
+        {
+            get
+            {
+                if (_negocio == enumNegocio.No_Definido)
+                {
+                    _negocio = NegociosDeSe.ParsearDto(typeof(TElemento).Name);
+                }
+                return _negocio;
+
+            }
+            set { _negocio = value; }
+        }
+
+        public string RenderNegocio => negocioDtm == null ? NegociosDeSe.ToString(Negocio): negocioDtm.Nombre;
+        public int RenderIdDeNegocio => negocioDtm == null ? 0 :negocioDtm.Id;
+
+        public NegocioDtm negocioDtm = null;
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase)
         : base(
@@ -88,7 +95,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
                 var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
-                var mostrarHistorico = new NavegarDesdeEdicion(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", $"/Auditoria/CrudDeAuditoria/?negocio={Negocio}");
+                var mostrarHistorico = new NavegarDesdeEdicion(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", $"/Auditoria/CrudDeAuditoria/?negocio={RenderNegocio}");
                 creador.Editable = false;
                 modificador.Editable = false;
 
@@ -131,7 +138,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     columna.ConOrdenacion = atributos.Ordenar;
 
                     if (p.Name.ToLower() == CamposDeFiltrado.Nombre && atributos.Ordenar)
-                       columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
+                        columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
 
                     columna.OrdenarPor = atributos.OrdenarPor;
                     columna.Alineada = atributos.Alineada;

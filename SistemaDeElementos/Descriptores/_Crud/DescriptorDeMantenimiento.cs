@@ -78,7 +78,8 @@ namespace MVCSistemaDeElementos.Descriptores
                         zona-de-filtro=¨{Filtro.IdHtml}¨ 
                         zona-de-menu=¨{ZonaMenu.IdHtml}¨ 
                         controlador=¨{Crud.Controlador}¨ 
-                        negocio=¨{Crud.Negocio}¨>
+                        negocio=¨{Crud.RenderNegocio}¨
+                        id-negocio=¨{Crud.RenderIdDeNegocio}¨>
                      ";
 
             return ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo ?

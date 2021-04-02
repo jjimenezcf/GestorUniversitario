@@ -68,21 +68,41 @@ namespace GestorDeElementos
            enumNegocio.Permiso
         };
 
+
+        private static List<string> _Registros = new List<string>
+        {
+           nameof(PermisosDeUnPuestoDtm).Replace("Dtm",""),
+           nameof(PermisosDeUnRolDtm).Replace("Dtm","")
+        };
+
+        public static bool EsDeParametrizacion(enumNegocio negocio)
+        {
+            return _negociosDeParametrizacion.Contains(negocio);
+        } 
+
         public static bool UsaSeguridad(enumNegocio negocio)
         {
             return _negociosConSeguridad.Contains(negocio);
         }
 
-        public static bool EsDeParametrizacion(enumNegocio negocio)
+        public static bool EsUnRegistro(string negocio)
         {
-            return _negociosDeParametrizacion.Contains(negocio);
+            return _Registros.Contains(negocio);
+        }
+
+        public static bool EsUnRegistro(enumNegocio negocio)
+        {
+            return _Registros.Contains(negocio.ToString());
         }
 
         public static string ToString(enumNegocio negocio)
         {
+            if (negocio == enumNegocio.No_Definido)
+                return enumNegocio.No_Definido.ToString();
+
             switch (negocio)
             {
-                case enumNegocio.Usuario: return "Usuarios de SE";
+                case enumNegocio.Usuario: return "Usuarios";
                 case enumNegocio.VistaMvc: return "Vistas";
                 case enumNegocio.Variable: return "Variables";
                 case enumNegocio.Menu: return "Menus";
@@ -96,22 +116,29 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
 
-        public static enumNegocio ParsearNegocio(string negocio)
+        public static enumNegocio Negocio(string negocio)
         {
+            if (negocio == enumNegocio.No_Definido.ToString())
+                return enumNegocio.No_Definido;
+
             switch (negocio)
             {
-                case "Usuario": return enumNegocio.Usuario;
-                case "VistaMvc": return enumNegocio.VistaMvc;
-                case "Permiso": return enumNegocio.Permiso;
-                case "Menu": return enumNegocio.Menu;
-                case "Variable": return enumNegocio.Variable;
-                case "Negocio": return enumNegocio.Negocio;
-                case "Puesto": return enumNegocio.Puesto;
-                case "Rol": return enumNegocio.Rol;
-                case "Pais": return enumNegocio.Pais;
-                case "Provincia": return enumNegocio.Provincia;
+                case "Usuarios": return enumNegocio.Usuario;
+                case "Vistas": return enumNegocio.VistaMvc;
+                case "Permisos": return enumNegocio.Permiso;
+                case "Menus": return enumNegocio.Menu;
+                case "Variables": return enumNegocio.Variable;
+                case "Negocios": return enumNegocio.Negocio;
+                case "Puestos": return enumNegocio.Puesto;
+                case "Roles": return enumNegocio.Rol;
+                case "Paises": return enumNegocio.Pais;
+                case "Provincias": return enumNegocio.Provincia;
             }
-            return enumNegocio.No_Definido;
+
+            if (EsUnRegistro(negocio))
+                return enumNegocio.No_Definido;
+
+            throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
 
         public static enumNegocio ParsearDto(string registroDto)
@@ -170,6 +197,23 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dtm");
         }
 
+        internal static Type TipoDto(this enumNegocio negocio)
+        {
+            switch (negocio)
+            {
+                case enumNegocio.Usuario: return typeof(UsuarioDto);
+                case enumNegocio.VistaMvc: return typeof(VistaMvcDto);
+                case enumNegocio.Variable: return typeof(VariableDto);
+                case enumNegocio.Menu: return typeof(MenuDto);
+                case enumNegocio.Puesto: return typeof(PuestoDto);
+                case enumNegocio.Negocio: return typeof(NegocioDto);
+                case enumNegocio.Permiso: return typeof(PermisoDto);
+                case enumNegocio.Rol: return typeof(RolDto);
+                case enumNegocio.Pais: return typeof(PaisDto);
+                case enumNegocio.Provincia: return typeof(ProvinciaDto);
+            }
+            throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dto");
+        }
         internal static IRegistro ObjetoDtm(this enumNegocio negocio)
         {
             switch (negocio)

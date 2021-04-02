@@ -239,7 +239,7 @@ var Crud;
             this.DatosDelGrid = new DatosDelGrid();
             this._idCuerpoCabecera = idPanelMnt;
             if (this.CuerpoCabecera === null)
-                throw Error(`No se puede crear el Crud ${idPanelMnt}`);
+                throw Error(`No se puede crear el Crud ${idPanelMnt} la cabecera es nula`);
             this._controlador = this.CuerpoCabecera.getAttribute(atMantenimniento.controlador);
             this._idGrid = this.CuerpoCabecera.getAttribute(atMantenimniento.gridDelMnt);
             this._idHtmlZonaMenu = this.CuerpoCabecera.getAttribute(atMantenimniento.zonaMenu);
@@ -280,6 +280,9 @@ var Crud;
         }
         get CuerpoPie() {
             return document.getElementById(`cuerpo.pie.${this._idCuerpoCabecera}`);
+        }
+        get IdNegocio() {
+            return this.CuerpoCabecera.getAttribute(atMantenimniento.idNegocio);
         }
         get Negocio() {
             return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);

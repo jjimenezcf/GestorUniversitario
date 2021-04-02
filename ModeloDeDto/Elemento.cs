@@ -137,7 +137,7 @@ namespace ModeloDeDto
             return false;
         }
 
-        public int LongitudMaxima {get; set;}
+        public int LongitudMaxima { get; set; }
 
     }
 
@@ -153,7 +153,18 @@ namespace ModeloDeDto
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
         public bool RenderCreacion { get; set; } = false;
-        public string MostrarExpresion { get; set; } = $"[{nameof(INombre.Nombre)}]";
+
+        private string _mostrarExpresion = $"[{nameof(INombre.Nombre)}]";
+        public string MostrarExpresion
+        {
+            get { return _mostrarExpresion; }
+            set 
+            { 
+                _mostrarExpresion = value;
+                if (!_mostrarExpresion.Contains('[') && !_mostrarExpresion.Contains(']'))
+                    _mostrarExpresion = $"[{_mostrarExpresion}]";
+            }
+        }
     }
 
     public interface IAuditadoDto
@@ -231,7 +242,7 @@ namespace ModeloDeDto
 
                         case nameof(IUDtoAttribute.MostrarExpresion):
                             return a.MostrarExpresion;
-                        
+
                         case nameof(IUDtoAttribute.RenderCreacion):
                             return a.RenderCreacion;
                     }
