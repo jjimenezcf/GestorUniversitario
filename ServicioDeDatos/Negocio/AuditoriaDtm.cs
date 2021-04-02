@@ -27,6 +27,26 @@ namespace ServicioDeDatos.Negocio
 
     public static class Auditoria
     {
+        public static string sqlAuditoriaDeUnElemento =
+$@"
+select ID as Id
+     , ID_ELEMENTO as IdElemento
+     , ID_USUARIO as IdUsuario
+     , OPERACION as Operacion
+     , REGISTRO as registroJson
+     , AUDITADO_EL as AuditadoEl
+from Esquema.Tabla T1 WITH(NOLOCK)
+where ID_ELEMENTO = @idElemento
+order by AUDITADO_EL DESC 
+OFFSET @posicion ROWS FETCH NEXT @cantidad ROWS ONLY
+";
+        public static string sqlTotalAuditoria =
+$@"
+select count(*) as cantidad
+from Esquema.Tabla T1 WITH(NOLOCK)
+where ID_ELEMENTO = @idElemento
+";
+
         internal static void DefinirCamposDeAuditoriaDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : AuditoriaDtm
         {
             var nombreDeTabla = GeneradorMd.NombreDeTabla(typeof(TEntity));

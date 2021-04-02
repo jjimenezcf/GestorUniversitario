@@ -79,22 +79,25 @@ namespace MVCSistemaDeElementos.Controllers
             int can = cantidad.Entero();
             try
             {
-                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext); 
+                List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+                var restrictor = ObtenerRestrictores(filtros);
                 var opcionesDeMapeo = new Dictionary<string, object>();
-                var elementos = LeerAuditoria(pos, can, filtro, orden, opcionesDeMapeo);
+                var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, restrictor.idNegocio);
+                var elementos = AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can);
                 //si no he leido nada por estar al final, vuelvo a leer los últimos
                 if (pos > 0 && elementos.Count() == 0)
                 {
                     pos = pos - can;
                     if (pos < 0) pos = 0;
-                    elementos = LeerAuditoria(pos, can, filtro, orden, opcionesDeMapeo);
+                    elementos = AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can);
                     r.Mensaje = "No hay más elementos";
                 }
 
                 var infoObtenida = new ResultadoDeLectura();
 
                 infoObtenida.registros = ElementosLeidos(elementos.ToList());
-                infoObtenida.total = infoObtenida.registros.Count; //accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
+                infoObtenida.total = AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento);
                 infoObtenida.posicion = pos;
                 infoObtenida.cantidad = can;
 
@@ -115,12 +118,10 @@ namespace MVCSistemaDeElementos.Controllers
             return a;
         }
 
-        private IEnumerable<AuditoriaDto> LeerAuditoria(int pos, int can, string filtro, string orden, Dictionary<string, object> opcionesDeMapeo)
+        private static (int idNegocio, int idElemento) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
         {
-            List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             var idNegocio = 0;
-            var idElemento  = 0;
-
+            var idElemento = 0;
             foreach (var f in filtros)
             {
                 if (f.Clausula == NegocioPor.idNegocio)
@@ -130,23 +131,10 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             if (idNegocio == 0)
-               GestorDeErrores.Emitir("Debe indicar el negocio del que se quiere obtener la auditoria");
+                GestorDeErrores.Emitir("Debe indicar el negocio del que se quiere obtener la auditoria");
             if (idElemento == 0)
                 GestorDeErrores.Emitir("Debe indicar el elemento del que se quiere obtener la auditoria");
-
-            var negocioDtm =  GestorDeNegocios.LeerNegocio(Contexto, idNegocio);
-
-            return AuditoriaDeNegocio.LeerElementos( Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre),  idElemento);
-        }
-
-        private int Recontar(string filtro)
-        {
-            throw new NotImplementedException();
-        }
-
-        private int Contar(string filtro)
-        {
-            throw new NotImplementedException();
+            return (idNegocio, idElemento);
         }
 
         private List<Dictionary<string, object>> ElementosLeidos(List<AuditoriaDto> auditorias)

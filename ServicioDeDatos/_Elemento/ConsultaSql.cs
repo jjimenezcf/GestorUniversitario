@@ -34,7 +34,7 @@ namespace ServicioDeDatos.Elemento
             Sentencia = sentencia;
             Traza = traza;
         }
-        public List<T> LanzarConsulta()
+        public List<T> LanzarConsulta(object parametros = null)
         {
             List<T> resultado = null;
 
@@ -48,7 +48,7 @@ namespace ServicioDeDatos.Elemento
                     if (Traza != null)
                         cronometro.Start();
 
-                    resultado = db.Query<T>(Sentencia).ToList();
+                    resultado = db.Query<T>(Sentencia, parametros).ToList();
 
                     if (Traza != null)
                     {

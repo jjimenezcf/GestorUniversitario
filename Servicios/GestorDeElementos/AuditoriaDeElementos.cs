@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Negocio;
 using Newtonsoft.Json;
@@ -35,20 +36,21 @@ namespace GestorDeElementos
         }
 
 
-        public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento)
+        public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento, int posicion, int cantidad)
         {
-            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza,  
-                 $@"
-select ID as Id
-     , ID_ELEMENTO as IdElemento
-     , ID_USUARIO as IdUsuario
-     , OPERACION as Operacion
-     , REGISTRO as registroJson
-     , AUDITADO_EL as AuditadoEl
-from {esquemaDeAuditoria}.{tablaDeAuditoria} T1 WITH(NOLOCK)
-where ID_ELEMENTO = {idElemento}");
-            var registros = consulta.LanzarConsulta();
+            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlAuditoriaDeUnElemento.Replace("Esquema.Tabla", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var parametros = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, {"@idElemento",idElemento } };
+            var registros = consulta.LanzarConsulta(new DynamicParameters(parametros));
             return registros;
+        }
+
+        public int ContarRegistros(int idElemento)
+        {
+            var consulta = new ConsultaSql<RegistrosAfectados>(Contexto.Traza, Auditoria.sqlTotalAuditoria.Replace("Esquema.Tabla", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var parametros = new Dictionary<string, object> { { "@idElemento", idElemento } };
+            var registros = consulta.LanzarConsulta(new DynamicParameters(parametros));
+            return registros[0].cantidad;
+
         }
 
         public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)
@@ -73,4 +75,6 @@ where ID_ELEMENTO = {idElemento}");
             contexto.Database.ExecuteSqlRaw(sentencia);
         }
     }
+
+
 }
