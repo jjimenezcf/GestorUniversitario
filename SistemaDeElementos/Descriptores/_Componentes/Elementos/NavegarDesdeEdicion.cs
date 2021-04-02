@@ -4,10 +4,10 @@ using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class AbrirEnPestana : ControlHtml
+    public class NavegarDesdeEdicion : ControlHtml
     {
         string Url { get; set; }
-        public AbrirEnPestana(ControlHtml padre, string etiqueta, string ayuda, string url) 
+        public NavegarDesdeEdicion(ControlHtml padre, string etiqueta, string ayuda, string url) 
         : base(padre, $"{padre.Id}-abrir", etiqueta, null, ayuda, null)
         {
             Tipo = Enumerados.enumTipoControl.Opcion;
@@ -35,7 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
             valores["Css"] = Css.Render(enumCssControlesDto.Editor);
             valores["PermisosNecesarios"] = "";
-            valores["Accion"] = $"Crud.EventosDeExpansores('{TipoDeAccionExpansor.AbrirPestana}','{atributos.Url}')";
+            valores["Accion"] = $"Crud.EventosDeExpansores('{TipoDeAccionExpansor.NavegarDesdeEdicion}','{atributos.Url}')";
 
             var htmlEditorTexto = PlantillasHtml.Render(PlantillasHtml.abrirEnPestana, valores);
 

@@ -423,8 +423,8 @@
                     ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
                     break;
                 }
-                case Evento.Expansores.AbrirPestana: {
-                    crudMnt.NavegarDesdeLaEdicion(parametros);
+                case Evento.Expansores.NavegarDesdeEdicion: {
+                    crudMnt.crudDeEdicion.NavegarDesdeEdicion(parametros);
                     break;
                 }
                 default: {

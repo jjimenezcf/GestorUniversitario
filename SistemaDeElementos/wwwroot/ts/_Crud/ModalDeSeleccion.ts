@@ -36,13 +36,31 @@
 
         public AbrirModalDeSeleccion() {
             this.EditorDelGrid.value = this.Selector.value;
+            this.RecargarGrid()
+                .then((valor) => {
+                    this.TrasAbrirModalDeSeleccion(valor);
+                })
+                .catch((valor) => {
+                    ApiCrud.CerrarModal(this.Modal);
+                }
+                );
+        }
 
-            super.AbrirModalConGrid();
-
-            var arrayMarcados = this.ElementosMarcados();
-            this.InfoSelector.InsertarElementos(arrayMarcados);
-            this.MarcarElementos();
-            this.InfoSelector.SincronizarCheck();
+        private TrasAbrirModalDeSeleccion(valor: boolean): void {
+            if (valor) {
+                try {
+                    var arrayMarcados = this.ElementosMarcados();
+                    this.InfoSelector.InsertarElementos(arrayMarcados);
+                    this.MarcarElementos();
+                    this.InfoSelector.SincronizarCheck();
+                }
+                catch (error) {
+                    ApiCrud.CerrarModal(this.Modal);
+                    throw error;
+                }
+            }
+            else
+                ApiCrud.CerrarModal(this.Modal);
         }
 
         private ElementosMarcados(): Array<Elemento> {
@@ -56,7 +74,7 @@
                 var listaNombres = (<HTMLSelector>this.Selector).value.split('|');
                 var listaIds = seleccionados.split(';');
                 for (var i = 0; i < listaIds.length; i++) {
-                    this.LeerElementoSeleccionado(Numero(listaIds[i]))
+                    this.LeerElementoSeleccionado(Numero(listaIds[i]));
                 }
             }
             return elementos;

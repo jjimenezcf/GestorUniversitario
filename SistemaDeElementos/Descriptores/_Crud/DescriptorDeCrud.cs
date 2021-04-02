@@ -88,7 +88,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 var creador = new EditorDeTexto(expanDeAuditoria, "Creado por", nameof(IAuditadoDto.Creador), "Quién lo creó");
                 var modificador = new EditorDeTexto(expanDeAuditoria, "Modificado por", nameof(IAuditadoDto.Modificador), "Quién lo modificó");
-                var mostrarHistorico = new AbrirEnPestana(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", $"/Auditoria/CrudDeAuditoria/?negocio={Negocio}");
+                var mostrarHistorico = new NavegarDesdeEdicion(expanDeAuditoria, "Ver auditoría", "Histórico de modificaciones del registro", $"/Auditoria/CrudDeAuditoria/?negocio={Negocio}");
                 creador.Editable = false;
                 modificador.Editable = false;
 

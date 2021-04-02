@@ -33,7 +33,15 @@
             this.Restrictor.value = seleccionado.Texto;
             this.Restrictor.setAttribute(atControl.restrictor, seleccionado.Id.toString());
 
-            this.AbrirModalConGrid();
+            this.RecargarGrid()
+                .then((valor) => {
+                    if (!valor)
+                        ApiCrud.CerrarModal(this.Modal);
+                })
+                .catch((valor) => {
+                    ApiCrud.CerrarModal(this.Modal);
+                }
+                );
         };
 
         public CerrarModalParaConsultarRelaciones() {

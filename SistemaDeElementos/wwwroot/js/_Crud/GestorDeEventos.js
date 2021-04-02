@@ -417,8 +417,8 @@ var Crud;
                     ApiControl.OcultarMostrarExpansor(idHtmlExpansor, idHtmlBloque);
                     break;
                 }
-                case Evento.Expansores.AbrirPestana: {
-                    Crud.crudMnt.NavegarDesdeLaEdicion(parametros);
+                case Evento.Expansores.NavegarDesdeEdicion: {
+                    Crud.crudMnt.crudDeEdicion.NavegarDesdeEdicion(parametros);
                     break;
                 }
                 default: {

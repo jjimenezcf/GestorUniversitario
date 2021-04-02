@@ -114,7 +114,7 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         private string RenderZonaDeDatos()
         {
-            var mostrarExpresion = $"[{(string)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.MostrarExpresion))}]"; 
+            var mostrarExpresion = $"{(string)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.MostrarExpresion))}"; 
 
             var expresionElemento = typeof(TElemento).GetField("ExpresionElemento");
             if (expresionElemento != null)

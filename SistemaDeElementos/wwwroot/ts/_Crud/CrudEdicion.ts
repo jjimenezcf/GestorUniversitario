@@ -50,6 +50,13 @@
             control.value = cantidad.toString();
         }
 
+        private get Elemento(): Elemento {
+            if (this.Posicionador === 0)
+                this.Posicionador = 1;
+            return this.InfoSelectorEdicion.Seleccionados[this.Posicionador-1];
+        }
+
+
         private get IdEditor(): HTMLInputElement {
             var control = this.BuscarEditor(this.PanelDeEditar, literal.id);
 
@@ -174,7 +181,7 @@
                 this.InicializarArchivos(this.PanelDeEditar);
                 this.InicializarSelectoresDeFecha(this.PanelDeEditar);
                 this.Posicionador = seleccionado;
-                this.InicializarValores(seleccionado - 1);
+                this.InicializarValores(this.Elemento.Id);
             }
 
         }
@@ -196,9 +203,7 @@
             this.CrudDeMnt.Buscar(atGrid.accion.buscar, 0);
         }
 
-        protected InicializarValores(seleccionado: number) {
-            let infSel: InfoSelector = this.InfoSelectorEdicion;
-            let id: number = infSel.Seleccionados[seleccionado].Id as number;
+        protected InicializarValores(id: number) {
             this.IdEditor.value = id.toString();
             this.LeerElemento(id);
         }
@@ -278,6 +283,29 @@
                 , this.SiHayErrorTrasPeticionAjax
             );
             a.Ejecutar();
+        }
+
+        public NavegarDesdeEdicion(url: string): void {
+
+            this.CrudDeMnt.Estado.Agregar("EditarAlVolver", true);
+            this.CrudDeMnt.Estado.Agregar(atGrid.id, this.CrudDeMnt.Navegador.Datos);
+            this.CrudDeMnt.Estado.Agregar("elementos_seleccionados", this.CrudDeMnt.InfoSelector.Seleccionados);
+            EntornoSe.Historial.GuardarEstadoDePagina(this.CrudDeMnt.Estado);
+
+            let datos: Tipos.DatosRestrictor[] = [];
+            let negocio: Tipos.DatosRestrictor = new Tipos.DatosRestrictor('negocio', 0, this.CrudDeMnt.Negocio);
+            let elemento: Tipos.DatosRestrictor = new Tipos.DatosRestrictor('idelemento', this.Elemento.Id, this.Elemento.Texto);
+
+            datos.push(negocio);
+            datos.push(elemento);
+            this.PrepararValoresAntesDeNavegar('crud_auditoriadto_mantenimiento', datos);
+            EntornoSe.NavegarAUrl(url);
+        }
+
+        private PrepararValoresAntesDeNavegar(paginaDestino: string, datos: Tipos.DatosRestrictor[]): void {
+            let estadoPaginaDestino: HistorialSe.EstadoPagina = EntornoSe.Historial.ObtenerEstadoDePagina(paginaDestino);
+            estadoPaginaDestino.Agregar(Sesion.restrictores, datos);
+            EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
         }
 
         private DespuesDeModificar(peticion: ApiDeAjax.DescriptorAjax) {

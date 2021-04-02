@@ -5,7 +5,7 @@ namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
-          , MostrarExpresion = "(Codigo) Nombre")]
+          , MostrarExpresion = "([Codigo]) [Nombre]")]
     public class ProvinciaDto : ElementoDto, IAuditadoDto
     {
         [IUPropiedad(

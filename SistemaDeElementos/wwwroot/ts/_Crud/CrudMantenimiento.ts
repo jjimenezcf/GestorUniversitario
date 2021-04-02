@@ -86,13 +86,6 @@
             }
         }
 
-        public NavegarDesdeLaEdicion(url: string): void {
-            crudMnt.Estado.Agregar("EditarAlVolver", true);
-            crudMnt.Estado.Agregar(atGrid.id, this.Navegador.Datos);
-            crudMnt.Estado.Agregar("elementos_seleccionados", this.InfoSelector.Seleccionados);
-            EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
-            EntornoSe.NavegarAUrl(url);
-        }
 
         public PosicionarPanelesDelCuerpo(): void {
             if (this.ModoTrabajo === ModoTrabajo.mantenimiento) {
@@ -140,14 +133,26 @@
             return alturaCabeceraPnlControl + alturaCabeceraMnt;
         }
 
-        public AplicarRestrictores() {
+        public AplicarRestrictores(): void {
+
+            if (this.Estado.Contiene(Sesion.restrictores)) {
+                let restrictores: Tipos.DatosRestrictor[] = this.Estado.Obtener(Sesion.restrictores) as Tipos.DatosRestrictor[];
+                for (let i = 0; i < restrictores.length; i++) {
+                    this.AplicarRestrictor(restrictores[i]);
+                }
+            }
+
             if (this.Estado.Contiene(Sesion.restrictor)) {
                 let restrictor: Tipos.DatosRestrictor = this.Estado.Obtener(Sesion.restrictor);
-                this.ValidarRestrictorDeFiltrado();
-                ApiControl.MapearPropiedadRestrictoraAlFiltro(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                this.AplicarRestrictor(restrictor);
             }
+        }
+
+        private AplicarRestrictor(restrictor: Tipos.DatosRestrictor): void {
+            this.ValidarRestrictorDeFiltrado();
+            ApiControl.MapearPropiedadRestrictoraAlFiltro(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
         }
 
         private InicializarSelectores() {
@@ -155,6 +160,7 @@
             selectores.forEach((selector) => {
                 let idModal: string = selector.getAttribute(atSelector.idModal);
                 let modal: ModalSeleccion = new ModalSeleccion(idModal);
+                modal.InicializarModalDeSeleccion();
                 this.ModalesDeSeleccion.push(modal);
             });
         }

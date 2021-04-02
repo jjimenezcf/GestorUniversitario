@@ -257,6 +257,20 @@ function ParsearExpresion(elemento: any, patron: string): string {
     return mostrar;
 }
 
+/*
+ * https://es.stackoverflow.com/questions/445/c%C3%B3mo-obtener-valores-de-la-url-get-en-javascript/457
+ * http://www.ejemplo.com.mx/producto?prodId=88 --> var prodId = getParameterByName('prodId');
+ * La función getParameterByName recibe un parámetro del tipo String (cadena de texto) que va a ser utilizado para evaluar por medio de una expresión regular que busque todo el contenido entre el final de la cadena recibida 
+ * seguido por un símbolo de igual (=) y el final de la cadena a donde buscar (location.search) o hasta encontrar el símbolo «et» también conocido como «ampersand» (&). 
+ * Al final dicho texto encontrado decodificado y devuelto. En el remoto caso de no encontrar coincidencias, devolverá una cadena vacía.
+ * */
+function ObtenerParametroDeLaUrl(parametro: string): string{
+    parametro = parametro.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + parametro + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

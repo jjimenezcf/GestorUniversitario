@@ -11,14 +11,15 @@ var Crud;
             this.InfoSelector.QuitarTodos();
         }
         ;
-        AbrirModalConGrid() {
-            this.RecargarGrid();
-        }
         CerrarModalConGrid() {
-            let referenciaCheck = `chksel.${this.IdGrid}`;
-            this.blanquearCheck(referenciaCheck);
-            this.InfoSelector.QuitarTodos();
-            ApiCrud.CerrarModal(this.Modal);
+            try {
+                let referenciaCheck = `chksel.${this.IdGrid}`;
+                this.blanquearCheck(referenciaCheck);
+                this.InfoSelector.QuitarTodos();
+            }
+            finally {
+                ApiCrud.CerrarModal(this.Modal);
+            }
         }
         blanquearCheck(refCheckDeSeleccion) {
             document.getElementsByName(`${refCheckDeSeleccion}`).forEach(c => {
@@ -28,7 +29,7 @@ var Crud;
         }
         RecargarGrid() {
             this.DatosDelGrid.InicializarCache();
-            this.CargarGrid(atGrid.accion.buscar, 0);
+            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
         }
     }
     Crud.ModalConGrid = ModalConGrid;

@@ -377,7 +377,7 @@ const Evento = {
     },
     Expansores: {
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
-        AbrirPestana: "abrir-pestana"
+        NavegarDesdeEdicion: "navegar-desde-edicion"
     },
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",
@@ -441,6 +441,7 @@ const Variables = {
 const Sesion = {
     historial: "historial",
     restrictor: "restrictor",
+    restrictores: "restrictores",
     idSeleccionado: "idSeleccionado",
     paginaDestino: "pagina-destino",
     paginaActual: "pagina-actual",

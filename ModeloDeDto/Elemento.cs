@@ -153,7 +153,7 @@ namespace ModeloDeDto
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
         public bool RenderCreacion { get; set; } = false;
-        public string MostrarExpresion { get; set; } = nameof(INombre.Nombre);
+        public string MostrarExpresion { get; set; } = $"[{nameof(INombre.Nombre)}]";
     }
 
     public interface IAuditadoDto

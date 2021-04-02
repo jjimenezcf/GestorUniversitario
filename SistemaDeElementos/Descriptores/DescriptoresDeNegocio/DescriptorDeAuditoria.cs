@@ -1,6 +1,7 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.Negocio;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -12,6 +13,28 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
               , rutaBase: "Negocio")
         {
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            new RestrictorDeFiltro<AuditoriaDto>(bloque: fltGeneral
+                  , etiqueta: "Negocio"
+                  , propiedad: "negocio"
+                  , ayuda: "negocio del elemento"
+                  , new Posicion { fila = 0, columna = 0 });
+            new RestrictorDeFiltro<AuditoriaDto>(bloque: fltGeneral
+                  , etiqueta: "Elemento"
+                  , propiedad: nameof(AuditoriaDto.IdElemento)
+                  , ayuda: "elemento auditado"
+                  , new Posicion { fila = 0, columna = 1 });
+
+            var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
+            new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: fltGeneral,
+                                              etiqueta: "Usuario",
+                                              filtrarPor: nameof(UsuarioDto),
+                                              ayuda: "Seleccionar usuario",
+                                              posicion: new Posicion() { fila = 1, columna = 0 },
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.Apellido),
+                                              crudModal: modalUsuario,
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
         }
         public override string RenderControl()
         {

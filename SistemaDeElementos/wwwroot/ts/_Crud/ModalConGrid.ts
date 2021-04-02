@@ -13,15 +13,15 @@
             this.InfoSelector.QuitarTodos();
         };
 
-        protected AbrirModalConGrid() {
-            this.RecargarGrid();
-        }
-
         protected CerrarModalConGrid() {
-            let referenciaCheck: string = `chksel.${this.IdGrid}`;
-            this.blanquearCheck(referenciaCheck);
-            this.InfoSelector.QuitarTodos();
-            ApiCrud.CerrarModal(this.Modal);
+            try {
+                let referenciaCheck: string = `chksel.${this.IdGrid}`;
+                this.blanquearCheck(referenciaCheck);
+                this.InfoSelector.QuitarTodos();
+            }
+            finally {
+                ApiCrud.CerrarModal(this.Modal);
+            }
         }
 
         private blanquearCheck(refCheckDeSeleccion: string) {
@@ -32,9 +32,9 @@
             );
         }
 
-        public RecargarGrid() {
+        public RecargarGrid(): Promise<boolean> {
             this.DatosDelGrid.InicializarCache();
-            this.CargarGrid(atGrid.accion.buscar, 0);
+            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
         }
 
     }

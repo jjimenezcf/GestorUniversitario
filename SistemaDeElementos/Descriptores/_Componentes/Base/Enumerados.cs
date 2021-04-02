@@ -40,7 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionExpansor
     {
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
-        public const string AbrirPestana = "abrir-pestana";
+        public const string NavegarDesdeEdicion = "navegar-desde-edicion";
     }
 
     public static class TipoDeAccionDeCreacion

@@ -301,7 +301,7 @@
     export class GridDeDatos extends CrudBase {
 
         protected Ordenacion: Tipos.Ordenacion;
-        protected Navegador: Navegador;
+        public Navegador: Navegador;
 
         private _infoSelector: InfoSelector;
         public get InfoSelector(): InfoSelector {
@@ -430,6 +430,7 @@
 
             this.Navegador = new Navegador(this.IdGrid);
             this.Ordenacion = new Tipos.Ordenacion();
+            this._infoSelector = new InfoSelector(this.IdGrid);
         }
 
         public Inicializar(idPanelMnt: string) {
@@ -441,7 +442,6 @@
 
             let elementos: Elemento[] = this.Estado.Obtener("elementos_seleccionados") as Elemento[];
 
-            this._infoSelector = new InfoSelector(this.IdGrid);
             if (elementos !== undefined) {
                 for (var i = 0; i < elementos.length; i++) {
                     let e: Elemento = new Elemento(elementos[i]["_registro"]);
@@ -734,9 +734,9 @@
 
             var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
             var len = celdasId.length;
-            for (var i = 0; i < this.InfoSelector.Cantidad; i++) {
+            for (var i = this.InfoSelector.Cantidad-1; i >=0; i--) {
+                let elemento: Elemento = this.InfoSelector.LeerElemento(i);
                 for (var j = 0; j < len; j++) {
-                    let elemento: Elemento = this.InfoSelector.LeerElemento(i);
                     if (Numero((<HTMLInputElement>celdasId[j]).value) == elemento.Id) {
                         var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
                         var check = document.getElementById(idCheck);
@@ -1073,8 +1073,7 @@
                     , ApiDeAjax.TipoPeticion.Asincrona
                     , ApiDeAjax.ModoPeticion.Get
                     , (peticion) => {
-                        this.CrearFilasEnElGrid(peticion);
-                        resolve(true);
+                        resolve(this.CrearFilasEnElGrid(peticion));
                     }
                     , (peticion) => {
                         this.SiHayErrorAlCargarElGrid(peticion);
@@ -1116,9 +1115,10 @@
             }
         }
 
-        private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax) {
+        private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax): boolean {
             let datosDeEntrada: DatosPeticionNavegarGrid = (peticion.DatosDeEntrada as DatosPeticionNavegarGrid);
             let grid: GridDeDatos = datosDeEntrada.Grid;
+            let lineasCreadas: boolean = true;
             try {
                 let infoObtenida: ResultadoDeLectura = peticion.resultado.datos as ResultadoDeLectura;
                 var registros = infoObtenida.registros;
@@ -1130,13 +1130,18 @@
                 grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
                 grid.MapearPaginaCacheada(grid, registros);
             }
+            catch (error) {
+                lineasCreadas = false;
+                MensajesSe.Error("CrearFilasEnElGrid", `Error al crear las filas en el grid`, error.message);
+            }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
-                if (!grid.EsCrud) {
+                if (!grid.EsCrud && lineasCreadas) {
                     grid.Modal.style.display = 'block';
                     EntornoSe.AjustarModalesAbiertas();
                 }
             }
+            return lineasCreadas;
         }
 
         protected MapearPaginaCacheada(grid: GridDeDatos, registros: Elemento[]): void {

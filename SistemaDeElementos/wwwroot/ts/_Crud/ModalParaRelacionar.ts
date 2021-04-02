@@ -45,7 +45,15 @@
             if (this.IdRestrictor == 0)
                 throw new Error(`Debe seleccionar el elemento a con el que relacionar los elementos`);
 
-            super.AbrirModalConGrid();
+            this.RecargarGrid()
+                .then((valor) => {
+                    if (!valor)
+                        ApiCrud.CerrarModal(this.Modal);
+                })
+                .catch((valor) => {
+                    ApiCrud.CerrarModal(this.Modal);
+                }
+                );
         }
 
         public CrearRelaciones() {

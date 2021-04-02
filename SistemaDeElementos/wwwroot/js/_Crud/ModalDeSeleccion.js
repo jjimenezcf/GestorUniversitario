@@ -28,11 +28,29 @@ var Crud;
         ;
         AbrirModalDeSeleccion() {
             this.EditorDelGrid.value = this.Selector.value;
-            super.AbrirModalConGrid();
-            var arrayMarcados = this.ElementosMarcados();
-            this.InfoSelector.InsertarElementos(arrayMarcados);
-            this.MarcarElementos();
-            this.InfoSelector.SincronizarCheck();
+            this.RecargarGrid()
+                .then((valor) => {
+                this.TrasAbrirModalDeSeleccion(valor);
+            })
+                .catch((valor) => {
+                ApiCrud.CerrarModal(this.Modal);
+            });
+        }
+        TrasAbrirModalDeSeleccion(valor) {
+            if (valor) {
+                try {
+                    var arrayMarcados = this.ElementosMarcados();
+                    this.InfoSelector.InsertarElementos(arrayMarcados);
+                    this.MarcarElementos();
+                    this.InfoSelector.SincronizarCheck();
+                }
+                catch (error) {
+                    ApiCrud.CerrarModal(this.Modal);
+                    throw error;
+                }
+            }
+            else
+                ApiCrud.CerrarModal(this.Modal);
         }
         ElementosMarcados() {
             let elementos = new Array();
