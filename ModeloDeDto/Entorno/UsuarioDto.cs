@@ -6,8 +6,9 @@ namespace ModeloDeDto.Entorno
 
     public static class UsuariosPor
     {
-       public static string NombreCompleto = nameof(NombreCompleto).ToLower();
-       public static string Permisos = nameof(Permisos).ToLower();
+        public static string NombreCompleto = nameof(NombreCompleto).ToLower();
+        public static string Permisos = nameof(Permisos).ToLower();
+        public static string AlgunUsuario = nameof(AlgunUsuario).ToLower();
     }
 
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, MostrarExpresion = ExpresionElemento)]
@@ -29,12 +30,12 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(
             VisibleEnGrid = false,
             Etiqueta = "Usuario",
-            Ayuda = "Usuario de conexión", 
-            Tipo = typeof(string), 
-            Fila = 1, 
+            Ayuda = "Usuario de conexión",
+            Tipo = typeof(string),
+            Fila = 1,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt=25
+            PorAnchoMnt = 25
             )
         ]
         public string Login { get; set; }
@@ -100,7 +101,7 @@ namespace ModeloDeDto.Entorno
             Etiqueta = "Fotografía",
             Ayuda = "Seleccione un fichero",
             Tipo = typeof(int),
-            TipoDeControl= enumTipoControl.Archivo,
+            TipoDeControl = enumTipoControl.Archivo,
             ExtensionesValidas = ".png, .jpg",
             UrlDelArchivo = nameof(Foto),
             Fila = 5,

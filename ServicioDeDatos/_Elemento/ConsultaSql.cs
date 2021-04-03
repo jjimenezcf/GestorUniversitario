@@ -15,6 +15,11 @@ namespace ServicioDeDatos.Elemento
         public int cantidad { get; set; }
     }
 
+    public class ClausulasDeConsultas
+    {
+       public const string ListaDeValores = nameof(ListaDeValores);
+    }
+
     public class ConsultaSql<T> where T : IRegistro
     {
         public string Conexion;
@@ -69,14 +74,31 @@ namespace ServicioDeDatos.Elemento
             return resultado;
         }
 
-        public void EliminarFiltro(string filtro)
+        public void EliminarCriterio(string filtro)
         {
           Sentencia = Sentencia.Replace($"[{filtro}]", "");
         }
 
-        public void AplicarFiltro(string clausula, string filtro )
+        public void AplicarFiltro(string filtro, string clausula )
         {
-            Sentencia = Sentencia.Replace($"[{clausula}]", filtro);
+            Sentencia = Sentencia.Replace($"[{filtro}]", clausula);
+        }
+
+        public void AplicarClausulaIn(string filtro, string clausula, List<int> valores)
+        {
+            if (valores.Count > 0)
+            {
+                var lista = "";
+                foreach (int valor in valores)
+                    lista = lista + "," + valor.ToString();
+
+                lista = lista.Substring(1);
+                clausula = clausula.Replace($"[{ClausulasDeConsultas.ListaDeValores}]", lista);
+
+                Sentencia = Sentencia.Replace($"[{filtro}]", clausula);
+            }
+            else
+                EliminarCriterio(filtro);
         }
 
         public int EjecutarConsulta()

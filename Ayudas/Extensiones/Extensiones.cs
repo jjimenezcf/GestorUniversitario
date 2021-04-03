@@ -28,7 +28,7 @@ namespace Utilidades
                 return str.Equals(cadena);
             }
 
-            if (cadena.StartsWith("|") && cadena.Length>1)
+            if (cadena.StartsWith("|") && cadena.Length > 1)
             {
                 cadena = cadena.Substring(1);
                 if (str.Length < cadena.Length)
@@ -39,7 +39,7 @@ namespace Utilidades
 
             if (cadena.EndsWith("|") && cadena.Length > 1)
             {
-                cadena = cadena.Substring(0, cadena.Length -1);
+                cadena = cadena.Substring(0, cadena.Length - 1);
                 if (str.Length < cadena.Length)
                     return false;
 
@@ -49,14 +49,23 @@ namespace Utilidades
             return str.Contains(cadena);
         }
 
-        public static List<int> ListaEnteros(this string str, string separador=";",  bool quitarCeros = true)
+        public static int Incluir(this List<int> lista, string cadena, string separador = ";", bool quitarCeros = true)
+        {
+            var elementos = lista.Count;
+            if (cadena.IsNullOrEmpty())
+                return 0;
+            lista.AddRange(cadena.ToLista());
+            return lista.Count - elementos;
+        }
+
+        public static List<int> ToLista(this string str, string separador = ";", bool quitarCeros = true)
         {
             var l = new List<int>();
             if (str.IsNullOrEmpty())
                 return l;
 
             var numeros = str.Split(separador);
-            foreach(string n in numeros)
+            foreach (string n in numeros)
             {
                 var i = n.Entero();
                 if (i == 0 && quitarCeros)
@@ -69,8 +78,6 @@ namespace Utilidades
             return l;
         }
 
-
-        
         public static string RemplazarCaracteres(this string str, string caracterDeRemplazo = "")
         {
             return str.RemplazarCaracteres(@"[^\w\.@-_]", caracterDeRemplazo);
@@ -103,7 +110,7 @@ namespace Utilidades
 
     }
 
-    
+
     public static class Excepciones
     {
         public static string MensajeCompleto(this Exception exc, bool mostrarPila = false)

@@ -12,6 +12,7 @@ using GestorDeElementos;
 using Microsoft.EntityFrameworkCore.Internal;
 using GestoresDeNegocio.Entorno;
 using ModeloDeDto;
+using ModeloDeDto.Entorno;
 
 namespace GestoresDeNegocio.Seguridad
 {
@@ -190,16 +191,16 @@ namespace GestoresDeNegocio.Seguridad
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == PermisoPor.PermisosDeUnUsuario)
+                if (filtro.Clausula.ToLower() == UsuariosPor.AlgunUsuario)
                 {
-                    var listaIds = filtro.Valor.ListaEnteros();
+                    var listaIds = filtro.Valor.ToLista();
                     foreach (int id in listaIds)
                         registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsuario == id && up.IdPermiso == p.Id));
                 }
 
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
-                    var listaIds = filtro.Valor.ListaEnteros();
+                    var listaIds = filtro.Valor.ToLista();
                     foreach (int id in listaIds)
                         registros = registros.Where(x => x.Roles.Any(i => i.IdPermiso == id));
                 }

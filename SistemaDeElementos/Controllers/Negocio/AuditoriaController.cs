@@ -18,6 +18,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Entorno;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -78,8 +79,8 @@ namespace MVCSistemaDeElementos.Controllers
                 var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, restrictor.idNegocio);
 
                 var datos = ApiController.LeerDatosParaElGrid(
-                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.idUsuario, pos, can)
-                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.idUsuario));
+                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios, pos, can)
+                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios));
 
                 var infoObtenida = new ResultadoDeLectura();
                 infoObtenida.registros = ApiController.ElementosLeidos(Contexto, datos.elementos.ToList(), () => { return enumModoDeAccesoDeDatos.Consultor; });
@@ -113,26 +114,26 @@ namespace MVCSistemaDeElementos.Controllers
                 : base.LeerModoAccesoAlNegocio(idUsuario,negocio);
         }
 
-        private static (int idNegocio, int idElemento, int idUsuario) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
+        private static (int idNegocio, int idElemento, List<int> usuarios) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
         {
             var idNegocio = 0;
             var idElemento = 0;
-            var idUsuario = 0;
+            var usuarios = new List<int>();
             foreach (var f in filtros)
             {
                 if (f.Clausula == NegocioPor.idNegocio)
                     idNegocio = f.Valor.Entero();
                 if (f.Clausula == nameof(AuditoriaDto.IdElemento).ToLower())
                     idElemento = f.Valor.Entero();
-                if (f.Clausula == nameof(AuditoriaDto.IdUsuario).ToLower())
-                    idUsuario = f.Valor.Entero();
+                if (f.Clausula == UsuariosPor.AlgunUsuario)
+                    usuarios.Incluir(f.Valor);
             }
 
             if (idNegocio == 0)
                 GestorDeErrores.Emitir("Debe indicar el negocio del que se quiere obtener la auditoria");
             if (idElemento == 0)
                 GestorDeErrores.Emitir("Debe indicar el elemento del que se quiere obtener la auditoria");
-            return (idNegocio, idElemento, idUsuario);
+            return (idNegocio, idElemento, usuarios);
         }
 
         private List<Dictionary<string, object>> ElementosLeidos(List<AuditoriaDto> auditorias)

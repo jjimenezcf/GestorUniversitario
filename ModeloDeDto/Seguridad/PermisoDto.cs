@@ -6,7 +6,6 @@ namespace ModeloDeDto.Seguridad
     {
         public static string Nombre = CamposDeFiltrado.Nombre;
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
-        public static string PermisosDeUnUsuario = nameof(PermisosDeUnUsuario).ToLower();
     }
 
     [IUDto(AnchoEtiqueta = 20

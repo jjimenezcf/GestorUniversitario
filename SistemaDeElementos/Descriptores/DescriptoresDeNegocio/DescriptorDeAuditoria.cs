@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
             new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
-                                              filtrarPor: nameof(UsuarioDto),
+                                              filtrarPor: UsuariosPor.AlgunUsuario,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 1, columna = 0 },
                                               paraFiltrar: nameof(UsuarioDto.Id),

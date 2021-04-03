@@ -20,7 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 
                 new SelectorDeFiltro<PermisoDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
-                                              filtrarPor: PermisoPor.PermisosDeUnUsuario,
+                                              filtrarPor: UsuariosPor.AlgunUsuario,
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 0, columna = 1 },
                                               paraFiltrar: nameof(UsuarioDto.Id),

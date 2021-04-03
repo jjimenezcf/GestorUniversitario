@@ -51,7 +51,7 @@ where ID_ELEMENTO = @idElemento
 
         public static string FiltroPorUsuario = nameof(FiltroPorUsuario);
 
-        public static string AplicarFiltroPorUsuario = "And ID_USUARIO = @idUsuario";
+        public static string AplicarFiltroPorUsuario = $"And ID_USUARIO in ([{ClausulasDeConsultas.ListaDeValores}])";
 
         internal static void DefinirCamposDeAuditoriaDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : AuditoriaDtm
         {

@@ -36,25 +36,25 @@ namespace GestorDeElementos
         }
 
 
-        public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento, int idUsuario, int posicion, int cantidad)
+        public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento, List<int> usuarios, int posicion, int cantidad)
         {
             var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlAuditoriaDeUnElemento.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
 
-            if (idUsuario > 0) 
-                consulta.AplicarFiltro(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario);
-            else 
-                consulta.EliminarFiltro(Auditoria.FiltroPorUsuario);
+            consulta.AplicarClausulaIn(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario, usuarios);
 
-            var restrictores = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, {"@idElemento",idElemento }, { "@idUsuario", idUsuario } };
+            var restrictores = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, {"@idElemento",idElemento } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
             return registros;
         }
 
-        public int ContarRegistros(int idElemento, int idUsuario)
+        public int ContarRegistros(int idElemento, List<int> usuarios)
         {
             var consulta = new ConsultaSql<RegistrosAfectados>(Contexto.Traza, Auditoria.sqlTotalAuditoria.Replace("Esquema.Tabla", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
-            var parametros = new Dictionary<string, object> { { "@idElemento", idElemento } };
-            var registros = consulta.LanzarConsulta(new DynamicParameters(parametros));
+
+            consulta.AplicarClausulaIn(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario, usuarios);
+
+            var restrictor = new Dictionary<string, object> { { "@idElemento", idElemento } };
+            var registros = consulta.LanzarConsulta(new DynamicParameters(restrictor));
             return registros[0].cantidad;
 
         }
