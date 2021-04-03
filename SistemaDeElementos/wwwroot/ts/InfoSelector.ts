@@ -45,6 +45,10 @@ class Elemento {
         let propiedades: string[] = Object.keys(this._registro);
         for (let j = 0; j < propiedades.length; j++) {
             let propiedad: string = propiedades[j];
+
+            if (propiedad.toLocaleLowerCase() === this.ExpresionMostrar.toLocaleLowerCase())
+                return this._registro[propiedad];
+
             if (expresion.includes(`[${propiedad.toLowerCase()}]`)) {
                 expresion = expresion.replace(`[${propiedad.toLowerCase()}]`, `${this._registro[propiedad]}`);
             }

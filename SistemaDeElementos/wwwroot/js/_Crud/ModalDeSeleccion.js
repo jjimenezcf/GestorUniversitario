@@ -123,9 +123,9 @@ var Crud;
             if (registros.length === 1) {
                 var registro = registros[0];
                 for (let key in registro) {
-                    if (key === propiedadmostrar) {
+                    if (key.toLocaleLowerCase() === propiedadmostrar) {
                         this.Selector.value = '';
-                        this.mapearElementoAlHtmlSelector(new Elemento(registro));
+                        this.mapearElementoAlHtmlSelector(new Elemento(registro, propiedadmostrar));
                         return;
                     }
                 }

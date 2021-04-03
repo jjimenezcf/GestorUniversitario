@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                               ayuda: "Seleccionar usuario",
                                               posicion: new Posicion() { fila = 1, columna = 0 },
                                               paraFiltrar: nameof(UsuarioDto.Id),
-                                              paraMostrar: nameof(UsuarioDto.Apellido),
+                                              paraMostrar: nameof(UsuarioDto.NombreCompleto),
                                               crudModal: modalUsuario,
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
         }
