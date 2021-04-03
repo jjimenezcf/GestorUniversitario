@@ -50,18 +50,11 @@ namespace MVCSistemaDeElementos.Controllers
 
 
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
-        : base(gestorErrores, gestorDeElementos.Contexto.DatosDeConexion)
+        : base(gestorErrores, gestorDeElementos.Contexto, gestorDeElementos.Mapeador)
         {
             GestorDeElementos = gestorDeElementos;
-            GestorDeElementos.Contexto.IniciarTraza();
         }
 
-
-        protected override void Dispose(bool disposing)
-        {
-            GestorDeElementos.Contexto.CerrarTraza();
-            base.Dispose(disposing);
-        }
 
         //Llamada desde opciones de menu (Menu.Ts)
         public IActionResult Index()
@@ -144,7 +137,6 @@ namespace MVCSistemaDeElementos.Controllers
         public JsonResult epLeerPorId(int id)
         {
             var r = new Resultado();
-
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
@@ -365,30 +357,9 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        //END-POINT: Desde CrudMantenimiento.ts
-        /// <summary>
-        /// Devuelve el modo de acceso a los datos del negocio del usuario conectado
-        /// </summary>
-        /// <param name="negocio">negocio del que se quiere saber el modo de acceso del usuario conectado</param>
-        /// <returns>modo de acceso a los datos del negocio</returns>
-        public JsonResult epLeerModoDeAccesoAlNegocio(string negocio)
+        protected override enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
-            var r = new Resultado();
-            try
-            {
-                var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
-                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio));
-                r.ModoDeAcceso = modoDeAcceso.Render();
-                r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
-                r.Estado = enumEstadoPeticion.Ok;
-            }
-            catch (Exception e)
-            {
-                ApiController.PrepararError(e, r, $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}.");
-            }
-
-            return new JsonResult(r);
+           return GestorDeElementos.LeerModoDeAccesoAlNegocio(idUsuario,negocio);
         }
 
         public JsonResult epLeerModoDeAccesoAlElemento(string negocio, int id)

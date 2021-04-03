@@ -15,26 +15,15 @@ using ModeloDeDto.Entorno;
 namespace MVCSistemaDeElementos.Controllers
 {
     [Authorize]
-    public class FormularioController<TContexto>: BaseController<UsuarioDto>
-        where TContexto : ContextoSe
+    public class FormularioController<TContexto> : BaseController<UsuarioDto>
+    where TContexto : ContextoSe
     {
-        public TContexto Contexto { get; }
-        public IMapper Mapeador => Contexto.Mapeador;
         public DescriptorDeFormulario Formulario { get; }
 
         public FormularioController(TContexto contexto, IMapper mapeador, DescriptorDeFormulario descriptor, GestorDeErrores gestorErrores)
-        : base(gestorErrores, contexto.DatosDeConexion)
+        : base(gestorErrores, contexto, mapeador)
         {
-            Contexto = contexto;
-            Contexto.Mapeador = mapeador;
-            Contexto.IniciarTraza();
             Formulario = descriptor;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Contexto.CerrarTraza();
-            base.Dispose(disposing);
         }
 
         public IActionResult Index()

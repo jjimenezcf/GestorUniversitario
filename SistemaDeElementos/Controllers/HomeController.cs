@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
     {
 
         public HomeController(ContextoSe contexto, GestorDeErrores gestorDeErrores):
-        base(gestorDeErrores, contexto.DatosDeConexion)
+        base(gestorDeErrores, contexto, null)
         {
         }
 

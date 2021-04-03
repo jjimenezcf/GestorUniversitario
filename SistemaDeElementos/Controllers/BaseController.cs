@@ -49,13 +49,25 @@ namespace MVCSistemaDeElementos.Controllers
     {
         protected GestorDeErrores GestorDeErrores { get; }
         public ILogger Logger { get; set; }
-        protected DatosDeConexion DatosDeConexion { get; private set; }
+        protected DatosDeConexion DatosDeConexion => Contexto.DatosDeConexion;
+        public IMapper Mapeador => Contexto.Mapeador;
+
+        protected ContextoSe Contexto { get; private set; }
+
         protected DescriptorDeCrud<TElemento> Descriptor { get; set; }
 
-        public BaseController(GestorDeErrores gestorDeErrores, DatosDeConexion datosDeConexion)
+        public BaseController(GestorDeErrores gestorDeErrores, ContextoSe contexto, IMapper mapeador)
         {
             GestorDeErrores = gestorDeErrores;
-            DatosDeConexion = datosDeConexion;
+            Contexto = contexto;
+            Contexto.Mapeador = mapeador;
+            Contexto.IniciarTraza();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Contexto.CerrarTraza();
+            base.Dispose(disposing);
         }
 
         protected ViewResult RenderMensaje(string mensaje)
@@ -131,6 +143,35 @@ namespace MVCSistemaDeElementos.Controllers
 
         }
 
+
+        //END-POINT: Desde CrudMantenimiento.ts
+        /// <summary>
+        /// Devuelve el modo de acceso a los datos del negocio del usuario conectado
+        /// </summary>
+        /// <param name="negocio">negocio del que se quiere saber el modo de acceso del usuario conectado</param>
+        /// <returns>modo de acceso a los datos del negocio</returns>
+        public JsonResult epLeerModoDeAccesoAlNegocio(string negocio)
+        {
+            var r = new Resultado();
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+                var modoDeAcceso = LeerModoAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio));
+                r.ModoDeAcceso = modoDeAcceso.Render();
+                r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
+                r.Estado = enumEstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}.");
+            }
+            return new JsonResult(r);
+        }
+
+        protected virtual enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio enumNegocio)
+        {
+            return enumModoDeAccesoDeDatos.SinPermiso;
+        }
 
         private static void ValidarExtension(IFormFile fichero, string extensiones)
         {

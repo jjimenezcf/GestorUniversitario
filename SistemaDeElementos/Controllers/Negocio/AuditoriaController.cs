@@ -23,16 +23,9 @@ namespace MVCSistemaDeElementos.Controllers
 {
     public class AuditoriaController : BaseController<AuditoriaDto>
     {
-        private ContextoSe Contexto { get; }
-        private IMapper Mapeador { get; }
-
         public AuditoriaController(ContextoSe contexto, IMapper mapeador, GestorDeErrores gestorDeErrores)
-        : base(gestorDeErrores, contexto.DatosDeConexion)
+        : base(gestorDeErrores, contexto, mapeador)
         {
-            Contexto = contexto;
-            Mapeador = mapeador;
-            Contexto.Mapeador = mapeador;
-            Contexto.IniciarTraza();
             Descriptor = new DescriptorDeAuditoria(ModoDescriptor.Mantenimiento);
         }
 
@@ -107,6 +100,19 @@ namespace MVCSistemaDeElementos.Controllers
             return a;
         }
 
+        /// <summary>
+        /// por ahora no veo en Negocio.Negocio si tiene permiso de consulta de auditoría
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <param name="negocio"></param>
+        /// <returns></returns>
+        protected override  enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio negocio)
+        {
+            return DatosDeConexion.EsAdministrador 
+                ? enumModoDeAccesoDeDatos.Consultor
+                : base.LeerModoAccesoAlNegocio(idUsuario,negocio);
+        }
+
         private static (int idNegocio, int idElemento) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
         {
             var idNegocio = 0;
@@ -149,11 +155,6 @@ namespace MVCSistemaDeElementos.Controllers
             return listaDeElementos;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            Contexto.CerrarTraza();
-            base.Dispose(disposing);
-        }
 
     }
 
