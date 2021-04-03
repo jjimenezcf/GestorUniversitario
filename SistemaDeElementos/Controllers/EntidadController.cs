@@ -5,12 +5,10 @@ using GestorDeElementos;
 using UtilidadesParaIu;
 using System.Collections.Generic;
 using Utilidades;
-using MVCSistemaDeElementos.UtilidadesIu;
 using Newtonsoft.Json;
 using MVCSistemaDeElementos.Descriptores;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using System.Reflection;
@@ -88,7 +86,7 @@ namespace MVCSistemaDeElementos.Controllers
         public JsonResult epCrearElemento(string elementoJson)
         {
             var r = new Resultado();
-
+            var tran = GestorDeElementos.IniciarTransaccion();
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
@@ -97,15 +95,12 @@ namespace MVCSistemaDeElementos.Controllers
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
+                GestorDeElementos.Commit(tran);
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido crear. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                GestorDeElementos.Rollback(tran);
+                ApiController.PrepararError(e, r, "No se ha podido crear.");
             }
 
             return new JsonResult(r);
@@ -119,7 +114,7 @@ namespace MVCSistemaDeElementos.Controllers
         public JsonResult epModificarPorId(string elementoJson)
         {
             var r = new Resultado();
-
+            var tran = GestorDeElementos.IniciarTransaccion();
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
@@ -128,15 +123,12 @@ namespace MVCSistemaDeElementos.Controllers
                 GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro modificado";
+                GestorDeElementos.Commit(tran);
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido modificar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                GestorDeElementos.Rollback(tran);
+                ApiController.PrepararError(e, r, "No se ha podido modificar.");
             }
 
             return new JsonResult(r);
@@ -171,12 +163,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"Error al leer. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "Error al leer.");
             }
 
             return new JsonResult(r);
@@ -206,12 +193,7 @@ namespace MVCSistemaDeElementos.Controllers
             catch (Exception e)
             {
                 GestorDeElementos.Rollback(tran);
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido eliminar. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "No se ha podido eliminar.");
             }
 
             return new JsonResult(r);
@@ -226,36 +208,26 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
-                var elementos = Leer(pos, can, filtro, orden, opcionesDeMapeo);
-                //si no he leido nada por estar al final, vuelvo a leer los últimos
-                if (pos > 0 && elementos.Count() == 0)
-                {
-                    pos = pos - can;
-                    if (pos < 0) pos = 0;
-                    elementos = Leer(pos, can, filtro, orden, opcionesDeMapeo);
-                    r.Mensaje = "No hay más elementos";
-                }
+
+                var datos = ApiController.LeerDatosParaElGrid(
+                    () => Leer(pos, can, filtro, orden)
+                  , () => accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro));
+
 
                 var infoObtenida = new ResultadoDeLectura();
-
-                infoObtenida.registros = ElementosLeidos(elementos.ToList());
-                infoObtenida.total = accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro);
+                infoObtenida.total = datos.total;
+                infoObtenida.registros = ElementosLeidos(datos.elementos.ToList());
                 infoObtenida.posicion = pos;
                 infoObtenida.cantidad = can;
 
                 r.Datos = infoObtenida;
                 r.Estado = enumEstadoPeticion.Ok;
+                if (pos > 0 && datos.elementos.Count() == 0)
+                    r.Mensaje = "No hay más elementos";
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+              ApiController.PrepararError(e,r, "No se ha podido recuperar datos para el grid.");
             }
 
             var a = new JsonResult(r);
@@ -295,20 +267,13 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
-                elementos = Leer(0, 2, filtro, null, opcionesDeMapeo).ToList();
+                elementos = Leer(0, 2, filtro, null).ToList();
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e,r, "No se ha podido leer los datos.");
             }
 
             return new JsonResult(r);
@@ -334,12 +299,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "No se ha podido leer los datos.");
             }
 
             return new JsonResult(r);
@@ -361,12 +321,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido leer los datos. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "No se ha podido leer los datos.");
             }
 
             return new JsonResult(r);
@@ -404,12 +359,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"Error en el proceso de relación. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "Error en el proceso de relación.");
             }
 
             return new JsonResult(r);
@@ -435,12 +385,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, $"Error al obtener los permisos sobre el negocio {negocio} para el usuario {DatosDeConexion.Login}.");
             }
 
             return new JsonResult(r);
@@ -468,12 +413,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"Error al obtener los permisos sobre el elemento {id} del {negocio} para el usuario {DatosDeConexion.Login}. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, $"Error al obtener los permisos sobre el elemento {id} del {negocio} para el usuario {DatosDeConexion.Login}.");
             }
 
             return new JsonResult(r);
@@ -568,10 +508,13 @@ namespace MVCSistemaDeElementos.Controllers
             return GestorDeElementos.Recontar(filtros);
         }
 
-        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden, Dictionary<string, object> opcionesDeMapeo)
+        protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
             Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
             Descriptor.Mnt.Datos.PosicionInicial = posicion;
+
+            var opcionesDeMapeo = new Dictionary<string, object>();
+            opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);

@@ -82,36 +82,25 @@ namespace MVCSistemaDeElementos.Controllers
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext); 
                 List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
                 var restrictor = ObtenerRestrictores(filtros);
-                var opcionesDeMapeo = new Dictionary<string, object>();
                 var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, restrictor.idNegocio);
-                var elementos = AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can);
-                //si no he leido nada por estar al final, vuelvo a leer los últimos
-                if (pos > 0 && elementos.Count() == 0)
-                {
-                    pos = pos - can;
-                    if (pos < 0) pos = 0;
-                    elementos = AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can);
-                    r.Mensaje = "No hay más elementos";
-                }
+
+                var datos = ApiController.LeerDatosParaElGrid(
+                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can)
+                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento));
 
                 var infoObtenida = new ResultadoDeLectura();
-
-                infoObtenida.registros = ElementosLeidos(elementos.ToList());
-                infoObtenida.total = AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento);
+                infoObtenida.registros = ApiController.ElementosLeidos(Contexto, datos.elementos.ToList(), () => { return enumModoDeAccesoDeDatos.Consultor; });
+                infoObtenida.total = datos.total;
                 infoObtenida.posicion = pos;
                 infoObtenida.cantidad = can;
-
                 r.Datos = infoObtenida;
                 r.Estado = enumEstadoPeticion.Ok;
+                if (pos > 0 && datos.elementos.Count() == 0)
+                    r.Mensaje = "No hay más elementos";
             }
             catch (Exception e)
             {
-                r.Estado = enumEstadoPeticion.Error;
-                r.consola = GestorDeErrores.Detalle(e);
-                if (e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true)
-                    r.Mensaje = e.Message;
-                else
-                    r.Mensaje = $"No se ha podido recuperar datos para el grid. {(e.Data.Contains(GestorDeErrores.Datos.Mostrar) && (bool)e.Data[GestorDeErrores.Datos.Mostrar] == true ? e.Message : "")}";
+                ApiController.PrepararError(e, r, "No se ha podido recuperar datos para el grid.");
             }
 
             var a = new JsonResult(r);
