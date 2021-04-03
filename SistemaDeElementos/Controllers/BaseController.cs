@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using ModeloDeDto;
 using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Descriptores;
+using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
@@ -28,6 +29,12 @@ namespace MVCSistemaDeElementos.Controllers
         public int Total { get; set; } = 0;
         public dynamic Datos { get; set; }
         public string ModoDeAcceso { get; set; }
+    }
+
+    public class ParametroIn
+    {
+        public string Parametro { get; set; }
+        public object Valor { get; set; }
     }
 
     public class ResultadoHtml : Resultado
@@ -109,7 +116,7 @@ namespace MVCSistemaDeElementos.Controllers
                     if (!Directory.Exists(rutaDestino))
                         Directory.CreateDirectory(rutaDestino);
                     int numero = 1;
-                    var ficheroSinExtension = Path.GetFileNameWithoutExtension(fichero.FileName).Replace(" ","_");
+                    var ficheroSinExtension = Path.GetFileNameWithoutExtension(fichero.FileName).Replace(" ", "_");
                     var extension = Path.GetExtension(fichero.FileName);
                     while (System.IO.File.Exists($@"{rutaDestino}\{ficheroSinExtension}{extension}"))
                     {
@@ -168,7 +175,49 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        //END-POINT: Desde CrudEdicion.ts
+        public JsonResult epLeerPorId(int id, string parametrosJson = null)
+        {
+            var r = new Resultado();
+            var parametros = new Dictionary<string, object>();
+            if (!parametrosJson.IsNullOrEmpty())
+            {
+                var parametrosIn = JsonConvert.DeserializeObject<List<ParametroIn>>(parametrosJson);
+                foreach (var p in parametrosIn)
+                    parametros.Add(p.Parametro, p.Valor);
+            }
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+
+                var elemento = LeerPorId(id, parametros);
+                var modoDeAcceso = LeerModoDeAccesoAlElemento(elemento);
+                if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
+                    GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
+
+                r.Datos = elemento;
+                r.ModoDeAcceso = modoDeAcceso.Render();
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = $"registro leido";
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al leer.");
+            }
+            return new JsonResult(r);
+        }
+
         protected virtual enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio enumNegocio)
+        {
+            return enumModoDeAccesoDeDatos.SinPermiso;
+        }
+
+        protected virtual TElemento LeerPorId(int id, Dictionary<string, object> parametros)
+        {
+            return null;
+        }
+        protected virtual enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(TElemento elemento)
         {
             return enumModoDeAccesoDeDatos.SinPermiso;
         }

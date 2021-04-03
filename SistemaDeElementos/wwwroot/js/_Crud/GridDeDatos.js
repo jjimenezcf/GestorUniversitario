@@ -282,7 +282,7 @@ var Crud;
             return document.getElementById(`cuerpo.pie.${this._idCuerpoCabecera}`);
         }
         get IdNegocio() {
-            return this.CuerpoCabecera.getAttribute(atMantenimniento.idNegocio);
+            return Numero((this.CuerpoCabecera.getAttribute(atMantenimniento.idNegocio)));
         }
         get Negocio() {
             return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);

@@ -26,5 +26,12 @@
         constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
             super(crud, idPanelEdicion);
         }
+
+        protected ParametrosOpcionalesLeerPorId(): Array<Parametro>  {
+            let parametros: Array<Parametro> = super.ParametrosOpcionalesLeerPorId();
+            let parametro: Parametro = new Parametro(literal.idNegocio.replace('-', ''), this.CrudDeMnt.IdNegocio);
+            parametros.push(parametro);
+            return parametros;
+        }
     }
 }

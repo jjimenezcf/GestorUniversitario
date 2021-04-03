@@ -268,6 +268,7 @@ const Ajax = {
         orden: "orden",
         usuario: "usuario",
         id: "id",
+        parametros: "parametrosJson",
         idsJson: "idsJson",
         claseElemento: "claseElemento",
         fichero: "fichero",

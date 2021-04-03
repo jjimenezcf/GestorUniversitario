@@ -103,6 +103,16 @@ namespace MVCSistemaDeElementos.Controllers
         {
         }
 
+        protected override TElemento LeerPorId(int id, Dictionary<string, object> parametros)
+        {
+            parametros.Add(ElementoDto.DescargarGestionDocumental, true);
+            return GestorDeElementos.LeerElementoPorId(id, parametros);
+        }
+        protected override enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(TElemento elemento)
+        {
+          return GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), elemento.Id);
+        }
+
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epModificarPorId(string elementoJson)
         {
@@ -130,36 +140,6 @@ namespace MVCSistemaDeElementos.Controllers
         protected virtual void AntesDeEjecutar_ModificarPorId(string elementoJson)
         {
             
-        }
-
-
-        //END-POINT: Desde CrudEdicion.ts
-        public JsonResult epLeerPorId(int id)
-        {
-            var r = new Resultado();
-            try
-            {
-                ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
-
-                var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
-                var modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), id);
-                if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
-                    GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
-
-                r.Datos = elemento;
-                r.ModoDeAcceso = modoDeAcceso.Render(); 
-                r.Estado = enumEstadoPeticion.Ok;
-                r.Mensaje = $"registro leido";
-            }
-            catch (Exception e)
-            {
-                ApiController.PrepararError(e, r, "Error al leer.");
-            }
-
-            return new JsonResult(r);
-
         }
 
 

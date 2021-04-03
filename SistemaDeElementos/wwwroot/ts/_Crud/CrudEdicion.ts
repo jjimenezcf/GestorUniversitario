@@ -209,8 +209,8 @@
         }
 
         private LeerElemento(id: number) {
-            //let idJson: string = this.DefinirFiltroPorId(id);
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
+            let parametros: Array<Parametro> = this.ParametrosOpcionalesLeerPorId();
+            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
 
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.LeerPorId
@@ -223,6 +223,10 @@
             );
 
             a.Ejecutar();
+        }
+
+        protected ParametrosOpcionalesLeerPorId(): Array<Parametro> {
+            return new Array<Parametro>();
         }
 
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
@@ -293,7 +297,7 @@
             EntornoSe.Historial.GuardarEstadoDePagina(this.CrudDeMnt.Estado);
 
             let datos: Tipos.DatosRestrictor[] = [];
-            let negocio: Tipos.DatosRestrictor = new Tipos.DatosRestrictor('idnegocio', Numero(this.CrudDeMnt.IdNegocio), this.CrudDeMnt.Negocio);
+            let negocio: Tipos.DatosRestrictor = new Tipos.DatosRestrictor('idnegocio', this.CrudDeMnt.IdNegocio, this.CrudDeMnt.Negocio);
             let elemento: Tipos.DatosRestrictor = new Tipos.DatosRestrictor('idelemento', this.Elemento.Id, this.Elemento.Texto);
 
             datos.push(negocio);

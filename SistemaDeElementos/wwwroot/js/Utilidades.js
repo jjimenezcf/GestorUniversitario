@@ -173,6 +173,12 @@ class ClausulaDeFiltrado {
         return NoDefinida(this.clausula) || NoDefinida(this.valor) || NoDefinida(this.criterio);
     }
 }
+class Parametro {
+    constructor(parametro, valor) {
+        this.Parametro = parametro;
+        this.valor = valor;
+    }
+}
 function DefinirRestrictorCadena(propiedad, valor) {
     var clausulas = new Array();
     var clausula = new ClausulaDeFiltrado(propiedad, literal.filtro.criterio.igual, `${valor}`);

@@ -166,10 +166,13 @@ var Crud;
             this.LeerElemento(id);
         }
         LeerElemento(id) {
-            //let idJson: string = this.DefinirFiltroPorId(id);
-            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}`;
+            let parametros = this.ParametrosOpcionalesLeerPorId();
+            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerPorId, null, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.MapearElementoDevuelto, this.SiHayErrorAlLeerElemento);
             a.Ejecutar();
+        }
+        ParametrosOpcionalesLeerPorId() {
+            return new Array();
         }
         MapearElementoDevuelto(peticion) {
             let edicion = peticion.llamador;
@@ -217,7 +220,7 @@ var Crud;
             this.CrudDeMnt.Estado.Agregar("elementos_seleccionados", this.CrudDeMnt.InfoSelector.Seleccionados);
             EntornoSe.Historial.GuardarEstadoDePagina(this.CrudDeMnt.Estado);
             let datos = [];
-            let negocio = new Tipos.DatosRestrictor('idnegocio', Numero(this.CrudDeMnt.IdNegocio), this.CrudDeMnt.Negocio);
+            let negocio = new Tipos.DatosRestrictor('idnegocio', this.CrudDeMnt.IdNegocio, this.CrudDeMnt.Negocio);
             let elemento = new Tipos.DatosRestrictor('idelemento', this.Elemento.Id, this.Elemento.Texto);
             datos.push(negocio);
             datos.push(elemento);

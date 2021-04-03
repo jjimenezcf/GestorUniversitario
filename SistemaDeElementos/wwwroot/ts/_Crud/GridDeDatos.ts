@@ -349,8 +349,8 @@
         public get CuerpoPie(): HTMLDivElement {
             return document.getElementById(`cuerpo.pie.${this._idCuerpoCabecera}`) as HTMLDivElement;
         }
-        public get IdNegocio() {
-            return this.CuerpoCabecera.getAttribute(atMantenimniento.idNegocio);
+        public get IdNegocio(): number {
+            return Numero((this.CuerpoCabecera.getAttribute(atMantenimniento.idNegocio)));
         }
         public get Negocio() {
             return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);

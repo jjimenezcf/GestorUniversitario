@@ -26,6 +26,12 @@ var Auditoria;
         constructor(crud, idPanelEdicion) {
             super(crud, idPanelEdicion);
         }
+        ParametrosOpcionalesLeerPorId() {
+            let parametros = super.ParametrosOpcionalesLeerPorId();
+            let parametro = new Parametro(literal.idNegocio.replace('-', ''), this.CrudDeMnt.IdNegocio);
+            parametros.push(parametro);
+            return parametros;
+        }
     }
     Auditoria.CrudEdicionAuditoria = CrudEdicionAuditoria;
 })(Auditoria || (Auditoria = {}));

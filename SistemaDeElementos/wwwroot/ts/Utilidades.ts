@@ -227,6 +227,16 @@ class ClausulaDeFiltrado {
     }
 }
 
+class Parametro {
+    Parametro: string;
+    valor: any;
+
+    constructor(parametro: string, valor: any) {
+        this.Parametro = parametro;
+        this.valor = valor;
+    }
+}
+
 
 function DefinirRestrictorCadena(propiedad: string, valor: string): string {
     var clausulas = new Array<ClausulaDeFiltrado>();

@@ -28,6 +28,18 @@ namespace ServicioDeDatos.Negocio
 
     public static class Auditoria
     {
+        public static string sqlLeerPorId =
+$@"
+select ID as Id
+     , ID_ELEMENTO as IdElemento
+     , ID_USUARIO as IdUsuario
+     , OPERACION as Operacion
+     , REGISTRO as registroJson
+     , AUDITADO_EL as AuditadoEl
+from [Esquema].[Tabla] T1 WITH(NOLOCK)
+where ID = @Id
+";
+
         public static string sqlAuditoriaDeUnElemento =
 $@"
 select ID as Id

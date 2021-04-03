@@ -114,6 +114,23 @@ namespace MVCSistemaDeElementos.Controllers
                 : base.LeerModoAccesoAlNegocio(idUsuario,negocio);
         }
 
+        protected override AuditoriaDto LeerPorId(int id, Dictionary<string,object> parametros)
+        {
+            if (!parametros.Keys.Contains(NegocioPor.idNegocio))
+                GestorDeErrores.Emitir("Debe definir el negocio del que ha de leerse la auditroría");
+
+            var id32 = Convert.ToInt32(parametros[NegocioPor.idNegocio]);
+
+            var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, id32);
+
+            return AuditoriaDeNegocio.LeerElemento(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), id);
+        }
+        protected override enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(AuditoriaDto elemento)
+        {
+            return DatosDeConexion.EsAdministrador ? enumModoDeAccesoDeDatos.Consultor : enumModoDeAccesoDeDatos.SinPermiso;
+        }
+
+
         private static (int idNegocio, int idElemento, List<int> usuarios) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
         {
             var idNegocio = 0;

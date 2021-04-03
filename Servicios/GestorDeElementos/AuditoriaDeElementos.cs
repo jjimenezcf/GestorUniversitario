@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Dapper;
+using Gestor.Errores;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Negocio;
 using Newtonsoft.Json;
@@ -35,6 +36,17 @@ namespace GestorDeElementos
             Contexto = contexto;
         }
 
+        public AuditoriaDtm LeerRegistroPorId(int id, bool emitirError = true)
+        {
+            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlLeerPorId.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var restrictores = new Dictionary<string, object> { { "@Id", id } };
+            var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
+            
+            if (registros.Count == 0 && emitirError)
+                GestorDeErrores.Emitir("No se ha localizado el registro pedido");
+
+            return registros[0];
+        }
 
         public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento, List<int> usuarios, int posicion, int cantidad)
         {
