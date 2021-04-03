@@ -78,8 +78,8 @@ namespace MVCSistemaDeElementos.Controllers
                 var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, restrictor.idNegocio);
 
                 var datos = ApiController.LeerDatosParaElGrid(
-                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, pos, can)
-                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento));
+                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.idUsuario, pos, can)
+                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.idUsuario));
 
                 var infoObtenida = new ResultadoDeLectura();
                 infoObtenida.registros = ApiController.ElementosLeidos(Contexto, datos.elementos.ToList(), () => { return enumModoDeAccesoDeDatos.Consultor; });
@@ -113,23 +113,26 @@ namespace MVCSistemaDeElementos.Controllers
                 : base.LeerModoAccesoAlNegocio(idUsuario,negocio);
         }
 
-        private static (int idNegocio, int idElemento) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
+        private static (int idNegocio, int idElemento, int idUsuario) ObtenerRestrictores(List<ClausulaDeFiltrado> filtros)
         {
             var idNegocio = 0;
             var idElemento = 0;
+            var idUsuario = 0;
             foreach (var f in filtros)
             {
                 if (f.Clausula == NegocioPor.idNegocio)
                     idNegocio = f.Valor.Entero();
                 if (f.Clausula == nameof(AuditoriaDto.IdElemento).ToLower())
                     idElemento = f.Valor.Entero();
+                if (f.Clausula == nameof(AuditoriaDto.IdUsuario).ToLower())
+                    idUsuario = f.Valor.Entero();
             }
 
             if (idNegocio == 0)
                 GestorDeErrores.Emitir("Debe indicar el negocio del que se quiere obtener la auditoria");
             if (idElemento == 0)
                 GestorDeErrores.Emitir("Debe indicar el elemento del que se quiere obtener la auditoria");
-            return (idNegocio, idElemento);
+            return (idNegocio, idElemento, idUsuario);
         }
 
         private List<Dictionary<string, object>> ElementosLeidos(List<AuditoriaDto> auditorias)

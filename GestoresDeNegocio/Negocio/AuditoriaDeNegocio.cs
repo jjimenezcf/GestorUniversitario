@@ -11,10 +11,10 @@ namespace GestoresDeNegocio.Negocio
 {
    public class AuditoriaDeNegocio
     {
-        public static IEnumerable<AuditoriaDto> LeerElementos(ContextoSe contexto, enumNegocio negocio, int idElemento, int posicion, int cantidad)
+        public static IEnumerable<AuditoriaDto> LeerElementos(ContextoSe contexto, enumNegocio negocio, int idElemento,int idUsuario, int posicion, int cantidad)
         {
             var a = new AuditoriaDeElementos(contexto, negocio);
-            var registros = a.LeerRegistros(idElemento, posicion, cantidad);
+            var registros = a.LeerRegistros(idElemento,idUsuario, posicion, cantidad);
             var elementos = new List<AuditoriaDto>();
 
             foreach (var registro in registros)
@@ -32,10 +32,10 @@ namespace GestoresDeNegocio.Negocio
             return elementos;
         }
 
-        public static int ContarElementos(ContextoSe contexto, enumNegocio negocio, int idElemento)
+        public static int ContarElementos(ContextoSe contexto, enumNegocio negocio, int idElemento, int idUsuario)
         {
             var a = new AuditoriaDeElementos(contexto, negocio);
-            var cantidad = a.ContarRegistros(idElemento);
+            var cantidad = a.ContarRegistros(idElemento, idUsuario);
             return cantidad;
         }
     }

@@ -69,6 +69,16 @@ namespace ServicioDeDatos.Elemento
             return resultado;
         }
 
+        public void EliminarFiltro(string filtro)
+        {
+          Sentencia = Sentencia.Replace($"[{filtro}]", "");
+        }
+
+        public void AplicarFiltro(string clausula, string filtro )
+        {
+            Sentencia = Sentencia.Replace($"[{clausula}]", filtro);
+        }
+
         public int EjecutarConsulta()
         {
             int resultado = 0;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,9 @@ select ID as Id
      , OPERACION as Operacion
      , REGISTRO as registroJson
      , AUDITADO_EL as AuditadoEl
-from Esquema.Tabla T1 WITH(NOLOCK)
+from [Esquema].[Tabla] T1 WITH(NOLOCK)
 where ID_ELEMENTO = @idElemento
+ [FiltroPorUsuario]
 order by AUDITADO_EL DESC 
 OFFSET @posicion ROWS FETCH NEXT @cantidad ROWS ONLY
 ";
@@ -46,6 +48,10 @@ select count(*) as cantidad
 from Esquema.Tabla T1 WITH(NOLOCK)
 where ID_ELEMENTO = @idElemento
 ";
+
+        public static string FiltroPorUsuario = nameof(FiltroPorUsuario);
+
+        public static string AplicarFiltroPorUsuario = "And ID_USUARIO = @idUsuario";
 
         internal static void DefinirCamposDeAuditoriaDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : AuditoriaDtm
         {
