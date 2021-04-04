@@ -381,14 +381,7 @@ var ApiCrud;
             if (ApiControl.EstaBloqueada(opcion))
                 continue;
             let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                opcion.disabled = true;
-            else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                opcion.disabled = true;
-            else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                opcion.disabled = true;
-            else
-                opcion.disabled = false;
+            opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, modoDeAccesoDelUsuario);
         }
     }
     ApiCrud.AplicarModoDeAccesoAlNegocio = AplicarModoDeAccesoAlNegocio;
@@ -402,11 +395,7 @@ var ApiCrud;
             opcion.disabled = true;
             return;
         }
-        if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAccesoDelUsuarioAlElemento !== ModoDeAccesoDeDatos.Administrador)
-            opcion.disabled = true;
-        else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.Consultor || modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso))
-            opcion.disabled = true;
-        else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso)
+        if (!ModoAcceso.HayPermisos(permisosNecesarios, modoAccesoDelUsuarioAlElemento))
             opcion.disabled = true;
         else
             opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;

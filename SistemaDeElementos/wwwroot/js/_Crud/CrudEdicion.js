@@ -163,9 +163,12 @@ var Crud;
         }
         InicializarValores(id) {
             this.IdEditor.value = id.toString();
-            this.LeerElemento(id);
+            let parametros = this.ParametrosOpcionalesLeerPorId();
+            ApiDePeticiones.LeerElementoPorId(this, this.Controlador, id, parametros)
+                .then((peticion) => this.MapearElementoDevuelto(peticion))
+                .catch((peticion) => this.SiHayErrorAlLeerElemento(peticion));
         }
-        LeerElemento(id) {
+        LeerElementoPorId(id) {
             let parametros = this.ParametrosOpcionalesLeerPorId();
             let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerPorId, null, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.MapearElementoDevuelto, this.SiHayErrorAlLeerElemento);
@@ -178,24 +181,17 @@ var Crud;
             let edicion = peticion.llamador;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
-            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.datos);
+            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
         }
-        AjustarOpcionesDeMenuDeEdicion(elemento) {
+        AjustarOpcionesDeMenuDeEdicion(modoDeAcceso) {
             let opcionesDeElemento = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
-            let permisosDelUsuario = elemento.ModoDeAcceso;
+            let permisosDelUsuario = modoDeAcceso;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion = opcionesDeElemento[i];
                 if (ApiControl.EstaBloqueada(opcion))
                     continue;
                 let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && permisosDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (permisosDelUsuario === ModoDeAccesoDeDatos.Consultor || permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                    opcion.disabled = true;
-                else if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                    opcion.disabled = true;
-                else
-                    opcion.disabled = false;
+                opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, permisosDelUsuario);
             }
         }
         SiHayErrorAlLeerElemento(peticion) {

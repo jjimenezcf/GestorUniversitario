@@ -445,12 +445,6 @@ const ClaseDeOpcioDeMenu = {
     Basico: "opcion-menu-basica",
 };
 
-const ModoDeAccesoDeDatos = {
-    Administrador: "administrador",
-    Gestor: "gestor",
-    Consultor: "consultor",
-    SinPermiso: "sinpermiso"
-};
 
 const ModoTrabajo = {
     creando: "creando",

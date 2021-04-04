@@ -53,7 +53,7 @@
         private get Elemento(): Elemento {
             if (this.Posicionador === 0)
                 this.Posicionador = 1;
-            return this.InfoSelectorEdicion.Seleccionados[this.Posicionador-1];
+            return this.InfoSelectorEdicion.Seleccionados[this.Posicionador - 1];
         }
 
 
@@ -205,10 +205,13 @@
 
         protected InicializarValores(id: number) {
             this.IdEditor.value = id.toString();
-            this.LeerElemento(id);
+            let parametros: Array<Parametro> = this.ParametrosOpcionalesLeerPorId();
+            ApiDePeticiones.LeerElementoPorId(this, this.Controlador, id, parametros)
+                .then((peticion) => this.MapearElementoDevuelto(peticion))
+                .catch((peticion) => this.SiHayErrorAlLeerElemento(peticion));
         }
 
-        private LeerElemento(id: number) {
+        private LeerElementoPorId(id: number) {
             let parametros: Array<Parametro> = this.ParametrosOpcionalesLeerPorId();
             let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
 
@@ -233,30 +236,20 @@
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
-            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.datos)
+            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
         }
 
 
-        public AjustarOpcionesDeMenuDeEdicion(elemento: any): void {
+        public AjustarOpcionesDeMenuDeEdicion(modoDeAcceso: string): void {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;
-            let permisosDelUsuario: string = elemento.ModoDeAcceso;
+            let permisosDelUsuario: string = modoDeAcceso;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
                 if (ApiControl.EstaBloqueada(opcion))
                     continue;
 
                 let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && permisosDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (permisosDelUsuario === ModoDeAccesoDeDatos.Consultor || permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                        opcion.disabled = true;
-                    else
-                        if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && permisosDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                            opcion.disabled = true;
-                        else
-                            opcion.disabled = false;
+                opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, permisosDelUsuario);
             }
         }
 

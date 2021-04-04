@@ -415,16 +415,7 @@ namespace ApiCrud {
                 continue;
 
             let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoDeAccesoDelUsuario !== ModoDeAccesoDeDatos.Administrador)
-                opcion.disabled = true;
-            else
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.Consultor || modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso))
-                    opcion.disabled = true;
-                else
-                    if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoDeAccesoDelUsuario === ModoDeAccesoDeDatos.SinPermiso)
-                        opcion.disabled = true;
-                    else
-                        opcion.disabled = false;
+            opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, modoDeAccesoDelUsuario);
         }
     }
 
@@ -440,16 +431,10 @@ namespace ApiCrud {
             return;
         }
 
-        if (permisosNecesarios === ModoDeAccesoDeDatos.Administrador && modoAccesoDelUsuarioAlElemento !== ModoDeAccesoDeDatos.Administrador)
+        if (!ModoAcceso.HayPermisos(permisosNecesarios, modoAccesoDelUsuarioAlElemento))
             opcion.disabled = true;
         else
-            if (permisosNecesarios === ModoDeAccesoDeDatos.Gestor && (modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.Consultor || modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso))
-                opcion.disabled = true;
-            else
-                if (permisosNecesarios === ModoDeAccesoDeDatos.Consultor && modoAccesoDelUsuarioAlElemento === ModoDeAccesoDeDatos.SinPermiso)
-                    opcion.disabled = true;
-                else
-                    opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
     }
 
     export function ActivarOpciones(opciones: NodeListOf<HTMLButtonElement>, activas: string[], seleccionadas: number): void {

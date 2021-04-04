@@ -81,7 +81,7 @@
             this.InicializarListasDeElementos(this.PanelDeCrear, this.Controlador);
             this.InicializarListasDinamicas(this.PanelDeCrear);
             this.InicializarArchivos(this.PanelDeCrear);
-            ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.CrudDeMnt.Negocio)
+            ApiDePeticiones.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.CrudDeMnt.Negocio)
                 .then((peticion) => this.AjustarMenuDeCreacion(peticion))
                 .catch((peticion) => this.DesactivarMenuDeCreacion(peticion));
         }

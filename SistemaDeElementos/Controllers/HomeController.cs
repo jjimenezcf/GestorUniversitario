@@ -8,14 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using ModeloDeDto.Entorno;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace MVCSistemaDeElementos.Controllers
 {
     public class HomeController : BaseController<UsuarioDto>
     {
 
-        public HomeController(ContextoSe contexto, GestorDeErrores gestorDeErrores):
-        base(gestorDeErrores, contexto, null)
+        public HomeController(ContextoSe contexto, IMapper mapeador, GestorDeErrores gestorDeErrores):
+        base(gestorDeErrores, contexto, mapeador)
         {
         }
 

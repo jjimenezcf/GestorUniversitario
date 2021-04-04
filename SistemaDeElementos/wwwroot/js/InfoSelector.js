@@ -21,7 +21,7 @@ class Elemento {
     get ModoDeAcceso() {
         if (this._registro.hasOwnProperty("ModoDeAcceso"))
             return this._registro["ModoDeAcceso"].toLowerCase();
-        return ModoDeAccesoDeDatos.Administrador;
+        return ModoAcceso.ModoDeAccesoDeDatos.Administrador;
     }
     static get ElementoVacio() { return new Elemento(null); }
     EsVacio() {

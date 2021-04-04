@@ -25,10 +25,12 @@ namespace SistemaDeElementos.Controllers.Seguridad
         GestorDeUsuarios _gestordeUsuarios;
 
 
-        public AccesoController(ILogger<AccesoController> logger, ContextoSe contexto, GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores) : base(contexto, gestorDeErrores)
+        public AccesoController(ILogger<AccesoController> logger, ContextoSe contexto, GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores) 
+        : base(contexto, gestorDeUsuarios.Mapeador, gestorDeErrores)
         {
             _logger = logger;
             _gestordeUsuarios = gestorDeUsuarios;
+
         }
 
         public async Task<IActionResult> Logout()

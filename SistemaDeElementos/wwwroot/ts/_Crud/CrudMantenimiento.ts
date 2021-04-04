@@ -168,7 +168,7 @@
         private InicializarMenus() {
             this.DeshabilitarOpcionesDeMenuDeElemento();
             if (IsNullOrEmpty(this.ModoAccesoDelUsuario)) {
-                ApiDeSeguridad.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
+                ApiDePeticiones.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
                     .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
                     .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
             }

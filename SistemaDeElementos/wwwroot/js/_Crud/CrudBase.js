@@ -109,7 +109,7 @@ var Crud;
                         }
                     }
                 selector.classList.remove(ClaseCss.soloLectura);
-                if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
+                if (ModoAcceso.EsConsultor(modoDeAcceso)) {
                     selector.disabled = true;
                     selector.classList.add(ClaseCss.soloLectura);
                 }
@@ -130,7 +130,7 @@ var Crud;
                 }
                 ApiControl.AlmacenarValorDeListaDinamica(input, id);
                 input.classList.remove(ClaseCss.soloLectura);
-                if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
+                if (ModoAcceso.EsConsultor(modoDeAcceso)) {
                     input.disabled = true;
                     input.classList.add(ClaseCss.soloLectura);
                 }
@@ -177,7 +177,7 @@ var Crud;
                 return false;
             editor.classList.remove(ClaseCss.crtlNoValido);
             editor.classList.remove(ClaseCss.soloLectura);
-            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
+            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
                 editor.readOnly = true;
                 editor.classList.add(ClaseCss.soloLectura);
             }
@@ -196,7 +196,7 @@ var Crud;
                 check.checked = valor === true;
             else if (IsString(valor))
                 check.checked = valor.toLowerCase() === 'true';
-            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
+            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
                 check.disabled = true;
             }
             return true;
@@ -268,7 +268,7 @@ var Crud;
             if (selector === null)
                 return false;
             let ruta = selector.getAttribute(atArchivo.rutaDestino);
-            if (modoDeAcceso === ModoDeAccesoDeDatos.Consultor) {
+            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
                 let ref = document.getElementById(`${selector.id}.ref`);
                 ref.style.visibility = "hidden";
             }
