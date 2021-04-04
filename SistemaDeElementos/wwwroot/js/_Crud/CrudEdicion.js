@@ -179,9 +179,12 @@ var Crud;
         }
         MapearElementoDevuelto(peticion) {
             let edicion = peticion.llamador;
+            edicion.AntesDeMapearElementoDevuelto(peticion);
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
             edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
+        }
+        AntesDeMapearElementoDevuelto(peticion) {
         }
         AjustarOpcionesDeMenuDeEdicion(modoDeAcceso) {
             let opcionesDeElemento = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);

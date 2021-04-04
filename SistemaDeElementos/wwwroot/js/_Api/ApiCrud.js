@@ -68,7 +68,7 @@ var ApiControl;
         restrictor.setAttribute(atControl.restrictor, id.toString());
     }
     ApiControl.MapearRestrictorAlControl = MapearRestrictorAlControl;
-    function MapearHoraAlControl(control, fechaHora) {
+    function MapearHoraAlControl(control, fechaHora, modoDeAcceso) {
         var fechaLeida = new Date(fechaHora);
         if (FechaValida(fechaLeida)) {
             let hora = fechaLeida.getHours();
@@ -80,6 +80,10 @@ var ApiControl;
                 let controlHora = document.getElementById(idHora);
                 controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
                 controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
+                if (!controlHora.readOnly && !ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
+                    controlHora.classList.add(ClaseCss.soloLectura);
+                    controlHora.readOnly = true;
+                }
                 return;
             }
         }

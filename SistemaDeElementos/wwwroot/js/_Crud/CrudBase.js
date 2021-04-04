@@ -71,9 +71,9 @@ var Crud;
             this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso);
             this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
             this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
-            this.MapearSelectoresDeArchivo(panel, elementoJson);
-            this.MapearAreasDeTexto(panel, elementoJson);
-            this.MapearFechas(panel, elementoJson);
+            this.MapearSelectoresDeArchivo(panel, elementoJson, modoDeAcceso);
+            this.MapearAreasDeTexto(panel, elementoJson, modoDeAcceso);
+            this.MapearFechas(panel, elementoJson, modoDeAcceso);
         }
         MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso) {
             let restrictores = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`);
@@ -109,7 +109,7 @@ var Crud;
                         }
                     }
                 selector.classList.remove(ClaseCss.soloLectura);
-                if (ModoAcceso.EsConsultor(modoDeAcceso)) {
+                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
                     selector.disabled = true;
                     selector.classList.add(ClaseCss.soloLectura);
                 }
@@ -130,7 +130,7 @@ var Crud;
                 }
                 ApiControl.AlmacenarValorDeListaDinamica(input, id);
                 input.classList.remove(ClaseCss.soloLectura);
-                if (ModoAcceso.EsConsultor(modoDeAcceso)) {
+                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
                     input.disabled = true;
                     input.classList.add(ClaseCss.soloLectura);
                 }
@@ -177,7 +177,7 @@ var Crud;
                 return false;
             editor.classList.remove(ClaseCss.crtlNoValido);
             editor.classList.remove(ClaseCss.soloLectura);
-            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
+            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
                 editor.readOnly = true;
                 editor.classList.add(ClaseCss.soloLectura);
             }
@@ -196,12 +196,12 @@ var Crud;
                 check.checked = valor === true;
             else if (IsString(valor))
                 check.checked = valor.toLowerCase() === 'true';
-            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
+            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
                 check.disabled = true;
             }
             return true;
         }
-        MapearSelectoresDeArchivo(panel, elementoJson) {
+        MapearSelectoresDeArchivo(panel, elementoJson, modoDeAcceso) {
             let selectores = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`);
             for (var i = 0; i < selectores.length; i++) {
                 let selector = selectores[i];
@@ -214,35 +214,39 @@ var Crud;
                 }
             }
         }
-        MapearAreasDeTexto(panel, elementoJson) {
+        MapearAreasDeTexto(panel, elementoJson, modoDeAcceso) {
             let areas = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`);
             for (var i = 0; i < areas.length; i++) {
                 let area = areas[i];
-                this.MapearAreaDeTexto(area, elementoJson);
+                this.MapearAreaDeTexto(area, elementoJson, modoDeAcceso);
             }
         }
-        MapearFechas(panel, elementoJson) {
+        MapearFechas(panel, elementoJson, modoDeAcceso) {
             let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
             for (var i = 0; i < fechas.length; i++) {
                 let fecha = fechas[i];
-                this.MapearSelectorDeFecha(fecha, elementoJson);
+                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
             }
             let fechasHoras = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha = fechasHoras[i];
-                this.MapearSelectorDeFecha(fecha, elementoJson);
+                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
             }
         }
-        MapearAreaDeTexto(area, elementoJson) {
+        MapearAreaDeTexto(area, elementoJson, modoDeAcceso) {
             let propiedad = area.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let texto = this.BuscarValorEnJson(propiedad, elementoJson);
                 if (!IsNullOrEmpty(texto)) {
                     ApiControl.MapearTextoAlControl(area, texto);
+                    if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
+                        area.classList.add(ClaseCss.soloLectura);
+                        area.readOnly = true;
+                    }
                 }
             }
         }
-        MapearSelectorDeFecha(fecha, elementoJson) {
+        MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso) {
             let propiedad = fecha.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let valor = this.BuscarValorEnJson(propiedad, elementoJson);
@@ -250,7 +254,11 @@ var Crud;
                     ApiControl.MapearFechaAlControl(fecha, valor);
                     let tipo = fecha.getAttribute(atControl.tipo);
                     if (tipo === TipoControl.SelectorDeFechaHora) {
-                        ApiControl.MapearHoraAlControl(fecha, valor);
+                        ApiControl.MapearHoraAlControl(fecha, valor, modoDeAcceso);
+                    }
+                    if (!fecha.readOnly && !ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
+                        fecha.classList.add(ClaseCss.soloLectura);
+                        fecha.readOnly = true;
                     }
                 }
                 else
@@ -268,7 +276,7 @@ var Crud;
             if (selector === null)
                 return false;
             let ruta = selector.getAttribute(atArchivo.rutaDestino);
-            if (ModoAcceso.EsConsultor(modoDeAcceso)) {
+            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
                 let ref = document.getElementById(`${selector.id}.ref`);
                 ref.style.visibility = "hidden";
             }

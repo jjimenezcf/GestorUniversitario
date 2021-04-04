@@ -70,7 +70,7 @@
         restrictor.setAttribute(atControl.restrictor, id.toString());
     }
 
-    export function MapearHoraAlControl(control: HTMLInputElement, fechaHora: string) {
+    export function MapearHoraAlControl(control: HTMLInputElement, fechaHora: string, modoDeAcceso: string) {
         var fechaLeida = new Date(fechaHora);
         if (FechaValida(fechaLeida)) {
             let hora: number = fechaLeida.getHours();
@@ -82,6 +82,12 @@
                 let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
                 controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
                 controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
+
+                if (!controlHora.readOnly && !ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
+                    controlHora.classList.add(ClaseCss.soloLectura);
+                    controlHora.readOnly = true;
+                }
+
                 return;
             }
         }

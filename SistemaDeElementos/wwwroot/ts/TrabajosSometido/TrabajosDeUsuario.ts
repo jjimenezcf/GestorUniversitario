@@ -32,6 +32,20 @@
         Trabajo: string;
     }
 
+
+    enum EstadoTrabajo { erroneo, pendiente, bloqueado, iniciado, terminado, conerrores }
+
+    function ParsearEstado(estado: string): EstadoTrabajo {
+        if (estado.toLowerCase() === 'erroneo') return EstadoTrabajo.erroneo;
+        if (estado.toLowerCase() === 'pendiente') return EstadoTrabajo.pendiente;
+        if (estado.toLowerCase() === 'bloqueado') return EstadoTrabajo.bloqueado;
+        if (estado.toLowerCase() === 'iniciado') return EstadoTrabajo.iniciado;
+        if (estado.toLowerCase() === 'terminado') return EstadoTrabajo.terminado;
+        if (estado.toLowerCase() === 'con errores') return EstadoTrabajo.conerrores;
+
+        throw Error(`No está definido el parseo para el estado ${estado}`);
+    }
+
     export class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
 
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
@@ -233,6 +247,13 @@
 
         constructor(crud: Crud.CrudMnt, idPanelEdicion: string) {
             super(crud, idPanelEdicion);
+        }
+
+        protected AntesDeMapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax): void {
+            super.AntesDeMapearElementoDevuelto(peticion);
+            let estado: EstadoTrabajo = ParsearEstado(peticion.resultado.datos['estado']);
+            if (estado !== EstadoTrabajo.pendiente && estado !== EstadoTrabajo.bloqueado)
+                peticion.resultado.modoDeAcceso = ModoAcceso.ModoDeAccesoDeDatos.Consultor;
         }
     }
 

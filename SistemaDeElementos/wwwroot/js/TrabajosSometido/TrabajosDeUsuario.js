@@ -13,6 +13,30 @@ var TrabajosSometido;
     const idsometedor = 'idsometedor';
     class TrabajoDeUsuario {
     }
+    let EstadoTrabajo;
+    (function (EstadoTrabajo) {
+        EstadoTrabajo[EstadoTrabajo["erroneo"] = 0] = "erroneo";
+        EstadoTrabajo[EstadoTrabajo["pendiente"] = 1] = "pendiente";
+        EstadoTrabajo[EstadoTrabajo["bloqueado"] = 2] = "bloqueado";
+        EstadoTrabajo[EstadoTrabajo["iniciado"] = 3] = "iniciado";
+        EstadoTrabajo[EstadoTrabajo["terminado"] = 4] = "terminado";
+        EstadoTrabajo[EstadoTrabajo["conerrores"] = 5] = "conerrores";
+    })(EstadoTrabajo || (EstadoTrabajo = {}));
+    function ParsearEstado(estado) {
+        if (estado.toLowerCase() === 'erroneo')
+            return EstadoTrabajo.erroneo;
+        if (estado.toLowerCase() === 'pendiente')
+            return EstadoTrabajo.pendiente;
+        if (estado.toLowerCase() === 'bloqueado')
+            return EstadoTrabajo.bloqueado;
+        if (estado.toLowerCase() === 'iniciado')
+            return EstadoTrabajo.iniciado;
+        if (estado.toLowerCase() === 'terminado')
+            return EstadoTrabajo.terminado;
+        if (estado.toLowerCase() === 'con errores')
+            return EstadoTrabajo.conerrores;
+        throw Error(`No está definido el parseo para el estado ${estado}`);
+    }
     class CrudDeTrabajosDeUsuario extends Crud.CrudMnt {
         constructor(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
             super(idPanelMnt, idModalBorrar);
@@ -152,6 +176,12 @@ var TrabajosSometido;
     class CrudEdicionTrabajoDeUsuario extends Crud.CrudEdicion {
         constructor(crud, idPanelEdicion) {
             super(crud, idPanelEdicion);
+        }
+        AntesDeMapearElementoDevuelto(peticion) {
+            super.AntesDeMapearElementoDevuelto(peticion);
+            let estado = ParsearEstado(peticion.resultado.datos['estado']);
+            if (estado !== EstadoTrabajo.pendiente && estado !== EstadoTrabajo.bloqueado)
+                peticion.resultado.modoDeAcceso = ModoAcceso.ModoDeAccesoDeDatos.Consultor;
         }
     }
     TrabajosSometido.CrudEdicionTrabajoDeUsuario = CrudEdicionTrabajoDeUsuario;

@@ -234,9 +234,14 @@
 
         private MapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax) {
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
+            edicion.AntesDeMapearElementoDevuelto(peticion);
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
             edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
+        }
+
+        protected AntesDeMapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax): void {
+            
         }
 
 
