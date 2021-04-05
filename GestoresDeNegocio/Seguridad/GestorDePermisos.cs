@@ -62,6 +62,7 @@ namespace GestoresDeNegocio.Seguridad
             {
                 ServicioDeCaches.EliminarCache($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}");
                 ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+                ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}");
                 ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
             }
             else
@@ -69,6 +70,8 @@ namespace GestoresDeNegocio.Seguridad
                 var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso);
                 if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Vista))
                     ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
+                if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Negocio))
+                    ServicioDeCaches.EliminarCache($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}");
 
                 var parteDeLaClave = $"Permiso:{idPermiso}";
                 ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", parteDeLaClave);

@@ -337,11 +337,6 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected override enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio negocio)
-        {
-           return GestorDeElementos.LeerModoDeAccesoAlNegocio(idUsuario,negocio);
-        }
-
         public JsonResult epLeerModoDeAccesoAlElemento(string negocio, int id)
         {
             var r = new Resultado();

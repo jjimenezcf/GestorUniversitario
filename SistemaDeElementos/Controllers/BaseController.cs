@@ -5,6 +5,7 @@ using AutoMapper;
 using Gestor.Errores;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.Negocio;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -208,9 +209,9 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio enumNegocio)
+        protected virtual enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
-            return enumModoDeAccesoDeDatos.SinPermiso;
+            return GestorDeNegocios.LeerModoDeAcceso(Contexto, negocio);
         }
 
         protected virtual TElemento LeerPorId(int id, Dictionary<string, object> parametros)

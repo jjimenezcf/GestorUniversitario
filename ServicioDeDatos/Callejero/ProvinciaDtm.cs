@@ -9,7 +9,7 @@ using ServicioDeDatos.Negocio;
 namespace ServicioDeDatos.Callejero
 {
     [Table("PROVINCIA", Schema = "CALLEJERO")]
-    public class ProvinciaDtm : ElementoDtm
+    public class ProvinciaDtm : ElementoDtm, IAuditoria
     {
         public string Codigo { get; set; }
         public string Sigla { get; set; }

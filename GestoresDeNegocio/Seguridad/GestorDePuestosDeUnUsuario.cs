@@ -92,6 +92,7 @@ namespace GestoresDeNegocio.Seguridad
                 var parteDeLaClave = $"Usuario:{registro.IdUsuario}";
                 ServicioDeCaches.EliminarElementos($"{nameof(GestorDeVistaMvc)}.{nameof(GestorDeVistaMvc.TienePermisos)}", parteDeLaClave);
                 ServicioDeCaches.EliminarElementos($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}", parteDeLaClave);
+                ServicioDeCaches.EliminarElementos($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}", parteDeLaClave);
             }
         }
     }

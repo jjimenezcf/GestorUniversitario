@@ -364,7 +364,7 @@ namespace GestorDeElementos
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
-            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio);
+            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio, registro);
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
@@ -782,7 +782,7 @@ namespace GestorDeElementos
 
         #region  Métodos de seguridad
 
-        public bool ValidarPermisosDePersistencia(int idUsuario, enumTipoOperacion operacion, enumNegocio negocio)
+        public bool ValidarPermisosDePersistencia(int idUsuario, enumTipoOperacion operacion, enumNegocio negocio, TRegistro registro)
         {
             if (Contexto.DatosDeConexion.EsAdministrador || negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;
@@ -790,24 +790,39 @@ namespace GestorDeElementos
             if (!Contexto.DatosDeConexion.EsAdministrador && NegociosDeSe.EsDeParametrizacion(negocio))
                 GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos de parametrización sobre el negocio {NegociosDeSe.ToString(negocio)}");
 
-            var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
-            var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
-            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
-            var indice = $"Usuario:{idUsuario} Permiso:{negocioDtm.IdPermisoDeGestor}";
-
-            if (!cache.ContainsKey(indice))
+            var modoAcceso = LeerModoDeAccesoAlNegocio(Contexto.DatosDeConexion.IdUsuario, negocio);
+            var hayPermisos = modoAcceso == enumModoDeAccesoDeDatos.Administrador;
+            if (!hayPermisos)
             {
-                var gestorDePermisosDeUnUsuario = Gestores<TContexto, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>.Obtener(Contexto, Mapeador, "Entorno.GestorDePermisosDeUnUsuario");
-                var filtros = new List<ClausulaDeFiltrado>();
-                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = idUsuario.ToString() });
-                filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
-
-                if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
-                    GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
-
-                cache[indice] = true;
+                if (operacion == enumTipoOperacion.Insertar)
+                    hayPermisos = modoAcceso == enumModoDeAccesoDeDatos.Gestor;
+                else
+                {
+                    var modoAccesoElemento = LeerModoDeAccesoAlElemento(Contexto.DatosDeConexion.IdUsuario, negocio, registro.Id);
+                    hayPermisos = modoAccesoElemento == enumModoDeAccesoDeDatos.Gestor || modoAccesoElemento == enumModoDeAccesoDeDatos.Administrador;
+                }
             }
-            return (bool)cache[indice];
+
+            //var gestorDeNegocio = Gestores<TContexto, NegocioDtm, NegocioDto>.Obtener(Contexto, Mapeador, "Negocio.GestorDeNegocio");
+            //var negocioDtm = gestorDeNegocio.LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            //var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(ValidarPermisosDePersistencia)}");
+            //var indice = $"Usuario:{idUsuario} Permiso:{negocioDtm.IdPermisoDeGestor}";
+
+            //if (!cache.ContainsKey(indice))
+            //{
+            //    var gestorDePermisosDeUnUsuario = Gestores<TContexto, PermisosDeUnUsuarioDtm, PermisosDeUnUsuarioDto>.Obtener(Contexto, Mapeador, "Entorno.GestorDePermisosDeUnUsuario");
+            //    var filtros = new List<ClausulaDeFiltrado>();
+            //    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdUsuario), Criterio = CriteriosDeFiltrado.igual, Valor = idUsuario.ToString() });
+            //    filtros.Add(new ClausulaDeFiltrado { Clausula = nameof(PermisosDeUnUsuarioDtm.IdPermiso), Criterio = CriteriosDeFiltrado.esAlgunoDe, Valor = $"{negocioDtm.IdPermisoDeGestor},{negocioDtm.IdPermisoDeAdministrador}" });
+
+            //    if (gestorDePermisosDeUnUsuario.Contar(filtros) == 0)
+            //        GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos para {operacion.ToString().ToLower()} los datos de {NegociosDeSe.ToString(negocio)}");
+
+            //    cache[indice] = true;
+            //}
+            //return (bool)cache[indice];
+
+            return hayPermisos;
         }
 
         public enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(int idUsuario, enumNegocio negocio, int id)
@@ -835,20 +850,26 @@ namespace GestorDeElementos
             if (!NegocioActivo(negocio))
                 return enumModoDeAccesoDeDatos.Consultor;
 
-            var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
-            foreach (var modoLeido in modosLeidos)
+            var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}");
+            var indice = $"Usuario:{idUsuario} Negocio:{NegociosDeSe.ToString(negocio)}";
+            if (!cache.ContainsKey(indice))
             {
-                if (modoLeido.Administrador)
-                    return enumModoDeAccesoDeDatos.Administrador;
+                var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
+                foreach (var modoLeido in modosLeidos)
+                {
+                    if (modoLeido.Administrador)
+                        return enumModoDeAccesoDeDatos.Administrador;
 
-                if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
-                    modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
-                else
-                if (modoLeido.Consultor)
-                    modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+                    if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
+                    else
+                    if (modoLeido.Consultor && modoDelUsuario == enumModoDeAccesoDeDatos.SinPermiso)
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+                }
+                cache[indice] = modoDelUsuario;
             }
 
-            return modoDelUsuario;
+            return (enumModoDeAccesoDeDatos)cache[indice];
         }
 
         private bool NegocioActivo(enumNegocio negocio)

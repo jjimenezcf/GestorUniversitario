@@ -48,6 +48,13 @@ namespace GestoresDeNegocio.Negocio
             return new GestorDeNegocios(contexto, mapeador);
         }
 
+
+        public static enumModoDeAccesoDeDatos LeerModoDeAcceso(ContextoSe contexto, enumNegocio negocio)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerModoDeAccesoAlNegocio(contexto.DatosDeConexion.IdUsuario, negocio);
+        }
+
         public static NegocioDtm LeerNegocio(ContextoSe contexto, enumNegocio negocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
