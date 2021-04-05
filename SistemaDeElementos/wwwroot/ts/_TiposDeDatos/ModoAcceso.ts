@@ -15,8 +15,8 @@
     };
 
     export function HayPermisos(permisosNecesarios: string, permisosDelUsuario: string): boolean {
-        let pn: enumModoDeAccesoDeDatos = ModoAcceso.ModoDeAcceso(permisosNecesarios);
-        let pu: enumModoDeAccesoDeDatos = ModoAcceso.ModoDeAcceso(permisosDelUsuario);
+        let pn: enumModoDeAccesoDeDatos = ModoAcceso.Parsear(permisosNecesarios);
+        let pu: enumModoDeAccesoDeDatos = ModoAcceso.Parsear(permisosDelUsuario);
 
         if (pn === enumModoDeAccesoDeDatos.SinPermiso)
             return true;
@@ -35,7 +35,7 @@
         return false;
     }
 
-    export function ModoDeAcceso(modoDeAcceso): enumModoDeAccesoDeDatos {
+    export function Parsear(modoDeAcceso: string): enumModoDeAccesoDeDatos {
         if (!HayAlgunPermisos(modoDeAcceso))
             return enumModoDeAccesoDeDatos.SinPermiso;
         if (EsAdministrador(modoDeAcceso))

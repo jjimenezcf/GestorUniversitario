@@ -75,7 +75,7 @@
             else {
                 let idUsuario: number = usuarioConectado['id'] as number;
                 let usuario: string = usuarioConectado['login'] as string;
-                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
+                MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
 

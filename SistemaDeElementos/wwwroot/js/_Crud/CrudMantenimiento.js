@@ -122,9 +122,9 @@ var Crud;
         }
         AplicarRestrictor(restrictor) {
             this.ValidarRestrictorDeFiltrado();
-            ApiControl.MapearPropiedadRestrictoraAlFiltro(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
         }
         InicializarSelectores() {
             let selectores = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`);

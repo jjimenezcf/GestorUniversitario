@@ -14,8 +14,8 @@ var ModoAcceso;
         SinPermiso: "sinpermiso"
     };
     function HayPermisos(permisosNecesarios, permisosDelUsuario) {
-        let pn = ModoAcceso.ModoDeAcceso(permisosNecesarios);
-        let pu = ModoAcceso.ModoDeAcceso(permisosDelUsuario);
+        let pn = ModoAcceso.Parsear(permisosNecesarios);
+        let pu = ModoAcceso.Parsear(permisosDelUsuario);
         if (pn === enumModoDeAccesoDeDatos.SinPermiso)
             return true;
         if (pn === enumModoDeAccesoDeDatos.Consultor && pu !== enumModoDeAccesoDeDatos.SinPermiso)
@@ -28,7 +28,7 @@ var ModoAcceso;
         return false;
     }
     ModoAcceso.HayPermisos = HayPermisos;
-    function ModoDeAcceso(modoDeAcceso) {
+    function Parsear(modoDeAcceso) {
         if (!HayAlgunPermisos(modoDeAcceso))
             return enumModoDeAccesoDeDatos.SinPermiso;
         if (EsAdministrador(modoDeAcceso))
@@ -39,7 +39,7 @@ var ModoAcceso;
             return enumModoDeAccesoDeDatos.Consultor;
         return enumModoDeAccesoDeDatos.SinPermiso;
     }
-    ModoAcceso.ModoDeAcceso = ModoDeAcceso;
+    ModoAcceso.Parsear = Parsear;
     function HayAlgunPermisos(modoAcceso) {
         if (IsNullOrEmpty(modoAcceso) || modoAcceso === ModoAcceso.ModoDeAccesoDeDatos.SinPermiso)
             return false;

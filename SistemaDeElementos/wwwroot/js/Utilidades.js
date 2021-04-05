@@ -116,11 +116,6 @@ function PadLeft(cadena, rellenarCon) {
         return rellenarCon;
     return (rellenarCon + cadena).slice(-rellenarCon.length);
 }
-function NumeroMayorDeCero(valor) {
-    if (valor === null || valor === undefined)
-        return false;
-    return Numero(valor) > 0;
-}
 function FechaValida(fecha) {
     if (fecha === undefined || fecha === null)
         return false;
@@ -128,8 +123,11 @@ function FechaValida(fecha) {
         return false;
     return true;
 }
+function NumeroMayorDeCero(valor) {
+    return Numero(valor) > 0;
+}
 function Numero(valor) {
-    if (valor === undefined || valor === null)
+    if (valor === null || valor === undefined)
         return 0;
     if (IsString(valor))
         return Number(valor);

@@ -66,16 +66,16 @@ var Crud;
             MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje);
         }
         // funciones para mapear un elemento Json a los controles de un panel
-        MapearElementoLeido(panel, elementoJson, modoDeAcceso) {
-            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
-            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso);
-            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
-            this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
-            this.MapearSelectoresDeArchivo(panel, elementoJson, modoDeAcceso);
-            this.MapearAreasDeTexto(panel, elementoJson, modoDeAcceso);
-            this.MapearFechas(panel, elementoJson, modoDeAcceso);
+        MapearElementoLeido(panel, elementoJson) {
+            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
+            this.MapearRestrictoresDelElemento(panel, elementoJson);
+            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson);
+            this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+            this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearAreasDeTexto(panel, elementoJson);
+            this.MapearFechas(panel, elementoJson);
         }
-        MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso) {
+        MapearRestrictoresDelElemento(panel, elementoJson) {
             let restrictores = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`);
             for (var i = 0; i < restrictores.length; i++) {
                 let restrictor = restrictores[i];
@@ -89,33 +89,20 @@ var Crud;
                 let idRestrictor = this.BuscarValorEnJson(propiedad, elementoJson);
                 let texto = this.BuscarValorEnJson(mostrar, elementoJson);
                 if (!IsNullOrEmpty(texto)) {
-                    ApiControl.MapearRestrictorAlControl(restrictor, idRestrictor, texto);
+                    MapearAlControl.Restrictor(restrictor, idRestrictor, texto);
                 }
             }
         }
-        MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso) {
-            let select = panel.getElementsByTagName('select');
-            for (var i = 0; i < select.length; i++) {
-                let selector = select[i];
-                let guardarEn = selector.getAttribute(atListasDinamicasDto.guardarEn);
+        MaperaPropiedadesDeListasDeElementos(panel, elementoJson) {
+            let listas = panel.getElementsByTagName('select');
+            for (var i = 0; i < listas.length; i++) {
+                let lista = listas[i];
+                let guardarEn = lista.getAttribute(atListasDinamicasDto.guardarEn);
                 let id = this.BuscarValorEnJson(guardarEn, elementoJson);
-                if (id === null || id == 0)
-                    selector.selectedIndex = 0;
-                else
-                    for (var j = 0; j < selector.options.length; j++) {
-                        if (Numero(selector.options[j].value) == id) {
-                            selector.selectedIndex = j;
-                            break;
-                        }
-                    }
-                selector.classList.remove(ClaseCss.soloLectura);
-                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                    selector.disabled = true;
-                    selector.classList.add(ClaseCss.soloLectura);
-                }
+                MapearAlControl.Lista(lista, id);
             }
         }
-        MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso) {
+        MaperaOpcionesListasDinamicas(panel, elementoJson) {
             let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
             for (var i = 0; i < listas.length; i++) {
                 let input = listas[i];
@@ -128,27 +115,22 @@ var Crud;
                     listaDinamica.AgregarOpcion(id, valor);
                     input.value = valor;
                 }
-                ApiControl.AlmacenarValorDeListaDinamica(input, id);
-                input.classList.remove(ClaseCss.soloLectura);
-                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                    input.disabled = true;
-                    input.classList.add(ClaseCss.soloLectura);
-                }
+                MapearAlControl.ListaDinamica(input, id);
             }
         }
-        MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson, modoDeAcceso) {
+        MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson) {
             if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
-                this.MapearPropiedad(panel, propiedad, "", modoDeAcceso);
+                this.MapearPropiedad(panel, propiedad, "");
                 return;
             }
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad], modoDeAcceso);
+                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad]);
                 }
             }
             else {
-                this.MapearPropiedad(panel, propiedad, valorPropiedadJson, modoDeAcceso);
+                this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
             }
         }
         BuscarValorEnJson(propiedad, valorPropiedadJson) {
@@ -161,32 +143,24 @@ var Crud;
             }
             return null;
         }
-        MapearPropiedad(panel, propiedad, valor, modoDeAcceso) {
-            if (this.MapearPropiedaAlEditor(panel, propiedad, valor, modoDeAcceso))
+        MapearPropiedad(panel, propiedad, valor) {
+            if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
                 return;
-            //if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
-            //    return;
-            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor, modoDeAcceso))
+            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor))
                 return;
-            if (this.MapearPropiedadAlCheck(panel, propiedad, valor, modoDeAcceso))
+            if (this.MapearPropiedadAlCheck(panel, propiedad, valor))
                 return;
         }
-        MapearPropiedaAlEditor(panel, propiedad, valor, modoDeAcceso) {
+        MapearPropiedaAlEditor(panel, propiedad, valor) {
             let editor = this.BuscarEditor(panel, propiedad);
             if (editor === null)
                 return false;
             editor.classList.remove(ClaseCss.crtlNoValido);
-            editor.classList.remove(ClaseCss.soloLectura);
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                editor.readOnly = true;
-                editor.classList.add(ClaseCss.soloLectura);
-            }
-            else
-                editor.classList.add(ClaseCss.crtlValido);
+            editor.classList.add(ClaseCss.crtlValido);
             editor.value = valor;
             return true;
         }
-        MapearPropiedadAlCheck(panel, propiedad, valor, modoDeAcceso) {
+        MapearPropiedadAlCheck(panel, propiedad, valor) {
             let check = this.BuscarCheck(panel, propiedad);
             if (check === null)
                 return false;
@@ -196,12 +170,9 @@ var Crud;
                 check.checked = valor === true;
             else if (IsString(valor))
                 check.checked = valor.toLowerCase() === 'true';
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                check.disabled = true;
-            }
             return true;
         }
-        MapearSelectoresDeArchivo(panel, elementoJson, modoDeAcceso) {
+        MapearSelectoresDeArchivo(panel, elementoJson) {
             let selectores = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`);
             for (var i = 0; i < selectores.length; i++) {
                 let selector = selectores[i];
@@ -214,51 +185,43 @@ var Crud;
                 }
             }
         }
-        MapearAreasDeTexto(panel, elementoJson, modoDeAcceso) {
+        MapearAreasDeTexto(panel, elementoJson) {
             let areas = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`);
             for (var i = 0; i < areas.length; i++) {
                 let area = areas[i];
-                this.MapearAreaDeTexto(area, elementoJson, modoDeAcceso);
+                this.MapearAreaDeTexto(area, elementoJson);
             }
         }
-        MapearFechas(panel, elementoJson, modoDeAcceso) {
+        MapearFechas(panel, elementoJson) {
             let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
             for (var i = 0; i < fechas.length; i++) {
                 let fecha = fechas[i];
-                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
+                this.MapearSelectorDeFecha(fecha, elementoJson);
             }
             let fechasHoras = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha = fechasHoras[i];
-                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
+                this.MapearSelectorDeFecha(fecha, elementoJson);
             }
         }
-        MapearAreaDeTexto(area, elementoJson, modoDeAcceso) {
+        MapearAreaDeTexto(area, elementoJson) {
             let propiedad = area.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let texto = this.BuscarValorEnJson(propiedad, elementoJson);
                 if (!IsNullOrEmpty(texto)) {
-                    ApiControl.MapearTextoAlControl(area, texto);
-                    if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                        area.classList.add(ClaseCss.soloLectura);
-                        area.readOnly = true;
-                    }
+                    MapearAlControl.Texto(area, texto);
                 }
             }
         }
-        MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso) {
+        MapearSelectorDeFecha(fecha, elementoJson) {
             let propiedad = fecha.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let valor = this.BuscarValorEnJson(propiedad, elementoJson);
                 if (!IsNullOrEmpty(valor)) {
-                    ApiControl.MapearFechaAlControl(fecha, valor);
+                    MapearAlControl.Fecha(fecha, valor);
                     let tipo = fecha.getAttribute(atControl.tipo);
                     if (tipo === TipoControl.SelectorDeFechaHora) {
-                        ApiControl.MapearHoraAlControl(fecha, valor, modoDeAcceso);
-                    }
-                    if (!fecha.readOnly && !ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                        fecha.classList.add(ClaseCss.soloLectura);
-                        fecha.readOnly = true;
+                        MapearAlControl.Hora(fecha, valor);
                     }
                 }
                 else
@@ -269,17 +232,13 @@ var Crud;
             let visor = document.getElementById(visorVinculado);
             let propiedadDelVisor = visor.getAttribute(atControl.propiedad);
             let url = this.BuscarValorEnJson(propiedadDelVisor, elementoJson);
-            this.MostrarImagenUrl(visor, url);
+            MapearAlControl.Url(visor, url);
         }
-        MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor, modoDeAcceso) {
+        MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor) {
             let selector = this.BuscarUrlDelArchivo(panel, propiedad);
             if (selector === null)
                 return false;
             let ruta = selector.getAttribute(atArchivo.rutaDestino);
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                let ref = document.getElementById(`${selector.id}.ref`);
-                ref.style.visibility = "hidden";
-            }
             selector.classList.remove(ClaseCss.crtlNoValido);
             selector.classList.add(ClaseCss.crtlValido);
             selector.setAttribute(atArchivo.nombre, valor);
@@ -290,20 +249,7 @@ var Crud;
             let visor = this.BuscarVisorDeImagen(panel, propiedad);
             if (visor === null)
                 return;
-            this.MostrarImagenUrl(visor, valor);
-        }
-        MostrarImagenUrl(visor, url) {
-            visor.setAttribute('src', url);
-            let idCanva = visor.getAttribute(atControl.id).replace('img', 'canvas');
-            let htmlCanvas = document.getElementById(idCanva);
-            htmlCanvas.width = 100;
-            htmlCanvas.height = 100;
-            var canvas = htmlCanvas.getContext('2d');
-            var img = new Image();
-            img.src = url;
-            img.onload = function () {
-                canvas.drawImage(img, 0, 0, 100, 100);
-            };
+            MapearAlControl.Url(visor, valor);
         }
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
         BuscarEditor(controlPadre, propiedadDto) {
@@ -393,7 +339,7 @@ var Crud;
         SeleccionarListaDinamica(input) {
             let lista = new Tipos.ListaDinamica(input);
             let valor = lista.BuscarSeleccionado(input.value);
-            ApiControl.AlmacenarValorDeListaDinamica(input, valor);
+            MapearAlControl.ListaDinamica(input, valor);
         }
         // funciones de carga de elementos para los selectores   ************************************************************************************
         CargarListaDinamica(input) {

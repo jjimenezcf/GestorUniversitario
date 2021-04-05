@@ -60,7 +60,7 @@ var TrabajosSometido;
             else {
                 let idUsuario = usuarioConectado['id'];
                 let usuario = usuarioConectado['login'];
-                ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
+                MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
         AplicarModoAccesoAlElemento(elemento) {

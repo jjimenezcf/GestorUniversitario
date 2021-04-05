@@ -88,19 +88,21 @@
             MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje);
         }
 
+
+
         // funciones para mapear un elemento Json a los controles de un panel
 
-        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
-            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson, modoDeAcceso);
-            this.MapearRestrictoresDelElemento(panel, elementoJson, modoDeAcceso);
-            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson, modoDeAcceso);
-            this.MaperaOpcionesListasDinamicas(panel, elementoJson, modoDeAcceso);
-            this.MapearSelectoresDeArchivo(panel, elementoJson, modoDeAcceso);
-            this.MapearAreasDeTexto(panel, elementoJson, modoDeAcceso);
-            this.MapearFechas(panel, elementoJson, modoDeAcceso);
+        protected MapearElementoLeido(panel: HTMLDivElement, elementoJson: JSON) {
+            this.MapearPropiedadesDelElemento(panel, "elementoJson", elementoJson);
+            this.MapearRestrictoresDelElemento(panel, elementoJson);
+            this.MaperaPropiedadesDeListasDeElementos(panel, elementoJson);
+            this.MaperaOpcionesListasDinamicas(panel, elementoJson);
+            this.MapearSelectoresDeArchivo(panel, elementoJson);
+            this.MapearAreasDeTexto(panel, elementoJson);
+            this.MapearFechas(panel, elementoJson);
         }
 
-        private MapearRestrictoresDelElemento(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
+        private MapearRestrictoresDelElemento(panel: HTMLDivElement, elementoJson: JSON) {
 
             let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < restrictores.length; i++) {
@@ -117,36 +119,22 @@
                 let idRestrictor: number = this.BuscarValorEnJson(propiedad, elementoJson) as number;
                 let texto: string = this.BuscarValorEnJson(mostrar, elementoJson) as string;
                 if (!IsNullOrEmpty(texto)) {
-                    ApiControl.MapearRestrictorAlControl(restrictor, idRestrictor, texto);
+                    MapearAlControl.Restrictor(restrictor, idRestrictor, texto);
                 }
             }
         }
 
-        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
-            let select: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
-            for (var i = 0; i < select.length; i++) {
-                let selector: HTMLSelectElement = select[i] as HTMLSelectElement;
-                let guardarEn: string = selector.getAttribute(atListasDinamicasDto.guardarEn);
+        private MaperaPropiedadesDeListasDeElementos(panel: HTMLDivElement, elementoJson: JSON) {
+            let listas: HTMLCollectionOf<HTMLSelectElement> = panel.getElementsByTagName('select') as HTMLCollectionOf<HTMLSelectElement>;
+            for (var i = 0; i < listas.length; i++) {
+                let lista: HTMLSelectElement = listas[i] as HTMLSelectElement;
+                let guardarEn: string = lista.getAttribute(atListasDinamicasDto.guardarEn);
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
-                if (id === null || id == 0)
-                    selector.selectedIndex = 0;
-                else
-                    for (var j = 0; j < selector.options.length; j++) {
-                        if (Numero(selector.options[j].value) == id) {
-                            selector.selectedIndex = j;
-                            break;
-                        }
-                    }
-
-                selector.classList.remove(ClaseCss.soloLectura);
-                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                    selector.disabled = true;
-                    selector.classList.add(ClaseCss.soloLectura);
-                }
+                MapearAlControl.Lista(lista, id);
             }
         }
 
-        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
+        private MaperaOpcionesListasDinamicas(panel: HTMLDivElement, elementoJson: JSON) {
 
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
 
@@ -163,31 +151,24 @@
                     input.value = valor;
                 }
 
-                ApiControl.AlmacenarValorDeListaDinamica(input, id);
-
-                input.classList.remove(ClaseCss.soloLectura);
-                if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                    input.disabled = true;
-                    input.classList.add(ClaseCss.soloLectura);
-                }
-
+                MapearAlControl.ListaDinamica(input, id);
             }
         }
 
-        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any, modoDeAcceso: string) {
+        private MapearPropiedadesDelElemento(panel: HTMLDivElement, propiedad: string, valorPropiedadJson: any) {
 
             if (valorPropiedadJson === undefined || valorPropiedadJson === null) {
-                this.MapearPropiedad(panel, propiedad, "", modoDeAcceso);
+                this.MapearPropiedad(panel, propiedad, "");
                 return;
             }
 
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var propiedad in valorPropiedadJson) {
-                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad], modoDeAcceso);
+                    this.MapearPropiedadesDelElemento(panel, propiedad.toLowerCase(), valorPropiedadJson[propiedad]);
                 }
             } else {
-                this.MapearPropiedad(panel, propiedad, valorPropiedadJson, modoDeAcceso);
+                this.MapearPropiedad(panel, propiedad, valorPropiedadJson);
             }
         }
 
@@ -203,42 +184,32 @@
         }
 
 
-        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string) {
+        private MapearPropiedad(panel: HTMLDivElement, propiedad: string, valor: any) {
 
-            if (this.MapearPropiedaAlEditor(panel, propiedad, valor, modoDeAcceso))
+            if (this.MapearPropiedaAlEditor(panel, propiedad, valor))
                 return;
 
-            //if (this.MapearPropiedadAlSelectorDeArchivo(panel, propiedad, valor))
-            //    return;
-
-            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor, modoDeAcceso))
+            if (this.MapearPropiedadAlSelectorDeUrlDelArchivo(panel, propiedad, valor))
                 return;
 
-            if (this.MapearPropiedadAlCheck(panel, propiedad, valor, modoDeAcceso))
+            if (this.MapearPropiedadAlCheck(panel, propiedad, valor))
                 return;
         }
 
-        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
+        private MapearPropiedaAlEditor(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let editor: HTMLInputElement = this.BuscarEditor(panel, propiedad);
 
             if (editor === null)
                 return false;
 
             editor.classList.remove(ClaseCss.crtlNoValido);
-            editor.classList.remove(ClaseCss.soloLectura);
-
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                editor.readOnly = true;
-                editor.classList.add(ClaseCss.soloLectura);
-            }
-            else
-                editor.classList.add(ClaseCss.crtlValido);
+            editor.classList.add(ClaseCss.crtlValido);
 
             editor.value = valor;
             return true;
         }
 
-        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
+        private MapearPropiedadAlCheck(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let check: HTMLInputElement = this.BuscarCheck(panel, propiedad);
 
             if (check === null)
@@ -252,16 +223,11 @@
             else
                 if (IsString(valor))
                     check.checked = valor.toLowerCase() === 'true';
-
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                check.disabled = true;
-            }
-
             return true;
         }
 
 
-        private MapearSelectoresDeArchivo(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string) {
+        private MapearSelectoresDeArchivo(panel: HTMLDivElement, elementoJson: JSON) {
 
             let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
 
@@ -276,59 +242,49 @@
                 }
             }
         }
-        private MapearAreasDeTexto(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string): void {
+        private MapearAreasDeTexto(panel: HTMLDivElement, elementoJson: JSON): void {
 
             let areas: NodeListOf<HTMLTextAreaElement> = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`) as NodeListOf<HTMLTextAreaElement>;
             for (var i = 0; i < areas.length; i++) {
                 let area: HTMLTextAreaElement = areas[i] as HTMLTextAreaElement;
-                this.MapearAreaDeTexto(area, elementoJson, modoDeAcceso);
+                this.MapearAreaDeTexto(area, elementoJson);
             }
         }
 
-        private MapearFechas(panel: HTMLDivElement, elementoJson: JSON, modoDeAcceso: string ): void {
+        private MapearFechas(panel: HTMLDivElement, elementoJson: JSON ): void {
 
             let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < fechas.length; i++) {
                 let fecha: HTMLInputElement = fechas[i] as HTMLInputElement;
-                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
+                this.MapearSelectorDeFecha(fecha, elementoJson);
             }
 
             let fechasHoras: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha: HTMLInputElement = fechasHoras[i] as HTMLInputElement;
-                this.MapearSelectorDeFecha(fecha, elementoJson, modoDeAcceso);
+                this.MapearSelectorDeFecha(fecha, elementoJson);
             }
         }
 
-        private MapearAreaDeTexto(area: HTMLTextAreaElement, elementoJson: JSON, modoDeAcceso: string): void {
+        private MapearAreaDeTexto(area: HTMLTextAreaElement, elementoJson: JSON): void {
             let propiedad: string = area.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let texto: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
                 if (!IsNullOrEmpty(texto)) {
-                    ApiControl.MapearTextoAlControl(area, texto);
-
-                    if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                        area.classList.add(ClaseCss.soloLectura);
-                        area.readOnly = true;
-                    }
+                    MapearAlControl.Texto(area, texto);
                 }
             }
         }
 
-        private MapearSelectorDeFecha(fecha: HTMLInputElement, elementoJson: JSON, modoDeAcceso: string): void {
+        private MapearSelectorDeFecha(fecha: HTMLInputElement, elementoJson: JSON): void {
             let propiedad: string = fecha.getAttribute(atControl.propiedad);
             if (!IsNullOrEmpty(propiedad)) {
                 let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
                 if (!IsNullOrEmpty(valor)) {
-                    ApiControl.MapearFechaAlControl(fecha, valor);
+                    MapearAlControl.Fecha(fecha, valor);
                     let tipo: string = fecha.getAttribute(atControl.tipo);
                     if (tipo === TipoControl.SelectorDeFechaHora) {
-                        ApiControl.MapearHoraAlControl(fecha, valor, modoDeAcceso);
-                    }
-
-                    if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                        fecha.classList.add(ClaseCss.soloLectura);
-                        fecha.readOnly = true;
+                        MapearAlControl.Hora(fecha, valor);
                     }
                 }
                 else 
@@ -336,27 +292,19 @@
             }
         }
 
-
-
         private MapearImagenes(elementoJson: JSON, visorVinculado: string): void {
             let visor: HTMLImageElement = document.getElementById(visorVinculado) as HTMLImageElement;
             let propiedadDelVisor: string = visor.getAttribute(atControl.propiedad);
             let url: string = this.BuscarValorEnJson(propiedadDelVisor, elementoJson) as string;
-            this.MostrarImagenUrl(visor, url);
+            MapearAlControl.Url(visor, url);
         }
 
-
-        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any, modoDeAcceso: string): boolean {
+        private MapearPropiedadAlSelectorDeUrlDelArchivo(panel: HTMLDivElement, propiedad: string, valor: any): boolean {
             let selector: HTMLInputElement = this.BuscarUrlDelArchivo(panel, propiedad);
 
             if (selector === null)
                 return false;
             let ruta: string = selector.getAttribute(atArchivo.rutaDestino);
-            if (!ModoAcceso.HayPermisos(ModoAcceso.ModoDeAccesoDeDatos.Gestor, modoDeAcceso)) {
-                let ref = document.getElementById(`${selector.id}.ref`);
-                ref.style.visibility = "hidden";
-            }
-
             selector.classList.remove(ClaseCss.crtlNoValido);
             selector.classList.add(ClaseCss.crtlValido);
             selector.setAttribute(atArchivo.nombre, valor);
@@ -367,26 +315,11 @@
 
         private MapearPropiedadAlVisorDeImagen(panel: HTMLDivElement, propiedad: string, valor: any) {
             let visor: HTMLImageElement = this.BuscarVisorDeImagen(panel, propiedad);
-
             if (visor === null)
                 return;
-
-            this.MostrarImagenUrl(visor, valor);
+            MapearAlControl.Url(visor, valor);
         }
 
-        private MostrarImagenUrl(visor: HTMLImageElement, url: any) {
-            visor.setAttribute('src', url);
-            let idCanva: string = visor.getAttribute(atControl.id).replace('img', 'canvas');
-            let htmlCanvas: HTMLCanvasElement = document.getElementById(idCanva) as HTMLCanvasElement;
-            htmlCanvas.width = 100;
-            htmlCanvas.height = 100;
-            var canvas = htmlCanvas.getContext('2d');
-            var img = new Image();
-            img.src = url;
-            img.onload = function () {
-                canvas.drawImage(img, 0, 0, 100, 100);
-            };
-        }
 
         // funciones para la gestión de los mapeos de controles a un json  ****************************************************************************
 
@@ -491,7 +424,7 @@
         public SeleccionarListaDinamica(input: HTMLInputElement) {
             let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
             let valor: number = lista.BuscarSeleccionado(input.value);
-            ApiControl.AlmacenarValorDeListaDinamica(input, valor);
+            MapearAlControl.ListaDinamica(input, valor);
         }
 
 

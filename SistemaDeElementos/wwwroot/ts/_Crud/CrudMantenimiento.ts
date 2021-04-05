@@ -150,9 +150,9 @@
 
         private AplicarRestrictor(restrictor: Tipos.DatosRestrictor): void {
             this.ValidarRestrictorDeFiltrado();
-            ApiControl.MapearPropiedadRestrictoraAlFiltro(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            ApiControl.MapearPropiedadRestrictoraAlControl(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
         }
 
         private InicializarSelectores() {

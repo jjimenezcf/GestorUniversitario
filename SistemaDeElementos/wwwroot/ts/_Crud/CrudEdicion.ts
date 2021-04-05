@@ -236,14 +236,26 @@
             let edicion: CrudEdicion = peticion.llamador as CrudEdicion;
             edicion.AntesDeMapearElementoDevuelto(peticion);
             let panel = edicion.PanelDeEditar;
-            edicion.MapearElementoLeido(panel, peticion.resultado.datos, peticion.resultado.modoDeAcceso);
+            edicion.MapearElementoLeido(panel, peticion.resultado.datos);
             edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
+            edicion.AplicarModoDeAccesoAlPanel(edicion.PanelDeEditar, ModoAcceso.Parsear(peticion.resultado.modoDeAcceso));
         }
 
         protected AntesDeMapearElementoDevuelto(peticion: ApiDeAjax.DescriptorAjax): void {
             
         }
 
+        public AplicarModoDeAccesoAlPanel(panel: HTMLDivElement, modoDeAcceso: ModoAcceso.enumModoDeAccesoDeDatos): void {
+            //ApiControl.AplicarModoDeAccesoAlEditor(editor, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoAlLinkDeArchivo(linkDeArchivo, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoAlCheck(check, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoAlRestrictor(restrictor, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoALaListaDeElementos(lista, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoALaListaDinamicas(lista, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoALSelectorDeArchivo(selector, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoALTextArea(area, modoDeAcceso);
+            //ApiControl.AplicarModoDeAccesoALSelectorDeFecha(fecha, modoDeAcceso);            
+        }
 
         public AjustarOpcionesDeMenuDeEdicion(modoDeAcceso: string): void {
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`) as NodeListOf<HTMLButtonElement>;

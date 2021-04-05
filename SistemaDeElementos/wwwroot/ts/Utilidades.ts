@@ -144,13 +144,6 @@ function PadLeft(cadena: string, rellenarCon: string): string {
     return (rellenarCon + cadena).slice(-rellenarCon.length);
 }
 
-function NumeroMayorDeCero(valor: string): boolean {
-
-    if (valor === null || valor === undefined)
-        return false;
-
-    return Numero(valor) > 0;
-}
 
 
 function FechaValida(fecha: Date): boolean {
@@ -163,8 +156,14 @@ function FechaValida(fecha: Date): boolean {
     return true;
 }
 
+function NumeroMayorDeCero(valor: any): boolean {
+
+    return Numero(valor) > 0;
+}
+
+
 function Numero(valor: any): number {
-    if (valor === undefined || valor === null)
+    if (valor === null || valor === undefined)
         return 0;
 
     if (IsString(valor))
