@@ -173,7 +173,7 @@ var Crud;
             return true;
         }
         MapearSelectoresDeArchivo(panel, elementoJson) {
-            let selectores = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`);
+            let selectores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`);
             for (var i = 0; i < selectores.length; i++) {
                 let selector = selectores[i];
                 let propiedad = selector.getAttribute(atControl.propiedad);
@@ -186,19 +186,19 @@ var Crud;
             }
         }
         MapearAreasDeTexto(panel, elementoJson) {
-            let areas = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`);
+            let areas = panel.querySelectorAll(`textarea[${atControl.tipo}="${TipoControl.AreaDeTexto}"]`);
             for (var i = 0; i < areas.length; i++) {
                 let area = areas[i];
                 this.MapearAreaDeTexto(area, elementoJson);
             }
         }
         MapearFechas(panel, elementoJson) {
-            let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
+            let fechas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`);
             for (var i = 0; i < fechas.length; i++) {
                 let fecha = fechas[i];
                 this.MapearSelectorDeFecha(fecha, elementoJson);
             }
-            let fechasHoras = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
+            let fechasHoras = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`);
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha = fechasHoras[i];
                 this.MapearSelectorDeFecha(fecha, elementoJson);
@@ -273,7 +273,7 @@ var Crud;
             return null;
         }
         BuscarSelectorDeArchivo(controlPadre, propiedadDto) {
-            let selectores = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`);
+            let selectores = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`);
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i];
                 var dto = control.getAttribute(atControl.propiedad);
@@ -293,7 +293,7 @@ var Crud;
             return null;
         }
         BuscarUrlDelArchivo(controlPadre, propiedadDto) {
-            let selectores = controlPadre.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`);
+            let selectores = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.UrlDeArchivo}"]`);
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i];
                 var dto = control.getAttribute(atControl.propiedad);

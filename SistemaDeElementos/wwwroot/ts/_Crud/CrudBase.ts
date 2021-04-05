@@ -229,7 +229,7 @@
 
         private MapearSelectoresDeArchivo(panel: HTMLDivElement, elementoJson: JSON) {
 
-            let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            let selectores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
 
             for (var i = 0; i < selectores.length; i++) {
                 let selector: HTMLInputElement = selectores[i] as HTMLInputElement;
@@ -244,7 +244,7 @@
         }
         private MapearAreasDeTexto(panel: HTMLDivElement, elementoJson: JSON): void {
 
-            let areas: NodeListOf<HTMLTextAreaElement> = panel.querySelectorAll(`textarea[tipo="${TipoControl.AreaDeTexto}"]`) as NodeListOf<HTMLTextAreaElement>;
+            let areas: NodeListOf<HTMLTextAreaElement> = panel.querySelectorAll(`textarea[${atControl.tipo}="${TipoControl.AreaDeTexto}"]`) as NodeListOf<HTMLTextAreaElement>;
             for (var i = 0; i < areas.length; i++) {
                 let area: HTMLTextAreaElement = areas[i] as HTMLTextAreaElement;
                 this.MapearAreaDeTexto(area, elementoJson);
@@ -253,13 +253,13 @@
 
         private MapearFechas(panel: HTMLDivElement, elementoJson: JSON ): void {
 
-            let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
+            let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < fechas.length; i++) {
                 let fecha: HTMLInputElement = fechas[i] as HTMLInputElement;
                 this.MapearSelectorDeFecha(fecha, elementoJson);
             }
 
-            let fechasHoras: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<HTMLInputElement>;
+            let fechasHoras: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < fechasHoras.length; i++) {
                 let fecha: HTMLInputElement = fechasHoras[i] as HTMLInputElement;
                 this.MapearSelectorDeFecha(fecha, elementoJson);
@@ -346,7 +346,7 @@
         }
 
         protected BuscarSelectorDeArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
+            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i] as HTMLInputElement;
                 var dto = control.getAttribute(atControl.propiedad);
@@ -368,7 +368,7 @@
         }
 
         protected BuscarUrlDelArchivo(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[tipo="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
+            let selectores: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.UrlDeArchivo}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < selectores.length; i++) {
                 var control = selectores[i] as HTMLInputElement;
                 var dto = control.getAttribute(atControl.propiedad);
