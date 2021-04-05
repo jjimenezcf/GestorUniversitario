@@ -8,11 +8,11 @@
         public crudDeEdicion: CrudEdicion;
         private _idModalBorrar: string;
 
-        private _modoAccesoDelUsuario: string;
-        public get ModoAccesoDelUsuario(): string {
+        private _modoAccesoDelUsuario: ModoAcceso.enumModoDeAccesoDeDatos;
+        public get ModoAccesoDelUsuario(): ModoAcceso.enumModoDeAccesoDeDatos {
             return this._modoAccesoDelUsuario;
         }
-        public set ModoAccesoDelUsuario(modoDeAcceso: string) {
+        public set ModoAccesoDelUsuario(modoDeAcceso: ModoAcceso.enumModoDeAccesoDeDatos) {
             this._modoAccesoDelUsuario = modoDeAcceso;
         }
 
@@ -167,13 +167,13 @@
 
         private InicializarMenus() {
             this.DeshabilitarOpcionesDeMenuDeElemento();
-            if (IsNullOrEmpty(this.ModoAccesoDelUsuario)) {
+            if (this.ModoAccesoDelUsuario === undefined) {
                 ApiDePeticiones.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
                     .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
                     .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
             }
             else {
-                ApiCrud.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
+                ModoAcceso.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
             }
         }
 
@@ -184,9 +184,9 @@
 
         private AplicarModoDeAccesoAlNegocio(peticion: ApiDeAjax.DescriptorAjax) {
             let mantenimiento: CrudMnt = peticion.llamador as CrudMnt;
-            let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            mantenimiento.ModoAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            ApiCrud.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
+            let modoDeAccesoDelUsuario = ModoAcceso.Parsear(peticion.resultado.modoDeAcceso);
+            mantenimiento.ModoAccesoDelUsuario = modoDeAccesoDelUsuario;
+            ModoAcceso.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
 
 

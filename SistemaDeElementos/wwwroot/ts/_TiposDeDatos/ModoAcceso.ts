@@ -14,22 +14,19 @@
         SinPermiso: "sinpermiso"
     };
 
-    export function HayPermisos(permisosNecesarios: string, permisosDelUsuario: string): boolean {
-        let pn: enumModoDeAccesoDeDatos = ModoAcceso.Parsear(permisosNecesarios);
-        let pu: enumModoDeAccesoDeDatos = ModoAcceso.Parsear(permisosDelUsuario);
-
-        if (pn === enumModoDeAccesoDeDatos.SinPermiso)
+    export function HayPermisos(permisosNecesarios: enumModoDeAccesoDeDatos, permisosDelUsuario: enumModoDeAccesoDeDatos): boolean {
+        if (permisosNecesarios === enumModoDeAccesoDeDatos.SinPermiso)
             return true;
 
-        if (pn === enumModoDeAccesoDeDatos.Consultor && pu !== enumModoDeAccesoDeDatos.SinPermiso)
+        if (permisosNecesarios === enumModoDeAccesoDeDatos.Consultor && permisosDelUsuario !== enumModoDeAccesoDeDatos.SinPermiso)
             return true;
 
-        if (pn === enumModoDeAccesoDeDatos.Gestor &&
-            (pu === enumModoDeAccesoDeDatos.Gestor || pu === enumModoDeAccesoDeDatos.Administrador)
+        if (permisosNecesarios === enumModoDeAccesoDeDatos.Gestor &&
+            (permisosDelUsuario === enumModoDeAccesoDeDatos.Gestor || permisosDelUsuario === enumModoDeAccesoDeDatos.Administrador)
         )
             return true;
 
-        if (pn === enumModoDeAccesoDeDatos.Administrador && pu === enumModoDeAccesoDeDatos.Administrador)
+        if (permisosNecesarios === enumModoDeAccesoDeDatos.Administrador && permisosDelUsuario === enumModoDeAccesoDeDatos.Administrador)
             return true;
 
         return false;
@@ -81,4 +78,87 @@
         else
             return false;
     }
+
+
+    export function AplicarModoDeAccesoAlNegocio(opcionesGenerales: NodeListOf<HTMLButtonElement>, modoDeAccesoDelUsuario: enumModoDeAccesoDeDatos): void {
+        for (var i = 0; i < opcionesGenerales.length; i++) {
+            let opcion: HTMLButtonElement = opcionesGenerales[i];
+
+            if (ApiControl.EstaBloqueada(opcion))
+                continue;
+
+            let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+            opcion.disabled = !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), modoDeAccesoDelUsuario);
+        }
+    }
+
+    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hacerLaInterseccion: boolean, permisos: ModoAcceso.enumModoDeAccesoDeDatos) {
+        if (ApiControl.EstaBloqueada(opcion))
+            return;
+
+        let estaDeshabilitado = opcion.disabled;
+        let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
+        let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
+            opcion.disabled = true;
+            return;
+        }
+
+        if (!ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisos))
+            opcion.disabled = true;
+        else
+            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+    }
+
+    export function AplicarloALosEditores(panel: HTMLDivElement, permisosDeUsuario: enumModoDeAccesoDeDatos) {
+        let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}='${TipoControl.Editor}']`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < editores.length; i++) {
+            var control = editores[i] as HTMLInputElement;
+            AplicarAlControl(control, permisosDeUsuario);
+        }
+    }
+
+    export function AplicarloALosRestrictores(panel: HTMLDivElement) {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}='${TipoControl.restrictorDeEdicion}']`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < restrictores.length; i++) {
+            var control = restrictores[i] as HTMLInputElement;
+            control.readOnly = true;
+        }
+    }
+
+    export function AplicarloAlasAreasDeTexto(panel: HTMLDivElement, permisosDeUsuario: enumModoDeAccesoDeDatos) {
+        let areas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`textarea[${atControl.tipo}='${TipoControl.AreaDeTexto}']`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < areas.length; i++) {
+            var control = areas[i] as HTMLInputElement;
+            AplicarAlControl(control, permisosDeUsuario);
+        }
+    }
+
+    export function AplicarloALasFechas(panel: HTMLDivElement, permisosDeUsuario: enumModoDeAccesoDeDatos) {
+        let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}='${TipoControl.SelectorDeFecha}']`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < fechas.length; i++) {
+            var control = fechas[i] as HTMLInputElement;
+            AplicarAlControl(control, permisosDeUsuario);
+        }
+
+        let fechaHora: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}='${TipoControl.SelectorDeFechaHora}']`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < fechaHora.length; i++) {
+            var control = fechaHora[i] as HTMLInputElement;
+            AplicarAlControl(control, permisosDeUsuario);
+            let idHora: string = control.getAttribute(atSelectorDeFecha.hora);
+            let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
+            AplicarAlControl(controlHora, permisosDeUsuario);
+        }
+
+    }
+
+    function AplicarAlControl(control: HTMLInputElement, permiso: enumModoDeAccesoDeDatos): void {
+        var editable = control.getAttribute(atControl.editable);
+        if (EsTrue(editable)) {
+            control.readOnly = !HayPermisos(enumModoDeAccesoDeDatos.Gestor, permiso);
+        }
+        else
+            control.readOnly = true;
+    }
+
 }

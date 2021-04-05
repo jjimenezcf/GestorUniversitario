@@ -1355,7 +1355,7 @@
         }
 
         public AplicarModoAccesoAlElemento(elemento: Elemento): void {
-            let modoAcceso: string = elemento.ModoDeAcceso;
+            let modoAcceso: ModoAcceso.enumModoDeAccesoDeDatos = ModoAcceso.Parsear(elemento.ModoDeAcceso);
 
             //En las modales no hay menús
             if (this.ZonaDeMenu === null)
@@ -1365,7 +1365,7 @@
             let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
-                ApiCrud.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
+                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion,modoAcceso);
             }
         }
 

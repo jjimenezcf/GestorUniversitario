@@ -87,7 +87,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Propiedad"] = atributos.Propiedad;
             valores["Tipo"] = atributos.TipoDeControl.Render();
             valores["Obligatorio"] = atributos.Visible && atributos.Obligatorio ? "S" : "N";
-            valores["Readonly"] = !atributos.Editable ? "readonly" : "";
+            valores["Readonly"] = !atributos.Editable ? "editable=¨N¨ readonly" : "editable=¨S¨";
             valores["Estilos"] = atributos.AnchoMaximo.IsNullOrEmpty() ? "" : $"max-width: {atributos.AnchoMaximo};";
             valores["Etiqueta"] = atributos.Etiqueta;
             return valores;

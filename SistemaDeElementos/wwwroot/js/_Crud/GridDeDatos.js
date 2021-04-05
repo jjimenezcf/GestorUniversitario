@@ -1094,7 +1094,7 @@ var Crud;
             }
         }
         AplicarModoAccesoAlElemento(elemento) {
-            let modoAcceso = elemento.ModoDeAcceso;
+            let modoAcceso = ModoAcceso.Parsear(elemento.ModoDeAcceso);
             //En las modales no hay menús
             if (this.ZonaDeMenu === null)
                 return;
@@ -1102,7 +1102,7 @@ var Crud;
             let hacerLaInterseccion = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion = opcionesDeElemento[i];
-                ApiCrud.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
+                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
             }
         }
         LeerElementoSeleccionado(id) {

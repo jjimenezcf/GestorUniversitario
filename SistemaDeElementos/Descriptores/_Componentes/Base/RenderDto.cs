@@ -226,6 +226,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["MostrarExpresion"] = atributos.MostrarExpresion.ToLower();
             valores["Placeholder"] = atributos.Ayuda;
             valores["ValorPorDefecto"] = atributos.ValorPorDefecto;
+            valores["Readonly"] = "editable=¨N¨ readonly";
 
             var htmlEditor = PlantillasHtml.Render(PlantillasHtml.restrictorDto, valores);
 

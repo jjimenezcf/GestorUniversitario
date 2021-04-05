@@ -182,31 +182,30 @@ var Crud;
             edicion.AntesDeMapearElementoDevuelto(peticion);
             let panel = edicion.PanelDeEditar;
             edicion.MapearElementoLeido(panel, peticion.resultado.datos);
-            edicion.AjustarOpcionesDeMenuDeEdicion(peticion.resultado.modoDeAcceso);
+            edicion.AjustarOpcionesDeMenuDeEdicion(ModoAcceso.Parsear(peticion.resultado.modoDeAcceso));
             edicion.AplicarModoDeAccesoAlPanel(edicion.PanelDeEditar, ModoAcceso.Parsear(peticion.resultado.modoDeAcceso));
         }
         AntesDeMapearElementoDevuelto(peticion) {
         }
         AplicarModoDeAccesoAlPanel(panel, modoDeAcceso) {
-            //ApiControl.AplicarModoDeAccesoAlEditor(editor, modoDeAcceso);
+            ModoAcceso.AplicarloALosEditores(panel, modoDeAcceso);
+            ModoAcceso.AplicarloALosRestrictores(panel);
+            ModoAcceso.AplicarloAlasAreasDeTexto(panel, modoDeAcceso);
+            ModoAcceso.AplicarloALasFechas(panel, modoDeAcceso);
             //ApiControl.AplicarModoDeAccesoAlLinkDeArchivo(linkDeArchivo, modoDeAcceso);
             //ApiControl.AplicarModoDeAccesoAlCheck(check, modoDeAcceso);
-            //ApiControl.AplicarModoDeAccesoAlRestrictor(restrictor, modoDeAcceso);
             //ApiControl.AplicarModoDeAccesoALaListaDeElementos(lista, modoDeAcceso);
             //ApiControl.AplicarModoDeAccesoALaListaDinamicas(lista, modoDeAcceso);
-            //ApiControl.AplicarModoDeAccesoALSelectorDeArchivo(selector, modoDeAcceso);
-            //ApiControl.AplicarModoDeAccesoALTextArea(area, modoDeAcceso);
-            //ApiControl.AplicarModoDeAccesoALSelectorDeFecha(fecha, modoDeAcceso);            
+            //ApiControl.AplicarModoDeAccesoALSelectorDeArchivo(selector, modoDeAcceso);         
         }
-        AjustarOpcionesDeMenuDeEdicion(modoDeAcceso) {
+        AjustarOpcionesDeMenuDeEdicion(permisosDelUsuario) {
             let opcionesDeElemento = this.PanelDeEditar.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeElemento}"]`);
-            let permisosDelUsuario = modoDeAcceso;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion = opcionesDeElemento[i];
                 if (ApiControl.EstaBloqueada(opcion))
                     continue;
                 let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-                opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, permisosDelUsuario);
+                opcion.disabled = !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisosDelUsuario);
             }
         }
         SiHayErrorAlLeerElemento(peticion) {

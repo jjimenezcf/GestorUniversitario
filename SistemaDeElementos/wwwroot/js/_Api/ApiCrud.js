@@ -108,32 +108,6 @@ var ApiCrud;
         }
     }
     ApiCrud.QuitarClaseDeCtrlNoValido = QuitarClaseDeCtrlNoValido;
-    function AplicarModoDeAccesoAlNegocio(opcionesGenerales, modoDeAccesoDelUsuario) {
-        for (var i = 0; i < opcionesGenerales.length; i++) {
-            let opcion = opcionesGenerales[i];
-            if (ApiControl.EstaBloqueada(opcion))
-                continue;
-            let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, modoDeAccesoDelUsuario);
-        }
-    }
-    ApiCrud.AplicarModoDeAccesoAlNegocio = AplicarModoDeAccesoAlNegocio;
-    function AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAccesoDelUsuarioAlElemento) {
-        if (ApiControl.EstaBloqueada(opcion))
-            return;
-        let estaDeshabilitado = opcion.disabled;
-        let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-        let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
-            opcion.disabled = true;
-            return;
-        }
-        if (!ModoAcceso.HayPermisos(permisosNecesarios, modoAccesoDelUsuarioAlElemento))
-            opcion.disabled = true;
-        else
-            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
-    }
-    ApiCrud.AplicarModoAccesoAlElemento = AplicarModoAccesoAlElemento;
     function ActivarOpciones(opciones, activas, seleccionadas) {
         for (var i = 0; i < opciones.length; i++) {
             let opcion = opciones[i];

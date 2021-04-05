@@ -41,6 +41,7 @@ const atControl = {
     valorTr: "idDelElemento",
     restrictor: "restrictor",
     nombreModal: "idModal",
+    editable: "editable",
     eventoJs: {
         onclick: 'onclick'
     }

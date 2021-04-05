@@ -137,13 +137,13 @@ var Crud;
         }
         InicializarMenus() {
             this.DeshabilitarOpcionesDeMenuDeElemento();
-            if (IsNullOrEmpty(this.ModoAccesoDelUsuario)) {
+            if (this.ModoAccesoDelUsuario === undefined) {
                 ApiDePeticiones.LeerModoDeAccesoAlNegocio(this, this.Controlador, this.Negocio)
                     .then((peticion) => this.AplicarModoDeAccesoAlNegocio(peticion))
                     .catch((peticion) => this.ErrorAlLeerModoAccesoAlNegocio(peticion));
             }
             else {
-                ApiCrud.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
+                ModoAcceso.AplicarModoDeAccesoAlNegocio(this.OpcionesGenerales, this.ModoAccesoDelUsuario);
             }
         }
         ErrorAlLeerModoAccesoAlNegocio(peticion) {
@@ -152,9 +152,9 @@ var Crud;
         }
         AplicarModoDeAccesoAlNegocio(peticion) {
             let mantenimiento = peticion.llamador;
-            let modoDeAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            mantenimiento.ModoAccesoDelUsuario = peticion.resultado.modoDeAcceso;
-            ApiCrud.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
+            let modoDeAccesoDelUsuario = ModoAcceso.Parsear(peticion.resultado.modoDeAcceso);
+            mantenimiento.ModoAccesoDelUsuario = modoDeAccesoDelUsuario;
+            ModoAcceso.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
         ObtenerModalDeSeleccion(idModal) {
             for (let i = 0; i < this.ModalesDeSeleccion.length; i++) {

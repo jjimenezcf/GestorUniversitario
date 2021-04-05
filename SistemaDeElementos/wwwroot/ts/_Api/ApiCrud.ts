@@ -113,36 +113,6 @@ namespace ApiCrud {
 
     }
 
-    export function AplicarModoDeAccesoAlNegocio(opcionesGenerales: NodeListOf<HTMLButtonElement>, modoDeAccesoDelUsuario: string): void {
-        for (var i = 0; i < opcionesGenerales.length; i++) {
-            let opcion: HTMLButtonElement = opcionesGenerales[i];
-
-            if (ApiControl.EstaBloqueada(opcion))
-                continue;
-
-            let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            opcion.disabled = !ModoAcceso.HayPermisos(permisosNecesarios, modoDeAccesoDelUsuario);
-        }
-    }
-
-    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hacerLaInterseccion: boolean, modoAccesoDelUsuarioAlElemento) {
-        if (ApiControl.EstaBloqueada(opcion))
-            return;
-
-        let estaDeshabilitado = opcion.disabled;
-        let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-        let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
-            opcion.disabled = true;
-            return;
-        }
-
-        if (!ModoAcceso.HayPermisos(permisosNecesarios, modoAccesoDelUsuarioAlElemento))
-            opcion.disabled = true;
-        else
-            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
-    }
-
     export function ActivarOpciones(opciones: NodeListOf<HTMLButtonElement>, activas: string[], seleccionadas: number): void {
         for (var i = 0; i < opciones.length; i++) {
             let opcion: HTMLButtonElement = opciones[i];
