@@ -364,7 +364,7 @@ namespace GestorDeElementos
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
-            ValidarPermisosDePersistencia(Contexto.DatosDeConexion.IdUsuario, parametros.Operacion, negocio, registro);
+            ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
@@ -782,7 +782,7 @@ namespace GestorDeElementos
 
         #region  Métodos de seguridad
 
-        public bool ValidarPermisosDePersistencia(int idUsuario, enumTipoOperacion operacion, enumNegocio negocio, TRegistro registro)
+        public bool ValidarPermisosDePersistencia(enumTipoOperacion operacion, enumNegocio negocio, TRegistro registro)
         {
             if (Contexto.DatosDeConexion.EsAdministrador || negocio == enumNegocio.No_Definido || !NegociosDeSe.UsaSeguridad(negocio))
                 return true;
@@ -858,13 +858,19 @@ namespace GestorDeElementos
                 foreach (var modoLeido in modosLeidos)
                 {
                     if (modoLeido.Administrador)
-                        return enumModoDeAccesoDeDatos.Administrador;
-
-                    if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
-                        modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
+                    {
+                        modoDelUsuario = enumModoDeAccesoDeDatos.Administrador;
+                        break;
+                    }
                     else
-                    if (modoLeido.Consultor && modoDelUsuario == enumModoDeAccesoDeDatos.SinPermiso)
-                        modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+                    {
+
+                        if (modoDelUsuario != enumModoDeAccesoDeDatos.Gestor && modoLeido.Gestor)
+                            modoDelUsuario = enumModoDeAccesoDeDatos.Gestor;
+                        else
+                        if (modoLeido.Consultor && modoDelUsuario == enumModoDeAccesoDeDatos.SinPermiso)
+                            modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
+                    }
                 }
                 cache[indice] = modoDelUsuario;
             }
