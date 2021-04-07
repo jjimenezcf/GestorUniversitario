@@ -91,13 +91,25 @@
             ApiControl.BloquearMenu(this.PanelDeCrear);
         }
 
-        protected AjustarMenuDeCreacion(peticion: ApiDeAjax.DescriptorAjax): void {
-            MensajesSe.Info(`Permisos sobre el negocio ${peticion.DatosDeEntrada["negocio"]} leidos`, peticion.resultado.consola);
+        public AjustarMenuDeCreacion(peticion: ApiDeAjax.DescriptorAjax): void {
+            let creador: CrudCreacion = peticion.llamador as CrudCreacion;
+            creador.InicializarControlesDeCreacion(peticion);
+            var ma = peticion.resultado.modoDeAcceso;
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Permisos sobre el negocio ${peticion.DatosDeEntrada["negocio"]} leidos`, peticion.resultado.consola);
+        }
+
+        public InicializarControlesDeCreacion(peticion: ApiDeAjax.DescriptorAjax): void {
+
         }
 
         private Crear() {
+            this.AntesDeCrear();
             let json: JSON = ApiCrud.MapearControlesDesdeLaIuAlJson(this, this.PanelDeCrear, ModoTrabajo.creando);
             this.CrearElemento(json);
+        }
+
+        public AntesDeCrear(): void {
+            
         }
 
         public CerrarCreacion() {

@@ -50,8 +50,9 @@ namespace ModeloDeDto.TrabajosSometidos
             MostrarExpresion = UsuarioDto.ExpresionElemento,
             Fila = 0,
             Columna = 1,
-            VisibleEnGrid = false,
-            EditableAlEditar = false
+            VisibleEnGrid = true,
+            EditableAlEditar = false,
+            Obligatorio = false
             )
         ]
         public string Ejecutor { get; set; }
@@ -112,12 +113,13 @@ namespace ModeloDeDto.TrabajosSometidos
 
         //--------------------------------------------
         [IUPropiedad(
-           Etiqueta = "Se iniciará",
+           Etiqueta = "Planificado a las:",
            Ayuda = "Fecha planificada de ejecución",
            TipoDeControl = enumTipoControl.SelectorDeFechaHora,
            Fila = 3,
            Columna = 1,
-           VisibleEnGrid = true
+           VisibleEnGrid = true,
+            Obligatorio = false
            )
         ]
         public DateTime Planificado { get; set; }

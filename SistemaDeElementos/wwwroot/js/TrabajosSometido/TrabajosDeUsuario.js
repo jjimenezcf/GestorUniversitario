@@ -54,12 +54,12 @@ var TrabajosSometido;
                 console.error("no se ha podido leer");
             }
             let usuarioConectado = Registro.UsuarioConectado();
-            if (usuarioConectado == null) {
+            if (usuarioConectado.id == 0) {
                 usuarioNoLeido(this.crudDeCreacion);
             }
             else {
-                let idUsuario = usuarioConectado['id'];
-                let usuario = usuarioConectado['login'];
+                let idUsuario = usuarioConectado.id;
+                let usuario = usuarioConectado.login;
                 MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
@@ -170,6 +170,20 @@ var TrabajosSometido;
     class CrudCreacionTrabajoDeUsuario extends Crud.CrudCreacion {
         constructor(crud, idPanelCreacion) {
             super(crud, idPanelCreacion);
+        }
+        InicializarControlesDeCreacion(peticion) {
+            super.InicializarControlesDeCreacion(peticion);
+            if (!Registro.EsAdministrador()) {
+                ApiControl.BloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+            }
+            else {
+                ApiControl.DesbloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+            }
+        }
+        AntesDeCrear() {
+            super.AntesDeCrear();
+            if (!ApiControl.AsignarFecha(this.PanelDeCrear, 'planificado', new Date()))
+                throw Error(`la fecha planificado no ha sido localizada en el panel ${this.PanelDeCrear.id}`);
         }
     }
     TrabajosSometido.CrudCreacionTrabajoDeUsuario = CrudCreacionTrabajoDeUsuario;

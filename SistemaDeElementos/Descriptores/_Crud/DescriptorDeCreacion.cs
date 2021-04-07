@@ -36,7 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            if (!Crud.NegocioActivo || !(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.RenderCreacion)))
+            if (!Crud.NegocioActivo || !(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeCrear)))
             {
                 MenuCreacion.QuitarOpcionDeMenu(TipoDeAccionDeCreacion.NuevoElemento);
             }

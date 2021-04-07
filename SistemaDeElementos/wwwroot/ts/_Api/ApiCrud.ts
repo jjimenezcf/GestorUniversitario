@@ -27,6 +27,37 @@
 
     export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
 
+    export function BloquearListaDinamica(panel: HTMLDivElement, propiedad: string): boolean {
+        let lista: HTMLInputElement = BuscarLista(panel, propiedad);
+        if (lista !== null) {
+            lista.disabled = true;
+            lista.readOnly = true;
+            return true;
+        }
+        return false;
+    }
+
+    export function DesbloquearListaDinamica(panel: HTMLDivElement, propiedad: string): boolean {
+        let lista: HTMLInputElement = BuscarLista(panel, propiedad);
+        if (lista !== null) {
+            lista.disabled = false;
+            lista.readOnly = false;
+            return true;
+        }
+        return false;
+    }
+
+    function BuscarLista(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
+        let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
+        for (let i = 0; i < listas.length; i++) {
+            let lista: HTMLInputElement = listas[i];
+            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return lista;
+            }
+        }
+        return null;
+    }
+
     export function BlanquearFecha(fecha: HTMLInputElement) {
         fecha.value = "";
         let tipo: string = fecha.getAttribute(atControl.tipo);
@@ -40,6 +71,38 @@
         }
     }
 
+    export function AsignarFecha(panel: HTMLDivElement, propiedad: string, fecha: Date): boolean {
+        let control: HTMLInputElement = BuscarFecha(panel, propiedad);
+        if (control !== null) {
+            MapearAlControl.FechaDate(control, fecha);
+
+            if (control.getAttribute(atControl.tipo) === TipoControl.SelectorDeFechaHora)
+                return MapearAlControl.HoraDate(control, fecha);
+            return true;
+        }
+        return false;
+    }
+
+
+    function BuscarFecha(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
+        let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < fechas.length; i++) {
+            let fecha: HTMLInputElement = fechas[i] as HTMLInputElement;
+            if (fecha.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return fecha;
+            }
+        }
+
+        fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`) as NodeListOf<HTMLInputElement>;
+        for (var i = 0; i < fechas.length; i++) {
+            let fecha: HTMLInputElement = fechas[i] as HTMLInputElement;
+            if (fecha.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return fecha;
+            }
+        }
+
+        return null;
+    }
 
     export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(columanDeOrdenacion.IdColumna) as HTMLTableHeaderCellElement;

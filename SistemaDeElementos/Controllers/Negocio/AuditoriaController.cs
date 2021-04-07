@@ -137,7 +137,9 @@ namespace MVCSistemaDeElementos.Controllers
         }
         protected override enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(AuditoriaDto elemento)
         {
-            return DatosDeConexion.EsAdministrador ? enumModoDeAccesoDeDatos.Consultor : enumModoDeAccesoDeDatos.SinPermiso;
+            return base.LeerModoDeAccesoAlElemento(elemento) == enumModoDeAccesoDeDatos.Administrador
+                ? enumModoDeAccesoDeDatos.Consultor
+                : enumModoDeAccesoDeDatos.SinPermiso;
         }
 
 

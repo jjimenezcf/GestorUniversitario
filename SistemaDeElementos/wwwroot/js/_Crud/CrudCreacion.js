@@ -68,11 +68,19 @@ var Crud;
             ApiControl.BloquearMenu(this.PanelDeCrear);
         }
         AjustarMenuDeCreacion(peticion) {
-            MensajesSe.Info(`Permisos sobre el negocio ${peticion.DatosDeEntrada["negocio"]} leidos`, peticion.resultado.consola);
+            let creador = peticion.llamador;
+            creador.InicializarControlesDeCreacion(peticion);
+            var ma = peticion.resultado.modoDeAcceso;
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Permisos sobre el negocio ${peticion.DatosDeEntrada["negocio"]} leidos`, peticion.resultado.consola);
+        }
+        InicializarControlesDeCreacion(peticion) {
         }
         Crear() {
+            this.AntesDeCrear();
             let json = ApiCrud.MapearControlesDesdeLaIuAlJson(this, this.PanelDeCrear, ModoTrabajo.creando);
             this.CrearElemento(json);
+        }
+        AntesDeCrear() {
         }
         CerrarCreacion() {
             this.CrudDeMnt.ModoTrabajo = ModoTrabajo.mantenimiento;

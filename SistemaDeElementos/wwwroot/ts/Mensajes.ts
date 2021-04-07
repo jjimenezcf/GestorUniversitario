@@ -167,7 +167,7 @@
             AsignarMemoria();
         
         Notificaciones.push(n);
-        MostrarMensaje(tipo, mensaje, mensajeDeConsola);
+        Notificar(tipo, mensaje, mensajeDeConsola);
     }
 
     export function Sacar() {
@@ -176,14 +176,14 @@
 
         if (Notificaciones.length > 0) {
             let n = Notificaciones.pop();
-            MostrarMensaje(n.tipo, n.mensaje);
+            Notificar(n.tipo, n.mensaje);
         }
         else {
             let cadena = 'No hay más mensajes';
             if (mensajeMostrado().indexOf(cadena) > 0)
                 blanquearMensajeMostrado();
             else
-                MostrarMensaje(enumTipoMensaje.informativo, cadena);
+                Notificar(enumTipoMensaje.informativo, cadena);
         }
     }
 
@@ -191,7 +191,7 @@
             MensajesSe.Notificaciones = [] as MensajesSe.clsNotificacion[];
     }
 
-    function MostrarMensaje(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
+    function Notificar(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
         var control = <HTMLInputElement>document.getElementById("Mensaje");
         var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
         if (control)

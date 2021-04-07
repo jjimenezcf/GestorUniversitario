@@ -4,7 +4,7 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.TrabajosSometidos
 {
-    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeBorrar = false)]
     public class ErrorDeUnTrabajoDto : ElementoDto
     {
 

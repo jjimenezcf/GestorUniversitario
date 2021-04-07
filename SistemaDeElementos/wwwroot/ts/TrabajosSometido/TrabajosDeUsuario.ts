@@ -68,13 +68,13 @@
             }
 
 
-            let usuarioConectado = Registro.UsuarioConectado();
-            if (usuarioConectado == null) {
+            let usuarioConectado: Registro.UsuarioDeConexion = Registro.UsuarioConectado();
+            if (usuarioConectado.id == 0) {
                 usuarioNoLeido(this.crudDeCreacion);
             }
             else {
-                let idUsuario: number = usuarioConectado['id'] as number;
-                let usuario: string = usuarioConectado['login'] as string;
+                let idUsuario: number = usuarioConectado.id;
+                let usuario: string = usuarioConectado.login;
                 MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, idsometedor, idUsuario, usuario);
             }
         }
@@ -239,6 +239,22 @@
 
         constructor(crud: Crud.CrudMnt, idPanelCreacion: string) {
             super(crud, idPanelCreacion);
+        }
+
+        public InicializarControlesDeCreacion(peticion: ApiDeAjax.DescriptorAjax) {
+            super.InicializarControlesDeCreacion(peticion);
+            if (!Registro.EsAdministrador()) {
+                ApiControl.BloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+            }
+            else{
+                ApiControl.DesbloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+            }
+        }
+
+        public AntesDeCrear(): void {
+            super.AntesDeCrear();
+            if (!ApiControl.AsignarFecha(this.PanelDeCrear, 'planificado', new Date()))
+                throw Error(`la fecha planificado no ha sido localizada en el panel ${this.PanelDeCrear.id}`);
         }
 
     }

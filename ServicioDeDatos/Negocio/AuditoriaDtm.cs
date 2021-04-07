@@ -12,7 +12,7 @@ namespace ServicioDeDatos.Negocio
     {
 
     }
-
+    
     public class AuditoriaDtm : Registro
     {
         public int IdElemento { get; set; }

@@ -346,13 +346,16 @@ var Crud;
             if (input.getAttribute(atListasDinamicas.cargando) == 'S' || IsNullOrEmpty(input.value)) {
                 return;
             }
-            let ultimaBuscada = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
+            let idsel = input.getAttribute(atListasDinamicas.idSeleccionado);
             let criterio = input.getAttribute(atListasDinamicas.criterio);
-            if (!IsNullOrEmpty(ultimaBuscada)) {
-                if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
-                    return;
-                if (criterio === atCriterio.comienza && ultimaBuscada.startsWith(input.value))
-                    return;
+            if (Numero(idsel) > 0) {
+                let ultimaBuscada = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
+                if (!IsNullOrEmpty(ultimaBuscada)) {
+                    if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
+                        return;
+                    if (criterio === atCriterio.comienza && ultimaBuscada.startsWith(input.value))
+                        return;
+                }
             }
             let clase = input.getAttribute(atListasDinamicas.claseElemento);
             let idInput = input.getAttribute('id');

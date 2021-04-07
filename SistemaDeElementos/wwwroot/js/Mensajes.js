@@ -144,7 +144,7 @@ var MensajesSe;
         if (IsNull(MensajesSe.Notificaciones))
             AsignarMemoria();
         MensajesSe.Notificaciones.push(n);
-        MostrarMensaje(tipo, mensaje, mensajeDeConsola);
+        Notificar(tipo, mensaje, mensajeDeConsola);
     }
     MensajesSe.Apilar = Apilar;
     function Sacar() {
@@ -152,21 +152,21 @@ var MensajesSe;
             return;
         if (MensajesSe.Notificaciones.length > 0) {
             let n = MensajesSe.Notificaciones.pop();
-            MostrarMensaje(n.tipo, n.mensaje);
+            Notificar(n.tipo, n.mensaje);
         }
         else {
             let cadena = 'No hay más mensajes';
             if (mensajeMostrado().indexOf(cadena) > 0)
                 blanquearMensajeMostrado();
             else
-                MostrarMensaje(enumTipoMensaje.informativo, cadena);
+                Notificar(enumTipoMensaje.informativo, cadena);
         }
     }
     MensajesSe.Sacar = Sacar;
     function AsignarMemoria() {
         MensajesSe.Notificaciones = [];
     }
-    function MostrarMensaje(tipo, mensaje, mensajeDeConsola) {
+    function Notificar(tipo, mensaje, mensajeDeConsola) {
         var control = document.getElementById("Mensaje");
         var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
         if (control)

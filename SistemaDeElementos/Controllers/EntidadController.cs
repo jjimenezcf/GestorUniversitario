@@ -108,10 +108,6 @@ namespace MVCSistemaDeElementos.Controllers
             parametros.Add(ElementoDto.DescargarGestionDocumental, true);
             return GestorDeElementos.LeerElementoPorId(id, parametros);
         }
-        protected override enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(TElemento elemento)
-        {
-          return GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ParsearDto(elemento.GetType().Name), elemento.Id);
-        }
 
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epModificarPorId(string elementoJson)

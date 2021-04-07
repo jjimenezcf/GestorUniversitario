@@ -88,12 +88,18 @@ namespace MVCSistemaDeElementos.Descriptores
         #region Opciones de mantenimiento
         internal void AnadirOpcionDeIrACrear()
         {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeCrear)))
+                return;
+
             var crearElemento = new CrearElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
         internal void AnadirOpcionDeIrAEditarFilasSeleccionadas()
         {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeEditar)))
+                return;
+
             var editarElemento = new EditarElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
@@ -135,6 +141,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         internal void AnadirOpcionDeBorrarElemento()
         {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeBorrar)))
+                return;
+
             var BorrarElemento = new BorrarElemento();
             var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);

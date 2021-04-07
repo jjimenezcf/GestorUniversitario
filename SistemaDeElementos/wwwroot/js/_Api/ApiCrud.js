@@ -27,6 +27,36 @@ var ApiControl;
     ApiControl.BloquearMenu = BloquearMenu;
     function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
     ApiControl.EstaBloqueada = EstaBloqueada;
+    function BloquearListaDinamica(panel, propiedad) {
+        let lista = BuscarLista(panel, propiedad);
+        if (lista !== null) {
+            lista.disabled = true;
+            lista.readOnly = true;
+            return true;
+        }
+        return false;
+    }
+    ApiControl.BloquearListaDinamica = BloquearListaDinamica;
+    function DesbloquearListaDinamica(panel, propiedad) {
+        let lista = BuscarLista(panel, propiedad);
+        if (lista !== null) {
+            lista.disabled = false;
+            lista.readOnly = false;
+            return true;
+        }
+        return false;
+    }
+    ApiControl.DesbloquearListaDinamica = DesbloquearListaDinamica;
+    function BuscarLista(panel, propiedad) {
+        let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
+        for (let i = 0; i < listas.length; i++) {
+            let lista = listas[i];
+            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return lista;
+            }
+        }
+        return null;
+    }
     function BlanquearFecha(fecha) {
         fecha.value = "";
         let tipo = fecha.getAttribute(atControl.tipo);
@@ -40,6 +70,34 @@ var ApiControl;
         }
     }
     ApiControl.BlanquearFecha = BlanquearFecha;
+    function AsignarFecha(panel, propiedad, fecha) {
+        let control = BuscarFecha(panel, propiedad);
+        if (control !== null) {
+            MapearAlControl.FechaDate(control, fecha);
+            if (control.getAttribute(atControl.tipo) === TipoControl.SelectorDeFechaHora)
+                return MapearAlControl.HoraDate(control, fecha);
+            return true;
+        }
+        return false;
+    }
+    ApiControl.AsignarFecha = AsignarFecha;
+    function BuscarFecha(panel, propiedad) {
+        let fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFecha}"]`);
+        for (var i = 0; i < fechas.length; i++) {
+            let fecha = fechas[i];
+            if (fecha.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return fecha;
+            }
+        }
+        fechas = panel.querySelectorAll(`input[tipo="${TipoControl.SelectorDeFechaHora}"]`);
+        for (var i = 0; i < fechas.length; i++) {
+            let fecha = fechas[i];
+            if (fecha.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return fecha;
+            }
+        }
+        return null;
+    }
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
         let columna = document.getElementById(columanDeOrdenacion.IdColumna);
         columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);

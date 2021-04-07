@@ -222,6 +222,17 @@ var MapearAlControl;
     function Fecha(control, fecha) {
         var fechaLeida = new Date(fecha);
         if (FechaValida(fechaLeida)) {
+            FechaDate(control, fechaLeida);
+        }
+        else {
+            var propiedad = control.getAttribute(atControl.propiedad);
+            MensajesSe.Error("MapearFechaAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+        }
+    }
+    MapearAlControl.Fecha = Fecha;
+    function FechaDate(control, fecha) {
+        var fechaLeida = new Date(fecha);
+        if (FechaValida(fechaLeida)) {
             let dia = fechaLeida.getDate();
             let mes = fechaLeida.getMonth() + 1;
             let ano = fechaLeida.getFullYear();
@@ -232,7 +243,7 @@ var MapearAlControl;
             MensajesSe.Error("MapearFechaAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
         }
     }
-    MapearAlControl.Fecha = Fecha;
+    MapearAlControl.FechaDate = FechaDate;
     function Texto(area, texto) {
         area.textContent = texto;
     }
@@ -275,22 +286,27 @@ var MapearAlControl;
     function Hora(control, fechaHora) {
         var fechaLeida = new Date(fechaHora);
         if (FechaValida(fechaLeida)) {
-            let hora = fechaLeida.getHours();
-            let minuto = fechaLeida.getMinutes();
-            let segundos = fechaLeida.getSeconds();
-            let milisegundos = fechaLeida.getMilliseconds();
-            let idHora = control.getAttribute(atSelectorDeFecha.hora);
-            if (!IsNullOrEmpty(idHora)) {
-                let controlHora = document.getElementById(idHora);
-                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
-                controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
-                return;
-            }
+            HoraDate(control, fechaLeida);
         }
         var propiedad = control.getAttribute(atControl.propiedad);
         MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
     }
     MapearAlControl.Hora = Hora;
+    function HoraDate(control, fechaLeida) {
+        let hora = fechaLeida.getHours();
+        let minuto = fechaLeida.getMinutes();
+        let segundos = fechaLeida.getSeconds();
+        let milisegundos = fechaLeida.getMilliseconds();
+        let idHora = control.getAttribute(atSelectorDeFecha.hora);
+        if (!IsNullOrEmpty(idHora)) {
+            let controlHora = document.getElementById(idHora);
+            controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
+            controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
+            return true;
+        }
+        return false;
+    }
+    MapearAlControl.HoraDate = HoraDate;
     function ListaDinamica(input, valor) {
         input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
         if (Numero(valor) === 0)

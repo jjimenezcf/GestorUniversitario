@@ -243,7 +243,19 @@ namespace MapearAlControl {
         };
 
     }
+
     export function Fecha(control: HTMLInputElement, fecha: string) {
+        var fechaLeida = new Date(fecha);
+        if (FechaValida(fechaLeida)) {
+            FechaDate(control, fechaLeida);
+        }
+        else {
+            var propiedad: string = control.getAttribute(atControl.propiedad);
+            MensajesSe.Error("MapearFechaAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fecha}`);
+        }
+    }
+
+    export function FechaDate(control: HTMLInputElement, fecha: Date) {
         var fechaLeida = new Date(fecha);
         if (FechaValida(fechaLeida)) {
             let dia: number = fechaLeida.getDate();
@@ -300,21 +312,25 @@ namespace MapearAlControl {
     export function Hora(control: HTMLInputElement, fechaHora: string) {
         var fechaLeida = new Date(fechaHora);
         if (FechaValida(fechaLeida)) {
-            let hora: number = fechaLeida.getHours();
-            let minuto: number = fechaLeida.getMinutes();
-            let segundos: number = fechaLeida.getSeconds();
-            let milisegundos: number = fechaLeida.getMilliseconds();
-            let idHora: string = control.getAttribute(atSelectorDeFecha.hora);
-            if (!IsNullOrEmpty(idHora)) {
-                let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
-                controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
-                controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
-                return;
-            }
+            HoraDate(control, fechaLeida);
         }
         var propiedad: string = control.getAttribute(atControl.propiedad);
         MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+    }
 
+    export function HoraDate(control: HTMLInputElement, fechaLeida: Date): boolean {
+        let hora: number = fechaLeida.getHours();
+        let minuto: number = fechaLeida.getMinutes();
+        let segundos: number = fechaLeida.getSeconds();
+        let milisegundos: number = fechaLeida.getMilliseconds();
+        let idHora: string = control.getAttribute(atSelectorDeFecha.hora);
+        if (!IsNullOrEmpty(idHora)) {
+            let controlHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
+            controlHora.value = `${PadLeft(hora.toString(), "00")}:${PadLeft(minuto.toString(), "00")}:${PadLeft(segundos.toString(), "00")}`;
+            controlHora.setAttribute(atSelectorDeFecha.milisegundos, milisegundos.toString());
+            return true;
+        }
+        return false;
     }
 
     export function ListaDinamica(input: HTMLInputElement, valor: number) {

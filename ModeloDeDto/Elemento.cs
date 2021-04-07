@@ -152,7 +152,9 @@ namespace ModeloDeDto
         /// Separación entre la etiqueta y el control que muestra el dato
         /// </summary>
         public short AnchoSeparador { get; set; } = 2;
-        public bool RenderCreacion { get; set; } = false;
+        public bool OpcionDeCrear { get; set; } = true;
+        public bool OpcionDeEditar { get; set; } = true;
+        public bool OpcionDeBorrar { get; set; } = true;
 
         private string _mostrarExpresion = $"[{nameof(INombre.Nombre)}]";
         public string MostrarExpresion
@@ -243,8 +245,14 @@ namespace ModeloDeDto
                         case nameof(IUDtoAttribute.MostrarExpresion):
                             return a.MostrarExpresion;
 
-                        case nameof(IUDtoAttribute.RenderCreacion):
-                            return a.RenderCreacion;
+                        case nameof(IUDtoAttribute.OpcionDeCrear):
+                            return a.OpcionDeCrear;
+
+                        case nameof(IUDtoAttribute.OpcionDeBorrar):
+                            return a.OpcionDeBorrar;
+
+                        case nameof(IUDtoAttribute.OpcionDeEditar):
+                            return a.OpcionDeEditar;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

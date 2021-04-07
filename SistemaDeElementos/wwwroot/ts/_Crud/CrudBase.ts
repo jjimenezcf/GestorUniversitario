@@ -434,13 +434,16 @@
                 return;
             }
 
-            let ultimaBuscada: string = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
+            let idsel: string = input.getAttribute(atListasDinamicas.idSeleccionado);
             let criterio: string = input.getAttribute(atListasDinamicas.criterio);
-            if (!IsNullOrEmpty(ultimaBuscada)) {
-                if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
-                    return;
-                if (criterio === atCriterio.comienza && ultimaBuscada.startsWith(input.value))
-                    return;
+            if (Numero(idsel) > 0) {
+                let ultimaBuscada: string = input.getAttribute(atListasDinamicas.ultimaCadenaBuscada);
+                if (!IsNullOrEmpty(ultimaBuscada)) {
+                    if (criterio === atCriterio.contiene && ultimaBuscada.includes(input.value))
+                        return;
+                    if (criterio === atCriterio.comienza && ultimaBuscada.startsWith(input.value))
+                        return;
+                }
             }
 
             let clase: string = input.getAttribute(atListasDinamicas.claseElemento);

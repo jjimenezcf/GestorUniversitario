@@ -12,7 +12,7 @@ namespace ModeloDeDto.Negocio
         public static string idNegocio = nameof(idNegocio).ToLower();
     }
 
-    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, RenderCreacion = false)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeCrear = false, OpcionDeBorrar = false)]
     public class AuditoriaDto : ElementoDto
     {
         //--------------------------------------------

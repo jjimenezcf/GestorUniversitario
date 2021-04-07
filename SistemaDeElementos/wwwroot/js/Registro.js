@@ -1,17 +1,33 @@
 var Registro;
 (function (Registro) {
     Registro.misRegistros = {
-        UsuarioConectado: 'usuario-conectado'
+        UsuarioConectado: 'usuario-conectado',
+        EsAdministrador: 'administrador'
     };
+    class UsuarioDeConexion {
+    }
+    Registro.UsuarioDeConexion = UsuarioDeConexion;
+    function CrearUsuarioDeConexion(usuario) {
+        let u = new UsuarioDeConexion();
+        u.id = Numero(usuario['id']);
+        u.login = usuario['login'];
+        return u;
+    }
     function UsuarioConectado() {
-        return JSON.parse(sessionStorage.getItem('usuario-conectado'));
+        return CrearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(Registro.misRegistros.UsuarioConectado)));
     }
     Registro.UsuarioConectado = UsuarioConectado;
+    ;
+    function EsAdministrador() {
+        return JSON.parse(sessionStorage.getItem(Registro.misRegistros.EsAdministrador)) === 'S';
+    }
+    Registro.EsAdministrador = EsAdministrador;
     ;
     function RegistrarUsuarioDeConexion(llamador) {
         function RegistrarUsuario(peticion) {
             let registro = peticion.resultado.datos;
-            sessionStorage.setItem('usuario-conectado', JSON.stringify(registro));
+            sessionStorage.setItem(Registro.misRegistros.UsuarioConectado, JSON.stringify(registro));
+            sessionStorage.setItem(Registro.misRegistros.EsAdministrador, JSON.stringify(registro));
         }
         let usuarioConectado = sessionStorage.getItem('usuario-conectado');
         return new Promise((resolve, reject) => {

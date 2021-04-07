@@ -16,24 +16,25 @@ namespace MVCSistemaDeElementos.Controllers
 {
     public class UsuariosController : EntidadController<ContextoSe, UsuarioDtm, UsuarioDto>
     {
-        class UsuarioConectado
+        class UsuarioDeConexion
         {
             public int id { get; set; }
             public string login { get; set; }
+            public string administrador { get; set; }
         }
 
         public UsuariosController(GestorDeUsuarios gestorDeUsuarios, GestorDeErrores gestorDeErrores)
-        :base
+        : base
         (
-          gestorDeUsuarios, 
-          gestorDeErrores, 
+          gestorDeUsuarios,
+          gestorDeErrores,
           new DescriptorDeUsuario(ModoDescriptor.Mantenimiento)
         )
         {
 
         }
 
-        
+
         public IActionResult CrudUsuario()
         {
             return ViewCrud();
@@ -63,7 +64,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var usuario = GestorDeElementos.LeerRegistroPorId(GestorDeElementos.Contexto.DatosDeConexion.IdUsuario);
                 r.consola = $"registro de usuario de conexión leido correctamente";
                 r.Estado = enumEstadoPeticion.Ok;
-                r.Datos = new UsuarioConectado() { login = usuario.Login, id = usuario.Id }; 
+                r.Datos = new UsuarioDeConexion() { login = usuario.Login, id = usuario.Id, administrador = DatosDeConexion.EsAdministrador ? "S" : "N" };
             }
             catch (Exception e)
             {
