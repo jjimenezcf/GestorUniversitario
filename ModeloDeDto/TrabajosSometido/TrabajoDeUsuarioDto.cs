@@ -113,7 +113,7 @@ namespace ModeloDeDto.TrabajosSometidos
 
         //--------------------------------------------
         [IUPropiedad(
-            Etiqueta = "Planificado a las:",
+            Etiqueta = "Planificado:",
             Ayuda = "Fecha planificada de ejecución",
             TipoDeControl = enumTipoControl.SelectorDeFechaHora,
             Fila = 3,

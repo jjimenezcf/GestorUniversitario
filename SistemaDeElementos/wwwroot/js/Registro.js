@@ -7,9 +7,10 @@ var Registro;
     class UsuarioDeConexion {
     }
     Registro.UsuarioDeConexion = UsuarioDeConexion;
-    function hayUsuarioDeConexion() {
+    function HayUsuarioDeConexion() {
         return sessionStorage.getItem(Registro.misRegistros.EsAdministrador) !== '';
     }
+    Registro.HayUsuarioDeConexion = HayUsuarioDeConexion;
     function crearUsuarioDeConexion(usuario) {
         let u = new UsuarioDeConexion();
         u.id = Numero(usuario['id']);
@@ -41,7 +42,7 @@ var Registro;
             }, () => {
                 reject();
             });
-            if (!hayUsuarioDeConexion())
+            if (!HayUsuarioDeConexion())
                 a.Ejecutar();
         });
     }

@@ -57,6 +57,8 @@
         public Inicializar(idPanelMnt: string) {
             super.Inicializar(idPanelMnt);
             this.MapearUsuarioConectado();
+            if (!Registro.EsAdministrador())
+                ApiControl.OcultarOpcionDeMenu(this.ZonaDeMenu, 'Nuevo');
         }
 
         private MapearUsuarioConectado(): void {

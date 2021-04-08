@@ -24,6 +24,15 @@
         }
     }
 
+    export function OcultarOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
+        let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            ocultarOpcionDeMenu(opcion, true);
+            return true;
+        }
+        return false;
+    }
+
     export function BloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
         let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
@@ -55,6 +64,13 @@
     function bloquearOpcionDeMenu(opcion: HTMLButtonElement, bloquear: boolean): void {
         opcion.disabled = bloquear;
         opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S":"N");
+    }
+
+    function ocultarOpcionDeMenu(opcion: HTMLButtonElement, ocultar: boolean): void {
+        if (ocultar)
+            bloquearOpcionDeMenu(opcion, ocultar);
+        opcion.hidden = ocultar;
+        opcion.setAttribute(atOpcionDeMenu.oculta, ocultar ? "S" : "N");
     }
 
     export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }

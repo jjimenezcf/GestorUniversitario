@@ -5,14 +5,17 @@ module EntornoSe {
 
     export function IniciarEntorno() {
         AjustarDivs();
-        Registro.RegistrarUsuarioDeConexion(this)
-            .then((usuarioConectado: Registro.UsuarioDeConexion) => {
-                ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
-            }
-            )
-            .catch(() => {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
-            });
+        if (!Registro.HayUsuarioDeConexion())
+            Registro.RegistrarUsuarioDeConexion(this)
+                .then((usuarioConectado: Registro.UsuarioDeConexion) => {
+                    ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
+                }
+                )
+                .catch(() => {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
+                });
+        else
+            ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
     }
 
     export function AjustarDivs() {

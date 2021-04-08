@@ -3,13 +3,16 @@ var EntornoSe;
     EntornoSe.Historial = undefined;
     function IniciarEntorno() {
         AjustarDivs();
-        Registro.RegistrarUsuarioDeConexion(this)
-            .then((usuarioConectado) => {
+        if (!Registro.HayUsuarioDeConexion())
+            Registro.RegistrarUsuarioDeConexion(this)
+                .then((usuarioConectado) => {
+                ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
+            })
+                .catch(() => {
+                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
+            });
+        else
             ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
-        })
-            .catch(() => {
-            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
-        });
     }
     EntornoSe.IniciarEntorno = IniciarEntorno;
     function AjustarDivs() {

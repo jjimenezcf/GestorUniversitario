@@ -117,7 +117,8 @@ const atOpcionDeMenu = {
     permisosNecesarios: "permisos-necesarios",
     permiteMultiSeleccion: "permite-multi-seleccion",
     clase: "clase",
-    bloqueada: "bloqueada"
+    bloqueada: "bloqueada",
+    oculta: "oculta"
 };
 const atSelector = {
     popiedadBuscar: "propiedadBuscar",

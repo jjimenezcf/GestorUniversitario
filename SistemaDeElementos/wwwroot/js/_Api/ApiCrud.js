@@ -24,6 +24,15 @@ var ApiControl;
         }
     }
     ApiControl.BloquearMenu = BloquearMenu;
+    function OcultarOpcionDeMenu(panel, nombreOpcion) {
+        let opcion = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            ocultarOpcionDeMenu(opcion, true);
+            return true;
+        }
+        return false;
+    }
+    ApiControl.OcultarOpcionDeMenu = OcultarOpcionDeMenu;
     function BloquearOpcionDeMenu(panel, nombreOpcion) {
         let opcion = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
@@ -54,6 +63,12 @@ var ApiControl;
     function bloquearOpcionDeMenu(opcion, bloquear) {
         opcion.disabled = bloquear;
         opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S" : "N");
+    }
+    function ocultarOpcionDeMenu(opcion, ocultar) {
+        if (ocultar)
+            bloquearOpcionDeMenu(opcion, ocultar);
+        opcion.hidden = ocultar;
+        opcion.setAttribute(atOpcionDeMenu.oculta, ocultar ? "S" : "N");
     }
     function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
     ApiControl.EstaBloqueada = EstaBloqueada;

@@ -11,7 +11,7 @@
         public administrador: boolean;
     }
 
-    function hayUsuarioDeConexion(): boolean {
+    export function HayUsuarioDeConexion(): boolean {
         return sessionStorage.getItem(misRegistros.EsAdministrador) !== '';
     }
 
@@ -58,7 +58,7 @@
                 }
             );
 
-            if (!hayUsuarioDeConexion())
+            if (!HayUsuarioDeConexion())
                a.Ejecutar();
         });
 

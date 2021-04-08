@@ -46,6 +46,8 @@ var TrabajosSometido;
         Inicializar(idPanelMnt) {
             super.Inicializar(idPanelMnt);
             this.MapearUsuarioConectado();
+            if (!Registro.EsAdministrador())
+                ApiControl.OcultarOpcionDeMenu(this.ZonaDeMenu, 'Nuevo');
         }
         MapearUsuarioConectado() {
             function usuarioNoLeido(llamador) {
