@@ -124,7 +124,7 @@
             let password: HTMLInputElement = document.getElementById('password') as HTMLInputElement;
             let p: HTMLInputElement = document.getElementById('p') as HTMLInputElement;
             p.value = Encriptar(l.value, password.value);
-
+            Registro.EliminarUsuarioDeConexion();
             let f: HTMLFormElement = document.getElementById('FormDeConexion') as HTMLFormElement;
             f.submit();
         }

@@ -79,6 +79,7 @@ var Acceso;
             let password = document.getElementById('password');
             let p = document.getElementById('p');
             p.value = Encriptar(l.value, password.value);
+            Registro.EliminarUsuarioDeConexion();
             let f = document.getElementById('FormDeConexion');
             f.submit();
         }

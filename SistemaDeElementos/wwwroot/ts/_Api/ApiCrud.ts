@@ -20,9 +20,41 @@
             let clase: string = opcion.getAttribute(atOpcionDeMenu.clase);
             if (clase === ClaseDeOpcioDeMenu.Basico)
                 continue;
-            opcion.disabled = true;
-            opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
+            bloquearOpcionDeMenu(opcion, true);
         }
+    }
+
+    export function BloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
+        let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            bloquearOpcionDeMenu(opcion,true);
+            return true;
+        }
+        return false;
+    }
+
+    export function DesbloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
+        let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            bloquearOpcionDeMenu(opcion,false);
+            return true;
+        }
+        return false;
+    }
+
+    function buscarOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): HTMLButtonElement {
+        let opciones: NodeListOf<HTMLButtonElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`) as NodeListOf<HTMLButtonElement>;
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion: HTMLButtonElement = opciones[i];
+            if (opcion.value === nombreOpcion)
+                return opcion;
+        }
+        return null;
+    }
+
+    function bloquearOpcionDeMenu(opcion: HTMLButtonElement, bloquear: boolean): void {
+        opcion.disabled = bloquear;
+        opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S":"N");
     }
 
     export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }

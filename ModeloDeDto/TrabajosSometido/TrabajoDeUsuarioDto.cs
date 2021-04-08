@@ -113,28 +113,30 @@ namespace ModeloDeDto.TrabajosSometidos
 
         //--------------------------------------------
         [IUPropiedad(
-           Etiqueta = "Planificado a las:",
-           Ayuda = "Fecha planificada de ejecución",
-           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
-           Fila = 3,
-           Columna = 1,
-           VisibleEnGrid = true,
-            Obligatorio = false
+            Etiqueta = "Planificado a las:",
+            Ayuda = "Fecha planificada de ejecución",
+            TipoDeControl = enumTipoControl.SelectorDeFechaHora,
+            Fila = 3,
+            Columna = 1,
+            VisibleEnGrid = true,
+            Obligatorio = false,
+            Ordenar = true
            )
         ]
-        public DateTime Planificado { get; set; }
+        public DateTime? Planificado { get; set; }
 
         //--------------------------------------------
         [IUPropiedad(
-           Etiqueta = "Iniciado",
-           Ayuda = "Fecha de inicio",
-           TipoDeControl = enumTipoControl.SelectorDeFechaHora,
-           Fila = 4,
-           Columna = 0,
-           VisibleEnGrid = true,
-           EditableAlCrear = false,
-           EditableAlEditar = false,
-           Obligatorio = false
+            Etiqueta = "Iniciado",
+            Ayuda = "Fecha de inicio",
+            TipoDeControl = enumTipoControl.SelectorDeFechaHora,
+            Fila = 4,
+            Columna = 0,
+            VisibleEnGrid = true,
+            EditableAlCrear = false,
+            EditableAlEditar = false,
+            Obligatorio = false,
+            Ordenar = true
            )
         ]
         public DateTime? Iniciado { get; set; }

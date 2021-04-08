@@ -8,31 +8,37 @@
     export class UsuarioDeConexion {
         public login: string;
         public id: number;
+        public administrador: boolean;
     }
 
-    function CrearUsuarioDeConexion(usuario: any): UsuarioDeConexion {
+    function hayUsuarioDeConexion(): boolean {
+        return sessionStorage.getItem(misRegistros.EsAdministrador) !== '';
+    }
+
+    function crearUsuarioDeConexion(usuario: any): UsuarioDeConexion {
         let u: UsuarioDeConexion = new UsuarioDeConexion();
         u.id = Numero(usuario['id']);
         u.login = usuario['login'];
+        u.administrador = usuario['administrador'] == 'S';
         return u;
     }
 
     export function UsuarioConectado(): UsuarioDeConexion {
-        return CrearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(misRegistros.UsuarioConectado)));
+        return crearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(misRegistros.UsuarioConectado)));
     };
+
     export function EsAdministrador(): boolean {
-        return JSON.parse(sessionStorage.getItem(misRegistros.EsAdministrador)) === 'S';
-    }; 
+        return JSON.parse(sessionStorage.getItem(misRegistros.EsAdministrador));
+    };
 
     export function RegistrarUsuarioDeConexion(llamador: any): Promise<any> {
 
-        function RegistrarUsuario(peticion: ApiDeAjax.DescriptorAjax) {
-            let registro: any = peticion.resultado.datos;
-            sessionStorage.setItem(misRegistros.UsuarioConectado, JSON.stringify(registro));
-            sessionStorage.setItem(misRegistros.EsAdministrador, JSON.stringify(registro));
+        function RegistrarUsuario(peticion: ApiDeAjax.DescriptorAjax): UsuarioDeConexion {
+            let usuario: UsuarioDeConexion = crearUsuarioDeConexion(peticion.resultado.datos) as UsuarioDeConexion;
+            sessionStorage.setItem(misRegistros.UsuarioConectado, JSON.stringify(usuario));
+            sessionStorage.setItem(misRegistros.EsAdministrador, JSON.stringify(usuario.administrador));
+            return usuario;
         }
-
-        let usuarioConectado: string = sessionStorage.getItem('usuario-conectado');
 
         return new Promise((resolve, reject) => {
 
@@ -45,20 +51,23 @@
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get
                 , (peticion) => {
-                    RegistrarUsuario(peticion);
-                    resolve(usuarioConectado);
+                    resolve(RegistrarUsuario(peticion));
                 }
                 , () => {
                     reject();
                 }
             );
-            if (usuarioConectado != null)
-                resolve(usuarioConectado);
-            else
-                a.Ejecutar();
+
+            if (!hayUsuarioDeConexion())
+               a.Ejecutar();
         });
 
 
+    }
+
+    export function EliminarUsuarioDeConexion() {
+        sessionStorage.setItem(misRegistros.UsuarioConectado, '');
+        sessionStorage.setItem(misRegistros.EsAdministrador, '');
     }
 
 }

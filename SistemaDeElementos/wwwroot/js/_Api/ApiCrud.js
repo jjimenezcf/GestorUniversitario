@@ -20,11 +20,41 @@ var ApiControl;
             let clase = opcion.getAttribute(atOpcionDeMenu.clase);
             if (clase === ClaseDeOpcioDeMenu.Basico)
                 continue;
-            opcion.disabled = true;
-            opcion.setAttribute(atOpcionDeMenu.bloqueada, "S");
+            bloquearOpcionDeMenu(opcion, true);
         }
     }
     ApiControl.BloquearMenu = BloquearMenu;
+    function BloquearOpcionDeMenu(panel, nombreOpcion) {
+        let opcion = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            bloquearOpcionDeMenu(opcion, true);
+            return true;
+        }
+        return false;
+    }
+    ApiControl.BloquearOpcionDeMenu = BloquearOpcionDeMenu;
+    function DesbloquearOpcionDeMenu(panel, nombreOpcion) {
+        let opcion = buscarOpcionDeMenu(panel, nombreOpcion);
+        if (opcion !== null) {
+            bloquearOpcionDeMenu(opcion, false);
+            return true;
+        }
+        return false;
+    }
+    ApiControl.DesbloquearOpcionDeMenu = DesbloquearOpcionDeMenu;
+    function buscarOpcionDeMenu(panel, nombreOpcion) {
+        let opciones = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.opcion}"]`);
+        for (var i = 0; i < opciones.length; i++) {
+            let opcion = opciones[i];
+            if (opcion.value === nombreOpcion)
+                return opcion;
+        }
+        return null;
+    }
+    function bloquearOpcionDeMenu(opcion, bloquear) {
+        opcion.disabled = bloquear;
+        opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S" : "N");
+    }
     function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
     ApiControl.EstaBloqueada = EstaBloqueada;
     function BloquearListaDinamica(panel, propiedad) {

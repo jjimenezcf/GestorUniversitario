@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using ServicioDeDatos.Seguridad;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -136,6 +137,20 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             return new JsonResult(r);
+        }
+
+        protected override ParametrosDeNegocio AntesDeEjecutar_CrearElemento(TrabajoDeUsuarioDto elemento)
+        {
+           var p = base.AntesDeEjecutar_CrearElemento(elemento);
+            p.Parametros[GestorDeTrabajosDeUsuario.SolicitudDeUsuario] = true;
+            
+            if (elemento.Planificado == null)
+               elemento.Planificado = DateTime.Now;
+
+            if (!elemento.IdEjecutor.HasValue || elemento.IdEjecutor == 0)
+                elemento.IdEjecutor = elemento.IdSometedor;
+
+            return p;
         }
 
     }

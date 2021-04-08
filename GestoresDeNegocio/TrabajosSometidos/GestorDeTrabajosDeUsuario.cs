@@ -138,6 +138,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
 
+        public static string SolicitudDeUsuario = nameof(SolicitudDeUsuario);
+
         public class MapearNegocio : Profile
         {
             public MapearNegocio()
@@ -190,7 +192,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return Crear(contexto, tu);
         }
 
-        internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
+        private static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
@@ -244,6 +246,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 if (e.InnerException != null)
                     throw e.InnerException;
+
+                entorno.AnotarError(e);
 
                 throw;
             }
@@ -334,6 +338,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
         protected override void AntesDePersistirValidarRegistro(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
+
+            if (parametros.Operacion == enumTipoOperacion.Insertar && parametros.Parametros.ContainsKey(SolicitudDeUsuario) && (bool)parametros.Parametros[SolicitudDeUsuario] && !Contexto.DatosDeConexion.EsAdministrador)
+                GestorDeErrores.Emitir("Un usuario no administrador no puede solicitar crear un trabajo sometido directamente desde las interface");
 
             if (parametros.Operacion == enumTipoOperacion.Modificar)
                 ValidarAntesDeModificar(registro, parametros);

@@ -6,7 +6,7 @@ module EntornoSe {
     export function IniciarEntorno() {
         AjustarDivs();
         Registro.RegistrarUsuarioDeConexion(this)
-            .then((usuarioConectado) => {
+            .then((usuarioConectado: Registro.UsuarioDeConexion) => {
                 ArbolDeMenu.ReqSolicitarMenu('id-contenedor-menu');
             }
             )

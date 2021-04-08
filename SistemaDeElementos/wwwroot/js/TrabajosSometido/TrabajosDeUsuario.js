@@ -175,15 +175,17 @@ var TrabajosSometido;
             super.InicializarControlesDeCreacion(peticion);
             if (!Registro.EsAdministrador()) {
                 ApiControl.BloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+                ApiControl.BloquearOpcionDeMenu(this.PanelDeCrear, 'Crear');
             }
             else {
                 ApiControl.DesbloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+                ApiControl.DesbloquearOpcionDeMenu(this.PanelDeCrear, 'Crear');
             }
         }
         AntesDeCrear() {
             super.AntesDeCrear();
-            if (!ApiControl.AsignarFecha(this.PanelDeCrear, 'planificado', new Date()))
-                throw Error(`la fecha planificado no ha sido localizada en el panel ${this.PanelDeCrear.id}`);
+            //if (!ApiControl.AsignarFecha(this.PanelDeCrear, 'planificado', new Date()))
+            //    throw Error(`la fecha planificado no ha sido localizada en el panel ${this.PanelDeCrear.id}`);
         }
     }
     TrabajosSometido.CrudCreacionTrabajoDeUsuario = CrudCreacionTrabajoDeUsuario;

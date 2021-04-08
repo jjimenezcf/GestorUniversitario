@@ -84,8 +84,8 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
-                AntesDeEjecutar_CrearElemento(elementoJson);
-                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+                var parametros = AntesDeEjecutar_CrearElemento(elemento);
+                GestorDeElementos.PersistirElementoDto(elemento,parametros);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
                 GestorDeElementos.Commit(tran);
@@ -99,8 +99,9 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual void AntesDeEjecutar_CrearElemento(string elementoJson)
+        protected virtual ParametrosDeNegocio AntesDeEjecutar_CrearElemento(TElemento elemento)
         {
+            return new ParametrosDeNegocio(enumTipoOperacion.Insertar);
         }
 
         protected override TElemento LeerPorId(int id, Dictionary<string, object> parametros)
@@ -118,8 +119,8 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
-                AntesDeEjecutar_ModificarPorId(elementoJson);
-                GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+                var p = AntesDeEjecutar_ModificarPorId(elemento);
+                GestorDeElementos.PersistirElementoDto(elemento, p);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro modificado";
                 GestorDeElementos.Commit(tran);
@@ -133,9 +134,9 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual void AntesDeEjecutar_ModificarPorId(string elementoJson)
+        protected virtual ParametrosDeNegocio AntesDeEjecutar_ModificarPorId(TElemento elemento)
         {
-            
+            return new ParametrosDeNegocio(enumTipoOperacion.Modificar);
         }
 
 

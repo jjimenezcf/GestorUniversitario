@@ -6,6 +6,7 @@ using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
 using GestoresDeNegocio.TrabajosSometidos;
 using System;
+using GestorDeElementos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -28,11 +29,12 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override void AntesDeEjecutar_ModificarPorId(string elementoJson)
+        protected override ParametrosDeNegocio AntesDeEjecutar_ModificarPorId(TrazaDeUnTrabajoDto elemento)
         {
             throw new Exception("Los mensajes de la traza de un trabajo no son modificables");
         }
-        protected override void AntesDeEjecutar_CrearElemento(string elementoJson)
+
+        protected override ParametrosDeNegocio AntesDeEjecutar_CrearElemento(TrazaDeUnTrabajoDto elemento)
         {
             throw new Exception("No se pueden crear trazas en un trabajo");
         }

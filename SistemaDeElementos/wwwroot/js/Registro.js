@@ -7,43 +7,49 @@ var Registro;
     class UsuarioDeConexion {
     }
     Registro.UsuarioDeConexion = UsuarioDeConexion;
-    function CrearUsuarioDeConexion(usuario) {
+    function hayUsuarioDeConexion() {
+        return sessionStorage.getItem(Registro.misRegistros.EsAdministrador) !== '';
+    }
+    function crearUsuarioDeConexion(usuario) {
         let u = new UsuarioDeConexion();
         u.id = Numero(usuario['id']);
         u.login = usuario['login'];
+        u.administrador = usuario['administrador'] == 'S';
         return u;
     }
     function UsuarioConectado() {
-        return CrearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(Registro.misRegistros.UsuarioConectado)));
+        return crearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(Registro.misRegistros.UsuarioConectado)));
     }
     Registro.UsuarioConectado = UsuarioConectado;
     ;
     function EsAdministrador() {
-        return JSON.parse(sessionStorage.getItem(Registro.misRegistros.EsAdministrador)) === 'S';
+        return JSON.parse(sessionStorage.getItem(Registro.misRegistros.EsAdministrador));
     }
     Registro.EsAdministrador = EsAdministrador;
     ;
     function RegistrarUsuarioDeConexion(llamador) {
         function RegistrarUsuario(peticion) {
-            let registro = peticion.resultado.datos;
-            sessionStorage.setItem(Registro.misRegistros.UsuarioConectado, JSON.stringify(registro));
-            sessionStorage.setItem(Registro.misRegistros.EsAdministrador, JSON.stringify(registro));
+            let usuario = crearUsuarioDeConexion(peticion.resultado.datos);
+            sessionStorage.setItem(Registro.misRegistros.UsuarioConectado, JSON.stringify(usuario));
+            sessionStorage.setItem(Registro.misRegistros.EsAdministrador, JSON.stringify(usuario.administrador));
+            return usuario;
         }
-        let usuarioConectado = sessionStorage.getItem('usuario-conectado');
         return new Promise((resolve, reject) => {
             let url = `/${Ajax.Usuarios.ruta}/${Ajax.Usuarios.accion.LeerUsuarioDeConexion}`;
             let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.Usuarios.accion.LeerUsuarioDeConexion, llamador, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
-                RegistrarUsuario(peticion);
-                resolve(usuarioConectado);
+                resolve(RegistrarUsuario(peticion));
             }, () => {
                 reject();
             });
-            if (usuarioConectado != null)
-                resolve(usuarioConectado);
-            else
+            if (!hayUsuarioDeConexion())
                 a.Ejecutar();
         });
     }
     Registro.RegistrarUsuarioDeConexion = RegistrarUsuarioDeConexion;
+    function EliminarUsuarioDeConexion() {
+        sessionStorage.setItem(Registro.misRegistros.UsuarioConectado, '');
+        sessionStorage.setItem(Registro.misRegistros.EsAdministrador, '');
+    }
+    Registro.EliminarUsuarioDeConexion = EliminarUsuarioDeConexion;
 })(Registro || (Registro = {}));
 //# sourceMappingURL=Registro.js.map
