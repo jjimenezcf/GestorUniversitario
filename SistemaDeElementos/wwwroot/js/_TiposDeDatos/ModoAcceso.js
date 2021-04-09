@@ -75,27 +75,27 @@ var ModoAcceso;
     function AplicarModoDeAccesoAlNegocio(opcionesGenerales, modoDeAccesoDelUsuario) {
         for (var i = 0; i < opcionesGenerales.length; i++) {
             let opcion = opcionesGenerales[i];
-            if (ApiControl.EstaBloqueada(opcion))
+            if (ApiControl.EstaOculta(opcion))
                 continue;
             let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            opcion.disabled = !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), modoDeAccesoDelUsuario);
+            ApiControl.OcultarMostrarOpcionDeMenu(opcion, !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), modoDeAccesoDelUsuario));
         }
     }
     ModoAcceso.AplicarModoDeAccesoAlNegocio = AplicarModoDeAccesoAlNegocio;
-    function AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, permisos) {
-        if (ApiControl.EstaBloqueada(opcion))
+    function AplicarModoAccesoAlElemento(opcion, hayMasDeUnaSeleccionada, permisos) {
+        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion))
             return;
-        let estaDeshabilitado = opcion.disabled;
+        let estaDeshabilitado = ApiControl.EstaBloqueada(opcion);
         let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
         let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
-            opcion.disabled = true;
+        if (!EsTrue(permiteMultiSeleccion) && hayMasDeUnaSeleccionada) {
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
             return;
         }
         if (!ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisos))
-            opcion.disabled = true;
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
         else
-            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, (estaDeshabilitado && hayMasDeUnaSeleccionada) || false);
     }
     ModoAcceso.AplicarModoAccesoAlElemento = AplicarModoAccesoAlElemento;
     function AplicarloALosEditores(panel, permisosDeUsuario) {

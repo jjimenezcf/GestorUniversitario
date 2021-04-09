@@ -8,7 +8,11 @@ var Registro;
     }
     Registro.UsuarioDeConexion = UsuarioDeConexion;
     function HayUsuarioDeConexion() {
-        return sessionStorage.getItem(Registro.misRegistros.EsAdministrador) !== '';
+        let u = sessionStorage.getItem(Registro.misRegistros.UsuarioConectado);
+        if (u === null || u === undefined)
+            return false;
+        let uc = UsuarioConectado();
+        return uc.id > 0;
     }
     Registro.HayUsuarioDeConexion = HayUsuarioDeConexion;
     function crearUsuarioDeConexion(usuario) {
@@ -18,8 +22,25 @@ var Registro;
         u.administrador = usuario['administrador'] == 'S';
         return u;
     }
+    function asignarUsuarioDeConexion(u, usuario) {
+        u.id = Numero(usuario['id']);
+        u.login = usuario['login'];
+        u.administrador = usuario['administrador'] == 'S';
+    }
+    function asignarUsuarioNulo(u) {
+        u.id = 0;
+        u.login = '';
+        u.administrador = false;
+    }
     function UsuarioConectado() {
-        return crearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(Registro.misRegistros.UsuarioConectado)));
+        let u = new UsuarioDeConexion();
+        try {
+            asignarUsuarioDeConexion(u, JSON.parse(sessionStorage.getItem(Registro.misRegistros.UsuarioConectado)));
+        }
+        catch {
+            asignarUsuarioNulo(u);
+        }
+        return u;
     }
     Registro.UsuarioConectado = UsuarioConectado;
     ;

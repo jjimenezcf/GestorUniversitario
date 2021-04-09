@@ -153,6 +153,19 @@ namespace MVCSistemaDeElementos.Controllers
             return p;
         }
 
+        protected override void AntesDeEjecutar_Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> ordenes)
+        {
+            base.AntesDeEjecutar_Leer(posicion, cantidad, filtros, ordenes);
+            if (!DatosDeConexion.EsAdministrador)
+            {
+                var f = new ClausulaDeFiltrado { Clausula = nameof(TrabajoDeUsuarioDtm.IdEjecutor), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = DatosDeConexion.IdUsuario.ToString() };
+                filtros.Add(f);
+
+                if (ordenes.Count == 0)
+                    ordenes.Add(new ClausulaDeOrdenacion { Modo = ModoDeOrdenancion.descendente, OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado) });                    
+            }    
+        }
+
     }
 
 }

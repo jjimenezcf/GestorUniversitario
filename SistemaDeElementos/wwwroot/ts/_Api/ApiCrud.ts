@@ -33,6 +33,15 @@
         return false;
     }
 
+    export function OcultarMostrarOpcionDeMenu(opcion: HTMLButtonElement, ocultar: boolean): void {
+        ocultarOpcionDeMenu(opcion, ocultar);
+    }
+
+
+    export function BloquearDesbloquearOpcionDeMenu(opcion: HTMLButtonElement, bloquear: boolean): void {
+        bloquearOpcionDeMenu(opcion, bloquear);
+    }
+
     export function BloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
         let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
@@ -67,13 +76,13 @@
     }
 
     function ocultarOpcionDeMenu(opcion: HTMLButtonElement, ocultar: boolean): void {
-        if (ocultar)
-            bloquearOpcionDeMenu(opcion, ocultar);
         opcion.hidden = ocultar;
         opcion.setAttribute(atOpcionDeMenu.oculta, ocultar ? "S" : "N");
     }
 
-    export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
+    export function EstaBloqueada(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S" || opcion.disabled; }
+
+    export function EstaOculta(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
 
     export function BloquearListaDinamica(panel: HTMLDivElement, propiedad: string): boolean {
         let lista: HTMLInputElement = BuscarLista(panel, propiedad);

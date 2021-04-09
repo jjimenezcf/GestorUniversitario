@@ -74,13 +74,13 @@ namespace GestorDeElementos
         public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)
         {
             auditar.UsuarioModificador = auditar.UsuarioCreador = null;
-            var json = JsonConvert.SerializeObject(auditar);
+            var json = JsonConvert.SerializeObject(auditar,Formatting.Indented);
             var valor = json
                 .Replace("{", "")
-                .Replace(",\"", Environment.NewLine)
-                .Replace("\",", Environment.NewLine)
+                .Replace(",\"","")
+                .Replace("\",","")
                 .Replace("\"", "")
-                .Replace("null,", Environment.NewLine)
+                .Replace("null,","")
                 .Replace("}", "");
 
             var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(negocio.TipoDtm())}.{GeneradorMd.NombreDeTabla(negocio.TipoDtm())}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 

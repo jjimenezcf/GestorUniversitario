@@ -33,6 +33,14 @@ var ApiControl;
         return false;
     }
     ApiControl.OcultarOpcionDeMenu = OcultarOpcionDeMenu;
+    function OcultarMostrarOpcionDeMenu(opcion, ocultar) {
+        ocultarOpcionDeMenu(opcion, ocultar);
+    }
+    ApiControl.OcultarMostrarOpcionDeMenu = OcultarMostrarOpcionDeMenu;
+    function BloquearDesbloquearOpcionDeMenu(opcion, bloquear) {
+        bloquearOpcionDeMenu(opcion, bloquear);
+    }
+    ApiControl.BloquearDesbloquearOpcionDeMenu = BloquearDesbloquearOpcionDeMenu;
     function BloquearOpcionDeMenu(panel, nombreOpcion) {
         let opcion = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
@@ -65,13 +73,13 @@ var ApiControl;
         opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S" : "N");
     }
     function ocultarOpcionDeMenu(opcion, ocultar) {
-        if (ocultar)
-            bloquearOpcionDeMenu(opcion, ocultar);
         opcion.hidden = ocultar;
         opcion.setAttribute(atOpcionDeMenu.oculta, ocultar ? "S" : "N");
     }
-    function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S"; }
+    function EstaBloqueada(opcion) { return opcion.getAttribute(atOpcionDeMenu.bloqueada) === "S" || opcion.disabled; }
     ApiControl.EstaBloqueada = EstaBloqueada;
+    function EstaOculta(opcion) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
+    ApiControl.EstaOculta = EstaOculta;
     function BloquearListaDinamica(panel, propiedad) {
         let lista = BuscarLista(panel, propiedad);
         if (lista !== null) {

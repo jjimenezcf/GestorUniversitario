@@ -12,7 +12,12 @@
     }
 
     export function HayUsuarioDeConexion(): boolean {
-        return sessionStorage.getItem(misRegistros.EsAdministrador) !== '';
+        let u = sessionStorage.getItem(misRegistros.UsuarioConectado);
+        if (u === null || u === undefined)
+            return false;
+
+        let uc: UsuarioDeConexion = UsuarioConectado();
+        return uc.id > 0;
     }
 
     function crearUsuarioDeConexion(usuario: any): UsuarioDeConexion {
@@ -23,8 +28,27 @@
         return u;
     }
 
+    function asignarUsuarioDeConexion(u: UsuarioDeConexion, usuario: any): void {
+        u.id = Numero(usuario['id']);
+        u.login = usuario['login'];
+        u.administrador = usuario['administrador'] == 'S';
+    }
+
+    function asignarUsuarioNulo(u): void {
+        u.id = 0;
+        u.login = '';
+        u.administrador = false;
+    }
+
     export function UsuarioConectado(): UsuarioDeConexion {
-        return crearUsuarioDeConexion(JSON.parse(sessionStorage.getItem(misRegistros.UsuarioConectado)));
+        let u: UsuarioDeConexion = new UsuarioDeConexion();
+        try {
+            asignarUsuarioDeConexion(u, JSON.parse(sessionStorage.getItem(misRegistros.UsuarioConectado)));
+        }
+        catch {
+            asignarUsuarioNulo(u);
+        }
+        return u;
     };
 
     export function EsAdministrador(): boolean {

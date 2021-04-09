@@ -82,12 +82,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string listaDeElementosFlt = listaDeElementos.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
-        public static string abrirEnPestana = @$" 
+        public static string opcionNavegar = @$" 
                            <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                     <input id=¨[IdHtml]¨
                                            type=¨button¨
                                            tipo=¨[Tipo]¨
-                                           clase=¨[Css]¨
+                                           clase=¨[claseBoton]¨
                                            permisos-necesarios=¨[PermisosNecesarios]¨
                                            value=¨[Etiqueta]¨
                                            onClick=¨[Accion]¨

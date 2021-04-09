@@ -6,6 +6,11 @@ var Crud;
     class CrudBase {
         constructor() {
             this._estado = undefined;
+            if (!Registro.HayUsuarioDeConexion())
+                Registro.RegistrarUsuarioDeConexion(this)
+                    .catch(() => {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
+                });
         }
         get Pagina() {
             return this.Estado.Obtener(Sesion.paginaActual);

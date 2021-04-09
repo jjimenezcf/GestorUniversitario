@@ -245,7 +245,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
             {
                 entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 if (e.InnerException != null)
+                {
+                    entorno.AnotarError(e.InnerException);
                     throw e.InnerException;
+                }
 
                 entorno.AnotarError(e);
 

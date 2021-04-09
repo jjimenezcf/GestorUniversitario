@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ModeloDeDto;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -34,12 +35,13 @@ namespace MVCSistemaDeElementos.Descriptores
             Dictionary<string, object> valores = atributos.MapearComunes();
             valores["CssContenedor"] = Css.Render(enumCssControlesDto.ContenedorEditor);
             valores["Css"] = Css.Render(enumCssControlesDto.Editor);
-            valores["PermisosNecesarios"] = "";
+            valores["PermisosNecesarios"] = $"{enumModoDeAccesoDeDatos.Administrador.Render()}";
             valores["Accion"] = $"Crud.EventosDeExpansores('{TipoDeAccionExpansor.NavegarDesdeEdicion}','{atributos.Url}')";
+            valores["claseBoton"] = $"{Css.Render(enumCssOpcionMenu.DeElemento)}";
 
-            var htmlEditorTexto = PlantillasHtml.Render(PlantillasHtml.abrirEnPestana, valores);
+            var htmlOpcionDeNavegar = PlantillasHtml.Render(PlantillasHtml.opcionNavegar, valores);
 
-            return htmlEditorTexto;
+            return htmlOpcionDeNavegar;
         }
 
     }

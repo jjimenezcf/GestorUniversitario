@@ -314,8 +314,10 @@ namespace MapearAlControl {
         if (FechaValida(fechaLeida)) {
             HoraDate(control, fechaLeida);
         }
-        var propiedad: string = control.getAttribute(atControl.propiedad);
-        MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        else {
+            var propiedad: string = control.getAttribute(atControl.propiedad);
+            MensajesSe.Error("MapearHoraAlControl", `Fecha leida para la propiedad ${propiedad} es no válida, valor ${fechaHora}`);
+        }
     }
 
     export function HoraDate(control: HTMLInputElement, fechaLeida: Date): boolean {

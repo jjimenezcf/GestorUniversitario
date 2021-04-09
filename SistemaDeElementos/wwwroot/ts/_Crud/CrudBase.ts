@@ -29,6 +29,11 @@
         }
 
         constructor() {
+            if (!Registro.HayUsuarioDeConexion())
+                Registro.RegistrarUsuarioDeConexion(this)
+                    .catch(() => {
+                        MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, "Error al leer el usuario de conexión");
+                    });
         }
 
         public Inicializar(pagina: string): void {
@@ -251,7 +256,7 @@
             }
         }
 
-        private MapearFechas(panel: HTMLDivElement, elementoJson: JSON ): void {
+        private MapearFechas(panel: HTMLDivElement, elementoJson: JSON): void {
 
             let fechas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.SelectorDeFecha}"]`) as NodeListOf<HTMLInputElement>;
             for (var i = 0; i < fechas.length; i++) {
@@ -287,8 +292,8 @@
                         MapearAlControl.Hora(fecha, valor);
                     }
                 }
-                else 
-                    ApiControl.BlanquearFecha(fecha)
+                else
+                    ApiControl.BlanquearFecha(fecha);
             }
         }
 

@@ -84,30 +84,30 @@
         for (var i = 0; i < opcionesGenerales.length; i++) {
             let opcion: HTMLButtonElement = opcionesGenerales[i];
 
-            if (ApiControl.EstaBloqueada(opcion))
+            if (ApiControl.EstaOculta(opcion))
                 continue;
 
             let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
-            opcion.disabled = !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), modoDeAccesoDelUsuario);
+            ApiControl.OcultarMostrarOpcionDeMenu(opcion, !ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), modoDeAccesoDelUsuario));
         }
     }
 
-    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hacerLaInterseccion: boolean, permisos: ModoAcceso.enumModoDeAccesoDeDatos) {
-        if (ApiControl.EstaBloqueada(opcion))
+    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hayMasDeUnaSeleccionada: boolean, permisos: ModoAcceso.enumModoDeAccesoDeDatos) {
+        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion))
             return;
 
-        let estaDeshabilitado = opcion.disabled;
+        let estaDeshabilitado = ApiControl.EstaBloqueada(opcion);
         let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
         let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-        if (!EsTrue(permiteMultiSeleccion) && hacerLaInterseccion) {
-            opcion.disabled = true;
+        if (!EsTrue(permiteMultiSeleccion) && hayMasDeUnaSeleccionada) {
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
             return;
         }
 
         if (!ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisos))
-            opcion.disabled = true;
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
         else
-            opcion.disabled = (estaDeshabilitado && hacerLaInterseccion) || false;
+            ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, (estaDeshabilitado && hayMasDeUnaSeleccionada) || false);
     }
 
     export function AplicarloALosEditores(panel: HTMLDivElement, permisosDeUsuario: enumModoDeAccesoDeDatos) {
