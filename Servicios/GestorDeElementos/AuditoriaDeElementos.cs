@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using AutoMapper;
 using Dapper;
 using Gestor.Errores;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Negocio;
+using Utilidades;
 
 namespace GestorDeElementos
 {
@@ -41,7 +43,7 @@ namespace GestorDeElementos
             var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlLeerPorId.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
             var restrictores = new Dictionary<string, object> { { "@Id", id } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
-            
+
             if (registros.Count == 0 && emitirError)
                 GestorDeErrores.Emitir("No se ha localizado el registro pedido");
 
@@ -54,7 +56,7 @@ namespace GestorDeElementos
 
             consulta.AplicarClausulaIn(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario, usuarios);
 
-            var restrictores = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, {"@idElemento",idElemento } };
+            var restrictores = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, { "@idElemento", idElemento } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
             return registros;
         }
@@ -74,14 +76,17 @@ namespace GestorDeElementos
         public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)
         {
             auditar.UsuarioModificador = auditar.UsuarioCreador = null;
-            var json = JsonConvert.SerializeObject(auditar,Formatting.Indented);
-            var valor = json
-                .Replace("{", "")
-                .Replace(",\"","")
-                .Replace("\",","")
-                .Replace("\"", "")
-                .Replace("null,","")
-                .Replace("}", "");
+            var json = JsonConvert.SerializeObject(auditar, Formatting.Indented);
+            var valor = serializarPropiedadesPOCO(auditar);
+
+
+            //json
+            //.Replace("{", "")
+            //.Replace(",\"","")
+            //.Replace("\",","")
+            //.Replace("\"", "")
+            //.Replace("null,","")
+            //.Replace("}", "");
 
             var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(negocio.TipoDtm())}.{GeneradorMd.NombreDeTabla(negocio.TipoDtm())}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
                                values ({((ElementoDtm)auditar).Id}
@@ -91,6 +96,23 @@ namespace GestorDeElementos
                                       ,'{DateTime.Now}')";
 
             contexto.Database.ExecuteSqlRaw(sentencia);
+        }
+
+        private static string serializarPropiedadesPOCO(IElementoDtm elemento)
+        {
+            var propiedades = elemento.GetType().GetProperties();
+            var serializado = "";
+            foreach (PropertyInfo propiedad in propiedades)
+            {
+                var tipo = propiedad.PropertyType.FullName.ToLower();
+                string valor;
+                if (tipo.Contains("int") || tipo.Contains("string") || tipo.Contains("date") || tipo.Contains("bool"))
+                    valor = $"{propiedad.GetValue(elemento)}";
+                else
+                    continue;
+                serializado = $"{serializado}{(serializado.IsNullOrEmpty() ? "" : Environment.NewLine)}{propiedad.Name}:{valor}";
+            }
+            return serializado;
         }
     }
 
