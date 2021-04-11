@@ -574,6 +574,10 @@
                         clausula = this.ObtenerClausulaCheck(control as HTMLInputElement);
                         break;
                     }
+                    case TipoControl.FiltroEntreFechas: {
+                        clausula = this.ObtenerClausulaEntreFechas(control as HTMLInputElement);
+                        break;
+                    }
                     default: {
                         MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                     }
@@ -671,14 +675,25 @@
         }
 
         private ObtenerClausulaCheck(input: HTMLInputElement): ClausulaDeFiltrado {
-            var propiedad = input.getAttribute(atControl.propiedad);
-            var criterio = literal.filtro.criterio.igual;
+            let propiedad: string = input.getAttribute(atControl.propiedad);
+            let criterio: string = literal.filtro.criterio.igual;
             let filtrarPorFalse = input.getAttribute(atCheck.filtrarPorFalse);
             let valor: boolean = input.checked;
 
             var clausula = null;
             if (valor || (filtrarPorFalse === "S" && !valor))
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor.toString());
+            return clausula;
+        }
+
+        private ObtenerClausulaEntreFechas(input: HTMLInputElement): ClausulaDeFiltrado {
+            let propiedad: string = input.getAttribute(atControl.propiedad);
+            let criterio: string = literal.filtro.criterio.entreFechas;
+            let valor: string = ApiControl.LeerEntreFechas(input);
+            var clausula = null;
+            if (valor.trim() !== '-') {
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            }
             return clausula;
         }
 

@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public bool Editable { get; set; }
         public bool Obligatorio { get; set; }
         public string AnchoMaximo { get; set; }
-        public int NumeroDeFilas { get; set; }
+        public int NumeroDeFilas { get; set; } = -1;
         public object Ayuda { get; internal set; }
         public object ValorPorDefecto { get; internal set; }
         public int LongitudMaxima { get; internal set; } = 0;
@@ -44,7 +44,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         }
 
-        public AtributosHtml(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl, bool visible, bool editable, bool obligatorio, string anchoMaximo, int numeroDeFilas, string ayuda, object valorPorDefecto)
+        public AtributosHtml(string idHtmlContenedor, string idHtml, string propiedad, enumTipoControl tipoDeControl, bool visible, bool editable, bool obligatorio, string ayuda, object valorPorDefecto)
         {
             IdHtmlContenedor = idHtmlContenedor;
             IdHtml = idHtml;
@@ -53,8 +53,6 @@ namespace MVCSistemaDeElementos.Descriptores
             Visible = visible;
             Editable = editable;
             Obligatorio = obligatorio;
-            AnchoMaximo = anchoMaximo;
-            NumeroDeFilas = numeroDeFilas;
             Ayuda = ayuda;
             ValorPorDefecto = valorPorDefecto;
         }

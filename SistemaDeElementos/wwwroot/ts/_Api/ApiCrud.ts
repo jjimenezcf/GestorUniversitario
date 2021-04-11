@@ -45,7 +45,7 @@
     export function BloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
         let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
-            bloquearOpcionDeMenu(opcion,true);
+            bloquearOpcionDeMenu(opcion, true);
             return true;
         }
         return false;
@@ -54,7 +54,7 @@
     export function DesbloquearOpcionDeMenu(panel: HTMLDivElement, nombreOpcion: string): boolean {
         let opcion: HTMLButtonElement = buscarOpcionDeMenu(panel, nombreOpcion);
         if (opcion !== null) {
-            bloquearOpcionDeMenu(opcion,false);
+            bloquearOpcionDeMenu(opcion, false);
             return true;
         }
         return false;
@@ -72,7 +72,7 @@
 
     function bloquearOpcionDeMenu(opcion: HTMLButtonElement, bloquear: boolean): void {
         opcion.disabled = bloquear;
-        opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S":"N");
+        opcion.setAttribute(atOpcionDeMenu.bloqueada, bloquear ? "S" : "N");
     }
 
     function ocultarOpcionDeMenu(opcion: HTMLButtonElement, ocultar: boolean): void {
@@ -178,6 +178,32 @@
         selector.classList.remove(ClaseCss.crtlNoValido);
         selector.classList.add(ClaseCss.crtlValido);
         selector.selectedIndex = 0;
+    }
+
+    export function LeerEntreFechas(controlDeFechaDesde: HTMLInputElement): string {
+        let idHora = controlDeFechaDesde.getAttribute(atEntreFechas.horaDesde);
+        let entreFechas: string = LeerFechaHora(controlDeFechaDesde, idHora);
+        let idFechaHasta = controlDeFechaDesde.getAttribute(atEntreFechas.fechaHasta);
+        let fechaHasta: HTMLInputElement = document.getElementById(idFechaHasta) as HTMLInputElement;
+        idHora = controlDeFechaDesde.getAttribute(atEntreFechas.horaHasta);
+        entreFechas = entreFechas + '-' + LeerFechaHora(fechaHasta, idHora);
+        return entreFechas;
+    }
+
+    function LeerFechaHora(controlDeFecha: HTMLInputElement, idHora: string): string {
+        let valorDeFecha: string = controlDeFecha.value;
+        let resultado: string = "";
+        if (!IsNullOrEmpty(valorDeFecha)) {
+            let fecha: Date = new Date(valorDeFecha);
+            resultado = fecha.toLocaleDateString();
+            let controlDeHora: HTMLInputElement = document.getElementById(idHora) as HTMLInputElement;
+            let valorDeHora: string = controlDeHora.value;
+            if (!IsNullOrEmpty(valorDeHora)) {
+                resultado = resultado + ' ' + valorDeHora;
+            }
+        }
+
+        return resultado;
     }
 
 }

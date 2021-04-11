@@ -11,7 +11,8 @@ const literal = {
         clausulaId: 'id',
         criterio: {
             igual: 'igual',
-            diferente: 'diferente'
+            diferente: 'diferente',
+            entreFechas: 'entrefechas'
         }
     }
 };
@@ -136,6 +137,11 @@ const atSelector = {
 const atSelectorDeFecha = {
     hora: "idDeLaHora",
     milisegundos: "milisegundos"
+};
+const atEntreFechas = {
+    horaDesde: "idHoraDesde",
+    fechaHasta: "idFechaHasta",
+    horaHasta: "idHoraHasta"
 };
 const atRestrictor = {
     mostrarExpresion: atControl.mostrarExpresion
@@ -401,6 +407,7 @@ const TipoControl = {
     ListaDeElementos: "lista-de-elemento",
     SelectorDeFecha: "selector-de-fecha",
     SelectorDeFechaHora: "selector-de-fecha-hora",
+    FiltroEntreFechas: "filtro-entre-fechas",
     AreaDeTexto: "area-de-texto",
     ListaDinamica: "lista-dinamica",
     Archivo: "archivo",

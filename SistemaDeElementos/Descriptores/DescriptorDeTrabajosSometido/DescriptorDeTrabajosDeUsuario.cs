@@ -68,6 +68,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                  , propiedadRestrictora: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)
                                  , "Consultar errores del trabajo de usuario");
 
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
+                                etiqueta: "Ejecutado entre",
+                                propiedad: nameof(TrabajoDeUsuarioDto.Iniciado),
+                                ayuda: "trabajos ejecutados entre",
+                                posicion: new Posicion() { fila = 1, columna = 0 });
+
         }
 
         public override string RenderControl()

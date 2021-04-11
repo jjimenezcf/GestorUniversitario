@@ -170,6 +170,30 @@ var ApiControl;
         selector.selectedIndex = 0;
     }
     ApiControl.BlanquearSelector = BlanquearSelector;
+    function LeerEntreFechas(controlDeFechaDesde) {
+        let idHora = controlDeFechaDesde.getAttribute(atEntreFechas.horaDesde);
+        let entreFechas = LeerFechaHora(controlDeFechaDesde, idHora);
+        let idFechaHasta = controlDeFechaDesde.getAttribute(atEntreFechas.fechaHasta);
+        let fechaHasta = document.getElementById(idFechaHasta);
+        idHora = controlDeFechaDesde.getAttribute(atEntreFechas.horaHasta);
+        entreFechas = entreFechas + '-' + LeerFechaHora(fechaHasta, idHora);
+        return entreFechas;
+    }
+    ApiControl.LeerEntreFechas = LeerEntreFechas;
+    function LeerFechaHora(controlDeFecha, idHora) {
+        let valorDeFecha = controlDeFecha.value;
+        let resultado = "";
+        if (!IsNullOrEmpty(valorDeFecha)) {
+            let fecha = new Date(valorDeFecha);
+            resultado = fecha.toLocaleDateString();
+            let controlDeHora = document.getElementById(idHora);
+            let valorDeHora = controlDeHora.value;
+            if (!IsNullOrEmpty(valorDeHora)) {
+                resultado = resultado + ' ' + valorDeHora;
+            }
+        }
+        return resultado;
+    }
 })(ApiControl || (ApiControl = {}));
 var ApiCrud;
 (function (ApiCrud) {

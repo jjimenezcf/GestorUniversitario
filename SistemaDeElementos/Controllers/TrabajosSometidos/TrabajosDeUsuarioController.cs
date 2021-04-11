@@ -160,10 +160,9 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 var f = new ClausulaDeFiltrado { Clausula = nameof(TrabajoDeUsuarioDtm.IdEjecutor), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = DatosDeConexion.IdUsuario.ToString() };
                 filtros.Add(f);
-
-                if (ordenes.Count == 0)
-                    ordenes.Add(new ClausulaDeOrdenacion { Modo = ModoDeOrdenancion.descendente, OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado) });                    
-            }    
+            }
+            if (ordenes.Count == 0)
+                ordenes.Add(new ClausulaDeOrdenacion { Modo = ModoDeOrdenancion.descendente, OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado) });
         }
 
     }

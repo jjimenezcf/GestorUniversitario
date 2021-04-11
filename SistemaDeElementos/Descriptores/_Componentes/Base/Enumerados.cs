@@ -86,7 +86,10 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorCheck,
         ContenedorEditor,
         ContenedorSelector,
-        Check
+        ContenedorEntreFechas,
+        Check,
+        Hora,
+        Fecha
     }
 
     public enum enumCssCuerpo
@@ -349,7 +352,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssFiltro.ContenedorCheck: return "contenedor-check";
                 case enumCssFiltro.ContenedorEditor: return "contenedor-editor-filtro";
                 case enumCssFiltro.ContenedorSelector: return "contenedor-selector-filtro";
+                case enumCssFiltro.ContenedorEntreFechas: return "contenedor-entre-fechas-filtro";
                 case enumCssFiltro.Check: return "check-flt";
+                case enumCssFiltro.Hora: return "hora-flt";
+                case enumCssFiltro.Fecha: return "fecha-flt";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

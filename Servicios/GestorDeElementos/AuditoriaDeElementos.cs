@@ -76,17 +76,7 @@ namespace GestorDeElementos
         public static void RegistrarAuditoria(ContextoSe contexto, enumNegocio negocio, enumTipoOperacion operacion, IElementoDtm auditar)
         {
             auditar.UsuarioModificador = auditar.UsuarioCreador = null;
-            var json = JsonConvert.SerializeObject(auditar, Formatting.Indented);
             var valor = serializarPropiedadesPOCO(auditar);
-
-
-            //json
-            //.Replace("{", "")
-            //.Replace(",\"","")
-            //.Replace("\",","")
-            //.Replace("\"", "")
-            //.Replace("null,","")
-            //.Replace("}", "");
 
             var sentencia = $@"Insert into {GeneradorMd.EsquemaDeTabla(negocio.TipoDtm())}.{GeneradorMd.NombreDeTabla(negocio.TipoDtm())}_AUDITORIA (id_elemento, id_usuario, operacion, registro, auditado_el) 
                                values ({((ElementoDtm)auditar).Id}

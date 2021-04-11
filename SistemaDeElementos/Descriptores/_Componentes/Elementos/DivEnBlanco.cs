@@ -20,8 +20,6 @@ namespace MVCSistemaDeElementos.Descriptores
                 visible: true,
                 editable: false,
                 obligatorio: false,
-                anchoMaximo: null,
-                numeroDeFilas: -1,
                 ayuda: null,
                 valorPorDefecto: null);
 

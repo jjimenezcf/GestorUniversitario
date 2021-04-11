@@ -277,10 +277,11 @@ namespace MVCSistemaDeElementos.Descriptores
                 visible: atributos.EsVisible(tabla.ModoDeTrabajo) && atributos.Obligatorio,
                 editable: atributos.EsEditable(tabla.ModoDeTrabajo),
                 obligatorio: atributos.Obligatorio,
-                anchoMaximo: atributos.AnchoMaximo,
-                numeroDeFilas: -1,
                 ayuda: atributos.Ayuda,
                 valorPorDefecto: atributos.ValorPorDefecto);
+
+            a.AnchoMaximo = atributos.AnchoMaximo;
+            a.NumeroDeFilas = atributos.NumeroDeFilas;
 
             return EditorDeFecha.RenderSelectorDeFechaHora(a);
 

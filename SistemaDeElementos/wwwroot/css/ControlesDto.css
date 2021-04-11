@@ -149,6 +149,30 @@ a {
     margin-right: 10px;
 }
 
+.contenedor-entre-fechas-filtro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "fecha-desde fecha-hasta";
+    margin-top: 2px;
+}
+.fecha-desde {
+    grid-area: fecha-desde;
+    text-align: left;
+    min-width: 100px;
+    align-items: center;
+    display: flex;
+    margin-right: 10px;
+}
+.fecha-hasta {
+    grid-area: fecha-hasta;
+    text-align: right;
+    min-width: 100px;
+    align-items: center;
+    display: flex;
+    margin-right: 10px;
+}
+
 .contenedor-listas-filtro {
     margin-top: 5px;
     margin-right: 10px;
@@ -168,6 +192,38 @@ a {
         border-radius: .25rem;
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
+
+
+.fecha-flt {
+    width: 60%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.hora-flt {
+    width: 40%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+/*********************************  clases para la edición **********************/
 
 .contenedor-editor {
     border-width: 2px;
@@ -275,8 +331,6 @@ a {
 
 
 .fecha-dto {
-    /*    margin-top: 20px;
-    margin-left: 20px;*/
     width: 60%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
@@ -292,8 +346,6 @@ a {
 }
 
 .hora-dto {
-    /*    margin-top: 20px;
-    margin-left: 20px;*/
     width: 40%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
@@ -313,18 +365,8 @@ a {
     margin-top: 20px;
 }
 
-.check-flt {
-    margin-left: 10px;
-    margin-top: 20px;
-}
-
 .contenedor-listas {
-    /*    position: relative;
-    border-color: aqua;
-    border-width: 2px;
-    width: 100%;*/
     margin-top: 5px;
-    /*margin-right: 20px;*/
 }
 
 

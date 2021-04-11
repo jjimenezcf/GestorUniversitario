@@ -13,7 +13,7 @@ namespace ModeloDeDto
         public static string Id = nameof(Id).ToLower();
     }
 
-    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe }
+    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
 
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
@@ -62,7 +62,7 @@ namespace ModeloDeDto
         public object ValorPorDefecto { get; set; }
         public bool Ordenar { get; set; } = false;
         public string OrdenarPor { get; set; }
-        public string AnchoMaximo { get; set; }
+        public string AnchoMaximo { get; set; } = null;
         public int PosicionEnGrid { get; set; } = -1;
         public Aliniacion Alineada
         {

@@ -162,6 +162,41 @@ namespace MVCSistemaDeElementos.Descriptores
         </div>
         ";
 
+        public static string filtroEntreFechas = $@"
+        <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
+            <div class=¨fecha-desde¨>
+                 <input {atributosComunesDeUnControlflt} 
+                        style=¨cursor: pointer;¨
+                        type=¨date¨
+                        idHoraDesde=¨[IdHtml].hora¨
+                        idFechaHasta=¨[IdHtml].hasta¨
+                        idHoraHasta=¨[IdHtml].hora.hasta¨
+                        value=¨¨>
+                 </input>
+                 <input id=¨[IdHtml].hora¨ 
+                         class=¨[CssHora]¨ 
+                         style=¨cursor: pointer;¨
+                         type=¨time¨
+                         value=¨¨>
+                 </input>
+            </div>
+            <div class=¨fecha-hasta¨>
+                 <input id=¨[IdHtml].hasta¨
+                        class=¨[Css]¨ 
+                        style=¨[Estilos]¨style=¨cursor: pointer;¨
+                        type=¨date¨
+                        value=¨¨>
+                 </input>
+                 <input id=¨[IdHtml].hora.hasta¨ 
+                         class=¨[CssHora]¨ 
+                         style=¨cursor: pointer;¨
+                         type=¨time¨
+                         value=¨¨>
+                 </input>
+            </div>
+         </div>
+        ";
+
         public static string selectorDeFechaHoraDto = $@"
         <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨input-group [CssContenedor]¨>
             <input {atributosComunesDeUnControlDto} 
