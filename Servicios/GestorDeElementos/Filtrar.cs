@@ -68,9 +68,18 @@ namespace GestorDeElementos
 
             return registros.AplicarFiltroPorEntero(filtro, propiedad);
         }
+
         public static IQueryable<TRegistro> AplicarFiltroPorFecha<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
         {
-            return AplicarFiltroEntreFechas(registros, filtro, propiedad);
+            switch (filtro.Criterio)
+            {
+                case CriteriosDeFiltrado.entreFechas:
+                    return AplicarFiltroEntreFechas(registros, filtro, propiedad);
+                default:
+                    new Exception($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
+                    break;
+            }
+            return registros;
         }
 
         public static IQueryable<TRegistro> AplicarFiltroEntreFechas<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
@@ -78,7 +87,7 @@ namespace GestorDeElementos
             var fecha = ParsearFechas(filtro.Valor);
             var expresionFechaDesde = fecha.desde != null ? $"x.{propiedad} >= DateTime({((DateTime)fecha.desde).Year},{((DateTime)fecha.desde).Month},{((DateTime)fecha.desde).Day},{((DateTime)fecha.desde).Hour},{((DateTime)fecha.desde).Minute},{((DateTime)fecha.desde).Second})" : "";
             var expresionFechaHasta = fecha.hasta != null ? $"x.{propiedad} <= DateTime({((DateTime)fecha.hasta).Year},{((DateTime)fecha.hasta).Month},{((DateTime)fecha.hasta).Day},{((DateTime)fecha.hasta).Hour},{((DateTime)fecha.hasta).Minute},{((DateTime)fecha.hasta).Second})" : "";
-            string expresion = $"x => {expresionFechaDesde} {(fecha.desde != null && fecha.hasta != null ? "&&": "")} {expresionFechaHasta}";
+            string expresion = $"x => {expresionFechaDesde} {(fecha.desde != null && fecha.hasta != null ? "&&" : "")} {expresionFechaHasta}";
             return registros.AplicarFiltroPorExpresion(expresion);
         }
 
