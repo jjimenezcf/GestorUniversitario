@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210413080026_modificar la fecha de traza")]
+    partial class modificarlafechadetraza
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,11 +35,11 @@ namespace Migraciones.Migrations
                         .HasColumnName("RUTA");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECCRE");
 
                     b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECMOD");
 
                     b.Property<int>("IdUsuaCrea")
@@ -163,11 +165,11 @@ namespace Migraciones.Migrations
                         .HasColumnName("CODIGO");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECCRE");
 
                     b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECMOD");
 
                     b.Property<string>("ISO2")
@@ -235,11 +237,11 @@ namespace Migraciones.Migrations
                         .HasColumnName("CODIGO");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECCRE");
 
                     b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECMOD");
 
                     b.Property<int>("IdPais")
