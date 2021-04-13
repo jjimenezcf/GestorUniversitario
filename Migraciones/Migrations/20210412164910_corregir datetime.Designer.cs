@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210412164910_corregir datetime")]
+    partial class corregirdatetime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +78,7 @@ namespace Migraciones.Migrations
                         .UseIdentityColumn();
 
                     b.Property<DateTime>("AuditadoEl")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("AUDITADO_EL");
 
                     b.Property<int>("IdElemento")
@@ -117,7 +119,7 @@ namespace Migraciones.Migrations
                         .UseIdentityColumn();
 
                     b.Property<DateTime>("AuditadoEl")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("AUDITADO_EL");
 
                     b.Property<int>("IdElemento")
@@ -953,7 +955,7 @@ namespace Migraciones.Migrations
                         .HasColumnName("ERROR");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("FECHA");
 
                     b.Property<int>("IdTrabajoDeUsuario")
@@ -980,7 +982,7 @@ namespace Migraciones.Migrations
                         .HasColumnName("ID_TRABAJO");
 
                     b.Property<DateTime>("Iniciado")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("INICIADO");
 
                     b.Property<string>("login")
@@ -1005,7 +1007,7 @@ namespace Migraciones.Migrations
                         .UseIdentityColumn();
 
                     b.Property<DateTime>("Encolado")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("ENTRADA");
 
                     b.Property<string>("Estado")
@@ -1038,11 +1040,11 @@ namespace Migraciones.Migrations
                         .HasColumnName("PERIODICIDAD");
 
                     b.Property<DateTime>("Planificado")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("PLANIFICADO");
 
                     b.Property<DateTime?>("Terminado")
-                        .HasColumnType("DATETIME2(7)")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("TERMINADO");
 
                     b.HasKey("Id");

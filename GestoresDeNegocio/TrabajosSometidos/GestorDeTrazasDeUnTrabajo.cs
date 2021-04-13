@@ -81,6 +81,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var gestor = Gestor(contexto, contexto.Mapeador);
             gestor.Contexto.Database.ExecuteSqlInterpolated($"delete from trabajo.traza where id_trabajo_usuario = {id}");
         }
+
+        internal static TrazaDeUnTrabajoDtm LeerUltimaTraza(ContextoSe contextoTu, int id)
+        {
+            var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
+            ClausulaDeFiltrado clausulaDeFiltrado = new ClausulaDeFiltrado() { Clausula = nameof(TrazaDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = id.ToString() };
+            var traza = gestorTraza.LeerUltimoRegistro(new List<ClausulaDeFiltrado>() { clausulaDeFiltrado });
+            return traza;
+        }
     }
 }
 

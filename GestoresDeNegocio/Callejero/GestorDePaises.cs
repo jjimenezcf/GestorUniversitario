@@ -113,6 +113,7 @@ namespace GestoresDeNegocio.Callejero
             var linea = 0;
             entorno.AnotarTraza($"Inicio del proceso");
             var idTraza = entorno.AnotarTraza($"Procesando la fila {linea}");
+            var idTrazaInformativa = entorno.AnotarTraza($"Traza informativa del proceso");
             foreach (var fila in fichero)
             {
                 var tran = gestor.IniciarTransaccion();
@@ -130,7 +131,7 @@ namespace GestoresDeNegocio.Callejero
                         fila["E"].IsNullOrEmpty())
                         throw new Exception($"El contenido de la fila {linea} debe ser: nombre del país, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
 
-                    ProcesarPaisLeido(gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"]);
+                    ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"], idTrazaInformativa);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -147,7 +148,7 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static PaisDtm ProcesarPaisLeido(GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono )
+        private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, int idTrazaInformativa )
         {
             ParametrosDeNegocio operacion;
             var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, true, true);
@@ -160,6 +161,7 @@ namespace GestoresDeNegocio.Callejero
                 p.ISO2 = Iso2;
                 p.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
+                entorno.AnotarTraza(idTrazaInformativa,$"Creando el pais {nombrePais}");
             }
             else
             {
@@ -170,9 +172,13 @@ namespace GestoresDeNegocio.Callejero
                     p.ISO2 = Iso2;
                     p.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
+                    entorno.AnotarTraza(idTrazaInformativa, $"Modificando el pais {nombrePais}");
                 }
                 else
-                   return p;
+                {
+                    entorno.AnotarTraza(idTrazaInformativa, $"El pais {nombrePais} ya existe");
+                    return p;
+                }
             }
 
             return gestor.PersistirRegistro(p, operacion);

@@ -88,6 +88,36 @@ namespace Utilidades
             return Regex.Replace(str, caracteresNoValidos, caracterDeRemplazo, RegexOptions.None);
         }
 
+        public static bool EsFecha(this string fecha)
+        {
+            try
+            {
+                DateTime.Parse(fecha);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public static DateTime? Fecha(this string fecha, bool finDelDia =false)
+        {
+            DateTime? f = null;
+            if (!fecha.IsNullOrEmpty() && fecha.EsFecha())
+            {
+                f = DateTime.Parse(fecha);
+                if (finDelDia && f.HasValue && ((DateTime)f).Hour == 0 && ((DateTime)f).Minute == 0 && ((DateTime)f).Second == 0)
+                {
+                    f = ((DateTime)f).AddHours(23);
+                    f = ((DateTime)f).AddMinutes(59);
+                    f = ((DateTime)f).AddSeconds(59);
+                }
+            }
+            return f;
+        }
+
     }
 
     public static class Numeros

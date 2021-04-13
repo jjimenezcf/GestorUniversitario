@@ -538,6 +538,18 @@ namespace GestorDeElementos
 
             return elementosDeBd;
         }
+        public TRegistro LeerUltimoRegistro(List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
+        {
+            if (parametros == null)
+                parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
+
+            var orden = new ClausulaDeOrdenacion() { OrdenarPor = nameof(IRegistro.Id), Modo = ModoDeOrdenancion.descendente };
+
+            var registros = DefinirConsulta(0, -1, filtros, new List<ClausulaDeOrdenacion> { orden }, joins, parametros);
+            var registro = registros.AsNoTracking().FirstOrDefault();
+
+            return registro;
+        }
 
         private IQueryable<TRegistro> DefinirConsulta(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
