@@ -126,10 +126,16 @@ namespace GestoresDeNegocio.Callejero
                     if (fila.Columnas != 5)
                         throw new Exception($"la fila {linea} solo debe tener 5 columnas");
 
-                    if (fila["A"].IsNullOrEmpty() || fila["B"].IsNullOrEmpty() ||
-                        fila["C"].IsNullOrEmpty() || fila["D"].IsNullOrEmpty() ||
-                        fila["E"].IsNullOrEmpty())
-                        throw new Exception($"El contenido de la fila {linea} debe ser: nombre del país, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
+                    if (fila["A"].IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el nombre del país, celda A, no puede ser nulo");
+                    if (fila["B"].IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el nombre en Inglés, celda B, no puede ser nulo");
+                    if (fila["C"].IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el iso2, celda C, no puede ser nulo");
+                    if (fila["D"].IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el iso3, celda D, no puede ser nulo");
+                    if (fila["E"].IsNullOrEmpty())
+                        GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el prefijo telefónico, celda E, no puede ser nulo");
 
                     ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"], idTrazaInformativa);
                     gestor.Commit(tran);
@@ -151,7 +157,7 @@ namespace GestoresDeNegocio.Callejero
         private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, int idTrazaInformativa )
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, true, true);
+            var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, false, false);
             if (p == null)
             {
                 p = new PaisDtm();
