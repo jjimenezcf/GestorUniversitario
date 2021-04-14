@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
-        internal static string NombreCrud = $"Crud_{typeof(TElemento).Name}".ToLower();
+        internal static string NombreCrud = $"Crud_{typeof(TElemento).Name}";
 
         public string Vista { get; private set; }
 
@@ -57,10 +57,10 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public NegocioDtm negocioDtm = null;
 
-        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase)
+        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase, string id = null)
         : base(
           padre: null,
-          id: $"Crud_{typeof(TElemento).Name}",
+          id: id==null? $"{NombreCrud}": id,
           etiqueta: typeof(TElemento).Name.Replace("Dto", ""),
           propiedad: null,
           ayuda: null,
@@ -142,7 +142,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     columna.OrdenarPor = atributos.OrdenarPor;
                     columna.Alineada = atributos.Alineada;
-                    columna.PorAnchoMnt = 0;
+                    columna.PorAnchoMnt = atributos.PorAnchoMnt;
                     columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;
                     Mnt.Datos.InsertarColumna(columna, atributos.PosicionEnGrid);
                 }

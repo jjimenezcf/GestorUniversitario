@@ -12,12 +12,16 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeUsuario : DescriptorDeCrud<UsuarioDto>
     {
         DescriptorDePuestosDeUnUsuario descriptorDePuestos = new DescriptorDePuestosDeUnUsuario(ModoDescriptor.Mantenimiento);
+        public DescriptorDeUsuario(ModoDescriptor modo): this(modo, null)
+        {
 
-        public DescriptorDeUsuario(ModoDescriptor modo)
+        }
+        public DescriptorDeUsuario(ModoDescriptor modo, string id)
         : base(controlador: nameof(UsuariosController)
                , vista: $"{nameof(UsuariosController.CrudUsuario)}"
                , modo: modo
-              , rutaBase: "Entorno")
+              , rutaBase: "Entorno"
+              , id)
         {
             if (modo == ModoDescriptor.Mantenimiento)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace GestorDeElementos
                     expresion = $"x => x.{propiedad} < {valorEntero}";
                     return registros.AplicarFiltroPorExpresion(expresion);
                 case CriteriosDeFiltrado.mayorIgual:
-                    expresion = $"x => x.{ propiedad} >= { valorEntero}";
+                    expresion = $"x => x.{ propiedad} >= {valorEntero}";
                     return registros.AplicarFiltroPorExpresion(expresion);
                 case CriteriosDeFiltrado.menorIgual:
                     expresion = $"x => x.{propiedad} <= {valorEntero}";
@@ -66,6 +67,34 @@ namespace GestorDeElementos
                 throw new Exception($"Se ha solicitado filtrar por {filtro.Clausula}, con el criterio {filtro.Criterio} y el valor proporcionado es '{filtro.Valor}', y eso no se puede hacer sobre la tabla {typeof(TRegistro).Name}. ");
 
             return registros.AplicarFiltroPorEntero(filtro, propiedad);
+        }
+
+        public static IQueryable<TRegistro> AplicarFiltroPorFecha<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
+        {
+            switch (filtro.Criterio)
+            {
+                case CriteriosDeFiltrado.entreFechas:
+                    return AplicarFiltroEntreFechas(registros, filtro, propiedad);
+                default:
+                    new Exception($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
+                    break;
+            }
+            return registros;
+        }
+
+        public static IQueryable<TRegistro> AplicarFiltroEntreFechas<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
+        {
+            var fecha = ParsearFechas(filtro.Valor);
+            var expresionFechaDesde = fecha.desde != null ? $"x.{propiedad} >= DateTime({((DateTime)fecha.desde).Year},{((DateTime)fecha.desde).Month},{((DateTime)fecha.desde).Day},{((DateTime)fecha.desde).Hour},{((DateTime)fecha.desde).Minute},{((DateTime)fecha.desde).Second})" : "";
+            var expresionFechaHasta = fecha.hasta != null ? $"x.{propiedad} <= DateTime({((DateTime)fecha.hasta).Year},{((DateTime)fecha.hasta).Month},{((DateTime)fecha.hasta).Day},{((DateTime)fecha.hasta).Hour},{((DateTime)fecha.hasta).Minute},{((DateTime)fecha.hasta).Second})" : "";
+            string expresion = $"x => {expresionFechaDesde} {(fecha.desde != null && fecha.hasta != null ? "&&" : "")} {expresionFechaHasta}";
+            return registros.AplicarFiltroPorExpresion(expresion);
+        }
+
+        private static (DateTime? desde, DateTime? hasta) ParsearFechas(string valor)
+        {
+            var fechas = valor.Split("-");
+            return (fechas[0].Fecha(), fechas[1].Fecha(true));
         }
 
         public static IQueryable<TRegistro> AplicarFiltroPorBooleano<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
@@ -130,34 +159,34 @@ namespace GestorDeElementos
         public static IQueryable<TRegistro> AplicarFiltroPorPropiedad<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, PropertyInfo propiedad)
         {
 
-            if (propiedad.PropertyType.Name.ToLower() == "string")
-            {
-                registros = registros.AplicarFiltroDeCadena(filtro, propiedad.Name);
-            }
-
             if (propiedad.Name.ToLower().Equals("id") && filtro.Criterio != CriteriosDeFiltrado.igual)
             {
                 registros = registros.AplicarFiltroPorIdentificador(filtro, propiedad.Name);
             }
 
-            if (propiedad.PropertyType.Name.ToLower() == "int32" && propiedad.Name.ToLower().StartsWith("id") && propiedad.Name.Length > 2)
+            if (propiedad.PropertyType == typeof(string))
+            {
+                registros = registros.AplicarFiltroDeCadena(filtro, propiedad.Name);
+            }
+
+            if ((propiedad.PropertyType == typeof(int) || propiedad.PropertyType == typeof(int?)) && propiedad.Name.ToLower().StartsWith("id") && propiedad.Name.Length > 2)
             {
                 registros = registros.AplicarFiltroPorIdentificador(filtro, propiedad.Name);
             }
 
-            if (propiedad.PropertyType.Name == "Nullable`1" && propiedad.PropertyType.GetGenericArguments()[0].Name == "Int32" && propiedad.Name.ToLower().StartsWith("id") && propiedad.Name.Length > 2)
-            {
-                registros = registros.AplicarFiltroPorIdentificador(filtro, propiedad.Name);
-            }
-
-            if (propiedad.PropertyType.Name.ToLower() == "int32" && !propiedad.Name.ToLower().StartsWith("id"))
+            if ((propiedad.PropertyType == typeof(int) || propiedad.PropertyType == typeof(int?)) && !propiedad.Name.ToLower().StartsWith("id"))
             {
                 registros = registros.AplicarFiltroPorEntero(filtro, propiedad.Name);
             }
 
-            if (propiedad.PropertyType.Name.ToLower() == "boolean")
+            if (propiedad.PropertyType == typeof(bool))
             {
                 registros = registros.AplicarFiltroPorBooleano(filtro, propiedad.Name);
+            }
+
+            if (propiedad.PropertyType == typeof(DateTime) || propiedad.PropertyType == typeof(DateTime?))
+            {
+                registros = registros.AplicarFiltroPorFecha(filtro, propiedad.Name);
             }
 
             return registros;

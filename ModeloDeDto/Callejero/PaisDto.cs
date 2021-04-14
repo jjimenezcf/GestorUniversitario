@@ -76,7 +76,7 @@ namespace ModeloDeDto.Callejero
         public string NombreIngles { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(Visible = false)]
+        [IUPropiedad(Visible = false, PorAnchoMnt = 10, Etiqueta = "Creado el")]
         public DateTime CreadoEl { get; set; }
 
         //----------------------------------------------

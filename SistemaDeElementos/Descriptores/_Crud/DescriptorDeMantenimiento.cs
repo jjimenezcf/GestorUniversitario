@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
 
-        public new string IdHtml => NombreMnt;
+        //public new string IdHtml => NombreMnt;
 
         public string IdHtmlZonaNavegador => $"cuerpo.pie.{IdHtml}";
 

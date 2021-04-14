@@ -70,10 +70,15 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
+                                etiqueta: "Planificado",
+                                propiedad: nameof(TrabajoDeUsuarioDto.Planificado),
+                                ayuda: "trabajos planificados entre",
+                                posicion: new Posicion() { fila = 1, columna = 0 });
+            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
                                 etiqueta: "Ejecutado entre",
                                 propiedad: nameof(TrabajoDeUsuarioDto.Iniciado),
                                 ayuda: "trabajos ejecutados entre",
-                                posicion: new Posicion() { fila = 1, columna = 0 });
+                                posicion: new Posicion() { fila = 2, columna = 0 });
 
         }
 

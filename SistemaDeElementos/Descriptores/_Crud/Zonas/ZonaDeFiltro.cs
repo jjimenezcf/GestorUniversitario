@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using Enumerados;
 using ModeloDeDto;
+using ModeloDeDto.Entorno;
+using ServicioDeDatos.Elemento;
+using ServicioDeDatos.Negocio;
 using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -24,8 +27,46 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = enumTipoControl.ZonaDeFiltro;
             var b1 = new BloqueDeFitro<TElemento>(this, "General", new Dimension(1, 2));
-            new BloqueDeFitro<TElemento>(this, "Común", new Dimension(1, 2));
+            var b2 = new BloqueDeFitro<TElemento>(this, "Común", new Dimension(2, 2));
             new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: CamposDeFiltrado.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+
+            if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
+            {
+                var modalCreador = new DescriptorDeUsuario(ModoDescriptor.Seleccion, "modal_creador");
+                new SelectorDeFiltro<TElemento, UsuarioDto>(padre: b2,
+                                              etiqueta: "Creador",
+                                              filtrarPor: nameof(ElementoDtm.IdUsuaCrea),
+                                              ayuda: "Usuario creador",
+                                              posicion: new Posicion() { fila = 1, columna = 0 },
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.NombreCompleto),
+                                              crudModal: modalCreador,
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+
+                new FiltroEntreFechas<TElemento>(bloque: b2,
+                                    etiqueta: "Creado entre",
+                                    propiedad: nameof(ElementoDtm.FechaCreacion),
+                                    ayuda: "filtrar por rango de fechas",
+                                    posicion: new Posicion() { fila = 1, columna = 1 });
+
+                var modalModificador = new DescriptorDeUsuario(ModoDescriptor.Seleccion, "modal_modificador");
+                new SelectorDeFiltro<TElemento, UsuarioDto>(padre: b2,
+                                              etiqueta: "Modificador",
+                                              filtrarPor: nameof(ElementoDtm.IdUsuaModi),
+                                              ayuda: "Usuario modificador",
+                                              posicion: new Posicion() { fila = 2, columna = 0 },
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.NombreCompleto),
+                                              crudModal: modalModificador,
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+
+                new FiltroEntreFechas<TElemento>(bloque: b2,
+                                    etiqueta: "Modificado entre",
+                                    propiedad: nameof(ElementoDtm.FechaModificacion),
+                                    ayuda: "filtrar por rango de fechas",
+                                    posicion: new Posicion() { fila = 2, columna = 1 });
+            }
+
         }
 
 
@@ -106,7 +147,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 default:
                     throw new Exception($"Ha de definir el evento de pulsar una tecla para la modal del tipo {tipoDeModal}");
             }
-            return RenderControl().Replace("eventoTeclaPulsada",evento);
+            return RenderControl().Replace("eventoTeclaPulsada", evento);
         }
 
         public string RenderZonaDeFiltroNoModal()
@@ -117,7 +158,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
 
         public override string RenderControl()
-        {           
+        {
             var numeroBloques = 0;
             var areas = "";
             foreach (BloqueDeFitro<TElemento> b in Bloques)

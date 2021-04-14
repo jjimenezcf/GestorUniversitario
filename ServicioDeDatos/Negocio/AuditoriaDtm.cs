@@ -88,7 +88,7 @@ where ID_ELEMENTO = @idElemento
             modelBuilder.Entity<TEntity>().Property(p => p.registroJson).IsRequired(true);
 
             modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).HasColumnName("AUDITADO_EL");
-            modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).HasColumnType("DATETIME");
+            modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).HasColumnType("DATETIME2(7)");
             modelBuilder.Entity<TEntity>().Property(p => p.AuditadoEl).IsRequired(true);
 
         }

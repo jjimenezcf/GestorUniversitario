@@ -211,7 +211,7 @@ namespace ServicioDeDatos.Elemento
     public class ElementoDtm : RegistroConNombre, IElementoDtm
     {
         [Required]
-        [Column("FECCRE", Order = 1, TypeName = "DATETIME")]
+        [Column("FECCRE", Order = 1, TypeName = "DATETIME2(7)")]
         public DateTime FechaCreacion { get; set; }
 
         [Required]
@@ -220,7 +220,7 @@ namespace ServicioDeDatos.Elemento
 
         public virtual UsuarioDtm UsuarioCreador { get; set; }
 
-        [Column("FECMOD", Order = 1, TypeName = "DATETIME")]
+        [Column("FECMOD", Order = 1, TypeName = "DATETIME2(7)")]
         public DateTime? FechaModificacion { get; set; }
 
         [Column("IDUSUMODI", Order = 1, TypeName = "INT")]

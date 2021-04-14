@@ -22,6 +22,7 @@ const atMenu = {
 };
 const atControl = {
     propiedad: "propiedad",
+    estilo: "style",
     ordenarPor: "ordenar-por",
     nombre: "name",
     criterio: "criterio-de-filtro",
