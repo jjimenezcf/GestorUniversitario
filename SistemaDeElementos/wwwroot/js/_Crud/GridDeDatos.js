@@ -6,10 +6,6 @@ var Crud;
             this.modo = modo;
         }
     }
-    class PropiedadesDeLaFila {
-        constructor() {
-        }
-    }
     class ResultadoDeLectura {
     }
     class DatosPeticionNavegarGrid {
@@ -918,6 +914,7 @@ var Crud;
                 let expresionMostrar = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
                 grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
                 grid.MapearPaginaCacheada(grid, registros);
+                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             catch (error) {
                 lineasCreadas = false;
@@ -940,7 +937,7 @@ var Crud;
             grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
         }
         CrearCuerpoDeLaTabla(grid, registros) {
-            let filaCabecera = grid.obtenerDescriptorDeLaCabecera(grid);
+            let filaCabecera = ApiGrid.obtenerDescriptorDeLaCabecera(grid.Tabla);
             let cuerpoDeLaTabla = document.createElement("tbody");
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
@@ -990,10 +987,11 @@ var Crud;
         crearCelda(fila, columnaCabecera, numeroDeCelda, valor) {
             let celdaDelTd = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
+            celdaDelTd.headers = `${columnaCabecera.id}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
-            celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;
+            celdaDelTd.style.width = columnaCabecera.estilo.width;
             let idCheckDeSeleccion = `${fila.id}.chksel`;
             let eventoOnClick = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
@@ -1067,7 +1065,7 @@ var Crud;
             var cabecera = grid.Tabla.rows[0];
             var ths = cabecera.querySelectorAll('th');
             for (let i = 0; i < ths.length; i++) {
-                let p = new PropiedadesDeLaFila();
+                let p = new ApiGrid.PropiedadesDeLaFila();
                 p.id = ths[i].id;
                 p.visible = !ths[i].hidden;
                 p.claseCss = ths[i].className;

@@ -73,7 +73,7 @@ namespace UtilidadesParaIu
 
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss};";
             if (columna.Visible)
-                atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
+                atributosDelEstilo = $"width: {porcentaje}%; {atributosDelEstilo}";
             string htmlRef = columna.ConOrdenacion 
                 ? RenderAccionOrdenar(columna) 
                 : columna.Visible ? columna.Titulo : "";
@@ -81,7 +81,8 @@ namespace UtilidadesParaIu
             string claseCss = columna.Visible ? Css.Render(enumCssGrid.ColumnaCabecera) : Css.Render(enumCssGrid.ColumnaOculta);
 
             var htmlTh = $@"{Environment.NewLine}
-                          <th id = ¨{columna.IdHtml}¨ 
+                          <th scope=¨col¨
+                              id = ¨{columna.IdHtml}¨ 
                               class=¨{claseCss}¨ 
                               propiedad = ¨{columna.Propiedad.ToLower()}¨
                               modo-ordenacion=¨{(columna.cssOrdenacion == enumCssOrdenacion.SinOrden ? $"{enumModoOrdenacion.sinOrden.Render()}": $"{enumModoOrdenacion.ascendente.Render()}")}¨ 

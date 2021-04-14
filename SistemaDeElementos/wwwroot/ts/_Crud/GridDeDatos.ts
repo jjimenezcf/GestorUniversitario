@@ -10,20 +10,6 @@
         }
     }
 
-    class PropiedadesDeLaFila {
-        id: string;
-        propiedad: string;
-        visible: boolean;
-        estilo: CSSStyleDeclaration;
-        claseCss: string;
-        editable: boolean;
-        tipo: string;
-        anchoEnPixel: number;
-        constructor() {
-
-        }
-    }
-
 
     class ResultadoDeLectura {
         registros: any;
@@ -397,7 +383,7 @@
             return document.getElementById(idNavegador) as HTMLDivElement;
         }
 
-        protected get Tabla(): HTMLTableElement {
+        public get Tabla(): HTMLTableElement {
             let idTabla: string = this.Grid.getAttribute(atControl.tablaDeDatos);
             return document.getElementById(idTabla) as HTMLTableElement;
         }
@@ -1146,6 +1132,7 @@
                 let expresionMostrar: string = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
                 grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
                 grid.MapearPaginaCacheada(grid, registros);
+                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             catch (error) {
                 lineasCreadas = false;
@@ -1171,7 +1158,7 @@
         }
 
         private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
-            let filaCabecera: PropiedadesDeLaFila[] = grid.obtenerDescriptorDeLaCabecera(grid);
+            let filaCabecera: ApiGrid.PropiedadesDeLaFila[] = ApiGrid.obtenerDescriptorDeLaCabecera(grid.Tabla);
             let cuerpoDeLaTabla: HTMLTableSectionElement = document.createElement("tbody");
 
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
@@ -1203,14 +1190,14 @@
             }
         }
 
-        private crearFila(filaCabecera: PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
+        private crearFila(filaCabecera: ApiGrid.PropiedadesDeLaFila[], registro: any, numeroDeFila: number): HTMLTableRowElement {
             let fila = document.createElement("tr");
             fila.id = `${this.IdGrid}_d_tr_${numeroDeFila}`;
             fila.classList.add(ClaseCss.filaDelGrid);
             let idDelElemento: number = 0;
             for (let j = 0; j < filaCabecera.length; j++) {
 
-                let columnaCabecera: PropiedadesDeLaFila = filaCabecera[j];
+                let columnaCabecera: ApiGrid.PropiedadesDeLaFila = filaCabecera[j];
                 let valor: any = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
                 if (columnaCabecera.propiedad === atControl.id) {
                     if (!IsNumber(valor))
@@ -1226,13 +1213,14 @@
             return fila;
         }
 
-        private crearCelda(fila: HTMLTableRowElement, columnaCabecera: PropiedadesDeLaFila, numeroDeCelda: number, valor: string): HTMLTableCellElement {
+        private crearCelda(fila: HTMLTableRowElement, columnaCabecera: ApiGrid.PropiedadesDeLaFila, numeroDeCelda: number, valor: string): HTMLTableCellElement {
             let celdaDelTd: HTMLTableCellElement = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
+            celdaDelTd.headers = `${columnaCabecera.id}`;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
-            celdaDelTd.style.width = `${columnaCabecera.estilo.width}`;
+            celdaDelTd.style.width = columnaCabecera.estilo.width;
 
             let idCheckDeSeleccion: string = `${fila.id}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
@@ -1274,7 +1262,7 @@
             return a;
         }
 
-        private insertarInputEnElTd(idFila: string, columnaCabecera: PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement, valor: string) {
+        private insertarInputEnElTd(idFila: string, columnaCabecera: ApiGrid.PropiedadesDeLaFila, celdaDelTd: HTMLTableCellElement, valor: string) {
             let input = document.createElement("input");
             input.type = "text";
             input.id = `${idFila}.${columnaCabecera.propiedad}`;
@@ -1317,12 +1305,12 @@
             celdaDelTd.append(checkbox);
         }
 
-        private obtenerDescriptorDeLaCabecera(grid: GridDeDatos): Array<PropiedadesDeLaFila> {
-            let filaCabecera: Array<PropiedadesDeLaFila> = new Array<PropiedadesDeLaFila>();
+        private obtenerDescriptorDeLaCabecera(grid: GridDeDatos): Array<ApiGrid.PropiedadesDeLaFila> {
+            let filaCabecera: Array<ApiGrid.PropiedadesDeLaFila> = new Array<ApiGrid.PropiedadesDeLaFila>();
             var cabecera = grid.Tabla.rows[0];
             var ths = cabecera.querySelectorAll('th');
             for (let i = 0; i < ths.length; i++) {
-                let p: PropiedadesDeLaFila = new PropiedadesDeLaFila();
+                let p: ApiGrid.PropiedadesDeLaFila = new ApiGrid.PropiedadesDeLaFila();
                 p.id = ths[i].id;
                 p.visible = !ths[i].hidden;
                 p.claseCss = ths[i].className;
