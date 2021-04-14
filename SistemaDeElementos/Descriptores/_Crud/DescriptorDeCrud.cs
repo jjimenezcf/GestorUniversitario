@@ -141,7 +141,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
 
                     columna.OrdenarPor = atributos.OrdenarPor;
-                    columna.Alineada = atributos.Alineada;
+                    columna.Alineada = atributos.Alineada == Aliniacion.no_definida ? columna.Tipo.Alineada(): atributos.Alineada;
                     columna.PorAnchoMnt = atributos.PorAnchoMnt;
                     columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;
                     Mnt.Datos.InsertarColumna(columna, atributos.PosicionEnGrid);

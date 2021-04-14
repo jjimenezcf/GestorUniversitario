@@ -72,11 +72,10 @@ namespace UtilidadesParaIu
                 : columna.PorAnchoMnt;
 
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss};";
-            if (columna.Visible)
-                atributosDelEstilo = $"width: {porcentaje}%; {atributosDelEstilo}";
+            atributosDelEstilo = $"width: {porcentaje}%; {atributosDelEstilo}";
             string htmlRef = columna.ConOrdenacion 
                 ? RenderAccionOrdenar(columna) 
-                : columna.Visible ? columna.Titulo : "";
+                : columna.Titulo;
 
             string claseCss = columna.Visible ? Css.Render(enumCssGrid.ColumnaCabecera) : Css.Render(enumCssGrid.ColumnaOculta);
 

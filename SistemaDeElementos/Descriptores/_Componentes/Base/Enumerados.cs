@@ -30,6 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
         public const string FilaPulsada = "fila-pulsada";
         public const string TeclaPulsada = "tecla-pulsada";
+        public const string MostrarAuditoria = "mostrar-auditoria";
     }
     public static class TipoDeAccionFormulario
     {

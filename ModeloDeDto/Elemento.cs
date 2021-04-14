@@ -64,16 +64,7 @@ namespace ModeloDeDto
         public string OrdenarPor { get; set; }
         public string AnchoMaximo { get; set; } = null;
         public int PosicionEnGrid { get; set; } = -1;
-        public Aliniacion Alineada
-        {
-            get
-            {
-                if (Tipo == typeof(string)) return Aliniacion.izquierda;
-                if (Tipo == typeof(int)) return Aliniacion.derecha;
-                if (Tipo == typeof(DateTime)) return Aliniacion.centrada;
-                return Aliniacion.izquierda;
-            }
-        }
+        public Aliniacion Alineada { get; set; } = Aliniacion.no_definida;
         public int PorAnchoMnt { get; set; } = 0;
         public int PorAnchoSel { get; set; } = 0;
 
@@ -269,6 +260,14 @@ namespace ModeloDeDto
         public static bool ImplementaAuditoria(this Type tipoElemento)
         {
             return tipoElemento.GetInterfaces().Contains(typeof(IAuditadoDto));
+        }
+
+        public static Aliniacion Alineada(this Type tipo)
+        {
+            if (tipo == typeof(string)) return Aliniacion.izquierda;
+            if (tipo == typeof(int)) return Aliniacion.derecha;
+            if (tipo == typeof(DateTime)) return Aliniacion.centrada;
+            return Aliniacion.izquierda;
         }
     }
 }

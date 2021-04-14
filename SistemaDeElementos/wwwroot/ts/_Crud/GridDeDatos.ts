@@ -1132,7 +1132,6 @@
                 let expresionMostrar: string = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
                 grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
                 grid.MapearPaginaCacheada(grid, registros);
-                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             catch (error) {
                 lineasCreadas = false;
@@ -1461,6 +1460,21 @@
                 grid.CargarGrid(atGrid.accion.buscar, 0);
                 e.preventDefault();
             }
+        }
+
+        public MostrarAuditoria(idCheck: string): void {
+            let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+            let idFecha: string = `${this.Grid.id}_c_tr_0.creadoel`;
+            let idUsuario: string = `${this.Grid.id}_c_tr_0.creador`;
+            if (check.checked) {
+                ApiGrid.ColumnaVisible(this.Tabla, idFecha);
+                ApiGrid.ColumnaVisible(this.Tabla, idUsuario);
+            }
+            else {
+                ApiGrid.ColumnaInvisible(this.Tabla, idFecha);
+                ApiGrid.ColumnaInvisible(this.Tabla, idUsuario);
+            }
+            ApiGrid.RecalcularAnchoColumnas(this.Tabla);
         }
 
         public AplicarQueFilasMostrar(inputDeSeleccionadas: HTMLInputElement, tbodyDelGrid: HTMLTableSectionElement, seleccionadas: InfoSelector): void {

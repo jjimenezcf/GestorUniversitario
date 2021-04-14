@@ -118,7 +118,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private static string check = $@"<input [RestoDeAtributos]
                                        type=¨checkbox¨ 
-                                       value =¨[Checked]¨>
+                                       value =¨[Checked]¨ [Accion]> 
                                        <label for=¨[IdHtml]¨>[Etiqueta]</label>";
 
         private static string checkInternoFlt = check.Replace("[RestoDeAtributos]", $" filtrar-por-false=¨[FiltrarPorFalse]¨ {atributosComunesDeUnControlflt}");

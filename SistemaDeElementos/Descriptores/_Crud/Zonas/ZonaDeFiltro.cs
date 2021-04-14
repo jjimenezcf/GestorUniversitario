@@ -65,6 +65,17 @@ namespace MVCSistemaDeElementos.Descriptores
                                     propiedad: nameof(ElementoDtm.FechaModificacion),
                                     ayuda: "filtrar por rango de fechas",
                                     posicion: new Posicion() { fila = 2, columna = 1 });
+
+                var idDeMostrarAuditoria = $"{b2.Id}_{enumTipoControl.Check.Render()}_mostrar-auditoria";
+                var accion = $"onclick = javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.MostrarAuditoria}','{idDeMostrarAuditoria.ToLower()}');";
+
+                new CheckDeAccionFlt<TElemento>(bloque: b2,
+                    id: idDeMostrarAuditoria,
+                    etiqueta: "Mostrar auditoría",
+                    ayuda: "Sólo las activos",
+                    valorInicial: false,
+                    posicion: new Posicion(3, 0),
+                    accion: accion);
             }
 
         }

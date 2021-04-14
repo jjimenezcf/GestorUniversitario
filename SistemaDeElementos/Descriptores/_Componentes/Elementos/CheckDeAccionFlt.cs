@@ -5,25 +5,23 @@ using ModeloDeDto;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class CheckFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
+    public class CheckDeAccionFlt<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
         public bool ValorInicial { get; private set; }
-        public bool FiltrarPorFalse { get; private set; }
 
         public string Accion { get; private set; }
 
 
-        public CheckFiltro(BloqueDeFitro<TElemento> bloque, string etiqueta, string filtrarPor, string ayuda, bool valorInicial, bool filtrarPorFalse, Posicion posicion, string accion = null)
+        public CheckDeAccionFlt(BloqueDeFitro<TElemento> bloque, string id,  string etiqueta, string ayuda, bool valorInicial, Posicion posicion, string accion)
         : base(padre: bloque
-              , id: $"{bloque.Id}_{enumTipoControl.Check.Render()}_{filtrarPor}"
+              , id: id
               , etiqueta
-              , filtrarPor
+              , ""
               , ayuda
               , posicion
               )
         {
             Tipo = enumTipoControl.Check;
-            Criterio = CriteriosDeFiltrado.igual;
             bloque.Tabla.Dimension.CambiarDimension(posicion);
             bloque.AnadirControlEn(this);
             ValorInicial = valorInicial;
@@ -43,7 +41,6 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssFiltro.Check);
             valores["Etiqueta"] = Etiqueta;
             valores["Checked"] = ValorInicial.ToString().ToLower();
-            valores["FiltrarPorFalse"] = FiltrarPorFalse ? "S" : "N";
             valores["Accion"] = Accion;
 
             return PlantillasHtml.Render(PlantillasHtml.checkFlt, valores);

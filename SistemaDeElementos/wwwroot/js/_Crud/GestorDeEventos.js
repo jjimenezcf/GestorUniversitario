@@ -81,6 +81,10 @@ var Crud;
                     Crud.crudMnt.TeclaPulsada(Crud.crudMnt, event);
                     break;
                 }
+                case Evento.Mnt.MostrarAuditoria: {
+                    Crud.crudMnt.MostrarAuditoria(parametros);
+                    break;
+                }
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos del mantenimiento`);
                     break;

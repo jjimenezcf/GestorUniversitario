@@ -368,7 +368,8 @@ const Evento = {
         OcultarMostrarFiltro: "ocultar-mostrar-filtro",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
-        TeclaPulsada: "tecla-pulsada"
+        TeclaPulsada: "tecla-pulsada",
+        MostrarAuditoria: "mostrar-auditoria"
     },
     Creacion: {
         Crear: "nuevo-elemento",

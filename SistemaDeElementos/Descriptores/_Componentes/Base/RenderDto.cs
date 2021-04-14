@@ -162,6 +162,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Css"] = Css.Render(enumCssControlesDto.Check);
             valores["Checked"] = atributos.ValorPorDefecto.ToString().ToLower();
             valores["Etiqueta"] = atributos.Etiqueta;
+            valores["Accion"] = ""; 
 
             var htmlCheck = PlantillasHtml.Render(PlantillasHtml.checkDto, valores);
 

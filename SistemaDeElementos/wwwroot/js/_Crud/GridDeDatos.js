@@ -914,7 +914,6 @@ var Crud;
                 let expresionMostrar = grid.Grid.getAttribute(atControl.expresionElemento).toLowerCase();
                 grid.DatosDelGrid.AnadirPagina(grid.Navegador.Pagina, datosDeEntrada.PosicionDesdeLaQueSeLee, grid.Navegador.Cantidad, infoObtenida.registros, expresionMostrar);
                 grid.MapearPaginaCacheada(grid, registros);
-                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             catch (error) {
                 lineasCreadas = false;
@@ -1178,6 +1177,20 @@ var Crud;
                 grid.CargarGrid(atGrid.accion.buscar, 0);
                 e.preventDefault();
             }
+        }
+        MostrarAuditoria(idCheck) {
+            let check = document.getElementById(idCheck);
+            let idFecha = `${this.Grid.id}_c_tr_0.creadoel`;
+            let idUsuario = `${this.Grid.id}_c_tr_0.creador`;
+            if (check.checked) {
+                ApiGrid.ColumnaVisible(this.Tabla, idFecha);
+                ApiGrid.ColumnaVisible(this.Tabla, idUsuario);
+            }
+            else {
+                ApiGrid.ColumnaInvisible(this.Tabla, idFecha);
+                ApiGrid.ColumnaInvisible(this.Tabla, idUsuario);
+            }
+            ApiGrid.RecalcularAnchoColumnas(this.Tabla);
         }
         AplicarQueFilasMostrar(inputDeSeleccionadas, tbodyDelGrid, seleccionadas) {
             if (NumeroMayorDeCero(inputDeSeleccionadas.value)) {

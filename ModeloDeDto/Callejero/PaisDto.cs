@@ -56,7 +56,8 @@ namespace ModeloDeDto.Callejero
             Tipo = typeof(string),
             LongitudMaxima =10,
             Fila = 1,
-            Columna = 2
+            Columna = 2,
+            Alineada = Aliniacion.derecha
           )
         ]
         public string Prefijo { get; set; }
@@ -76,7 +77,7 @@ namespace ModeloDeDto.Callejero
         public string NombreIngles { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(Visible = false, PorAnchoMnt = 10, Etiqueta = "Creado el")]
+        [IUPropiedad(Visible = false, PorAnchoMnt = 15, Etiqueta = "Creado el")]
         public DateTime CreadoEl { get; set; }
 
         //----------------------------------------------
@@ -84,7 +85,7 @@ namespace ModeloDeDto.Callejero
         public DateTime? ModificadoEl { get; set; }
 
         //----------------------------------------------
-        [IUPropiedad(Visible = false)]
+        [IUPropiedad(Visible = false, PorAnchoMnt = 20, Etiqueta = "Creado por")]
         public string Creador { get; set; }
 
         //----------------------------------------------
