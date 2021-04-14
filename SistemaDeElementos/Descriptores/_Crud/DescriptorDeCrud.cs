@@ -142,7 +142,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                     columna.OrdenarPor = atributos.OrdenarPor;
                     columna.Alineada = atributos.Alineada;
-                    columna.PorAnchoMnt = 0;
+                    columna.PorAnchoMnt = atributos.PorAnchoMnt;
                     columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;
                     Mnt.Datos.InsertarColumna(columna, atributos.PosicionEnGrid);
                 }

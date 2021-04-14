@@ -60,7 +60,7 @@ namespace UtilidadesParaIu
 
         public string NavegadorToHtml()
         {
-           return RenderNavegadorGrid(this) + RenderOpcionesGrid();
+            return RenderNavegadorGrid(this) + RenderOpcionesGrid();
         }
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
@@ -72,11 +72,11 @@ namespace UtilidadesParaIu
                 : columna.PorAnchoMnt;
 
             var atributosDelEstilo = $"text-align: {columna.AlineacionCss};";
-            if (columna.Visible)
-                atributosDelEstilo = $" width: {porcentaje}%; {atributosDelEstilo}";
-            string htmlRef = columna.ConOrdenacion 
-                ? RenderAccionOrdenar(columna) 
-                : columna.Visible ? columna.Titulo : "";
+            //if (columna.Visible)
+            atributosDelEstilo = $"width: {porcentaje}%; {atributosDelEstilo}";
+            string htmlRef = columna.ConOrdenacion
+                ? RenderAccionOrdenar(columna)
+                : columna.Titulo;
 
             string claseCss = columna.Visible ? Css.Render(enumCssGrid.ColumnaCabecera) : Css.Render(enumCssGrid.ColumnaOculta);
 
@@ -84,7 +84,7 @@ namespace UtilidadesParaIu
                           <th id = ¨{columna.IdHtml}¨ 
                               class=¨{claseCss}¨ 
                               propiedad = ¨{columna.Propiedad.ToLower()}¨
-                              modo-ordenacion=¨{(columna.cssOrdenacion == enumCssOrdenacion.SinOrden ? $"{enumModoOrdenacion.sinOrden.Render()}": $"{enumModoOrdenacion.ascendente.Render()}")}¨ 
+                              modo-ordenacion=¨{(columna.cssOrdenacion == enumCssOrdenacion.SinOrden ? $"{enumModoOrdenacion.sinOrden.Render()}" : $"{enumModoOrdenacion.ascendente.Render()}")}¨ 
                               style = ¨{atributosDelEstilo}¨
                               alineacion=¨{columna.AlineacionCss}¨
                               ordenar-por = ¨{columna.OrdenarPor}¨
@@ -131,7 +131,7 @@ namespace UtilidadesParaIu
 
         private static string RenderGestorDeEventos(ModoDescriptor modo)
         {
-            var getorDeEventos = $"{GestorDeEventos.EventosDelMantenimiento}"; 
+            var getorDeEventos = $"{GestorDeEventos.EventosDelMantenimiento}";
             if (modo == ModoDescriptor.Seleccion)
             {
                 getorDeEventos = $"{GestorDeEventos.EventosModalDeSeleccion}";
@@ -235,7 +235,7 @@ namespace UtilidadesParaIu
 
         }
 
-        private static string AplicarCss(bool esModal,enumCssNavegadorEnModal claseCss)
+        private static string AplicarCss(bool esModal, enumCssNavegadorEnModal claseCss)
         {
             if (esModal)
             {
@@ -270,17 +270,17 @@ namespace UtilidadesParaIu
             var esModal = grid.ZonaDeDatos.Mnt.Crud.EsModal;
 
             var htmlContenedorNavegador = esModal
-                ?$@"
+                ? $@"
                    <!-- ***************** Navegador del grid ****************** -->
                    <div id= ¨{grid.IdHtml}_pie¨ class=¨{Css.Render(enumCssNavegadorEnModal.Contenedor)}¨>
                      htmlNavegadorGrid
                    </div>
                  "
-                 :"htmlNavegadorGrid" ;
+                 : "htmlNavegadorGrid";
 
 
             var htmlNavegadorGrid = $@"
-            <div id=¨{grid.IdHtmlNavegador}¨ class=¨{AplicarCss(esModal,enumCssNavegadorEnModal.Navegador)}¨>
+            <div id=¨{grid.IdHtmlNavegador}¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Navegador)}¨>
                  <div id=¨{grid.IdHtmlNavegador_1}¨ data-type=¨img¨>
                         <img src=¨/images/paginaInicial.png¨ alt=¨Primera página¨ title=¨Ir al primer registro¨ onclick=¨{accionBuscar}¨>
                  </div>

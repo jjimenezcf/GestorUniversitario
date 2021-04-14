@@ -990,6 +990,7 @@ var Crud;
         crearCelda(fila, columnaCabecera, numeroDeCelda, valor) {
             let celdaDelTd = document.createElement("td");
             celdaDelTd.id = `${fila.id}.${numeroDeCelda}`;
+            celdaDelTd.headers = columnaCabecera.id;
             celdaDelTd.setAttribute(atControl.nombre, `td.${columnaCabecera.propiedad}.${this.IdGrid}`);
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
