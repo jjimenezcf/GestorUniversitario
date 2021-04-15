@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ServicioDeDatos.Elemento;
 using Gestor.Errores;
 using ServicioDeDatos.Entorno;
+using Utilidades;
 
 namespace ServicioDeDatos
 {

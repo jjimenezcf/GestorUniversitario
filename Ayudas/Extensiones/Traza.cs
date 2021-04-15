@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Utilidades.Traza
+namespace Utilidades
 {
 
     public enum NivelDeTraza

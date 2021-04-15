@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServicioDeDatos.Entorno;
+using Utilidades;
 
 namespace ServicioDeDatos.Elemento
 {
@@ -188,6 +190,7 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(IElementoDtm));
         }
+
     }
 
     public class RegistroConNombre : Registro, INombre

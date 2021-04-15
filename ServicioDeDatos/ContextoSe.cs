@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Utilidades.Traza;
+using Utilidades;
 using System.Data.Common;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;

@@ -32,7 +32,6 @@ namespace Utilidades
             metodo.Invoke(null, new object[] { parametros });
         }
 
-
         public static PropertyInfo ObtenerPropiedad(string dll, string nombreCompletoDeClase, string nombrePropiedad)
         {
             var assembly = Assembly.LoadFrom(dll);
@@ -48,6 +47,19 @@ namespace Utilidades
                 if (propiedad.Name.ToLower() == nombrePropiedad.ToLower())
                     return propiedad;
             throw new Exception($"Hay que implementar el método estático {nombrePropiedad} en la clase {nombreCompletoDeClase} en la ddl {nombreEnsamblado} antes de usarlo");
+        }
+
+        public static PropertyInfo[] PropiedadesDelObjeto(this object objeto)
+        {
+            var indice = objeto.GetType().FullName;
+            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
+            if (!cache.ContainsKey(indice))
+            {
+                Type t = objeto.GetType();
+                cache[indice] = t.GetProperties();
+            }
+            PropertyInfo[] props = (PropertyInfo[])cache[indice];
+            return props;
         }
 
     }

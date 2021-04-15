@@ -468,11 +468,12 @@ namespace MVCSistemaDeElementos.Controllers
             AntesDeEjecutar_Leer(posicion, cantidad, filtros, ordenes);
 
             return GestorDeElementos.LeerElementos(posicion, cantidad, filtros, ordenes, opcionesDeMapeo);
+
         }
 
         protected virtual void AntesDeEjecutar_Leer(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> ordenes)
         {
-            
+
         }
     }
 

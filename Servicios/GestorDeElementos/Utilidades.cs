@@ -7,6 +7,7 @@ using AutoMapper;
 using ModeloDeDto;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
+using Utilidades;
 
 namespace GestorDeElementos
 {

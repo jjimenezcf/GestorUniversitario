@@ -170,22 +170,6 @@ namespace GestorDeElementos
 
         #endregion
 
-        #region Métodos de ayuda
-
-        private static PropertyInfo[] PropiedadesDelObjeto(TRegistro registro)
-        {
-            var indice = typeof(TRegistro).FullName;
-            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
-            if (!cache.ContainsKey(indice))
-            {
-                Type t = registro.GetType();
-                cache[indice] = t.GetProperties();
-            }
-            PropertyInfo[] props = (PropertyInfo[])cache[indice];
-            return props;
-        }
-
-        #endregion
 
         #region Métodos de persistencia
 
@@ -241,7 +225,7 @@ namespace GestorDeElementos
 
         private void DefinirFiltroDeRelacion(TRegistro registro, List<ClausulaDeFiltrado> filtros, int idElemento1, int idElemento2)
         {
-            var propiedades = PropiedadesDelObjeto(registro);
+            var propiedades = registro.PropiedadesDelObjeto();
             foreach (var propiedad in propiedades)
             {
                 var c = new ClausulaDeFiltrado
@@ -326,7 +310,7 @@ namespace GestorDeElementos
             var indice = typeof(TRegistro).FullName;
             _CacheDeRecuentos[indice] = true;
 
-            var propiedades = PropiedadesDelObjeto(registro);
+            var propiedades = registro.PropiedadesDelObjeto();
             foreach (var propiedad in propiedades)
             {
                 if (typeof(TRegistro).ImplementaNombre() && propiedad.Name == nameof(INombre.Nombre))
@@ -368,7 +352,7 @@ namespace GestorDeElementos
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
-                var propiedades = PropiedadesDelObjeto(registro);
+                var propiedades = registro.PropiedadesDelObjeto();
                 foreach (var propiedad in propiedades)
                 {
                     if (propiedad.Name == nameof(INombre.Nombre))
@@ -777,7 +761,7 @@ namespace GestorDeElementos
 
         private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
         {
-            var propiedades = PropiedadesDelObjeto(registro);
+            var propiedades = registro.PropiedadesDelObjeto();
             foreach (var propiedad in propiedades)
             {
                 if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())

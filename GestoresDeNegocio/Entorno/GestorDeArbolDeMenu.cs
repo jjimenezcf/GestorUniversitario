@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
+using Utilidades;
 
 namespace GestoresDeNegocio.Entorno
 {

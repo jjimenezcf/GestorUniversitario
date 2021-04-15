@@ -7,6 +7,9 @@ using ModeloDeDto.Archivos;
 using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
+using System.Collections.Generic;
+using ServicioDeDatos.Elemento;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -85,7 +88,13 @@ namespace GestoresDeNegocio.Archivos
             return archivo.Id;
         }
 
-
+        public static void GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
+        {
+            var gestor = GestorDeVariables.Gestor(contexto, contexto.Mapeador);
+            var ruta = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
+            var fichero = $"{elementos[0].GetType()}.xls";
+            elementos.ToExcel(ruta.Valor, fichero);
+        }
 
     }
 }

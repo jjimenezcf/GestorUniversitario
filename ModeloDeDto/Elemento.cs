@@ -4,6 +4,8 @@ using System.Reflection;
 using Utilidades;
 using Enumerados;
 using ServicioDeDatos.Elemento;
+using System.IO;
+using System.Collections.Generic;
 
 namespace ModeloDeDto
 {
@@ -295,6 +297,13 @@ namespace ModeloDeDto
             if (tipo == typeof(int)) return Aliniacion.derecha;
             if (tipo == typeof(DateTime)) return Aliniacion.centrada;
             return Aliniacion.izquierda;
+        }
+
+        public static void ToExcel<T>(this List<T> elementos, string ruta, string fichero)
+        {
+            var ficheroConRuta = Path.Combine(ruta, fichero);
+            var excel = new ExportarExcel<T>(ficheroConRuta, elementos.ToList());
+            excel.Exportar();
         }
     }
 }

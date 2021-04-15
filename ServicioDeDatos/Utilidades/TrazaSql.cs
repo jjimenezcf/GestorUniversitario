@@ -1,4 +1,4 @@
-﻿using Utilidades.Traza;
+﻿using Utilidades;
 using System;
 using System.Data.Common;
 using Utilidades;
