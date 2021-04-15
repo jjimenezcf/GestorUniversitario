@@ -2,14 +2,9 @@
 using Gestor.Errores;
 using Microsoft.AspNetCore.Mvc;
 using MVCSistemaDeElementos.Descriptores;
-using ServicioDeDatos.Callejero;
 using GestoresDeNegocio.Callejero;
-using ModeloDeDto.Callejero;
 using AutoMapper;
-using System.IO;
-using Utilidades;
 using System;
-using Microsoft.AspNetCore.Http;
 
 namespace MVCSistemaDeElementos.Controllers
 {
