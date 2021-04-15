@@ -514,9 +514,6 @@
             let propiedad: string = htmlColumna.getAttribute(atControl.propiedad);
             let ordenarPor: string = htmlColumna.getAttribute(atControl.ordenarPor);
             this.Ordenacion.Actualizar(idcolumna, propiedad, modo, ordenarPor);
-
-            //htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
-
         }
 
         protected ObtenerOrdenacion() {
@@ -737,7 +734,7 @@
 
             var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
             var len = celdasId.length;
-            for (var i = this.InfoSelector.Cantidad-1; i >=0; i--) {
+            for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
                 let elemento: Elemento = this.InfoSelector.LeerElemento(i);
                 for (var j = 0; j < len; j++) {
                     if (Numero((<HTMLInputElement>celdasId[j]).value) == elemento.Id) {
@@ -1143,6 +1140,7 @@
                     grid.Modal.style.display = 'block';
                     EntornoSe.AjustarModalesAbiertas();
                 }
+                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             return lineasCreadas;
         }
@@ -1157,7 +1155,7 @@
         }
 
         private CrearCuerpoDeLaTabla(grid: GridDeDatos, registros: any) {
-            let filaCabecera: ApiGrid.PropiedadesDeLaFila[] = ApiGrid.obtenerDescriptorDeLaCabecera(grid.Tabla);
+            let filaCabecera: ApiGrid.PropiedadesDeLaFila[] = ApiGrid.ObtenerDescriptorDeLaCabecera(grid.Tabla);
             let cuerpoDeLaTabla: HTMLTableSectionElement = document.createElement("tbody");
 
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
@@ -1220,6 +1218,8 @@
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
             celdaDelTd.style.width = columnaCabecera.estilo.width;
+            if (celdaDelTd.style.textAlign == "right")
+                celdaDelTd.style.paddingRight = "10px";
 
             let idCheckDeSeleccion: string = `${fila.id}.chksel`;
             let eventoOnClick: string = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
@@ -1367,7 +1367,7 @@
             let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
-                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion,modoAcceso);
+                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
             }
         }
 
@@ -1473,6 +1473,13 @@
             else {
                 ApiGrid.ColumnaInvisible(this.Tabla, idFecha);
                 ApiGrid.ColumnaInvisible(this.Tabla, idUsuario);
+            }
+            ApiGrid.RecalcularAnchoColumnas(this.Tabla);
+        }
+
+        public OcultarMostrarColumnas(propiedades: string[]): void {
+            for (let i: number = 0; i < propiedades.length; i++) {
+                ApiGrid.OcultarMostrarColumna(this.Tabla, propiedades[i]);
             }
             ApiGrid.RecalcularAnchoColumnas(this.Tabla);
         }

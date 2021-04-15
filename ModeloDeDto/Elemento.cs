@@ -151,8 +151,8 @@ namespace ModeloDeDto
         public string MostrarExpresion
         {
             get { return _mostrarExpresion; }
-            set 
-            { 
+            set
+            {
                 _mostrarExpresion = value;
                 if (!_mostrarExpresion.Contains('[') && !_mostrarExpresion.Contains(']'))
                     _mostrarExpresion = $"[{_mostrarExpresion}]";
@@ -253,6 +253,33 @@ namespace ModeloDeDto
             return null;
 
         }
+    }
+
+    public class AuditoriaDto : ElementoDto, IAuditadoDto
+    {
+        [IUPropiedad(Visible = false
+            , PorAnchoMnt = 15
+            , Etiqueta = "Creado el"
+            , Ordenar = true, OrdenarPor = nameof(ElementoDtm.FechaCreacion)
+            , Alineada = Aliniacion.centrada)]
+        public DateTime CreadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(Visible = false
+            , PorAnchoMnt = 15
+            , Etiqueta = "Modificado el"
+            , Ordenar = true
+            , OrdenarPor = nameof(ElementoDtm.FechaModificacion)
+            , Alineada = Aliniacion.centrada)]
+        public DateTime? ModificadoEl { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(Visible = false, PorAnchoMnt = 20, Etiqueta = "Creado por")]
+        public string Creador { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(Visible = false, PorAnchoMnt = 20, Etiqueta = "Modificado por")]
+        public string Modificador { get; set; }
     }
 
     public static class ElementoDtoExtensiones

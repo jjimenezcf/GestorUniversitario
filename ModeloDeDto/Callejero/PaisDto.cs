@@ -1,11 +1,12 @@
 ﻿using System;
+using ServicioDeDatos.Callejero;
 
 namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
           , MostrarExpresion = "([Codigo]) [Nombre]")]
-    public class PaisDto : ElementoDto, IAuditadoDto
+    public class PaisDto : AuditoriaDto
     {
 
         [IUPropiedad(
@@ -43,7 +44,8 @@ namespace ModeloDeDto.Callejero
             Tipo = typeof(string),
             Fila = 1,
             Columna = 1,
-            LongitudMaxima = 2
+            LongitudMaxima = 2,
+            Alineada = Aliniacion.derecha
           )
         ]
         public string ISO2 { get; set; }
@@ -75,25 +77,6 @@ namespace ModeloDeDto.Callejero
           )
         ]
         public string NombreIngles { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false, PorAnchoMnt = 15, Etiqueta = "Creado el")]
-        public DateTime CreadoEl { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public DateTime? ModificadoEl { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false, PorAnchoMnt = 20, Etiqueta = "Creado por")]
-        public string Creador { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public string Modificador { get; set; }
-
-        //----------------------------------------------
-
 
     }
 }

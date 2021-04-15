@@ -6,7 +6,7 @@ namespace ModeloDeDto.Callejero
     [IUDto(AnchoEtiqueta = 20
           , AnchoSeparador = 5
           , MostrarExpresion = "([Codigo]) [Nombre]")]
-    public class ProvinciaDto : ElementoDto, IAuditadoDto
+    public class ProvinciaDto : AuditoriaDto
     {
         [IUPropiedad(
             Etiqueta = nameof(Pais),
@@ -34,7 +34,8 @@ namespace ModeloDeDto.Callejero
             Columna = 0,
             Ordenar = true,
             Obligatorio = true,
-            LongitudMaxima = 2
+            LongitudMaxima = 2,
+            Alineada = Aliniacion.derecha
           )
         ]
         public string Codigo { get; set; }
@@ -64,7 +65,8 @@ namespace ModeloDeDto.Callejero
             Fila = 2,
             Columna = 0,
             Obligatorio = true,
-            LongitudMaxima = 3
+            LongitudMaxima = 3,
+            Alineada = Aliniacion.derecha
           )
         ]
         public string Sigla { get; set; }
@@ -78,30 +80,11 @@ namespace ModeloDeDto.Callejero
             Fila = 2,
             Columna = 1,
             Obligatorio = true,
-            LongitudMaxima = 10
+            LongitudMaxima = 10,
+            Alineada = Aliniacion.derecha
           )
         ]
         public string Prefijo { get; set; }
-
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public DateTime CreadoEl { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public DateTime? ModificadoEl { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public string Creador { get; set; }
-
-        //----------------------------------------------
-        [IUPropiedad(Visible = false)]
-        public string Modificador { get; set; }
-
-        //----------------------------------------------
-
 
     }
 }

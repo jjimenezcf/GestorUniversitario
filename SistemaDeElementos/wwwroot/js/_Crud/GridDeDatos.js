@@ -414,7 +414,6 @@ var Crud;
             let propiedad = htmlColumna.getAttribute(atControl.propiedad);
             let ordenarPor = htmlColumna.getAttribute(atControl.ordenarPor);
             this.Ordenacion.Actualizar(idcolumna, propiedad, modo, ordenarPor);
-            //htmlColumna.setAttribute(atControl.modoOrdenacion, modo);
         }
         ObtenerOrdenacion() {
             var clausulas = new Array();
@@ -925,6 +924,7 @@ var Crud;
                     grid.Modal.style.display = 'block';
                     EntornoSe.AjustarModalesAbiertas();
                 }
+                ApiGrid.RecalcularAnchoColumnas(grid.Tabla);
             }
             return lineasCreadas;
         }
@@ -936,7 +936,7 @@ var Crud;
             grid.AplicarQueFilasMostrar(grid.InputSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
         }
         CrearCuerpoDeLaTabla(grid, registros) {
-            let filaCabecera = ApiGrid.obtenerDescriptorDeLaCabecera(grid.Tabla);
+            let filaCabecera = ApiGrid.ObtenerDescriptorDeLaCabecera(grid.Tabla);
             let cuerpoDeLaTabla = document.createElement("tbody");
             cuerpoDeLaTabla.id = `${grid.Grid.id}_tbody`;
             cuerpoDeLaTabla.classList.add(ClaseCss.cuerpoDeLaTabla);
@@ -991,6 +991,8 @@ var Crud;
             celdaDelTd.setAttribute(atControl.propiedad, `${columnaCabecera.propiedad}`);
             celdaDelTd.style.textAlign = columnaCabecera.estilo.textAlign;
             celdaDelTd.style.width = columnaCabecera.estilo.width;
+            if (celdaDelTd.style.textAlign == "right")
+                celdaDelTd.style.paddingRight = "10px";
             let idCheckDeSeleccion = `${fila.id}.chksel`;
             let eventoOnClick = this.definirPulsarCheck(idCheckDeSeleccion, celdaDelTd.id);
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
@@ -1189,6 +1191,12 @@ var Crud;
             else {
                 ApiGrid.ColumnaInvisible(this.Tabla, idFecha);
                 ApiGrid.ColumnaInvisible(this.Tabla, idUsuario);
+            }
+            ApiGrid.RecalcularAnchoColumnas(this.Tabla);
+        }
+        OcultarMostrarColumnas(propiedades) {
+            for (let i = 0; i < propiedades.length; i++) {
+                ApiGrid.OcultarMostrarColumna(this.Tabla, propiedades[i]);
             }
             ApiGrid.RecalcularAnchoColumnas(this.Tabla);
         }

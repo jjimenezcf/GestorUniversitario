@@ -65,6 +65,10 @@ cuerpo-datos > tr:after {
     padding: unset;
 }
 
+.columna-alineacion-derecha{
+    padding-right: 10px;
+}
+
 .ordenada-sin-orden {
     color: #a5a1a1
 }

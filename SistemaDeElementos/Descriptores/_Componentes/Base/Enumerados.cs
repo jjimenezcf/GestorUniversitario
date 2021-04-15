@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
         public const string FilaPulsada = "fila-pulsada";
         public const string TeclaPulsada = "tecla-pulsada";
-        public const string MostrarAuditoria = "mostrar-auditoria";
+        public const string OcultarMostrarColumnas = "ocultar-mostrar-columnas";
     }
     public static class TipoDeAccionFormulario
     {
@@ -153,7 +153,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public enum enumCssGrid
     {
         ColumnaOculta,
-        ColumnaCabecera
+        ColumnaCabecera,
+        ColumnaAlineadaDerecha
     }
 
     public enum enumCssCreacion
@@ -448,6 +449,7 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 case enumCssGrid.ColumnaCabecera: return "columna-cabecera";
                 case enumCssGrid.ColumnaOculta: return "columna-oculta";
+                case enumCssGrid.ColumnaAlineadaDerecha: return "columna-alineacion-derecha";
             }
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }

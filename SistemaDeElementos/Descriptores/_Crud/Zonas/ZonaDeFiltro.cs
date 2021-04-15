@@ -66,16 +66,25 @@ namespace MVCSistemaDeElementos.Descriptores
                                     ayuda: "filtrar por rango de fechas",
                                     posicion: new Posicion() { fila = 2, columna = 1 });
 
-                var idDeMostrarAuditoria = $"{b2.Id}_{enumTipoControl.Check.Render()}_mostrar-auditoria";
-                var accion = $"onclick = javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.MostrarAuditoria}','{idDeMostrarAuditoria.ToLower()}');";
-
+                var idAudtCreacion = $"{b2.Id}_{enumTipoControl.Check.Render()}_auditoria-de-creacion";
+                var accionCreacion = $"onclick = javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarColumnas}','{nameof(IAuditadoDto.CreadoEl)}#{nameof(IAuditadoDto.Creador)}');";
                 new CheckDeAccionFlt<TElemento>(bloque: b2,
-                    id: idDeMostrarAuditoria,
-                    etiqueta: "Mostrar auditoría",
-                    ayuda: "Sólo las activos",
+                    id: idAudtCreacion,
+                    etiqueta: "Auditoría de creación",
+                    ayuda: "muestra la fecha y usuario de creación",
                     valorInicial: false,
                     posicion: new Posicion(3, 0),
-                    accion: accion);
+                    accion: accionCreacion);
+
+                var idAudtModificacion = $"{b2.Id}_{enumTipoControl.Check.Render()}_auditoria-de-modificacion";
+                var accionModificacion = $"onclick = javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarColumnas}','{nameof(IAuditadoDto.ModificadoEl)}#{nameof(IAuditadoDto.Modificador)}');";
+                new CheckDeAccionFlt<TElemento>(bloque: b2,
+                    id: idAudtModificacion,
+                    etiqueta: "Auditoría de modificación",
+                    ayuda: "muestra la última fecha y usuario de modificación",
+                    valorInicial: false,
+                    posicion: new Posicion(3, 1),
+                    accion: accionModificacion);
             }
 
         }

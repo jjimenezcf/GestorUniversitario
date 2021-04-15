@@ -399,7 +399,8 @@ const Evento = {
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada",
-        MostrarAuditoria: "mostrar-auditoria"
+        MostrarAuditoria: "mostrar-auditoria",
+        OcultarMostrarColumnas: "ocultar-mostrar-columnas"
     },
     Creacion: {
         Crear: "nuevo-elemento",

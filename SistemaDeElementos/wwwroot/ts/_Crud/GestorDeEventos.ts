@@ -81,8 +81,13 @@
                     crudMnt.TeclaPulsada(crudMnt, event);
                     break;
                 }
-                case Evento.Mnt.MostrarAuditoria: {
-                    crudMnt.MostrarAuditoria(parametros as string);
+                case Evento.Mnt.OcultarMostrarColumnas: {
+                    let parIn: Array<string> = parametros.split("#");
+                    let propiedades = [];
+                    for (let i: number = 0; i < parIn.length; i++) {
+                        propiedades.push(parIn[i]);
+                    }
+                    crudMnt.OcultarMostrarColumnas(propiedades);
                     break;
                 }
                 default: {

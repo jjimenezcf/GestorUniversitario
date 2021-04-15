@@ -13,7 +13,7 @@
         }
     }
 
-    export function obtenerDescriptorDeLaCabecera(tabla: HTMLTableElement): Array<PropiedadesDeLaFila> {
+    export function ObtenerDescriptorDeLaCabecera(tabla: HTMLTableElement): Array<PropiedadesDeLaFila> {
         let filaCabecera: Array<PropiedadesDeLaFila> = new Array<PropiedadesDeLaFila>();
         var cabecera = tabla.rows[0];
         var ths = cabecera.querySelectorAll('th');
@@ -33,28 +33,24 @@
 
     export function ColumnaVisible(tabla: HTMLTableElement, idColumna: string) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(idColumna) as HTMLTableHeaderCellElement;
-        columna.classList.remove('columna-oculta');
-        columna.classList.add('columna-cabecera');
-        let cuerpoDeLaTabla: HTMLTableSectionElement = tabla.tBodies[0];
-        var tds = cuerpoDeLaTabla.querySelectorAll('td');
-        for (let i = 0; i < tds.length; i++) {
-            if (tds[i].headers === idColumna) {
-                tds[i].classList.remove('columna-oculta');
-                tds[i].classList.add('columna-cabecera');
-            }
-        }
+        hacerVisible(tabla, columna);
     }
 
     export function ColumnaInvisible(tabla: HTMLTableElement, idColumna: string) {
         let columna: HTMLTableHeaderCellElement = document.getElementById(idColumna) as HTMLTableHeaderCellElement;
-        columna.classList.add('columna-oculta');
-        columna.classList.remove('columna-cabecera');
-        let cuerpoDeLaTabla: HTMLTableSectionElement = tabla.tBodies[0];
-        var tds = cuerpoDeLaTabla.querySelectorAll('td');
-        for (let i = 0; i < tds.length; i++) {
-            if (tds[i].headers === idColumna) {
-                tds[i].classList.add('columna-oculta');
-                tds[i].classList.remove('columna-cabecera');
+        hacerInvisible(tabla, columna);
+    }
+
+    export function OcultarMostrarColumna(tabla: HTMLTableElement, propiedad: string) {
+        var cabecera = tabla.rows[0];
+        var ths = cabecera.querySelectorAll('th');
+        for (let i = 0; i < ths.length; i++) {
+            if (ths[i].getAttribute(atControl.propiedad) === propiedad.toLocaleLowerCase()) {
+                let columna: HTMLTableHeaderCellElement = ths[i];
+                if (estaOculta(columna))
+                    hacerVisible(tabla, columna);
+                else
+                    hacerInvisible(tabla, columna);
             }
         }
     }
@@ -63,6 +59,36 @@
         recalcularPorcentajes(tabla);
         let cuerpo: HTMLTableSectionElement = tabla.tBodies[0];
         aplicarPorcentajes(cuerpo);
+    }
+
+    function estaOculta(columna: HTMLTableHeaderCellElement) {
+        return columna.classList.contains('columna-oculta');
+    }
+
+    function hacerVisible(tabla: HTMLTableElement, columna: HTMLTableHeaderCellElement) {
+        columna.classList.remove('columna-oculta');
+        columna.classList.add('columna-cabecera');
+        let cuerpoDeLaTabla: HTMLTableSectionElement = tabla.tBodies[0];
+        var tds = cuerpoDeLaTabla.querySelectorAll('td');
+        for (let i = 0; i < tds.length; i++) {
+            if (tds[i].headers === columna.id) {
+                tds[i].classList.remove('columna-oculta');
+                tds[i].classList.add('columna-cabecera');
+            }
+        }
+    }
+
+    function hacerInvisible(tabla: HTMLTableElement, columna: HTMLTableHeaderCellElement) {
+        columna.classList.add('columna-oculta');
+        columna.classList.remove('columna-cabecera');
+        let cuerpoDeLaTabla: HTMLTableSectionElement = tabla.tBodies[0];
+        var tds = cuerpoDeLaTabla.querySelectorAll('td');
+        for (let i = 0; i < tds.length; i++) {
+            if (tds[i].headers === columna.id) {
+                tds[i].classList.add('columna-oculta');
+                tds[i].classList.remove('columna-cabecera');
+            }
+        }
     }
 
     function aplicarPorcentajes(cuerpoDeLaTabla: HTMLTableSectionElement) {
@@ -91,7 +117,7 @@
         for (let i = 0; i < ths.length; i++) {
             if (!ths[i].hidden) {
                 loQueHay = Numero(ths[i].style.width.replace('%', ''));
-                loQueDebeSer = (loQueHay * 100) / sumaDeLoQueHay;
+                loQueDebeSer = (loQueHay * 99) / sumaDeLoQueHay;
                 ths[i].style.width = `${loQueDebeSer}%`;
             }
         }

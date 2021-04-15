@@ -120,7 +120,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (expresionElemento != null)
                 mostrarExpresion = $"[{expresionElemento.GetValue(typeof(TElemento))}]";
             else
-            if (typeof(TElemento).BaseType.Name != nameof(ElementoDto))
+            if (typeof(TElemento).BaseType.Name != nameof(ElementoDto) && typeof(TElemento).BaseType.Name != nameof(AuditoriaDto))
                 GestorDeErrores.Emitir($"Debe definir los campos que componen la 'exprexión del elemento' para el objeto {typeof(TElemento).Name}");
 
 
