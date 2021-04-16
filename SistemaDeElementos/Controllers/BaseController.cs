@@ -4,6 +4,7 @@ using System.IO;
 using AutoMapper;
 using Gestor.Errores;
 using GestorDeElementos;
+using GestoresDeNegocio.Archivos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
 using Microsoft.AspNetCore.Http;
@@ -97,9 +98,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(contexto, mapeador, httpContext);
                 ValidarExtension(fichero, extensionesValidas);
-                var rutaBase = @"..\SistemaDeElementos\wwwroot";
-                var rutaDeDescarga = $@"{rutaBase}\Archivos";
-                var rutaConFichero = $@"{rutaDeDescarga}\{fichero.FileName}";
+                var rutaConFichero = $@"{GestorDeVariables.RutaDeDescarga}\{fichero.FileName}";
 
                 using (var stream = new FileStream(rutaConFichero, FileMode.Create))
                 {
@@ -108,11 +107,11 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (rutaDestino.IsNullOrEmpty())
                 {
-                    r.Datos = GestoresDeNegocio.Archivos.GestorDocumental.SubirArchivo(contexto, rutaConFichero, mapeador);
+                    r.Datos = GestorDocumental.SubirArchivo(contexto, rutaConFichero, mapeador);
                 }
                 else
                 {
-                    rutaDestino = $@"{rutaBase}{rutaDestino.Replace("/", @"\")}";
+                    rutaDestino = $@"{GestorDeVariables.RutaBase}{rutaDestino.Replace("/", @"\")}";
 
                     if (!Directory.Exists(rutaDestino))
                         Directory.CreateDirectory(rutaDestino);

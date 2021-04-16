@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Negocio;
+using GestoresDeNegocio.Archivos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -182,7 +183,7 @@ namespace MVCSistemaDeElementos.Controllers
                     () => Leer(pos, can, filtro, orden)
                   , () => accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro));
 
-
+                GestorDocumental.GenerarExcel(Contexto, datos.elementos.ToList());
                 var infoObtenida = new ResultadoDeLectura();
                 infoObtenida.total = datos.total;
                 infoObtenida.registros = ElementosLeidos(datos.elementos.ToList());

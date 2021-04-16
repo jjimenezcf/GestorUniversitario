@@ -21,11 +21,11 @@
             let url: string = DefinirPeticionDeLeerModoDeAccesoAlNegocio(controlador, negocio);
             let datosEntrada: any = { "cotrolador": controlador, "negocio": negocio };
             let a = new ApiDeAjax.DescriptorAjax(llamador
-                , Ajax.EndPoint.SubirArchivo
+                , Ajax.EndPoint.LeerModoDeAccesoAlNegocio
                 , datosEntrada
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Post
+                , ApiDeAjax.ModoPeticion.Get
                 , (peticion) => {
                     resolve(peticion);
                 }

@@ -18,7 +18,6 @@ namespace ServicioDeDatos
         internal static readonly string usuario = "jjimenezcf@gmail.com";
         internal static readonly string Version_0 = "0.0.0";
         public static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
-
         public class Vista
         {
             internal static string Catalogo = "CatalogoDelSe";

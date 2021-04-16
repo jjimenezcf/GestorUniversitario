@@ -15,6 +15,7 @@ namespace ServicioDeDatos
         public static readonly string Debugar_Sqls = $"CFG_{nameof(Debugar_Sqls)}";
         public static readonly string Servidor_Archivos = $"CFG_{nameof(Servidor_Archivos)}";
         public static readonly string Binarios = $"CFG_{nameof(Binarios)}";
+        public static readonly string Ruta_De_Exportaciones = $"CFG_{nameof(Ruta_De_Exportaciones)}";
     }
 
 

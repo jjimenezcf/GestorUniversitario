@@ -13,7 +13,7 @@ var ApiDePeticiones;
         return new Promise((resolve, reject) => {
             let url = DefinirPeticionDeLeerModoDeAccesoAlNegocio(controlador, negocio);
             let datosEntrada = { "cotrolador": controlador, "negocio": negocio };
-            let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.EndPoint.SubirArchivo, datosEntrada, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Post, (peticion) => {
+            let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.EndPoint.LeerModoDeAccesoAlNegocio, datosEntrada, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
                 resolve(peticion);
             }, (peticion) => {
                 reject(peticion);

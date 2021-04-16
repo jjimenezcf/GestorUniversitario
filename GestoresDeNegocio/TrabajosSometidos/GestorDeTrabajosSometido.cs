@@ -12,6 +12,7 @@ using GestoresDeNegocio.Entorno;
 using ServicioDeDatos.Entorno;
 using System;
 using System.Reflection;
+using GestoresDeNegocio.Archivos;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -21,6 +22,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public class MapeadorTrabajosSometidos : Profile
         {
+
+            public static readonly string RutaDeBinarios = $@"..\{GestorDeVariables.RutaBase}\bin";
             public MapeadorTrabajosSometidos()
             {
                 CreateMap<TrabajoSometidoDtm, TrabajoSometidoDto>()
@@ -123,16 +126,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static MethodInfo ValidarExisteTrabajoSometido(ContextoSe contexto, TrabajoSometidoDtm registro)
         {
-            var ruta = GestorDeVariables.Gestor(contexto, contexto.Mapeador).LeerVariable(Variable.Binarios);
+            VariableDtm ruta = GestorDeVariables.VariableDeRutaDeBinarios(contexto);
             return Ensamblados.ValidarMetodoEstatico($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
         }
     }
 }
 
-//Antigua forma, antes de usar Dapper
-//using (var c = ContextoSe.ObtenerContexto())
-//{
-//    if (!new ExistePa(c, registro.Pa, registro.Esquema).Existe)
-//        GestorDeErrores.Emitir($"El {registro.Esquema}.{registro.Pa} indicado no existe en la BD");
-//}
+
 
