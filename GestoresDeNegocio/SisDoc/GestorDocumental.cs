@@ -61,14 +61,13 @@ namespace GestoresDeNegocio.Archivos
 
         private int SubirArchivoInterno(string rutaConFichero)
         {
-            var gestor = GestorDeVariables.Gestor(Contexto, Mapeador);
-            var rutaDocumental = gestor.LeerRegistroCacheado(nameof(VariableDto.Nombre), Variable.Servidor_Archivos);
+            var servidorDeArchivos = GestorDeVariables.LeerVariable(Contexto, Variable.Servidor_Archivos, true);
 
-            if (!Directory.Exists(rutaDocumental.Valor))
-                throw new Exception($"La ruta del servidor documental {rutaDocumental.Valor} asignada a la variable {Variable.Servidor_Archivos} no está definida");
+            if (!Directory.Exists(servidorDeArchivos.Valor))
+                throw new Exception($"La ruta del servidor documental {servidorDeArchivos.Valor} asignada a la variable {Variable.Servidor_Archivos} no está definida");
 
             var fecha = DateTime.Now;
-            var almacenarEn = $@"{rutaDocumental.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{gestor.Contexto.DatosDeConexion.IdUsuario}";
+            var almacenarEn = $@"{servidorDeArchivos.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{Contexto.DatosDeConexion.IdUsuario}";
             Directory.CreateDirectory(almacenarEn);
             var fichero = Path.GetFileName(rutaConFichero);
 
@@ -94,7 +93,11 @@ namespace GestoresDeNegocio.Archivos
         {
             VariableDtm ruta = GestorDeVariables.VariableDeRutaDeExportaciones(contexto);
             var fichero = $"{elementos[0].GetType()}.xls";
-            elementos.ToExcel(ruta.Valor, fichero);
+            var fecha = DateTime.Now;
+            var rutaDeExportacion = $@"{ruta.Valor}\{fecha.Year}-{fecha.Month}-{fecha.Day}\{contexto.DatosDeConexion.Login}";
+            if (!Directory.Exists(rutaDeExportacion))
+                Directory.CreateDirectory(rutaDeExportacion);
+            elementos.ToExcel(rutaDeExportacion, fichero);
         }
 
     }

@@ -66,6 +66,8 @@ namespace ServicioDeDatos.Entorno
                 .HasMany(vista => vista.Menus)
                 .WithOne(vista => vista.VistaMvc)
                 .HasForeignKey(menu => menu.IdVistaMvc);
+
+            modelBuilder.Entity<VistaMvcDtm>().HasIndex(v => new { v.Nombre }).IsUnique(true).HasDatabaseName("IND_VISTAMVC_NOMBRE");
         }
     }
 }

@@ -14,14 +14,14 @@ namespace ServicioDeDatos
         public static readonly string Version = $"CFG_{nameof(Version)}";
         public static readonly string Debugar_Sqls = $"CFG_{nameof(Debugar_Sqls)}";
         public static readonly string Servidor_Archivos = $"CFG_{nameof(Servidor_Archivos)}";
-        public static readonly string Binarios = $"CFG_{nameof(Binarios)}";
+        public static readonly string Ruta_De_Binarios = $"CFG_{nameof(Ruta_De_Binarios)}";
         public static readonly string Ruta_De_Exportaciones = $"CFG_{nameof(Ruta_De_Exportaciones)}";
     }
 
 
     public class CacheDeVariable 
     {
-        private static ConcurrentDictionary<string, object> cacheVariables = ServicioDeCaches.Obtener(nameof(CacheDeVariable));
+        private static ConcurrentDictionary<string, object> cacheVariables = ServicioDeCaches.Obtener(typeof(VariableDtm).FullName);
 
         public static string ServidorDeArchivos
         {
@@ -71,7 +71,7 @@ namespace ServicioDeDatos
 
         public static void BorrarCache(string variable)
         {
-            ServicioDeCaches.EliminarElemento(nameof(CacheDeVariable), variable);
+            ServicioDeCaches.EliminarElemento(typeof(VariableDtm).FullName, variable);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Utilidades
     {
         public static MethodInfo ValidarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo)
         {
-            var assembly = Assembly.LoadFrom(dll);
+            var assembly = Assembly.LoadFrom(dll.Replace(@"file:\", ""));
 
             var rutaBinarios = Path.GetDirectoryName(dll);
             var nombreEnsamblado = Path.GetFileNameWithoutExtension(dll);

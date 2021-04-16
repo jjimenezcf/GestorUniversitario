@@ -22,10 +22,7 @@ namespace ServicioDeDatos.Entorno
         {
             modelBuilder.Entity<VariableDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(50)").IsRequired();
             modelBuilder.Entity<VariableDtm>().Property(v => v.Descripcion).IsRequired(false);
-            modelBuilder.Entity<VistaMvcDtm>()
-            .HasIndex(v => new { v.Nombre })
-            .IsUnique(true)
-            .HasDatabaseName("IX_VARIABLE");
+            modelBuilder.Entity<VariableDtm>().HasIndex(v => new { v.Nombre }).IsUnique(true).HasDatabaseName("IND_VARIABLE_NOMBRE");
 
         }
     }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210416173747_indicepornombredevariable")]
+    partial class indicepornombredevariable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -525,7 +527,7 @@ namespace Migraciones.Migrations
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasDatabaseName("IND_VARIABLE_NOMBRE");
+                        .HasDatabaseName("IND_NOMBRE");
 
                     b.ToTable("VARIABLE", "ENTORNO");
                 });
@@ -572,10 +574,6 @@ namespace Migraciones.Migrations
                     b.HasIndex("IdPermiso")
                         .IsUnique()
                         .HasDatabaseName("IX_VISTA_MVC_IDPERMISO");
-
-                    b.HasIndex("Nombre")
-                        .IsUnique()
-                        .HasDatabaseName("IND_VISTAMVC_NOMBRE");
 
                     b.HasIndex("Controlador", "Accion", "Parametros")
                         .IsUnique()

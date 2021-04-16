@@ -13,6 +13,7 @@ using ServicioDeDatos.Entorno;
 using System;
 using System.Reflection;
 using GestoresDeNegocio.Archivos;
+using System.IO;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -23,7 +24,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public class MapeadorTrabajosSometidos : Profile
         {
 
-            public static readonly string RutaDeBinarios = $@"..\{GestorDeVariables.RutaBase}\bin";
             public MapeadorTrabajosSometidos()
             {
                 CreateMap<TrabajoSometidoDtm, TrabajoSometidoDto>()
@@ -126,8 +126,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static MethodInfo ValidarExisteTrabajoSometido(ContextoSe contexto, TrabajoSometidoDtm registro)
         {
-            VariableDtm ruta = GestorDeVariables.VariableDeRutaDeBinarios(contexto);
-            return Ensamblados.ValidarMetodoEstatico($"{ruta}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
+            var rutaBinarios = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            return Ensamblados.ValidarMetodoEstatico($"{rutaBinarios}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);
         }
     }
 }

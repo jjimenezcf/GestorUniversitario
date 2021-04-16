@@ -1,7 +1,6 @@
 ﻿namespace ModeloDeDto.Entorno
 {
-    [IUDto(AnchoEtiqueta = 20
-          , AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class VariableDto : ElementoDto
     {
         [IUPropiedad(
@@ -21,7 +20,8 @@
           Ayuda = "Describa el uso de la variable",
           Tipo = typeof(string),
           Fila = 1,
-          Columna = 0
+          Columna = 0,
+          VisibleEnGrid = false
           )
         ]
         public string Descripcion { get; set; }

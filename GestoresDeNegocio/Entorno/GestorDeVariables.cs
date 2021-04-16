@@ -20,7 +20,7 @@ namespace GestoresDeNegocio.Entorno
         public static readonly string RutaBase = @"..\SistemaDeElementos\wwwroot";
         public static readonly string RutaDeDescarga = $@"{RutaBase}\Archivos";
         public static readonly string RutaDeExportaciones = $@"{RutaBase}\Exportaciones";
-        public static readonly string RutaDeBinarios = $@"{RutaBase}\bin";
+        public static readonly string RutaDeBinarios = $@"..\{RutaBase}\bin";
 
         public class MapearVariables : Profile
         {
@@ -34,24 +34,12 @@ namespace GestoresDeNegocio.Entorno
         public GestorDeVariables(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
-
         }
         internal static GestorDeVariables Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeVariables(contexto, mapeador);
         }
 
-        protected override void AntesMapearRegistroParaModificar(VariableDto elemento, ParametrosDeNegocio opciones)
-        {
-            base.AntesMapearRegistroParaModificar(elemento, opciones);
-            CacheDeVariable.BorrarCache(elemento.Nombre);
-        }
-
-        protected override void AntesMapearRegistroParaEliminar(VariableDto elemento, ParametrosDeNegocio opciones)
-        {
-            base.AntesMapearRegistroParaEliminar(elemento, opciones);
-            CacheDeVariable.BorrarCache(elemento.Nombre);
-        }
 
         internal static VariableDtm LeerVariable(ContextoSe contextoSe, string variable, bool emitirErrorSiNoExiste)
         {
@@ -81,25 +69,24 @@ namespace GestoresDeNegocio.Entorno
             var ruta = LeerVariable(contexto, Variable.Ruta_De_Exportaciones, false);
             
             if (ruta == null)
-            {
-                if (!Directory.Exists(RutaDeExportaciones))
-                    Directory.CreateDirectory(RutaDeExportaciones);
                 ruta = CrearVariable(contexto, Variable.Ruta_De_Exportaciones, "Directorio donde se genera la documentación a exportar", RutaDeExportaciones);
-            }
+
+            if (!Directory.Exists(ruta.Valor))
+                Directory.CreateDirectory(ruta.Valor);
 
             return ruta;
         }
 
         public static VariableDtm VariableDeRutaDeBinarios(ContextoSe contexto)
         {
-            var ruta = LeerVariable(contexto, Variable.Binarios, false);
+            var ruta = LeerVariable(contexto, Variable.Ruta_De_Binarios, false);
             if (ruta == null)
             {
                 var rutaBinarios = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
                 //if (!Directory.Exists(RutaDeBinarios))
                 //    Directory.CreateDirectory(RutaDeBinarios);
                 //var rutaAbsoluta = Path.GetFullPath(RutaDeBinarios);
-                ruta = CrearVariable(contexto, Variable.Binarios, "Directorio donde se genera los binarios del sistema", rutaBinarios);
+                ruta = CrearVariable(contexto, Variable.Ruta_De_Binarios, "Directorio donde se genera los binarios del sistema", rutaBinarios);
             }
 
             return ruta;
