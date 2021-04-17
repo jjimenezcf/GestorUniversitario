@@ -148,6 +148,7 @@ namespace ModeloDeDto
         public bool OpcionDeCrear { get; set; } = true;
         public bool OpcionDeEditar { get; set; } = true;
         public bool OpcionDeBorrar { get; set; } = true;
+        public bool OpcionDeExportar { get; set; } = true;
 
         private string _mostrarExpresion = $"[{nameof(INombre.Nombre)}]";
         public string MostrarExpresion
@@ -246,6 +247,9 @@ namespace ModeloDeDto
 
                         case nameof(IUDtoAttribute.OpcionDeEditar):
                             return a.OpcionDeEditar;
+
+                        case nameof(IUDtoAttribute.OpcionDeExportar):
+                            return a.OpcionDeExportar;
                     }
                     if (obligatorio)
                         throw new Exception($"Se ha solicitado el atributo {nameof(IUDtoAttribute)}.{nombreAtributo} de la clase {clase} y no está definido");

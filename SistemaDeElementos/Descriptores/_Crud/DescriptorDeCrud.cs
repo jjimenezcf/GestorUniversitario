@@ -23,8 +23,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMantenimiento<TElemento> Mnt { get; private set; }
         public DescriptorDeCreacion<TElemento> Creador { get; private set; }
         public DescriptorDeEdicion<TElemento> Editor { get; private set; }
+        public DescriptorDeExportacion<TElemento> Exportador { get; private set; }
         public DescriptorDeBorrado<TElemento> Borrado { get; private set; }
-        public DescriptorDeDetalle Detalle { get; private set; }
 
         public string Controlador { get; private set; }
         public ModoDescriptor Modo { get; private set; }
@@ -79,11 +79,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
             Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
             Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
+            Exportador = new DescriptorDeExportacion<TElemento>(crud: this);
             Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
             Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
-            Mnt.ZonaMenu.AnadirOpcionDeIrAEditarFilasSeleccionadas();
-            Mnt.ZonaMenu.AnadirOpcionDeBorrarElemento();
+            Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
+            Mnt.ZonaMenu.AnadirOpcionDeIrAExportar();
+            Mnt.ZonaMenu.AnadirOpcionDeBorrar();
 
+            DefinirDescriptorDeAuditoria();
+
+        }
+
+        private void DefinirDescriptorDeAuditoria()
+        {
             if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
             {
                 var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
@@ -108,9 +116,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 expanDeAuditoria.Controles.Add(new DivEnBlanco(expanDeAuditoria));
                 expanDeAuditoria.Controles.Add(mostrarHistorico);
             }
-
         }
-
 
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
@@ -185,16 +191,18 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             try
             {
-                var renderMnt = Mnt.RenderControl();
+                var renderMnt = Mnt.RenderDelMantenimiento();
                 if (ModoDescriptor.Mantenimiento == Modo)
                     return $@"
                   {renderMnt}
                   <!--  ******************* div de creacion ******************* -->
-                  {Creador.RenderControl()}
+                  {Creador.RenderDeCreacion()}
                   <!--  *******************  div de edición ******************* -->
-                  {Editor.RenderControl()}
+                  {Editor.RenderDeEdicion()}
+                  <!--  *******************  div de exportacion ******************* -->
+                  {Exportador.RenderDeExportacion()}
                   <!--  *******************  div de borrado ******************* -->
-                  {Borrado.RenderControl()}";
+                  {Borrado.RenderDelBorrado()}";
 
                 if (ModoDescriptor.Consulta == Modo)
                     return $@"

@@ -57,6 +57,7 @@ namespace Enumerados
         , ModalDeRelacion
         , ModalDeConsulta
         , FiltroEntreFechas
+        , pnlExportacion
     }
 
     public static class TipoControlExtension
@@ -97,6 +98,7 @@ namespace Enumerados
                 case enumTipoControl.Mantenimiento: return "mantenimiento";
                 case enumTipoControl.pnlCreador: return "panel-creador";
                 case enumTipoControl.pnlEditor: return "panel-editor";
+                case enumTipoControl.pnlExportacion: return "panel-exportacion";
                 case enumTipoControl.pnlBorrado: return "panel-borrado";
                 case enumTipoControl.ModalDeRelacion: return "modal-de-relacion";
                 case enumTipoControl.ModalDeConsulta: return "modal-de-consulta";

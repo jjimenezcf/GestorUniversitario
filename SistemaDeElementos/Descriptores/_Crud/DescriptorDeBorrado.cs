@@ -39,6 +39,10 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlModal;
         }
 
+        public string RenderDelBorrado()
+        {
+            return RenderControl();
+        }
 
         public override string RenderControl()
         {

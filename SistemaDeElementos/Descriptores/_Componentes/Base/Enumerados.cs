@@ -6,7 +6,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta }
 
-    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosModalDeExportacion, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
 
     public static class TipoAccionDeListaDinamica
     {
@@ -20,6 +20,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public const string CrearElemento = "crear-elemento";
         public const string EditarElemento = "editar-elemento";
+        public const string ExportarElemento = "exportar-elementos";
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
         public const string GestionarDependencias = "gestionar-dependencias";
@@ -62,6 +63,11 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionDeConsulta
     {
         public const string Cerrar = "cerrar-consulta";
+    }
+    public static class TipoDeAccionDeExportar
+    {
+        public const string Exportar = "exportar";
+        public const string Cerrar = "cerrar-exportacion";
     }
 
     public enum enumModoOrdenacion

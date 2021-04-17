@@ -32,6 +32,13 @@
             return document.getElementById(this._idModalBorrar) as HTMLDivElement;
         };
 
+        protected get ModalDeExportacion(): HTMLDivElement {
+            let idModal: string = this.IdCuerpoCabecera;
+            idModal = idModal.replace('mantenimiento', '');
+            idModal = idModal + 'panel-exportacion';
+            return document.getElementById(idModal) as HTMLDivElement;
+        };
+
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
@@ -310,6 +317,18 @@
         public CerrarModalDeEdicion() {
             this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
         }
+
+        public IraExportar() {
+            this.ModoTrabajo = ModoTrabajo.exportando;
+            this.ModalDeExportacion.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
+        }
+
+        public CerrarModalDeExportacion() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            ApiCrud.CerrarModal(this.ModalDeExportacion);
+        }
+
 
         public ModificarElemento() {
             this.crudDeEdicion.EjecutarAcciones(Evento.ModalEdicion.Modificar);

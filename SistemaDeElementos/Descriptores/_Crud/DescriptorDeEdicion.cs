@@ -35,6 +35,10 @@ namespace MVCSistemaDeElementos.Descriptores
             MenuDeEdicion.AnadirOpcionDeCancelarEdicion();
         }
 
+        public string RenderDeEdicion()
+        {
+            return RenderControl();
+        }
 
         public override string RenderControl()
         {

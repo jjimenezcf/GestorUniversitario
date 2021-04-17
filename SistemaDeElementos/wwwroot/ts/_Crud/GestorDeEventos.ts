@@ -11,6 +11,10 @@
                     crudMnt.IraEditar();
                     break;
                 }
+                case Evento.Mnt.Exportar: {
+                    crudMnt.IraExportar();
+                    break;
+                }
                 case Evento.Mnt.Borrar: {
                     crudMnt.AbrirModalBorrarElemento();
                     break;

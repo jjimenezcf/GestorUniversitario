@@ -35,8 +35,8 @@ namespace MVCSistemaDeElementos.Descriptores
                               		 	       crudDeRelacion
                                            </div>
                                            <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
-                                              <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
-                                              <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.EventosModalDeCrearRelaciones('{TipoDeAccionDeRelacionar.Cerrar}','{IdHtml}')¨ />
+                                              <input type=¨text¨ id=¨{IdHtml}-relacionar¨ class=¨boton-modal¨ value=¨Relacionar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalDeCrearRelaciones}('{TipoDeAccionDeRelacionar.Relacionar}','{IdHtml}')¨/>
+                                              <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalDeCrearRelaciones}('{TipoDeAccionDeRelacionar.Cerrar}','{IdHtml}')¨ />
                                            </div>
                                         </div>
                                      </div>";

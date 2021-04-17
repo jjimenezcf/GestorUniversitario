@@ -34,6 +34,32 @@ namespace MVCSistemaDeElementos.Descriptores
             Datos = new ZonaDeDatos<TElemento>(mnt: this);
         }
 
+        public string RenderDelMantenimiento()
+        {
+            return RenderControl();
+        }
+
+        public string RenderMntModal(string idModal, enumTipoDeModal tipoDeModal)
+        {
+            Datos.IdHtmlModal = idModal.ToLower();
+
+            var htmlMnt =
+                   Filtro.RenderFiltroDeUnaModal(tipoDeModal) + Environment.NewLine +
+                   Datos.RenderControl() + Environment.NewLine;
+
+            var htmContenedorMnt =
+                $@"
+                   <div id=¨{IdHtml}¨ 
+                     class=¨{Css.Render(enumCssDiv.DivVisible)}¨ 
+                     grid-del-mnt=¨{Datos.IdHtml}¨ 
+                     filtro =¨{Filtro.IdHtml}¨ >
+                     {htmlMnt}
+                   </div>
+                ";
+
+            return htmContenedorMnt.Render();
+        }
+
         public override string RenderControl()
         {
 
@@ -70,6 +96,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return htmContenedorMnt.Render();
         }
+
+
         private string RenderCuerpoCabecera(string htmlTitulo, string htmlMenu)
         {
             var propiedades = $@" id=¨{IdHtml}¨ 
@@ -131,28 +159,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlParteSuperiror;
         }
 
-        public string RenderMntModal(string idModal, enumTipoDeModal tipoDeModal)
-        {
-            Datos.IdHtmlModal = idModal.ToLower();
-
-            var htmlMnt =
-                   Filtro.RenderFiltroDeUnaModal(tipoDeModal) + Environment.NewLine +
-                   Datos.RenderControl() + Environment.NewLine;
-
-            var htmContenedorMnt =
-                $@"
-                   <div id=¨{IdHtml}¨ 
-                     class=¨{Css.Render(enumCssDiv.DivVisible)}¨ 
-                     grid-del-mnt=¨{Datos.IdHtml}¨ 
-                     filtro =¨{Filtro.IdHtml}¨ >
-                     {htmlMnt}
-                   </div>
-                ";
-
-            return htmContenedorMnt.Render();
-        }
-
-        public string RenderTitulo()
+        private string RenderTitulo()
         {
             var htmlCabecera = $"<h2>{this.Etiqueta}</h2>";
             return htmlCabecera;

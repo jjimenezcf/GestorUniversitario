@@ -135,6 +135,13 @@ namespace MVCSistemaDeElementos.Descriptores
         }
     }
 
+    public class ExportarElementos : AccionDeMenuMnt
+    {
+        public ExportarElementos()
+        : base(TipoDeAccionDeMnt.ExportarElemento, enumCssOpcionMenu.DeVista, "Exportar elementos")
+        {
+        }
+    }
     public class RelacionarElementos : AccionDeMenuMnt
     {
         public string IdHtmlDeLaModalAsociada { get; private set; }

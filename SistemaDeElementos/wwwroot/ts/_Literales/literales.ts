@@ -383,6 +383,7 @@ const Evento = {
     Mnt: {
         Crear: "crear-elemento",
         Editar: "editar-elemento",
+        Exportar: "exportar-elementos",
         Borrar: "eliminar-elemento",
         Relacionar: "relacionar-elementos",
         Dependencias: "gestionar-dependencias",
@@ -461,6 +462,7 @@ const ClaseDeOpcioDeMenu = {
 
 const ModoTrabajo = {
     creando: "creando",
+    exportando: "exportando",
     editando: "editando",
     consultando: "consultando",
     copiando: "copiando",

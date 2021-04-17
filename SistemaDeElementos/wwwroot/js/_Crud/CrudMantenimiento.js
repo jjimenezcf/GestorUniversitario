@@ -29,6 +29,13 @@ var Crud;
             return document.getElementById(this._idModalBorrar);
         }
         ;
+        get ModalDeExportacion() {
+            let idModal = this.IdCuerpoCabecera;
+            idModal = idModal.replace('mantenimiento', '');
+            idModal = idModal + 'panel-exportacion';
+            return document.getElementById(idModal);
+        }
+        ;
         get OpcionesGenerales() {
             return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
         }
@@ -245,6 +252,15 @@ var Crud;
         }
         CerrarModalDeEdicion() {
             this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
+        }
+        IraExportar() {
+            this.ModoTrabajo = ModoTrabajo.exportando;
+            this.ModalDeExportacion.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
+        }
+        CerrarModalDeExportacion() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            ApiCrud.CerrarModal(this.ModalDeExportacion);
         }
         ModificarElemento() {
             this.crudDeEdicion.EjecutarAcciones(Evento.ModalEdicion.Modificar);

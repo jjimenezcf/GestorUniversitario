@@ -22,8 +22,10 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
-        public bool EsZonaDeMenuDeMantenimiento {get{ return  Padre is DescriptorDeMantenimiento<TElemento>;}
-}
+        public bool EsZonaDeMenuDeMantenimiento
+        {
+            get { return Padre is DescriptorDeMantenimiento<TElemento>; }
+        }
 
         public DescriptorDeCreacion<TElemento> Creador => (DescriptorDeCreacion<TElemento>)Padre;
         public DescriptorDeEdicion<TElemento> Editor => (DescriptorDeEdicion<TElemento>)Padre;
@@ -95,7 +97,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<TElemento>(Menu, crearElemento, $"Nuevo", enumModoDeAccesoDeDatos.Gestor);
             Menu.Add(opcion);
         }
-        internal void AnadirOpcionDeIrAEditarFilasSeleccionadas()
+        internal void AnadirOpcionDeIrAEditar()
         {
             if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeEditar)))
                 return;
@@ -104,6 +106,18 @@ namespace MVCSistemaDeElementos.Descriptores
             var opcion = new OpcionDeMenu<TElemento>(Menu, editarElemento, $"Editar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }
+
+        internal void AnadirOpcionDeIrAExportar()
+        {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeExportar)))
+                return;
+
+            var exportarElemento = new ExportarElementos();
+            var opcion = new OpcionDeMenu<TElemento>(Menu, exportarElemento, $"Exportar", enumModoDeAccesoDeDatos.Consultor);
+            Menu.Add(opcion);
+        }
+
+
         #endregion
 
 
@@ -139,7 +153,7 @@ namespace MVCSistemaDeElementos.Descriptores
         #endregion
 
 
-        internal void AnadirOpcionDeBorrarElemento()
+        internal void AnadirOpcionDeBorrar()
         {
             if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeBorrar)))
                 return;

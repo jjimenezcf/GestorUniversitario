@@ -33,6 +33,10 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
+        public string RenderDeCreacion()
+        {
+            return RenderControl();
+        }
 
         public override string RenderControl()
         {
