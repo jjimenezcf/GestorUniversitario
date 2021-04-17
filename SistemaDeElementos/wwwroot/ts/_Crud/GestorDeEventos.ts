@@ -375,6 +375,27 @@
         }
     }
 
+    export function EventosModalDeExportacion(accion: string): void {
+        try {
+            switch (accion) {
+                case Evento.ModalExportacion.Cerrar: {
+                    crudMnt.CerrarModalDeExportacion();
+                    break;
+                }
+                case Evento.ModalExportacion.Exportar: {
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
+        }
+    }
+
     export function EjecutarMenuEdt(accion: string): void {
         try {
             crudMnt.crudDeEdicion.EjecutarAcciones(accion);

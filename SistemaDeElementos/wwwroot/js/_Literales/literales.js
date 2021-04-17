@@ -311,6 +311,10 @@ const Evento = {
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
+    ModalExportacion: {
+        Exportar: 'exportar',
+        Cerrar: 'cerrar-exportacion'
+    },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",
         Cerrar: "cerrar-relacionar",

@@ -369,6 +369,27 @@ var Crud;
         }
     }
     Crud.EventosModalDeEdicion = EventosModalDeEdicion;
+    function EventosModalDeExportacion(accion) {
+        try {
+            switch (accion) {
+                case Evento.ModalExportacion.Cerrar: {
+                    Crud.crudMnt.CerrarModalDeExportacion();
+                    break;
+                }
+                case Evento.ModalExportacion.Exportar: {
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
+        }
+    }
+    Crud.EventosModalDeExportacion = EventosModalDeExportacion;
     function EjecutarMenuEdt(accion) {
         try {
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);
