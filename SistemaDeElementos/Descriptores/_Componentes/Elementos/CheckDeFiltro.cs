@@ -32,21 +32,24 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            return RenderCheck();
+            return RenderCheckFlt();
         }
 
-        public string RenderCheck()
+        public string RenderCheckFlt()
         {
-            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
-            var valores = a.MapearComunes();
-            valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorCheck);
-            valores["Css"] = Css.Render(enumCssFiltro.Check);
-            valores["Etiqueta"] = Etiqueta;
-            valores["Checked"] = ValorInicial.ToString().ToLower();
-            valores["FiltrarPorFalse"] = FiltrarPorFalse ? "S" : "N";
-            valores["Accion"] = Accion;
+            var render = RenderCheck(PlantillasHtml.checkFlt, IdHtml, PropiedadHtml, ValorInicial, Etiqueta, Accion);
+            return render.Replace("[FiltrarPorFalse]", FiltrarPorFalse ? "S" : "N");
 
-            return PlantillasHtml.Render(PlantillasHtml.checkFlt, valores);
+            //var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, Tipo);
+            //var valores = a.MapearComunes();
+            //valores["CssContenedor"] = Css.Render(enumCssFiltro.ContenedorCheck);
+            //valores["Css"] = Css.Render(enumCssFiltro.Check);
+            //valores["Checked"] = ValorInicial.ToString().ToLower();
+            //valores["Etiqueta"] = Etiqueta;
+            //valores["Accion"] = Accion;
+            //valores["FiltrarPorFalse"] = FiltrarPorFalse ? "S" : "N";
+
+            //return PlantillasHtml.Render(PlantillasHtml.checkFlt, valores);
         }
 
     }

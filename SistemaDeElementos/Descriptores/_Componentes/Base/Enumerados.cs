@@ -249,6 +249,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
     }
 
+    public enum enumCssExportacion
+    {
+        Contenedor,
+        lista,
+        sometido,
+        enviar
+    }
+
     public static class MetodosDeRenderizacion
     {
         public static string Render(this enumModoOrdenacion modo)
@@ -266,6 +274,19 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public static class Css
     {
+        public static string Render(this enumCssExportacion clase)
+        {
+            switch (clase)
+            {
+                case enumCssExportacion.Contenedor: return "exportacion-contenedor";
+                case enumCssExportacion.lista: return "exportacion-lista";
+                case enumCssExportacion.sometido: return "exportacion-sometido";
+                case enumCssExportacion.enviar: return "exportacion-enviar";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario de exportación");
+
+        }
+
         public static string Render(enumCssControlesFormulario clase)
         {
             switch (clase)
@@ -316,7 +337,7 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
-        public static string Render(enumCssControlesDto clase)
+        public static string Render(this enumCssControlesDto clase)
         {
             switch (clase)
             {
@@ -349,7 +370,7 @@ namespace MVCSistemaDeElementos.Descriptores
             throw new Exception($"No se ha definido que renderizar para la clase {clase}");
         }
 
-        public static string Render(enumCssFiltro clase)
+        public static string Render(this enumCssFiltro clase)
         {
             switch (clase)
             {

@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud();
         }
 
-        protected override dynamic CargarLista(string claseElemento)
+        protected override dynamic CargarLista(string claseElemento, enumNegocio negocio, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(ClasePermisoDto))
                 return ((GestorDePermisos)GestorDeElementos).LeerClases();
@@ -36,7 +36,7 @@ namespace MVCSistemaDeElementos.Controllers
             if (claseElemento == nameof(TipoPermisoDto))
                 return ((GestorDePermisos)GestorDeElementos).LeerTipos();
 
-            return null;
+            return base.CargarLista(claseElemento, negocio, filtros);
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

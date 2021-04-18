@@ -183,7 +183,7 @@ namespace MVCSistemaDeElementos.Controllers
                     () => Leer(pos, can, filtro, orden)
                   , () => accion == epAcciones.buscar.ToString() ? Contar(filtro) : Recontar(filtro));
 
-                GestorDocumental.GenerarExcel(Contexto, datos.elementos.ToList());
+                //GestorDocumental.GenerarExcel(Contexto, datos.elementos.ToList());
                 var infoObtenida = new ResultadoDeLectura();
                 infoObtenida.total = datos.total;
                 infoObtenida.registros = ElementosLeidos(datos.elementos.ToList());
@@ -256,14 +256,15 @@ namespace MVCSistemaDeElementos.Controllers
         /// </summary>
         /// <param name="claseElemento">Indica la lista de elementos que se quiere cargar</param>
         /// <returns></returns>
-        public JsonResult epCargarLista(string claseElemento)
+        public JsonResult epCargarLista(string claseElemento, string negocio, string filtro)
         {
             var r = new Resultado();
             dynamic elementos;
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                elementos = CargarLista(claseElemento);
+                List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
+                elementos = CargarLista(claseElemento, NegociosDeSe.Negocio(negocio,true), filtros);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -368,9 +369,12 @@ namespace MVCSistemaDeElementos.Controllers
             throw new Exception($"Debe implementar la función de CargaDinamica para la clase '{claseElemento}' en el controlador '{this.GetType().Name}'");
         }
 
-        protected virtual dynamic CargarLista(string claseElemento)
+        protected virtual dynamic CargarLista(string claseElemento, enumNegocio negocio, List<ClausulaDeFiltrado> filtros)
         {
-            throw new NotImplementedException();
+            //if (claseElemento == nameof(ExportacionDto))
+            //    return GestorDeExportaciones.LeerTipos(Contexto, claseElemento, negocio, filtros);
+
+            throw new Exception($"Debe implementar la función de CargaDeElementos para la clase '{claseElemento}' en el controlador '{GetType().Name}'");
         }
 
         public ViewResult ViewCrud()

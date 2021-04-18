@@ -1,0 +1,30 @@
+﻿.exportacion-contenedor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: "exportacion-lista" "exportacion-sometido" "exportacion-enviar";
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.exportacion-lista {
+    display: grid;
+    grid-area: exportacion-lista;
+    /*    align-items: center;
+    height: 50px;
+    align-self:self-start*/
+}
+
+.exportacion-sometido {
+    display: grid;
+    grid-area: exportacion-sometido;
+    margin-top: 20px;
+}
+
+.exportacion-enviar {
+    display: grid;
+    grid-area: exportacion-enviar;
+    /*    align-items: center;
+    height: 50px;
+    align-self:self-start*/
+}

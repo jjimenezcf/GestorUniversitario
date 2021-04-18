@@ -116,8 +116,11 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
 
-        public static enumNegocio Negocio(string negocio)
+        public static enumNegocio Negocio(string negocio, bool nullValido = false)
         {
+            if (negocio == null && nullValido)
+                return enumNegocio.No_Definido;
+
             if (negocio == enumNegocio.No_Definido.ToString())
                 return enumNegocio.No_Definido;
 

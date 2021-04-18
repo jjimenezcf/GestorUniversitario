@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Enumerados;
 using ModeloDeDto;
 using ServicioDeDatos.Seguridad;
@@ -64,7 +65,6 @@ namespace MVCSistemaDeElementos.Descriptores
             a.IdHtml = idHtml;
             a.Propiedad = propiedad;
             a.TipoDeControl = tipoDeControl;
-
             a.Editable = true;
             a.Visible = true;
             a.Obligatorio = false;
@@ -153,7 +153,70 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Etiqueta"] = etiqueta;
 
             return PlantillasHtml.Render(PlantillasHtml.Etiqueta, valores);
+        }
 
+        public static string RenderLista(string IdHtml, string elemetoDto, string mostrarExpresion, string etiqueta)
+        {
+            var valores = new Dictionary<string, object>();
+            /* $@"
+             * <div id=¨etiqueta-[IdDeControl]-contenedor¨ name=¨contenedor-etiqueta¨ class=¨[CssContenedor]¨>
+                <label id=¨etiqueta-[IdDeControl]¨ for=¨[IdDeControl]¨ class=¨[CssEtiqueta]¨>[Etiqueta]</label>
+              </div>
+             * 
+             * <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                   <select clase-elemento=¨[ClaseElemento]¨ 
+                           id=¨[IdHtml]¨
+                           propiedad=¨[Propiedad]¨ 
+                           class=¨[Css]¨ 
+                           tipo=¨[Tipo]¨
+                           style=¨[Estilos]¨
+                           mostrar-expresion=¨[MostrarExpresion]¨  >
+                           <option value=¨0¨>Seleccionar ...</option>
+                   </select>
+               </div>";
+             */
+
+            valores["IdHtmlContenedor"] = $"{IdHtml}_contenedor_lista";
+            valores["IdHtml"] = $"{IdHtml}_lista";
+            valores["Tipo"] = enumTipoControl.ListaDeElemento.Render();
+            valores["CssContenedor"] = enumCssControlesDto.ContenedorListaDeElementos.Render();
+            valores["Css"] = enumCssControlesDto.ListaDeElementos.Render();
+            valores["ClaseElemento"] = elemetoDto; 
+            valores["MostrarExpresion"] = mostrarExpresion;
+            valores["RestoDeAtributos"] = "id=¨[IdHtml]¨ class=¨[Css]¨ tipo=¨[Tipo]¨";
+
+            return RenderEtiqueta($"{IdHtml}_lista", etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), enumCssControlesDto.Etiqueta.Render()) +
+                   PlantillasHtml.Render(PlantillasHtml.listaDeElementos.Replace("[RestoDeAtributos]", valores["RestoDeAtributos"].ToString()), valores);
+        }
+
+        public string RenderCheck(string plantillaHtml, string IdHtml, string PropiedadHtml, bool chequeado, string etiqueta, string accion)
+        {
+            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, enumTipoControl.Check);
+
+            Dictionary<string, object> valores = AtributosHtmlExtension.MapearComunes(a);
+            valores["CssContenedor"] = enumCssControlesDto.ContenedorCheck.Render();
+            valores["Css"] = enumCssControlesDto.Check.Render();
+            valores["Checked"] = chequeado ? "true": "false";
+            valores["Etiqueta"] = etiqueta;
+            valores["Accion"] = accion;
+
+            return PlantillasHtml.Render(plantillaHtml, valores);
+        }
+
+        public static string RenderEditor(string plantillaHtml, AtributosHtml a)
+        {
+            Dictionary<string, object> valores = a.MapearComunes();
+            valores["CssContenedor"] =enumCssControlesDto.ContenedorEditor.Render();
+            valores["Css"] = enumCssControlesDto.Editor.Render();
+            valores["Placeholder"] = a.Ayuda;
+            valores["ValorPorDefecto"] = a.ValorPorDefecto;
+            valores["LongitudMaxima"] = a.LongitudMaxima > 0 ?
+                    $"{Environment.NewLine}maxlength=¨{a.LongitudMaxima}¨"
+                    : "";
+
+            var htmlEditor = PlantillasHtml.Render(plantillaHtml, valores);
+
+            return htmlEditor;
         }
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)

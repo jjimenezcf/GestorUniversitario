@@ -77,7 +77,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , cuerpo: RenderContenedorDeEdicionCuerpo(tabla) + RenderContenedorDeEdicionPie(tabla)
                 , idOpcion: $"{IdHtml}-modificar"
                 , opcion: Crud.NegocioActivo ? "Modificar" : ""
-                , accion: Crud.NegocioActivo ? "Crud.EventosModalDeEdicion('modificar-elemento')" : ""
+                , accion: Crud.NegocioActivo ? $"Crud.EventosModalDeEdicion('{TipoDeAccionDeEdicion.ModificarElemento}')" : ""
                 , cerrar: "Crud.EventosModalDeEdicion('cerrar-modal')"
                 , navegador: HtmlRenderNavegadorDeSeleccionados()
                 , claseBoton: enumCssOpcionMenu.DeElemento

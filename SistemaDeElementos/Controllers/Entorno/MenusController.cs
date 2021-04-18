@@ -32,12 +32,12 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected override dynamic CargarLista(string claseElemento)
+        protected override dynamic CargarLista(string claseElemento, enumNegocio negocio, List<ClausulaDeFiltrado> filtro)
         {
             if (claseElemento == nameof(MenuDto))
                 return ((GestorDeMenus)GestorDeElementos).LeerPadres();
 
-            return null;
+            return base.CargarLista(claseElemento, negocio, filtro);
         }
 
 

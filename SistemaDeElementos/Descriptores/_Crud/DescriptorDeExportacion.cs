@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Enumerados;
 using ModeloDeDto;
 using MVCSistemaDeElementos.Descriptores;
+using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -32,23 +33,53 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            string _htmlMiModal = $@"<div id=¨{IdHtml}¨ class=¨contenedor-modal¨ crud-modal=¨{IdHtml}¨ negocio=¨{Crud.RenderNegocio}¨>
-                              		<div id=¨{IdHtml}_contenido¨ class=¨contenido-modal¨ >
-                              		    <div id=¨{IdHtml}_cabecera¨ class=¨contenido-cabecera¨>
-                              		    	{Etiqueta}
-                                        </div>
-                              		    <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
-                              			    cuerpoDeExportacion
-                                        </div>
-                                        <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
-                                              <input type=¨text¨ id=¨{IdHtml}-exportar¨ class=¨boton-modal¨ value=¨Exportar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.Exportar}','{IdHtml}')¨/>
-                                              <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.Cerrar}','{IdHtml}')¨ />
-                                           </div>
-                                      </div>
-                              </div>";
+                var htmlModal = RenderizarModal(
+                    idHtml: IdHtml
+                    , controlador: Crud.Controlador
+                    , tituloH2: Etiqueta
+                    , cuerpo: cuerpoDeExportacion()
+                    , idOpcion: $"{IdHtml}-exportar"
+                    , opcion: Crud.NegocioActivo ? "Exportar" : ""
+                    , accion: Crud.NegocioActivo ? $"Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.Exportar}','{IdHtml}')" : ""
+                    , cerrar: $"Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.Cerrar}','{IdHtml}')"
+                    , navegador: ""
+                    , claseBoton: enumCssOpcionMenu.DeElemento
+                    , permisosNecesarios: enumModoDeAccesoDeDatos.Consultor);
 
-            return _htmlMiModal;
+            return htmlModal;
         }
 
+        private string cuerpoDeExportacion()
+        {
+            var htmlCuerpo = $@"<div id=¨{IdHtml}_cuerpo_contenedor¨ class=¨{enumCssExportacion.Contenedor.Render()}¨>
+                                     <div id=¨{IdHtml}_cuerpo_exportacion¨ class=¨{enumCssExportacion.lista.Render()}¨>
+                                        {listaDeExportaciones()}
+                                     </div>
+                                     <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssExportacion.sometido.Render()}¨>
+                                        {checkDeSometido()}
+                                     </div>
+                                     <div id=¨{IdHtml}_cuerpo_enviar¨ class=¨{enumCssExportacion.enviar.Render()}¨>
+                                        {editorDeEMail()}
+                                     </div>
+                                </div>";
+            return htmlCuerpo;
+        }
+
+        private string listaDeExportaciones()
+        {
+            return RenderLista(IdHtml, "ExportacionDto", "Nombre", "Plantilla").Replace("Seleccionar ...", "Estandard");
+        }
+        private string checkDeSometido()
+        {
+            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_check", "", true, "Someter", "");
+        }
+
+        private string editorDeEMail()
+        {
+            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, "", enumTipoControl.Editor);
+            a.Ayuda = "Indique los correos de e-mail receptores";
+            
+            return RenderEditor(PlantillasHtml.editorDto, a);
+        }
     }
 }
