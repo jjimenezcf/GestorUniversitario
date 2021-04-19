@@ -101,6 +101,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                          type=¨text¨ [LongitudMaxima]
                                          placeholder =¨[Placeholder]¨
                                          valorPorDefecto=¨[ValorPorDefecto]¨
+                                         [onBlur]
                                          value=¨[ValorPorDefecto]¨>
                                   </input>
                              </div>"; 

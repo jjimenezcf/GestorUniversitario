@@ -313,7 +313,9 @@ const Evento = {
     },
     ModalExportacion: {
         Exportar: 'exportar',
-        Cerrar: 'cerrar-exportacion'
+        Cerrar: 'cerrar-exportacion',
+        PulsarSometer: 'pulsar-someter',
+        SalirListaCorreos: 'salir-lista-correos'
     },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",

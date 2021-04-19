@@ -100,6 +100,50 @@ var ApiControl;
         return false;
     }
     ApiControl.DesbloquearListaDinamica = DesbloquearListaDinamica;
+    function BloquearEditorPorPropiedad(panel, propiedad) {
+        let editor = BuscarEditor(panel, propiedad);
+        if (editor !== null) {
+            return BloquearEditor(editor);
+        }
+        return false;
+    }
+    ApiControl.BloquearEditorPorPropiedad = BloquearEditorPorPropiedad;
+    function BloquearEditor(editor) {
+        if (editor !== null) {
+            editor.disabled = true;
+            editor.readOnly = true;
+            return true;
+        }
+        return false;
+    }
+    ApiControl.BloquearEditor = BloquearEditor;
+    function DesbloquearEditorPorPropiedad(panel, propiedad) {
+        let editor = BuscarEditor(panel, propiedad);
+        if (editor !== null) {
+            return DesbloquearEditor(editor);
+        }
+        return false;
+    }
+    ApiControl.DesbloquearEditorPorPropiedad = DesbloquearEditorPorPropiedad;
+    function DesbloquearEditor(editor) {
+        if (editor !== null) {
+            editor.disabled = false;
+            editor.readOnly = false;
+            return true;
+        }
+        return false;
+    }
+    ApiControl.DesbloquearEditor = DesbloquearEditor;
+    function BuscarEditor(panel, propiedad) {
+        let editores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`);
+        for (let i = 0; i < editores.length; i++) {
+            let lista = editores[i];
+            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return lista;
+            }
+        }
+        return null;
+    }
     function BuscarLista(panel, propiedad) {
         let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
         for (let i = 0; i < listas.length; i++) {
@@ -159,11 +203,20 @@ var ApiControl;
     }
     ApiControl.AjustarColumnaDelGrid = AjustarColumnaDelGrid;
     function BlanquearEditor(editor) {
-        editor.classList.remove(ClaseCss.crtlNoValido);
-        editor.classList.add(ClaseCss.crtlValido);
+        AnularError(editor);
         editor.value = "";
     }
     ApiControl.BlanquearEditor = BlanquearEditor;
+    function AnularError(control) {
+        control.classList.remove(ClaseCss.crtlNoValido);
+        control.classList.add(ClaseCss.crtlValido);
+    }
+    ApiControl.AnularError = AnularError;
+    function MarcarError(control) {
+        control.classList.add(ClaseCss.crtlNoValido);
+        control.classList.remove(ClaseCss.crtlValido);
+    }
+    ApiControl.MarcarError = MarcarError;
     function BlanquearSelector(selector) {
         selector.classList.remove(ClaseCss.crtlNoValido);
         selector.classList.add(ClaseCss.crtlValido);

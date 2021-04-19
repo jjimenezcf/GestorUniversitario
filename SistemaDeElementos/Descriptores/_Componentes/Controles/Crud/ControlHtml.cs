@@ -39,6 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public int LongitudMaxima { get; internal set; } = 0;
         public string Etiqueta { get; set; }
         public string Url { get; set; }
+        public string AlPerderElFoco { get; set; }
 
         public AtributosHtml()
         {
@@ -155,7 +156,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return PlantillasHtml.Render(PlantillasHtml.Etiqueta, valores);
         }
 
-        public static string RenderLista(string IdHtml, string elemetoDto, string mostrarExpresion, string etiqueta)
+        public static string RenderListaConEtiquetaEncima(string IdHtml, string elemetoDto, string mostrarExpresion, string etiqueta)
         {
             var valores = new Dictionary<string, object>();
             /* $@"
@@ -189,9 +190,9 @@ namespace MVCSistemaDeElementos.Descriptores
                    PlantillasHtml.Render(PlantillasHtml.listaDeElementos.Replace("[RestoDeAtributos]", valores["RestoDeAtributos"].ToString()), valores);
         }
 
-        public string RenderCheck(string plantillaHtml, string IdHtml, string PropiedadHtml, bool chequeado, string etiqueta, string accion)
+        public string RenderCheck(string plantillaHtml, string idHtml, string propiedadHtml, bool chequeado, string etiqueta, string accion)
         {
-            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, PropiedadHtml, enumTipoControl.Check);
+            var a = AtributosHtml.AtributosComunes($"div_{idHtml}", idHtml, propiedadHtml, enumTipoControl.Check);
 
             Dictionary<string, object> valores = AtributosHtmlExtension.MapearComunes(a);
             valores["CssContenedor"] = enumCssControlesDto.ContenedorCheck.Render();
@@ -203,7 +204,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return PlantillasHtml.Render(plantillaHtml, valores);
         }
 
-        public static string RenderEditor(string plantillaHtml, AtributosHtml a)
+        public static string RenderEditorConEtiquetaEncima(string plantillaHtml, AtributosHtml a)
         {
             Dictionary<string, object> valores = a.MapearComunes();
             valores["CssContenedor"] =enumCssControlesDto.ContenedorEditor.Render();
@@ -213,10 +214,12 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["LongitudMaxima"] = a.LongitudMaxima > 0 ?
                     $"{Environment.NewLine}maxlength=¨{a.LongitudMaxima}¨"
                     : "";
+            valores["onBlur"] = a.AlPerderElFoco.IsNullOrEmpty() ? "" : a.AlPerderElFoco;
+
 
             var htmlEditor = PlantillasHtml.Render(plantillaHtml, valores);
 
-            return htmlEditor;
+            return RenderEtiqueta($"{a.IdHtml}_editor", a.Etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), enumCssControlesDto.Etiqueta.Render()) +  htmlEditor;
         }
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)

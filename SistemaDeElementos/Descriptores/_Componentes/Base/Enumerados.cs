@@ -68,6 +68,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public const string Exportar = "exportar";
         public const string Cerrar = "cerrar-exportacion";
+        public const string PulsarSometer = "pulsar-someter";
+        public const string SalirListaDeCorreos = "salir-lista-correos";
     }
 
     public enum enumModoOrdenacion

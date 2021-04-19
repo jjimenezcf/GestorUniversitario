@@ -12,11 +12,11 @@
                     break;
                 }
                 case Evento.Mnt.Exportar: {
-                    crudMnt.IraExportar();
+                    crudMnt.ModalExportacion_Abrir();
                     break;
                 }
                 case Evento.Mnt.Borrar: {
-                    crudMnt.AbrirModalBorrarElemento();
+                    crudMnt.ModalDeBorrado_Abrir();
                     break;
                 }
                 case Evento.Mnt.Dependencias: {
@@ -313,11 +313,11 @@
         try {
             switch (accion) {
                 case Evento.ModalBorrar.Cerrar: {
-                    crudMnt.CerrarModalDeBorrado();
+                    crudMnt.ModalDeBorrado_Cerrar();
                     break;
                 }
                 case Evento.ModalBorrar.Borrar: {
-                    crudMnt.BorrarElemento();
+                    crudMnt.ModalDeBorrado_Borrar();
                     break;
                 }
                 default: {
@@ -379,7 +379,15 @@
         try {
             switch (accion) {
                 case Evento.ModalExportacion.Cerrar: {
-                    crudMnt.CerrarModalDeExportacion();
+                    crudMnt.ModalExportacion_Cerrar();
+                    break;
+                }
+                case Evento.ModalExportacion.PulsarSometer: {
+                    crudMnt.ModalExportacion_CheckSometerPulsado();
+                    break;
+                }
+                case Evento.ModalExportacion.SalirListaCorreos: {
+                    crudMnt.ModalExportacion_SalirDeListaDeCorreos();
                     break;
                 }
                 case Evento.ModalExportacion.Exportar: {

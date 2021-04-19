@@ -67,19 +67,25 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string listaDeExportaciones()
         {
-            return RenderLista(IdHtml, "ExportacionDto", "Nombre", "Plantilla").Replace("Seleccionar ...", "Estandard");
+            return RenderListaConEtiquetaEncima(IdHtml, "ExportacionDto", "Nombre", "Plantilla").Replace("Seleccionar ...", "Estandard");
         }
         private string checkDeSometido()
         {
-            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_check", "", true, "Someter", "");
+            var accion = $"onClick = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.PulsarSometer}')¨";
+            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_check", "", true, "Someter", accion) +
+                   RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
         }
 
         private string editorDeEMail()
         {
-            var a = AtributosHtml.AtributosComunes($"div_{IdHtml}", IdHtml, "", enumTipoControl.Editor);
+            var idHtmlCorreos = $"{IdHtml}_correos";
+            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, "", enumTipoControl.Editor);
+            a.Editable = false;
             a.Ayuda = "Indique los correos de e-mail receptores";
-            
-            return RenderEditor(PlantillasHtml.editorDto, a);
+            a.Etiqueta = "Indicar los correos del destinatario separados por ;";
+            a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.SalirListaDeCorreos}')¨";
+
+            return RenderEditorConEtiquetaEncima(PlantillasHtml.editorDto, a);
         }
     }
 }

@@ -10,21 +10,16 @@
 .exportacion-lista {
     display: grid;
     grid-area: exportacion-lista;
-    /*    align-items: center;
-    height: 50px;
-    align-self:self-start*/
 }
 
 .exportacion-sometido {
     display: grid;
     grid-area: exportacion-sometido;
-    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 100px;
 }
 
 .exportacion-enviar {
     display: grid;
     grid-area: exportacion-enviar;
-    /*    align-items: center;
-    height: 50px;
-    align-self:self-start*/
 }

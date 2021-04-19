@@ -12,11 +12,11 @@ var Crud;
                     break;
                 }
                 case Evento.Mnt.Exportar: {
-                    Crud.crudMnt.IraExportar();
+                    Crud.crudMnt.ModalExportacion_Abrir();
                     break;
                 }
                 case Evento.Mnt.Borrar: {
-                    Crud.crudMnt.AbrirModalBorrarElemento();
+                    Crud.crudMnt.ModalDeBorrado_Abrir();
                     break;
                 }
                 case Evento.Mnt.Dependencias: {
@@ -307,11 +307,11 @@ var Crud;
         try {
             switch (accion) {
                 case Evento.ModalBorrar.Cerrar: {
-                    Crud.crudMnt.CerrarModalDeBorrado();
+                    Crud.crudMnt.ModalDeBorrado_Cerrar();
                     break;
                 }
                 case Evento.ModalBorrar.Borrar: {
-                    Crud.crudMnt.BorrarElemento();
+                    Crud.crudMnt.ModalDeBorrado_Borrar();
                     break;
                 }
                 default: {
@@ -373,7 +373,15 @@ var Crud;
         try {
             switch (accion) {
                 case Evento.ModalExportacion.Cerrar: {
-                    Crud.crudMnt.CerrarModalDeExportacion();
+                    Crud.crudMnt.ModalExportacion_Cerrar();
+                    break;
+                }
+                case Evento.ModalExportacion.PulsarSometer: {
+                    Crud.crudMnt.ModalExportacion_CheckSometerPulsado();
+                    break;
+                }
+                case Evento.ModalExportacion.SalirListaCorreos: {
+                    Crud.crudMnt.ModalExportacion_SalirDeListaDeCorreos();
                     break;
                 }
                 case Evento.ModalExportacion.Exportar: {

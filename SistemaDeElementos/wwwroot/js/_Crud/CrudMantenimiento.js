@@ -205,12 +205,12 @@ var Crud;
                 throw new Error(`Modal ${idModalParaConsultar} no definida`);
             modal.AbrirModalParaConsultarRelaciones(this.InfoSelector.LeerElemento(0));
         }
-        AbrirModalBorrarElemento() {
+        ModalDeBorrado_Abrir() {
             if (this.InfoSelector.Cantidad == 0)
                 throw new Error(`Debe seleccionar el elemento a borrar, ha seleccionado ${this.InfoSelector.Cantidad}`);
-            this.AbrirModalDeBorrar();
+            this.modalDeBorrardo_Abrir();
         }
-        AbrirModalDeBorrar() {
+        modalDeBorrardo_Abrir() {
             this.ModoTrabajo = ModoTrabajo.borrando;
             this.ModalDeBorrado.style.display = 'block';
             EntornoSe.AjustarModalesAbiertas();
@@ -222,24 +222,24 @@ var Crud;
                 mensaje.value = "Seguro desea borrar el elemento seleccionado";
             }
         }
-        BorrarElemento() {
+        ModalDeBorrado_Borrar() {
             let url = this.DefinirPeticionDeBorrado();
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.Borrar, null, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.DespuesDeBorrar, this.SiHayErrorTrasPeticionDeBorrar);
             a.Ejecutar();
         }
         DespuesDeBorrar(peticion) {
             let mantenimiento = peticion.llamador;
-            mantenimiento.CerrarModalDeBorrado();
+            mantenimiento.ModalDeBorrado_Cerrar();
             mantenimiento.InfoSelector.QuitarTodos();
             mantenimiento.Buscar(atGrid.accion.buscar, 0);
         }
         SiHayErrorTrasPeticionDeBorrar(peticion) {
             let mantenimiento = peticion.llamador;
-            mantenimiento.CerrarModalDeBorrado();
+            mantenimiento.ModalDeBorrado_Cerrar();
             mantenimiento.BlanquearTodosLosCheck();
             mantenimiento.SiHayErrorTrasPeticionAjax(peticion);
         }
-        CerrarModalDeBorrado() {
+        ModalDeBorrado_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             ApiCrud.CerrarModal(this.ModalDeBorrado);
         }
@@ -252,15 +252,6 @@ var Crud;
         }
         CerrarModalDeEdicion() {
             this.crudDeEdicion.EjecutarAcciones(Evento.Edicion.Cerrar);
-        }
-        IraExportar() {
-            this.ModoTrabajo = ModoTrabajo.exportando;
-            this.ModalDeExportacion.style.display = 'block';
-            EntornoSe.AjustarModalesAbiertas();
-        }
-        CerrarModalDeExportacion() {
-            this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            ApiCrud.CerrarModal(this.ModalDeExportacion);
         }
         ModificarElemento() {
             this.crudDeEdicion.EjecutarAcciones(Evento.ModalEdicion.Modificar);
@@ -340,6 +331,42 @@ var Crud;
                 ApiCrud.MostrarPanel(document.getElementById(`${idHtmlBloque}`));
             }
             this.PosicionarPanelesDelCuerpo();
+        }
+        ModalExportacion_Abrir() {
+            this.ModoTrabajo = ModoTrabajo.exportando;
+            this.ModalDeExportacion.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
+        }
+        ModalExportacion_Cerrar() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            ApiCrud.CerrarModal(this.ModalDeExportacion);
+        }
+        ModalExportacion_SalirDeListaDeCorreos() {
+            let idCorreos = this.ModalDeExportacion.id + '_correos';
+            let correos = document.getElementById(idCorreos);
+            if (!IsNullOrEmpty(correos.value)) {
+                ApiControl.AnularError(correos);
+                let lista = correos.value.split(';');
+                for (let i = 0; i < lista.length; i++) {
+                    if (!EsCorreoValido(lista[i].trim())) {
+                        ApiControl.MarcarError(correos);
+                        throw Error(`El correo ${lista[i].trim()} no es válido`);
+                    }
+                }
+            }
+        }
+        ModalExportacion_CheckSometerPulsado() {
+            let idCheck = this.ModalDeExportacion.id + '_check';
+            let idCorreos = this.ModalDeExportacion.id + '_correos';
+            let check = document.getElementById(idCheck);
+            let correos = document.getElementById(idCorreos);
+            if (check.checked) {
+                ApiControl.DesbloquearEditor(correos);
+            }
+            else {
+                ApiControl.BlanquearEditor(correos);
+                ApiControl.BloquearEditor(correos);
+            }
         }
     }
     Crud.CrudMnt = CrudMnt;

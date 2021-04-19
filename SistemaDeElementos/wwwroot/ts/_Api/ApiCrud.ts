@@ -104,6 +104,51 @@
         return false;
     }
 
+    export function BloquearEditorPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
+        let editor: HTMLInputElement = BuscarEditor(panel, propiedad);
+        if (editor !== null) {
+           return BloquearEditor(editor);
+        }
+        return false;
+    }
+
+    export function BloquearEditor(editor: HTMLInputElement): boolean {
+        if (editor !== null) {
+            editor.disabled = true;
+            editor.readOnly = true;
+            return true;
+        }
+        return false;
+    }
+
+    export function DesbloquearEditorPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
+        let editor: HTMLInputElement = BuscarEditor(panel, propiedad);
+        if (editor !== null) {
+            return DesbloquearEditor(editor);
+        }
+        return false;
+    }
+
+    export function DesbloquearEditor(editor: HTMLInputElement): boolean {
+        if (editor !== null) {
+            editor.disabled = false;
+            editor.readOnly = false;
+            return true;
+        }
+        return false;
+    }
+
+    function BuscarEditor(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
+        let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
+        for (let i = 0; i < editores.length; i++) {
+            let lista: HTMLInputElement = editores[i];
+            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+                return lista;
+            }
+        }
+        return null;
+    }
+
     function BuscarLista(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
         let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < listas.length; i++) {
@@ -169,9 +214,18 @@
     }
 
     export function BlanquearEditor(editor: HTMLInputElement): void {
-        editor.classList.remove(ClaseCss.crtlNoValido);
-        editor.classList.add(ClaseCss.crtlValido);
+        AnularError(editor);
         editor.value = "";
+    }
+
+    export function AnularError(control: HTMLInputElement): void {
+        control.classList.remove(ClaseCss.crtlNoValido);
+        control.classList.add(ClaseCss.crtlValido);
+    }
+
+    export function MarcarError(control: HTMLInputElement): void {
+        control.classList.add(ClaseCss.crtlNoValido);
+        control.classList.remove(ClaseCss.crtlValido);
     }
 
     export function BlanquearSelector(selector: HTMLSelectElement): void {
