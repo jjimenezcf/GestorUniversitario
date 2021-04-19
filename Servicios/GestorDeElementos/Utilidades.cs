@@ -15,8 +15,13 @@ namespace GestorDeElementos
     {
         public static string DescargarUrlDeArchivo(int id, string nombreFichero, string almacenadoEn)
         {
-            var rutaUrlBase = "/Archivos";
             var archivo = DescargarArchivo(id, nombreFichero, almacenadoEn);
+            return UrlDeArchivo(archivo);
+        }
+
+        public static string UrlDeArchivo(string archivo)
+        {
+            var rutaUrlBase = "/Archivos";
             string urlArchivoRelativa = $@"{rutaUrlBase}/{Path.GetFileName(archivo)}";
             return urlArchivoRelativa;
         }
@@ -43,6 +48,27 @@ namespace GestorDeElementos
                 return $@"{rutaDeDescarga}/FicheroBloqueado.png";
 
             return ficherpParaDevolverConRuta;
+        }
+
+        public static string DescargarArchivo(string ficheroConRutaEnLaGd)
+        {
+            var rutaDeDescarga = $@".\wwwroot\Archivos";
+            var ficheroParaDescargar = $@"{rutaDeDescarga}\{DateTime.Now.Ticks}{Path.GetFileName(ficheroConRutaEnLaGd)}";
+
+            if (!File.Exists(ficheroConRutaEnLaGd))
+                return $@"{rutaDeDescarga}\FicheroNoEncontrado.png";
+
+
+            if (!File.Exists(ficheroParaDescargar))
+            {
+                if (!CopiarFichero(ficheroConRutaEnLaGd, ficheroParaDescargar))
+                    return $@"{rutaDeDescarga}\FicheroBloqueado.png";
+            }
+
+            if (!CopiarFichero(ficheroConRutaEnLaGd, ficheroParaDescargar))
+                return $@"{rutaDeDescarga}/FicheroBloqueado.png";
+
+            return ficheroParaDescargar;
         }
 
         private static bool EstaEnUso(string ficheroConRuta)

@@ -303,11 +303,12 @@ namespace ModeloDeDto
             return Aliniacion.izquierda;
         }
 
-        public static void ToExcel<T>(this List<T> elementos, string ruta, string fichero)
+        public static string ToExcel<T>(this List<T> elementos, string ruta, string fichero)
         {
             var ficheroConRuta = Path.Combine(ruta, fichero);
             var excel = new ExportarExcel<T>(ficheroConRuta, elementos.ToList());
             excel.Exportar();
+            return ficheroConRuta;
         }
     }
 }

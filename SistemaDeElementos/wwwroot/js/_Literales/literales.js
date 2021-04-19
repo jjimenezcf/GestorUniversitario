@@ -233,7 +233,8 @@ const Ajax = {
         SubirArchivo: "epSubirArchivo",
         CrearRelaciones: "epCrearRelaciones",
         LeerModoDeAccesoAlNegocio: "epLeerModoDeAccesoAlNegocio",
-        LeerModoDeAccesoAlElemento: "epLeerModoDeAccesoAlElemento"
+        LeerModoDeAccesoAlElemento: "epLeerModoDeAccesoAlElemento",
+        Exportar: "epExportar"
     },
     EpDeAcceso: {
         ReferenciarFoto: "epReferenciarFoto",

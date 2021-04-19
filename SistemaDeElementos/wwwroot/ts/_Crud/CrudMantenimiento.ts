@@ -421,7 +421,6 @@
         }
 
         public ModalExportacion_SalirDeListaDeCorreos(): void {
-
             let idCorreos: string = this.ModalDeExportacion.id + '_correos';
             let correos: HTMLInputElement = document.getElementById(idCorreos) as HTMLInputElement;
             if (!IsNullOrEmpty(correos.value)) {
@@ -449,6 +448,24 @@
                 ApiControl.BloquearEditor(correos);
             }
 
+        }
+
+        public ModalExportacion_Exportar(): void {
+            let parametros: Array<Parametro> = this.FiltrosDeExportacion();
+            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
+                .then((peticion) => this.DescargarArchivo(peticion))
+                .catch((peticion) => this.ErrorAlExportar(peticion));
+        }
+
+        FiltrosDeExportacion(): Parametro[] {
+            return [];
+        }
+
+        DescargarArchivo(peticion: ApiDeAjax.DescriptorAjax): any {
+            throw new Error("Method not implemented.");
+        }
+        ErrorAlExportar(peticion: any): any {
+            throw new Error("Method not implemented.");
         }
 
     }

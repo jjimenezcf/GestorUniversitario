@@ -385,6 +385,7 @@ var Crud;
                     break;
                 }
                 case Evento.ModalExportacion.Exportar: {
+                    Crud.crudMnt.ModalExportacion_Exportar();
                     break;
                 }
                 default: {

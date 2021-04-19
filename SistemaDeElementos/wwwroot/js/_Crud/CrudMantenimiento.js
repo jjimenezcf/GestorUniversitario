@@ -368,6 +368,21 @@ var Crud;
                 ApiControl.BloquearEditor(correos);
             }
         }
+        ModalExportacion_Exportar() {
+            let parametros = this.FiltrosDeExportacion();
+            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
+                .then((peticion) => this.DescargarArchivo(peticion))
+                .catch((peticion) => this.ErrorAlExportar(peticion));
+        }
+        FiltrosDeExportacion() {
+            return [];
+        }
+        DescargarArchivo(peticion) {
+            throw new Error("Method not implemented.");
+        }
+        ErrorAlExportar(peticion) {
+            throw new Error("Method not implemented.");
+        }
     }
     Crud.CrudMnt = CrudMnt;
 })(Crud || (Crud = {}));

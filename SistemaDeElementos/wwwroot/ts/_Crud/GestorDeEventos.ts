@@ -391,6 +391,7 @@
                     break;
                 }
                 case Evento.ModalExportacion.Exportar: {
+                    crudMnt.ModalExportacion_Exportar();
                     break;
                 }
                 default: {

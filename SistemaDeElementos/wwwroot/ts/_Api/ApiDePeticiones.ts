@@ -69,4 +69,30 @@
         });
     }
 
+
+    export function Exportar(llamador: any, controlador: string, parametros: Array<Parametro>): Promise<ApiDeAjax.DescriptorAjax> {
+
+        return new Promise((resolve, reject) => {
+
+            let url: string = `/${controlador}/${Ajax.EndPoint.Exportar}?${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
+
+            let a = new ApiDeAjax.DescriptorAjax(llamador
+                , Ajax.EndPoint.Exportar
+                , null
+                , url
+                , ApiDeAjax.TipoPeticion.Asincrona
+                , ApiDeAjax.ModoPeticion.Get
+                , (peticion) => {
+                    resolve(peticion);
+                }
+                , (peticion) => {
+                    reject(peticion);
+                }
+            );
+
+            a.Ejecutar();
+        });
+    }
+
+
 }

@@ -208,6 +208,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+
         protected virtual enumModoDeAccesoDeDatos LeerModoAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
             return GestorDeNegocios.LeerModoDeAcceso(Contexto, negocio);

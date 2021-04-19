@@ -204,6 +204,39 @@ namespace MVCSistemaDeElementos.Controllers
             return a;
         }
 
+        //END-POINT: desde CrudMantenimiento.Ts
+        public JsonResult epExportar(string parametrosJson = null)
+        {
+            var r = new Resultado();
+            var parametros = new Dictionary<string, object>();
+            if (!parametrosJson.IsNullOrEmpty())
+            {
+                var parametrosIn = JsonConvert.DeserializeObject<List<ParametroIn>>(parametrosJson);
+                foreach (var p in parametrosIn)
+                    parametros.Add(p.Parametro, p.Valor);
+            }
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+                var opcionesDeMapeo = new Dictionary<string, object>();
+                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+
+                List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+
+                var elementos = GestorDeElementos.LeerElementos(0, -1, filtros, null, opcionesDeMapeo);
+                r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList()); 
+                r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = $"Exportado";
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al exportar.");
+            }
+            return new JsonResult(r);
+        }
+
         private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
         {
             var listaDeElementos = new List<Dictionary<string, object>>();

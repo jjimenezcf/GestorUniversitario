@@ -89,7 +89,7 @@ namespace GestoresDeNegocio.Archivos
             return archivo.Id;
         }
 
-        public static void GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
+        public static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
         {
             VariableDtm ruta = GestorDeVariables.VariableDeRutaDeExportaciones(contexto);
             var fichero = $"{elementos[0].GetType()}.xls";
@@ -97,7 +97,8 @@ namespace GestoresDeNegocio.Archivos
             var rutaDeExportacion = $@"{ruta.Valor}\{fecha.Year}-{fecha.Month}-{fecha.Day}\{contexto.DatosDeConexion.Login}";
             if (!Directory.Exists(rutaDeExportacion))
                 Directory.CreateDirectory(rutaDeExportacion);
-            elementos.ToExcel(rutaDeExportacion, fichero);
+            var ficheroConRuta = elementos.ToExcel(rutaDeExportacion, fichero);
+            return GestorDeElementos.Utilidades.UrlDeArchivo(GestorDeElementos.Utilidades.DescargarArchivo(ficheroConRuta)); 
         }
 
     }
