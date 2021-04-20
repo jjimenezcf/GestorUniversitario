@@ -462,7 +462,11 @@
         }
 
         DescargarArchivo(peticion: ApiDeAjax.DescriptorAjax): any {
-            throw new Error("Method not implemented.");
+            var downloadLink = document.createElement("a");
+            document.body.appendChild(downloadLink);
+            downloadLink.href = peticion.resultado.datos;
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
         }
         ErrorAlExportar(peticion: any): any {
             throw new Error("Method not implemented.");
