@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ModeloDeDto.Archivos;
@@ -14,6 +16,7 @@ using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
+using Utilidades;
 
 namespace GestorDeElementos
 {
@@ -233,6 +236,23 @@ namespace GestorDeElementos
                 case enumNegocio.Provincia: return new ProvinciaDtm();
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
+        }
+
+        public static object CrearGestor(this enumNegocio negocio)
+        {
+            // a partir del negocio obtengo el ensamblado
+            var assembly = Assembly.LoadFile($@"{Ensamblados.RutaDeBinarios()}\GestoresDeNegocio.dll");
+            var clases = assembly.GetExportedTypes();
+            for(int i = 0; i<clases.Length; i++)
+            {
+                var clase = clases[i];
+            }
+
+
+            // a partir del ensamblado busco el constructor del gestor
+
+            //invoco al constructor del gestor
+            return null;
         }
     }
 }

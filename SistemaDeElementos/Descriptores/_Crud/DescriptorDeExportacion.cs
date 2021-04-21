@@ -72,7 +72,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string checkDeSometido()
         {
             var accion = $"onClick = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.PulsarSometer}')¨";
-            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_check", "", true, "Someter", accion) +
+            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", "", true, "Someter", accion) +
                    RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
         }
 

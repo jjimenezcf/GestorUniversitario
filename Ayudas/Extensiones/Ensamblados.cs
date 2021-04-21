@@ -10,6 +10,11 @@ namespace Utilidades
 {
     public static class Ensamblados
     {
+        public static string RutaDeBinarios()
+        {
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+        }
+
         public static MethodInfo ValidarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo)
         {
             var assembly = Assembly.LoadFrom(dll.Replace(@"file:\", ""));
@@ -17,7 +22,7 @@ namespace Utilidades
             var rutaBinarios = Path.GetDirectoryName(dll);
             var nombreEnsamblado = Path.GetFileNameWithoutExtension(dll);
             var tipo = assembly.GetType(nombreCompletoDeClase);
-            if (tipo==null)
+            if (tipo == null)
                 throw new Exception($"la clase {nombreCompletoDeClase} no se encuentra en la dll {nombreEnsamblado} dentro de la ruta de binarios {rutaBinarios}");
 
             MethodInfo[] metodos = tipo.GetMethods(BindingFlags.Public | BindingFlags.Static);
@@ -26,7 +31,8 @@ namespace Utilidades
                     return metodo;
             throw new Exception($"Hay que implementar el método estático {nombreMetodo} en la clase {nombreCompletoDeClase} en la ddl {nombreEnsamblado} antes de usarlo");
         }
-        public static void EjecutarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo, object parametros )
+
+        public static void EjecutarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo, object parametros)
         {
             var metodo = ValidarMetodoEstatico(dll, nombreCompletoDeClase, nombreMetodo);
             metodo.Invoke(null, new object[] { parametros });

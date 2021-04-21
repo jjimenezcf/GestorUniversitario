@@ -168,12 +168,6 @@ var Crud;
                 .then((peticion) => this.MapearElementoDevuelto(peticion))
                 .catch((peticion) => this.SiHayErrorAlLeerElemento(peticion));
         }
-        LeerElementoPorId(id) {
-            let parametros = this.ParametrosOpcionalesLeerPorId();
-            let url = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
-            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerPorId, null, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.MapearElementoDevuelto, this.SiHayErrorAlLeerElemento);
-            a.Ejecutar();
-        }
         ParametrosOpcionalesLeerPorId() {
             return new Array();
         }

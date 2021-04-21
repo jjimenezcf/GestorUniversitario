@@ -12,6 +12,11 @@ using ServicioDeDatos.Elemento;
 using ModeloDeDto;
 using Utilidades;
 using ServicioDeDatos.Entorno;
+using Gestor.Errores;
+using System.Reflection;
+using GestoresDeNegocio.TrabajosSometidos;
+using Newtonsoft.Json;
+using Enumerados;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -87,6 +92,53 @@ namespace GestoresDeNegocio.Archivos
             }
 
             return archivo.Id;
+        }
+
+        public static void SometerExportacion(ContextoSe contexto, string parametros)
+        {
+            if (parametros.IsNullOrEmpty())
+                GestorDeErrores.Emitir("No se han proporcionado los parámetros para someter el trabajo de exportacion");
+
+            var dll = Assembly.GetExecutingAssembly().GetName().Name;
+            var clase = typeof(GestorDocumental).FullName;
+            var ts = GestorDeTrabajosSometido.Obtener(contexto, "Exportar a excel", dll, clase, nameof(SometerExportacion).Replace("Someter", ""));
+            // crear trabajo de usuario
+
+            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
+            //liberarlo
+        }
+
+        public static Dictionary<string, object> ParametrosDeExportacion(string parametrosJson)
+        {
+            var parametros = new Dictionary<string, object>();
+            if (!parametrosJson.IsNullOrEmpty())
+            {
+                var json = new ParametrosJson(parametrosJson);
+                foreach (var p in json.Parametros)
+                    parametros.Add(p.parametro, p.valor);
+            }
+            return parametros;
+        }
+
+        public static void Exportacion(EntornoDeTrabajo entorno)
+        {
+            Dictionary<string, object> parametros = ParametrosDeExportacion(entorno.Trabajo.Parametros);
+            if (!parametros.ContainsKey(nameof(ElementoDto)))
+                GestorDeErrores.Emitir("No se ha indicado el elemento dto a exportar");
+
+            var negocio = NegociosDeSe.ParsearDto(parametros[nameof(ElementoDto)].ToString());
+            var gestor = NegociosDeSe.CrearGestor(negocio);
+
+            var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
+            var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();
+            List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+            List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey("orden") || parametros["orden"].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
+
+            var opcionesDeMapeo = new Dictionary<string, object>();
+            opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+
+            //var elementos = gestor.LeerElementos(cantidad, posicion, filtros, orden, opcionesDeMapeo);
+            //r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList());
         }
 
         public static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

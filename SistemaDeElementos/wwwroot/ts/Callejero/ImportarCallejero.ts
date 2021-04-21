@@ -99,7 +99,7 @@
 
         private SiHayErrorAlSometer(peticion: ApiDeAjax.DescriptorAjax) {
             let datos: Archivo[] = peticion.DatosDeEntrada;
-            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
 

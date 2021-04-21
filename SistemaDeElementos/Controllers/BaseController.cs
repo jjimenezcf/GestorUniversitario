@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using AutoMapper;
+using Enumerados;
 using Gestor.Errores;
 using GestorDeElementos;
 using GestoresDeNegocio.Archivos;
@@ -31,12 +32,6 @@ namespace MVCSistemaDeElementos.Controllers
         public int Total { get; set; } = 0;
         public dynamic Datos { get; set; }
         public string ModoDeAcceso { get; set; }
-    }
-
-    public class ParametroIn
-    {
-        public string Parametro { get; set; }
-        public object Valor { get; set; }
     }
 
     public class ResultadoHtml : Resultado
@@ -182,9 +177,9 @@ namespace MVCSistemaDeElementos.Controllers
             var parametros = new Dictionary<string, object>();
             if (!parametrosJson.IsNullOrEmpty())
             {
-                var parametrosIn = JsonConvert.DeserializeObject<List<ParametroIn>>(parametrosJson);
+                var parametrosIn = JsonConvert.DeserializeObject<List<Parametro>>(parametrosJson);
                 foreach (var p in parametrosIn)
-                    parametros.Add(p.Parametro, p.Valor);
+                    parametros.Add(p.parametro, p.valor);
             }
 
             try

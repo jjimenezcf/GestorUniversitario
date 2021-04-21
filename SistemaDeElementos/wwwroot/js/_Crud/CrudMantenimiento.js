@@ -58,11 +58,24 @@ var Crud;
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
+                    this.InicializarOrdenacion();
                     this.Buscar(atGrid.accion.buscar, 0);
                 }
             }
             catch (error) {
                 MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
+            }
+        }
+        InicializarOrdenacion() {
+            let columnas = this.CabeceraTablaGrid.querySelectorAll("th");
+            for (let i = 0; i < columnas.length; i++) {
+                let columna = columnas[i];
+                let modo = columna.getAttribute(atControl.modoOrdenacion);
+                if (!IsNullOrEmpty(modo) && modo !== ModoOrdenacion.sinOrden) {
+                    let propiedad = columna.getAttribute(atControl.propiedad);
+                    let ordenarPor = columna.getAttribute(atControl.ordenarPor);
+                    this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
+                }
             }
         }
         TrasRestaurar(valor) {
@@ -356,7 +369,7 @@ var Crud;
             }
         }
         ModalExportacion_CheckSometerPulsado() {
-            let idCheck = this.ModalDeExportacion.id + '_check';
+            let idCheck = this.ModalDeExportacion.id + '_sometido';
             let idCorreos = this.ModalDeExportacion.id + '_correos';
             let check = document.getElementById(idCheck);
             let correos = document.getElementById(idCorreos);
@@ -369,13 +382,32 @@ var Crud;
             }
         }
         ModalExportacion_Exportar() {
-            let parametros = this.FiltrosDeExportacion();
+            let parametros = this.ParametrosDeExportacion();
             ApiDePeticiones.Exportar(this, this.Controlador, parametros)
                 .then((peticion) => this.DescargarArchivo(peticion))
                 .catch((peticion) => this.ErrorAlExportar(peticion));
         }
-        FiltrosDeExportacion() {
-            return [];
+        ParametrosDeExportacion() {
+            let parametros = new Array();
+            let idMostradas = this.ModalDeExportacion.id + '_mostradas';
+            let idSometido = this.ModalDeExportacion.id + '_sometido';
+            let mostradas = document.getElementById(idMostradas).checked;
+            let sometido = document.getElementById(idSometido).checked;
+            let posicion = 0;
+            let cantidad = -1;
+            if (mostradas) {
+                cantidad = this.Navegador.Cantidad;
+                posicion = this.Navegador.Posicion;
+            }
+            posicion = posicion - cantidad;
+            if (posicion < 0)
+                posicion = 0;
+            parametros.push(new Parametro('posicion', posicion));
+            parametros.push(new Parametro('cantidad', cantidad));
+            parametros.push(new Parametro('sometido', sometido));
+            parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
+            parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
+            return parametros;
         }
         DescargarArchivo(peticion) {
             var downloadLink = document.createElement("a");
@@ -385,7 +417,7 @@ var Crud;
             document.body.removeChild(downloadLink);
         }
         ErrorAlExportar(peticion) {
-            throw new Error("Method not implemented.");
+            MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
         }
     }
     Crud.CrudMnt = CrudMnt;

@@ -71,7 +71,7 @@ var Callejero;
         }
         SiHayErrorAlSometer(peticion) {
             let datos = peticion.DatosDeEntrada;
-            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.informativo, `Error al someter el trabajo de importación con ${datos.length} archivos`);
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Error al someter el trabajo de importación con ${datos.length} archivos`);
         }
     }
     Callejero.ImportarCallejero = ImportarCallejero;

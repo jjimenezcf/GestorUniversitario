@@ -14,14 +14,10 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using Gestor.Errores;
 using ServicioDeDatos.Elemento;
+using Enumerados;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
-    public class Parametro
-    {
-        public string parametro { get; set; }
-        public object valor { get; set; }
-    }
     public class ParametrosJson
     {
         public List<Parametro> Parametros { get; private set; }
@@ -29,14 +25,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             try
             {
-                ValidarJson(json);
+                // ValidarJson(json);
+                Parametros = JsonConvert.DeserializeObject<List<Parametro>>(json);
             }
             catch (Exception e)
             {
-                if (!e.Message.Contains("The free-quota limit of 10 schema generations per hour has been reached"))
-                    throw;
+                GestorDeErrores.Emitir("Paremetro json mal definido",e);
             }
-            Parametros = JsonConvert.DeserializeObject<List<Parametro>>(json);
         }
 
         public static void ValidarJson(string json)
@@ -60,7 +55,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
             catch (Exception exc)
             {
-                GestorDeErrores.Emitir($"Json mal definido.{Environment.NewLine}{json}", exc);
+                GestorDeErrores.Emitir($"Json mal definido", exc);
             }
         }
     }
@@ -238,7 +233,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             bool tran = entorno.GestorDeEntorno.IniciarTransaccion();
             try
             {
-                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.GestorDeEntorno.Contexto, entorno.Trabajo.Trabajo);
+                var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.Trabajo.Trabajo);
                 using (var contextoPr = ContextoSe.ObtenerContexto(entorno.GestorDeEntorno.Contexto))
                 {
                     entorno.contextoPr = contextoPr;

@@ -76,11 +76,25 @@
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
+                    this.InicializarOrdenacion();
                     this.Buscar(atGrid.accion.buscar, 0);
                 }
             }
             catch (error) {
                 MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
+            }
+        }
+
+        InicializarOrdenacion() {
+            let columnas: NodeListOf<HTMLTableHeaderCellElement> = this.CabeceraTablaGrid.querySelectorAll("th") as NodeListOf<HTMLTableHeaderCellElement>;
+            for (let i: number = 0; i < columnas.length; i++) {
+                let columna = columnas[i];
+                let modo: string = columna.getAttribute(atControl.modoOrdenacion);
+                if (!IsNullOrEmpty(modo) && modo !== ModoOrdenacion.sinOrden) {
+                    let propiedad: string = columna.getAttribute(atControl.propiedad);
+                    let ordenarPor: string = columna.getAttribute(atControl.ordenarPor);
+                    this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
+                }
             }
         }
 
@@ -436,7 +450,7 @@
         }
 
         public ModalExportacion_CheckSometerPulsado(): void {
-            let idCheck: string = this.ModalDeExportacion.id + '_check';
+            let idCheck: string = this.ModalDeExportacion.id + '_sometido';
             let idCorreos: string = this.ModalDeExportacion.id + '_correos';
             let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
             let correos: HTMLInputElement = document.getElementById(idCorreos) as HTMLInputElement;
@@ -451,14 +465,33 @@
         }
 
         public ModalExportacion_Exportar(): void {
-            let parametros: Array<Parametro> = this.FiltrosDeExportacion();
+            let parametros: Array<Parametro> = this.ParametrosDeExportacion();
             ApiDePeticiones.Exportar(this, this.Controlador, parametros)
                 .then((peticion) => this.DescargarArchivo(peticion))
                 .catch((peticion) => this.ErrorAlExportar(peticion));
         }
 
-        FiltrosDeExportacion(): Parametro[] {
-            return [];
+
+        ParametrosDeExportacion(): Array<Parametro> {
+            let parametros: Array<Parametro> = new Array<Parametro>();
+            let idMostradas: string = this.ModalDeExportacion.id + '_mostradas';
+            let idSometido: string = this.ModalDeExportacion.id + '_sometido';
+            let mostradas: boolean = (document.getElementById(idMostradas) as HTMLInputElement).checked;
+            let sometido: boolean = (document.getElementById(idSometido) as HTMLInputElement).checked;
+            let posicion = 0;
+            let cantidad = -1;
+            if (mostradas) {
+                cantidad = this.Navegador.Cantidad;
+                posicion = this.Navegador.Posicion;
+            }
+            posicion = posicion - cantidad;
+            if (posicion < 0) posicion = 0;
+            parametros.push(new Parametro('posicion', posicion));
+            parametros.push(new Parametro('cantidad', cantidad));
+            parametros.push(new Parametro('sometido', sometido));
+            parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
+            parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
+            return parametros;
         }
 
         DescargarArchivo(peticion: ApiDeAjax.DescriptorAjax): any {
@@ -468,8 +501,8 @@
             downloadLink.click();
             document.body.removeChild(downloadLink);
         }
-        ErrorAlExportar(peticion: any): any {
-            throw new Error("Method not implemented.");
+        ErrorAlExportar(peticion: ApiDeAjax.DescriptorAjax): any {
+            MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
         }
 
     }

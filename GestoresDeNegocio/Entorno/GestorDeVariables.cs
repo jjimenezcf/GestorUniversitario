@@ -20,7 +20,7 @@ namespace GestoresDeNegocio.Entorno
         public static readonly string RutaBase = @"..\SistemaDeElementos\wwwroot";
         public static readonly string RutaDeDescarga = $@"{RutaBase}\Archivos";
         public static readonly string RutaDeExportaciones = $@"{RutaBase}\Exportaciones";
-        public static readonly string RutaDeBinarios = $@"..\{RutaBase}\bin";
+        //public static readonly string RutaDeBinarios = $@"..\{RutaBase}\bin";
 
         public class MapearVariables : Profile
         {

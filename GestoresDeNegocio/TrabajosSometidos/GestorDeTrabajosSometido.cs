@@ -118,13 +118,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (registro.EsDll)
             {
-                ValidarExisteTrabajoSometido(Contexto, registro);
+                ValidarExisteTrabajoSometido(registro);
             }
             else
                 GestorDePa.ValidarExistePa(registro.Pa, registro.Esquema);
         }
 
-        public static MethodInfo ValidarExisteTrabajoSometido(ContextoSe contexto, TrabajoSometidoDtm registro)
+        public static MethodInfo ValidarExisteTrabajoSometido(TrabajoSometidoDtm registro)
         {
             var rutaBinarios = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             return Ensamblados.ValidarMetodoEstatico($"{rutaBinarios}\\{registro.Dll}.dll", registro.Clase, registro.Metodo);

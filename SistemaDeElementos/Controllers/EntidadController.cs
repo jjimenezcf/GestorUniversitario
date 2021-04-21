@@ -208,24 +208,29 @@ namespace MVCSistemaDeElementos.Controllers
         public JsonResult epExportar(string parametrosJson = null)
         {
             var r = new Resultado();
-            var parametros = new Dictionary<string, object>();
-            if (!parametrosJson.IsNullOrEmpty())
-            {
-                var parametrosIn = JsonConvert.DeserializeObject<List<ParametroIn>>(parametrosJson);
-                foreach (var p in parametrosIn)
-                    parametros.Add(p.Parametro, p.Valor);
-            }
+            Dictionary<string, object> parametros = GestorDocumental.ParametrosDeExportacion(parametrosJson);
 
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-                var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
-                List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+                if (parametros.ContainsKey("sometido") && bool.Parse(parametros["sometido"].ToString()))
+                {
+                    GestorDocumental.SometerExportacion(Contexto, parametrosJson);
+                    r.Datos = "Trabajo de exportación sometido";
+                }
+                else
+                {
+                    var opcionesDeMapeo = new Dictionary<string, object>();
+                    opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+                    var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
+                    var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();
+                    List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+                    List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey("orden") || parametros["orden"].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
 
-                var elementos = GestorDeElementos.LeerElementos(0, -1, filtros, null, opcionesDeMapeo);
-                r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList()); 
+                    var elementos = GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden, opcionesDeMapeo);
+                    r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList());
+                }
                 r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = $"Exportado";
@@ -236,6 +241,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             return new JsonResult(r);
         }
+
 
         private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
         {

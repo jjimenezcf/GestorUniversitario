@@ -211,22 +211,6 @@
                 .catch((peticion) => this.SiHayErrorAlLeerElemento(peticion));
         }
 
-        private LeerElementoPorId(id: number) {
-            let parametros: Array<Parametro> = this.ParametrosOpcionalesLeerPorId();
-            let url: string = `/${this.Controlador}/${Ajax.EndPoint.LeerPorId}?${Ajax.Param.id}=${id}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
-
-            let a = new ApiDeAjax.DescriptorAjax(this
-                , Ajax.EndPoint.LeerPorId
-                , null
-                , url
-                , ApiDeAjax.TipoPeticion.Asincrona
-                , ApiDeAjax.ModoPeticion.Get
-                , this.MapearElementoDevuelto
-                , this.SiHayErrorAlLeerElemento
-            );
-
-            a.Ejecutar();
-        }
 
         protected ParametrosOpcionalesLeerPorId(): Array<Parametro> {
             return new Array<Parametro>();
