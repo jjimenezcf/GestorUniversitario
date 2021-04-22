@@ -68,5 +68,17 @@ namespace Utilidades
             return props;
         }
 
+        /*
+         *             
+            //Type d1 = typeof(GestorDeElementos<,,>);
+            //Type[] genericos = new Type[] { typeof(ContextoSe), typeof(IRegistro), typeof(ElementoDto) }; 
+            //Type constructed = d1.MakeGenericType(genericos);
+            //object o = Activator.CreateInstance(constructed,new object[] { contexto, contexto.Mapeador });
+            //return (GestorDeElementos<ContextoSe, Registro, ElementoDto>) o;
+
+         * */
+
+
+
     }
 }

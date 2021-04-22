@@ -95,7 +95,13 @@ namespace GestorDeElementos
 
     #endregion
 
-    public class GestorDeElementos<TContexto, TRegistro, TElemento>
+    public interface IGestor
+    {
+        public IEnumerable<TElemento> LeerElementos<TElemento>(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo);
+    }
+
+
+    public class GestorDeElementos<TContexto, TRegistro, TElemento>: IGestor
         where TRegistro : Registro
         where TElemento : ElementoDto
         where TContexto : ContextoSe
@@ -382,6 +388,11 @@ namespace GestorDeElementos
 
             elementoDtm = LeerRegistroPorId(id);
             return MapearElemento(elementoDtm, parametros);
+        }
+
+        public IEnumerable<T> LeerElementos<T>(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo) 
+        {
+            return (IEnumerable<T>) LeerElementos( posicion, cantidad, filtros, orden, opcionesDeMapeo);
         }
 
         public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo)
@@ -916,6 +927,7 @@ namespace GestorDeElementos
             var tableName = entityType.GetTableName();
             return $"{schema}.{tableName}";
         }
+
 
         #region codigo creo que obsoleto
 

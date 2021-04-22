@@ -79,9 +79,9 @@ namespace GestorDeElementos
                         .ThenBy($"{ordenacion[2].OrdenarPor} {ordenacion[2].Modo.toSql()}")
                         .ThenBy($"{ordenacion[3].OrdenarPor} {ordenacion[3].Modo.toSql()}");
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}");
+                throw new Exception($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}", e);
             }
 
 

@@ -17,6 +17,7 @@ using System.Reflection;
 using GestoresDeNegocio.TrabajosSometidos;
 using Newtonsoft.Json;
 using Enumerados;
+using System.Linq;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -129,7 +130,7 @@ namespace GestoresDeNegocio.Archivos
             if (!parametros.ContainsKey(nameof(Registro)))
                 GestorDeErrores.Emitir("No se ha indicado el Registro de exportación");
 
-            var gestor = NegociosDeSe.CrearGestor(parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
+           var gestor = NegociosDeSe.CrearGestor(entorno.contextoPr, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
 
             var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
             var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();
@@ -139,8 +140,10 @@ namespace GestoresDeNegocio.Archivos
             var opcionesDeMapeo = new Dictionary<string, object>();
             opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
-            //var elementos = gestor.LeerElementos(cantidad, posicion, filtros, orden, opcionesDeMapeo);
-            //r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList());
+            var elementos = gestor.LeerElementos<ElementoDto>(posicion,cantidad, filtros, orden, opcionesDeMapeo);
+            GestorDocumental.GenerarExcel(entorno.contextoPr, elementos.ToList());
+
+            /* enviar por correo */
         }
 
         public static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

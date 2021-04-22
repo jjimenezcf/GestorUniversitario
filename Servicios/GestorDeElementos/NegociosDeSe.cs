@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Gestor.Errores;
 using ModeloDeDto;
 using ModeloDeDto.Archivos;
@@ -12,6 +13,7 @@ using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Seguridad;
+using ServicioDeDatos;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Callejero;
 using ServicioDeDatos.Elemento;
@@ -88,7 +90,7 @@ namespace GestorDeElementos
         public static bool EsDeParametrizacion(enumNegocio negocio)
         {
             return _negociosDeParametrizacion.Contains(negocio);
-        } 
+        }
 
         public static bool UsaSeguridad(enumNegocio negocio)
         {
@@ -245,26 +247,34 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
         }
 
-        public static object CrearGestor(string dtm, string dto)
+        public static IGestor CrearGestor(ContextoSe contexto, string dtm, string dto) 
         {
-            // a partir del negocio obtengo el ensamblado
-            var assembly = Assembly.LoadFile($@"{Ensamblados.RutaDeBinarios()}\GestoresDeNegocio.dll");
-            var clases = assembly.GetExportedTypes();
-            for(int i = 0; i<clases.Length; i++)
+            var cache = ServicioDeCaches.Obtener(nameof(CrearGestor));
+            var clave = $"{dtm}-{dto}";
+            if (!cache.ContainsKey(clave))
             {
-                var clase = clases[i];
-                if (clase.BaseType.Name.Contains(nameof(GestorDeElementos)) && clase.BaseType.GenericTypeArguments[1].Name == dtm && clase.BaseType.GenericTypeArguments[2].Name == dto)
+                var assembly = Assembly.LoadFile($@"{Ensamblados.RutaDeBinarios()}\GestoresDeNegocio.dll");
+                var clases = assembly.GetExportedTypes();
+                for (int i = 0; i < clases.Length; i++)
                 {
-                    var a = 1;
-                }
+                    var clase = clases[i];
+                    if (clase.BaseType.Name.Contains(nameof(GestorDeElementos)) && clase.BaseType.GenericTypeArguments[1].Name == dtm && clase.BaseType.GenericTypeArguments[2].Name == dto)
+                    {
+                        var parametros = new Type[] { typeof(ContextoSe), typeof(IMapper) };
 
+                        cache[clave] = clase.GetConstructor(new Type[] { typeof(ContextoSe), typeof(IMapper) });
+                        if (cache[clave] == null)
+                           throw new Exception($"No se ha definido el constructor Gestor para la clase {clase.Name} con los parámetros de contexto y mapeador.");
+
+                        break;
+                    }
+                }
             }
 
+            if (!cache.ContainsKey(clave))
+                throw new Exception($"No se ha localizado un gestor de elementods para los tipos {dtm}, {dto}.");
 
-            // a partir del ensamblado busco el constructor del gestor
-
-            //invoco al constructor del gestor
-            return null;
+            return (IGestor)((ConstructorInfo)cache[clave]).Invoke(new object[] { contexto, contexto.Mapeador });
         }
 
         public static object ValorDelAtributo(Type clase, string nombreAtributo, bool obligatorio = true)

@@ -187,7 +187,11 @@ namespace ModeloDeDto
         public string Modificador { get; set; }
     }
 
-    public class ElementoDto
+    public interface IElementoDto
+    {
+
+    }
+    public class ElementoDto: IElementoDto
     {
         public static string DescargarGestionDocumental = "descargar-gestion-documental";
 
