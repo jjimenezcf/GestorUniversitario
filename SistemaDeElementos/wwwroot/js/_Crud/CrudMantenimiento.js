@@ -384,7 +384,7 @@ var Crud;
         ModalExportacion_Exportar() {
             let parametros = this.ParametrosDeExportacion();
             ApiDePeticiones.Exportar(this, this.Controlador, parametros)
-                .then((peticion) => this.DescargarArchivo(peticion))
+                .then((peticion) => this.DespuesDeExportar(peticion))
                 .catch((peticion) => this.ErrorAlExportar(peticion));
         }
         ParametrosDeExportacion() {
@@ -402,12 +402,24 @@ var Crud;
             posicion = posicion - cantidad;
             if (posicion < 0)
                 posicion = 0;
+            parametros.push(new Parametro('negocio', this.Negocio));
             parametros.push(new Parametro('posicion', posicion));
             parametros.push(new Parametro('cantidad', cantidad));
             parametros.push(new Parametro('sometido', sometido));
             parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
             parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
             return parametros;
+        }
+        DespuesDeExportar(peticion) {
+            let crud = peticion.llamador;
+            let parametros = peticion.DatosDeEntrada;
+            for (let i = 0; i < parametros.length; i++) {
+                if (parametros[i].Parametro === 'sometido' && (parametros[i].valor)) {
+                    MensajesSe.Info(peticion.resultado.mensaje);
+                    return;
+                }
+            }
+            crud.DescargarArchivo(peticion);
         }
         DescargarArchivo(peticion) {
             var downloadLink = document.createElement("a");

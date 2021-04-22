@@ -110,6 +110,9 @@ namespace GestorDeElementos
         protected bool InvertirMapeoDeRelacion { get; set; } = false;
         public bool HayFiltroPorId { get; private set; } = false;
 
+        public string ClaseDto => typeof(TElemento).Name;
+        public string ClaseDtm => typeof(TRegistro).Name;
+
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         : this(contexto)
         {

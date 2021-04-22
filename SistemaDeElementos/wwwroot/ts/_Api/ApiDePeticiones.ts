@@ -78,7 +78,7 @@
 
             let a = new ApiDeAjax.DescriptorAjax(llamador
                 , Ajax.EndPoint.Exportar
-                , null
+                , parametros
                 , url
                 , ApiDeAjax.TipoPeticion.Asincrona
                 , ApiDeAjax.ModoPeticion.Get

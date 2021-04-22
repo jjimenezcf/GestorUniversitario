@@ -17,6 +17,7 @@ using ModeloDeDto;
 namespace GestoresDeNegocio.Entorno
 {
 
+    [Negocio(Negocio = enumNegocio.VistaMvc)]
     public class GestorDeVistaMvc : GestorDeElementos<ContextoSe, VistaMvcDtm, VistaMvcDto>
     {
         public class MapearVistaMvc : Profile

@@ -123,11 +123,10 @@ namespace GestoresDeNegocio.Archivos
         public static void Exportacion(EntornoDeTrabajo entorno)
         {
             Dictionary<string, object> parametros = ParametrosDeExportacion(entorno.Trabajo.Parametros);
-            if (!parametros.ContainsKey(nameof(ElementoDto)))
-                GestorDeErrores.Emitir("No se ha indicado el elemento dto a exportar");
+            if (!parametros.ContainsKey("negocio"))
+                GestorDeErrores.Emitir("No se ha indicado el negocio a exportar");
 
-            var negocio = NegociosDeSe.ParsearDto(parametros[nameof(ElementoDto)].ToString());
-            var gestor = NegociosDeSe.CrearGestor(negocio);
+            var gestor = NegociosDeSe.CrearGestor(NegociosDeSe.Negocio(parametros["negocio"].ToString()));
 
             var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
             var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();

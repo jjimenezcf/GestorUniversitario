@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using ModeloDeDto;
 using ModeloDeDto.Archivos;
 using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
@@ -43,6 +44,11 @@ namespace GestorDeElementos
         Archivos,
         Pais,
         Provincia
+    }
+
+    public class NegocioAttribute : Attribute
+    {
+        public enumNegocio Negocio { get; set; } = enumNegocio.No_Definido;
     }
 
     public static class NegociosDeSe
@@ -238,7 +244,7 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
         }
 
-        public static object CrearGestor(this enumNegocio negocio)
+        public static object CrearGestor(enumNegocio negocio)
         {
             // a partir del negocio obtengo el ensamblado
             var assembly = Assembly.LoadFile($@"{Ensamblados.RutaDeBinarios()}\GestoresDeNegocio.dll");
@@ -246,6 +252,7 @@ namespace GestorDeElementos
             for(int i = 0; i<clases.Length; i++)
             {
                 var clase = clases[i];
+                atr
             }
 
 

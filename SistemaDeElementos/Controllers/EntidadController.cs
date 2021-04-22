@@ -215,9 +215,9 @@ namespace MVCSistemaDeElementos.Controllers
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
 
                 if (parametros.ContainsKey("sometido") && bool.Parse(parametros["sometido"].ToString()))
-                {
-                    GestorDocumental.SometerExportacion(Contexto, parametrosJson);
-                    r.Datos = "Trabajo de exportación sometido";
+                {                    
+                    GestorDocumental.SometerExportacion(Contexto, typeof(TElemento), parametrosJson);
+                    r.Mensaje = $"Trabajo sometido correctamente";
                 }
                 else
                 {
@@ -230,10 +230,10 @@ namespace MVCSistemaDeElementos.Controllers
 
                     var elementos = GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden, opcionesDeMapeo);
                     r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList());
+                    r.Mensaje = $"Exportado";
                 }
                 r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
                 r.Estado = enumEstadoPeticion.Ok;
-                r.Mensaje = $"Exportado";
             }
             catch (Exception e)
             {

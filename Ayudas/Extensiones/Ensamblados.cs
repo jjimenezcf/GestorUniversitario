@@ -12,7 +12,7 @@ namespace Utilidades
     {
         public static string RutaDeBinarios()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).Replace(@"file:\","");
         }
 
         public static MethodInfo ValidarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo)

@@ -467,7 +467,7 @@
         public ModalExportacion_Exportar(): void {
             let parametros: Array<Parametro> = this.ParametrosDeExportacion();
             ApiDePeticiones.Exportar(this, this.Controlador, parametros)
-                .then((peticion) => this.DescargarArchivo(peticion))
+                .then((peticion) => this.DespuesDeExportar(peticion))
                 .catch((peticion) => this.ErrorAlExportar(peticion));
         }
 
@@ -486,6 +486,7 @@
             }
             posicion = posicion - cantidad;
             if (posicion < 0) posicion = 0;
+            parametros.push(new Parametro('negocio', this.Negocio))
             parametros.push(new Parametro('posicion', posicion));
             parametros.push(new Parametro('cantidad', cantidad));
             parametros.push(new Parametro('sometido', sometido));
@@ -494,14 +495,28 @@
             return parametros;
         }
 
-        DescargarArchivo(peticion: ApiDeAjax.DescriptorAjax): any {
+        public DespuesDeExportar(peticion: ApiDeAjax.DescriptorAjax): any {
+            let crud: CrudMnt = peticion.llamador;
+            let parametros: Array<Parametro> = peticion.DatosDeEntrada;
+            for (let i: number = 0; i < parametros.length; i++) {
+                if (parametros[i].Parametro === 'sometido' && (parametros[i].valor)) {
+                    MensajesSe.Info(peticion.resultado.mensaje);
+                    return;
+                }
+            }
+            crud.DescargarArchivo(peticion);
+        }
+
+
+        public DescargarArchivo(peticion: ApiDeAjax.DescriptorAjax): any {
             var downloadLink = document.createElement("a");
             document.body.appendChild(downloadLink);
             downloadLink.href = peticion.resultado.datos;
             downloadLink.click();
             document.body.removeChild(downloadLink);
         }
-        ErrorAlExportar(peticion: ApiDeAjax.DescriptorAjax): any {
+
+        public ErrorAlExportar(peticion: ApiDeAjax.DescriptorAjax): any {
             MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
         }
 
