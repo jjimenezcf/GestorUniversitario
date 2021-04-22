@@ -361,7 +361,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             {
                 if (!registro.Iniciado.HasValue)
                 {
-                    new ParametrosJson(registro.Parametros);
+                    ParametrosJson.ValidarJson(registro.Parametros);
                     if (registro.Planificado.Millisecond > 0 || registro.Planificado.Second > 0)
                     {
                         registro.Planificado = registro.Planificado.AddMilliseconds(1000 - registro.Planificado.Millisecond);

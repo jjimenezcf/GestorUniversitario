@@ -19,6 +19,7 @@ using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Archivos;
+using Enumerados;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -208,7 +209,9 @@ namespace MVCSistemaDeElementos.Controllers
         public JsonResult epExportar(string parametrosJson = null)
         {
             var r = new Resultado();
-            Dictionary<string, object> parametros = GestorDocumental.ParametrosDeExportacion(parametrosJson);
+            Dictionary<string, object> parametros = parametrosJson.ToDiccionarioDeParametros();
+            parametros[nameof(ElementoDto)] = typeof(TElemento).Name;
+            parametros[nameof(Registro)] = typeof(TRegistro).Name;
 
             try
             {
@@ -216,7 +219,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 if (parametros.ContainsKey("sometido") && bool.Parse(parametros["sometido"].ToString()))
                 {                    
-                    GestorDocumental.SometerExportacion(Contexto, typeof(TElemento), parametrosJson);
+                    GestorDocumental.SometerExportacion(Contexto, parametros.ToJson());
                     r.Mensaje = $"Trabajo sometido correctamente";
                 }
                 else

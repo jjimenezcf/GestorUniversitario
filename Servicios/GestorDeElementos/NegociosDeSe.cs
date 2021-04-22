@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Gestor.Errores;
 using ModeloDeDto;
 using ModeloDeDto.Archivos;
 using ModeloDeDto.Callejero;
@@ -244,7 +245,7 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
         }
 
-        public static object CrearGestor(enumNegocio negocio)
+        public static object CrearGestor(string dtm, string dto)
         {
             // a partir del negocio obtengo el ensamblado
             var assembly = Assembly.LoadFile($@"{Ensamblados.RutaDeBinarios()}\GestoresDeNegocio.dll");
@@ -252,7 +253,11 @@ namespace GestorDeElementos
             for(int i = 0; i<clases.Length; i++)
             {
                 var clase = clases[i];
-                atr
+                if (clase.BaseType.Name.Contains(nameof(GestorDeElementos)) && clase.BaseType.GenericTypeArguments[1].Name == dtm && clase.BaseType.GenericTypeArguments[2].Name == dto)
+                {
+                    var a = 1;
+                }
+
             }
 
 
@@ -261,5 +266,31 @@ namespace GestorDeElementos
             //invoco al constructor del gestor
             return null;
         }
+
+        public static object ValorDelAtributo(Type clase, string nombreAtributo, bool obligatorio = true)
+        {
+            Attribute[] atributosDelGestor = Attribute.GetCustomAttributes(clase);
+
+            if (atributosDelGestor == null || atributosDelGestor.Length == 0)
+                GestorDeErrores.Emitir($"No hay definido atributos {nameof(NegocioAttribute)} para el gestor {clase.Name}");
+
+            foreach (Attribute propiedad in atributosDelGestor)
+            {
+                if (propiedad is NegocioAttribute)
+                {
+                    NegocioAttribute a = (NegocioAttribute)propiedad;
+                    switch (nombreAtributo)
+                    {
+                        case nameof(NegocioAttribute.Negocio):
+                            return a.Negocio;
+                    }
+                    if (obligatorio)
+                        throw new Exception($"Se ha solicitado el atributo {nameof(NegocioAttribute)}.{nombreAtributo} de la clase {clase.Name} y no está definido");
+                }
+            }
+
+            return null;
+        }
+
     }
 }

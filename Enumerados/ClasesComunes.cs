@@ -8,26 +8,18 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
+using Utilidades;
 
 namespace Enumerados
 {
-
-    public class ParametrosJson
+    public class Parametro
     {
-        public List<Parametro> Parametros { get; private set; }
-        public ParametrosJson(string json)
-        {
-            try
-            {
-                // ValidarJson(json);
-                Parametros = JsonConvert.DeserializeObject<List<Parametro>>(json);
-            }
-            catch (Exception e)
-            {
-                GestorDeErrores.Emitir("Paremetro json mal definido", e);
-            }
-        }
+        public string parametro { get; set; }
+        public object valor { get; set; }
+    }
 
+    public static class ParametrosJson
+    {
         public static void ValidarJson(string json)
         {
             JSchemaGenerator generator = new JSchemaGenerator();
@@ -52,11 +44,43 @@ namespace Enumerados
                 GestorDeErrores.Emitir($"Json mal definido", exc);
             }
         }
+
+        public static string ToJson(this List<Parametro> p)
+        {
+            return JsonConvert.SerializeObject(p);
+        }
+
+        public static List<Parametro> ToListaDeParametros(this string  json)
+        {
+            // ValidarJson(json);
+            return JsonConvert.DeserializeObject<List<Parametro>>(json);
+        }
+
+        public static Dictionary<string, object> ToDiccionarioDeParametros(this string parametrosJson)
+        {
+            var parametros = new Dictionary<string, object>();
+            if (!parametrosJson.IsNullOrEmpty())
+            {
+                var listaJson = parametrosJson.ToListaDeParametros();
+                foreach (var p in listaJson)
+                    parametros.Add(p.parametro, p.valor);
+            }
+            return parametros;
+        }
+
+        public static string ToJson(this Dictionary<string, object> dic)
+        {
+            var parametros = new List<Parametro>();
+            foreach(var clave in dic.Keys)
+            {
+                var p = new Parametro();
+                p.parametro = clave;
+                p.valor = dic[clave];
+                parametros.Add(p);
+            }
+
+            return parametros.ToJson();
+        }
     }
 
-    public class Parametro
-    {
-        public string parametro { get; set; }
-        public object valor { get; set; }
-    }
 }

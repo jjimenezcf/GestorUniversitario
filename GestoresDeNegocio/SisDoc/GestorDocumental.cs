@@ -113,8 +113,8 @@ namespace GestoresDeNegocio.Archivos
             var parametros = new Dictionary<string, object>();
             if (!parametrosJson.IsNullOrEmpty())
             {
-                var json = new ParametrosJson(parametrosJson);
-                foreach (var p in json.Parametros)
+                var listaJson = parametrosJson.ToListaDeParametros();
+                foreach (var p in listaJson)
                     parametros.Add(p.parametro, p.valor);
             }
             return parametros;
@@ -122,11 +122,14 @@ namespace GestoresDeNegocio.Archivos
 
         public static void Exportacion(EntornoDeTrabajo entorno)
         {
-            Dictionary<string, object> parametros = ParametrosDeExportacion(entorno.Trabajo.Parametros);
-            if (!parametros.ContainsKey("negocio"))
-                GestorDeErrores.Emitir("No se ha indicado el negocio a exportar");
+            Dictionary<string, object> parametros = entorno.Trabajo.Parametros.ToDiccionarioDeParametros();
+            if (!parametros.ContainsKey(nameof(ElementoDto)))
+                GestorDeErrores.Emitir("No se ha indicado el ElementoDto de exportación");
 
-            var gestor = NegociosDeSe.CrearGestor(NegociosDeSe.Negocio(parametros["negocio"].ToString()));
+            if (!parametros.ContainsKey(nameof(Registro)))
+                GestorDeErrores.Emitir("No se ha indicado el Registro de exportación");
+
+            var gestor = NegociosDeSe.CrearGestor(parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
 
             var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
             var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();

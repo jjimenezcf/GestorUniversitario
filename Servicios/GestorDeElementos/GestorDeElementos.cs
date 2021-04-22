@@ -173,7 +173,6 @@ namespace GestorDeElementos
 
         #endregion
 
-
         #region Métodos de persistencia
 
         public bool IniciarTransaccion()
@@ -293,7 +292,7 @@ namespace GestorDeElementos
                 {
                     var negocio = NegociosDeSe.ParsearDtm(typeof(TRegistro).Name);
                     var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
-                    AuditoriaDeElementos.RegistrarAuditoria(Contexto,negocio, parametros.Operacion, (IElementoDtm)auditar);
+                    AuditoriaDeElementos.RegistrarAuditoria(Contexto, negocio, parametros.Operacion, (IElementoDtm)auditar);
                 }
 
                 DespuesDePersistir(registro, parametros);
