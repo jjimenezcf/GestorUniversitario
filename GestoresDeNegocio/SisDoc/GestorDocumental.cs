@@ -141,12 +141,12 @@ namespace GestoresDeNegocio.Archivos
             opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
             var elementos = gestor.LeerElementos<ElementoDto>(posicion,cantidad, filtros, orden, opcionesDeMapeo);
-            GestorDocumental.GenerarExcel(entorno.contextoPr, elementos.ToList());
+            var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos.ToList());
 
             /* enviar por correo */
         }
 
-        public static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
+        private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
         {
             VariableDtm ruta = GestorDeVariables.VariableDeRutaDeExportaciones(contexto);
             var fichero = $"{elementos[0].GetType()}.xls";
@@ -154,9 +154,13 @@ namespace GestoresDeNegocio.Archivos
             var rutaDeExportacion = $@"{ruta.Valor}\{fecha.Year}-{fecha.Month}-{fecha.Day}\{contexto.DatosDeConexion.Login}";
             if (!Directory.Exists(rutaDeExportacion))
                 Directory.CreateDirectory(rutaDeExportacion);
-            var ficheroConRuta = elementos.ToExcel(rutaDeExportacion, fichero);
-            return GestorDeElementos.Utilidades.UrlDeArchivo(GestorDeElementos.Utilidades.DescargarArchivo(ficheroConRuta)); 
+            return elementos.ToExcel(rutaDeExportacion, fichero);
         }
 
+        public static string DescargarExcel<T>(ContextoSe contexto, List<T> elementos)
+        {
+            var ficheroConRuta = GenerarExcel<T>(contexto, elementos); 
+            return GestorDeElementos.Utilidades.UrlDeArchivo(GestorDeElementos.Utilidades.DescargarArchivo(ficheroConRuta));
+        }
     }
 }

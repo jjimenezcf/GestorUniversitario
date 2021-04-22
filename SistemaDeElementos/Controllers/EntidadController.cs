@@ -232,7 +232,7 @@ namespace MVCSistemaDeElementos.Controllers
                     List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey("orden") || parametros["orden"].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
 
                     var elementos = GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden, opcionesDeMapeo);
-                    r.Datos = GestorDocumental.GenerarExcel(Contexto, elementos.ToList());
+                    r.Datos = GestorDocumental.DescargarExcel(Contexto, elementos.ToList());
                     r.Mensaje = $"Exportado";
                 }
                 r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
