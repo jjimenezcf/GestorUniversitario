@@ -5,10 +5,10 @@ using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Utilidades;
 
-namespace Gestor.Correo
+namespace ServicioDeCorreos
 {
 
-    public class GestorDeCorreo
+    public class ServicioDeCorreo
     {
         private static SmtpClient SmtpCliente;
 
@@ -22,7 +22,7 @@ namespace Gestor.Correo
         private static int Puerto => ServidorDeCorreo["puerto"].Entero();
         private static string Password => ServidorDeCorreo["contraseña"];
 
-        public GestorDeCorreo()
+        public ServicioDeCorreo()
         {
             InicializaConfiguracion();
 
@@ -53,7 +53,7 @@ namespace Gestor.Correo
             var configuration = generador.Build();
             ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo");
         }
-        public void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = false)
+        public static void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
             MailMessage email;
 
@@ -72,8 +72,7 @@ namespace Gestor.Correo
 
         public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-            var correo = new GestorDeCorreo();
-            correo.Enviar(destinatario, asunto, mensaje, esHtlm);
+           Enviar(destinatario, asunto, mensaje, esHtlm);
         }
 
 

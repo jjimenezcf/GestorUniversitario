@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Ayudas\Extensiones\Utilidades.csproj" />
-    <ProjectReference Include="..\GestorDeCorreo\GestorDeCorreo.csproj" />
+    <ProjectReference Include="..\GestorDeCorreo\ServicioDeCorreos.csproj" />
   </ItemGroup>
 
 </Project>

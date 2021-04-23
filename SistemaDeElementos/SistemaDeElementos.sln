@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeErrores", "..\Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilidades", "..\Ayudas\Extensiones\Utilidades.csproj", "{9F572B22-183A-45C2-80CD-5649F8EDA322}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeCorreo", "..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj", "{618CACF4-AFF6-4833-9F60-0A87F379543B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicioDeCorreos", "..\Servicios\GestorDeCorreo\ServicioDeCorreos.csproj", "{618CACF4-AFF6-4833-9F60-0A87F379543B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorDeElementos", "..\Servicios\GestorDeElementos\GestorDeElementos.csproj", "{14238C7E-1CB5-47FE-9869-F0774CFDA37A}"
 EndProject
@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentación", "Documenta
 		Documentación\Proximos pasos.txt = Documentación\Proximos pasos.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enumerados", "..\Enumerados\Enumerados.csproj", "{7B31F3A3-D7B6-4BEA-9916-210CE55A8820}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enumerados", "..\Enumerados\Enumerados.csproj", "{7B31F3A3-D7B6-4BEA-9916-210CE55A8820}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

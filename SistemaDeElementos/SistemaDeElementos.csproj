@@ -117,7 +117,7 @@
     <ProjectReference Include="..\GestoresDeNegocio\GestoresDeNegocio.csproj" />
     <ProjectReference Include="..\Migraciones\Migraciones.csproj" />
     <ProjectReference Include="..\ModeloDeDto\ModeloDeDto.csproj" />
-    <ProjectReference Include="..\Servicios\GestorDeCorreo\GestorDeCorreo.csproj" />
+    <ProjectReference Include="..\Servicios\GestorDeCorreo\ServicioDeCorreos.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeErrores\GestorDeErrores.csproj" />
     <ProjectReference Include="..\Servicios\GestorDeElementos\GestorDeElementos.csproj" />
   </ItemGroup>

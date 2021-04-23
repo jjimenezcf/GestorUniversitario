@@ -135,6 +135,7 @@ namespace ServicioDeDatos
             TablaDeLatrazaDeUnTrabajo.Definir(modelBuilder);
             TablaDeErroresDeUnTrabajo.Definir(modelBuilder);
             TablaSemaforoDeTrabajos.Definir(modelBuilder);
+            TablaDeCorreos.Definir(modelBuilder);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Utilidades;
 using System;
 using System.Data.Common;
-using Utilidades;
 
 namespace ServicioDeDatos.Utilidades
 {
