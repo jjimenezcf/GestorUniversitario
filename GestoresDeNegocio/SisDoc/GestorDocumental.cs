@@ -18,6 +18,7 @@ using GestoresDeNegocio.TrabajosSometidos;
 using Newtonsoft.Json;
 using Enumerados;
 using System.Linq;
+using ModeloDeDto.TrabajosSometido;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -143,7 +144,7 @@ namespace GestoresDeNegocio.Archivos
             var elementos = gestor.LeerElementos<ElementoDto>(posicion,cantidad, filtros, orden, opcionesDeMapeo);
             var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos.ToList());
 
-            /* enviar por correo */
+            GestorDeCorreos.CrearCorreo(entorno.contextoPr, new List<string> { parametros[CorreoDto.receptores].ToString() }, "Exportación solicitada", "Se le adjunta el fichero con la exportación solicitada", null, new List<string>() { ficheroConRuta });
         }
 
         private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

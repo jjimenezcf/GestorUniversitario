@@ -476,8 +476,10 @@
             let parametros: Array<Parametro> = new Array<Parametro>();
             let idMostradas: string = this.ModalDeExportacion.id + '_mostradas';
             let idSometido: string = this.ModalDeExportacion.id + '_sometido';
+            let idCorreo: string = this.ModalDeExportacion.id + '_correos';
             let mostradas: boolean = (document.getElementById(idMostradas) as HTMLInputElement).checked;
             let sometido: boolean = (document.getElementById(idSometido) as HTMLInputElement).checked;
+            let receptores: string = (document.getElementById(idCorreo) as HTMLInputElement).value;
             let posicion = 0;
             let cantidad = -1;
             if (mostradas) {
@@ -490,6 +492,7 @@
             parametros.push(new Parametro('posicion', posicion));
             parametros.push(new Parametro('cantidad', cantidad));
             parametros.push(new Parametro('sometido', sometido));
+            parametros.push(new Parametro('receptores', receptores));
             parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
             parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
             return parametros;

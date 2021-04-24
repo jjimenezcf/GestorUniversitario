@@ -391,8 +391,10 @@ var Crud;
             let parametros = new Array();
             let idMostradas = this.ModalDeExportacion.id + '_mostradas';
             let idSometido = this.ModalDeExportacion.id + '_sometido';
+            let idCorreo = this.ModalDeExportacion.id + '_correos';
             let mostradas = document.getElementById(idMostradas).checked;
             let sometido = document.getElementById(idSometido).checked;
+            let receptores = document.getElementById(idCorreo).value;
             let posicion = 0;
             let cantidad = -1;
             if (mostradas) {
@@ -406,6 +408,7 @@ var Crud;
             parametros.push(new Parametro('posicion', posicion));
             parametros.push(new Parametro('cantidad', cantidad));
             parametros.push(new Parametro('sometido', sometido));
+            parametros.push(new Parametro('receptores', receptores));
             parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
             parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
             return parametros;

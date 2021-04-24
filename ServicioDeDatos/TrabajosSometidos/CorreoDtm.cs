@@ -5,7 +5,7 @@ using ServicioDeDatos.Entorno;
 
 namespace ServicioDeDatos.TrabajosSometidos
 {
-    class CorreoDtm: Registro
+    public class CorreoDtm: Registro
     {
         public string Emisor { get; set; }
 

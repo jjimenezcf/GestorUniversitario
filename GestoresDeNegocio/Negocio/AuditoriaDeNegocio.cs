@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GestorDeElementos;
 using ModeloDeDto.Negocio;
 using ServicioDeDatos;
+using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
 
 namespace GestoresDeNegocio.Negocio
@@ -50,7 +51,7 @@ namespace GestoresDeNegocio.Negocio
             elemento.AuditadoEl = registro.AuditadoEl;
             elemento.Operacion = registro.Operacion;
             elemento.registroJson = registro.registroJson;
-            elemento.Usuario = Entorno.GestorDeUsuarios.LeerUsuario(contexto, elemento.IdUsuario);
+            elemento.Usuario = UsuarioDtm.NombreCompleto(Entorno.GestorDeUsuarios.LeerUsuario(contexto, elemento.IdUsuario));
             return elemento;
         }
     }

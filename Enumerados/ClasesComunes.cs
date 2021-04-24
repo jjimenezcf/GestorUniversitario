@@ -68,6 +68,11 @@ namespace Enumerados
             return parametros;
         }
 
+        public static string ToJson(this List<string> lista)
+        {
+            return JsonConvert.SerializeObject(lista);
+        }
+
         public static string ToJson(this Dictionary<string, object> dic)
         {
             var parametros = new List<Parametro>();

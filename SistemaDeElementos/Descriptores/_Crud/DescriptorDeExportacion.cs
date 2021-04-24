@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Enumerados;
 using ModeloDeDto;
+using ModeloDeDto.TrabajosSometido;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
 
@@ -79,7 +80,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string editorDeEMail()
         {
             var idHtmlCorreos = $"{IdHtml}_correos";
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, "", enumTipoControl.Editor);
+            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, CorreoDto.receptores, enumTipoControl.Editor);
             a.Editable = false;
             a.Ayuda = "Indique los correos de e-mail receptores";
             a.Etiqueta = "Indicar los correos del destinatario separados por ;";
