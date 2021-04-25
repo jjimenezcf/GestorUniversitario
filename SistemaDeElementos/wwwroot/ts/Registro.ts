@@ -9,6 +9,7 @@
         public login: string;
         public id: number;
         public administrador: boolean;
+        public mail: string;
     }
 
     export function HayUsuarioDeConexion(): boolean {
@@ -22,21 +23,21 @@
 
     function crearUsuarioDeConexion(usuario: any): UsuarioDeConexion {
         let u: UsuarioDeConexion = new UsuarioDeConexion();
-        u.id = Numero(usuario['id']);
-        u.login = usuario['login'];
-        u.administrador = usuario['administrador'] == 'S';
+        asignarUsuarioDeConexion(u, usuario);
         return u;
     }
 
     function asignarUsuarioDeConexion(u: UsuarioDeConexion, usuario: any): void {
         u.id = Numero(usuario['id']);
         u.login = usuario['login'];
+        u.mail = usuario['mail'];
         u.administrador = usuario['administrador'] == 'S';
     }
 
     function asignarUsuarioNulo(u): void {
         u.id = 0;
         u.login = '';
+        u.mail = '';
         u.administrador = false;
     }
 

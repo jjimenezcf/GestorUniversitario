@@ -17,19 +17,19 @@ var Registro;
     Registro.HayUsuarioDeConexion = HayUsuarioDeConexion;
     function crearUsuarioDeConexion(usuario) {
         let u = new UsuarioDeConexion();
-        u.id = Numero(usuario['id']);
-        u.login = usuario['login'];
-        u.administrador = usuario['administrador'] == 'S';
+        asignarUsuarioDeConexion(u, usuario);
         return u;
     }
     function asignarUsuarioDeConexion(u, usuario) {
         u.id = Numero(usuario['id']);
         u.login = usuario['login'];
+        u.mail = usuario['mail'];
         u.administrador = usuario['administrador'] == 'S';
     }
     function asignarUsuarioNulo(u) {
         u.id = 0;
         u.login = '';
+        u.mail = '';
         u.administrador = false;
     }
     function UsuarioConectado() {

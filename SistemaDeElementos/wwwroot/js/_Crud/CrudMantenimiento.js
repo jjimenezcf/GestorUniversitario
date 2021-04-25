@@ -360,13 +360,20 @@ var Crud;
             if (!IsNullOrEmpty(correos.value)) {
                 ApiControl.AnularError(correos);
                 let lista = correos.value.split(';');
-                for (let i = 0; i < lista.length; i++) {
-                    if (!EsCorreoValido(lista[i].trim())) {
-                        ApiControl.MarcarError(correos);
-                        throw Error(`El correo ${lista[i].trim()} no es válido`);
-                    }
+                let correoMalo = this.ValidarListaDeCorreos(lista);
+                if (!IsNullOrEmpty(correoMalo)) {
+                    ApiControl.MarcarError(correos);
+                    throw Error(`El correo ${correoMalo} no es válido`);
                 }
             }
+        }
+        ValidarListaDeCorreos(lista) {
+            for (let i = 0; i < lista.length; i++) {
+                if (!EsCorreoValido(lista[i].trim())) {
+                    return lista[i].trim();
+                }
+            }
+            return '';
         }
         ModalExportacion_CheckSometerPulsado() {
             let idCheck = this.ModalDeExportacion.id + '_sometido';
@@ -375,6 +382,7 @@ var Crud;
             let correos = document.getElementById(idCorreos);
             if (check.checked) {
                 ApiControl.DesbloquearEditor(correos);
+                correos.value = Registro.UsuarioConectado().mail;
             }
             else {
                 ApiControl.BlanquearEditor(correos);
@@ -395,6 +403,14 @@ var Crud;
             let mostradas = document.getElementById(idMostradas).checked;
             let sometido = document.getElementById(idSometido).checked;
             let receptores = document.getElementById(idCorreo).value;
+            if (sometido && IsNullOrEmpty(receptores))
+                throw Error(`Debe indicar al menos un correo`);
+            let lista = receptores.split(';');
+            let correoMalo = this.ValidarListaDeCorreos(lista);
+            if (!IsNullOrEmpty(correoMalo)) {
+                ApiControl.MarcarError(document.getElementById(idCorreo));
+                throw Error(`El correo ${correoMalo} no es válido`);
+            }
             let posicion = 0;
             let cantidad = -1;
             if (mostradas) {

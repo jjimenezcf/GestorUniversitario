@@ -20,6 +20,7 @@ namespace MVCSistemaDeElementos.Controllers
         {
             public int id { get; set; }
             public string login { get; set; }
+            public string mail { get; set; }
             public string administrador { get; set; }
         }
 
@@ -64,7 +65,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var usuario = GestorDeElementos.LeerRegistroPorId(GestorDeElementos.Contexto.DatosDeConexion.IdUsuario);
                 r.consola = $"registro de usuario de conexión leido correctamente";
                 r.Estado = enumEstadoPeticion.Ok;
-                r.Datos = new UsuarioDeConexion() { login = usuario.Login, id = usuario.Id, administrador = DatosDeConexion.EsAdministrador ? "S" : "N" };
+                r.Datos = new UsuarioDeConexion() { login = usuario.Login, id = usuario.Id, mail = usuario.eMail, administrador = DatosDeConexion.EsAdministrador ? "S" : "N" };
             }
             catch (Exception e)
             {

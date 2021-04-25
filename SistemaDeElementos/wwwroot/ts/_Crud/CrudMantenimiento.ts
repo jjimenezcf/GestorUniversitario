@@ -440,13 +440,21 @@
             if (!IsNullOrEmpty(correos.value)) {
                 ApiControl.AnularError(correos);
                 let lista = correos.value.split(';');
-                for (let i: number = 0; i < lista.length; i++) {
-                    if (!EsCorreoValido(lista[i].trim())) {
-                        ApiControl.MarcarError(correos);
-                        throw Error(`El correo ${lista[i].trim()} no es válido`);
-                    }
+                let correoMalo: string = this.ValidarListaDeCorreos(lista);
+                if (!IsNullOrEmpty(correoMalo)) {
+                    ApiControl.MarcarError(correos);
+                    throw Error(`El correo ${correoMalo} no es válido`);
                 }
             }
+        }
+
+        private ValidarListaDeCorreos(lista: Array<string>): string {
+            for (let i: number = 0; i < lista.length; i++) {
+                if (!EsCorreoValido(lista[i].trim())) {
+                    return lista[i].trim();
+                }
+            }
+            return '';
         }
 
         public ModalExportacion_CheckSometerPulsado(): void {
@@ -456,6 +464,7 @@
             let correos: HTMLInputElement = document.getElementById(idCorreos) as HTMLInputElement;
             if (check.checked) {
                 ApiControl.DesbloquearEditor(correos);
+                correos.value = Registro.UsuarioConectado().mail;
             }
             else {
                 ApiControl.BlanquearEditor(correos);
@@ -480,6 +489,17 @@
             let mostradas: boolean = (document.getElementById(idMostradas) as HTMLInputElement).checked;
             let sometido: boolean = (document.getElementById(idSometido) as HTMLInputElement).checked;
             let receptores: string = (document.getElementById(idCorreo) as HTMLInputElement).value;
+
+            if (sometido && IsNullOrEmpty(receptores))
+                throw Error(`Debe indicar al menos un correo`);
+
+            let lista = receptores.split(';');
+            let correoMalo: string = this.ValidarListaDeCorreos(lista);
+            if (!IsNullOrEmpty(correoMalo)) {
+                ApiControl.MarcarError(document.getElementById(idCorreo) as HTMLInputElement);
+                throw Error(`El correo ${correoMalo} no es válido`);
+            }
+
             let posicion = 0;
             let cantidad = -1;
             if (mostradas) {
