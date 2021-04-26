@@ -18,7 +18,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por puesto"
                   , new Posicion { fila = 0, columna = 0 });
 
-            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Rol", nameof(RolesDeUnPuestoDto.Rol), "Buscar por 'rol'");
+            BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Rol", nameof(RolesDeUnPuestoDto.Rol), "Buscar por 'rol'");
 
             var modalDeRoles = new ModalDeRelacionarElementos<RolesDeUnPuestoDto, RolDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los roles a relacionar"

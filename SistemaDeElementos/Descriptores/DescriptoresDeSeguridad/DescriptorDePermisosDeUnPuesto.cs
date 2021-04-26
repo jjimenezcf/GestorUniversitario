@@ -17,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por Puesto"
                   , new Posicion { fila = 0, columna = 0 });
 
-            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Permiso", nameof(PermisosDeUnPuestoDto.Permiso), "Buscar por 'permiso'");
+            BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Permiso", nameof(PermisosDeUnPuestoDto.Permiso), "Buscar por 'permiso'");
 
         }
 

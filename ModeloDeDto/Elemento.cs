@@ -9,10 +9,14 @@ using System.Collections.Generic;
 
 namespace ModeloDeDto
 {
-    public static class CamposDeFiltrado
+    public static class ltrFiltros
     {
         public static string Nombre = nameof(Nombre).ToLower();
         public static string Id = nameof(Id).ToLower();
+        public static string filtro = nameof(filtro).ToLower();
+        public static string posicion = nameof(posicion).ToLower();
+        public static string orden = nameof(orden).ToLower();
+        public static string cantidad = nameof(cantidad).ToLower();
     }
 
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
@@ -80,7 +84,7 @@ namespace ModeloDeDto
         public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.contiene;
 
         public string GuardarEn { get; set; }
-        public string BuscarPor { get; set; } = CamposDeFiltrado.Nombre;
+        public string BuscarPor { get; set; } = ltrFiltros.Nombre;
 
         public string MostrarExpresion { get; set; }
 

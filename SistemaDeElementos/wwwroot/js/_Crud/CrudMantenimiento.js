@@ -401,8 +401,12 @@ var Crud;
             let idSometido = this.ModalDeExportacion.id + '_sometido';
             let idCorreo = this.ModalDeExportacion.id + '_correos';
             let mostradas = document.getElementById(idMostradas).checked;
-            let sometido = document.getElementById(idSometido).checked;
-            let receptores = document.getElementById(idCorreo).value;
+            let controlSometido = document.getElementById(idSometido);
+            let parametroSometido = controlSometido.getAttribute(atControl.propiedad);
+            let sometido = controlSometido.checked;
+            let controlReceptor = document.getElementById(idCorreo);
+            let parametroReceptor = controlReceptor.getAttribute(atControl.propiedad);
+            let receptores = controlReceptor.value;
             if (sometido && IsNullOrEmpty(receptores))
                 throw Error(`Debe indicar al menos un correo`);
             let lista = receptores.split(';');
@@ -416,17 +420,17 @@ var Crud;
             if (mostradas) {
                 cantidad = this.Navegador.Cantidad;
                 posicion = this.Navegador.Posicion;
+                posicion = posicion - cantidad;
+                if (posicion < 0)
+                    posicion = 0;
             }
-            posicion = posicion - cantidad;
-            if (posicion < 0)
-                posicion = 0;
-            parametros.push(new Parametro('negocio', this.Negocio));
-            parametros.push(new Parametro('posicion', posicion));
-            parametros.push(new Parametro('cantidad', cantidad));
-            parametros.push(new Parametro('sometido', sometido));
-            parametros.push(new Parametro('receptores', receptores));
-            parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
-            parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
+            parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
+            parametros.push(new Parametro(Ajax.Param.posicion, posicion));
+            parametros.push(new Parametro(Ajax.Param.cantidad, cantidad));
+            parametros.push(new Parametro(parametroSometido, sometido));
+            parametros.push(new Parametro(parametroReceptor, receptores));
+            parametros.push(new Parametro(Ajax.Param.filtro, this.ObtenerFiltros()));
+            parametros.push(new Parametro(Ajax.Param.orden, this.ObtenerOrdenacion()));
             return parametros;
         }
         DespuesDeExportar(peticion) {

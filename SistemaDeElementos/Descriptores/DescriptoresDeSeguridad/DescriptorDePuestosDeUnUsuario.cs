@@ -19,7 +19,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "buscar por usuario"
                   , new Posicion { fila = 0, columna = 0 });
 
-            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Puesto", nameof(PuestosDeUnUsuarioDto.Puesto), "Buscar por 'puesto'");
+            BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Puesto", nameof(PuestosDeUnUsuarioDto.Puesto), "Buscar por 'puesto'");
 
 
             var modalDePuestos = new ModalDeRelacionarElementos<PuestosDeUnUsuarioDto, PuestoDto>(mantenimiento: Mnt

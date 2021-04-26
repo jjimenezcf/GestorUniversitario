@@ -226,10 +226,10 @@ namespace MVCSistemaDeElementos.Controllers
                 {
                     var opcionesDeMapeo = new Dictionary<string, object>();
                     opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
-                    var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
-                    var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();
-                    List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
-                    List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey("orden") || parametros["orden"].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
+                    var cantidad = !parametros.ContainsKey(ltrFiltros.cantidad) ? -1 : parametros[ltrFiltros.cantidad].ToString().Entero();
+                    var posicion = !parametros.ContainsKey(ltrFiltros.posicion) ? 0 : parametros[ltrFiltros.posicion].ToString().Entero();
+                    List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey(ltrFiltros.filtro) || parametros[ltrFiltros.filtro].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+                    List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey(ltrFiltros.orden) || parametros[ltrFiltros.orden].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
 
                     var elementos = GestorDeElementos.LeerElementos(posicion, cantidad, filtros, orden, opcionesDeMapeo);
                     r.Datos = GestorDocumental.DescargarExcel(Contexto, elementos.ToList());

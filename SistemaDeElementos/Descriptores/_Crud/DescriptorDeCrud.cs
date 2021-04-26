@@ -143,7 +143,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     columna.Titulo = atributos.EtiquetaGrid;
                     columna.ConOrdenacion = atributos.Ordenar;
 
-                    if (p.Name.ToLower() == CamposDeFiltrado.Nombre && atributos.Ordenar)
+                    if (p.Name.ToLower() == ltrFiltros.Nombre && atributos.Ordenar)
                         columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
 
                     columna.OrdenarPor = atributos.OrdenarPor;

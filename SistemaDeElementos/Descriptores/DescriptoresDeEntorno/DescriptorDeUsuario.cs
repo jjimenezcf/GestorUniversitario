@@ -35,7 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
                        crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
-                       propiedadDondeMapear: CamposDeFiltrado.Nombre.ToString());
+                       propiedadDondeMapear: ltrFiltros.Nombre.ToString());
 
                 
 
@@ -73,7 +73,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 posicion: new Posicion(3, 0)).LongitudMinimaParaBuscar = 3;
 
             }
-            BuscarControlEnFiltro(CamposDeFiltrado.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
+            BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
             
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PuestosDeUnUsuarioController)

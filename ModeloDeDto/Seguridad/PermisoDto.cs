@@ -4,7 +4,7 @@ namespace ModeloDeDto.Seguridad
 {
     public static class PermisoPor
     {
-        public static string Nombre = CamposDeFiltrado.Nombre;
+        public static string Nombre = ltrFiltros.Nombre;
         public static string PermisoDeUnRol = nameof(PermisoDeUnRol).ToLower();
     }
 

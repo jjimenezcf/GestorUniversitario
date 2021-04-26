@@ -4,16 +4,18 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.TrabajosSometido
 {
-
+    public static class ltrExportacion
+    {
+        public static readonly string receptores = nameof(receptores);
+        public static readonly string sometido = nameof(sometido);
+        public static readonly string asunto = nameof(asunto);
+        public static readonly string cuerpo = nameof(cuerpo);
+    }
 
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeBorrar = false)]
     public class CorreoDto : ElementoDto
     {
         public static readonly string ExpresionElemento = $"{nameof(Creado)}: {nameof(Asunto)}";
-        public static readonly string receptores = nameof(receptores);
-        public static readonly string asunto = nameof(asunto);
-        public static readonly string cuerpo = nameof(cuerpo);
-
 
         //--------------------------------------------
         [IUPropiedad(

@@ -73,14 +73,14 @@ namespace MVCSistemaDeElementos.Descriptores
         private string checkDeSometido()
         {
             var accion = $"onClick = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.PulsarSometer}')¨";
-            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", "", true, "Someter", accion) +
+            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", ltrExportacion.sometido, true, "Someter", accion) +
                    RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
         }
 
         private string editorDeEMail()
         {
             var idHtmlCorreos = $"{IdHtml}_correos";
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, CorreoDto.receptores, enumTipoControl.Editor);
+            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, ltrExportacion.receptores, enumTipoControl.Editor);
             a.Editable = false;
             a.Ayuda = "Indique los correos de e-mail receptores";
             a.Etiqueta = "Indicar los correos del destinatario separados por ;";

@@ -97,7 +97,7 @@ namespace GestorDeElementos
 
     public interface IGestor
     {
-        public IEnumerable<TElemento> LeerElementos<TElemento>(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo);
+        //public IEnumerable<TElemento> LeerElementos<TElemento>(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo);
     }
 
 
@@ -388,11 +388,6 @@ namespace GestorDeElementos
 
             elementoDtm = LeerRegistroPorId(id);
             return MapearElemento(elementoDtm, parametros);
-        }
-
-        public IEnumerable<T> LeerElementos<T>(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo) 
-        {
-            return (IEnumerable<T>) LeerElementos( posicion, cantidad, filtros, orden, opcionesDeMapeo);
         }
 
         public IEnumerable<TElemento> LeerElementos(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros, List<ClausulaDeOrdenacion> orden, Dictionary<string, object> opcionesDeMapeo)

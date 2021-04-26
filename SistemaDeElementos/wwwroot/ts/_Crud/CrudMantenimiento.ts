@@ -481,14 +481,20 @@
         }
 
 
-        ParametrosDeExportacion(): Array<Parametro> {
+        public ParametrosDeExportacion(): Array<Parametro> {
             let parametros: Array<Parametro> = new Array<Parametro>();
             let idMostradas: string = this.ModalDeExportacion.id + '_mostradas';
             let idSometido: string = this.ModalDeExportacion.id + '_sometido';
             let idCorreo: string = this.ModalDeExportacion.id + '_correos';
             let mostradas: boolean = (document.getElementById(idMostradas) as HTMLInputElement).checked;
-            let sometido: boolean = (document.getElementById(idSometido) as HTMLInputElement).checked;
-            let receptores: string = (document.getElementById(idCorreo) as HTMLInputElement).value;
+
+            let controlSometido: HTMLInputElement = document.getElementById(idSometido) as HTMLInputElement;
+            let parametroSometido: string = controlSometido.getAttribute(atControl.propiedad);
+            let sometido: boolean = controlSometido.checked;
+
+            let controlReceptor: HTMLInputElement = document.getElementById(idCorreo) as HTMLInputElement;
+            let parametroReceptor: string = controlReceptor.getAttribute(atControl.propiedad);
+            let receptores: string = controlReceptor.value;
 
             if (sometido && IsNullOrEmpty(receptores))
                 throw Error(`Debe indicar al menos un correo`);
@@ -505,16 +511,16 @@
             if (mostradas) {
                 cantidad = this.Navegador.Cantidad;
                 posicion = this.Navegador.Posicion;
+                posicion = posicion - cantidad;
+                if (posicion < 0) posicion = 0;
             }
-            posicion = posicion - cantidad;
-            if (posicion < 0) posicion = 0;
-            parametros.push(new Parametro('negocio', this.Negocio))
-            parametros.push(new Parametro('posicion', posicion));
-            parametros.push(new Parametro('cantidad', cantidad));
-            parametros.push(new Parametro('sometido', sometido));
-            parametros.push(new Parametro('receptores', receptores));
-            parametros.push(new Parametro('filtro', this.ObtenerFiltros()));
-            parametros.push(new Parametro('orden', this.ObtenerOrdenacion()));
+            parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
+            parametros.push(new Parametro(Ajax.Param.posicion, posicion));
+            parametros.push(new Parametro(Ajax.Param.cantidad, cantidad));
+            parametros.push(new Parametro(parametroSometido, sometido));
+            parametros.push(new Parametro(parametroReceptor, receptores));
+            parametros.push(new Parametro(Ajax.Param.filtro, this.ObtenerFiltros()));
+            parametros.push(new Parametro(Ajax.Param.orden, this.ObtenerOrdenacion()));
             return parametros;
         }
 

@@ -133,18 +133,20 @@ namespace GestoresDeNegocio.Archivos
 
            var gestor = NegociosDeSe.CrearGestor(entorno.contextoPr, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
 
-            var cantidad = !parametros.ContainsKey("cantidad") ? -1 : parametros["cantidad"].ToString().Entero();
-            var posicion = !parametros.ContainsKey("posicion") ? 0 : parametros["posicion"].ToString().Entero();
-            List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey("filtro") || parametros["filtro"].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
-            List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey("orden") || parametros["orden"].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
+            var cantidad = !parametros.ContainsKey(ltrFiltros.cantidad) ? -1 : parametros[ltrFiltros.cantidad].ToString().Entero();
+            var posicion = !parametros.ContainsKey(ltrFiltros.posicion) ? 0 : parametros[ltrFiltros.posicion].ToString().Entero();
+            List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey(ltrFiltros.filtro) || parametros[ltrFiltros.filtro].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
+            List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey(ltrFiltros.orden) || parametros[ltrFiltros.orden].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
 
             var opcionesDeMapeo = new Dictionary<string, object>();
             opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
-            var elementos = gestor.LeerElementos<ElementoDto>(posicion,cantidad, filtros, orden, opcionesDeMapeo);
-            var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos.ToList());
+            Type clase = gestor.GetType();
+            MethodInfo metodo = clase.GetMethod(nameof(GestorDeElementos<ContextoSe,Registro,ElementoDto>.LeerElementos));            
+            dynamic elementos = metodo.Invoke(gestor, new object[] { posicion, cantidad, filtros, orden, opcionesDeMapeo });
+            var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos);
 
-            GestorDeCorreos.CrearCorreo(entorno.contextoPr, new List<string> { parametros[CorreoDto.receptores].ToString() }, "Exportación solicitada", "Se le adjunta el fichero con la exportación solicitada", null, new List<string>() { ficheroConRuta });
+            GestorDeCorreos.CrearCorreo(entorno.contextoPr, new List<string> { parametros[ltrExportacion.receptores].ToString() }, "Exportación solicitada", "Se le adjunta el fichero con la exportación solicitada", null, new List<string>() { ficheroConRuta });
         }
 
         private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)
