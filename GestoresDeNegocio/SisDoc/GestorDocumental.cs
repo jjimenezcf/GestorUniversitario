@@ -47,7 +47,7 @@ namespace GestoresDeNegocio.Archivos
         }
 
 
-        public GestorDocumental(ContextoSe contexto, IMapper mapeador) 
+        public GestorDocumental(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
         }
@@ -62,7 +62,7 @@ namespace GestoresDeNegocio.Archivos
         private string DescargarArchivoInterno(int idArchivo)
         {
             var archivo = LeerRegistroPorId(idArchivo);
-            var rutaConFichero =  GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn);
+            var rutaConFichero = GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn);
             return rutaConFichero;
         }
 
@@ -131,7 +131,7 @@ namespace GestoresDeNegocio.Archivos
             if (!parametros.ContainsKey(nameof(Registro)))
                 GestorDeErrores.Emitir("No se ha indicado el Registro de exportación");
 
-           var gestor = NegociosDeSe.CrearGestor(entorno.contextoPr, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
+            var gestor = NegociosDeSe.CrearGestor(entorno.contextoPr, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
 
             var cantidad = !parametros.ContainsKey(ltrFiltros.cantidad) ? -1 : parametros[ltrFiltros.cantidad].ToString().Entero();
             var posicion = !parametros.ContainsKey(ltrFiltros.posicion) ? 0 : parametros[ltrFiltros.posicion].ToString().Entero();
@@ -142,7 +142,7 @@ namespace GestoresDeNegocio.Archivos
             opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
             Type clase = gestor.GetType();
-            MethodInfo metodo = clase.GetMethod(nameof(GestorDeElementos<ContextoSe,Registro,ElementoDto>.LeerElementos));            
+            MethodInfo metodo = clase.GetMethod(nameof(GestorDeElementos<ContextoSe, Registro, ElementoDto>.LeerElementos));
             dynamic elementos = metodo.Invoke(gestor, new object[] { posicion, cantidad, filtros, orden, opcionesDeMapeo });
             var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos);
 
@@ -162,7 +162,7 @@ namespace GestoresDeNegocio.Archivos
 
         public static string DescargarExcel<T>(ContextoSe contexto, List<T> elementos)
         {
-            var ficheroConRuta = GenerarExcel<T>(contexto, elementos); 
+            var ficheroConRuta = GenerarExcel<T>(contexto, elementos);
             return GestorDeElementos.Utilidades.UrlDeArchivo(GestorDeElementos.Utilidades.DescargarArchivo(ficheroConRuta));
         }
     }
