@@ -53,26 +53,29 @@ namespace ServicioDeCorreos
             var configuration = generador.Build();
             ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo");
         }
-        public static void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = false)
+        public void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = true)
         {
-            MailMessage email;
 
-            if (Sistema == "EMUASA")
-                email = new MailMessage(Usuario, destinatario, asunto, mensaje);
-            else
-            if (Sistema == "GMAIL")
-                email = new MailMessage(Usuario, destinatario, asunto, mensaje);
-            else
+            if (Sistema != "EMUASA" && Sistema != "GMAIL")
                 throw new Exception($"Sistema de correo {Sistema} no definido");
 
-            email.IsBodyHtml = esHtlm;
+            MailMessage email = new MailMessage(new MailAddress(Usuario), new MailAddress(destinatario))
+            {
+                BodyEncoding = System.Text.Encoding.UTF8,
+                IsBodyHtml = esHtlm,
+                SubjectEncoding = System.Text.Encoding.UTF8,
+                Subject = asunto,
+                Body = mensaje.Replace("\n", "<br/>")
+            };
+
             SmtpCliente.Send(email);
         }
 
 
         public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
         {
-           Enviar(destinatario, asunto, mensaje, esHtlm);
+            var servicio = new ServicioDeCorreo();
+            servicio.Enviar(destinatario, asunto, mensaje, esHtlm);
         }
 
 

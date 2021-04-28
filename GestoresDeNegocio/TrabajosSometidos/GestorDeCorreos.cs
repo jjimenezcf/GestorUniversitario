@@ -11,6 +11,7 @@ using Gestor.Errores;
 using ModeloDeDto.TrabajosSometido;
 using GestoresDeNegocio.Entorno;
 using Enumerados;
+using ServicioDeCorreos;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {

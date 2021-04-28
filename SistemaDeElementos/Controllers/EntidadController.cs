@@ -20,6 +20,7 @@ using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Archivos;
 using Enumerados;
+using ServicioDeCorreos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -178,6 +179,10 @@ namespace MVCSistemaDeElementos.Controllers
             int can = cantidad.Entero();
             try
             {
+
+
+                ServicioDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", "correo creado", "hola");
+
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
 
                 var datos = ApiController.LeerDatosParaElGrid(
