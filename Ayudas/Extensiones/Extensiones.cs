@@ -54,27 +54,52 @@ namespace Utilidades
             var elementos = lista.Count;
             if (cadena.IsNullOrEmpty())
                 return 0;
-            lista.AddRange(cadena.ToLista());
+            lista.AddRange(cadena.ToLista<int>(separador,quitarCeros));
             return lista.Count - elementos;
         }
 
-        public static List<int> ToLista(this string str, string separador = ";", bool quitarCeros = true)
+        public static string ToString(this List<string> lista, string separador)
         {
-            var l = new List<int>();
+            var retorno = "";
+            foreach(var l in lista)
+            {
+                if (l.IsNullOrEmpty())
+                    continue;
+                retorno = $"{retorno}{separador}{l}";
+            }
+            return retorno.IsNullOrEmpty() ? retorno: retorno.Substring(1);
+        }
+
+        public static List<T> ToLista<T>(this string str, string separador = ";", bool quitarNulos = true)
+        {
+            var l = new List<T>();
             if (str.IsNullOrEmpty())
                 return l;
 
-            var numeros = str.Split(separador);
-            foreach (string n in numeros)
+            var cadenas = str.Split(separador);
+            foreach (string c in cadenas)
             {
-                var i = n.Entero();
-                if (i == 0 && quitarCeros)
+                if (typeof(T) == typeof(int))
+                {
+                    var i = c.Entero();
+                    if (i == 0 && quitarNulos)
+                        continue;
+
+                    if (i >= 0)
+                        l.Add((T)(object)i);
                     continue;
+                }
 
-                if (i >= 0)
-                    l.Add(i);
+                if (typeof(T) == typeof(string))
+                {
+                    if (c.IsNullOrEmpty() && quitarNulos)
+                        continue;
+                    l.Add((T)(object)c);
+                    continue;
+                }
+
+                throw new Exception($"No se ha definido como se pasa a una lista el tipo {typeof(T)}");
             }
-
             return l;
         }
 
@@ -102,7 +127,7 @@ namespace Utilidades
         }
 
 
-        public static DateTime? Fecha(this string fecha, bool finDelDia =false)
+        public static DateTime? Fecha(this string fecha, bool finDelDia = false)
         {
             DateTime? f = null;
             if (!fecha.IsNullOrEmpty() && fecha.EsFecha())

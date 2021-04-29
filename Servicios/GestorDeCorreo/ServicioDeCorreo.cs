@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
@@ -20,7 +21,7 @@ namespace ServicioDeCorreos
         private static string Servidor => ServidorDeCorreo["servidor"];
         private static bool SSL => ServidorDeCorreo["sslActivo"] == "true";
         private static int Puerto => ServidorDeCorreo["puerto"].Entero();
-        private static string Password => ServidorDeCorreo["contraseña"];
+        private static string Password => ServidorDeCorreo["clave"];
 
         public ServicioDeCorreo()
         {
@@ -42,7 +43,7 @@ namespace ServicioDeCorreos
                 };
             }
             else
-            throw new Exception($"Sistema de correo {Sistema} no definido");
+                throw new Exception($"Sistema de correo {Sistema} no definido");
         }
 
         private static void InicializaConfiguracion()
@@ -53,29 +54,43 @@ namespace ServicioDeCorreos
             var configuration = generador.Build();
             ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo");
         }
-        public void Enviar(string destinatario, string asunto, string mensaje, bool esHtlm = true)
+
+        internal void Enviar(List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)
         {
 
             if (Sistema != "EMUASA" && Sistema != "GMAIL")
                 throw new Exception($"Sistema de correo {Sistema} no definido");
 
-            MailMessage email = new MailMessage(new MailAddress(Usuario), new MailAddress(destinatario))
+            var destinos = receptores.ToString(";");
+            if (destinos.IsNullOrEmpty())
+            {
+                throw new Exception($"No se ha definido el destinatario del correo {asunto}");
+            }
+
+            MailMessage email = new MailMessage(new MailAddress(Usuario), new MailAddress(destinos))
             {
                 BodyEncoding = System.Text.Encoding.UTF8,
                 IsBodyHtml = esHtlm,
                 SubjectEncoding = System.Text.Encoding.UTF8,
                 Subject = asunto,
                 Body = mensaje.Replace("\n", "<br/>")
+
             };
+
+            if (archivos != null) foreach (var archivo in archivos)
+                {
+                    var attach = new Attachment(archivo);
+                    email.Attachments.Add(attach);
+                }
 
             SmtpCliente.Send(email);
         }
 
 
-        public static void EnviarCorreo(string destinatario, string asunto, string mensaje, bool esHtlm = false)
+        public static void EnviarCorreo(List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
         {
             var servicio = new ServicioDeCorreo();
-            servicio.Enviar(destinatario, asunto, mensaje, esHtlm);
+            servicio.Enviar(receptores, asunto, mensaje, esHtlm, archivos, prioridad);
         }
 
 

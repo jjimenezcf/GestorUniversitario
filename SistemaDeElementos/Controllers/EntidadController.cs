@@ -180,9 +180,6 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
 
-
-                ServicioDeCorreo.EnviarCorreo("juan.jimenez@emuasa.es", "correo creado", "hola");
-
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
 
                 var datos = ApiController.LeerDatosParaElGrid(

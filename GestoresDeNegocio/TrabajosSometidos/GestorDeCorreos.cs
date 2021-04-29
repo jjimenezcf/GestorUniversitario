@@ -12,6 +12,7 @@ using ModeloDeDto.TrabajosSometido;
 using GestoresDeNegocio.Entorno;
 using Enumerados;
 using ServicioDeCorreos;
+using Utilidades;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -35,6 +36,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return new GestorDeCorreos(contexto, mapeador);
         }
 
+
         public static CorreoDtm CrearCorreo(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
         {
             var correo = new CorreoDtm();
@@ -47,6 +49,57 @@ namespace GestoresDeNegocio.TrabajosSometidos
             correo.Archivos = archivos.ToJson();
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.PersistirRegistro(correo, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+        }
+
+        public static (int enviados, bool errores) EnviarCorreos(EntornoDeTrabajo entorno)
+        {
+            var gestor = Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
+            var fltPendientes = new ClausulaDeFiltrado { Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Clausula = nameof(CorreoDtm.Enviado), Valor = null };
+            var correosPendientes = gestor.LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { fltPendientes }, null, null);
+            var enviados = 0;
+            var errores = false;
+            foreach (var correoDtm in correosPendientes)
+            {
+                var tran = entorno.contextoPr.IniciarTransaccion();
+                try
+                {
+                    gestor.EnviarCorreo(correoDtm);
+                    enviados++;
+                    entorno.contextoPr.Commit(tran);
+                }
+                catch (Exception e)
+                {
+                    errores = true;
+                    entorno.contextoPr.Rollback(tran);
+                    entorno.AnotarError(e);
+                }
+            }
+            return (enviados, errores);
+        }
+
+        public static void EnviarCorreo(EntornoDeTrabajo entorno, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        {
+            var gestor = Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
+            var correoDtm = CrearCorreo(entorno.contextoPr, receptores, asunto, cuerpo, elementos, archivos);
+            gestor.EnviarCorreo(correoDtm);
+        }
+
+        protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+            if (parametros.Operacion == enumTipoOperacion.Insertar)
+            {
+                registro.Creado = DateTime.Now;
+            }
+        }
+
+        public void EnviarCorreo(CorreoDtm correoDtm)
+        {
+            var archivos = correoDtm.Archivos.JsonToLista<string>();
+            var receptores = correoDtm.Receptores.JsonToLista<string>();
+            ServicioDeCorreo.EnviarCorreo(receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            correoDtm.Enviado = DateTime.Now;
+            PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
     }
 }

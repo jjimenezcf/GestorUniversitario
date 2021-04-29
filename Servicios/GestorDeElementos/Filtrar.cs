@@ -75,6 +75,8 @@ namespace GestorDeElementos
             {
                 case CriteriosDeFiltrado.entreFechas:
                     return AplicarFiltroEntreFechas(registros, filtro, propiedad);
+                case CriteriosDeFiltrado.igual:
+                    return AplicarFiltroPorFechaIgual(registros, filtro, propiedad);
                 default:
                     new Exception($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
                     break;
@@ -89,6 +91,17 @@ namespace GestorDeElementos
             var expresionFechaHasta = fecha.hasta != null ? $"x.{propiedad} <= DateTime({((DateTime)fecha.hasta).Year},{((DateTime)fecha.hasta).Month},{((DateTime)fecha.hasta).Day},{((DateTime)fecha.hasta).Hour},{((DateTime)fecha.hasta).Minute},{((DateTime)fecha.hasta).Second})" : "";
             string expresion = $"x => {expresionFechaDesde} {(fecha.desde != null && fecha.hasta != null ? "&&" : "")} {expresionFechaHasta}";
             return registros.AplicarFiltroPorExpresion(expresion);
+        }
+
+        public static IQueryable<TRegistro> AplicarFiltroPorFechaIgual<TRegistro>(this IQueryable<TRegistro> registros, ClausulaDeFiltrado filtro, string propiedad)
+        {
+            var expresionFecha = $"x.{propiedad} = null || x.{propiedad} = DateTime({"0001"},{"01"},{"01"},{"00"},{"00"},{"00"})";
+            if (!filtro.Valor.IsNullOrEmpty())
+            {
+                var fecha = filtro.Valor.Fecha();
+                expresionFecha = $"x.{propiedad} = DateTime({((DateTime)fecha).Year},{((DateTime)fecha).Month},{((DateTime)fecha).Day},{((DateTime)fecha).Hour},{((DateTime)fecha).Minute},{((DateTime)fecha).Second})";
+            }
+            return registros.AplicarFiltroPorExpresion($"x => {expresionFecha}");
         }
 
         private static (DateTime? desde, DateTime? hasta) ParsearFechas(string valor)
@@ -222,7 +235,7 @@ namespace GestorDeElementos
         public CriteriosDeFiltrado Criterio { get; set; }
 
         private string _valor = "";
-        public string Valor { get { return _valor.Trim(); } set { _valor = value; } }
+        public string Valor { get { return _valor.Trim(); } set { _valor = value == null ? "" : value; } }
 
     }
 }

@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Enumerados;
 using System.Linq;
 using ModeloDeDto.TrabajosSometido;
+using ServicioDeCorreos;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -146,7 +147,13 @@ namespace GestoresDeNegocio.Archivos
             dynamic elementos = metodo.Invoke(gestor, new object[] { posicion, cantidad, filtros, orden, opcionesDeMapeo });
             var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos);
 
-            GestorDeCorreos.CrearCorreo(entorno.contextoPr, new List<string> { parametros[ltrExportacion.receptores].ToString() }, "Exportación solicitada", "Se le adjunta el fichero con la exportación solicitada", null, new List<string>() { ficheroConRuta });
+            GestorDeCorreos.EnviarCorreo(entorno
+                , new List<string> { parametros[ltrExportacion.receptores].ToString() }
+                , "Exportación solicitada"
+                , "Se le adjunta el fichero con la exportación solicitada"
+                , null
+                , new List<string>() { ficheroConRuta }
+                );
         }
 
         private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

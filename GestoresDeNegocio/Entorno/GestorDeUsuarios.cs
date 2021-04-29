@@ -82,7 +82,7 @@ namespace GestoresDeNegocio.Entorno
 
                 if (filtro.Clausula.ToLower() == UsuariosPor.Permisos)
                 {
-                    var listaIds = filtro.Valor.ToLista();
+                    var listaIds = filtro.Valor.ToLista<int>();
                     foreach (int id in listaIds)
                     {
                         registros = registros.Where(u => u.Permisos.Any(up => up.IdPermiso == id && up.IdUsuario == u.Id));

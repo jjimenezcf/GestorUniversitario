@@ -56,6 +56,11 @@ namespace Enumerados
             return JsonConvert.DeserializeObject<List<Parametro>>(json);
         }
 
+        public static List<T> JsonToLista<T>(this string json)
+        {
+          return JsonConvert.DeserializeObject<List<T>>(json);
+        }
+
         public static Dictionary<string, object> ToDiccionarioDeParametros(this string parametrosJson)
         {
             var parametros = new Dictionary<string, object>();

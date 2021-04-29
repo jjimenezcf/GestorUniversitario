@@ -196,14 +196,14 @@ namespace GestoresDeNegocio.Seguridad
             {
                 if (filtro.Clausula.ToLower() == UsuariosPor.AlgunUsuario)
                 {
-                    var listaIds = filtro.Valor.ToLista();
+                    var listaIds = filtro.Valor.ToLista<int>();
                     foreach (int id in listaIds)
                         registros = registros.Where(p => p.Usuarios.Any(up => up.IdUsuario == id && up.IdPermiso == p.Id));
                 }
 
                 if (filtro.Clausula.ToLower() == PermisoPor.PermisoDeUnRol)
                 {
-                    var listaIds = filtro.Valor.ToLista();
+                    var listaIds = filtro.Valor.ToLista<int>();
                     foreach (int id in listaIds)
                         registros = registros.Where(x => x.Roles.Any(i => i.IdPermiso == id));
                 }
