@@ -126,9 +126,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
         }
 
-        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
         {
-            return new GestorDeTrabajosDeUsuario(contexto, mapeador); ;
+            return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador); 
         }
 
         protected override void AntesMapearRegistroParaInsertar(TrabajoDeUsuarioDto elemento, ParametrosDeNegocio opciones)
@@ -154,14 +154,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         private static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoDeUsuarioDtm tu)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
+            var gestor = Gestor(contexto);
             tu = gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return tu;
         }
 
         public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario)
         {
-            var gestorTu = Gestor(contextoTu, contextoTu.Mapeador);
+            var gestorTu = Gestor(contextoTu);
             var tu = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, false);
             var entorno = new EntornoDeTrabajo(gestorTu, tu);
 
@@ -229,7 +229,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
+            var gestor = Gestor(contexto);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
             try
             {
@@ -249,7 +249,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
+            var gestor = Gestor(contexto);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
             try
             {
@@ -269,7 +269,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void Resometer(ContextoSe contexto, int idTrabajoDeUsuario)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
+            var gestor = Gestor(contexto);
             var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
 
             if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error) &&

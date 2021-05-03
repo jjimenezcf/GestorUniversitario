@@ -17,6 +17,7 @@ using System;
 using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Callejero;
 using GestoresDeNegocio.TrabajosSometidos;
+using ColaDeTrabajosSometidos;
 
 namespace MVCSistemaDeElementos
 {
@@ -99,6 +100,9 @@ namespace MVCSistemaDeElementos
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddHostedService<Cola>();
+
 
         }
 
