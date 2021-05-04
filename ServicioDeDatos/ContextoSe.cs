@@ -149,9 +149,8 @@ namespace ServicioDeDatos
         /// <param name="options"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
-            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO"))
-                   .UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
+            //var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
+            //options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO")).UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
         }
 
         public void InicializarDatosDeConexion()

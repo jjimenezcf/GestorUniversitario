@@ -26,7 +26,7 @@ namespace ColaDeTrabajosSometidos
                 {
                     services.AddDbContext<ContextoSe>(options => options.UseSqlServer("Server=DESARROLLO2;Database=SistemaDeElementos;uid=admin;Password=kadmon;MultipleActiveResultSets=true"));
                     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-                    services.AddScoped<GestorDeTrabajosSometido>();
+                    services.AddScoped<GestorDeTrabajosDeUsuario>();
                     services.AddHostedService<Cola>();
                 });
     }
