@@ -101,7 +101,7 @@ namespace ServicioDeDatos.Elemento
                 EliminarCriterio(filtro);
         }
 
-        public int EjecutarConsulta()
+        public int EjecutarConsulta(object parametros = null)
         {
             int resultado = 0;
 
@@ -113,7 +113,7 @@ namespace ServicioDeDatos.Elemento
                     if (Traza != null)
                         cronometro.Start();
                     db.Open();
-                    resultado = db.Execute(Sentencia);
+                    resultado = db.Execute(Sentencia, parametros);
 
                     if (Traza != null)
                     {

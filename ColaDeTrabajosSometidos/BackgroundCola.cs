@@ -37,49 +37,6 @@ namespace ColaDeTrabajosSometidos
 
         public IConfiguration Configuracion { get; }
 
-        public bool IniciarTraza
-        {
-            get
-            {
-                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
-                return (bool)entorno.GetValue(typeof(bool), Literal.TrazarConsultas);
-            }
-        }
-        public bool ColaActiva
-        {
-            get
-            {
-                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
-                return (bool)entorno.GetValue(typeof(bool), Literal.ColaActiva);
-            }
-        }
-
-        public string Emisor
-        {
-            get
-            {
-                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
-                return (string)entorno.GetValue(typeof(string), Literal.EmisorDeCorreos);
-            }
-        }
-
-        public string Receptor
-        {
-            get
-            {
-                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
-                return (string)entorno.GetValue(typeof(string), Literal.ReceptorDeCorreos);
-            }
-        }
-
-        public string Ejecutor
-        {
-            get
-            {
-                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
-                return (string)entorno.GetValue(typeof(string), Literal.EjecutorDeLaCola);
-            }
-        }
 
         public UsuarioDtm Usuario { get; private set; }
 
@@ -96,14 +53,14 @@ namespace ColaDeTrabajosSometidos
             var scope = _servicios.CreateScope();
             using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeUsuarios>())
             {
-                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), Ejecutor);
+                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), CacheDeVariable.Cola_Ejecutor);
             }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
 
-            if (!ColaActiva)
+            if (!CacheDeVariable.Cola_Activa)
                 return;
 
             while (!stoppingToken.IsCancellationRequested)
@@ -135,7 +92,7 @@ namespace ColaDeTrabajosSometidos
                     {
                         CumplimentarDatosDeConexion(gestor);
 
-                        if (IniciarTraza)
+                        if (CacheDeVariable.Cola_Trazar)
                             gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
 
 
@@ -149,16 +106,16 @@ namespace ColaDeTrabajosSometidos
                         }
 
 
-                        GestorDeCorreos.EnviarCorreoDe(gestor.Contexto, Emisor, new List<string> { Receptor }, "Cola ejecutada", $"Se ha ejecutado la cola y había pendientes {trabajosPorEjecutar.Count()} trabajos", null, null);
+                        GestorDeCorreos.EnviarCorreoDe(gestor.Contexto, CacheDeVariable.Cola_Emisor, new List<string> { CacheDeVariable.Cola_Receptor }, "Cola ejecutada", $"Se ha ejecutado la cola y había pendientes {trabajosPorEjecutar.Count()} trabajos", null, null);
                     }
                     catch (Exception e)
                     {
-                        if (IniciarTraza)
+                        if (CacheDeVariable.Cola_Trazar)
                             gestor.Contexto.AnotarExcepcion(e);
                     }
                     finally
                     {
-                        if (IniciarTraza)
+                        if (CacheDeVariable.Cola_Trazar)
                             gestor.Contexto.CerrarTraza();
 
                         await Task.Delay(10000, stoppingToken);
