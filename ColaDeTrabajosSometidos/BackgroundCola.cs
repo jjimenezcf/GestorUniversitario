@@ -60,70 +60,69 @@ namespace ColaDeTrabajosSometidos
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
 
-            if (!CacheDeVariable.Cola_Activa)
-                return;
 
             while (!stoppingToken.IsCancellationRequested)
             {
-
-                var filtros = new List<ClausulaDeFiltrado>();
-
-                var noBloqueado = new ClausulaDeFiltrado();
-                noBloqueado.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
-                noBloqueado.Criterio = ModeloDeDto.CriteriosDeFiltrado.diferente;
-                noBloqueado.Valor = enumEstadosDeUnTrabajo.Bloqueado.ToDtm();
-                filtros.Add(noBloqueado);
-
-                var listo = new ClausulaDeFiltrado();
-                listo.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
-                listo.Criterio = ModeloDeDto.CriteriosDeFiltrado.igual;
-                listo.Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
-                filtros.Add(listo);
-
-                var orden = new List<ClausulaDeOrdenacion>();
-                var fechaPlanificacion = new ClausulaDeOrdenacion();
-                fechaPlanificacion.Modo = ModoDeOrdenancion.ascendente;
-                fechaPlanificacion.OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado);
-
-                var scope = _servicios.CreateScope();
-                using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeTrabajosDeUsuario>())
+                if (CacheDeVariable.Cola_Activa)
                 {
-                    try
+                    var filtros = new List<ClausulaDeFiltrado>();
+
+                    var noBloqueado = new ClausulaDeFiltrado();
+                    noBloqueado.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+                    noBloqueado.Criterio = ModeloDeDto.CriteriosDeFiltrado.diferente;
+                    noBloqueado.Valor = enumEstadosDeUnTrabajo.Bloqueado.ToDtm();
+                    filtros.Add(noBloqueado);
+
+                    var listo = new ClausulaDeFiltrado();
+                    listo.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+                    listo.Criterio = ModeloDeDto.CriteriosDeFiltrado.igual;
+                    listo.Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
+                    filtros.Add(listo);
+
+                    var orden = new List<ClausulaDeOrdenacion>();
+                    var fechaPlanificacion = new ClausulaDeOrdenacion();
+                    fechaPlanificacion.Modo = ModoDeOrdenancion.ascendente;
+                    fechaPlanificacion.OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado);
+
+                    var scope = _servicios.CreateScope();
+                    using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeTrabajosDeUsuario>())
                     {
-                        CumplimentarDatosDeConexion(gestor);
-
-                        if (CacheDeVariable.Cola_Trazar)
-                            gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
-
-
-                        var trabajosPorEjecutar = gestor.LeerRegistros(0, -1, filtros, orden);
-
-                        _logger.LogInformation("Trabajos pendientes {pedientes}", trabajosPorEjecutar.Count());
-                        if (trabajosPorEjecutar.Count() > 0)
+                        try
                         {
-                            var entorno = new EntornoDeTrabajo(gestor, trabajosPorEjecutar[0]);
-                            _logger.LogInformation("Ejecutando el trabajo {trabajo} del usuario {usuario}", trabajosPorEjecutar[0].Trabajo.Nombre, trabajosPorEjecutar[0].Ejecutor.Login);
+                            CumplimentarDatosDeConexion(gestor);
+
+                            if (CacheDeVariable.Cola_Trazar)
+                                gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
+
+
+                            var trabajosPorEjecutar = gestor.LeerRegistros(0, -1, filtros, orden);
+
+                            _logger.LogInformation("Trabajos pendientes {pedientes}", trabajosPorEjecutar.Count());
+                            if (trabajosPorEjecutar.Count() > 0)
+                            {
+                                var entorno = new EntornoDeTrabajo(gestor, trabajosPorEjecutar[0]);
+                                _logger.LogInformation("Ejecutando el trabajo {trabajo} del usuario {usuario}", trabajosPorEjecutar[0].Trabajo.Nombre, trabajosPorEjecutar[0].Ejecutor.Login);
+                            }
+
+
+                            GestorDeCorreos.EnviarCorreoDe(gestor.Contexto, CacheDeVariable.Cola_Emisor, new List<string> { CacheDeVariable.Cola_Receptor }, "Cola ejecutada", $"Se ha ejecutado la cola y había pendientes {trabajosPorEjecutar.Count()} trabajos", null, null);
                         }
-
-
-                        GestorDeCorreos.EnviarCorreoDe(gestor.Contexto, CacheDeVariable.Cola_Emisor, new List<string> { CacheDeVariable.Cola_Receptor }, "Cola ejecutada", $"Se ha ejecutado la cola y había pendientes {trabajosPorEjecutar.Count()} trabajos", null, null);
-                    }
-                    catch (Exception e)
-                    {
-                        if (CacheDeVariable.Cola_Trazar)
-                            gestor.Contexto.AnotarExcepcion(e);
-                    }
-                    finally
-                    {
-                        if (CacheDeVariable.Cola_Trazar)
-                            gestor.Contexto.CerrarTraza();
-
-                        await Task.Delay(10000, stoppingToken);
+                        catch (Exception e)
+                        {
+                            if (CacheDeVariable.Cola_Trazar)
+                                gestor.Contexto.AnotarExcepcion(e);
+                        }
+                        finally
+                        {
+                            if (CacheDeVariable.Cola_Trazar)
+                                gestor.Contexto.CerrarTraza();
+                        }
                     }
                 }
-
+                await Task.Delay(10000, stoppingToken);
             }
         }
+
 
         private void CumplimentarDatosDeConexion(GestorDeTrabajosDeUsuario gestor)
         {
