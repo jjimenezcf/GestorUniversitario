@@ -1,0 +1,179 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
+using Gestor.Errores;
+using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
+using GestoresDeNegocio.TrabajosSometidos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using ServicioDeDatos;
+using ServicioDeDatos.Entorno;
+using ServicioDeDatos.TrabajosSometidos;
+
+namespace ColaDeTrabajosSometidos
+{
+    internal class Literal
+    {
+        internal static readonly string EntornoDeEjecucion = nameof(BackgroundCola);
+        internal static readonly string ColaActiva = nameof(ColaActiva);
+        internal static readonly string EmisorDeCorreos = nameof(EmisorDeCorreos);
+        internal static readonly string ReceptorDeCorreos = nameof(ReceptorDeCorreos);
+        internal static readonly string EjecutorDeLaCola = nameof(EjecutorDeLaCola);
+        internal static readonly string TrazarConsultas = nameof(TrazarConsultas);
+        internal static readonly string CadenaDeConexion = nameof(CadenaDeConexion);
+    }
+
+    public class BackgroundCola : BackgroundService
+    {
+        private readonly ILogger<BackgroundCola> _logger;
+        private IServiceProvider _servicios;
+
+        public IConfiguration Configuracion { get; }
+
+        public bool IniciarTraza
+        {
+            get
+            {
+                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
+                return (bool)entorno.GetValue(typeof(bool), Literal.TrazarConsultas);
+            }
+        }
+        public bool ColaActiva
+        {
+            get
+            {
+                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
+                return (bool)entorno.GetValue(typeof(bool), Literal.ColaActiva);
+            }
+        }
+
+        public string Emisor
+        {
+            get
+            {
+                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
+                return (string)entorno.GetValue(typeof(string), Literal.EmisorDeCorreos);
+            }
+        }
+
+        public string Receptor
+        {
+            get
+            {
+                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
+                return (string)entorno.GetValue(typeof(string), Literal.ReceptorDeCorreos);
+            }
+        }
+
+        public string Ejecutor
+        {
+            get
+            {
+                var entorno = Configuracion.GetSection(Literal.EntornoDeEjecucion);
+                return (string)entorno.GetValue(typeof(string), Literal.EjecutorDeLaCola);
+            }
+        }
+
+        public UsuarioDtm Usuario { get; private set; }
+
+        public BackgroundCola(IServiceProvider services, ILogger<BackgroundCola> logger, IConfiguration configuracion)
+        {
+            _logger = logger;
+            _servicios = services;
+            Configuracion = configuracion;
+            ObtenerUsuarioEjecutor();
+        }
+
+        public void ObtenerUsuarioEjecutor()
+        {
+            var scope = _servicios.CreateScope();
+            using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeUsuarios>())
+            {
+                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), Ejecutor);
+            }
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+
+            if (!ColaActiva)
+                return;
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+
+                var filtros = new List<ClausulaDeFiltrado>();
+
+                var noBloqueado = new ClausulaDeFiltrado();
+                noBloqueado.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+                noBloqueado.Criterio = ModeloDeDto.CriteriosDeFiltrado.diferente;
+                noBloqueado.Valor = enumEstadosDeUnTrabajo.Bloqueado.ToDtm();
+                filtros.Add(noBloqueado);
+
+                var listo = new ClausulaDeFiltrado();
+                listo.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+                listo.Criterio = ModeloDeDto.CriteriosDeFiltrado.igual;
+                listo.Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
+                filtros.Add(listo);
+
+                var orden = new List<ClausulaDeOrdenacion>();
+                var fechaPlanificacion = new ClausulaDeOrdenacion();
+                fechaPlanificacion.Modo = ModoDeOrdenancion.ascendente;
+                fechaPlanificacion.OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado);
+
+                var scope = _servicios.CreateScope();
+                using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeTrabajosDeUsuario>())
+                {
+                    try
+                    {
+                        CumplimentarDatosDeConexion(gestor);
+
+                        if (IniciarTraza)
+                            gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
+
+
+                        var trabajosPorEjecutar = gestor.LeerRegistros(0, -1, filtros, orden);
+
+                        _logger.LogInformation("Trabajos pendientes {pedientes}", trabajosPorEjecutar.Count());
+                        if (trabajosPorEjecutar.Count() > 0)
+                        {
+                            var entorno = new EntornoDeTrabajo(gestor, trabajosPorEjecutar[0]);
+                            _logger.LogInformation("Ejecutando el trabajo {trabajo} del usuario {usuario}", trabajosPorEjecutar[0].Trabajo.Nombre, trabajosPorEjecutar[0].Ejecutor.Login);
+                        }
+
+
+                        GestorDeCorreos.EnviarCorreoDe(gestor.Contexto, Emisor, new List<string> { Receptor }, "Cola ejecutada", $"Se ha ejecutado la cola y había pendientes {trabajosPorEjecutar.Count()} trabajos", null, null);
+                    }
+                    catch (Exception e)
+                    {
+                        if (IniciarTraza)
+                            gestor.Contexto.AnotarExcepcion(e);
+                    }
+                    finally
+                    {
+                        if (IniciarTraza)
+                            gestor.Contexto.CerrarTraza();
+
+                        await Task.Delay(10000, stoppingToken);
+                    }
+                }
+
+            }
+        }
+
+        private void CumplimentarDatosDeConexion(GestorDeTrabajosDeUsuario gestor)
+        {
+            gestor.Contexto.DatosDeConexion.IdUsuario = Usuario.Id;
+            gestor.Contexto.DatosDeConexion.EsAdministrador = Usuario.EsAdministrador;
+            gestor.Contexto.DatosDeConexion.Login = Usuario.Login;
+
+        }
+    }
+}

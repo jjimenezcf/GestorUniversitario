@@ -1,5 +1,6 @@
 using System;
 using GestorDeElementos;
+using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.TrabajosSometidos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,8 @@ namespace ColaDeTrabajosSometidos
                     services.AddDbContext<ContextoSe>(options => options.UseSqlServer("Server=DESARROLLO2;Database=SistemaDeElementos;uid=admin;Password=kadmon;MultipleActiveResultSets=true"));
                     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                     services.AddScoped<GestorDeTrabajosDeUsuario>();
-                    services.AddHostedService<Cola>();
+                    services.AddScoped<GestorDeUsuarios>();
+                    services.AddHostedService<BackgroundCola>();
                 });
     }
 }

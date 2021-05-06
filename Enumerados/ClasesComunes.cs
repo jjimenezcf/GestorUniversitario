@@ -47,10 +47,12 @@ namespace Enumerados
 
         public static string ToJson(this List<Parametro> p)
         {
+            if (p == null)
+                return "";
             return JsonConvert.SerializeObject(p);
         }
 
-        public static List<Parametro> ToListaDeParametros(this string  json)
+        public static List<Parametro> ToListaDeParametros(this string json)
         {
             // ValidarJson(json);
             return JsonConvert.DeserializeObject<List<Parametro>>(json);
@@ -58,7 +60,9 @@ namespace Enumerados
 
         public static List<T> JsonToLista<T>(this string json)
         {
-          return JsonConvert.DeserializeObject<List<T>>(json);
+            if (json.IsNullOrEmpty())
+                return new List<T>();
+            return JsonConvert.DeserializeObject<List<T>>(json);
         }
 
         public static Dictionary<string, object> ToDiccionarioDeParametros(this string parametrosJson)
@@ -75,13 +79,15 @@ namespace Enumerados
 
         public static string ToJson(this List<string> lista)
         {
+            if (lista == null)
+                return null;
             return JsonConvert.SerializeObject(lista);
         }
 
         public static string ToJson(this Dictionary<string, object> dic)
         {
             var parametros = new List<Parametro>();
-            foreach(var clave in dic.Keys)
+            foreach (var clave in dic.Keys)
             {
                 var p = new Parametro();
                 p.parametro = clave;

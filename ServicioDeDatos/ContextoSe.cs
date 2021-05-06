@@ -164,13 +164,13 @@ namespace ServicioDeDatos
             DatosDeConexion.Version = ObtenerVersion;
         }
 
-        public void IniciarTraza()
+        public void IniciarTraza(string nombre = "traza")
         {
             if (!Debuggar)
                 return;
 
             if (Traza == null)
-                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"traza_{DateTime.Now}.txt");
+                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{nombre}_{DateTime.Now}.txt");
             else
             if (!Traza.Abierta)
                 Traza.Abrir(true);
@@ -187,12 +187,28 @@ namespace ServicioDeDatos
             }
         }
 
+        public void AnotarExcepcion(Exception e)
+        {
+            if (Traza != null)
+            {
+                if (!Traza.Abierta)
+                    Traza.Abrir(true);
+
+                Traza.AnotarExcepcion(e);
+            }
+        }
+
         private void CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
         {
             Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Login}");
             Interceptor.Traza = Traza;
         }
 
+        //public override void Dispose()
+        //{
+        //    base.Dispose();
+        //    CerrarTraza();
+        //}
 
     }
     public class InterceptadorDeConsultas : DbCommandInterceptor

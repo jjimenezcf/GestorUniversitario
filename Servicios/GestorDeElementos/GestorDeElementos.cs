@@ -101,7 +101,7 @@ namespace GestorDeElementos
     }
 
 
-    public class GestorDeElementos<TContexto, TRegistro, TElemento>: IGestor
+    public class GestorDeElementos<TContexto, TRegistro, TElemento>: IGestor, IDisposable
         where TRegistro : Registro
         where TElemento : ElementoDto
         where TContexto : ContextoSe
@@ -921,6 +921,11 @@ namespace GestorDeElementos
             var schema = entityType.GetSchema();
             var tableName = entityType.GetTableName();
             return $"{schema}.{tableName}";
+        }
+
+        public void Dispose()
+        {
+            Contexto.Dispose();
         }
 
 

@@ -61,7 +61,7 @@ namespace Gestor.Errores
         public static void EnviarExcepcionPorCorreo(string asunto, Exception e)
         {
             var mensajeDeError = Detalle(e);
-            ServicioDeCorreos.ServicioDeCorreo.EnviarCorreo(new System.Collections.Generic.List<string> { "juan.jimenez@emuasa.es" }, $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
+            ServicioDeCorreos.ServicioDeCorreo.EnviarCorreoPara(new System.Collections.Generic.List<string> { "juan.jimenez@emuasa.es" }, $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
         }
 
     }

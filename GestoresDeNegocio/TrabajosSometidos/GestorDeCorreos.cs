@@ -37,11 +37,25 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        public static CorreoDtm CrearCorreo(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
         {
             var correo = new CorreoDtm();
             correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
             correo.Emisor = GestorDeUsuarios.LeerUsuario(contexto, contexto.DatosDeConexion.IdUsuario).eMail;
+            correo.Receptores = receptores.ToJson();
+            correo.Asunto = asunto;
+            correo.Cuerpo = cuerpo;
+            correo.Elementos = elementos.ToJson();
+            correo.Archivos = archivos.ToJson();
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.PersistirRegistro(correo, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+        }
+
+        public static CorreoDtm CrearCorreoDe(ContextoSe contexto, string emisor, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        {
+            var correo = new CorreoDtm();
+            correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
+            correo.Emisor = emisor;
             correo.Receptores = receptores.ToJson();
             correo.Asunto = asunto;
             correo.Cuerpo = cuerpo;
@@ -63,7 +77,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 var tran = entorno.contextoPr.IniciarTransaccion();
                 try
                 {
-                    gestor.EnviarCorreo(correoDtm);
+                    gestor.EnviarCorreoPara(correoDtm);
                     enviados++;
                     entorno.contextoPr.Commit(tran);
                 }
@@ -77,11 +91,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return (enviados, errores);
         }
 
-        public static void EnviarCorreo(EntornoDeTrabajo entorno, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        public static void EnviarCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
         {
-            var gestor = Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
-            var correoDtm = CrearCorreo(entorno.contextoPr, receptores, asunto, cuerpo, elementos, archivos);
-            gestor.EnviarCorreo(correoDtm);
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var correoDtm = CrearCorreoPara(contexto, receptores, asunto, cuerpo, elementos, archivos);
+            gestor.EnviarCorreoPara(correoDtm);
+        }
+
+        public static void EnviarCorreoDe(ContextoSe contexto, string emisor, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var correoDtm = CrearCorreoDe(contexto, emisor, receptores, asunto, cuerpo, elementos, archivos);
+            gestor.EnviarCorreoDe(correoDtm);
         }
 
         protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)
@@ -93,11 +114,20 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
-        public void EnviarCorreo(CorreoDtm correoDtm)
+        private void EnviarCorreoPara(CorreoDtm correoDtm)
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
-            ServicioDeCorreo.EnviarCorreo(receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            ServicioDeCorreo.EnviarCorreoPara(receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            correoDtm.Enviado = DateTime.Now;
+            PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+        }
+
+        private void EnviarCorreoDe(CorreoDtm correoDtm)
+        {
+            var archivos = correoDtm.Archivos.JsonToLista<string>();
+            var receptores = correoDtm.Receptores.JsonToLista<string>();
+            ServicioDeCorreo.EnviarCorreoDe(correoDtm.Emisor, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
