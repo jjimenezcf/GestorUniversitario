@@ -153,10 +153,6 @@ namespace ServicioDeDatos
             return valor;
         }
 
-        private static T2 Dictionary<T1, T2>()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public static void BorrarCache(string variable)
         {

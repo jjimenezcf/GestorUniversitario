@@ -78,7 +78,6 @@ namespace ModeloDeDto.Entorno
         ]
         public string eMail { get; set; }
 
-
         [IUPropiedad(
             Etiqueta = "Fecha de alta",
             EtiquetaGrid = "Alta",
@@ -94,6 +93,21 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public DateTime Alta { get; set; }
+
+        //------------------------------------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Administrador",
+            Ayuda = "indica si el usuario es administrador",
+            VisibleEnGrid = false,
+            Obligatorio = false,
+            Fila = 6,
+            Columna = 0,
+            TipoDeControl = enumTipoControl.Check,
+            ValorPorDefecto = false
+            )
+        ]
+        public bool EsAdministrador { get; set; }
+
 
         [IUPropiedad(
             VisibleEnGrid = false,

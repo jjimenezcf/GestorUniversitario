@@ -77,7 +77,8 @@ namespace GestorDeElementos
            enumNegocio.Menu,
            enumNegocio.Variable,
            enumNegocio.Negocio,
-           enumNegocio.Permiso
+           enumNegocio.Permiso,
+           enumNegocio.Usuario
         };
 
 

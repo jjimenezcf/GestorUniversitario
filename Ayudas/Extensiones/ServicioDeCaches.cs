@@ -37,13 +37,13 @@ namespace Utilidades
             }
         }
 
-        public static void EliminarElementos(string cache, string clave)
+        public static void EliminarElementos(string cache, string patron)
         {
             var cacheDeRegistros = Obtener(cache);
 
             foreach (var indice in cacheDeRegistros.Keys)
             {
-                if (indice.Contains(clave))
+                if (indice.Contains(patron))
                 {
                     cacheDeRegistros.TryRemove(indice, out _);
                 }

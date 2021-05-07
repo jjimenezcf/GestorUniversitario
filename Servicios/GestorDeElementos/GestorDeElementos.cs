@@ -840,19 +840,16 @@ namespace GestorDeElementos
 
         public enumModoDeAccesoDeDatos LeerModoDeAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
-            enumModoDeAccesoDeDatos modoDelUsuario = enumModoDeAccesoDeDatos.SinPermiso;
-
-            if (!NegociosDeSe.UsaSeguridad(negocio) || negocio == enumNegocio.No_Definido)
+            if (Contexto.DatosDeConexion.EsAdministrador)
                 return enumModoDeAccesoDeDatos.Administrador;
 
             if (NegociosDeSe.EsDeParametrizacion(negocio) && !Contexto.DatosDeConexion.EsAdministrador)
                 return enumModoDeAccesoDeDatos.Consultor;
 
-            if (Contexto.DatosDeConexion.EsAdministrador)
+            if (!NegociosDeSe.UsaSeguridad(negocio) || negocio == enumNegocio.No_Definido)
                 return enumModoDeAccesoDeDatos.Administrador;
 
-            if (!NegocioActivo(negocio))
-                return enumModoDeAccesoDeDatos.Consultor;
+            enumModoDeAccesoDeDatos modoDelUsuario = enumModoDeAccesoDeDatos.SinPermiso;
 
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}");
             var indice = $"Usuario:{idUsuario} Negocio:{NegociosDeSe.ToString(negocio)}";
@@ -876,6 +873,10 @@ namespace GestorDeElementos
                             modoDelUsuario = enumModoDeAccesoDeDatos.Consultor;
                     }
                 }
+
+                if (modoDelUsuario != enumModoDeAccesoDeDatos.SinPermiso && !NegocioActivo(negocio))
+                    return enumModoDeAccesoDeDatos.Consultor;
+
                 cache[indice] = modoDelUsuario;
             }
 

@@ -40,6 +40,12 @@ namespace GestoresDeNegocio.Entorno
             return new GestorDeVariables(contexto, mapeador);
         }
 
+        protected override void DespuesDePersistir(VariableDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Eliminar)
+                CacheDeVariable.BorrarCache(registro.Nombre);
+        }
 
         internal static VariableDtm LeerVariable(ContextoSe contextoSe, string variable, bool emitirErrorSiNoExiste)
         {

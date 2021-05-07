@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using Gestor.Errores;
 using ServicioDeDatos.Elemento;
 using Enumerados;
+using ServicioDeDatos.Entorno;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -94,6 +95,45 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
     }
 
+    public static class GestorDeTrabajosDeUsuarioExtension
+    {
+        public static void ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
+        {
+            CumplimentarDatosDeConexion(gestor, usuario);
+
+            var filtros = new List<ClausulaDeFiltrado>();
+
+            var noBloqueado = new ClausulaDeFiltrado();
+            noBloqueado.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+            noBloqueado.Criterio = ModeloDeDto.CriteriosDeFiltrado.diferente;
+            noBloqueado.Valor = enumEstadosDeUnTrabajo.Bloqueado.ToDtm();
+            filtros.Add(noBloqueado);
+
+            var listo = new ClausulaDeFiltrado();
+            listo.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
+            listo.Criterio = ModeloDeDto.CriteriosDeFiltrado.igual;
+            listo.Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
+            filtros.Add(listo);
+
+            var orden = new List<ClausulaDeOrdenacion>();
+            var fechaPlanificacion = new ClausulaDeOrdenacion();
+            fechaPlanificacion.Modo = ModoDeOrdenancion.ascendente;
+            fechaPlanificacion.OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado);
+
+            var trabajosPorEjecutar = gestor.LeerRegistros(0, -1, filtros, orden);
+        }
+
+
+        private static void CumplimentarDatosDeConexion(GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
+        {
+            gestor.Contexto.DatosDeConexion.IdUsuario = usuario.Id;
+            gestor.Contexto.DatosDeConexion.EsAdministrador = usuario.EsAdministrador;
+            gestor.Contexto.DatosDeConexion.Login = usuario.Login;
+
+        }
+
+
+    }
 
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
@@ -120,7 +160,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
-
         public GestorDeTrabajosDeUsuario(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
@@ -129,15 +168,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
         {
             return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador); 
-        }
-
-        protected override void AntesMapearRegistroParaInsertar(TrabajoDeUsuarioDto elemento, ParametrosDeNegocio opciones)
-        {
-            base.AntesMapearRegistroParaInsertar(elemento, opciones);
-            if (elemento.Estado.IsNullOrEmpty())
-                elemento.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDto();
-            if (elemento.Parametros.IsNullOrEmpty())
-                elemento.Parametros = "[]";
         }
 
         internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
@@ -312,7 +342,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 ValidarAntesDeEliminar(registro, parametros);
         }
 
-        
+        protected override void AntesMapearRegistroParaInsertar(TrabajoDeUsuarioDto elemento, ParametrosDeNegocio opciones)
+        {
+            base.AntesMapearRegistroParaInsertar(elemento, opciones);
+            if (elemento.Estado.IsNullOrEmpty())
+                elemento.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDto();
+            if (elemento.Parametros.IsNullOrEmpty())
+                elemento.Parametros = "[]";
+        }
+
         private void ValidarAntesDeEliminar(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             var RegistroEnBD = ((TrabajoDeUsuarioDtm)parametros.registroEnBd);
