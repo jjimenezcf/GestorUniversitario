@@ -23,9 +23,9 @@ namespace ServicioDeCorreos
         private static int Puerto => ServidorDeCorreo["puerto"].Entero();
         private static string Password => ServidorDeCorreo["clave"];
 
-        public ServicioDeCorreo()
+        public ServicioDeCorreo(string servidor)
         {
-            InicializaConfiguracion();
+            InicializaConfiguracion(servidor);
 
             if (Sistema == "EMUASA")
             {
@@ -46,13 +46,13 @@ namespace ServicioDeCorreos
                 throw new Exception($"Sistema de correo {Sistema} no definido");
         }
 
-        private static void InicializaConfiguracion()
+        private static void InicializaConfiguracion(string servidor)
         {
             var generador = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                  .AddJsonFile("appsettings.json");
             var configuration = generador.Build();
-            ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo");
+            ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo").GetSection(servidor);
         }
 
         internal void EnviarPara(List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)
@@ -91,15 +91,15 @@ namespace ServicioDeCorreos
                 SmtpCliente.Send(email);
         }
 
-        public static void EnviarCorreoPara(List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
+        public static void EnviarCorreoPara(string servidor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
         {
-            var servicio = new ServicioDeCorreo();
+            var servicio = new ServicioDeCorreo(servidor);
             servicio.EnviarPara(receptores, asunto, mensaje, esHtlm, archivos, prioridad);
         }
 
-        public static void EnviarCorreoDe(string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
+        public static void EnviarCorreoDe(string servidor, string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
         {
-            var servicio = new ServicioDeCorreo();
+            var servicio = new ServicioDeCorreo(servidor);
             servicio.EnviarDe(emisor, receptores, asunto, mensaje, esHtlm, archivos, prioridad);
         }
 

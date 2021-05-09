@@ -1,21 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using Gestor.Errores;
-using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.TrabajosSometidos;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
-using ServicioDeDatos.TrabajosSometidos;
 
 namespace ColaDeTrabajosSometidos
 {
@@ -36,7 +27,7 @@ namespace ColaDeTrabajosSometidos
             var scope = _servicios.CreateScope();
             using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeUsuarios>())
             {
-                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), CacheDeVariable.Cola_Ejecutor);
+                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), CacheDeVariable.Cola_LoginDeEjecutor);
             }
         }
 

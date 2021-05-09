@@ -58,10 +58,10 @@ namespace Gestor.Errores
             
         }
 
-        public static void EnviarExcepcionPorCorreo(string asunto, Exception e)
+        public static void EnviarExcepcionPorCorreo(string servidor, string asunto, Exception e)
         {
             var mensajeDeError = Detalle(e);
-            ServicioDeCorreos.ServicioDeCorreo.EnviarCorreoPara(new System.Collections.Generic.List<string> { "juan.jimenez@emuasa.es" }, $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
+            ServicioDeCorreos.ServicioDeCorreo.EnviarCorreoPara(servidor, new System.Collections.Generic.List<string> { "juan.jimenez@emuasa.es" }, $"{asunto} en {e.TargetSite.DeclaringType.Name}.{e.TargetSite.Name}", mensajeDeError);
         }
 
     }

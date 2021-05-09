@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos
             }
             catch (Exception ex)
             {
-                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo("Error al inicializar la BD.", ex);
+                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo(CacheDeVariable.ServidorDeCorreo, "Error al inicializar la BD.", ex);
                 throw new Exception($"Error al conectarse al contexto {ctoPermisos.GetType().Name}", ex);
             }
             finally
@@ -54,7 +54,7 @@ namespace MVCSistemaDeElementos
             }
             catch (Exception ex)
             {
-                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo("Error al inicializar la BD.", ex);
+                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo(CacheDeVariable.ServidorDeCorreo, "Error al inicializar la BD.", ex);
                 throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}", ex);
             }
             finally

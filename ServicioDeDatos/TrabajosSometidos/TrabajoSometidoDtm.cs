@@ -74,8 +74,8 @@ namespace ServicioDeDatos.TrabajosSometidos
                .IsUnique(true)
                .HasDatabaseName("IX_TRABAJO_NOMBRE");
 
-            modelBuilder.Entity<TrabajoSometidoDtm>().HasIndex(x => new { x.Dll, x.Clase, x.Metodo }).IsUnique(true).HasDatabaseName("IX_TRABAJO_METODO");
-            modelBuilder.Entity<TrabajoSometidoDtm>().HasIndex(x => new { x.Esquema, x.Pa }).IsUnique(true).HasDatabaseName("IX_TRABAJO_PA");
+            modelBuilder.Entity<TrabajoSometidoDtm>().HasIndex(x => new { x.Nombre, x.Dll, x.Clase, x.Metodo }).IsUnique(true).HasDatabaseName("IX_TRABAJO_METODO");
+            modelBuilder.Entity<TrabajoSometidoDtm>().HasIndex(x => new { x.Nombre, x.Esquema, x.Pa }).IsUnique(true).HasDatabaseName("IX_TRABAJO_PA");
         }
     }
 

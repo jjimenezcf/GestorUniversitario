@@ -132,7 +132,7 @@ namespace GestoresDeNegocio.Archivos
             if (!parametros.ContainsKey(nameof(Registro)))
                 GestorDeErrores.Emitir("No se ha indicado el Registro de exportación");
 
-            var gestor = NegociosDeSe.CrearGestor(entorno.contextoPr, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
+            var gestor = NegociosDeSe.CrearGestor(entorno.contextoDelProceso, parametros[nameof(Registro)].ToString(), parametros[nameof(ElementoDto)].ToString());
 
             var cantidad = !parametros.ContainsKey(ltrFiltros.cantidad) ? -1 : parametros[ltrFiltros.cantidad].ToString().Entero();
             var posicion = !parametros.ContainsKey(ltrFiltros.posicion) ? 0 : parametros[ltrFiltros.posicion].ToString().Entero();
@@ -145,9 +145,9 @@ namespace GestoresDeNegocio.Archivos
             Type clase = gestor.GetType();
             MethodInfo metodo = clase.GetMethod(nameof(GestorDeElementos<ContextoSe, Registro, ElementoDto>.LeerElementos));
             dynamic elementos = metodo.Invoke(gestor, new object[] { posicion, cantidad, filtros, orden, opcionesDeMapeo });
-            var ficheroConRuta = GenerarExcel(entorno.contextoPr, elementos);
+            var ficheroConRuta = GenerarExcel(entorno.contextoDelProceso, elementos);
 
-            GestorDeCorreos.EnviarCorreoPara(entorno.contextoPr
+            GestorDeCorreos.EnviarCorreoPara(entorno.contextoDelProceso
                 , new List<string> { parametros[ltrExportacion.receptores].ToString() }
                 , "Exportación solicitada"
                 , "Se le adjunta el fichero con la exportación solicitada"

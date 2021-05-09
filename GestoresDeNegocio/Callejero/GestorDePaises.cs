@@ -107,8 +107,8 @@ namespace GestoresDeNegocio.Callejero
 
         private static void ImportarFicheroDePaises(EntornoDeTrabajo entorno, int idArchivo)
         {
-            var gestor = GestorDePaises.Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
-            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoPr, idArchivo);
+            var gestor = GestorDePaises.Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
+            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
             entorno.AnotarTraza($"Inicio del proceso");

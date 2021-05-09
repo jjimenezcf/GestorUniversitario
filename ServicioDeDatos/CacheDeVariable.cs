@@ -17,6 +17,7 @@ namespace ServicioDeDatos
         public static readonly string Servidor_Archivos = $"CFG_{nameof(Servidor_Archivos)}";
         public static readonly string Ruta_De_Binarios = $"CFG_{nameof(Ruta_De_Binarios)}";
         public static readonly string Ruta_De_Exportaciones = $"CFG_{nameof(Ruta_De_Exportaciones)}";
+        public static readonly string Servidor_De_Correo = $"CFG_{nameof(Servidor_De_Correo)}"; 
 
 
         public static readonly string Cola_Activa = nameof(Cola_Activa);
@@ -38,6 +39,16 @@ namespace ServicioDeDatos
                 if (!cacheVariables.ContainsKey(Variable.Servidor_Archivos))
                     cacheVariables[Variable.Servidor_Archivos] = LeerValorDeVariable(Variable.Servidor_Archivos);
                 return cacheVariables[Variable.Servidor_Archivos].ToString();
+            }
+        }
+
+        public static string ServidorDeCorreo
+        {
+            get
+            {
+                if (!cacheVariables.ContainsKey(Variable.Servidor_De_Correo))
+                    cacheVariables[Variable.Servidor_De_Correo] = LeerCrear(Variable.Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
+                return cacheVariables[Variable.Servidor_De_Correo].ToString();
             }
         }
 
@@ -81,7 +92,7 @@ namespace ServicioDeDatos
             }
         }
 
-        public static string Cola_Ejecutor
+        public static string Cola_LoginDeEjecutor
         {
             get
             {

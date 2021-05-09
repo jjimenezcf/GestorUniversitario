@@ -54,8 +54,8 @@ namespace GestoresDeNegocio.Callejero
 
         public static void ImportarFicheroDeProvincias(EntornoDeTrabajo entorno, int idArchivo)
         {
-            var gestorProceso = GestorDeProvincias.Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
-            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoPr, idArchivo);
+            var gestorProceso = GestorDeProvincias.Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
+            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
             entorno.AnotarTraza($"Inicio del proceso");

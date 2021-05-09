@@ -19,6 +19,7 @@ using ServicioDeDatos.Entorno;
 using ModeloDeDto;
 using System.Threading.Tasks;
 using Dapper;
+using GestoresDeNegocio.Entorno;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -36,13 +37,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
     {
         public GestorDeTrabajosDeUsuario GestorDelTrabajo { get; private set; }
         public TrabajoDeUsuarioDtm Trabajo { get; private set; }
-        public ContextoSe contextoPr { get; set; }
+        public ContextoSe contextoDelProceso { get; set; }
+        public ContextoSe contextosDelEntorno => GestorDelTrabajo.Contexto;
 
         public bool HayErrores
         {
             get
             {
-                var gestor = GestorDeErroresDeUnTrabajo.Gestor(GestorDelTrabajo.Contexto, GestorDelTrabajo.Contexto.Mapeador);
+                var gestor = GestorDeErroresDeUnTrabajo.Gestor(contextosDelEntorno, contextosDelEntorno.Mapeador);
                 var filtro = new ClausulaDeFiltrado { Clausula = nameof(ErrorDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = Trabajo.Id.ToString() };
                 return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> { filtro }).Count > 0;
             }
@@ -61,18 +63,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public int AnotarTraza(int id, string traza)
         {
-            return GestorDeTrazasDeUnTrabajo.AnotarTraza(GestorDelTrabajo.Contexto, Trabajo, id, traza);
+            return GestorDeTrazasDeUnTrabajo.AnotarTraza(contextosDelEntorno, Trabajo, id, traza);
         }
 
         internal void ModificarUltimaTraza(string traza)
         {
-            TrazaDeUnTrabajoDtm registroDeTraza =  GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(GestorDelTrabajo.Contexto, Trabajo.Id);
+            TrazaDeUnTrabajoDtm registroDeTraza = GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(contextosDelEntorno, Trabajo.Id);
             AnotarTraza(registroDeTraza.Id, traza);
         }
 
         public void AnotarError(Exception e)
         {
-            GestorDeErroresDeUnTrabajo.AnotarError(GestorDelTrabajo.Contexto, Trabajo, e);
+            GestorDeErroresDeUnTrabajo.AnotarError(contextosDelEntorno, Trabajo, e);
         }
 
         public bool IniciarTransaccion()
@@ -91,7 +93,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public void PonerSemaforo()
         {
             GestorDeSemaforoDeTrabajos.PonerSemaforo(Trabajo);
-            AnotarTraza($"Trabajo iniciado por el usuario {GestorDelTrabajo.Contexto.DatosDeConexion.Login}");
+            AnotarTraza($"Trabajo iniciado por el usuario {contextosDelEntorno.DatosDeConexion.Login}");
         }
 
         public void QuitarSemaforo(string traza)
@@ -100,6 +102,34 @@ namespace GestoresDeNegocio.TrabajosSometidos
             AnotarTraza(traza);
         }
 
+        internal void ComunicarError(Exception e)
+        {
+            AnotarError(e);
+            if (Trabajo.Trabajo.ComunicarError)
+            {
+                GestorDeCorreos.EnviarCorreoDe(contextosDelEntorno
+                    , GestorDeUsuarios.LeerUsuario(contextosDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                    , new List<string> { Trabajo.Sometedor.eMail }
+                    , $"Error al ejecutar el trabajo {Trabajo.Trabajo.Nombre}"
+                    , $"Error en la ejecución del trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado}, acceda al mantenimiento de trabajos de usuario para visualizar los errores"
+                    , null
+                    , null);
+            }
+        }
+
+        internal void EnviarFinalizacion()
+        {
+            if (Trabajo.Trabajo.ComunicarFin)
+            {
+                GestorDeCorreos.EnviarCorreoDe(contextosDelEntorno
+                    , GestorDeUsuarios.LeerUsuario(contextosDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                    , new List<string> { Trabajo.Sometedor.eMail }
+                    , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
+                    , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza y a los errores para ver el resultado"
+                    , null
+                    , null);
+            }
+        }
     }
 
     public static class GestorDeTrabajosDeUsuarioExtension
@@ -165,7 +195,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
         {
-            return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador); 
+            return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador);
         }
 
 
@@ -221,26 +251,26 @@ namespace GestoresDeNegocio.TrabajosSometidos
             try
             {
                 var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.Trabajo.Trabajo);
-                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.GestorDelTrabajo.Contexto))
+                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.contextosDelEntorno))
                 {
-                    entorno.contextoPr = contextoPr;
+                    entorno.contextoDelProceso = contextoPr;
                     metodo.Invoke(null, new object[] { entorno });
                 }
                 entorno.Trabajo.Estado = !entorno.HayErrores
                     ? TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado)
                     : TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores);
+                entorno.EnviarFinalizacion();
             }
             catch (Exception e)
             {
                 entorno.Trabajo.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error);
                 if (e.InnerException != null)
                 {
-                    entorno.AnotarError(e.InnerException);
+                    entorno.ComunicarError(e.InnerException);
                     throw e.InnerException;
                 }
 
-                entorno.AnotarError(e);
-
+                entorno.ComunicarError(e);
                 throw;
             }
             finally

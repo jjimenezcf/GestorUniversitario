@@ -67,24 +67,24 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static (int enviados, bool errores) EnviarCorreos(EntornoDeTrabajo entorno)
         {
-            var gestor = Gestor(entorno.contextoPr, entorno.contextoPr.Mapeador);
+            var gestor = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
             var fltPendientes = new ClausulaDeFiltrado { Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Clausula = nameof(CorreoDtm.Enviado), Valor = null };
             var correosPendientes = gestor.LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { fltPendientes }, null, null);
             var enviados = 0;
             var errores = false;
             foreach (var correoDtm in correosPendientes)
             {
-                var tran = entorno.contextoPr.IniciarTransaccion();
+                var tran = entorno.contextoDelProceso.IniciarTransaccion();
                 try
                 {
                     gestor.EnviarCorreoPara(correoDtm);
                     enviados++;
-                    entorno.contextoPr.Commit(tran);
+                    entorno.contextoDelProceso.Commit(tran);
                 }
                 catch (Exception e)
                 {
                     errores = true;
-                    entorno.contextoPr.Rollback(tran);
+                    entorno.contextoDelProceso.Rollback(tran);
                     entorno.AnotarError(e);
                 }
             }
@@ -118,7 +118,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
-            ServicioDeCorreo.EnviarCorreoPara(receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            
+            ServicioDeCorreo.EnviarCorreoPara(CacheDeVariable.ServidorDeCorreo, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
@@ -127,7 +128,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
-            ServicioDeCorreo.EnviarCorreoDe(correoDtm.Emisor, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }

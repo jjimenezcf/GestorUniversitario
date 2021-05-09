@@ -45,6 +45,12 @@ namespace GestoresDeNegocio.Entorno
             return gestor.LeerRegistroPorId(idUsuario);
         }
 
+        internal static UsuarioDtm LeerUsuario(ContextoSe contexto, string login)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            return gestor.LeerRegistro(nameof(UsuarioDtm.Login), login, true,true, false,false);
+        }
+
         public static GestorDeUsuarios Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeUsuarios(contexto, mapeador);
