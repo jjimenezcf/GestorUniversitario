@@ -16,6 +16,9 @@ using Gestor.Errores;
 using ServicioDeDatos.Elemento;
 using Enumerados;
 using ServicioDeDatos.Entorno;
+using ModeloDeDto;
+using System.Threading.Tasks;
+using Dapper;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -25,9 +28,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static string terminando = nameof(terminando);
     }
 
+    public class resultadoDelProceso
+    {
+    }
+
     public class EntornoDeTrabajo
     {
-        public GestorDeTrabajosDeUsuario GestorDeEntorno { get; private set; }
+        public GestorDeTrabajosDeUsuario GestorDelTrabajo { get; private set; }
         public TrabajoDeUsuarioDtm Trabajo { get; private set; }
         public ContextoSe contextoPr { get; set; }
 
@@ -35,7 +42,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             get
             {
-                var gestor = GestorDeErroresDeUnTrabajo.Gestor(GestorDeEntorno.Contexto, GestorDeEntorno.Contexto.Mapeador);
+                var gestor = GestorDeErroresDeUnTrabajo.Gestor(GestorDelTrabajo.Contexto, GestorDelTrabajo.Contexto.Mapeador);
                 var filtro = new ClausulaDeFiltrado { Clausula = nameof(ErrorDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = Trabajo.Id.ToString() };
                 return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> { filtro }).Count > 0;
             }
@@ -43,7 +50,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public EntornoDeTrabajo(GestorDeTrabajosDeUsuario gestor, TrabajoDeUsuarioDtm trabajoUsuario)
         {
-            GestorDeEntorno = gestor;
+            GestorDelTrabajo = gestor;
             Trabajo = trabajoUsuario;
         }
 
@@ -54,37 +61,37 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public int AnotarTraza(int id, string traza)
         {
-            return GestorDeTrazasDeUnTrabajo.AnotarTraza(GestorDeEntorno.Contexto, Trabajo, id, traza);
+            return GestorDeTrazasDeUnTrabajo.AnotarTraza(GestorDelTrabajo.Contexto, Trabajo, id, traza);
         }
 
         internal void ModificarUltimaTraza(string traza)
         {
-            TrazaDeUnTrabajoDtm registroDeTraza =  GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(GestorDeEntorno.Contexto, Trabajo.Id);
+            TrazaDeUnTrabajoDtm registroDeTraza =  GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(GestorDelTrabajo.Contexto, Trabajo.Id);
             AnotarTraza(registroDeTraza.Id, traza);
         }
 
         public void AnotarError(Exception e)
         {
-            GestorDeErroresDeUnTrabajo.AnotarError(GestorDeEntorno.Contexto, Trabajo, e);
+            GestorDeErroresDeUnTrabajo.AnotarError(GestorDelTrabajo.Contexto, Trabajo, e);
         }
 
         public bool IniciarTransaccion()
         {
-            return GestorDeEntorno.IniciarTransaccion();
+            return GestorDelTrabajo.IniciarTransaccion();
         }
         public void RollBack(bool transaccion)
         {
-            GestorDeEntorno.Rollback(transaccion);
+            GestorDelTrabajo.Rollback(transaccion);
         }
         public void Commit(bool transaccion)
         {
-            GestorDeEntorno.Commit(transaccion);
+            GestorDelTrabajo.Commit(transaccion);
         }
 
         public void PonerSemaforo()
         {
             GestorDeSemaforoDeTrabajos.PonerSemaforo(Trabajo);
-            AnotarTraza($"Trabajo iniciado por el usuario {GestorDeEntorno.Contexto.DatosDeConexion.Login}");
+            AnotarTraza($"Trabajo iniciado por el usuario {GestorDelTrabajo.Contexto.DatosDeConexion.Login}");
         }
 
         public void QuitarSemaforo(string traza)
@@ -97,30 +104,23 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
     public static class GestorDeTrabajosDeUsuarioExtension
     {
-        public static void ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
+        public static Task<resultadoDelProceso> ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
         {
             CumplimentarDatosDeConexion(gestor, usuario);
 
-            var filtros = new List<ClausulaDeFiltrado>();
+            var trabajosPorEjecutar = LeerTrabajoPendiente();
 
-            var noBloqueado = new ClausulaDeFiltrado();
-            noBloqueado.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
-            noBloqueado.Criterio = ModeloDeDto.CriteriosDeFiltrado.diferente;
-            noBloqueado.Valor = enumEstadosDeUnTrabajo.Bloqueado.ToDtm();
-            filtros.Add(noBloqueado);
+            if (trabajosPorEjecutar.Count == 1)
+                GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id);
 
-            var listo = new ClausulaDeFiltrado();
-            listo.Clausula = nameof(TrabajoDeUsuarioDtm.Estado);
-            listo.Criterio = ModeloDeDto.CriteriosDeFiltrado.igual;
-            listo.Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
-            filtros.Add(listo);
+            return Task.FromResult(new resultadoDelProceso());
+        }
 
-            var orden = new List<ClausulaDeOrdenacion>();
-            var fechaPlanificacion = new ClausulaDeOrdenacion();
-            fechaPlanificacion.Modo = ModoDeOrdenancion.ascendente;
-            fechaPlanificacion.OrdenarPor = nameof(TrabajoDeUsuarioDtm.Planificado);
-
-            var trabajosPorEjecutar = gestor.LeerRegistros(0, -1, filtros, orden);
+        private static List<TrabajoDeUsuarioDtm> LeerTrabajoPendiente()
+        {
+            var consulta = new ConsultaSql<TrabajoDeUsuarioDtm>(TrabajosDeUsuarioSql.LeerTrabajoPendiente);
+            var trabajos = consulta.LanzarConsulta(new DynamicParameters(null));
+            return trabajos;
         }
 
 
@@ -131,8 +131,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
             gestor.Contexto.DatosDeConexion.Login = usuario.Login;
 
         }
-
-
     }
 
     public class GestorDeTrabajosDeUsuario : GestorDeElementos<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
@@ -170,6 +168,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador); 
         }
 
+
         internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
         {
             var tu = new TrabajoDeUsuarioDtm();
@@ -202,7 +201,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             {
                 tu.Iniciado = DateTime.Now;
                 tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
-                tu = entorno.GestorDeEntorno.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+                tu = entorno.GestorDelTrabajo.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 entorno.Commit(tran);
             }
             catch (Exception e)
@@ -216,13 +215,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
             EjecutarTrabajo(entorno);
         }
 
-        private static bool EjecutarTrabajo(EntornoDeTrabajo entorno)
+        private static void EjecutarTrabajo(EntornoDeTrabajo entorno)
         {
-            bool tran = entorno.GestorDeEntorno.IniciarTransaccion();
+            bool tran = entorno.GestorDelTrabajo.IniciarTransaccion();
             try
             {
                 var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.Trabajo.Trabajo);
-                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.GestorDeEntorno.Contexto))
+                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.GestorDelTrabajo.Contexto))
                 {
                     entorno.contextoPr = contextoPr;
                     metodo.Invoke(null, new object[] { entorno });
@@ -249,12 +248,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 entorno.Trabajo.Terminado = DateTime.Now;
                 var parametros = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
                 parametros.Parametros[EnumParametro.accion] = EnumParametroTu.terminando;
-                entorno.GestorDeEntorno.PersistirRegistro(entorno.Trabajo, parametros);
-                entorno.GestorDeEntorno.Commit(tran);
+                entorno.GestorDelTrabajo.PersistirRegistro(entorno.Trabajo, parametros);
+                entorno.GestorDelTrabajo.Commit(tran);
                 entorno.QuitarSemaforo($"Trabajo finalizado: {(entorno.Trabajo.Estado == TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado) ? "sin errores" : "con errores")}");
             }
-
-            return tran;
         }
 
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)

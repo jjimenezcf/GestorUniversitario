@@ -19,7 +19,7 @@ namespace ModeloDeDto
         public static string cantidad = nameof(cantidad).ToLower();
     }
 
-    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
+    public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, noContiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
 
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }

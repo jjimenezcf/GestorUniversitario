@@ -88,7 +88,7 @@ namespace ServicioDeCorreos
                     email.Attachments.Add(attach);
                 }
 
-            SmtpCliente.Send(email);
+                SmtpCliente.Send(email);
         }
 
         public static void EnviarCorreoPara(List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)

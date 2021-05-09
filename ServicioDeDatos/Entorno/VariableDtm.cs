@@ -37,7 +37,7 @@ INSERT INTO SistemaDeElementos.ENTORNO.VARIABLE
 VALUES(@variable, @descripcion, @valor);
 ";
 
-        public static string LeerVariable =
+        public static string LeerValorDeVariable =
 $@"
 SELECT ID, NOMBRE, DESCRIPCION, VALOR
 FROM SistemaDeElementos.ENTORNO.VARIABLE

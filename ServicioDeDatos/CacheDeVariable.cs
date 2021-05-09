@@ -36,7 +36,7 @@ namespace ServicioDeDatos
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Servidor_Archivos))
-                    cacheVariables[Variable.Servidor_Archivos] = LeerValor(Variable.Servidor_Archivos);
+                    cacheVariables[Variable.Servidor_Archivos] = LeerValorDeVariable(Variable.Servidor_Archivos);
                 return cacheVariables[Variable.Servidor_Archivos].ToString();
             }
         }
@@ -46,7 +46,7 @@ namespace ServicioDeDatos
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Debugar_Sqls))
-                    cacheVariables[Variable.Debugar_Sqls] = LeerValor(Variable.Debugar_Sqls);
+                    cacheVariables[Variable.Debugar_Sqls] = LeerValorDeVariable(Variable.Debugar_Sqls);
                 return cacheVariables[Variable.Debugar_Sqls].ToString() == "S";
             }
         }
@@ -56,7 +56,7 @@ namespace ServicioDeDatos
             get
             {
                 if (!cacheVariables.ContainsKey(Variable.Version))
-                    cacheVariables[Variable.Version] = LeerValor(Variable.Version);
+                    cacheVariables[Variable.Version] = LeerValorDeVariable(Variable.Version);
                 return cacheVariables[Variable.Version].ToString();
             }
         }
@@ -116,7 +116,7 @@ namespace ServicioDeDatos
 
         private static string LeerCrear(string variable, string descripcion, string valorInicial)
         {
-            var valor = LeerValor(variable, emitirError: false);
+            var valor = LeerValorDeVariable(variable, emitirError: false);
             if (valor == Literal.VariableNoDefinida)
             {
                 valor = CrearVariable(variable, descripcion, valorInicial);
@@ -124,9 +124,9 @@ namespace ServicioDeDatos
             return valor;
         }
 
-        private static string LeerValor(string variable, bool emitirError = true)
+        private static string LeerValorDeVariable(string variable, bool emitirError = true)
         {
-            var consulta = new ConsultaSql<VariableDtm>(VariableSqls.LeerVariable);
+            var consulta = new ConsultaSql<VariableDtm>(VariableSqls.LeerValorDeVariable);
             var valores = new Dictionary<string, object> { { $"@{nameof(variable)}", variable } };
             var resultado = consulta.LanzarConsulta(new DynamicParameters(valores));
 

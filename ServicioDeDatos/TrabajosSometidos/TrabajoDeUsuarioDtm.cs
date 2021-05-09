@@ -89,8 +89,6 @@ namespace ServicioDeDatos.TrabajosSometidos
         public virtual UsuarioDtm Ejecutor { get; set; }
     }
 
-
-
     public static class TablaTrabajoDeUsuario
     {
         public static void Definir(ModelBuilder mb)
@@ -113,5 +111,17 @@ namespace ServicioDeDatos.TrabajosSometidos
      
 
         }
+    }
+
+    public static class TrabajosDeUsuarioSql
+    {
+        public static string LeerTrabajoPendiente = @"
+SELECT top(1)  ID, ENTRADA, ESTADO, ID_EJECUTOR, ID_SOMETEDOR, ID_TRABAJO, INICIADO, PARAMETROS, PERIODICIDAD, PLANIFICADO, TERMINADO
+FROM TRABAJO.USUARIO 
+WHERE ESTADO = 'PT'
+ AND (INICIADO = '0001-01-01T00:00:00.0000000' OR INICIADO IS NULL)
+ and id not in (select ID_TRABAJO from TRABAJO.SEMAFORO with(nolock))
+ ORDER BY PLANIFICADO
+";
     }
 }

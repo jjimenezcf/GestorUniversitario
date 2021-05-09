@@ -27,10 +27,20 @@ namespace GestorDeElementos
     {
         public string OrdenarPor { get; set; }
         public ModoDeOrdenancion Modo { get; set; }
+        public ClausulaDeOrdenacion()
+        {
+
+        }
+        public ClausulaDeOrdenacion(string ordenarPor, ModoDeOrdenancion modo)
+        {
+            OrdenarPor = ordenarPor;
+            Modo = modo;
+        }
     }
 
     public static class Ordenar
-    {        private static string AplicarThenBy<TRegistro>(this IQueryable<TRegistro> registros, ModoDeOrdenancion modo, string propiedad)
+    {
+        private static string AplicarThenBy<TRegistro>(this IQueryable<TRegistro> registros, ModoDeOrdenancion modo, string propiedad)
         {
             switch (modo)
             {
@@ -47,9 +57,9 @@ namespace GestorDeElementos
             switch (orden.Modo)
             {
                 case ModoDeOrdenancion.ascendente:
-                         return registros.OrderBy($"x => x.{propiedad.Name}");
+                    return registros.OrderBy($"x => x.{propiedad.Name}");
                 case ModoDeOrdenancion.descendente:
-                         return registros.OrderBy($"x => x.{propiedad.Name}", "descending");
+                    return registros.OrderBy($"x => x.{propiedad.Name}", "descending");
             }
             return registros;
         }
@@ -79,7 +89,7 @@ namespace GestorDeElementos
                         .ThenBy($"{ordenacion[2].OrdenarPor} {ordenacion[2].Modo.toSql()}")
                         .ThenBy($"{ordenacion[3].OrdenarPor} {ordenacion[3].Modo.toSql()}");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}", e);
             }

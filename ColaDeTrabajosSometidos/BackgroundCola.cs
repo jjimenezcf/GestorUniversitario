@@ -44,7 +44,7 @@ namespace ColaDeTrabajosSometidos
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-              if (CacheDeVariable.Cola_Activa)
+                if (CacheDeVariable.Cola_Activa)
                 {
                     var scope = _servicios.CreateScope();
                     using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeTrabajosDeUsuario>())
@@ -54,7 +54,7 @@ namespace ColaDeTrabajosSometidos
 
                         try
                         {
-                            gestor.ProcesarCola(Usuario);
+                            await gestor.ProcesarCola(Usuario);
                         }
                         catch (Exception e)
                         {
@@ -74,4 +74,5 @@ namespace ColaDeTrabajosSometidos
 
 
     }
+
 }
