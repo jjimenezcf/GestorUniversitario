@@ -69,10 +69,10 @@ namespace GestoresDeNegocio.Archivos
 
         private int SubirArchivoInterno(string rutaConFichero)
         {
-            var servidorDeArchivos = GestorDeVariables.LeerVariable(Contexto, Variable.Servidor_Archivos, true);
+            var servidorDeArchivos = GestorDeVariables.LeerVariable(Contexto, Variable.CFG_Servidor_Archivos, true);
 
             if (!Directory.Exists(servidorDeArchivos.Valor))
-                throw new Exception($"La ruta del servidor documental {servidorDeArchivos.Valor} asignada a la variable {Variable.Servidor_Archivos} no está definida");
+                throw new Exception($"La ruta del servidor documental {servidorDeArchivos.Valor} asignada a la variable {Variable.CFG_Servidor_Archivos} no está definida");
 
             var fecha = DateTime.Now;
             var almacenarEn = $@"{servidorDeArchivos.Valor}\{fecha.Year}\{fecha.Month}\{fecha.Day}\{fecha.Hour}\{Contexto.DatosDeConexion.IdUsuario}";

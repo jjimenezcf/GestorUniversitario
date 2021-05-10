@@ -37,7 +37,30 @@
             this._accion = accion;
             this._posicion = posicion;
         }
+    }
 
+    export class DatosPeticionFiltrarPorId {
+        private _grid: GridDeDatos;
+        private _id: number;
+
+        public get Grid(): GridDeDatos {
+            return this._grid;
+        }
+
+        public get Accion(): string {
+            return atGrid.accion.buscar;
+        }
+        public get PosicionDesdeLaQueSeLee(): number {
+            return 0;
+        }
+        
+        public get Id(): number {
+            return this._id;
+        }
+        constructor(grid: GridDeDatos, id: number) {
+            this._grid = grid;
+            this._id = id;
+        }
     }
 
     class InfoNavegador {
@@ -522,6 +545,16 @@
                 let orden = this.Ordenacion.Leer(i);
                 clausulas.push(new ClausulaDeOrdenacion(orden.OrdenarPor, orden.Modo));
             }
+            return JSON.stringify(clausulas);
+        }
+
+        protected ObtenerFiltroPorId(id: number): string {
+            var clausulas = new Array<ClausulaDeFiltrado>();
+            let propiedad: string = atControl.id;
+            let criterio: string = literal.filtro.criterio.igual;
+            let valor: string = id.toString();
+            let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }
 
@@ -1057,6 +1090,52 @@
             a.Ejecutar();
         }
 
+        protected FiltrarPorId(id: number): Promise<boolean> {
+
+            if (this.Grid.getAttribute(atGrid.cargando) == 'S') {
+                MensajesSe.Error("FiltrarPorId", "El grid se está cargando");
+                return null;
+            }
+
+            let promesa: Promise<boolean> = new Promise((resolve, reject) => {
+                let url: string = this.DefinirFiltroPorId(id);
+                var datosDePeticion = new DatosPeticionFiltrarPorId(this, id);
+                let a = new ApiDeAjax.DescriptorAjax(this
+                    , Ajax.EndPoint.LeerDatosParaElGrid
+                    , datosDePeticion
+                    , url
+                    , ApiDeAjax.TipoPeticion.Asincrona
+                    , ApiDeAjax.ModoPeticion.Get
+                    , (peticion) => {
+                        resolve(this.CrearFilaDelIdEnElGrid(peticion));
+                    }
+                    , (peticion) => {
+                        this.SiHayErrorAlCargarElGrid(peticion);
+                        reject(false);
+                    }
+                );
+                this.Grid.setAttribute(atGrid.cargando, 'S');
+                a.Ejecutar();
+            });
+
+            return promesa;
+        }
+
+        private DefinirFiltroPorId(id: number): string {
+            var controlador = this.Navegador.Controlador;
+            var filtroJson = this.ObtenerFiltroPorId(id);
+
+            let url: string = `/${controlador}/${Ajax.EndPoint.LeerDatosParaElGrid}`;
+            let parametros: string = `${Ajax.Param.modo}=Mantenimiento` +
+                `&${Ajax.Param.accion}=${atGrid.accion.buscar}` +
+                `&${Ajax.Param.posicion}=${0}` +
+                `&${Ajax.Param.cantidad}=${1}` +
+                `&${Ajax.Param.filtro}=${filtroJson}` +
+                `&${Ajax.Param.orden}=${[]}`;
+            let peticion: string = url + '?' + parametros;
+            return peticion;
+        }
+
 
         protected PromesaDeCargarGrid(accion: string, posicion: number): Promise<boolean> {
 
@@ -1105,6 +1184,7 @@
             return peticion;
         }
 
+
         private SiHayErrorAlCargarElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
             try {
@@ -1113,6 +1193,13 @@
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
             }
+        }
+
+        private CrearFilaDelIdEnElGrid(peticion: ApiDeAjax.DescriptorAjax): boolean {
+            let datosDeEntrada: DatosPeticionFiltrarPorId = (peticion.DatosDeEntrada as DatosPeticionFiltrarPorId);
+            let grid: GridDeDatos = datosDeEntrada.Grid;
+            grid.Estado.Agregar(atGrid.idSeleccionado, datosDeEntrada.Id);
+            return this.CrearFilasEnElGrid(peticion);
         }
 
         private CrearFilasEnElGrid(peticion: ApiDeAjax.DescriptorAjax): boolean {

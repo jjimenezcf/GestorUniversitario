@@ -58,6 +58,14 @@ var Crud;
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
+                    const querystring = window.location.search;
+                    const params = new URLSearchParams(querystring);
+                    if (params.has("id"))
+                        this.EditarRegistro(Numero(params.get("id")));
+                    else {
+                        this.InicializarOrdenacion();
+                        this.Buscar(atGrid.accion.buscar, 0);
+                    }
                     this.InicializarOrdenacion();
                     this.Buscar(atGrid.accion.buscar, 0);
                 }
@@ -65,6 +73,10 @@ var Crud;
             catch (error) {
                 MensajesSe.Error("Inicializando el crud", `Error al inicializar el crud ${this.IdCuerpoCabecera}`, error.message);
             }
+        }
+        EditarRegistro(id) {
+            this.FiltrarPorId(id)
+                .then(() => this.IraEditar());
         }
         InicializarOrdenacion() {
             let columnas = this.CabeceraTablaGrid.querySelectorAll("th");
@@ -90,7 +102,6 @@ var Crud;
             if (this.ModoTrabajo === ModoTrabajo.mantenimiento) {
                 this.PosicionarFiltro();
                 this.PosicionarGrid();
-                //EntornoSe.AjustarModalesAbiertas()
             }
             if (this.ModoTrabajo === ModoTrabajo.editando || this.ModoTrabajo === ModoTrabajo.consultando) {
                 if (!this.crudDeEdicion.EsModal)

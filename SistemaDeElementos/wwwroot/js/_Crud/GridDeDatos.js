@@ -25,6 +25,25 @@ var Crud;
         }
     }
     Crud.DatosPeticionNavegarGrid = DatosPeticionNavegarGrid;
+    class DatosPeticionFiltrarPorId {
+        constructor(grid, id) {
+            this._grid = grid;
+            this._id = id;
+        }
+        get Grid() {
+            return this._grid;
+        }
+        get Accion() {
+            return atGrid.accion.buscar;
+        }
+        get PosicionDesdeLaQueSeLee() {
+            return 0;
+        }
+        get Id() {
+            return this._id;
+        }
+    }
+    Crud.DatosPeticionFiltrarPorId = DatosPeticionFiltrarPorId;
     class InfoNavegador {
     }
     class Navegador {
@@ -421,6 +440,15 @@ var Crud;
                 let orden = this.Ordenacion.Leer(i);
                 clausulas.push(new ClausulaDeOrdenacion(orden.OrdenarPor, orden.Modo));
             }
+            return JSON.stringify(clausulas);
+        }
+        ObtenerFiltroPorId(id) {
+            var clausulas = new Array();
+            let propiedad = atControl.id;
+            let criterio = literal.filtro.criterio.igual;
+            let valor = id.toString();
+            let clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }
         ObtenerFiltros() {
@@ -858,6 +886,38 @@ var Crud;
             this.Grid.setAttribute(atGrid.cargando, 'S');
             a.Ejecutar();
         }
+        FiltrarPorId(id) {
+            if (this.Grid.getAttribute(atGrid.cargando) == 'S') {
+                MensajesSe.Error("FiltrarPorId", "El grid se está cargando");
+                return null;
+            }
+            let promesa = new Promise((resolve, reject) => {
+                let url = this.DefinirFiltroPorId(id);
+                var datosDePeticion = new DatosPeticionFiltrarPorId(this, id);
+                let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.LeerDatosParaElGrid, datosDePeticion, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                    resolve(this.CrearFilaDelIdEnElGrid(peticion));
+                }, (peticion) => {
+                    this.SiHayErrorAlCargarElGrid(peticion);
+                    reject(false);
+                });
+                this.Grid.setAttribute(atGrid.cargando, 'S');
+                a.Ejecutar();
+            });
+            return promesa;
+        }
+        DefinirFiltroPorId(id) {
+            var controlador = this.Navegador.Controlador;
+            var filtroJson = this.ObtenerFiltroPorId(id);
+            let url = `/${controlador}/${Ajax.EndPoint.LeerDatosParaElGrid}`;
+            let parametros = `${Ajax.Param.modo}=Mantenimiento` +
+                `&${Ajax.Param.accion}=${atGrid.accion.buscar}` +
+                `&${Ajax.Param.posicion}=${0}` +
+                `&${Ajax.Param.cantidad}=${1}` +
+                `&${Ajax.Param.filtro}=${filtroJson}` +
+                `&${Ajax.Param.orden}=${[]}`;
+            let peticion = url + '?' + parametros;
+            return peticion;
+        }
         PromesaDeCargarGrid(accion, posicion) {
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')
                 return null;
@@ -899,6 +959,12 @@ var Crud;
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');
             }
+        }
+        CrearFilaDelIdEnElGrid(peticion) {
+            let datosDeEntrada = peticion.DatosDeEntrada;
+            let grid = datosDeEntrada.Grid;
+            grid.Estado.Agregar(atGrid.idSeleccionado, datosDeEntrada.Id);
+            return this.CrearFilasEnElGrid(peticion);
         }
         CrearFilasEnElGrid(peticion) {
             let datosDeEntrada = peticion.DatosDeEntrada;

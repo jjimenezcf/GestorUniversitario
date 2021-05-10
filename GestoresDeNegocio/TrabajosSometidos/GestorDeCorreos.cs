@@ -118,8 +118,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
-            
-            ServicioDeCorreo.EnviarCorreoPara(CacheDeVariable.ServidorDeCorreo, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            string cuerpo = AdjuntarElementos(correoDtm);
+
+            ServicioDeCorreo.EnviarCorreoPara(CacheDeVariable.ServidorDeCorreo, receptores, correoDtm.Asunto, cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
@@ -128,9 +129,23 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
-            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, correoDtm.Cuerpo, true, archivos);
+            string cuerpo = AdjuntarElementos(correoDtm);
+
+            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+        }
+
+        private static string AdjuntarElementos(CorreoDtm correoDtm)
+        {
+            var elementos = correoDtm.Elementos.JsonToLista<string>();
+            var cuerpo = correoDtm.Cuerpo;
+            foreach (string elemento in elementos)
+            {
+                cuerpo = $"{cuerpo}{Environment.NewLine}{Environment.NewLine}{elemento}";
+            }
+
+            return cuerpo;
         }
     }
 }

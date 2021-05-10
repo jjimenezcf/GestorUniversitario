@@ -38,13 +38,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public GestorDeTrabajosDeUsuario GestorDelTrabajo { get; private set; }
         public TrabajoDeUsuarioDtm Trabajo { get; private set; }
         public ContextoSe contextoDelProceso { get; set; }
-        public ContextoSe contextosDelEntorno => GestorDelTrabajo.Contexto;
+        public ContextoSe ContextoDelEntorno => GestorDelTrabajo.Contexto;
 
         public bool HayErrores
         {
             get
             {
-                var gestor = GestorDeErroresDeUnTrabajo.Gestor(contextosDelEntorno, contextosDelEntorno.Mapeador);
+                var gestor = GestorDeErroresDeUnTrabajo.Gestor(ContextoDelEntorno, ContextoDelEntorno.Mapeador);
                 var filtro = new ClausulaDeFiltrado { Clausula = nameof(ErrorDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = Trabajo.Id.ToString() };
                 return gestor.LeerRegistros(1, 1, new List<ClausulaDeFiltrado> { filtro }).Count > 0;
             }
@@ -63,18 +63,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public int AnotarTraza(int id, string traza)
         {
-            return GestorDeTrazasDeUnTrabajo.AnotarTraza(contextosDelEntorno, Trabajo, id, traza);
+            return GestorDeTrazasDeUnTrabajo.AnotarTraza(ContextoDelEntorno, Trabajo, id, traza);
         }
 
         internal void ModificarUltimaTraza(string traza)
         {
-            TrazaDeUnTrabajoDtm registroDeTraza = GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(contextosDelEntorno, Trabajo.Id);
+            TrazaDeUnTrabajoDtm registroDeTraza = GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(ContextoDelEntorno, Trabajo.Id);
             AnotarTraza(registroDeTraza.Id, traza);
         }
 
         public void AnotarError(Exception e)
         {
-            GestorDeErroresDeUnTrabajo.AnotarError(contextosDelEntorno, Trabajo, e);
+            GestorDeErroresDeUnTrabajo.AnotarError(ContextoDelEntorno, Trabajo, e);
         }
 
         public bool IniciarTransaccion()
@@ -93,7 +93,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public void PonerSemaforo()
         {
             GestorDeSemaforoDeTrabajos.PonerSemaforo(Trabajo);
-            AnotarTraza($"Trabajo iniciado por el usuario {contextosDelEntorno.DatosDeConexion.Login}");
+            AnotarTraza($"Trabajo iniciado por el usuario {ContextoDelEntorno.DatosDeConexion.Login}");
         }
 
         public void QuitarSemaforo(string traza)
@@ -107,8 +107,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
             AnotarError(e);
             if (Trabajo.Trabajo.ComunicarError)
             {
-                GestorDeCorreos.EnviarCorreoDe(contextosDelEntorno
-                    , GestorDeUsuarios.LeerUsuario(contextosDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                GestorDeCorreos.EnviarCorreoDe(ContextoDelEntorno
+                    , GestorDeUsuarios.LeerUsuario(ContextoDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Error al ejecutar el trabajo {Trabajo.Trabajo.Nombre}"
                     , $"Error en la ejecución del trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado}, acceda al mantenimiento de trabajos de usuario para visualizar los errores"
@@ -121,12 +121,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             if (Trabajo.Trabajo.ComunicarFin)
             {
-                GestorDeCorreos.EnviarCorreoDe(contextosDelEntorno
-                    , GestorDeUsuarios.LeerUsuario(contextosDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                var urls = new List<string>();
+                urls.Add($"{CacheDeVariable.UrlBase}TrabajosDeUsuario/CrudDeTrabajosDeUsuario?id={Trabajo.Id}");
+                GestorDeCorreos.EnviarCorreoDe(ContextoDelEntorno
+                    , GestorDeUsuarios.LeerUsuario(ContextoDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
                     , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza y a los errores para ver el resultado"
-                    , null
+                    , urls
                     , null);
             }
         }
@@ -251,7 +253,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             try
             {
                 var metodo = GestorDeTrabajosSometido.ValidarExisteTrabajoSometido(entorno.Trabajo.Trabajo);
-                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.contextosDelEntorno))
+                using (var contextoPr = ContextoSe.ObtenerContexto(entorno.ContextoDelEntorno))
                 {
                     entorno.contextoDelProceso = contextoPr;
                     metodo.Invoke(null, new object[] { entorno });

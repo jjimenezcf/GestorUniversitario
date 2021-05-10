@@ -72,10 +72,10 @@ namespace GestoresDeNegocio.Entorno
 
         public static VariableDtm VariableDeRutaDeExportaciones(ContextoSe contexto)
         {
-            var ruta = LeerVariable(contexto, Variable.Ruta_De_Exportaciones, false);
+            var ruta = LeerVariable(contexto, Variable.CFG_Ruta_De_Exportaciones, false);
             
             if (ruta == null)
-                ruta = CrearVariable(contexto, Variable.Ruta_De_Exportaciones, "Directorio donde se genera la documentación a exportar", RutaDeExportaciones);
+                ruta = CrearVariable(contexto, Variable.CFG_Ruta_De_Exportaciones, "Directorio donde se genera la documentación a exportar", RutaDeExportaciones);
 
             if (!Directory.Exists(ruta.Valor))
                 Directory.CreateDirectory(ruta.Valor);
@@ -85,14 +85,14 @@ namespace GestoresDeNegocio.Entorno
 
         public static VariableDtm VariableDeRutaDeBinarios(ContextoSe contexto)
         {
-            var ruta = LeerVariable(contexto, Variable.Ruta_De_Binarios, false);
+            var ruta = LeerVariable(contexto, Variable.CFG_Ruta_De_Binarios, false);
             if (ruta == null)
             {
                 var rutaBinarios = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
                 //if (!Directory.Exists(RutaDeBinarios))
                 //    Directory.CreateDirectory(RutaDeBinarios);
                 //var rutaAbsoluta = Path.GetFullPath(RutaDeBinarios);
-                ruta = CrearVariable(contexto, Variable.Ruta_De_Binarios, "Directorio donde se genera los binarios del sistema", rutaBinarios);
+                ruta = CrearVariable(contexto, Variable.CFG_Ruta_De_Binarios, "Directorio donde se genera los binarios del sistema", rutaBinarios);
             }
 
             return ruta;

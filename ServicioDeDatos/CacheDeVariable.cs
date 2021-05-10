@@ -12,12 +12,13 @@ namespace ServicioDeDatos
 
     public class Variable
     {
-        public static readonly string Version = $"CFG_{nameof(Version)}";
-        public static readonly string Debugar_Sqls = $"CFG_{nameof(Debugar_Sqls)}";
-        public static readonly string Servidor_Archivos = $"CFG_{nameof(Servidor_Archivos)}";
-        public static readonly string Ruta_De_Binarios = $"CFG_{nameof(Ruta_De_Binarios)}";
-        public static readonly string Ruta_De_Exportaciones = $"CFG_{nameof(Ruta_De_Exportaciones)}";
-        public static readonly string Servidor_De_Correo = $"CFG_{nameof(Servidor_De_Correo)}"; 
+        public static readonly string CFG_Version = nameof(CFG_Version);
+        public static readonly string CFG_Debugar_Sqls = nameof(CFG_Debugar_Sqls);
+        public static readonly string CFG_Servidor_Archivos = nameof(CFG_Servidor_Archivos);
+        public static readonly string CFG_Ruta_De_Binarios = nameof(CFG_Ruta_De_Binarios);
+        public static readonly string CFG_Ruta_De_Exportaciones = nameof(CFG_Ruta_De_Exportaciones);
+        public static readonly string CFG_Servidor_De_Correo = nameof(CFG_Servidor_De_Correo);
+        public static readonly string CFG_UrlBase = nameof(CFG_UrlBase);
 
 
         public static readonly string Cola_Activa = nameof(Cola_Activa);
@@ -36,9 +37,9 @@ namespace ServicioDeDatos
         {
             get
             {
-                if (!cacheVariables.ContainsKey(Variable.Servidor_Archivos))
-                    cacheVariables[Variable.Servidor_Archivos] = LeerValorDeVariable(Variable.Servidor_Archivos);
-                return cacheVariables[Variable.Servidor_Archivos].ToString();
+                if (!cacheVariables.ContainsKey(Variable.CFG_Servidor_Archivos))
+                    cacheVariables[Variable.CFG_Servidor_Archivos] = LeerValorDeVariable(Variable.CFG_Servidor_Archivos);
+                return cacheVariables[Variable.CFG_Servidor_Archivos].ToString();
             }
         }
 
@@ -46,9 +47,9 @@ namespace ServicioDeDatos
         {
             get
             {
-                if (!cacheVariables.ContainsKey(Variable.Servidor_De_Correo))
-                    cacheVariables[Variable.Servidor_De_Correo] = LeerCrear(Variable.Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
-                return cacheVariables[Variable.Servidor_De_Correo].ToString();
+                if (!cacheVariables.ContainsKey(Variable.CFG_Servidor_De_Correo))
+                    cacheVariables[Variable.CFG_Servidor_De_Correo] = LeerCrear(Variable.CFG_Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
+                return cacheVariables[Variable.CFG_Servidor_De_Correo].ToString();
             }
         }
 
@@ -56,9 +57,9 @@ namespace ServicioDeDatos
         {
             get
             {
-                if (!cacheVariables.ContainsKey(Variable.Debugar_Sqls))
-                    cacheVariables[Variable.Debugar_Sqls] = LeerValorDeVariable(Variable.Debugar_Sqls);
-                return cacheVariables[Variable.Debugar_Sqls].ToString() == "S";
+                if (!cacheVariables.ContainsKey(Variable.CFG_Debugar_Sqls))
+                    cacheVariables[Variable.CFG_Debugar_Sqls] = LeerValorDeVariable(Variable.CFG_Debugar_Sqls);
+                return cacheVariables[Variable.CFG_Debugar_Sqls].ToString() == "S";
             }
         }
 
@@ -66,9 +67,19 @@ namespace ServicioDeDatos
         {
             get
             {
-                if (!cacheVariables.ContainsKey(Variable.Version))
-                    cacheVariables[Variable.Version] = LeerValorDeVariable(Variable.Version);
-                return cacheVariables[Variable.Version].ToString();
+                if (!cacheVariables.ContainsKey(Variable.CFG_Version))
+                    cacheVariables[Variable.CFG_Version] = LeerValorDeVariable(Variable.CFG_Version);
+                return cacheVariables[Variable.CFG_Version].ToString();
+            }
+        }
+
+        public static string UrlBase
+        {
+            get
+            {
+                if (!cacheVariables.ContainsKey(Variable.CFG_UrlBase))
+                    cacheVariables[Variable.CFG_UrlBase] = LeerCrear(Variable.CFG_UrlBase, "Indica el sitio WEB donde está ubicado", "https://localhost:44396/");
+                return cacheVariables[Variable.CFG_UrlBase].ToString();
             }
         }
 
