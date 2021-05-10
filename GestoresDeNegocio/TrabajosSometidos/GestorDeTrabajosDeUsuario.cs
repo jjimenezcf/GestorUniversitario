@@ -355,6 +355,27 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return registros;
         }
 
+        protected override IQueryable<TrabajoDeUsuarioDtm> AplicarFiltros(IQueryable<TrabajoDeUsuarioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(ElementoDtm.Nombre).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        registros = registros.Where(x => x.Trabajo.Nombre.Contains(filtro.Valor));
+                    else
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Trabajo.Nombre.Equals(filtro.Valor));
+                    else
+                        GestorDeErrores.Emitir($"Se ha solicitado filtrar por {filtro.Criterio} en el gestor {nameof(GestorDeTrabajosDeUsuario)} y no se ha implementado el filtro");
+                }
+            }
+
+            return registros;
+        }
+
         protected override void AntesDePersistirValidarRegistro(TrabajoDeUsuarioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
