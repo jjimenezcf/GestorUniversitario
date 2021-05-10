@@ -43,8 +43,7 @@ namespace ModeloDeDto.Seguridad
             GuardarEn = nameof(IdUsuario),
             Fila = 1,
             Columna = 0,
-            Ordenar = true,
-            PorAnchoMnt = 15
+            Ordenar = true
             )
         ]
         public string Usuario { get; set; }

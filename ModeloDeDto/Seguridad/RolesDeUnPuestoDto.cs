@@ -42,8 +42,7 @@ namespace ModeloDeDto.Seguridad
             GuardarEn = nameof(IdRol),
             Fila = 1,
             Columna = 0,
-            Ordenar = true,
-            PorAnchoMnt = 15
+            Ordenar = true
             )
         ]
         public string Rol { get; set; }

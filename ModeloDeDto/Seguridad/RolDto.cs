@@ -10,8 +10,7 @@
             Tipo = typeof(string),
             Fila = 0,
             Columna = 0,
-            Ordenar = true,
-            PorAnchoMnt = 50
+            Ordenar = true
             )
         ]
         public string Nombre { get; set; }
@@ -23,8 +22,7 @@
             Tipo = typeof(string),
             Fila = 0,
             Columna = 0,
-            Ordenar = true,
-            PorAnchoMnt = 50
+            Ordenar = true
             )
         ]
         public string Descripcion { get; set; }
