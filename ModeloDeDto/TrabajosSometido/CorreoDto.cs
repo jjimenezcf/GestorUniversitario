@@ -2,7 +2,7 @@
 using Enumerados;
 using ModeloDeDto.Entorno;
 
-namespace ModeloDeDto.TrabajosSometido
+namespace ModeloDeDto.TrabajosSometidos
 {
     public static class ltrExportacion
     {
@@ -19,23 +19,25 @@ namespace ModeloDeDto.TrabajosSometido
 
         //--------------------------------------------
         [IUPropiedad(
-            Etiqueta = "Creador",
-            Ayuda = "mensaje creado por",
-            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
-            MostrarExpresion = nameof(Creador),
-            Fila = 0,
-            Columna = 0,
-            EditableAlCrear = false,
-            EditableAlEditar = false,
-            VisibleEnGrid = true
+            Etiqueta = "Id del usuario creador del correo",
+            Visible = false
             )
         ]
-        public int IdUsuario { get; set; }
+        public int? IdUsuario { get; set; }
 
         //--------------------------------------------
         [IUPropiedad(
-            Etiqueta = "Creador",
-            Visible = false
+            Etiqueta = "Creado por",
+            Ayuda = "Usuario creador",
+            TipoDeControl = enumTipoControl.ListaDinamica,
+            SeleccionarDe = typeof(UsuarioDto),
+            GuardarEn = nameof(IdUsuario),
+            MostrarExpresion = UsuarioDto.ExpresionElemento,
+            Fila = 0,
+            Columna = 0,
+            VisibleEnGrid = true,
+            EditableAlEditar = false,
+            Obligatorio = false
             )
         ]
         public string Creador { get; set; }

@@ -18,6 +18,7 @@ using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Callejero;
 using GestoresDeNegocio.TrabajosSometidos;
 using ColaDeTrabajosSometidos;
+using Gestor.Errores;
 
 namespace MVCSistemaDeElementos
 {
@@ -70,7 +71,7 @@ namespace MVCSistemaDeElementos
                 });
             });
 
-            services.AddScoped<Gestor.Errores.GestorDeErrores>();
+            services.AddScoped<GestorDeErrores>();
             services.AddScoped<GestorDeArbolDeMenu>();
             services.AddScoped<GestorDeUsuarios>();
             services.AddScoped<GestorDePermisos>();
@@ -96,6 +97,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeTrabajosDeUsuario>();
             services.AddScoped<GestorDeTrazasDeUnTrabajo>();
             services.AddScoped<GestorDeErroresDeUnTrabajo>();
+            services.AddScoped<GestorDeCorreos>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

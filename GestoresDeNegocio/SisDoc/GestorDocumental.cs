@@ -18,7 +18,7 @@ using GestoresDeNegocio.TrabajosSometidos;
 using Newtonsoft.Json;
 using Enumerados;
 using System.Linq;
-using ModeloDeDto.TrabajosSometido;
+using ModeloDeDto.TrabajosSometidos;
 using ServicioDeCorreos;
 
 namespace GestoresDeNegocio.Archivos

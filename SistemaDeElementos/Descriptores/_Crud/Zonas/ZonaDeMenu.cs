@@ -147,7 +147,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal void AnadirOpcionDeCancelarEdicion()
         {
             var cancelarEdicion = new CancelarEdicion();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cancelar", enumModoDeAccesoDeDatos.Consultor);
+            var opcion = new OpcionDeMenu<TElemento>(Menu, cancelarEdicion, $"Cerrar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }
         #endregion

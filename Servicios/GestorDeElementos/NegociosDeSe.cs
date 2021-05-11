@@ -13,6 +13,7 @@ using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Seguridad;
+using ModeloDeDto.TrabajosSometidos;
 using ServicioDeDatos;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Callejero;
@@ -20,6 +21,7 @@ using ServicioDeDatos.Elemento;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
+using ServicioDeDatos.TrabajosSometidos;
 using Utilidades;
 
 namespace GestorDeElementos
@@ -46,7 +48,8 @@ namespace GestorDeElementos
         TipoPermiso,
         Archivos,
         Pais,
-        Provincia
+        Provincia,
+        Correo
     }
 
     public class NegocioAttribute : Attribute
@@ -78,7 +81,8 @@ namespace GestorDeElementos
            enumNegocio.Variable,
            enumNegocio.Negocio,
            enumNegocio.Permiso,
-           enumNegocio.Usuario
+           enumNegocio.Usuario,
+           enumNegocio.Correo
         };
 
 
@@ -125,6 +129,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return "Roles";
                 case enumNegocio.Pais: return "Paises";
                 case enumNegocio.Provincia: return "Provincias";
+                case enumNegocio.Correo: return "Correos";
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
         }
@@ -149,6 +154,7 @@ namespace GestorDeElementos
                 case "Roles": return enumNegocio.Rol;
                 case "Paises": return enumNegocio.Pais;
                 case "Provincias": return enumNegocio.Provincia;
+                case "Correos": return enumNegocio.Correo;
             }
 
             if (EsUnRegistro(negocio))
@@ -171,6 +177,7 @@ namespace GestorDeElementos
                 case nameof(PuestoDto): return enumNegocio.Puesto;
                 case nameof(PaisDto): return enumNegocio.Pais;
                 case nameof(ProvinciaDto): return enumNegocio.Provincia;
+                case nameof(CorreoDto): return enumNegocio.Correo;
             }
 
             return enumNegocio.No_Definido;
@@ -190,6 +197,7 @@ namespace GestorDeElementos
                 case nameof(PuestoDtm): return enumNegocio.Puesto;
                 case nameof(PaisDtm): return enumNegocio.Pais;
                 case nameof(ProvinciaDtm): return enumNegocio.Provincia;
+                case nameof(CorreoDtm): return enumNegocio.Correo;
             }
 
             return enumNegocio.No_Definido;
@@ -209,6 +217,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return typeof(RolDtm);
                 case enumNegocio.Pais: return typeof(PaisDtm);
                 case enumNegocio.Provincia: return typeof(ProvinciaDtm);
+                case enumNegocio.Correo: return typeof(CorreoDtm);
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dtm");
         }
@@ -227,6 +236,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return typeof(RolDto);
                 case enumNegocio.Pais: return typeof(PaisDto);
                 case enumNegocio.Provincia: return typeof(ProvinciaDto);
+                case enumNegocio.Correo: return typeof(CorreoDto);
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dto");
         }
@@ -244,6 +254,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return new RolDtm();
                 case enumNegocio.Pais: return new PaisDtm();
                 case enumNegocio.Provincia: return new ProvinciaDtm();
+                case enumNegocio.Correo: return new CorreoDtm();
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
         }

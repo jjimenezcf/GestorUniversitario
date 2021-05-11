@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using ServicioDeDatos;
 using GestorDeElementos;
-using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.TrabajosSometidos;
 using ModeloDeDto.TrabajosSometidos;
 using System;
-using Gestor.Errores;
-using ModeloDeDto.TrabajosSometido;
 using GestoresDeNegocio.Entorno;
 using Enumerados;
 using ServicioDeCorreos;
-using Utilidades;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using ServicioDeDatos.Elemento;
+using ModeloDeDto;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -22,7 +22,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             public MapearArchivos()
             {
-                CreateMap<CorreoDtm, CorreoDto>();
+                CreateMap<CorreoDtm, CorreoDto>()
+                .ForMember(dto => dto.Creador, dtm => dtm.MapFrom(x => $"({x.Usuario.Login})- {x.Usuario.Nombre} {x.Usuario.Apellido}"));
                 CreateMap<CorreoDto, CorreoDtm>();
             }
         }
@@ -105,13 +106,16 @@ namespace GestoresDeNegocio.TrabajosSometidos
             gestor.EnviarCorreoDe(correoDtm);
         }
 
-        protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)
+        private static string AdjuntarElementos(CorreoDtm correoDtm)
         {
-            base.AntesDePersistir(registro, parametros);
-            if (parametros.Operacion == enumTipoOperacion.Insertar)
+            var elementos = correoDtm.Elementos.JsonToLista<string>();
+            var cuerpo = correoDtm.Cuerpo;
+            foreach (string elemento in elementos)
             {
-                registro.Creado = DateTime.Now;
+                cuerpo = $"{cuerpo}{Environment.NewLine}{Environment.NewLine}{elemento}";
             }
+
+            return cuerpo;
         }
 
         private void EnviarCorreoPara(CorreoDtm correoDtm)
@@ -136,16 +140,41 @@ namespace GestoresDeNegocio.TrabajosSometidos
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
 
-        private static string AdjuntarElementos(CorreoDtm correoDtm)
+        protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)
         {
-            var elementos = correoDtm.Elementos.JsonToLista<string>();
-            var cuerpo = correoDtm.Cuerpo;
-            foreach (string elemento in elementos)
+            base.AntesDePersistir(registro, parametros);
+            if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
-                cuerpo = $"{cuerpo}{Environment.NewLine}{Environment.NewLine}{elemento}";
+                registro.Creado = DateTime.Now;
+            }
+        }
+
+        protected override IQueryable<CorreoDtm> AplicarJoins(IQueryable<CorreoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Usuario);
+            return registros;
+        }
+
+        protected override IQueryable<CorreoDtm> AplicarFiltros(IQueryable<CorreoDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(ElementoDtm.Nombre).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        registros = registros.Where(x => x.Asunto.Contains(filtro.Valor));
+                    else
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        registros = registros.Where(x => x.Asunto.Equals(filtro.Valor));
+                    else
+                        GestorDeErrores.Emitir($"Se ha solicitado filtrar por {filtro.Criterio} en el gestor {nameof(GestorDeTrabajosDeUsuario)} y no se ha implementado el filtro");
+                }
             }
 
-            return cuerpo;
+            return registros;
         }
     }
 }

@@ -19,10 +19,10 @@ namespace MVCSistemaDeElementos.Controllers
     public class TrabajosDeUsuarioController : EntidadController<ContextoSe, TrabajoDeUsuarioDtm, TrabajoDeUsuarioDto>
     {
 
-        public TrabajosDeUsuarioController(GestorDeTrabajosDeUsuario gestorDeNegocios, GestorDeErrores gestorDeErrores)
+        public TrabajosDeUsuarioController(GestorDeTrabajosDeUsuario gestorDeTu, GestorDeErrores gestorDeErrores)
         :base
         (
-          gestorDeNegocios, 
+          gestorDeTu, 
           gestorDeErrores, 
           new DescriptorDeTrabajosDeUsuario(ModoDescriptor.Mantenimiento)
         )
