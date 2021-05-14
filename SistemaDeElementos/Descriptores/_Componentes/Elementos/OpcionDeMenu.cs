@@ -142,6 +142,13 @@ namespace MVCSistemaDeElementos.Descriptores
         {
         }
     }
+    public class EnviarElementos : AccionDeMenuMnt
+    {
+        public EnviarElementos()
+        : base(TipoDeAccionDeMnt.EnviarElementos, enumCssOpcionMenu.DeElemento, "Enviar elementos")
+        {
+        }
+    }
     public class RelacionarElementos : AccionDeMenuMnt
     {
         public string IdHtmlDeLaModalAsociada { get; private set; }

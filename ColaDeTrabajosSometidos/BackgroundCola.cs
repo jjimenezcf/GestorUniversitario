@@ -42,10 +42,11 @@ namespace ColaDeTrabajosSometidos
                     {
                         if (CacheDeVariable.Cola_Trazar)
                             gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
-
+                       
+                        Task t = gestor.ProcesarCola(Usuario);
                         try
                         {
-                            await gestor.ProcesarCola(Usuario);
+                            await t;
                         }
                         catch (Exception e)
                         {

@@ -411,10 +411,10 @@ namespace GestorDeElementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true, bool conBloqueo = false)
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true, bool traqueado = false, bool conBloqueo = false)
         {
             if (!usarLaCache)
-                return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: !usarLaCache, conBloqueo);
+                return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado, conBloqueo);
 
             return LeerRegistroCacheado(nameof(IRegistro.Id), id.ToString());
         }

@@ -6,7 +6,14 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta }
 
-    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones, EventosModalDeCrearRelaciones, EventosModalDeExportacion, EventosDelMantenimiento, EventosDelFormulario, EventosModalDeSeleccion, EventosDeListaDinamica }
+    public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones
+            , EventosModalDeCrearRelaciones
+            , EventosModalDeExportacion
+            , EventosModalDeEnviarCorreo
+            , EventosDelMantenimiento
+            , EventosDelFormulario
+            , EventosModalDeSeleccion
+            , EventosDeListaDinamica }
 
     public static class TipoAccionDeListaDinamica
     {
@@ -19,8 +26,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionDeMnt
     {
         public const string CrearElemento = "crear-elemento";
-        public const string EditarElemento = "editar-elemento";
+        public const string EditarElemento = "editar-elemento"; 
         public const string ExportarElemento = "exportar-elementos";
+        public const string EnviarElementos = "enviar-elementos";
         public const string EliminarElemento = "eliminar-elemento";
         public const string RelacionarElementos = "relacionar-elementos";
         public const string GestionarDependencias = "gestionar-dependencias";
@@ -70,6 +78,12 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string Cerrar = "cerrar-exportacion";
         public const string PulsarSometer = "pulsar-someter";
         public const string SalirListaDeCorreos = "salir-lista-correos";
+    }
+
+    public static class TipoDeAccionDeEnviarCorreo
+    {
+        public const string Enviar = "enviar-correo";
+        public const string Cerrar = "cerrar-enviar-correo";
     }
 
     public enum enumModoOrdenacion
@@ -259,6 +273,14 @@ namespace MVCSistemaDeElementos.Descriptores
         enviar
     }
 
+    public enum enumCssEnviarCorreo
+    {
+        Contenedor,
+        cabecera,
+        cuerpo,
+        adjuntos
+    }
+
     public static class MetodosDeRenderizacion
     {
         public static string Render(this enumModoOrdenacion modo)
@@ -276,6 +298,21 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public static class Css
     {
+
+        public static string Render(this enumCssEnviarCorreo clase)
+        {
+            switch (clase)
+            {
+                case enumCssEnviarCorreo.Contenedor: return "enviar-correo-contenedor";
+                case enumCssEnviarCorreo.cabecera: return "enviar-correo-cabecera";
+                case enumCssEnviarCorreo.cuerpo: return "enviar-correo-cuerpo";
+                case enumCssEnviarCorreo.adjuntos: return "enviar-correo-adjuntos";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario de exportación");
+
+        }
+
+
         public static string Render(this enumCssExportacion clase)
         {
             switch (clase)

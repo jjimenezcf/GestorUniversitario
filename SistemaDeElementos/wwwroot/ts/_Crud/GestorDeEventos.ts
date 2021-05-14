@@ -15,6 +15,10 @@
                     crudMnt.ModalExportacion_Abrir();
                     break;
                 }
+                case Evento.Mnt.EnviarCorreo: {
+                    crudMnt.ModalEnviarCorreo_Abrir();
+                    break;
+                }
                 case Evento.Mnt.Borrar: {
                     crudMnt.ModalDeBorrado_Abrir();
                     break;
@@ -392,6 +396,24 @@
                 }
                 case Evento.ModalExportacion.Exportar: {
                     crudMnt.ModalExportacion_Exportar();
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
+        }
+    }
+
+    export function EventosModalDeEnviarCorreo(accion: string): void {
+        try {
+            switch (accion) {
+                case Evento.ModalEnviarCorreo.Cerrar: {
+                    crudMnt.ModalEnviarCorreo_Cerrar();
                     break;
                 }
                 default: {

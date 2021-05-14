@@ -24,6 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCreacion<TElemento> Creador { get; private set; }
         public DescriptorDeEdicion<TElemento> Editor { get; private set; }
         public DescriptorDeExportacion<TElemento> Exportador { get; private set; }
+        public DescriptorDeEnviarCorreo<TElemento> Cartero { get; private set; }
         public DescriptorDeBorrado<TElemento> Borrado { get; private set; }
 
         public string Controlador { get; private set; }
@@ -80,10 +81,12 @@ namespace MVCSistemaDeElementos.Descriptores
             Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
             Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
             Exportador = new DescriptorDeExportacion<TElemento>(crud: this);
+            Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
             Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
             Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
             Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
             Mnt.ZonaMenu.AnadirOpcionDeIrAExportar();
+            Mnt.ZonaMenu.AnadirOpcionDeIrAEnviar();
             Mnt.ZonaMenu.AnadirOpcionDeBorrar();
 
             DefinirDescriptorDeAuditoria();
@@ -201,6 +204,8 @@ namespace MVCSistemaDeElementos.Descriptores
                   {Editor.RenderDeEdicion()}
                   <!--  *******************  div de exportacion ******************* -->
                   {Exportador.RenderDeExportacion()}
+                  <!--  *******************  div de envío de correo *************** -->
+                  {Cartero.RenderDeEnvioDeCorreo()}
                   <!--  *******************  div de borrado ******************* -->
                   {Borrado.RenderDelBorrado()}";
 

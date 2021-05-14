@@ -147,7 +147,7 @@ namespace GestoresDeNegocio.Archivos
             dynamic elementos = metodo.Invoke(gestor, new object[] { posicion, cantidad, filtros, orden, opcionesDeMapeo });
             var ficheroConRuta = GenerarExcel(entorno.contextoDelProceso, elementos);
 
-            GestorDeCorreos.EnviarCorreoPara(entorno.contextoDelProceso
+            GestorDeCorreos.CrearCorreoPara(entorno.contextoDelProceso
                 , new List<string> { parametros[ltrExportacion.receptores].ToString() }
                 , "Exportación solicitada"
                 , "Se le adjunta el fichero con la exportación solicitada"

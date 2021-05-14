@@ -318,6 +318,10 @@ const Evento = {
         PulsarSometer: 'pulsar-someter',
         SalirListaCorreos: 'salir-lista-correos'
     },
+    ModalEnviarCorreo: {
+        Enviar: 'enviar-correo',
+        Cerrar: 'cerrar-enviar-correo'
+    },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",
         Cerrar: "cerrar-relacionar",
@@ -361,6 +365,7 @@ const Evento = {
         Crear: "crear-elemento",
         Editar: "editar-elemento",
         Exportar: "exportar-elementos",
+        EnviarCorreo: "enviar-elementos",
         Borrar: "eliminar-elemento",
         Relacionar: "relacionar-elementos",
         Dependencias: "gestionar-dependencias",
@@ -436,6 +441,7 @@ const ClaseDeOpcioDeMenu = {
 const ModoTrabajo = {
     creando: "creando",
     exportando: "exportando",
+    enviandoCorreo: "enviando-correo",
     editando: "editando",
     consultando: "consultando",
     copiando: "copiando",

@@ -11,17 +11,17 @@ namespace ServicioDeCorreos
 
     public class ServicioDeCorreo
     {
-        private static SmtpClient SmtpCliente;
+        private  SmtpClient SmtpCliente;
 
-        private static IConfigurationSection ServidorDeCorreo { get; set; }
+        private  IConfigurationSection ServidorDeCorreo { get; set; }
 
 
-        private static string Sistema => ServidorDeCorreo["Sistema"].ToUpper();
-        private static string Usuario => ServidorDeCorreo["usuario"];
-        private static string Servidor => ServidorDeCorreo["servidor"];
-        private static bool SSL => ServidorDeCorreo["sslActivo"] == "true";
-        private static int Puerto => ServidorDeCorreo["puerto"].Entero();
-        private static string Password => ServidorDeCorreo["clave"];
+        private string Sistema => ServidorDeCorreo["Sistema"].ToUpper();
+        public  string Emisor => ServidorDeCorreo["usuario"];
+        private  string Servidor => ServidorDeCorreo["servidor"];
+        private  bool SSL => ServidorDeCorreo["sslActivo"] == "true";
+        private  int Puerto => ServidorDeCorreo["puerto"].Entero();
+        private  string Password => ServidorDeCorreo["clave"];
 
         public ServicioDeCorreo(string servidor)
         {
@@ -39,14 +39,14 @@ namespace ServicioDeCorreos
                     EnableSsl = SSL,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(Usuario, Password)
+                    Credentials = new NetworkCredential(Emisor, Password)
                 };
             }
             else
                 throw new Exception($"Sistema de correo {Sistema} no definido");
         }
 
-        private static void InicializaConfiguracion(string servidor)
+        private void InicializaConfiguracion(string servidor)
         {
             var generador = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
@@ -57,7 +57,7 @@ namespace ServicioDeCorreos
 
         internal void EnviarPara(List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)
         {
-            EnviarDe(Usuario, receptores, asunto, mensaje, esHtlm, archivos, prioridad);
+            EnviarDe(Emisor, receptores, asunto, mensaje, esHtlm, archivos, prioridad);
         }
 
         internal void EnviarDe(string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)

@@ -15,6 +15,10 @@ var Crud;
                     Crud.crudMnt.ModalExportacion_Abrir();
                     break;
                 }
+                case Evento.Mnt.EnviarCorreo: {
+                    Crud.crudMnt.ModalEnviarCorreo_Abrir();
+                    break;
+                }
                 case Evento.Mnt.Borrar: {
                     Crud.crudMnt.ModalDeBorrado_Abrir();
                     break;
@@ -399,6 +403,24 @@ var Crud;
         }
     }
     Crud.EventosModalDeExportacion = EventosModalDeExportacion;
+    function EventosModalDeEnviarCorreo(accion) {
+        try {
+            switch (accion) {
+                case Evento.ModalEnviarCorreo.Cerrar: {
+                    Crud.crudMnt.ModalEnviarCorreo_Cerrar();
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
+        }
+    }
+    Crud.EventosModalDeEnviarCorreo = EventosModalDeEnviarCorreo;
     function EjecutarMenuEdt(accion) {
         try {
             Crud.crudMnt.crudDeEdicion.EjecutarAcciones(accion);

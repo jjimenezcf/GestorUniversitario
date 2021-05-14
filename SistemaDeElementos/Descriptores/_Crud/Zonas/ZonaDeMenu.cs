@@ -117,6 +117,25 @@ namespace MVCSistemaDeElementos.Descriptores
             Menu.Add(opcion);
         }
 
+        internal void AnadirOpcionDeIrAEnviar()
+        {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeEnviar)))
+                return;
+
+            var enviarElementos = new EnviarElementos();
+            var opcion = new OpcionDeMenu<TElemento>(Menu, enviarElementos, $"Enviar", enumModoDeAccesoDeDatos.Consultor);
+            Menu.Add(opcion);
+        }
+
+        internal void AnadirOpcionDeBorrar()
+        {
+            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeBorrar)))
+                return;
+
+            var BorrarElemento = new BorrarElemento();
+            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumModoDeAccesoDeDatos.Gestor);
+            Menu.Add(opcion);
+        }
 
         #endregion
 
@@ -152,16 +171,6 @@ namespace MVCSistemaDeElementos.Descriptores
         }
         #endregion
 
-
-        internal void AnadirOpcionDeBorrar()
-        {
-            if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeBorrar)))
-                return;
-
-            var BorrarElemento = new BorrarElemento();
-            var opcion = new OpcionDeMenu<TElemento>(Menu, BorrarElemento, $"Borrar", enumModoDeAccesoDeDatos.Gestor);
-            Menu.Add(opcion);
-        }
 
         internal void QuitarOpcionDeMenu(string tipoDeAccion)
         {

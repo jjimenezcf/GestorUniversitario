@@ -39,6 +39,13 @@
             return document.getElementById(idModal) as HTMLDivElement;
         };
 
+        protected get ModalDeEnviarCorreo(): HTMLDivElement {
+            let idModal: string = this.IdCuerpoCabecera;
+            idModal = idModal.replace('mantenimiento', '');
+            idModal = idModal + 'panel-enviar-correo';
+            return document.getElementById(idModal) as HTMLDivElement;
+        };
+
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
@@ -434,6 +441,17 @@
             }
             this.PosicionarPanelesDelCuerpo();
         }
+
+        public ModalEnviarCorreo_Abrir() {
+            this.ModoTrabajo = ModoTrabajo.enviandoCorreo;
+            this.ModalDeEnviarCorreo.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
+        }
+
+        public ModalEnviarCorreo_Cerrar() {
+            this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
+        } 
 
         public ModalExportacion_Abrir() {
             this.ModoTrabajo = ModoTrabajo.exportando;

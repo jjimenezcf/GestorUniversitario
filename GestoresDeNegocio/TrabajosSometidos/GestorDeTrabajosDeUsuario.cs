@@ -107,8 +107,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             AnotarError(e);
             if (Trabajo.Trabajo.ComunicarError)
             {
-                GestorDeCorreos.EnviarCorreoDe(ContextoDelEntorno
-                    , GestorDeUsuarios.LeerUsuario(ContextoDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                GestorDeCorreos.CrearCorreoPara(ContextoDelEntorno
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Error al ejecutar el trabajo {Trabajo.Trabajo.Nombre}"
                     , $"Error en la ejecución del trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado}, acceda al mantenimiento de trabajos de usuario para visualizar los errores"
@@ -117,17 +116,16 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
-        internal void EnviarFinalizacion()
+        internal void ComunicarFinalizacion()
         {
             if (Trabajo.Trabajo.ComunicarFin)
             {
                 var urls = new List<string>();
                 urls.Add($"{CacheDeVariable.UrlBase}TrabajosDeUsuario/CrudDeTrabajosDeUsuario?id={Trabajo.Id}");
-                GestorDeCorreos.EnviarCorreoDe(ContextoDelEntorno
-                    , GestorDeUsuarios.LeerUsuario(ContextoDelEntorno, CacheDeVariable.Cola_LoginDeEjecutor).eMail
+                GestorDeCorreos.CrearCorreoPara(ContextoDelEntorno
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
-                    , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza y a los errores para ver el resultado"
+                    , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " y a los errores" : "")} para ver el resultado"
                     , urls
                     , null);
             }
@@ -136,7 +134,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
     public static class GestorDeTrabajosDeUsuarioExtension
     {
-        public static Task<resultadoDelProceso> ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
+        public static Task ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
         {
             CumplimentarDatosDeConexion(gestor, usuario);
 
@@ -144,6 +142,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (trabajosPorEjecutar.Count == 1)
                 GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id);
+
+            GestorDeCorreos.EnviarCorreoPendientes(contexto: gestor.Contexto);
 
             return Task.FromResult(new resultadoDelProceso());
         }
@@ -260,7 +260,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 entorno.Trabajo.Estado = !entorno.HayErrores
                     ? TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Terminado)
                     : TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores);
-                entorno.EnviarFinalizacion();
+                entorno.ComunicarFinalizacion();
             }
             catch (Exception e)
             {
