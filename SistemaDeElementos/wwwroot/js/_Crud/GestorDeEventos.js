@@ -245,6 +245,32 @@ var Crud;
         }
     }
     Crud.EventosModalDeCrearRelaciones = EventosModalDeCrearRelaciones;
+    function EventosModalDeSeleccionar(accion, parametros) {
+        let parIn = parametros.split("#");
+        let modal = Crud.crudMnt.ObtenerModalParaSeleccionar(parIn[0]);
+        if (modal === undefined) {
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Modal ${parIn[0]} no definida`);
+            return;
+        }
+        try {
+            switch (accion) {
+                case Evento.ModalParaSeleccionar.FilaPulsada: {
+                    let idCheck = parIn[1];
+                    let idOrigen = parIn[2]; // si se ha pulsado en el check o en la fila
+                    modal.FilaPulsada(idCheck, idOrigen);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error.message);
+        }
+    }
+    Crud.EventosModalDeSeleccionar = EventosModalDeSeleccionar;
     function EventosModalDeConsultaDeRelaciones(accion, parametros) {
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalParaConsultarRelaciones(parIn[0]);

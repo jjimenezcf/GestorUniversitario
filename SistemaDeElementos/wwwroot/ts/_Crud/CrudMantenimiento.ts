@@ -49,6 +49,7 @@
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
+        public ModalesParaSeleccionar: Array<ModalParaSeleccionar> = new Array<ModalParaSeleccionar>();
 
         public get OpcionesGenerales(): NodeListOf<HTMLButtonElement> {
             return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`) as NodeListOf<HTMLButtonElement>;
@@ -453,10 +454,26 @@
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
         } 
 
-        public ModalEnviarCorreo_SeleccionarUsuarios(modal: string) {
-            var div = document.getElementById(modal) as HTMLDivElement;
-            div.style.display = 'block';
-            EntornoSe.AjustarModalesAbiertas();
+        public ObtenerModalParaSeleccionar(idModal: string): ModalParaSeleccionar {
+            for (let i: number = 0; i < this.ModalesParaSeleccionar.length; i++) {
+                let modal: ModalParaSeleccionar = this.ModalesParaSeleccionar[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+
+            let modal: ModalParaSeleccionar = new ModalParaSeleccionar(this, idModal);
+            this.ModalesParaSeleccionar.push(modal);
+            return modal;
+        }
+
+        public ModalEnviarCorreo_SeleccionarUsuarios(idModal: string) {
+            this.ModalEnviarCorreo_Cerrar();
+
+            let modal: ModalParaSeleccionar = this.ObtenerModalParaSeleccionar(idModal);
+            if (modal === undefined)
+                throw new Error(`Modal ${idModal} no definida`);
+
+            modal.AbrirModalParaSeleccionar(null);
         } 
 
         public ModalExportacion_Abrir() {

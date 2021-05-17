@@ -366,6 +366,16 @@ const Evento = {
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
+    ModalParaSeleccionar: {
+        Buscar: "buscar-elementos",
+        FilaPulsada: "fila-pulsada",
+        ObtenerAnteriores: "obtener-anteriores",
+        ObtenerSiguientes: "obtener-siguientes",
+        ObtenerUltimos: "obtener-ultimos",
+        OrdenarPor: "ordenar-por",
+        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
+        TeclaPulsada: "tecla-pulsada"
+    },
     ModalParaConsultaDeRelaciones: {
         Cerrar: "cerrar-consulta",
         Buscar: "buscar-elementos",
@@ -517,6 +527,7 @@ const GestorDeEventos = {
     deCrearRelaciones: "Crud.EventosModalDeCrearRelaciones",
     deConsultaDeRelaciones: "Crud.EventosModalDeConsultaDeRelaciones",
     delMantenimiento: "Crud.EventosDelMantenimiento",
-    deListaDinamica: "Crud.EventosDeListaDinamica"
+    deListaDinamica: "Crud.EventosDeListaDinamica",
+    deSeleccionar: "Crud.EventosDeListaDinamica"
 };
 

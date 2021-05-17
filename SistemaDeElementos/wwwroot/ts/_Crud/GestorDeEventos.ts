@@ -249,6 +249,34 @@
         }
     }
 
+    export function EventosModalDeSeleccionar(accion: string, parametros: string): void {
+
+        let parIn: Array<string> = parametros.split("#");
+        let modal: ModalParaSeleccionar = crudMnt.ObtenerModalParaSeleccionar(parIn[0]);
+        if (modal === undefined) {
+            MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `Modal ${parIn[0]} no definida`);
+            return;
+        }
+        try {
+            switch (accion) {
+                case Evento.ModalParaSeleccionar.FilaPulsada: {
+                    let idCheck: string = parIn[1];
+                    let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
+                    modal.FilaPulsada(idCheck, idOrigen);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de crear relaciones, accion: ${accion}`, error.message);
+        }
+    }
+
+
     export function EventosModalDeConsultaDeRelaciones(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");

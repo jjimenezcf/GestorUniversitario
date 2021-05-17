@@ -278,8 +278,11 @@ var Crud;
         get EsModalParaRelacionar() {
             return this.constructor.name === Crud.ModalParaRelacionar.name;
         }
+        get EsModalParaSeleccionar() {
+            return this.constructor.name === Crud.ModalParaSeleccionar.name;
+        }
         get EsModalConGrid() {
-            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones;
+            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones || this.EsModalParaSeleccionar;
         }
         get EsCrud() {
             return EsObjetoDe(this, Crud.CrudMnt);
@@ -1082,16 +1085,18 @@ var Crud;
                 let idModal = this.Grid.getAttribute(atSelector.idModal);
                 a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
-            else {
-                if (this.EsModalParaConsultarRelaciones) {
-                    let idModal = this.Grid.getAttribute(atSelector.idModal);
-                    a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
-                }
-                else if (this.EsCrud)
-                    a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
-                else
-                    throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
+            else if (this.EsModalParaSeleccionar) {
+                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
+            else if (this.EsModalParaConsultarRelaciones) {
+                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+            }
+            else if (this.EsCrud)
+                a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+            else
+                throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
             return a;
         }
         insertarInputEnElTd(idFila, columnaCabecera, celdaDelTd, valor) {

@@ -53,7 +53,7 @@
         public get PosicionDesdeLaQueSeLee(): number {
             return 0;
         }
-        
+
         public get Id(): number {
             return this._id;
         }
@@ -336,8 +336,11 @@
             return this.constructor.name === ModalParaRelacionar.name;
         }
 
+        protected get EsModalParaSeleccionar(): boolean {
+            return this.constructor.name === ModalParaSeleccionar.name;
+        }
         protected get EsModalConGrid(): boolean {
-            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones;
+            return this.EsModalParaRelacionar || this.EsModalDeSeleccion || this.EsModalParaConsultarRelaciones || this.EsModalParaSeleccionar;
         }
 
         protected get EsCrud(): boolean {
@@ -1330,21 +1333,27 @@
                 let idModal: string = this.Grid.getAttribute(atSelector.idModal);
                 a = `${GestorDeEventos.deSeleccion}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
-            else if (this.EsModalParaRelacionar) {
-                let idModal: string = this.Grid.getAttribute(atSelector.idModal);
-                a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
-            }
-            else {
-                if (this.EsModalParaConsultarRelaciones) {
+            else
+                if (this.EsModalParaRelacionar) {
                     let idModal: string = this.Grid.getAttribute(atSelector.idModal);
-                    a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                    a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
                 }
                 else
-                    if (this.EsCrud)
-                        a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+                    if (this.EsModalParaSeleccionar) {
+                        let idModal: string = this.Grid.getAttribute(atSelector.idModal);
+                        a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                    }
                     else
-                        throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
-            }
+                        if (this.EsModalParaConsultarRelaciones) {
+                            let idModal: string = this.Grid.getAttribute(atSelector.idModal);
+                            a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                        }
+                        else
+                            if (this.EsCrud)
+                                a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
+                            else
+                                throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
+
             return a;
         }
 

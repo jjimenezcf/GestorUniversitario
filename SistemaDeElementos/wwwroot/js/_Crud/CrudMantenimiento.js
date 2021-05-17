@@ -7,6 +7,7 @@ var Crud;
             this.ModalesDeSeleccion = new Array();
             this.ModalesParaRelacionar = new Array();
             this.ModalesParaConsultarRelaciones = new Array();
+            this.ModalesParaSeleccionar = new Array();
             this._idModalBorrar = idModalDeBorrado;
         }
         get ModoAccesoDelUsuario() {
@@ -372,10 +373,22 @@ var Crud;
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
         }
-        ModalEnviarCorreo_SeleccionarUsuarios(modal) {
-            var div = document.getElementById(modal);
-            div.style.display = 'block';
-            EntornoSe.AjustarModalesAbiertas();
+        ObtenerModalParaSeleccionar(idModal) {
+            for (let i = 0; i < this.ModalesParaSeleccionar.length; i++) {
+                let modal = this.ModalesParaSeleccionar[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            let modal = new Crud.ModalParaSeleccionar(this, idModal);
+            this.ModalesParaSeleccionar.push(modal);
+            return modal;
+        }
+        ModalEnviarCorreo_SeleccionarUsuarios(idModal) {
+            this.ModalEnviarCorreo_Cerrar();
+            let modal = this.ObtenerModalParaSeleccionar(idModal);
+            if (modal === undefined)
+                throw new Error(`Modal ${idModal} no definida`);
+            modal.AbrirModalParaSeleccionar(null);
         }
         ModalExportacion_Abrir() {
             this.ModoTrabajo = ModoTrabajo.exportando;
