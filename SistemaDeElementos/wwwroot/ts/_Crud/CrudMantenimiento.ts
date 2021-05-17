@@ -46,13 +46,6 @@
             return document.getElementById(idModal) as HTMLDivElement;
         };
 
-        protected get ModalDeSeleccionarUsuariosDeCorreo(): HTMLDivElement {
-            let idModal: string = this.IdCuerpoCabecera;
-            idModal = idModal.replace('mantenimiento', '');
-            idModal = idModal + 'panel-enviar-correo';
-            return document.getElementById(idModal) as HTMLDivElement;
-        };
-
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
@@ -461,7 +454,8 @@
         } 
 
         public ModalEnviarCorreo_SeleccionarUsuarios(modal: string) {
-            this.ModalDeSeleccionarUsuariosDeCorreo.style.display = 'block';
+            var div = document.getElementById(modal) as HTMLDivElement;
+            div.style.display = 'block';
             EntornoSe.AjustarModalesAbiertas();
         } 
 
