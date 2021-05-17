@@ -53,15 +53,15 @@ namespace MVCSistemaDeElementos.Descriptores
             set { _negocio = value; }
         }
 
-        public string RenderNegocio => negocioDtm == null ? NegociosDeSe.ToString(Negocio): negocioDtm.Nombre;
-        public int RenderIdDeNegocio => negocioDtm == null ? 0 :negocioDtm.Id;
+        public string RenderNegocio => negocioDtm == null ? NegociosDeSe.ToString(Negocio) : negocioDtm.Nombre;
+        public int RenderIdDeNegocio => negocioDtm == null ? 0 : negocioDtm.Id;
 
         public NegocioDtm negocioDtm = null;
 
         public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase, string id = null)
         : base(
           padre: null,
-          id: id==null? $"{NombreCrud}": id,
+          id: id == null ? $"{NombreCrud}" : id,
           etiqueta: typeof(TElemento).Name.Replace("Dto", ""),
           propiedad: null,
           ayuda: null,
@@ -81,7 +81,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Creador = new DescriptorDeCreacion<TElemento>(crud: this, etiqueta: elemento);
             Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
             Exportador = new DescriptorDeExportacion<TElemento>(crud: this);
-            Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
+            if (modo == ModoDescriptor.Mantenimiento)
+               Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
             Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
             Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
             Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
@@ -150,7 +151,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
 
                     columna.OrdenarPor = atributos.OrdenarPor;
-                    columna.Alineada = atributos.Alineada == Aliniacion.no_definida ? columna.Tipo.Alineada(): atributos.Alineada;
+                    columna.Alineada = atributos.Alineada == Aliniacion.no_definida ? columna.Tipo.Alineada() : atributos.Alineada;
                     columna.PorAnchoMnt = atributos.PorAnchoMnt;
                     columna.PorAnchoSel = atributos.PorAnchoSel == 0 ? atributos.PorAnchoMnt : atributos.PorAnchoSel;
                     Mnt.Datos.InsertarColumna(columna, atributos.PosicionEnGrid);

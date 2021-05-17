@@ -84,6 +84,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public const string Enviar = "enviar-correo";
         public const string Cerrar = "cerrar-enviar-correo";
+        public const string SalirListaDeCorreos = "salir-lista-correos";
+        public const string SeleccionaUsuarios = "seleccionar-usuarios";
     }
 
     public enum enumModoOrdenacion

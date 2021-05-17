@@ -43,6 +43,13 @@ var Crud;
             return document.getElementById(idModal);
         }
         ;
+        get ModalDeSeleccionarUsuariosDeCorreo() {
+            let idModal = this.IdCuerpoCabecera;
+            idModal = idModal.replace('mantenimiento', '');
+            idModal = idModal + 'panel-enviar-correo';
+            return document.getElementById(idModal);
+        }
+        ;
         get OpcionesGenerales() {
             return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
         }
@@ -371,6 +378,10 @@ var Crud;
         ModalEnviarCorreo_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
+        }
+        ModalEnviarCorreo_SeleccionarUsuarios(modal) {
+            this.ModalDeSeleccionarUsuariosDeCorreo.style.display = 'block';
+            EntornoSe.AjustarModalesAbiertas();
         }
         ModalExportacion_Abrir() {
             this.ModoTrabajo = ModoTrabajo.exportando;

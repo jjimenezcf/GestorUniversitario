@@ -2,17 +2,18 @@
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class MenuDeFormulario
+    public class MenuDeFormulario: ControlHtml
     {
         public CabeceraDeFormulario Cabecera { get; }
 
-        public string IdHtml => $"menu-{Cabecera.IdHtml}".ToLower();
+        //public string IdHtml => $"menu-{Cabecera.IdHtml}".ToLower();
 
         public List<OpcionDeFormulario> Opciones { get; }
 
 
 
         public MenuDeFormulario(CabeceraDeFormulario cabecera)
+            : base(cabecera, $"menu-{cabecera.Id}", "", "", "", null)
         {
             Cabecera = cabecera;
             Opciones = new List<OpcionDeFormulario>();
@@ -24,6 +25,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderMenu()
         {
+            return RenderControl();
+        }
+
+        public override string RenderControl()
+        {
+
             var menu = "";
             var i = 0;
             foreach (var opcion in Opciones)

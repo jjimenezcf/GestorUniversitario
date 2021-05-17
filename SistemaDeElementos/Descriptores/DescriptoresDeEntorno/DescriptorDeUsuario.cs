@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeUsuario : DescriptorDeCrud<UsuarioDto>
     {
-        DescriptorDePuestosDeUnUsuario descriptorDePuestos = new DescriptorDePuestosDeUnUsuario(ModoDescriptor.Mantenimiento);
+       
         public DescriptorDeUsuario(ModoDescriptor modo): this(modo, null)
         {
 

@@ -1,0 +1,25 @@
+﻿.enviar-correo-contenedor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: "enviar-correo-cabecera" "enviar-correo-cuerpo" "enviar-correo-adjuntos";
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.enviar-correo-cabecera {
+    display: grid;
+    grid-area: enviar-correo-cabecera;
+}
+
+.enviar-correo-cuerpo {
+    display: grid;
+    grid-area: enviar-correo-cuerpo;
+    margin-bottom: 10px;
+    margin-left: 100px;
+}
+
+.enviar-correo-adjuntos {
+    display: grid;
+    grid-area: enviar-correo-adjuntos;
+}

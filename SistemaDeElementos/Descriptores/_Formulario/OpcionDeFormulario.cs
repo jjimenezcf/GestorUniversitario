@@ -30,6 +30,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public object Ayuda { get; }
 
+
+        private OpcionHtml opcion;
+
         public OpcionDeFormulario(MenuDeFormulario menu, string id, string etiqueta, enumAccionDeFormulario accion, string ayuda)
         {
             Menu = menu;
@@ -37,10 +40,16 @@ namespace MVCSistemaDeElementos.Descriptores
             Etiqueta = etiqueta;
             Accion = accion;
             Ayuda = ayuda;
+
+            new OpcionHtml(menu, id, etiqueta, ayuda, accion.Render());
+
         }
 
         public string RenderOpcion()
         {
+
+            
+
             return $@"<div id = ¨{IdHtml}¨ class=¨{Css.Render(enumCssControlesFormulario.ContenedorOpcion)}¨>
                         <input id=¨{IdHtml}¨ 
                                type=¨button¨ 

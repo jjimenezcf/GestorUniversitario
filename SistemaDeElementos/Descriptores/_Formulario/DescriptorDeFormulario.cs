@@ -4,11 +4,11 @@ using ServicioDeDatos.Entorno;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public class DescriptorDeFormulario
+    public class DescriptorDeFormulario: ControlHtml
     {
-        public string Id { get; }
+        //public string Id { get; }
 
-        public string IdHtml => Id.ToLower();
+        //public string IdHtml => Id.ToLower();
 
         public string Titulo { get; }
         public string Controlador { get; }
@@ -24,8 +24,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
 
         public DescriptorDeFormulario(string idHtml, string titulo, string controlador, string ruta, string vista)
+        : base(null, idHtml, titulo, "", "", null)
         {
-            Id = idHtml;
+            //Id = idHtml;
             Titulo = titulo;
             Controlador = controlador.Replace("Controller","");
             Vista = vista;
@@ -36,7 +37,12 @@ namespace MVCSistemaDeElementos.Descriptores
             Pie = new PieDeFormulario(this);
         }
 
-        public string RenderFormulario()
+        public  string RenderFormulario()
+        {
+            return RenderControl();
+        }
+
+        public override string RenderControl()
         {
             string formularioHtml;
             try
@@ -81,6 +87,5 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return formularioHtml;
         }
-
     }
 }

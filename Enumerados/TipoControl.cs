@@ -56,6 +56,7 @@ namespace Enumerados
         , pnlBorrado
         , ModalDeRelacion
         , ModalDeConsulta
+        , ModalDeSeleccion
         , FiltroEntreFechas
         , pnlExportacion
         , pnlEnviarCorreo
@@ -104,6 +105,7 @@ namespace Enumerados
                 case enumTipoControl.pnlBorrado: return "panel-borrado";
                 case enumTipoControl.ModalDeRelacion: return "modal-de-relacion";
                 case enumTipoControl.ModalDeConsulta: return "modal-de-consulta";
+                case enumTipoControl.ModalDeSeleccion: return "modal-de-seleccion";
                 case enumTipoControl.FiltroEntreFechas: return "filtro-entre-fechas";
             }
             throw new Exception($"El tipo de control {tipo} no está definido como renderizarlo");

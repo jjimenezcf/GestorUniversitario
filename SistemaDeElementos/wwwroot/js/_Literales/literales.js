@@ -320,7 +320,8 @@ const Evento = {
     },
     ModalEnviarCorreo: {
         Enviar: 'enviar-correo',
-        Cerrar: 'cerrar-enviar-correo'
+        Cerrar: 'cerrar-enviar-correo',
+        SeleccionarUsuarios: 'seleccionar-usuarios'
     },
     ModalParaRelacionar: {
         Relacionar: "nuevas-relaciones",

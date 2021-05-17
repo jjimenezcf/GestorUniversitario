@@ -409,11 +409,15 @@
         }
     }
 
-    export function EventosModalDeEnviarCorreo(accion: string): void {
+    export function EventosModalDeEnviarCorreo(accion: string, modal: string): void {
         try {
             switch (accion) {
                 case Evento.ModalEnviarCorreo.Cerrar: {
                     crudMnt.ModalEnviarCorreo_Cerrar();
+                    break;
+                }
+                case Evento.ModalEnviarCorreo.SeleccionarUsuarios: {
+                    crudMnt.ModalEnviarCorreo_SeleccionarUsuarios(modal);
                     break;
                 }
                 default: {

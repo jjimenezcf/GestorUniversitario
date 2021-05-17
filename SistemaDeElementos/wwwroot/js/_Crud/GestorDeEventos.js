@@ -403,11 +403,15 @@ var Crud;
         }
     }
     Crud.EventosModalDeExportacion = EventosModalDeExportacion;
-    function EventosModalDeEnviarCorreo(accion) {
+    function EventosModalDeEnviarCorreo(accion, modal) {
         try {
             switch (accion) {
                 case Evento.ModalEnviarCorreo.Cerrar: {
                     Crud.crudMnt.ModalEnviarCorreo_Cerrar();
+                    break;
+                }
+                case Evento.ModalEnviarCorreo.SeleccionarUsuarios: {
+                    Crud.crudMnt.ModalEnviarCorreo_SeleccionarUsuarios(modal);
                     break;
                 }
                 default: {
