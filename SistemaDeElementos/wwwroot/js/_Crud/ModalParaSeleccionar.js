@@ -20,8 +20,9 @@ var Crud;
                 throw new Error(`No se ha definido el control input asociado a la ${propiedadRestrictora}`);
             return input;
         }
-        AbrirModalParaSeleccionar(filtro) {
+        AbrirModalParaSeleccionar(selector) {
             this.InicializarModalConGrid();
+            //mapeo el texto de lo que haya en el selector a la zona de filtrado de la modal que me indique el selector
             this.RecargarGrid()
                 .then((valor) => {
                 if (!valor)

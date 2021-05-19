@@ -462,7 +462,8 @@
         }
     }
 
-    export function EventosModalDeEnviarCorreo(accion: string, modal: string): void {
+    export function EventosModalDeEnviarCorreo(accion: string, parametros: string): void {
+        let parIn: Array<string> = parametros.split("#");
         try {
             switch (accion) {
                 case Evento.ModalEnviarCorreo.Cerrar: {
@@ -470,7 +471,9 @@
                     break;
                 }
                 case Evento.ModalEnviarCorreo.SeleccionarUsuarios: {
-                    crudMnt.ModalEnviarCorreo_SeleccionarUsuarios(modal);
+                    if (parIn.length !== 2)
+                        throw new Error(`No se ha definido los parámetros de entrada correctos para el evento SeleccionaUsuario de la Modal de enviar por correo`);
+                    crudMnt.ModalEnviarCorreo_SeleccionarUsuarios(parIn[0], parIn[1]);
                     break;
                 }
                 default: {

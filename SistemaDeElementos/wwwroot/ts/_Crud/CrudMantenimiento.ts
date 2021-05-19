@@ -466,14 +466,18 @@
             return modal;
         }
 
-        public ModalEnviarCorreo_SeleccionarUsuarios(idModal: string) {
+        public ModalEnviarCorreo_SeleccionarUsuarios(idModal: string, idSelector: string) {
             this.ModalEnviarCorreo_Cerrar();
 
             let modal: ModalParaSeleccionar = this.ObtenerModalParaSeleccionar(idModal);
             if (modal === undefined)
                 throw new Error(`Modal ${idModal} no definida`);
 
-            modal.AbrirModalParaSeleccionar(null);
+            let selector: HTMLInputElement = document.getElementById(idSelector) as HTMLInputElement;
+            if (IsNull(selector))
+                throw new Error(`el selector ${idSelector} no está definido en la modal ${idModal}`);
+
+            modal.AbrirModalParaSeleccionar(selector);
         } 
 
         public ModalExportacion_Abrir() {

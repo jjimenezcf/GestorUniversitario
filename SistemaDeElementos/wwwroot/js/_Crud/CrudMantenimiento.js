@@ -383,12 +383,15 @@ var Crud;
             this.ModalesParaSeleccionar.push(modal);
             return modal;
         }
-        ModalEnviarCorreo_SeleccionarUsuarios(idModal) {
+        ModalEnviarCorreo_SeleccionarUsuarios(idModal, idSelector) {
             this.ModalEnviarCorreo_Cerrar();
             let modal = this.ObtenerModalParaSeleccionar(idModal);
             if (modal === undefined)
                 throw new Error(`Modal ${idModal} no definida`);
-            modal.AbrirModalParaSeleccionar(null);
+            let selector = document.getElementById(idSelector);
+            if (IsNull(selector))
+                throw new Error(`el selector ${idSelector} no está definido en la modal ${idModal}`);
+            modal.AbrirModalParaSeleccionar(selector);
         }
         ModalExportacion_Abrir() {
             this.ModoTrabajo = ModoTrabajo.exportando;

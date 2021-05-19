@@ -28,9 +28,9 @@
             this._crud = crudPadre;
         }
 
-        public AbrirModalParaSeleccionar(filtro: string) {
+        public AbrirModalParaSeleccionar(selector: HTMLInputElement) {
             this.InicializarModalConGrid();
-
+            //mapeo el texto de lo que haya en el selector a la zona de filtrado de la modal que me indique el selector
             this.RecargarGrid()
                 .then((valor) => {
                     if (!valor)
