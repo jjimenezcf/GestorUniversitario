@@ -44,6 +44,7 @@
 
         public CerrarModalParaSeleccionar() {
             this.CerrarModalConGrid();
+            this._crud.ModalEnviarCorreo_Abrir();
         }
 
 

@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        posicion: new Posicion(0,0),
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
-                       crudModal: new DescriptorDePermiso(ModoDescriptor.Seleccion),
+                       crudModal: new DescriptorDePermiso(ModoDescriptor.SeleccionarParaFiltrar),
                        propiedadDondeMapear: ltrFiltros.Nombre.ToString());
 
                 

@@ -12,7 +12,7 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum ModoDescriptor { Mantenimiento, Consulta, Seleccion, Relacion }
+    public enum ModoDescriptor { Mantenimiento, Consulta, SeleccionarParaFiltrar, Relacion, ParaSeleccionar }
 
     public class DescriptorDeCrud<TElemento> : ControlHtml where TElemento : ElementoDto
     {
@@ -236,8 +236,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (modo)
             {
-                case nameof(ModoDescriptor.Seleccion):
-                    return ModoDescriptor.Seleccion;
+                case nameof(ModoDescriptor.SeleccionarParaFiltrar):
+                    return ModoDescriptor.SeleccionarParaFiltrar;
                 case nameof(ModoDescriptor.Mantenimiento):
                     return ModoDescriptor.Mantenimiento;
                 case nameof(ModoDescriptor.Consulta):

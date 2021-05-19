@@ -249,7 +249,7 @@
         }
     }
 
-    export function EventosModalDeSeleccionar(accion: string, parametros: string): void {
+    export function EventosModalParaSeleccionar(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");
         let modal: ModalParaSeleccionar = crudMnt.ObtenerModalParaSeleccionar(parIn[0]);
@@ -265,8 +265,33 @@
                     modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
+                case Evento.ModalParaSeleccionar.Buscar: {
+                    modal.RecargarGrid();
+                    break;
+                }
+                case Evento.ModalParaSeleccionar.ObtenerSiguientes: {
+                    modal.ObtenerSiguientes();
+                    break;
+                }
+                case Evento.ModalParaSeleccionar.ObtenerAnteriores: {
+                    modal.ObtenerAnteriores();
+                    break;
+                }
+                case Evento.ModalParaSeleccionar.ObtenerUltimos: {
+                    modal.ObtenerUltimos();
+                    break;
+                }
+                case Evento.ModalParaSeleccionar.OrdenarPor: {
+                    let columna: string = parIn[1];
+                    modal.OrdenarPor(columna);
+                    break;
+                }
+                case Evento.ModalParaSeleccionar.Cerrar: {
+                    modal.CerrarModalParaSeleccionar();
+                    break;
+                }
                 default: {
-                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de relación`);
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos para seleccionar`);
                     break;
                 }
             }

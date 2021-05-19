@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {
-                var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
+                var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar);
                 var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
                 var fltEspecificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
                 

@@ -32,7 +32,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
             {
-                var modalCreador = new DescriptorDeUsuario(ModoDescriptor.Seleccion, "modal_creador");
+                var modalCreador = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar, "modal_creador");
                 new SelectorDeFiltro<TElemento, UsuarioDto>(padre: b2,
                                               etiqueta: "Creador",
                                               filtrarPor: nameof(ElementoDtm.IdUsuaCrea),
@@ -49,7 +49,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                     ayuda: "filtrar por rango de fechas",
                                     posicion: new Posicion() { fila = 1, columna = 1 });
 
-                var modalModificador = new DescriptorDeUsuario(ModoDescriptor.Seleccion, "modal_modificador");
+                var modalModificador = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar, "modal_modificador");
                 new SelectorDeFiltro<TElemento, UsuarioDto>(padre: b2,
                                               etiqueta: "Modificador",
                                               filtrarPor: nameof(ElementoDtm.IdUsuaModi),

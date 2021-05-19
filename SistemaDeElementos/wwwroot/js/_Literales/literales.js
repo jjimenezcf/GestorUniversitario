@@ -342,6 +342,7 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
+        Cerrar: "cerrar-seleccionar",
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },

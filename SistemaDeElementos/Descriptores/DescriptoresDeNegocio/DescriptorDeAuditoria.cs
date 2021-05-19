@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "elemento auditado"
                   , new Posicion { fila = 0, columna = 1 });
 
-            var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
+            var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar);
             new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
                                               filtrarPor: UsuariosPor.AlgunUsuario,

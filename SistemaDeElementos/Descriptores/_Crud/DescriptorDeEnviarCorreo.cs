@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
 
-        private ModalDeSeleccion<UsuarioDto> ModalDeUsuarios { get; }
+        private ModalParaSeleccionar<UsuarioDto> ModalDeUsuarios { get; }
 
         public DescriptorDeEnviarCorreo(DescriptorDeCrud<TElemento> crud)
         : base(
@@ -31,8 +31,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = enumTipoControl.pnlEnviarCorreo;
 
 
-            var descriptorUsuarios = new DescriptorDeUsuario(ModoDescriptor.Seleccion);
-            ModalDeUsuarios = new ModalDeSeleccion<UsuarioDto>(this,
+            var descriptorUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
+            ModalDeUsuarios = new ModalParaSeleccionar<UsuarioDto>(this,
                                          tituloModal: "Seleccionar usuario",
                                          crudModal: descriptorUsuarios,
                                          propiedadRestrictora: "");
@@ -80,7 +80,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private object RenderUsuarioReceptor()
         {
-            return ModalDeUsuarios.RenderModalDeSeleccion();
+            return ModalDeUsuarios.RenderModalParaSeleccionar();
         }
 
         private string listaDeExportaciones()

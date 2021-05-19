@@ -34,6 +34,7 @@ var Crud;
         ;
         CerrarModalParaSeleccionar() {
             this.CerrarModalConGrid();
+            this._crud.ModalEnviarCorreo_Abrir();
         }
     }
     Crud.ModalParaSeleccionar = ModalParaSeleccionar;

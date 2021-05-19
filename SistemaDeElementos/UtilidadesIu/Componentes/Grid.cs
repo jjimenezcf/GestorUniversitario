@@ -65,7 +65,7 @@ namespace UtilidadesParaIu
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
         {
-            var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion
+            var porcentaje = columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.SeleccionarParaFiltrar
                           || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion
                           || columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta
                 ? columna.PorAnchoSel
@@ -102,7 +102,7 @@ namespace UtilidadesParaIu
             var gestorDeEventos = RenderGestorDeEventos(columna.ZonaDeDatos.Mnt.Crud.Modo);
 
             var parametros = $"{columna.IdHtml}";
-            if (columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Seleccion ||
+            if (columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.SeleccionarParaFiltrar ||
                 columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Relacion ||
                 columna.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Consulta)
             {
@@ -119,7 +119,7 @@ namespace UtilidadesParaIu
             var getorDeEventos = RenderGestorDeEventos(celda.Fila.Datos.Mnt.Crud.Modo);
 
             var parametros = $"{celda.Fila.idHtmlCheckDeSeleccion}#{idControlHtml}";
-            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Seleccion ||
+            if (celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.SeleccionarParaFiltrar ||
                 celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Relacion ||
                 celda.Fila.Datos.Mnt.Crud.Modo == ModoDescriptor.Consulta)
             {
@@ -132,9 +132,13 @@ namespace UtilidadesParaIu
         private static string RenderGestorDeEventos(ModoDescriptor modo)
         {
             var getorDeEventos = $"{GestorDeEventos.EventosDelMantenimiento}"; 
-            if (modo == ModoDescriptor.Seleccion)
+            if (modo == ModoDescriptor.SeleccionarParaFiltrar)
             {
                 getorDeEventos = $"{GestorDeEventos.EventosModalDeSeleccion}";
+            }
+            if (modo == ModoDescriptor.ParaSeleccionar)
+            {
+                getorDeEventos = $"{GestorDeEventos.EventosModalParaSeleccionar}";
             }
             if (modo == ModoDescriptor.Relacion)
             {

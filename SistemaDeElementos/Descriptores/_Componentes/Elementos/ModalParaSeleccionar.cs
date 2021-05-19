@@ -4,14 +4,14 @@ using ModeloDeDto;
 namespace MVCSistemaDeElementos.Descriptores
 {
 
-    public class ModalDeSeleccion<TSeleccionado> : ControlFiltroHtml
+    public class ModalParaSeleccionar<TSeleccionado> : ControlFiltroHtml
     where TSeleccionado : ElementoDto
     {
         public DescriptorDeCrud<TSeleccionado> CrudModal { get; set; }
 
         public string PropiedadRestrictora { get; private set; }
 
-        public ModalDeSeleccion(ControlHtml controlPadre, string tituloModal, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadRestrictora)
+        public ModalParaSeleccionar(ControlHtml controlPadre, string tituloModal, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadRestrictora)
         : base(padre: controlPadre
               ,id: $"{controlPadre.Id}-{enumTipoControl.ModalDeSeleccion.Render()}-{typeof(TSeleccionado).Name}"
               ,etiqueta: tituloModal
@@ -23,7 +23,7 @@ namespace MVCSistemaDeElementos.Descriptores
             PropiedadRestrictora = propiedadRestrictora.ToLower();
         }
 
-        public string RenderModalDeSeleccion()
+        public string RenderModalParaSeleccionar()
         {
           return RenderControl();
         }
@@ -36,17 +36,17 @@ namespace MVCSistemaDeElementos.Descriptores
                               		    	titulo
                                         </div>
                               		    <div id=¨{IdHtml}_cuerpo¨ class=¨contenido-cuerpo¨>
-                              			    crudDeConsulta
+                              			    crudParaSeleccionar
                                         </div>
                                         <div id=¨{IdHtml}_pie¨ class=¨contenido-pie¨>
-                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalDeSeleccion}('{TipoDeAccionDeConsulta.Cerrar}','{IdHtml}')¨ />
+                                           <input type=¨text¨ id=¨{IdHtml}-cerrar¨  class=¨boton-modal¨ value=¨Cerrar¨ readonly onclick=¨Crud.{GestorDeEventos.EventosModalParaSeleccionar}('{TipoDeAccionParaSeleccionar.Cerrar}','{IdHtml}')¨ />
                                         </div>
                                       </div>
                               </div>";
 
             return _htmlMiModal
                 .Replace("titulo", Etiqueta)
-                .Replace("crudDeConsulta", CrudModal.RenderCrudModal(idModal: this.IdHtml, enumTipoDeModal.ModalDeConsulta));
+                .Replace("crudParaSeleccionar", CrudModal.RenderCrudModal(idModal: this.IdHtml, enumTipoDeModal.ModalDeConsulta));
         }
 
     }

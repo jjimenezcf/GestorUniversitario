@@ -13,6 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores
             , EventosDelMantenimiento
             , EventosDelFormulario
             , EventosModalDeSeleccion
+            , EventosModalParaSeleccionar
             , EventosDeListaDinamica }
 
     public static class TipoAccionDeListaDinamica
@@ -71,6 +72,10 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionDeConsulta
     {
         public const string Cerrar = "cerrar-consulta";
+    }
+    public static class TipoDeAccionParaSeleccionar
+    {
+        public const string Cerrar = "cerrar-seleccionar";
     }
     public static class TipoDeAccionDeExportar
     {
