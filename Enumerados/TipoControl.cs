@@ -21,7 +21,8 @@ namespace Enumerados
     }
 
     public enum enumTipoControl
-    {     Selector
+    {     SelectorDeFiltro
+        , SelectorDeElemento
         , ListaDeElemento
         , ListaDinamica
         , Editor
@@ -68,7 +69,8 @@ namespace Enumerados
 
             switch(tipo)
             {
-                case enumTipoControl.Selector: return "selector";
+                case enumTipoControl.SelectorDeFiltro: return "selector";
+                case enumTipoControl.SelectorDeElemento: return "selector-de-elemento";
                 case enumTipoControl.ListaDeElemento: return "lista-de-elemento";
                 case enumTipoControl.ListaDinamica: return "lista-dinamica";
                 case enumTipoControl.Editor: return "editor";

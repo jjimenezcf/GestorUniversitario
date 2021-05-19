@@ -14,7 +14,9 @@ namespace MVCSistemaDeElementos.Descriptores
             , EventosDelFormulario
             , EventosModalDeSeleccion
             , EventosModalParaSeleccionar
-            , EventosDeListaDinamica }
+            , EventosDeListaDinamica
+            , EventosSelectorEnModal
+    }
 
     public static class TipoAccionDeListaDinamica
     {
@@ -91,6 +93,13 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string Cerrar = "cerrar-enviar-correo";
         public const string SalirListaDeCorreos = "salir-lista-correos";
         public const string SeleccionaUsuarios = "seleccionar-usuarios";
+    }
+    public static class TipoDeAccionSelectorEnModal
+    {
+        public const string perderFoco = "perder-foco";
+        public const string pulsarBoton = "pulsar-boton";
+        public const string blanquear = "blanquear-selector";
+        public const string trasSeleccionar = "tras-seleccionar";
     }
 
     public enum enumModoOrdenacion
@@ -288,6 +297,13 @@ namespace MVCSistemaDeElementos.Descriptores
         adjuntos
     }
 
+    public enum enumCssSelectorEnModal
+    {
+        Contenedor,
+        Editor,
+        botonSelector
+    }
+
     public static class MetodosDeRenderizacion
     {
         public static string Render(this enumModoOrdenacion modo)
@@ -305,6 +321,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public static class Css
     {
+        public static string Render(this enumCssSelectorEnModal clase)
+        {
+            switch (clase)
+            {
+                case enumCssSelectorEnModal.Contenedor: return "selector-en-modal-contenedor";
+                case enumCssSelectorEnModal.Editor: return "selector-en-modal-editor";
+                case enumCssSelectorEnModal.botonSelector: return "selector-en-modal-boton-selector";
+            }
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para el selector en modal");
+
+        }
 
         public static string Render(this enumCssEnviarCorreo clase)
         {
@@ -315,7 +342,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssEnviarCorreo.cuerpo: return "enviar-correo-cuerpo";
                 case enumCssEnviarCorreo.adjuntos: return "enviar-correo-adjuntos";
             }
-            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario de exportación");
+            throw new Exception($"No se ha definido que renderizar para la clase {clase} para un formulario de envío de correo");
 
         }
 

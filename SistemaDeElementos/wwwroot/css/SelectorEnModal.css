@@ -1,0 +1,18 @@
+﻿.selector-en-modal-contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "selector-en-modal-editor selector-en-modal-boton-selector";
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.selector-en-modal-editor {
+    display: grid;
+    grid-area: selector-en-modal-editor;
+}
+
+.selector-en-modal-boton-selector {
+    display: grid;
+    grid-area: selector-en-modal-boton-selector;
+}

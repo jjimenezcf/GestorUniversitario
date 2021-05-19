@@ -103,7 +103,7 @@ namespace MVCSistemaDeElementos.Descriptores
             a.Etiqueta = "Indicar los correos del destinatario separados por ;";
             a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.SalirListaDeCorreos}')¨";
 
-            var o = new OpcionHtml(this, "bonton-seleccion"
+            var o = new OpcionHtml(this, "boton-seleccion"
                 , "Seleccionar usuarios"
                 , "marque los usuarios a los que enviar el correo"
                 , $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.SeleccionaUsuarios}','{ModalDeUsuarios.IdHtml}')"
