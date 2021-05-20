@@ -225,11 +225,24 @@ a {
 }
 /*********************************  clases para la edición **********************/
 
+.contenedor-editor-etiqueta-izquierda {
+    display: grid;
+    grid-template-columns: 0.1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "contenedor-etiqueta contenedor-editor";
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 .contenedor-editor {
     border-width: 2px;
     margin-top: 5px;
 }
 
+.contenedor-boton-selector {
+    border-width: 2px;
+    margin-top: 5px;
+}
 
 .contenedor-etiqueta {
     border-width: 2px;
@@ -261,6 +274,18 @@ a {
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.boton-selector-dto {
+    width: 100%;
+    padding: .375rem .75rem;
     line-height: 1.5;
     color: #495057;
     background-color: #fff;

@@ -96,10 +96,11 @@ namespace MVCSistemaDeElementos.Descriptores
     }
     public static class TipoDeAccionSelectorEnModal
     {
-        public const string perderFoco = "perder-foco";
-        public const string pulsarBoton = "pulsar-boton";
-        public const string blanquear = "blanquear-selector";
-        public const string trasSeleccionar = "tras-seleccionar";
+        public const string PerderFoco = "perder-foco";
+        public const string Blanquear = "blanquear-selector";
+        public const string TrasSeleccionar = "tras-seleccionar";
+        public const string OpcionSeleccionada = "opcion-seleccionar";
+
     }
 
     public enum enumModoOrdenacion
@@ -241,9 +242,11 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         FormDeArchivo,
         ContenedorListaDeElementos,
+        ContenedorEditorConEtiquetaIzquierda,
         ContenedorListaDinamica,
         ContenedorEtiqueta,
         ContenedorEditor,
+        ContenedorBotonSelector,
         ContenedorCheck,
         ContenedorFecha,
         ContenedorFechaHora,
@@ -257,6 +260,7 @@ namespace MVCSistemaDeElementos.Descriptores
         Check,
         Selector,
         Editor,
+        BotonSelector,
         Etiqueta,
         ListaDeElementos,
         ListaDinamica,
@@ -414,9 +418,11 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             switch (clase)
             {
+                case enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda: return "contenedor-editor-etiqueta-izquierda";
                 case enumCssControlesDto.ContenedorListaDeElementos: return "contenedor-listas";
                 case enumCssControlesDto.ContenedorListaDinamica: return "contenedor-listas";
                 case enumCssControlesDto.ContenedorEditor: return "contenedor-editor";
+                case enumCssControlesDto.ContenedorBotonSelector: return "contenedor-boton-selector";
                 case enumCssControlesDto.ContenedorEtiqueta: return "contenedor-etiqueta";
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
@@ -428,6 +434,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.Check: return "check-dto";
                 case enumCssControlesDto.Selector: return "selector-dto";
                 case enumCssControlesDto.Editor: return "editor-dto";
+                case enumCssControlesDto.BotonSelector: return "boton-selector-dto";
                 case enumCssControlesDto.EditorRestrictor: return "form-control";
                 case enumCssControlesDto.Etiqueta: return "etiqueta-dto";
                 case enumCssControlesDto.ListaDinamica: return "lista-dinamica";

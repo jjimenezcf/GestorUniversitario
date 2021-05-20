@@ -348,6 +348,47 @@
         </div>
     </div>
 
+    <div id="crud_vistamvcdto_panel-enviar-correo_cuerpo_contenedor" class="enviar-correo-contenedor">
+        <div id="crud_vistamvcdto_panel-enviar-correo_cuerpo_enviar_correo" class="enviar-correo-cabecera">
+            <div id="crud_vistamvcdto_panel-enviar-correo_selector-usuario" class="selector-en-modal-contenedor propiedad=" idsdeusuarios"  idseleccionados="" ideditor="crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" idbotonselector="crud_vistamvcdto_panel-enviar-correo_selector-usuario_btnsel">
+
+                <div id="div_crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor_contenedor" name="contenedor-control" class="selector-en-modal-editor&quot;">
+                    <div id="div-crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" name="contenedor-control" class="contenedor-editor-etiqueta-izquierda">
+                        <div class="contenedor-etiqueta">
+                            <label id="etiqueta-crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" for="crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" class="[CssEtiqueta]">Usuario</label>
+                        </div>
+                        <div class="contenedor-editor">
+                            <input id="crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" propiedad="IdsDeUsuarios" class="editor-dto" tipo="editor" placeholder="Seleccione usuarios" onblur="Crud.EventosSelectorEnModal('perder-foco')">
+
+                            <div>
+                            </div>
+                        </div>
+
+
+                        <div id="div-crud_vistamvcdto_panel-enviar-correo_selector-usuario_btnsel" class="[cssContenedor]">
+                            <input id="crud_vistamvcdto_panel-enviar-correo_selector-usuario_editor" type="button" class="[css]" value="" onclick="onClick = " crud.eventosselectorenmodal('opcion-seleccionar','crud_usuariodto')""="" title="[Ayuda]">
+                        </div>
+
+                    </div>
+                </div>
+                <div id="crud_vistamvcdto_panel-enviar-correo_cuerpo_sometido" class="enviar-correo-cuerpo">
+                    Asunto
+                    Cuerpo
+                </div>
+                <div id="crud_vistamvcdto_panel-enviar-correo_cuerpo_enviar" class="enviar-correo-adjuntos">
+                    Elementos
+                </div>
+            </div>
+        </div>
+        <div id="crud_vistamvcdto_panel-enviar-correo_pie" class="contenido-pie">
+            <div id="crud_vistamvcdto_panel-enviar-correo_menu" class="contenido-modal-pie-menu">
+                <input id="crud_vistamvcdto_panel-enviar-correo-enviar" type="button" tipo="opcion" clase="opcion-menu-de-elemento" permisos-necesarios="consultor" value="Enviar" onclick="Crud.EventosModalDeEnviarCorreo('enviar-correo','crud_vistamvcdto_panel-enviar-correo')">
+                <input id="crud_vistamvcdto_panel-enviar-correo-cerrar" type="button" tipo="opcion" clase="opcion-menu-basica" permisos-necesarios="sinpermiso" value="Cerrar" onclick="Crud.EventosModalDeEnviarCorreo('cerrar-enviar-correo','crud_vistamvcdto_panel-enviar-correo')">
+            </div>
+
+        </div>
+    </div>
+
 
 
     <script>
@@ -369,13 +410,15 @@
            width: 100%;
            background-color: inherit;">
 
-    <td id="crud_paisdto_mantenimiento_grid_d_tr_0.4" 
-        headers="crud_paisdto_mantenimiento_grid_c_tr_0.prefijo" 
-        name="td.prefijo.crud_paisdto_mantenimiento_grid" 
-        propiedad="prefijo" onclick="Crud.EventosDelMantenimiento('fila-pulsada', 'crud_paisdto_mantenimiento_grid_d_tr_0.chksel#crud_paisdto_mantenimiento_grid_d_tr_0.prefijo');" 
-        style="text-align: right; 
-width: 15.1515%; 
-padding-right: 10px;"><input type="text" id="crud_paisdto_mantenimiento_grid_d_tr_0.prefijo" name="prefijo.crud_paisdto_mantenimiento_grid" propiedad="prefijo" readonly="" style="border: 0px; text-align: right; width: 100%; background-color: inherit;"></td>
+    <td id="crud_paisdto_mantenimiento_grid_d_tr_0.4"
+        headers="crud_paisdto_mantenimiento_grid_c_tr_0.prefijo"
+        name="td.prefijo.crud_paisdto_mantenimiento_grid"
+        propiedad="prefijo" onclick="Crud.EventosDelMantenimiento('fila-pulsada', 'crud_paisdto_mantenimiento_grid_d_tr_0.chksel#crud_paisdto_mantenimiento_grid_d_tr_0.prefijo');"
+        style="text-align: right;
+width: 15.1515%;
+padding-right: 10px;">
+        <input type="text" id="crud_paisdto_mantenimiento_grid_d_tr_0.prefijo" name="prefijo.crud_paisdto_mantenimiento_grid" propiedad="prefijo" readonly="" style="border: 0px; text-align: right; width: 100%; background-color: inherit;">
+    </td>
 
 
     <input type="text"

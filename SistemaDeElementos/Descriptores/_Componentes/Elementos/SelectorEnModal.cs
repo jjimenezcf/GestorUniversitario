@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Enumerados;
 using GestorDeElementos;
 using ModeloDeDto;
@@ -12,9 +13,9 @@ namespace MVCSistemaDeElementos.Descriptores
         public string propiedadParaMostrar { get; private set; }
         public DescriptorDeCrud<TSeleccionado> Modal { get; set; }
 
-        public string idBtnSelectorHtml => $"{IdHtml}_btnsel";
+        public string IdBtnSelectorHtml => $"{IdHtml}_btnsel";
 
-        public string idHtmlEditor => $"{IdHtml}_editor";
+        public string IdHtmlEditor => $"{IdHtml}_editor";
 
         public string PropiedadDondeMapear { get; private set; }
 
@@ -40,6 +41,12 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
+        public string RenderModalDeSeleccion()
+        {
+            return CrudModal.RenderCrudModal(CrudModal.IdHtml, enumTipoDeModal.ModalDeSeleccion);
+        }
+
+
         public string RenderSelector()
         {
             return RenderControl();
@@ -48,37 +55,43 @@ namespace MVCSistemaDeElementos.Descriptores
         public override string RenderControl()
         {
 
-            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()} propiedad=¨{PropiedadHtml}¨ idSeleccionados=¨¨ idEditor=¨{idHtmlEditor}¨ idBotonSelector=¨{idBtnSelectorHtml}¨>
-                           {RenderEditor()}{RenderBotonSelector()}
+            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()}¨ propiedad=¨{PropiedadHtml}¨ idSeleccionados=¨¨ idEditor=¨{IdHtmlEditor}¨ idBotonSelector=¨{IdBtnSelectorHtml}¨>
+                             {RenderEditorDelSelector()}
+                             {RenderBotonSelector()}
                           </div>";
 
 
             return html;
         }
 
-        private string RenderEditor()
+        private string RenderEditorDelSelector()
         {
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlEditor}", idHtmlEditor, Propiedad, enumTipoControl.Editor);
-            a.Editable = false;
-            a.Etiqueta = Etiqueta;
-            a.Ayuda = Ayuda;
-            a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.perderFoco}')¨";
 
+            var otrosAtributos = new Dictionary<string, string>();
+            otrosAtributos["onBlur"] = $"onBlur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}')¨";
 
-            return RenderEditorConEtiquetaEncima(PlantillasHtml.editorDto, a);
+            var div = $@"
+            <div id=¨div_{IdHtmlEditor}_contenedor¨ name=¨contenedor-control¨ class={enumCssSelectorEnModal.Editor.Render()}¨>
+               {RenderEditorConEtiquetaIzquierda(IdHtmlEditor,Etiqueta,Propiedad,Ayuda, otrosAtributos)}
+            </div>
+            ";
+
+            return div;
         }
         private string RenderBotonSelector()
         {
-            //indicar el idDivSelector= ....
+            var a = AtributosHtml.AtributosComunes($"div-{IdBtnSelectorHtml}", IdHtmlEditor, Propiedad, enumTipoControl.SelectorDeElemento);
+            a.AlPulsarElBoton = $"onClick = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.OpcionSeleccionada}','{Modal.IdHtml}')¨";
+
+            Dictionary<string, object> valores = a.MapearComunes();
+
+            valores["CssContenedor"] = enumCssControlesDto.ContenedorEditor.Render();
+            valores["Css"] = enumCssControlesDto.BotonSelector.Render();
+            valores["Placeholder"] = a.Ayuda;
+            valores["onClick"] = a.AlPulsarElBoton;
 
 
-            var o = new OpcionHtml(this, "boton-seleccion"
-                , "Seleccionar usuarios"
-                , "marque los usuarios a los que enviar el correo"
-                , $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.SeleccionaUsuarios}','{ModalDeUsuarios.IdHtml}')"
-                );
-
-            return "";
+            return PlantillasHtml.Render(PlantillasHtml.BotonSeleccion, valores); 
         }
     }
 }

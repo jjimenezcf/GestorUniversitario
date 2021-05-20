@@ -16,7 +16,9 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
 
-        private ModalParaSeleccionar<UsuarioDto> ModalDeUsuarios { get; }
+        private DescriptorDeUsuario ModalDeUsuarios { get; }
+
+        private SelectorEnModal<UsuarioDto> SelectorDeUsuarios { get; }
 
         public DescriptorDeEnviarCorreo(DescriptorDeCrud<TElemento> crud)
         : base(
@@ -30,12 +32,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = enumTipoControl.pnlEnviarCorreo;
 
-
-            var descriptorUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
-            ModalDeUsuarios = new ModalParaSeleccionar<UsuarioDto>(this,
-                                         tituloModal: "Seleccionar usuario",
-                                         crudModal: descriptorUsuarios,
-                                         propiedadRestrictora: "");
+            ModalDeUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
+            SelectorDeUsuarios = new SelectorEnModal<UsuarioDto>(this, "selector-usuario", "Usuario", "Seleccione usuarios", "IdsDeUsuarios", nameof(UsuarioDto.Id), nameof(UsuarioDto.NombreCompleto), ModalDeUsuarios);
         }
 
         public string RenderDeEnvioDeCorreo()
@@ -58,14 +56,15 @@ namespace MVCSistemaDeElementos.Descriptores
                     , claseBoton: enumCssOpcionMenu.DeElemento
                     , permisosNecesarios: enumModoDeAccesoDeDatos.Consultor);
 
-            return htmlModal +Environment.NewLine+ RenderUsuarioReceptor();
+            return htmlModal + Environment.NewLine + " <!--  ******************* modal para selector de usuario ******************* -->" + Environment.NewLine + RenderUsuarioReceptor();
         }
 
         private string cuerpoDeEnvioDeCorreo()
         {
+            //
             var htmlCuerpo = $@"<div id=¨{IdHtml}_cuerpo_contenedor¨ class=¨{enumCssEnviarCorreo.Contenedor.Render()}¨>
                                      <div id=¨{IdHtml}_cuerpo_enviar_correo¨ class=¨{enumCssEnviarCorreo.cabecera.Render()}¨>
-                                        {editorDeEMail()}
+                                        {RenderSelectorDeUsuario()}
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssEnviarCorreo.cuerpo.Render()}¨>
                                         Asunto
@@ -74,13 +73,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                      <div id=¨{IdHtml}_cuerpo_enviar¨ class=¨{enumCssEnviarCorreo.adjuntos.Render()}¨>                                        
                                         Elementos
                                      </div>
-                                </div>";
+            //                    </div>";
             return htmlCuerpo;
         }
 
         private object RenderUsuarioReceptor()
         {
-            return ModalDeUsuarios.RenderModalParaSeleccionar();
+            return SelectorDeUsuarios.RenderModalDeSeleccion();
         }
 
         private string listaDeExportaciones()
@@ -94,22 +93,9 @@ namespace MVCSistemaDeElementos.Descriptores
                    RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
         }
 
-        private string editorDeEMail()
+        private string RenderSelectorDeUsuario()
         {
-            var idHtmlCorreos = $"{IdHtml}_correos";
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, ltrExportacion.receptores, enumTipoControl.Editor);
-            a.Editable = false;
-            a.Ayuda = "Indique los correos de e-mail receptores";
-            a.Etiqueta = "Indicar los correos del destinatario separados por ;";
-            a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.SalirListaDeCorreos}')¨";
-
-            var o = new OpcionHtml(this, "boton-seleccion"
-                , "Seleccionar usuarios"
-                , "marque los usuarios a los que enviar el correo"
-                , $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.SeleccionaUsuarios}','{ModalDeUsuarios.IdHtml}')"
-                );
-
-            return RenderEditorConEtiquetaEncima(PlantillasHtml.editorDto, a) + Environment.NewLine + o.RenderOpcion();
+            return SelectorDeUsuarios.RenderSelector();
         }
     }
 }

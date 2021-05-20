@@ -225,6 +225,17 @@ namespace MVCSistemaDeElementos.Descriptores
         </div>
         ";
 
+        public static string BotonSeleccion = $@"
+        <div id = ¨[IdHtmlContenedor]¨ class=¨[cssContenedor]¨>
+           <input id=¨[IdHtml]¨ 
+                  type=¨button¨ 
+                  class=¨[css]¨ 
+                  value=¨[Etiqueta]¨ 
+                  onClick=¨[onClick]¨
+                  title=¨[Ayuda]¨/>
+        </div>
+         ";
+
         public static string Render(string plantilla, Dictionary<string, object> valores)
         {
             foreach (var indice in valores.Keys)

@@ -40,6 +40,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string Etiqueta { get; set; }
         public string Url { get; set; }
         public string AlPerderElFoco { get; set; }
+        public string AlPulsarElBoton { get; set; }
 
         public AtributosHtml()
         {
@@ -220,6 +221,31 @@ namespace MVCSistemaDeElementos.Descriptores
             var htmlEditor = PlantillasHtml.Render(plantillaHtml, valores);
 
             return RenderEtiqueta($"{a.IdHtml}_editor", a.Etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), enumCssControlesDto.Etiqueta.Render()) +  htmlEditor;
+        }
+
+        public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos)
+        {
+            var htmlEditor = @$" <div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
+                                  <div class=¨{enumCssControlesDto.ContenedorEtiqueta.Render()}¨>
+                                     <label id=¨etiqueta-{idHtml}¨ for=¨{idHtml}¨ class=¨[CssEtiqueta]¨>{etiqueta}</label>
+                                  </div>
+                                  <div class=¨{enumCssControlesDto.ContenedorEditor.Render()}¨>
+                                     <input id=¨{idHtml}¨
+                                         propiedad=¨{propiedad}¨ 
+                                         class=¨{enumCssControlesDto.Editor.Render()}¨ 
+                                         tipo=¨{enumTipoControl.Editor.Render()}¨
+                                         placeholder =¨{ayuda}¨
+                                         [estilo][readOnly][obligatorio][onBlur]>
+                                     </input>
+                                  <div>
+                             </div>";
+
+            htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
+
+            return htmlEditor;
         }
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)
