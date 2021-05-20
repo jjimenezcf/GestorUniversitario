@@ -279,16 +279,28 @@ var ApiCrud;
         panel.classList.remove(ClaseCss.divVisible);
     }
     ApiCrud.OcultarPanel = OcultarPanel;
+    function CerrarModalPorId(id) {
+        let modal = document.getElementById(id);
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        CerrarModal(modal);
+    }
+    ApiCrud.CerrarModalPorId = CerrarModalPorId;
     function CerrarModal(modal) {
         modal.style.display = "none";
-        //modal.setAttribute('altura-inicial', "0");
-        //modal.setAttribute('ratio-inicial', "0");
-        //var body = document.getElementsByTagName("body")[0];
-        //body.style.position = "inherit";
-        //body.style.height = "auto";
-        //body.style.overflow = "visible";
     }
     ApiCrud.CerrarModal = CerrarModal;
+    function AbrirModalPorId(id) {
+        let modal = document.getElementById(id);
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        AbriModal(modal);
+    }
+    ApiCrud.AbrirModalPorId = AbrirModalPorId;
+    function AbriModal(modal) {
+        modal.style.display = 'block';
+    }
+    ApiCrud.AbriModal = AbriModal;
     function QuitarClaseDeCtrlNoValido(panel) {
         let crtls = panel.getElementsByClassName(ClaseCss.crtlNoValido);
         for (let i = 0; i < crtls.length; i++) {
@@ -347,6 +359,21 @@ var ApiCrud;
         }
     }
     ApiCrud.CambiarLiteralOpcion = CambiarLiteralOpcion;
+    function ObtenerSelector(idSelector) {
+        let selector = document.getElementById(idSelector);
+        if (NoDefinida(selector))
+            throw new Error(`el selector ${idSelector} no está definido`);
+        return selector;
+    }
+    ApiCrud.ObtenerSelector = ObtenerSelector;
+    function ObtenerEditorAsociadoAlSelector(selector) {
+        let idEditor = selector.getAttribute(atSelectorDeElementos.Editor);
+        let editor = document.getElementById(idEditor);
+        if (NoDefinida(editor))
+            throw new Error(`el editor ${idEditor} no está definido en el selector ${selector.id}`);
+        return editor;
+    }
+    ApiCrud.ObtenerEditorAsociadoAlSelector = ObtenerEditorAsociadoAlSelector;
     function BlanquearEditores(panel) {
         let editores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`);
         for (let i = 0; i < editores.length; i++) {

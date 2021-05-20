@@ -301,7 +301,6 @@
         }
     }
 
-
     export function EventosModalDeConsultaDeRelaciones(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");
@@ -470,12 +469,6 @@
                     crudMnt.ModalEnviarCorreo_Cerrar();
                     break;
                 }
-                case Evento.ModalEnviarCorreo.SeleccionarUsuarios: {
-                    if (parIn.length !== 2)
-                        throw new Error(`No se ha definido los parámetros de entrada correctos para el evento SeleccionaUsuario de la Modal de enviar por correo`);
-                    crudMnt.ModalEnviarCorreo_SeleccionarUsuarios(parIn[0], parIn[1]);
-                    break;
-                }
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
                     break;
@@ -560,6 +553,39 @@
         }
         catch (error) {
             MensajesSe.Error(`Expansor, accion: ${accion}`, error.message);
+        }
+    }
+
+    export function EventosSelectorEnModal(accion: string, parametros: string) {
+        try {
+            let parIn: Array<string> = parametros.split("#");
+            switch (accion) {
+                case Evento.SelectorDeElementos.Seleccionar: {
+                    if (parIn.length !== 3)
+                        throw new Error(`No se han definido los parámetros de entrada correctos para el evento ${Evento.SelectorDeElementos.Seleccionar}`);
+                    crudMnt.AbrirModalParaSeleccionarDesdeUnaModal(parIn[0], parIn[1], parIn[2]);
+                    break;
+                }
+                case Evento.SelectorDeElementos.PerderFoco: {
+                    if (parIn.length !== 3)
+                        throw new Error(`No se han definido los parámetros de entrada correctos para el evento ${Evento.SelectorDeElementos.Seleccionar}`);
+                    crudMnt.PerderElFocoEnUnSelectorDesdeUnaModal(parIn[0], parIn[1], parIn[2]);
+                    break;
+                }
+                case Evento.SelectorDeElementos.ObtenerFoco: {
+                    if (parIn.length !== 1)
+                        throw new Error(`No se han definido los parámetros de entrada correctos para el evento ${Evento.SelectorDeElementos.Seleccionar}`);
+                    crudMnt.ObtenerFocoEnSelector(parIn[0]);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
         }
     }
 }

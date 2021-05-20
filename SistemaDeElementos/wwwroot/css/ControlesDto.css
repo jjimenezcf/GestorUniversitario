@@ -249,6 +249,13 @@ a {
     height: calc(1.5em + .75rem);
 }
 
+.contenedor-etiqueta-izquierda {
+    border-width: 2px;
+    height: calc(1.5em + .75rem);
+    display: inline-block;
+    margin-top: 15px;
+}
+
 .contenedor-area-de-texto {
     border-width: 2px;
     /*margin-right: 20px;*/

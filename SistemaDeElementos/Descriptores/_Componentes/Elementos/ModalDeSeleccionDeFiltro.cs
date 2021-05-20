@@ -27,7 +27,8 @@ namespace MVCSistemaDeElementos.Descriptores
             Selector.Modal = this;
             CrudModal = crudModal;
         }
-
+        
+        //Lo llama el método RenderModalesBloque()
         private string RenderModalDeSeleccionDeFiltro()
         {
             string _htmlMiModal = $@"

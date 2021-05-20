@@ -23,21 +23,46 @@
             return input;
         }
 
+        private _selector: HTMLDivElement;
+
+        private get EditorDeFiltro(): HTMLInputElement {
+            var idEditorDeFiltro: string = this._selector.getAttribute(atSelectorDeElementos.IdEditorDeFiltro);
+            let editorDeFiltro: HTMLInputElement = document.getElementById(idEditorDeFiltro) as HTMLInputElement;
+            if (NoDefinida(editorDeFiltro))
+                throw new Error(`el editor ${idEditorDeFiltro} no está definido en la zona de filtro de la modal asociada al selector ${this._selector.id}`);
+            return editorDeFiltro;
+        }
+
+        private get EditorAsociado(): HTMLInputElement {
+            return ApiCrud.ObtenerEditorAsociadoAlSelector(this._selector);
+        }
+
+
         constructor(crudPadre: CrudMnt, idModal: string) {
             super(idModal, document.getElementById(idModal).getAttribute(atControl.crudModal));
             this._crud = crudPadre;
         }
 
-        public AbrirModalParaSeleccionar(selector: HTMLInputElement) {
+        protected InicializarModalParaSeleccionar(selector: HTMLDivElement) {
             this.InicializarModalConGrid();
-            //mapeo el texto de lo que haya en el selector a la zona de filtrado de la modal que me indique el selector
+            this._selector = selector;
+            this.EditorDeFiltro.value = this.EditorAsociado.value;
+        }
+
+        public AbrirModalParaSeleccionar(selector: HTMLDivElement) {
+            this.InicializarModalParaSeleccionar(selector);
             this.RecargarGrid()
                 .then((valor) => {
-                    if (!valor)
+                    if (!valor) {
                         ApiCrud.CerrarModal(this.Modal);
+                        let idModal: string = selector.getAttribute(atSelectorDeElementos.ModalPadre);
+                        if (!NoDefinida(idModal)) ApiCrud.AbrirModalPorId(idModal);
+                    }
                 })
                 .catch((valor) => {
                     ApiCrud.CerrarModal(this.Modal);
+                    let idModal: string = selector.getAttribute(atSelectorDeElementos.ModalPadre);
+                    if (!NoDefinida(idModal)) ApiCrud.AbrirModalPorId(idModal);
                 }
                 );
         };

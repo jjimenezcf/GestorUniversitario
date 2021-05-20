@@ -231,7 +231,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   type=¨button¨ 
                   class=¨[css]¨ 
                   value=¨[Etiqueta]¨ 
-                  onClick=¨[onClick]¨
+                  [onClick]
                   title=¨[Ayuda]¨/>
         </div>
          ";

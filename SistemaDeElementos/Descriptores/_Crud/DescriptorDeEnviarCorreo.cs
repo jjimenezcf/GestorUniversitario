@@ -8,6 +8,7 @@ using ModeloDeDto.Entorno;
 using ModeloDeDto.TrabajosSometidos;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
+using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -16,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeCrud<TElemento> Crud => (DescriptorDeCrud<TElemento>)Padre;
         public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
 
-        private DescriptorDeUsuario ModalDeUsuarios { get; }
+        private ModalParaSeleccionar<UsuarioDto> ModalDeUsuarios { get; }
 
         private SelectorEnModal<UsuarioDto> SelectorDeUsuarios { get; }
 
@@ -32,7 +33,12 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = enumTipoControl.pnlEnviarCorreo;
 
-            ModalDeUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
+            var descriptorUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
+            ModalDeUsuarios = new ModalParaSeleccionar<UsuarioDto>(this,
+                                         tituloModal: "Seleccionar usuario",
+                                         crudModal: descriptorUsuarios,
+                                         propiedadRestrictora: "");
+
             SelectorDeUsuarios = new SelectorEnModal<UsuarioDto>(this, "selector-usuario", "Usuario", "Seleccione usuarios", "IdsDeUsuarios", nameof(UsuarioDto.Id), nameof(UsuarioDto.NombreCompleto), ModalDeUsuarios);
         }
 
@@ -56,7 +62,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     , claseBoton: enumCssOpcionMenu.DeElemento
                     , permisosNecesarios: enumModoDeAccesoDeDatos.Consultor);
 
-            return htmlModal + Environment.NewLine + " <!--  ******************* modal para selector de usuario ******************* -->" + Environment.NewLine + RenderUsuarioReceptor();
+            return htmlModal;
         }
 
         private string cuerpoDeEnvioDeCorreo()
@@ -64,7 +70,7 @@ namespace MVCSistemaDeElementos.Descriptores
             //
             var htmlCuerpo = $@"<div id=¨{IdHtml}_cuerpo_contenedor¨ class=¨{enumCssEnviarCorreo.Contenedor.Render()}¨>
                                      <div id=¨{IdHtml}_cuerpo_enviar_correo¨ class=¨{enumCssEnviarCorreo.cabecera.Render()}¨>
-                                        {RenderSelectorDeUsuario()}
+                                        UsuariosReceptores 
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssEnviarCorreo.cuerpo.Render()}¨>
                                         Asunto
@@ -73,29 +79,23 @@ namespace MVCSistemaDeElementos.Descriptores
                                      <div id=¨{IdHtml}_cuerpo_enviar¨ class=¨{enumCssEnviarCorreo.adjuntos.Render()}¨>                                        
                                         Elementos
                                      </div>
-            //                    </div>";
-            return htmlCuerpo;
+                                </div>
+                                ";
+
+            var htmlUsuariosReceptores = RenderUsuariosReceptores().Render();
+
+            return htmlCuerpo.Replace("UsuariosReceptores", htmlUsuariosReceptores);
+
         }
 
-        private object RenderUsuarioReceptor()
+        internal object RenderDeModalParaSeleccionarUsuarioReceptor()
         {
-            return SelectorDeUsuarios.RenderModalDeSeleccion();
+            return SelectorDeUsuarios.RenderModalAsociadaAlSelector();
         }
 
-        private string listaDeExportaciones()
+        private string RenderUsuariosReceptores()
         {
-            return RenderListaConEtiquetaEncima(IdHtml, "ExportacionDto", "Nombre", "Plantilla").Replace("Seleccionar ...", "Estandard");
-        }
-        private string checkDeSometido()
-        {
-            var accion = $"onClick = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.PulsarSometer}')¨";
-            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", ltrExportacion.sometido, true, "Someter", accion) +
-                   RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
-        }
-
-        private string RenderSelectorDeUsuario()
-        {
-            return SelectorDeUsuarios.RenderSelector();
+            return SelectorDeUsuarios.RenderSelectorEnModal();
         }
     }
 }

@@ -5,25 +5,25 @@ var Crud;
             return document.getElementById(this.idSelector);
         }
         get EditorDelGrid() {
-            var idEditorMostrar = this.Selector.getAttribute(atSelector.idEditorMostrar);
+            var idEditorMostrar = this.Selector.getAttribute(atSelectorDeFiltro.idEditorMostrar);
             return document.getElementById(idEditorMostrar);
         }
         get idSelector() {
-            return this.Modal.getAttribute(atSelector.selector);
+            return this.Modal.getAttribute(atSelectorDeFiltro.selector);
         }
         get ExpresionNombre() {
             return this.Grid.getAttribute(atControl.expresionElemento);
         }
         get ColumnaId() {
-            return this.Selector.getAttribute(atSelector.propiedadParaFiltrar);
+            return this.Selector.getAttribute(atSelectorDeFiltro.propiedadParaFiltrar);
         }
         constructor(idModal) {
             super(idModal, document.getElementById(idModal).getAttribute(atControl.crudModal));
         }
         InicializarModalDeSeleccion() {
             super.InicializarModalConGrid();
-            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
-                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
+            if (this.Selector.hasAttribute(atSelectorDeFiltro.ListaDeSeleccionados))
+                this.Selector.setAttribute(atSelectorDeFiltro.ListaDeSeleccionados, '');
         }
         ;
         AbrirModalDeSeleccion() {
@@ -54,8 +54,8 @@ var Crud;
         }
         ElementosMarcados() {
             let elementos = new Array();
-            let seleccionados = this.Selector.hasAttribute(atSelector.ListaDeSeleccionados) ?
-                this.Selector.getAttribute(atSelector.ListaDeSeleccionados) :
+            let seleccionados = this.Selector.hasAttribute(atSelectorDeFiltro.ListaDeSeleccionados) ?
+                this.Selector.getAttribute(atSelectorDeFiltro.ListaDeSeleccionados) :
                 "";
             if (!IsNullOrEmpty(seleccionados)) {
                 var listaNombres = this.Selector.value.split('|');
@@ -82,8 +82,8 @@ var Crud;
             this.CerrarModalDeSeleccion();
         }
         BlanquearListaDeSeleccionados() {
-            if (this.Selector.hasAttribute(atSelector.ListaDeSeleccionados))
-                this.Selector.setAttribute(atSelector.ListaDeSeleccionados, '');
+            if (this.Selector.hasAttribute(atSelectorDeFiltro.ListaDeSeleccionados))
+                this.Selector.setAttribute(atSelectorDeFiltro.ListaDeSeleccionados, '');
         }
         TextoSelectorCambiado() {
             this.EditorDelGrid.value = this.Selector.value;
@@ -110,8 +110,8 @@ var Crud;
             return JSON.stringify(clausulas);
         }
         ClausulaSegunLoEscrito() {
-            var propiedad = this.Selector.getAttribute(atSelector.popiedadBuscar);
-            var criterio = this.Selector.getAttribute(atSelector.criterioBuscar);
+            var propiedad = this.Selector.getAttribute(atSelectorDeFiltro.popiedadBuscar);
+            var criterio = this.Selector.getAttribute(atSelectorDeFiltro.criterioBuscar);
             var valor = this.Selector.value.trim();
             var clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             return clausula;
@@ -119,7 +119,7 @@ var Crud;
         ;
         ProcesarRegistrosLeidos(registros) {
             this.InicializarModalDeSeleccion();
-            var propiedadmostrar = this.Selector.getAttribute(atSelector.propiedadmostrar);
+            var propiedadmostrar = this.Selector.getAttribute(atSelectorDeFiltro.propiedadmostrar);
             if (registros.length === 1) {
                 var registro = registros[0];
                 for (let key in registro) {
@@ -143,16 +143,16 @@ var Crud;
             this.mapearIdAlHtmlSelector(elemento.Id);
         }
         mapearIdAlHtmlSelector(id) {
-            var listaDeIds = this.Selector.getAttribute(atSelector.ListaDeSeleccionados);
+            var listaDeIds = this.Selector.getAttribute(atSelectorDeFiltro.ListaDeSeleccionados);
             if (listaDeIds === null) {
-                var atributo = document.createAttribute(atSelector.ListaDeSeleccionados);
+                var atributo = document.createAttribute(atSelectorDeFiltro.ListaDeSeleccionados);
                 this.Selector.setAttributeNode(atributo);
                 listaDeIds = "";
             }
             if (!IsNullOrEmpty(listaDeIds))
                 listaDeIds = listaDeIds + ';';
             listaDeIds = listaDeIds + id;
-            this.Selector.setAttribute(atSelector.ListaDeSeleccionados, listaDeIds);
+            this.Selector.setAttribute(atSelectorDeFiltro.ListaDeSeleccionados, listaDeIds);
         }
     }
     Crud.ModalSeleccion = ModalSeleccion;

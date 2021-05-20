@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         public string propiedadParaFiltrar { get; private set; }
         public string propiedadParaMostrar { get; private set; }
-        public DescriptorDeCrud<TSeleccionado> Modal { get; set; }
+        public ModalParaSeleccionar<TSeleccionado> Modal { get; set; }
 
         public string IdBtnSelectorHtml => $"{IdHtml}_btnsel";
 
@@ -19,10 +19,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string PropiedadDondeMapear { get; private set; }
 
-        public DescriptorDeCrud<TSeleccionado> CrudModal { get; private set; }
-
         //la propiedad es el parámetro que se enviará en la llamada ajax
-        public SelectorEnModal(ControlHtml padre,string id,  string etiqueta, string ayuda, string propiedad, string paraFiltrar, string paraMostrar, DescriptorDeCrud<TSeleccionado> crudModal)
+        public SelectorEnModal(ControlHtml padre,string id,  string etiqueta, string ayuda, string propiedad, string paraFiltrar, string paraMostrar, ModalParaSeleccionar<TSeleccionado> crudModal)
         : base(
           padre: padre
           , id: $"{padre.Id}_{id}" 
@@ -37,27 +35,31 @@ namespace MVCSistemaDeElementos.Descriptores
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = crudModal;
             Criterio = CriteriosDeFiltrado.igual;
-            CrudModal = crudModal;
         }
 
 
-        public string RenderModalDeSeleccion()
+        internal string RenderModalAsociadaAlSelector()
         {
-            return CrudModal.RenderCrudModal(CrudModal.IdHtml, enumTipoDeModal.ModalDeSeleccion);
+            return Modal.RenderModalParaSeleccionar();
         }
 
 
-        public string RenderSelector()
+        public string RenderSelectorEnModal()
         {
             return RenderControl();
         }
 
         public override string RenderControl()
         {
+            var editorDeFiltro = Modal.CrudModal.BuscarControlEnFiltro(propiedadParaMostrar);
 
-            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()}¨ propiedad=¨{PropiedadHtml}¨ idSeleccionados=¨¨ idEditor=¨{IdHtmlEditor}¨ idBotonSelector=¨{IdBtnSelectorHtml}¨>
+            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()}¨ propiedad=¨{PropiedadHtml}¨ 
+                              idSeleccionados=¨¨ 
+                              idEditor=¨{IdHtmlEditor}¨ 
+                              idBotonSelector=¨{IdBtnSelectorHtml}¨
+                              idEditorDelFiltro=¨{editorDeFiltro.IdHtml}¨>
                              {RenderEditorDelSelector()}
-                             {RenderBotonSelector()}
+                             {RenderBotonSelectorEnModal()}
                           </div>";
 
 
@@ -68,7 +70,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
 
             var otrosAtributos = new Dictionary<string, string>();
-            otrosAtributos["onBlur"] = $"onBlur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}')¨";
+            otrosAtributos["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
+            otrosAtributos["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
 
             var div = $@"
             <div id=¨div_{IdHtmlEditor}_contenedor¨ name=¨contenedor-control¨ class={enumCssSelectorEnModal.Editor.Render()}¨>
@@ -78,20 +81,20 @@ namespace MVCSistemaDeElementos.Descriptores
 
             return div;
         }
-        private string RenderBotonSelector()
+        private string RenderBotonSelectorEnModal()
         {
-            var a = AtributosHtml.AtributosComunes($"div-{IdBtnSelectorHtml}", IdHtmlEditor, Propiedad, enumTipoControl.SelectorDeElemento);
-            a.AlPulsarElBoton = $"onClick = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.OpcionSeleccionada}','{Modal.IdHtml}')¨";
+            var htmlBotonSelector = $@"
+                <div id = ¨{IdBtnSelectorHtml}_contenedor¨ class=¨{enumCssControlesDto.ContenedorBotonSelector.Render()}¨>
+                   <input id=¨{IdBtnSelectorHtml}¨ 
+                          type=¨button¨ 
+                          class=¨{enumCssControlesDto.BotonSelector.Render()}¨ 
+                          value=¨...¨ 
+                          onClick = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.OpcionSeleccionada}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨
+                          title=¨{Ayuda}¨/>
+                </div>
+                 ";
 
-            Dictionary<string, object> valores = a.MapearComunes();
-
-            valores["CssContenedor"] = enumCssControlesDto.ContenedorEditor.Render();
-            valores["Css"] = enumCssControlesDto.BotonSelector.Render();
-            valores["Placeholder"] = a.Ayuda;
-            valores["onClick"] = a.AlPulsarElBoton;
-
-
-            return PlantillasHtml.Render(PlantillasHtml.BotonSeleccion, valores); 
+            return htmlBotonSelector;
         }
     }
 }

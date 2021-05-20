@@ -225,8 +225,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos)
         {
-            var htmlEditor = @$" <div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
-                                  <div class=¨{enumCssControlesDto.ContenedorEtiqueta.Render()}¨>
+            var htmlEditor = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
+                                  <div class=¨{enumCssControlesDto.ContenedorEtiquetaIzquierda.Render()}¨>
                                      <label id=¨etiqueta-{idHtml}¨ for=¨{idHtml}¨ class=¨[CssEtiqueta]¨>{etiqueta}</label>
                                   </div>
                                   <div class=¨{enumCssControlesDto.ContenedorEditor.Render()}¨>
@@ -235,11 +235,12 @@ namespace MVCSistemaDeElementos.Descriptores
                                          class=¨{enumCssControlesDto.Editor.Render()}¨ 
                                          tipo=¨{enumTipoControl.Editor.Render()}¨
                                          placeholder =¨{ayuda}¨
-                                         [estilo][readOnly][obligatorio][onBlur]>
+                                         [estilo][readOnly][obligatorio][onBlur][onFocus]>
                                      </input>
-                                  <div>
-                             </div>";
+                                  </div>
+                                </div>";
 
+            htmlEditor = htmlEditor.Replace("[onFocus]", otrosAtributos.ContainsKey("onFocus") ? otrosAtributos["onFocus"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
@@ -270,7 +271,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                        value=¨Cerrar¨
                                        onclick=¨{cerrar}¨ />";
 
-            var htmlModal = $@"<div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
+            var htmlModal = $@" <!--  *******************  modal de {idHtml} ******************* -->
+                                <div id=¨{idHtml}¨ class=¨contenedor-modal¨ controlador=¨{controlador}¨>
                               		<div id=¨{idHtml}_contenido¨ class=¨contenido-modal¨>
                               		    <div id=¨{idHtml}_cabecera¨ class=¨contenido-cabecera¨>
                               		    	<h2>{tituloH2}</h2>
@@ -285,8 +287,10 @@ namespace MVCSistemaDeElementos.Descriptores
                                           </div>
                                            {navegador}
                                         </div>
-                                      </div>
-                              </div>";
+                                   </div>
+                              </div>
+                              <!--  *******************  fin de la modal ******************* -->
+                              ";
 
             return htmlModal;
         }

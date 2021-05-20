@@ -69,6 +69,10 @@ namespace MVCSistemaDeElementos.Descriptores
                   ";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string RenderControl()
         {
             return RenderSelector();

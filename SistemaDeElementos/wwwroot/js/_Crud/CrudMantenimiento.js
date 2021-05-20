@@ -168,7 +168,7 @@ var Crud;
         InicializarSelectores() {
             let selectores = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`);
             selectores.forEach((selector) => {
-                let idModal = selector.getAttribute(atSelector.idModal);
+                let idModal = selector.getAttribute(atSelectorDeFiltro.idModal);
                 let modal = new Crud.ModalSeleccion(idModal);
                 modal.InicializarModalDeSeleccion();
                 this.ModalesDeSeleccion.push(modal);
@@ -328,7 +328,7 @@ var Crud;
         }
         CambiarSelector(idSelector) {
             var htmlSelector = document.getElementById(idSelector);
-            let modal = Crud.crudMnt.ObtenerModalDeSeleccion(htmlSelector.getAttribute(atSelector.idModal));
+            let modal = Crud.crudMnt.ObtenerModalDeSeleccion(htmlSelector.getAttribute(atSelectorDeFiltro.idModal));
             if (IsNullOrEmpty(htmlSelector.value))
                 modal.InicializarModalDeSeleccion();
             else
@@ -383,14 +383,26 @@ var Crud;
             this.ModalesParaSeleccionar.push(modal);
             return modal;
         }
-        ModalEnviarCorreo_SeleccionarUsuarios(idModal, idSelector) {
-            this.ModalEnviarCorreo_Cerrar();
-            let modal = this.ObtenerModalParaSeleccionar(idModal);
-            if (modal === undefined)
-                throw new Error(`Modal ${idModal} no definida`);
-            let selector = document.getElementById(idSelector);
-            if (IsNull(selector))
-                throw new Error(`el selector ${idSelector} no está definido en la modal ${idModal}`);
+        ObtenerFocoEnSelector(idSelector) {
+            let selector = ApiCrud.ObtenerSelector(idSelector);
+            let editor = ApiCrud.ObtenerEditorAsociadoAlSelector(selector);
+            editor.setAttribute(atSelectorDeElementos.ValorAlEntrar, editor.value);
+        }
+        PerderElFocoEnUnSelectorDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector) {
+            let selector = ApiCrud.ObtenerSelector(idSelector);
+            let editor = ApiCrud.ObtenerEditorAsociadoAlSelector(selector);
+            let valorAlEntrar = editor.getAttribute(atSelectorDeElementos.ValorAlEntrar);
+            if (editor.value === valorAlEntrar || IsNullOrEmpty(editor.value))
+                return;
+            this.AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector);
+        }
+        AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector) {
+            ApiCrud.CerrarModalPorId(idModalQueSeCierra);
+            let modal = this.ObtenerModalParaSeleccionar(idModalQueSeAbre);
+            if (NoDefinida(modal))
+                throw new Error(`Modal ${idModalQueSeAbre} no definida`);
+            let selector = ApiCrud.ObtenerSelector(idSelector);
+            selector.setAttribute(atSelectorDeElementos.ModalPadre, idModalQueSeCierra);
             modal.AbrirModalParaSeleccionar(selector);
         }
         ModalExportacion_Abrir() {

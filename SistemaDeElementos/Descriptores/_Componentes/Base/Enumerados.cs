@@ -97,6 +97,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoDeAccionSelectorEnModal
     {
         public const string PerderFoco = "perder-foco";
+        public const string ObtenerFoco = "obtener-foco";
         public const string Blanquear = "blanquear-selector";
         public const string TrasSeleccionar = "tras-seleccionar";
         public const string OpcionSeleccionada = "opcion-seleccionar";
@@ -245,6 +246,7 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorEditorConEtiquetaIzquierda,
         ContenedorListaDinamica,
         ContenedorEtiqueta,
+        ContenedorEtiquetaIzquierda,
         ContenedorEditor,
         ContenedorBotonSelector,
         ContenedorCheck,
@@ -424,6 +426,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorEditor: return "contenedor-editor";
                 case enumCssControlesDto.ContenedorBotonSelector: return "contenedor-boton-selector";
                 case enumCssControlesDto.ContenedorEtiqueta: return "contenedor-etiqueta";
+                case enumCssControlesDto.ContenedorEtiquetaIzquierda: return "contenedor-etiqueta-izquierda";
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
                 case enumCssControlesDto.ContenedorFecha: return "contenedor-fecha";

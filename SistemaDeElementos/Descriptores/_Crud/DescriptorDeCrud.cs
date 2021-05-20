@@ -208,8 +208,10 @@ namespace MVCSistemaDeElementos.Descriptores
                   <!--  *******************  div de envío de correo *************** -->
                   {Cartero.RenderDeEnvioDeCorreo()}
                   <!--  *******************  div de borrado ******************* -->
-                  {Borrado.RenderDelBorrado()}";
-
+                  {Borrado.RenderDelBorrado()}
+                  <!--  **********  div de selector de usuario receptor de correo****** -->
+                  {Cartero.RenderDeModalParaSeleccionarUsuarioReceptor()}";
+                
                 if (ModoDescriptor.Consulta == Modo)
                     return $@"
                  {renderMnt}

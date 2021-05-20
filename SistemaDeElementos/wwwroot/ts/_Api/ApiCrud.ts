@@ -295,14 +295,25 @@ namespace ApiCrud {
         panel.classList.remove(ClaseCss.divVisible);
     }
 
+    export function CerrarModalPorId(id: string) {
+        let modal: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        CerrarModal(modal);
+    } 
     export function CerrarModal(modal: HTMLDivElement) {
         modal.style.display = "none";
-        //modal.setAttribute('altura-inicial', "0");
-        //modal.setAttribute('ratio-inicial', "0");
-        //var body = document.getElementsByTagName("body")[0];
-        //body.style.position = "inherit";
-        //body.style.height = "auto";
-        //body.style.overflow = "visible";
+    }
+
+    export function AbrirModalPorId(id: string) {
+        let modal: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        AbriModal(modal);
+    } 
+
+    export function AbriModal(modal: HTMLDivElement) {
+        modal.style.display = 'block';
     }
 
     export function QuitarClaseDeCtrlNoValido(panel: HTMLDivElement) {
@@ -367,6 +378,21 @@ namespace ApiCrud {
             if (literal.toLowerCase() === antiguo)
                 opcion.value = nuevo;
         }
+    }
+
+    export function ObtenerSelector(idSelector: string): HTMLDivElement {
+        let selector: HTMLDivElement = document.getElementById(idSelector) as HTMLDivElement;
+        if (NoDefinida(selector))
+            throw new Error(`el selector ${idSelector} no está definido`);
+        return selector;
+    }
+
+    export function ObtenerEditorAsociadoAlSelector(selector: HTMLDivElement): HTMLInputElement {
+        let idEditor = selector.getAttribute(atSelectorDeElementos.Editor);
+        let editor: HTMLInputElement = document.getElementById(idEditor) as HTMLInputElement;
+        if (NoDefinida(editor))
+            throw new Error(`el editor ${idEditor} no está definido en el selector ${selector.id}`);
+        return editor;
     }
 
     function BlanquearEditores(panel: HTMLDivElement) {

@@ -96,7 +96,7 @@ namespace MVCSistemaDeElementos.Descriptores
                     htmlModalesEnBloque =
                         $@"{htmlModalesEnBloque}{(htmlModalesEnBloque.IsNullOrEmpty() ? "" : Environment.NewLine)}" +
                         $"{c.RenderControl()}";
-
+                //ModalDeSeleccionDeFiltro.RenderModalDeSeleccionDeFiltro()
             }
             return htmlModalesEnBloque;
         }

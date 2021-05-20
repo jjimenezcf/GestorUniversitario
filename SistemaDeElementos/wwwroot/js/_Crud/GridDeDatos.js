@@ -552,8 +552,8 @@ var Crud;
             var criterio = selector.getAttribute(atControl.criterio);
             var valor = null;
             var clausula = null;
-            if (selector.hasAttribute(atSelector.ListaDeSeleccionados)) {
-                var ids = selector.getAttribute(atSelector.ListaDeSeleccionados);
+            if (selector.hasAttribute(atSelectorDeFiltro.ListaDeSeleccionados)) {
+                var ids = selector.getAttribute(atSelectorDeFiltro.ListaDeSeleccionados);
                 if (!NoDefinida(ids)) {
                     valor = ids;
                     clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
@@ -1078,19 +1078,19 @@ var Crud;
         definirPulsarCheck(idCheckDeSeleccion, idControlHtml) {
             let a = '';
             if (this.EsModalDeSeleccion) {
-                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                let idModal = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
                 a = `${GestorDeEventos.deSeleccion}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else if (this.EsModalParaRelacionar) {
-                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                let idModal = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
                 a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else if (this.EsModalParaSeleccionar) {
-                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                let idModal = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
                 a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else if (this.EsModalParaConsultarRelaciones) {
-                let idModal = this.Grid.getAttribute(atSelector.idModal);
+                let idModal = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
                 a = `${GestorDeEventos.deConsultaDeRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else if (this.EsCrud)

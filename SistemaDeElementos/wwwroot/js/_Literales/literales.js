@@ -122,7 +122,7 @@ const atOpcionDeMenu = {
     bloqueada: "bloqueada",
     oculta: "oculta"
 };
-const atSelector = {
+const atSelectorDeFiltro = {
     popiedadBuscar: "propiedadBuscar",
     criterioBuscar: "criterioBuscar",
     idEditorMostrar: "ideditormostrar",
@@ -134,6 +134,13 @@ const atSelector = {
     ListaDeSeleccionados: 'ids-seleccionados',
     selector: "selector",
     propiedadParaFiltrar: "propiedadFiltrar"
+};
+const atSelectorDeElementos = {
+    ModalPadre: "modal-padre",
+    Editor: "idEditor",
+    Boton: "idBotonSelector",
+    IdEditorDeFiltro: "idEditorDelFiltro",
+    ValorAlEntrar: "valor-al-entrar"
 };
 const atSelectorDeFecha = {
     hora: "idDeLaHora",
@@ -417,6 +424,11 @@ const Evento = {
     Expansores: {
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
         NavegarDesdeEdicion: "navegar-desde-edicion"
+    },
+    SelectorDeElementos: {
+        Seleccionar: "opcion-seleccionar",
+        PerderFoco: "perder-foco",
+        ObtenerFoco: "obtener-foco"
     },
     TrabajoDeUsuario: {
         iniciar: "iniciar-trabajo",
