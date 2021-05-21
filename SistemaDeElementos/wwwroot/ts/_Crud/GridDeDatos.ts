@@ -1331,7 +1331,7 @@
             let a: string = '';
             if (this.EsModalDeSeleccion) {
                 let idModal: string = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
-                a = `${GestorDeEventos.deSeleccion}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                a = `${GestorDeEventos.deSeleccionDeFiltro}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
             }
             else
                 if (this.EsModalParaRelacionar) {
@@ -1341,7 +1341,7 @@
                 else
                     if (this.EsModalParaSeleccionar) {
                         let idModal: string = this.Grid.getAttribute(atSelectorDeFiltro.idModal);
-                        a = `${GestorDeEventos.deCrearRelaciones}('fila-pulsada', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
+                        a = `${GestorDeEventos.paraSeleccionarElementos}('${Evento.ModalParaSeleccionarElementos.FilaPulsada}', '${idModal}#${idCheckDeSeleccion}#${idControlHtml}');`;
                     }
                     else
                         if (this.EsModalParaConsultarRelaciones) {

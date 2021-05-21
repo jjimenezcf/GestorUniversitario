@@ -228,7 +228,7 @@
         control.classList.remove(ClaseCss.crtlValido);
     }
 
-    export function BlanquearSelector(selector: HTMLSelectElement): void {
+    export function BlanquearListaDeElemento(selector: HTMLSelectElement): void {
         selector.classList.remove(ClaseCss.crtlNoValido);
         selector.classList.add(ClaseCss.crtlValido);
         selector.selectedIndex = 0;
@@ -282,7 +282,7 @@ namespace ApiCrud {
 
     export function BlanquearControlesDeIU(panel: HTMLDivElement) {
         BlanquearEditores(panel);
-        BlanquearSelectores(panel);
+        BlanquearListaDeElementos(panel);
         BlanquearArchivos(panel);
     }
 
@@ -301,7 +301,9 @@ namespace ApiCrud {
             throw new Error(`La modal ${id} no está definida`);
         CerrarModal(modal);
     } 
+
     export function CerrarModal(modal: HTMLDivElement) {
+        BlanquearSelectoresDeElemento(modal);
         modal.style.display = "none";
     }
 
@@ -388,7 +390,7 @@ namespace ApiCrud {
     }
 
     export function ObtenerEditorAsociadoAlSelector(selector: HTMLDivElement): HTMLInputElement {
-        let idEditor = selector.getAttribute(atSelectorDeElementos.Editor);
+        let idEditor = selector.getAttribute(atSelectorDeElementos.EditorAsociado);
         let editor: HTMLInputElement = document.getElementById(idEditor) as HTMLInputElement;
         if (NoDefinida(editor))
             throw new Error(`el editor ${idEditor} no está definido en el selector ${selector.id}`);
@@ -402,10 +404,10 @@ namespace ApiCrud {
         }
     }
 
-    function BlanquearSelectores(panel: HTMLDivElement) {
+    function BlanquearListaDeElementos(panel: HTMLDivElement) {
         let selectores: NodeListOf<HTMLSelectElement> = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.ListaDeElementos}"]`) as NodeListOf<HTMLSelectElement>;
         for (let i = 0; i < selectores.length; i++) {
-            ApiControl.BlanquearSelector(selectores[i]);
+            ApiControl.BlanquearListaDeElemento(selectores[i]);
         }
     }
 
@@ -413,6 +415,16 @@ namespace ApiCrud {
         let archivos: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`${atControl.tipo}[tipo="${TipoControl.Archivo}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < archivos.length; i++) {
             ApiDeArchivos.BlanquearArchivo(archivos[i], true);
+        }
+    }
+
+    function BlanquearSelectoresDeElemento(modal: HTMLDivElement) {
+        let selectores: NodeListOf<HTMLInputElement> = modal.querySelectorAll(`[${atControl.tipo}=${TipoControl.SelectorDeElementos}]`) as NodeListOf<HTMLInputElement>;
+        for (let i: number = 0; i < selectores.length; i++) {
+            selectores[i].setAttribute(atSelectorDeElementos.Seleccionados, '');
+            let idEditor = selectores[i].getAttribute(atSelectorDeElementos.EditorAsociado);
+            let editor: HTMLInputElement = document.getElementById(idEditor) as HTMLInputElement;
+            ApiControl.BlanquearEditor(editor)
         }
     }
 }

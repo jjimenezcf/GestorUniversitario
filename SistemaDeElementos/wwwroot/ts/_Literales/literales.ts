@@ -151,10 +151,11 @@ const atSelectorDeFiltro = {
 
 const atSelectorDeElementos = {
     ModalPadre: "modal-padre",
-    Editor: "idEditor",
+    EditorAsociado: "idEditor",
     Boton: "idBotonSelector",
     IdEditorDeFiltro: "idEditorDelFiltro",
-    ValorAlEntrar: "valor-al-entrar"
+    ValorAlEntrar: "valor-al-entrar",
+    Seleccionados: "idseleccionados"
 };
 
 const atSelectorDeFecha = {
@@ -337,7 +338,7 @@ const LiteralMnt = {
 };
 
 const Evento = {
-    ModalSeleccion: {
+    ModalSeleccionDeFiltro: {
         Abrir: "abrir-modal-seleccion",
         Seleccionar: "seleccionar-elementos",
         Cerrar: "cerrar-modal-seleccion",
@@ -374,7 +375,7 @@ const Evento = {
         MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
-    ModalParaSeleccionar: {
+    ModalParaSeleccionarElementos: {
         Buscar: "buscar-elementos",
         FilaPulsada: "fila-pulsada",
         ObtenerAnteriores: "obtener-anteriores",
@@ -477,6 +478,7 @@ const TipoControl = {
     Editor: "editor",
     Check: "check",
     Selector: "selector",
+    SelectorDeElementos: "selector-de-elemento",
     ListaDeElementos: "lista-de-elemento",
     SelectorDeFecha: "selector-de-fecha",
     SelectorDeFechaHora: "selector-de-fecha-hora",
@@ -537,11 +539,11 @@ const Sesion = {
 };
 
 const GestorDeEventos = {
-    deSeleccion: "Crud.EventosModalDeSeleccion",
+    deSeleccionDeFiltro: "Crud.EventosModalDeSeleccion",
     deCrearRelaciones: "Crud.EventosModalDeCrearRelaciones",
     deConsultaDeRelaciones: "Crud.EventosModalDeConsultaDeRelaciones",
     delMantenimiento: "Crud.EventosDelMantenimiento",
     deListaDinamica: "Crud.EventosDeListaDinamica",
-    deSeleccionar: "Crud.EventosDeListaDinamica"
+    paraSeleccionarElementos: "Crud.EventosModalParaSeleccionar"
 };
 

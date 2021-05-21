@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Enumerados;
 using ModeloDeDto;
 using ModeloDeDto.Entorno;
+using ModeloDeDto.Seguridad;
 using ModeloDeDto.TrabajosSometidos;
 using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Seguridad;
@@ -18,8 +19,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMantenimiento<TElemento> Mnt => Crud.Mnt;
 
         private ModalParaSeleccionar<UsuarioDto> ModalDeUsuarios { get; }
+        private ModalParaSeleccionar<PuestoDto> ModalDePuestos { get; }
 
         private SelectorEnModal<UsuarioDto> SelectorDeUsuarios { get; }
+        private SelectorEnModal<PuestoDto> SelectorDePuestoTr { get; }
 
         public DescriptorDeEnviarCorreo(DescriptorDeCrud<TElemento> crud)
         : base(
@@ -33,13 +36,20 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             Tipo = enumTipoControl.pnlEnviarCorreo;
 
-            var descriptorUsuarios = new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar);
             ModalDeUsuarios = new ModalParaSeleccionar<UsuarioDto>(this,
                                          tituloModal: "Seleccionar usuario",
-                                         crudModal: descriptorUsuarios,
+                                         crudModal: new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar),
                                          propiedadRestrictora: "");
 
+            ModalDePuestos = new ModalParaSeleccionar<PuestoDto>(this,
+                                         tituloModal: "Seleccionar puestos de trabajo",
+                                         crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.ParaSeleccionar),
+                                         propiedadRestrictora: "");
+
+
             SelectorDeUsuarios = new SelectorEnModal<UsuarioDto>(this, "selector-usuario", "Usuario", "Seleccione usuarios", "IdsDeUsuarios", nameof(UsuarioDto.Id), nameof(UsuarioDto.NombreCompleto), ModalDeUsuarios);
+            SelectorDePuestoTr = new SelectorEnModal<PuestoDto>(this, "selector-puestos", "Puestos", "Seleccione puestos", "IdsDePuestos", nameof(PuestoDto.Id), nameof(UsuarioDto.Nombre), ModalDePuestos);
+
         }
 
         public string RenderDeEnvioDeCorreo()
@@ -70,7 +80,8 @@ namespace MVCSistemaDeElementos.Descriptores
             //
             var htmlCuerpo = $@"<div id=¨{IdHtml}_cuerpo_contenedor¨ class=¨{enumCssEnviarCorreo.Contenedor.Render()}¨>
                                      <div id=¨{IdHtml}_cuerpo_enviar_correo¨ class=¨{enumCssEnviarCorreo.cabecera.Render()}¨>
-                                        UsuariosReceptores 
+                                        PuestosDeTrabajoReceptores
+                                        UsuariosReceptores
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssEnviarCorreo.cuerpo.Render()}¨>
                                         Asunto
@@ -82,20 +93,20 @@ namespace MVCSistemaDeElementos.Descriptores
                                 </div>
                                 ";
 
-            var htmlUsuariosReceptores = RenderUsuariosReceptores().Render();
+            var htmlUsuariosReceptores = SelectorDeUsuarios.RenderSelectorEnModal();
+            var htmlPuestosDeTrabajoReceptores = SelectorDePuestoTr.RenderSelectorEnModal();
 
-            return htmlCuerpo.Replace("UsuariosReceptores", htmlUsuariosReceptores);
-
+            htmlCuerpo = htmlCuerpo.Replace("UsuariosReceptores", htmlUsuariosReceptores);
+            htmlCuerpo = htmlCuerpo.Replace("PuestosDeTrabajoReceptores", htmlPuestosDeTrabajoReceptores);
+            return htmlCuerpo;
         }
 
-        internal object RenderDeModalParaSeleccionarUsuarioReceptor()
+
+        internal object RenderDeModalesParaSeleccionarReceptores()
         {
-            return SelectorDeUsuarios.RenderModalAsociadaAlSelector();
+            return SelectorDeUsuarios.RenderModalAsociadaAlSelector() + Environment.NewLine + SelectorDePuestoTr.RenderModalAsociadaAlSelector();
         }
 
-        private string RenderUsuariosReceptores()
-        {
-            return SelectorDeUsuarios.RenderSelectorEnModal();
-        }
+
     }
 }

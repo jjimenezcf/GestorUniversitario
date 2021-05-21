@@ -67,9 +67,24 @@
                 );
         };
 
-        public CerrarModalParaSeleccionar() {
+        public CerrarModalParaSeleccionar() {   
+            for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
+                let elemento: Elemento = this.InfoSelector.LeerElemento(i);
+
+                if (IsNullOrEmpty(this.EditorAsociado.value)) {
+                    this._selector.setAttribute(atSelectorDeElementos.Seleccionados, `${elemento.Id}`);
+                    this.EditorAsociado.value = elemento.Texto;
+                }
+                else {
+                    let seleccionados = this._selector.getAttribute(atSelectorDeElementos.Seleccionados);
+                    this._selector.setAttribute(atSelectorDeElementos.Seleccionados, `${seleccionados},${elemento.Id}`);
+                    this.EditorAsociado.value = `${this.EditorAsociado.value} | ${elemento.Texto}`;
+                }
+            }
             this.CerrarModalConGrid();
-            this._crud.ModalEnviarCorreo_Abrir();
+            let idmodal: string = this._selector.getAttribute(atSelectorDeElementos.ModalPadre);
+            if (!NoDefinida(idmodal))
+                ApiCrud.AbrirModalPorId(idmodal);
         }
 
 

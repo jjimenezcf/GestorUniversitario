@@ -217,12 +217,12 @@ var ApiControl;
         control.classList.remove(ClaseCss.crtlValido);
     }
     ApiControl.MarcarError = MarcarError;
-    function BlanquearSelector(selector) {
+    function BlanquearListaDeElemento(selector) {
         selector.classList.remove(ClaseCss.crtlNoValido);
         selector.classList.add(ClaseCss.crtlValido);
         selector.selectedIndex = 0;
     }
-    ApiControl.BlanquearSelector = BlanquearSelector;
+    ApiControl.BlanquearListaDeElemento = BlanquearListaDeElemento;
     function LeerEntreFechas(controlDeFechaDesde) {
         let idHora = controlDeFechaDesde.getAttribute(atEntreFechas.horaDesde);
         let entreFechas = LeerFechaHora(controlDeFechaDesde, idHora);
@@ -266,7 +266,7 @@ var ApiCrud;
     ApiCrud.MapearControlesDesdeLaIuAlJson = MapearControlesDesdeLaIuAlJson;
     function BlanquearControlesDeIU(panel) {
         BlanquearEditores(panel);
-        BlanquearSelectores(panel);
+        BlanquearListaDeElementos(panel);
         BlanquearArchivos(panel);
     }
     ApiCrud.BlanquearControlesDeIU = BlanquearControlesDeIU;
@@ -287,6 +287,7 @@ var ApiCrud;
     }
     ApiCrud.CerrarModalPorId = CerrarModalPorId;
     function CerrarModal(modal) {
+        BlanquearSelectoresDeElemento(modal);
         modal.style.display = "none";
     }
     ApiCrud.CerrarModal = CerrarModal;
@@ -367,7 +368,7 @@ var ApiCrud;
     }
     ApiCrud.ObtenerSelector = ObtenerSelector;
     function ObtenerEditorAsociadoAlSelector(selector) {
-        let idEditor = selector.getAttribute(atSelectorDeElementos.Editor);
+        let idEditor = selector.getAttribute(atSelectorDeElementos.EditorAsociado);
         let editor = document.getElementById(idEditor);
         if (NoDefinida(editor))
             throw new Error(`el editor ${idEditor} no está definido en el selector ${selector.id}`);
@@ -380,16 +381,25 @@ var ApiCrud;
             ApiControl.BlanquearEditor(editores[i]);
         }
     }
-    function BlanquearSelectores(panel) {
+    function BlanquearListaDeElementos(panel) {
         let selectores = panel.querySelectorAll(`select[${atControl.tipo}="${TipoControl.ListaDeElementos}"]`);
         for (let i = 0; i < selectores.length; i++) {
-            ApiControl.BlanquearSelector(selectores[i]);
+            ApiControl.BlanquearListaDeElemento(selectores[i]);
         }
     }
     function BlanquearArchivos(panel) {
         let archivos = panel.querySelectorAll(`${atControl.tipo}[tipo="${TipoControl.Archivo}"]`);
         for (let i = 0; i < archivos.length; i++) {
             ApiDeArchivos.BlanquearArchivo(archivos[i], true);
+        }
+    }
+    function BlanquearSelectoresDeElemento(modal) {
+        let selectores = modal.querySelectorAll(`[${atControl.tipo}=${TipoControl.SelectorDeElementos}]`);
+        for (let i = 0; i < selectores.length; i++) {
+            selectores[i].setAttribute(atSelectorDeElementos.Seleccionados, '');
+            let idEditor = selectores[i].getAttribute(atSelectorDeElementos.EditorAsociado);
+            let editor = document.getElementById(idEditor);
+            ApiControl.BlanquearEditor(editor);
         }
     }
 })(ApiCrud || (ApiCrud = {}));

@@ -120,53 +120,53 @@
 
         try {
             switch (accion) {
-                case Evento.ModalSeleccion.Abrir: {
+                case Evento.ModalSeleccionDeFiltro.Abrir: {
                     modal.AbrirModalDeSeleccion();
                     break;
                 }
-                case Evento.ModalSeleccion.Cerrar: {
+                case Evento.ModalSeleccionDeFiltro.Cerrar: {
                     modal.CerrarModalDeSeleccion();
                     break;
                 }
-                case Evento.ModalSeleccion.Seleccionar: {
+                case Evento.ModalSeleccionDeFiltro.Seleccionar: {
                     modal.SeleccionarElementos();
                     break;
                 }
-                case Evento.ModalSeleccion.FilaPulsada: {
+                case Evento.ModalSeleccionDeFiltro.FilaPulsada: {
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
-                case Evento.ModalSeleccion.Buscar: {
+                case Evento.ModalSeleccionDeFiltro.Buscar: {
                     modal.RecargarGrid();
                     break;
                 }
-                case Evento.ModalSeleccion.ObtenerSiguientes: {
+                case Evento.ModalSeleccionDeFiltro.ObtenerSiguientes: {
                     modal.ObtenerSiguientes();
                     break;
                 }
-                case Evento.ModalSeleccion.ObtenerAnteriores: {
+                case Evento.ModalSeleccionDeFiltro.ObtenerAnteriores: {
                     modal.ObtenerAnteriores();
                     break;
                 }
-                case Evento.ModalSeleccion.ObtenerUltimos: {
+                case Evento.ModalSeleccionDeFiltro.ObtenerUltimos: {
                     modal.ObtenerUltimos();
                     break;
                 }
-                case Evento.ModalSeleccion.OrdenarPor: {
+                case Evento.ModalSeleccionDeFiltro.OrdenarPor: {
                     let columna: string = parIn[1];
                     modal.OrdenarPor(columna);
                     break;
                 }
-                case Evento.ModalSeleccion.MostrarSoloSeleccionadas: {
+                case Evento.ModalSeleccionDeFiltro.MostrarSoloSeleccionadas: {
                     var input = modal.InputSeleccionadas;
                     var etiqueta = modal.EtiquetasSeleccionadas;
                     var tbodyDelGrid = modal.CuerpoTablaGrid;
                     crudMnt.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
-                case Evento.ModalSeleccion.TeclaPulsada: {
+                case Evento.ModalSeleccionDeFiltro.TeclaPulsada: {
                     modal.TeclaPulsada(modal, event);
                     break;
                 }
@@ -259,34 +259,33 @@
         }
         try {
             switch (accion) {
-                case Evento.ModalParaSeleccionar.FilaPulsada: {
+                case Evento.ModalParaSeleccionarElementos.FilaPulsada: {
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(idCheck, idOrigen);
-                    break;
                 }
-                case Evento.ModalParaSeleccionar.Buscar: {
+                case Evento.ModalParaSeleccionarElementos.Buscar: {
                     modal.RecargarGrid();
                     break;
                 }
-                case Evento.ModalParaSeleccionar.ObtenerSiguientes: {
+                case Evento.ModalParaSeleccionarElementos.ObtenerSiguientes: {
                     modal.ObtenerSiguientes();
                     break;
                 }
-                case Evento.ModalParaSeleccionar.ObtenerAnteriores: {
+                case Evento.ModalParaSeleccionarElementos.ObtenerAnteriores: {
                     modal.ObtenerAnteriores();
                     break;
                 }
-                case Evento.ModalParaSeleccionar.ObtenerUltimos: {
+                case Evento.ModalParaSeleccionarElementos.ObtenerUltimos: {
                     modal.ObtenerUltimos();
                     break;
                 }
-                case Evento.ModalParaSeleccionar.OrdenarPor: {
+                case Evento.ModalParaSeleccionarElementos.OrdenarPor: {
                     let columna: string = parIn[1];
                     modal.OrdenarPor(columna);
                     break;
                 }
-                case Evento.ModalParaSeleccionar.Cerrar: {
+                case Evento.ModalParaSeleccionarElementos.Cerrar: {
                     modal.CerrarModalParaSeleccionar();
                     break;
                 }

@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
           , null
           )
         {
-            Tipo = enumTipoControl.SelectorDeFiltro;
+            Tipo = enumTipoControl.SelectorDeElemento;
             propiedadParaFiltrar = paraFiltrar.ToLower();
             propiedadParaMostrar = paraMostrar.ToLower();
             Modal = crudModal;
@@ -53,7 +53,9 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var editorDeFiltro = Modal.CrudModal.BuscarControlEnFiltro(propiedadParaMostrar);
 
-            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()}¨ propiedad=¨{PropiedadHtml}¨ 
+            var html = $@"<div id=¨{IdHtml}¨ class=¨{enumCssSelectorEnModal.Contenedor.Render()}¨ 
+                              tipo=¨{Tipo.Render()}¨ 
+                              propiedad=¨{PropiedadHtml}¨ 
                               idSeleccionados=¨¨ 
                               idEditor=¨{IdHtmlEditor}¨ 
                               idBotonSelector=¨{IdBtnSelectorHtml}¨
