@@ -100,11 +100,10 @@ namespace MVCSistemaDeElementos.Descriptores
             if (descriptorControl.atributos.TipoDeControl == enumTipoControl.Check)
                 return "";
 
-            var cssDelContenedor = Css.Render(enumCssControlesDto.ContenedorEtiqueta); //"div-lbl-propiedad";//
-            var cssDeLaEtiqueta = Css.Render(enumCssControlesDto.Etiqueta);
+            var cssDelContenedor = Css.Render(enumCssControlesDto.ContenedorEtiqueta); 
 
 
-            return ControlHtml.RenderEtiqueta($"{tabla.IdHtml}_{i}_{j}_lbl", descriptorControl.atributos.Etiqueta, cssDelContenedor, cssDeLaEtiqueta);
+            return ControlHtml.RenderEtiqueta($"{tabla.IdHtml}_{i}_{j}_lbl", descriptorControl.atributos.Etiqueta, cssDelContenedor);
         }
 
         //

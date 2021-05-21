@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public bool Obligatorio { get; set; }
         public string AnchoMaximo { get; set; }
         public int NumeroDeFilas { get; set; } = -1;
-        public object Ayuda { get; internal set; }
+        public string Ayuda { get; internal set; }
         public object ValorPorDefecto { get; internal set; }
         public int LongitudMaxima { get; internal set; } = 0;
         public string Etiqueta { get; set; }
@@ -126,7 +126,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderEtiqueta()
         {
-            return RenderEtiqueta(IdHtml, Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
+            return RenderEtiqueta(IdHtml, Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta));
         }
 
         public abstract string RenderControl();
@@ -146,15 +146,18 @@ namespace MVCSistemaDeElementos.Descriptores
             Ayuda = ayuda;
         }
 
-        public static string RenderEtiqueta(string idControl, string etiqueta, string cssContenedor, string cssEtiqueta)
+        public static string RenderEtiqueta(string idControl, string etiqueta, string cssContenedor, Dictionary<string, string> otrosAtributos = null)
         {
-            Dictionary<string, object> valores = new Dictionary<string, object>();
-            valores["CssContenedor"] = cssContenedor;
-            valores["CssEtiqueta"] = cssEtiqueta;
-            valores["IdDeControl"] = idControl;
-            valores["Etiqueta"] = etiqueta;
+            var htmlEtiqueta = $@"<div id=¨etiqueta-{idControl}-contenedor¨ name=¨contenedor-etiqueta¨ class=¨{cssContenedor}¨>
+                                   <label id=¨etiqueta-{idControl}¨ for=¨{idControl}¨ class=¨{enumCssControlesDto.Etiqueta.Render()}¨ [estilo]>{etiqueta}</label>
+                                 </div>";
 
-            return PlantillasHtml.Render(PlantillasHtml.Etiqueta, valores);
+            if (otrosAtributos == null)
+                otrosAtributos = new Dictionary<string, string>();
+
+            htmlEtiqueta = htmlEtiqueta.Replace("[estilo]", otrosAtributos.ContainsKey("estiloEtiqueta") ? otrosAtributos["estiloEtiqueta"] + Environment.NewLine : "");
+
+            return htmlEtiqueta;
         }
 
         public static string RenderListaConEtiquetaEncima(string IdHtml, string elemetoDto, string mostrarExpresion, string etiqueta)
@@ -183,11 +186,11 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Tipo"] = enumTipoControl.ListaDeElemento.Render();
             valores["CssContenedor"] = enumCssControlesDto.ContenedorListaDeElementos.Render();
             valores["Css"] = enumCssControlesDto.ListaDeElementos.Render();
-            valores["ClaseElemento"] = elemetoDto; 
+            valores["ClaseElemento"] = elemetoDto;
             valores["MostrarExpresion"] = mostrarExpresion;
             valores["RestoDeAtributos"] = "id=¨[IdHtml]¨ class=¨[Css]¨ tipo=¨[Tipo]¨";
 
-            return RenderEtiqueta($"{IdHtml}_lista", etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), enumCssControlesDto.Etiqueta.Render()) +
+            return RenderEtiqueta($"{IdHtml}_lista", etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render()) +
                    PlantillasHtml.Render(PlantillasHtml.listaDeElementos.Replace("[RestoDeAtributos]", valores["RestoDeAtributos"].ToString()), valores);
         }
 
@@ -198,55 +201,69 @@ namespace MVCSistemaDeElementos.Descriptores
             Dictionary<string, object> valores = AtributosHtmlExtension.MapearComunes(a);
             valores["CssContenedor"] = enumCssControlesDto.ContenedorCheck.Render();
             valores["Css"] = enumCssControlesDto.Check.Render();
-            valores["Checked"] = chequeado ? "true": "false";
+            valores["Checked"] = chequeado ? "true" : "false";
             valores["Etiqueta"] = etiqueta;
             valores["Accion"] = accion;
 
             return PlantillasHtml.Render(plantillaHtml, valores);
         }
 
-        public static string RenderEditorConEtiquetaEncima(string plantillaHtml, AtributosHtml a)
+        public static string RenderEditor(string idHtml, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos)
         {
-            Dictionary<string, object> valores = a.MapearComunes();
-            valores["CssContenedor"] =enumCssControlesDto.ContenedorEditor.Render();
-            valores["Css"] = enumCssControlesDto.Editor.Render();
-            valores["Placeholder"] = a.Ayuda;
-            valores["ValorPorDefecto"] = a.ValorPorDefecto;
-            valores["LongitudMaxima"] = a.LongitudMaxima > 0 ?
-                    $"{Environment.NewLine}maxlength=¨{a.LongitudMaxima}¨"
-                    : "";
-            valores["onBlur"] = a.AlPerderElFoco.IsNullOrEmpty() ? "" : a.AlPerderElFoco;
-
-
-            var htmlEditor = PlantillasHtml.Render(plantillaHtml, valores);
-
-            return RenderEtiqueta($"{a.IdHtml}_editor", a.Etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), enumCssControlesDto.Etiqueta.Render()) +  htmlEditor;
-        }
-
-        public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos)
-        {
-            var htmlEditor = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
-                                  <div class=¨{enumCssControlesDto.ContenedorEtiquetaIzquierda.Render()}¨>
-                                     <label id=¨etiqueta-{idHtml}¨ for=¨{idHtml}¨ class=¨[CssEtiqueta]¨>{etiqueta}</label>
-                                  </div>
-                                  <div class=¨{enumCssControlesDto.ContenedorEditor.Render()}¨>
+            var htmlEditor = $@"<div id=¨{idHtml}_contenedor¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditor.Render()}¨>
                                      <input id=¨{idHtml}¨
+                                         type=¨text¨ 
                                          propiedad=¨{propiedad}¨ 
                                          class=¨{enumCssControlesDto.Editor.Render()}¨ 
                                          tipo=¨{enumTipoControl.Editor.Render()}¨
                                          placeholder =¨{ayuda}¨
-                                         [estilo][readOnly][obligatorio][onBlur][onFocus]>
+                                         [ValorPorDefecto][LongitudMaxima][estilo][readOnly][obligatorio][onBlur][onFocus]>
                                      </input>
-                                  </div>
                                 </div>";
 
-            htmlEditor = htmlEditor.Replace("[onFocus]", otrosAtributos.ContainsKey("onFocus") ? otrosAtributos["onFocus"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
+            if (otrosAtributos == null)
+                otrosAtributos = new Dictionary<string, string>();
+
+            htmlEditor = htmlEditor.Replace("[onFocus]", otrosAtributos.ContainsKey("editor_onFocus") ? otrosAtributos["editor_onFocus"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("editor_onBlur") ? otrosAtributos["editor_onBlur"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("editor_estilo") ? otrosAtributos["editor_estilo"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("editor_readOnly") ? otrosAtributos["editor_readOnly"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
+
+            var remplazo = otrosAtributos.ContainsKey("valorPorDefecto") && !otrosAtributos["valorPorDefecto"].ToString().IsNullOrEmpty() 
+                ? $"valorPorDefecto=¨{otrosAtributos["valorPorDefecto"]}¨{Environment.NewLine}value=¨{otrosAtributos["valorPorDefecto"]}¨"
+                : "";
+            htmlEditor = htmlEditor.Replace("[ValorPorDefecto]", remplazo);
 
             return htmlEditor;
+        }
+
+        public static string RenderEditorConEtiquetaEncima(AtributosHtml a, Dictionary<string, string> otrosAtributos = null)
+        {
+            if (otrosAtributos == null)
+                otrosAtributos = new Dictionary<string, string>();
+
+            otrosAtributos["valorPorDefecto"] = a.ValorPorDefecto == null ? "" : a.ValorPorDefecto.ToString();
+            otrosAtributos["LongitudMaxima"] = a.LongitudMaxima > 0 ? $"maxlength=¨{a.LongitudMaxima}¨" : ""; ;
+            otrosAtributos["Obligatorio"] = a.Visible && a.Obligatorio ? "obligatorio='S'" : "obligatorio='N'";
+            otrosAtributos["readOnly"] = !a.Editable ? "Readonly" : "";
+
+            var htmlEtiqueta = RenderEtiqueta(a.IdHtml, a.Etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), otrosAtributos);
+            var htmlEditor = RenderEditor(a.IdHtml, a.Propiedad, a.Ayuda, otrosAtributos);
+
+            return htmlEtiqueta + htmlEditor;
+        }
+
+        public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos = null)
+        {
+            var html = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
+                           EtiquetaIzq
+                           Editor
+                          </div>";
+            html = html.Replace("EtiquetaIzq", RenderEtiqueta(idHtml, etiqueta, enumCssControlesDto.ContenedorEtiquetaIzquierda.Render(), otrosAtributos));
+            html = html.Replace("Editor", RenderEditor(idHtml, propiedad, ayuda, otrosAtributos));
+            return html;
         }
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)

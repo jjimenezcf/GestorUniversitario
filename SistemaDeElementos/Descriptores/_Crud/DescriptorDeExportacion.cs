@@ -86,7 +86,7 @@ namespace MVCSistemaDeElementos.Descriptores
             a.Etiqueta = "Indicar los correos del destinatario separados por ;";
             a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.SalirListaDeCorreos}')¨";
 
-            return RenderEditorConEtiquetaEncima(PlantillasHtml.editorDto, a);
+            return RenderEditorConEtiquetaEncima(a);
         }
     }
 }

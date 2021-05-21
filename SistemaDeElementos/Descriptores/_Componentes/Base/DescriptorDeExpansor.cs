@@ -66,7 +66,7 @@ namespace MVCSistemaDeElementos.Descriptores
             
             valores["RenderEtiqueta"] = control.Tipo == Enumerados.enumTipoControl.Opcion 
                    ? "" : 
-                   RenderEtiqueta(IdHtml, control.Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta), Css.Render(enumCssControlesDto.Etiqueta));
+                   RenderEtiqueta(IdHtml, control.Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta));
             
             valores["RenderControl"] = control.RenderControl();
 

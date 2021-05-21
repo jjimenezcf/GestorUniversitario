@@ -16,7 +16,6 @@
     display: grid;
     grid-area: enviar-correo-cuerpo;
     margin-bottom: 10px;
-    margin-left: 100px;
 }
 
 .enviar-correo-adjuntos {

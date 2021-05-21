@@ -98,9 +98,25 @@ namespace MVCSistemaDeElementos.Descriptores
 
             htmlCuerpo = htmlCuerpo.Replace("UsuariosReceptores", htmlUsuariosReceptores);
             htmlCuerpo = htmlCuerpo.Replace("PuestosDeTrabajoReceptores", htmlPuestosDeTrabajoReceptores);
+            htmlCuerpo = htmlCuerpo.Replace("Asunto", RenderEditorAsunto());
             return htmlCuerpo;
         }
 
+
+        private string RenderEditorAsunto()
+        {
+
+            //    var otrosAtributos = new Dictionary<string, string>();
+            //    otrosAtributos["estiloEtiqueta"] = "style='padding :0px;'";
+
+            var idHtmlAsunto = $"{IdHtml}_asunto";
+            var a = AtributosHtml.AtributosComunes($"div_{idHtmlAsunto}", idHtmlAsunto, "", enumTipoControl.Editor);
+            a.Editable = true;
+            a.Ayuda = "indique el asunto";
+            a.Etiqueta = "Asunto";
+
+            return RenderEditorConEtiquetaEncima(a);
+        }
 
         internal object RenderDeModalesParaSeleccionarReceptores()
         {
