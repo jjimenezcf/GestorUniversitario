@@ -210,15 +210,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderTextArea(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos = null)
         {
+
             var html = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorAreaDeTexto.Render()}¨>
                            <textarea id=¨{idHtml}¨
                                      type=¨text¨ 
                                      propiedad=¨{propiedad}¨ 
                                      class=¨{enumCssControlesDto.AreaDeTexto.Render()}¨ 
                                      tipo=¨{enumTipoControl.AreaDeTexto.Render()}¨
-                                     placeholder =¨[Placeholder]¨
-                                     valorPorDefecto=¨[ValorPorDefecto]¨
-                                     value=¨¨
+                                     placeholder =¨{ayuda}¨
                                      [ValorPorDefecto][LongitudMaxima][estilo][readOnly][obligatorio][onBlur][onFocus]>
                             </textarea>
                           </div>";
@@ -226,10 +225,15 @@ namespace MVCSistemaDeElementos.Descriptores
             if (otrosAtributos == null)
                 otrosAtributos = new Dictionary<string, string>();
 
-            html = html.Replace("[onFocus]", otrosAtributos.ContainsKey("editor_onFocus") ? otrosAtributos["editor_onFocus"] + Environment.NewLine : "");
-            html = html.Replace("[onBlur]", otrosAtributos.ContainsKey("editor_onBlur") ? otrosAtributos["editor_onBlur"] + Environment.NewLine : "");
-            html = html.Replace("[estilo]", otrosAtributos.ContainsKey("editor_estilo") ? otrosAtributos["editor_estilo"] + Environment.NewLine : "");
-            html = html.Replace("[readOnly]", otrosAtributos.ContainsKey("editor_readOnly") ? otrosAtributos["editor_readOnly"] + Environment.NewLine : "");
+
+            string alto = $"calc({(double)(1.5 * 5)}em + .75rem + 2px);".Replace(",", ".");
+            otrosAtributos["estilo"] = $"style='height: {alto};'";
+
+
+            html = html.Replace("[onFocus]", otrosAtributos.ContainsKey("onFocus") ? otrosAtributos["onFocus"] + Environment.NewLine : "");
+            html = html.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
+            html = html.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
+            html = html.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
             html = html.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
             html = html.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
 
@@ -257,10 +261,10 @@ namespace MVCSistemaDeElementos.Descriptores
             if (otrosAtributos == null)
                 otrosAtributos = new Dictionary<string, string>();
 
-            htmlEditor = htmlEditor.Replace("[onFocus]", otrosAtributos.ContainsKey("editor_onFocus") ? otrosAtributos["editor_onFocus"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("editor_onBlur") ? otrosAtributos["editor_onBlur"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("editor_estilo") ? otrosAtributos["editor_estilo"] + Environment.NewLine : "");
-            htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("editor_readOnly") ? otrosAtributos["editor_readOnly"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[onFocus]", otrosAtributos.ContainsKey("onFocus") ? otrosAtributos["onFocus"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
+            htmlEditor = htmlEditor.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
 

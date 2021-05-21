@@ -112,7 +112,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var a = AtributosHtml.AtributosComunes($"div_{idHtmlAsunto}", idHtmlAsunto, "", enumTipoControl.Editor);
             a.Editable = true;
             a.Ayuda = "indique el asunto";
-            a.Etiqueta = "Asunto";
+            a.Etiqueta = "Mensaje";
 
             return RenderEditorConEtiquetaEncima(a);
         }

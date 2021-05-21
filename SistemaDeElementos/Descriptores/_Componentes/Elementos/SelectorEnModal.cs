@@ -71,8 +71,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderEditorDelSelector()
         {
             var otrosAtributos = new Dictionary<string, string>();
-            otrosAtributos["editor_onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
-            otrosAtributos["editor_onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
+            otrosAtributos["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
+            otrosAtributos["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
 
             var div = $@"
             <div id=¨div_{IdHtmlEditor}_contenedor¨ name=¨contenedor-control¨ class={enumCssSelectorEnModal.Editor.Render()}¨>
