@@ -208,6 +208,39 @@ namespace MVCSistemaDeElementos.Descriptores
             return PlantillasHtml.Render(plantillaHtml, valores);
         }
 
+        public static string RenderTextArea(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos = null)
+        {
+            var html = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorAreaDeTexto.Render()}¨>
+                           <textarea id=¨{idHtml}¨
+                                     type=¨text¨ 
+                                     propiedad=¨{propiedad}¨ 
+                                     class=¨{enumCssControlesDto.AreaDeTexto.Render()}¨ 
+                                     tipo=¨{enumTipoControl.AreaDeTexto.Render()}¨
+                                     placeholder =¨[Placeholder]¨
+                                     valorPorDefecto=¨[ValorPorDefecto]¨
+                                     value=¨¨
+                                     [ValorPorDefecto][LongitudMaxima][estilo][readOnly][obligatorio][onBlur][onFocus]>
+                            </textarea>
+                          </div>";
+
+            if (otrosAtributos == null)
+                otrosAtributos = new Dictionary<string, string>();
+
+            html = html.Replace("[onFocus]", otrosAtributos.ContainsKey("editor_onFocus") ? otrosAtributos["editor_onFocus"] + Environment.NewLine : "");
+            html = html.Replace("[onBlur]", otrosAtributos.ContainsKey("editor_onBlur") ? otrosAtributos["editor_onBlur"] + Environment.NewLine : "");
+            html = html.Replace("[estilo]", otrosAtributos.ContainsKey("editor_estilo") ? otrosAtributos["editor_estilo"] + Environment.NewLine : "");
+            html = html.Replace("[readOnly]", otrosAtributos.ContainsKey("editor_readOnly") ? otrosAtributos["editor_readOnly"] + Environment.NewLine : "");
+            html = html.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
+            html = html.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
+
+            var remplazo = otrosAtributos.ContainsKey("valorPorDefecto") && !otrosAtributos["valorPorDefecto"].ToString().IsNullOrEmpty()
+                ? $"valorPorDefecto=¨{otrosAtributos["valorPorDefecto"]}¨{Environment.NewLine}value=¨{otrosAtributos["valorPorDefecto"]}¨"
+                : "";
+            html = html.Replace("[ValorPorDefecto]", remplazo);
+
+            return html;
+        }
+
         public static string RenderEditor(string idHtml, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos)
         {
             var htmlEditor = $@"<div id=¨{idHtml}_contenedor¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditor.Render()}¨>
@@ -265,6 +298,7 @@ namespace MVCSistemaDeElementos.Descriptores
             html = html.Replace("Editor", RenderEditor(idHtml, propiedad, ayuda, otrosAtributos));
             return html;
         }
+
 
         internal static string RenderizarModal(string idHtml, string controlador, string tituloH2, string cuerpo, string idOpcion, string opcion, string accion, string cerrar, string navegador, enumCssOpcionMenu claseBoton, enumModoDeAccesoDeDatos permisosNecesarios)
         {

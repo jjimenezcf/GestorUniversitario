@@ -85,7 +85,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssEnviarCorreo.cuerpo.Render()}¨>
                                         Asunto
-                                        Cuerpo
+                                        {RenderTextArea($"{IdHtml}_mensaje", "mensaje", "cuerpoMensaje", "indique el mensaje")}
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_enviar¨ class=¨{enumCssEnviarCorreo.adjuntos.Render()}¨>                                        
                                         Elementos
@@ -101,7 +101,6 @@ namespace MVCSistemaDeElementos.Descriptores
             htmlCuerpo = htmlCuerpo.Replace("Asunto", RenderEditorAsunto());
             return htmlCuerpo;
         }
-
 
         private string RenderEditorAsunto()
         {
