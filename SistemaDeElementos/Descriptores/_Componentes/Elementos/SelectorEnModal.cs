@@ -70,13 +70,17 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderEditorDelSelector()
         {
-            var otrosAtributos = new Dictionary<string, string>();
-            otrosAtributos["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
-            otrosAtributos["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
+            var otrosAtributosEditor = new Dictionary<string, string>();
+            otrosAtributosEditor["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
+            otrosAtributosEditor["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
+
+
+            var otrosAtributosEtiqueta = new Dictionary<string, string>();
+            otrosAtributosEtiqueta["estilo"] = "style='padding :0px;'";
 
             var div = $@"
             <div id=¨div_{IdHtmlEditor}_contenedor¨ name=¨contenedor-control¨ class={enumCssSelectorEnModal.Editor.Render()}¨>
-               {RenderEditorConEtiquetaIzquierda(IdHtmlEditor,Etiqueta,Propiedad,Ayuda, otrosAtributos)}
+               {RenderEditorConEtiquetaIzquierda(IdHtmlEditor,Etiqueta,Propiedad,Ayuda, otrosAtributosEditor, otrosAtributosEtiqueta)}
             </div>
             ";
 

@@ -38,7 +38,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> elementos, List<string> archivos)
+        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> urlsDeElementos, List<string> archivos)
         {
             var correo = new CorreoDtm();
             correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
@@ -46,7 +46,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             correo.Receptores = receptores.ToJson();
             correo.Asunto = asunto;
             correo.Cuerpo = cuerpo;
-            correo.Elementos = elementos.ToJson();
+            correo.Elementos = urlsDeElementos.ToJson();
             correo.Archivos = archivos.ToJson();
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.PersistirRegistro(correo, new ParametrosDeNegocio(enumTipoOperacion.Insertar));

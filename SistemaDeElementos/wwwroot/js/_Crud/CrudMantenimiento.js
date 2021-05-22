@@ -367,10 +367,29 @@ var Crud;
         ModalEnviarCorreo_Abrir() {
             this.ModoTrabajo = ModoTrabajo.enviandoCorreo;
             this.ModalDeEnviarCorreo.style.display = 'block';
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++) {
+                let divDeElementos = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`);
+                this.crearEnlaceAlElemento(divDeElementos, this.InfoSelector.LeerElemento(i));
+            }
             EntornoSe.AjustarModalesAbiertas();
+        }
+        crearEnlaceAlElemento(divDeElementos, elemento) {
+            let a = document.createElement("a");
+            let url = `${window.location}`;
+            if (url.indexOf("?id=") <= 0)
+                url = url + `?id=${elemento.Id}`;
+            a.setAttribute("href", url);
+            a.target = "_blank";
+            let aTexto = document.createTextNode(elemento.Texto);
+            a.appendChild(aTexto);
+            divDeElementos.appendChild(a);
+            var br = document.createElement("br");
+            divDeElementos.appendChild(br);
         }
         ModalEnviarCorreo_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            let divDeElementos = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`);
+            divDeElementos.innerHTML = "";
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
         }
         ObtenerModalParaSeleccionar(idModal) {

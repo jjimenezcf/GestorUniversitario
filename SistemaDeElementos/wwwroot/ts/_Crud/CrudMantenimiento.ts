@@ -446,11 +446,30 @@
         public ModalEnviarCorreo_Abrir() {
             this.ModoTrabajo = ModoTrabajo.enviandoCorreo;
             this.ModalDeEnviarCorreo.style.display = 'block';
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++) {
+                let divDeElementos: HTMLDivElement = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`) as HTMLDivElement;
+                this.crearEnlaceAlElemento(divDeElementos, this.InfoSelector.LeerElemento(i))
+            }
             EntornoSe.AjustarModalesAbiertas();
+        }
+        private crearEnlaceAlElemento(divDeElementos: HTMLDivElement, elemento: Elemento) {
+            let a = document.createElement("a");
+            let url: string = `${window.location}`;
+            if (url.indexOf("?id=") <= 0)
+                url = url + `?id=${elemento.Id}`;
+            a.setAttribute("href", url);
+            a.target = "_blank"
+            let aTexto = document.createTextNode(elemento.Texto);
+            a.appendChild(aTexto);
+            divDeElementos.appendChild(a);
+            var br = document.createElement("br");
+            divDeElementos.appendChild(br);
         }
 
         public ModalEnviarCorreo_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
+            let divDeElementos: HTMLDivElement = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`) as HTMLDivElement;
+            divDeElementos.innerHTML="";
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
         } 
 

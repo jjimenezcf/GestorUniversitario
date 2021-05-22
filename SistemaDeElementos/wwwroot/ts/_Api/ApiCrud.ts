@@ -427,6 +427,13 @@ namespace ApiCrud {
             ApiControl.BlanquearEditor(editor)
         }
     }
+
+    export function EliminarReferenciasDeUnDiv(modal: HTMLDivElement) {
+        let referencias: NodeListOf<HTMLElement> = modal.querySelectorAll("a") as NodeListOf<HTMLElement>;
+        for (let i: number = 0; i < referencias.length; i++) {
+            referencias[i].remove();
+        }
+    }
 }
 
 namespace ApiRuote {

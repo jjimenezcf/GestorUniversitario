@@ -1,7 +1,7 @@
 ﻿.enviar-correo-contenedor {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas: "enviar-correo-cabecera" "enviar-correo-cuerpo" "enviar-correo-adjuntos";
     overflow-y: hidden;
     overflow-x: hidden;
@@ -20,5 +20,7 @@
 
 .enviar-correo-adjuntos {
     display: grid;
+    height: calc(1.5em * 3 + .75rem + 2px);
     grid-area: enviar-correo-adjuntos;
+    overflow-y: scroll;
 }

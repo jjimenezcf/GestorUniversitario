@@ -361,6 +361,9 @@ a {
         opacity: 1
     }
 
+.contenedor-referencias {
+    /*height: calc(1.5em * 2 + .75rem + 2px);*/
+}
 
 .fecha-dto {
     width: 60%;

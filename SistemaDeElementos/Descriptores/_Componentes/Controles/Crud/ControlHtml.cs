@@ -126,7 +126,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderEtiqueta()
         {
-            return RenderEtiqueta(IdHtml, Etiqueta, Css.Render(enumCssControlesDto.ContenedorEtiqueta));
+            return RenderEtiqueta(IdHtml, Etiqueta);
         }
 
         public abstract string RenderControl();
@@ -146,16 +146,21 @@ namespace MVCSistemaDeElementos.Descriptores
             Ayuda = ayuda;
         }
 
-        public static string RenderEtiqueta(string idControl, string etiqueta, string cssContenedor, Dictionary<string, string> otrosAtributos = null)
+        public static string RenderEtiqueta(string idControl, string etiqueta, Dictionary<string, string> otrosAtributos = null, Dictionary<string, string> otrosAtributosDelContenedor = null)
         {
-            var htmlEtiqueta = $@"<div id=¨etiqueta-{idControl}-contenedor¨ name=¨contenedor-etiqueta¨ class=¨{cssContenedor}¨>
-                                   <label id=¨etiqueta-{idControl}¨ for=¨{idControl}¨ class=¨{enumCssControlesDto.Etiqueta.Render()}¨ [estilo]>{etiqueta}</label>
+            var htmlEtiqueta = $@"<div id='etiqueta-{idControl}-contenedor' name='contenedor-etiqueta' class='{enumCssControlesDto.ContenedorEtiqueta.Render()}'[estilo_contenedor]>
+                                   <label id='etiqueta-{idControl}' for='{idControl}' class='{enumCssControlesDto.Etiqueta.Render()}' [estilo]>{etiqueta}</label>
                                  </div>";
 
             if (otrosAtributos == null)
                 otrosAtributos = new Dictionary<string, string>();
 
-            htmlEtiqueta = htmlEtiqueta.Replace("[estilo]", otrosAtributos.ContainsKey("estiloEtiqueta") ? otrosAtributos["estiloEtiqueta"] + Environment.NewLine : "");
+            if (otrosAtributosDelContenedor == null)
+                otrosAtributosDelContenedor = new Dictionary<string, string>();
+
+            htmlEtiqueta = htmlEtiqueta.Replace("[estilo_contenedor]", otrosAtributosDelContenedor.ContainsKey("estilo") ? otrosAtributosDelContenedor["estilo"] : "");
+
+            htmlEtiqueta = htmlEtiqueta.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
 
             return htmlEtiqueta;
         }
@@ -190,7 +195,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["MostrarExpresion"] = mostrarExpresion;
             valores["RestoDeAtributos"] = "id=¨[IdHtml]¨ class=¨[Css]¨ tipo=¨[Tipo]¨";
 
-            return RenderEtiqueta($"{IdHtml}_lista", etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render()) +
+            return RenderEtiqueta($"{IdHtml}_lista", etiqueta) +
                    PlantillasHtml.Render(PlantillasHtml.listaDeElementos.Replace("[RestoDeAtributos]", valores["RestoDeAtributos"].ToString()), valores);
         }
 
@@ -208,7 +213,18 @@ namespace MVCSistemaDeElementos.Descriptores
             return PlantillasHtml.Render(plantillaHtml, valores);
         }
 
-        public static string RenderTextArea(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos = null)
+        public static string RenderDivConEtiquetaParaLinks(string idHtml, string etiqueta, Dictionary<string, string> otrosAtributosEtiqueta = null, Dictionary<string, string> otrosAtributosDelContenedor = null)
+        {
+            var html =$@"<div id='{idHtml}' name='contenedor-control' class='{enumCssControlesDto.ContenedorEtiqueta.Render()}'>
+                            {RenderEtiqueta(idHtml, etiqueta, otrosAtributosEtiqueta, otrosAtributosDelContenedor)}
+                            <div id='{idHtml}_ref' class='{enumCssControlesDto.ContenedorReferencias.Render()}'>
+                            </div>
+                         </div>";
+
+            return html;
+        }
+
+        public static string RenderTextArea(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributosTextArea = null)
         {
 
             var html = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorAreaDeTexto.Render()}¨>
@@ -222,23 +238,23 @@ namespace MVCSistemaDeElementos.Descriptores
                             </textarea>
                           </div>";
 
-            if (otrosAtributos == null)
-                otrosAtributos = new Dictionary<string, string>();
+            if (otrosAtributosTextArea == null)
+                otrosAtributosTextArea = new Dictionary<string, string>();
 
 
-            string alto = $"calc({(double)(1.5 * 5)}em + .75rem + 2px);".Replace(",", ".");
-            otrosAtributos["estilo"] = $"style='height: {alto};'";
+            string alto = $"calc({(double)(1.5 * 10)}em + .75rem + 2px);".Replace(",", ".");
+            otrosAtributosTextArea["estilo"] = $"style='height: {alto};'";
 
 
-            html = html.Replace("[onFocus]", otrosAtributos.ContainsKey("onFocus") ? otrosAtributos["onFocus"] + Environment.NewLine : "");
-            html = html.Replace("[onBlur]", otrosAtributos.ContainsKey("onBlur") ? otrosAtributos["onBlur"] + Environment.NewLine : "");
-            html = html.Replace("[estilo]", otrosAtributos.ContainsKey("estilo") ? otrosAtributos["estilo"] + Environment.NewLine : "");
-            html = html.Replace("[readOnly]", otrosAtributos.ContainsKey("readOnly") ? otrosAtributos["readOnly"] + Environment.NewLine : "");
-            html = html.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
-            html = html.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
+            html = html.Replace("[onFocus]", otrosAtributosTextArea.ContainsKey("onFocus") ? otrosAtributosTextArea["onFocus"] + Environment.NewLine : "");
+            html = html.Replace("[onBlur]", otrosAtributosTextArea.ContainsKey("onBlur") ? otrosAtributosTextArea["onBlur"] + Environment.NewLine : "");
+            html = html.Replace("[estilo]", otrosAtributosTextArea.ContainsKey("estilo") ? otrosAtributosTextArea["estilo"] + Environment.NewLine : "");
+            html = html.Replace("[readOnly]", otrosAtributosTextArea.ContainsKey("readOnly") ? otrosAtributosTextArea["readOnly"] + Environment.NewLine : "");
+            html = html.Replace("[obligatorio]", otrosAtributosTextArea.ContainsKey("obligatorio") ? otrosAtributosTextArea["obligatorio"] + Environment.NewLine : "");
+            html = html.Replace("[LongitudMaxima]", otrosAtributosTextArea.ContainsKey("LongitudMaxima") ? otrosAtributosTextArea["LongitudMaxima"] + Environment.NewLine : "");
 
-            var remplazo = otrosAtributos.ContainsKey("valorPorDefecto") && !otrosAtributos["valorPorDefecto"].ToString().IsNullOrEmpty()
-                ? $"valorPorDefecto=¨{otrosAtributos["valorPorDefecto"]}¨{Environment.NewLine}value=¨{otrosAtributos["valorPorDefecto"]}¨"
+            var remplazo = otrosAtributosTextArea.ContainsKey("valorPorDefecto") && !otrosAtributosTextArea["valorPorDefecto"].ToString().IsNullOrEmpty()
+                ? $"valorPorDefecto=¨{otrosAtributosTextArea["valorPorDefecto"]}¨{Environment.NewLine}value=¨{otrosAtributosTextArea["valorPorDefecto"]}¨"
                 : "";
             html = html.Replace("[ValorPorDefecto]", remplazo);
 
@@ -276,30 +292,25 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlEditor;
         }
 
-        public static string RenderEditorConEtiquetaEncima(AtributosHtml a, Dictionary<string, string> otrosAtributos = null)
+        public static string RenderEditorConEtiquetaEncima(string idHtml, string etiqueta, string propiedad, string ayuda,Dictionary<string, string> otrosAtributosEditor = null, Dictionary<string, string> otrosAtributosEtiqueta = null)
         {
-            if (otrosAtributos == null)
-                otrosAtributos = new Dictionary<string, string>();
+            if (otrosAtributosEditor == null)
+                otrosAtributosEditor = new Dictionary<string, string>();
 
-            otrosAtributos["valorPorDefecto"] = a.ValorPorDefecto == null ? "" : a.ValorPorDefecto.ToString();
-            otrosAtributos["LongitudMaxima"] = a.LongitudMaxima > 0 ? $"maxlength=¨{a.LongitudMaxima}¨" : ""; ;
-            otrosAtributos["Obligatorio"] = a.Visible && a.Obligatorio ? "obligatorio='S'" : "obligatorio='N'";
-            otrosAtributos["readOnly"] = !a.Editable ? "Readonly" : "";
-
-            var htmlEtiqueta = RenderEtiqueta(a.IdHtml, a.Etiqueta, enumCssControlesDto.ContenedorEtiqueta.Render(), otrosAtributos);
-            var htmlEditor = RenderEditor(a.IdHtml, a.Propiedad, a.Ayuda, otrosAtributos);
+            var htmlEtiqueta = RenderEtiqueta(idHtml, etiqueta, otrosAtributosEtiqueta);
+            var htmlEditor = RenderEditor(idHtml, propiedad, ayuda, otrosAtributosEditor);
 
             return htmlEtiqueta + htmlEditor;
         }
 
-        public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributos = null)
+        public static string RenderEditorConEtiquetaIzquierda(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributosEditor = null, Dictionary<string, string> otrosAtributosEtiqueta = null)
         {
             var html = @$"<div id=¨div-{idHtml}¨ name=¨contenedor-control¨ class=¨{enumCssControlesDto.ContenedorEditorConEtiquetaIzquierda.Render()}¨>
                            EtiquetaIzq
                            Editor
                           </div>";
-            html = html.Replace("EtiquetaIzq", RenderEtiqueta(idHtml, etiqueta, enumCssControlesDto.ContenedorEtiquetaIzquierda.Render(), otrosAtributos));
-            html = html.Replace("Editor", RenderEditor(idHtml, propiedad, ayuda, otrosAtributos));
+            html = html.Replace("EtiquetaIzq", RenderEtiqueta(idHtml, etiqueta, otrosAtributosEtiqueta));
+            html = html.Replace("Editor", RenderEditor(idHtml, propiedad, ayuda, otrosAtributosEditor));
             return html;
         }
 

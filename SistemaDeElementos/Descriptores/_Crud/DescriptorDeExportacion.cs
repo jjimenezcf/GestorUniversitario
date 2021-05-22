@@ -79,14 +79,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string editorDeEMail()
         {
-            var idHtmlCorreos = $"{IdHtml}_correos";
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlCorreos}", idHtmlCorreos, ltrExportacion.receptores, enumTipoControl.Editor);
-            a.Editable = false;
-            a.Ayuda = "Indique los correos de e-mail receptores";
-            a.Etiqueta = "Indicar los correos del destinatario separados por ;";
-            a.AlPerderElFoco = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.SalirListaDeCorreos}')¨";
+            var otrosAtributosEditor = new Dictionary<string, string>();
+            otrosAtributosEditor["estilo"] = "style='padding :0px;'";
+            otrosAtributosEditor["onBlur"] = $"onBlur = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.SalirListaDeCorreos}')¨";
+            otrosAtributosEditor["readOnly"] = "Readonly";
 
-            return RenderEditorConEtiquetaEncima(a);
+            var otrosAtributosEtiqueta = new Dictionary<string, string>();
+            otrosAtributosEtiqueta["estilo"] = "style='padding :0px;'";
+
+            return RenderEditorConEtiquetaEncima($"{IdHtml}_correos", "Mensaje", ltrExportacion.receptores, "Indique los correos de e-mail receptores", otrosAtributosEditor, otrosAtributosEtiqueta);
+
         }
     }
 }

@@ -402,6 +402,13 @@ var ApiCrud;
             ApiControl.BlanquearEditor(editor);
         }
     }
+    function EliminarReferenciasDeUnDiv(modal) {
+        let referencias = modal.querySelectorAll("a");
+        for (let i = 0; i < referencias.length; i++) {
+            referencias[i].remove();
+        }
+    }
+    ApiCrud.EliminarReferenciasDeUnDiv = EliminarReferenciasDeUnDiv;
 })(ApiCrud || (ApiCrud = {}));
 var ApiRuote;
 (function (ApiRuote) {

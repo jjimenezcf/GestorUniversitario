@@ -100,10 +100,7 @@ namespace MVCSistemaDeElementos.Descriptores
             if (descriptorControl.atributos.TipoDeControl == enumTipoControl.Check)
                 return "";
 
-            var cssDelContenedor = Css.Render(enumCssControlesDto.ContenedorEtiqueta); 
-
-
-            return ControlHtml.RenderEtiqueta($"{tabla.IdHtml}_{i}_{j}_lbl", descriptorControl.atributos.Etiqueta, cssDelContenedor);
+            return ControlHtml.RenderEtiqueta($"{tabla.IdHtml}_{i}_{j}_lbl", descriptorControl.atributos.Etiqueta);
         }
 
         //

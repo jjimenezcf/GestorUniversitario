@@ -254,6 +254,7 @@ namespace MVCSistemaDeElementos.Descriptores
         ContenedorFechaHora,
         ContenedorAreaDeTexto,
         ContenedorArchivo,
+        ContenedorReferencias,
         TablaDeArchivo,
         FilaDeArchivo,
         ColumnaDeArchivo,
@@ -428,6 +429,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumCssControlesDto.ContenedorEtiqueta: return "contenedor-etiqueta";
                 case enumCssControlesDto.ContenedorEtiquetaIzquierda: return "contenedor-etiqueta-izquierda";
                 case enumCssControlesDto.ContenedorArchivo: return "contenedor-archivo";
+                case enumCssControlesDto.ContenedorReferencias: return "contenedor-referencias";
                 case enumCssControlesDto.ContenedorCheck: return "contenedor-check";
                 case enumCssControlesDto.ContenedorFecha: return "contenedor-fecha";
                 case enumCssControlesDto.ContenedorFechaHora: return "contenedor-fecha-hora";

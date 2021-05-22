@@ -59,18 +59,18 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-                var htmlModal = RenderizarModal(
-                    idHtml: IdHtml
-                    , controlador: Crud.Controlador
-                    , tituloH2: Etiqueta
-                    , cuerpo: cuerpoDeEnvioDeCorreo()
-                    , idOpcion: $"{IdHtml}-enviar"
-                    , opcion: Crud.NegocioActivo ? "Enviar" : ""
-                    , accion: Crud.NegocioActivo ? $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.Enviar}','{IdHtml}')" : ""
-                    , cerrar: $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.Cerrar}','{IdHtml}')"
-                    , navegador: ""
-                    , claseBoton: enumCssOpcionMenu.DeElemento
-                    , permisosNecesarios: enumModoDeAccesoDeDatos.Consultor);
+            var htmlModal = RenderizarModal(
+                idHtml: IdHtml
+                , controlador: Crud.Controlador
+                , tituloH2: Etiqueta
+                , cuerpo: cuerpoDeEnvioDeCorreo()
+                , idOpcion: $"{IdHtml}-enviar"
+                , opcion: Crud.NegocioActivo ? "Enviar" : ""
+                , accion: Crud.NegocioActivo ? $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.Enviar}','{IdHtml}')" : ""
+                , cerrar: $"Crud.{GestorDeEventos.EventosModalDeEnviarCorreo}('{TipoDeAccionDeEnviarCorreo.Cerrar}','{IdHtml}')"
+                , navegador: ""
+                , claseBoton: enumCssOpcionMenu.DeElemento
+                , permisosNecesarios: enumModoDeAccesoDeDatos.Consultor);
 
             return htmlModal;
         }
@@ -84,11 +84,11 @@ namespace MVCSistemaDeElementos.Descriptores
                                         UsuariosReceptores
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_sometido¨ class=¨{enumCssEnviarCorreo.cuerpo.Render()}¨>
-                                        Asunto
+                                        {RenderEditorAsunto()}
                                         {RenderTextArea($"{IdHtml}_mensaje", "mensaje", "cuerpoMensaje", "indique el mensaje")}
                                      </div>
                                      <div id=¨{IdHtml}_cuerpo_enviar¨ class=¨{enumCssEnviarCorreo.adjuntos.Render()}¨>                                        
-                                        Elementos
+                                        {RenderElementos()}
                                      </div>
                                 </div>
                                 ";
@@ -98,23 +98,29 @@ namespace MVCSistemaDeElementos.Descriptores
 
             htmlCuerpo = htmlCuerpo.Replace("UsuariosReceptores", htmlUsuariosReceptores);
             htmlCuerpo = htmlCuerpo.Replace("PuestosDeTrabajoReceptores", htmlPuestosDeTrabajoReceptores);
-            htmlCuerpo = htmlCuerpo.Replace("Asunto", RenderEditorAsunto());
             return htmlCuerpo;
+        }
+
+        private string RenderElementos()
+        {
+            var oaEtiqueta = new Dictionary<string, string> { { "estilo", "style='padding :0px;'" } };
+            var oaContenedor = new Dictionary<string, string> { { "estilo", "style='height: calc(1.5em)';'" } };
+
+            var html = RenderDivConEtiquetaParaLinks($"{IdHtml}_elementos", "Elementos", oaEtiqueta, oaContenedor);
+            return html;
         }
 
         private string RenderEditorAsunto()
         {
+            var otrosAtributosEditor = new Dictionary<string, string>();
+            otrosAtributosEditor["estilo"] = "style='padding :0px;'";
+            otrosAtributosEditor["LongitudMaxima"] = "maxlength=¨255¨"; ;
+            otrosAtributosEditor["Obligatorio"] = "obligatorio='S'";
 
-            //    var otrosAtributos = new Dictionary<string, string>();
-            //    otrosAtributos["estiloEtiqueta"] = "style='padding :0px;'";
+            var otrosAtributosEtiqueta = new Dictionary<string, string>();
+            otrosAtributosEtiqueta["estilo"] = "style='padding :0px;'";
 
-            var idHtmlAsunto = $"{IdHtml}_asunto";
-            var a = AtributosHtml.AtributosComunes($"div_{idHtmlAsunto}", idHtmlAsunto, "", enumTipoControl.Editor);
-            a.Editable = true;
-            a.Ayuda = "indique el asunto";
-            a.Etiqueta = "Mensaje";
-
-            return RenderEditorConEtiquetaEncima(a);
+            return RenderEditorConEtiquetaEncima($"{IdHtml}_asunto", "Mensaje", "asunto", "indique el asunto", otrosAtributosEditor, otrosAtributosEtiqueta);
         }
 
         internal object RenderDeModalesParaSeleccionarReceptores()
