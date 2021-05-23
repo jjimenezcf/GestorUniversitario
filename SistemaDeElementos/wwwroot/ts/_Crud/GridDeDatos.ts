@@ -553,54 +553,34 @@
 
         protected ObtenerFiltroPorId(id: number): string {
             var clausulas = new Array<ClausulaDeFiltrado>();
-            let propiedad: string = atControl.id;
-            let criterio: string = literal.filtro.criterio.igual;
-            let valor: string = id.toString();
-            let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            let clausula: ClausulaDeFiltrado = this.ObtenerClausulaPorId(id);
             clausulas.push(clausula);
             return JSON.stringify(clausulas);
         }
 
-        protected ObtenerFiltros(): string {
-            let arrayIds: Array<string> = this.ObtenerControlesDeFiltro();
-            var clausulas = new Array<ClausulaDeFiltrado>();
-            for (let i = 0; i < arrayIds.length; i++) {
-                var clausula: ClausulaDeFiltrado = null;
-                var control: HTMLElement = document.getElementById(`${arrayIds[i]}`);
-                var tipo: string = control.getAttribute(TipoControl.Tipo);
-                switch (tipo) {
-                    case TipoControl.restrictorDeFiltro: {
-                        clausula = this.ObtenerClausulaRestrictor(control as HTMLInputElement);;
-                        break;
-                    }
-                    case TipoControl.Editor: {
-                        clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);
-                        break;
-                    }
-                    case TipoControl.Selector: {
-                        clausula = this.ObtenerClausulaSelector(control as HTMLInputElement);;
-                        break;
-                    }
-                    case TipoControl.ListaDeElementos: {
-                        clausula = this.ObtenerClausulaListaDeELemento(control as HTMLSelectElement);
-                        break;
-                    }
-                    case TipoControl.ListaDinamica: {
-                        clausula = this.ObtenerClausulaListaDinamica(control as HTMLInputElement);
-                        break;
-                    }
-                    case TipoControl.Check: {
-                        clausula = this.ObtenerClausulaCheck(control as HTMLInputElement);
-                        break;
-                    }
-                    case TipoControl.FiltroEntreFechas: {
-                        clausula = this.ObtenerClausulaEntreFechas(control as HTMLInputElement);
-                        break;
-                    }
-                    default: {
-                        MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
-                    }
+        private ObtenerClausulaPorId(id: number) {
+            let propiedad: string = atControl.id;
+            let criterio: string = literal.filtro.criterio.igual;
+            let valor: string = id.toString();
+            let clausula: ClausulaDeFiltrado = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            return clausula;
+        }
 
+        protected ObtenerFiltros(): string {
+            var clausulas = new Array<ClausulaDeFiltrado>();
+            var clausula: ClausulaDeFiltrado = null;
+
+            const querystring = window.location.search;
+            const params = new URLSearchParams(querystring);
+            if (params.has("id")) {
+                clausula = this.ObtenerClausulaPorId(Numero(params.get("id")));
+                clausulas.push(clausula);
+            }
+            else {
+                let arrayIds: Array<string> = this.ObtenerElIdDeLosControlesDeFiltro();
+                for (let i = 0; i < arrayIds.length; i++) {
+                    var control: HTMLElement = document.getElementById(`${arrayIds[i]}`);
+                    clausula = this.ObtenerClausulaDeFiltradoParaElControl(control);
                 }
 
                 if (clausula !== null)
@@ -612,11 +592,50 @@
             return JSON.stringify(clausulas);
         }
 
+        private ObtenerClausulaDeFiltradoParaElControl(control: HTMLElement) {
+            var clausula: ClausulaDeFiltrado = null;
+            var tipo: string = control.getAttribute(TipoControl.Tipo);
+            switch (tipo) {
+                case TipoControl.restrictorDeFiltro: {
+                    clausula = this.ObtenerClausulaRestrictor(control as HTMLInputElement);;
+                    break;
+                }
+                case TipoControl.Editor: {
+                    clausula = this.ObtenerClausulaEditor(control as HTMLInputElement);
+                    break;
+                }
+                case TipoControl.Selector: {
+                    clausula = this.ObtenerClausulaSelector(control as HTMLInputElement);;
+                    break;
+                }
+                case TipoControl.ListaDeElementos: {
+                    clausula = this.ObtenerClausulaListaDeELemento(control as HTMLSelectElement);
+                    break;
+                }
+                case TipoControl.ListaDinamica: {
+                    clausula = this.ObtenerClausulaListaDinamica(control as HTMLInputElement);
+                    break;
+                }
+                case TipoControl.Check: {
+                    clausula = this.ObtenerClausulaCheck(control as HTMLInputElement);
+                    break;
+                }
+                case TipoControl.FiltroEntreFechas: {
+                    clausula = this.ObtenerClausulaEntreFechas(control as HTMLInputElement);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
+                }
+            }
+            return clausula;
+        }
+
         protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]) {
             return clausulas;
         }
 
-        private ObtenerControlesDeFiltro(): Array<string> {
+        private ObtenerElIdDeLosControlesDeFiltro(): Array<string> {
             var arrayIds = new Array<string>();
             var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`) as NodeListOf<HTMLButtonElement>;
             for (let i = 0; i < arrayHtmlInput.length; i++) {

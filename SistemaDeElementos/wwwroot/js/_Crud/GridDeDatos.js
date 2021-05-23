@@ -447,54 +447,31 @@ var Crud;
         }
         ObtenerFiltroPorId(id) {
             var clausulas = new Array();
+            let clausula = this.ObtenerClausulaPorId(id);
+            clausulas.push(clausula);
+            return JSON.stringify(clausulas);
+        }
+        ObtenerClausulaPorId(id) {
             let propiedad = atControl.id;
             let criterio = literal.filtro.criterio.igual;
             let valor = id.toString();
             let clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
-            clausulas.push(clausula);
-            return JSON.stringify(clausulas);
+            return clausula;
         }
         ObtenerFiltros() {
-            let arrayIds = this.ObtenerControlesDeFiltro();
             var clausulas = new Array();
-            for (let i = 0; i < arrayIds.length; i++) {
-                var clausula = null;
-                var control = document.getElementById(`${arrayIds[i]}`);
-                var tipo = control.getAttribute(TipoControl.Tipo);
-                switch (tipo) {
-                    case TipoControl.restrictorDeFiltro: {
-                        clausula = this.ObtenerClausulaRestrictor(control);
-                        ;
-                        break;
-                    }
-                    case TipoControl.Editor: {
-                        clausula = this.ObtenerClausulaEditor(control);
-                        break;
-                    }
-                    case TipoControl.Selector: {
-                        clausula = this.ObtenerClausulaSelector(control);
-                        ;
-                        break;
-                    }
-                    case TipoControl.ListaDeElementos: {
-                        clausula = this.ObtenerClausulaListaDeELemento(control);
-                        break;
-                    }
-                    case TipoControl.ListaDinamica: {
-                        clausula = this.ObtenerClausulaListaDinamica(control);
-                        break;
-                    }
-                    case TipoControl.Check: {
-                        clausula = this.ObtenerClausulaCheck(control);
-                        break;
-                    }
-                    case TipoControl.FiltroEntreFechas: {
-                        clausula = this.ObtenerClausulaEntreFechas(control);
-                        break;
-                    }
-                    default: {
-                        MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
-                    }
+            var clausula = null;
+            const querystring = window.location.search;
+            const params = new URLSearchParams(querystring);
+            if (params.has("id")) {
+                clausula = this.ObtenerClausulaPorId(Numero(params.get("id")));
+                clausulas.push(clausula);
+            }
+            else {
+                let arrayIds = this.ObtenerElIdDeLosControlesDeFiltro();
+                for (let i = 0; i < arrayIds.length; i++) {
+                    var control = document.getElementById(`${arrayIds[i]}`);
+                    clausula = this.ObtenerClausulaDeFiltradoParaElControl(control);
                 }
                 if (clausula !== null)
                     clausulas.push(clausula);
@@ -502,10 +479,50 @@ var Crud;
             }
             return JSON.stringify(clausulas);
         }
+        ObtenerClausulaDeFiltradoParaElControl(control) {
+            var clausula = null;
+            var tipo = control.getAttribute(TipoControl.Tipo);
+            switch (tipo) {
+                case TipoControl.restrictorDeFiltro: {
+                    clausula = this.ObtenerClausulaRestrictor(control);
+                    ;
+                    break;
+                }
+                case TipoControl.Editor: {
+                    clausula = this.ObtenerClausulaEditor(control);
+                    break;
+                }
+                case TipoControl.Selector: {
+                    clausula = this.ObtenerClausulaSelector(control);
+                    ;
+                    break;
+                }
+                case TipoControl.ListaDeElementos: {
+                    clausula = this.ObtenerClausulaListaDeELemento(control);
+                    break;
+                }
+                case TipoControl.ListaDinamica: {
+                    clausula = this.ObtenerClausulaListaDinamica(control);
+                    break;
+                }
+                case TipoControl.Check: {
+                    clausula = this.ObtenerClausulaCheck(control);
+                    break;
+                }
+                case TipoControl.FiltroEntreFechas: {
+                    clausula = this.ObtenerClausulaEntreFechas(control);
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
+                }
+            }
+            return clausula;
+        }
         FiltrosExcluyentes(clausulas) {
             return clausulas;
         }
-        ObtenerControlesDeFiltro() {
+        ObtenerElIdDeLosControlesDeFiltro() {
             var arrayIds = new Array();
             var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`);
             for (let i = 0; i < arrayHtmlInput.length; i++) {

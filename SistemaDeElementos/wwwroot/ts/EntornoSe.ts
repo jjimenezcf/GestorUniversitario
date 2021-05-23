@@ -101,8 +101,6 @@ module EntornoSe {
         return v;
     }
 
-
-
     export function Sumit(form: HTMLFormElement) {
         PonerCapa();
         try {
