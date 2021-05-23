@@ -15,7 +15,6 @@ namespace MVCSistemaDeElementos.Descriptores
         public enumCssOpcionMenu ClaseDeAccion { get; private set; }
 
         public string Ayuda { get; private set; }
-        public bool PermiteMultiSeleccion { get; set; } = false;
 
         public AccionDeMenu(string tipoDeAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         {
@@ -94,6 +93,7 @@ namespace MVCSistemaDeElementos.Descriptores
     public class AccionDeMenuMnt : AccionDeMenu
     {
         protected List<string> Parametros = new List<string>();
+        public bool PermiteMultiSeleccion { get; set; } = false;
         public AccionDeMenuMnt(string tipoAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         : base(tipoAccion, claseDeAccion, ayuda)
         {
@@ -147,6 +147,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public EnviarElementos()
         : base(TipoDeAccionDeMnt.EnviarElementos, enumCssOpcionMenu.DeElemento, "Enviar elementos")
         {
+            PermiteMultiSeleccion = true;
         }
     }
     public class RelacionarElementos : AccionDeMenuMnt
@@ -311,7 +312,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 return htmlFormPost;
             }
 
-            var permite = Accion.PermiteMultiSeleccion ? "S" : "N";
+            var permite = (Accion is AccionDeMenuMnt) ? ((AccionDeMenuMnt)Accion).PermiteMultiSeleccion ? "S" : "N" : "N";
             var htmlOpcionMenu = $@"<input id=¨{IdHtml}¨
                                            type=¨button¨
                                            tipo=¨{Tipo.Render()}¨
