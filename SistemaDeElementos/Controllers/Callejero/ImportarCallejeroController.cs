@@ -14,7 +14,6 @@ namespace MVCSistemaDeElementos.Controllers
         public ImportarCallejeroController(ContextoSe contexto, IMapper mapeador, GestorDeErrores gestorDeErrores)
          : base(contexto
                , mapeador
-               , new DescriptorImportarCallejero()
                , gestorDeErrores)
         {
         }
@@ -22,7 +21,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult ImportarCallejero()
         {
-            return ViewFormulario();
+            return ViewFormulario(new DescriptorImportarCallejero());
         }
 
         // END-POIN: desde el Callejero.ImportarCallejero.ts. somete la importación de ficheros csv

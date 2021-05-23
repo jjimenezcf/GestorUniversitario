@@ -18,12 +18,10 @@ namespace MVCSistemaDeElementos.Controllers
     public class FormularioController<TContexto> : BaseController<UsuarioDto>
     where TContexto : ContextoSe
     {
-        public DescriptorDeFormulario Formulario { get; }
 
-        public FormularioController(TContexto contexto, IMapper mapeador, DescriptorDeFormulario descriptor, GestorDeErrores gestorErrores)
+        public FormularioController(TContexto contexto, IMapper mapeador,  GestorDeErrores gestorErrores)
         : base(gestorErrores, contexto, mapeador)
         {
-            Formulario = descriptor;
         }
 
         public IActionResult Index()
@@ -32,27 +30,27 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        public ViewResult ViewFormulario()
+        public ViewResult ViewFormulario(DescriptorDeFormulario formulario)
         {
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-            Formulario.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            Formulario.UsuarioConectado = Formulario.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            formulario.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
+            formulario.UsuarioConectado = formulario.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            var destino = $"{(Formulario.RutaVista.IsNullOrEmpty() ? "" : $"../{Formulario.RutaVista}/")}{Formulario.Vista}";
+            var destino = $"{(formulario.RutaVista.IsNullOrEmpty() ? "" : $"../{formulario.RutaVista}/")}{formulario.Vista}";
             if (!this.ExisteLaVista(destino))
                 return RenderMensaje($"La vista {destino} no está definida");
 
-            if (!Formulario.UsuarioConectado.EsAdministrador)
+            if (!formulario.UsuarioConectado.EsAdministrador)
             {
                 string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
                 string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
-                var hayPermisos = Formulario.GestorDeUsuario.TienePermisoFuncional(Formulario.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
+                var hayPermisos = formulario.GestorDeUsuario.TienePermisoFuncional(formulario.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
                     return RenderMensaje($"Solicite permisos de acceso a {destino}");
             }
 
-            return base.View(destino, Formulario);
+            return base.View(destino, formulario);
         }
 
         /// <summary>
