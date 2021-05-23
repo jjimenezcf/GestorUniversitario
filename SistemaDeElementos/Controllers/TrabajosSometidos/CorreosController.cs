@@ -23,8 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
                 
         public IActionResult CrudDeCorreos()
         {
-            Descriptor = new DescriptorDeCorreos(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeCorreos(Contexto, ModoDescriptor.Mantenimiento));
         }
 
      

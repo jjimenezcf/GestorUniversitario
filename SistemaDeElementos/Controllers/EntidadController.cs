@@ -46,11 +46,11 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        //Llamada desde opciones de menu (Menu.Ts)
-        public IActionResult Index()
-        {
-            return RedirectToAction(Descriptor.Vista);
-        }
+        ////Llamada desde opciones de menu (Menu.Ts)
+        //public IActionResult Index()
+        //{
+        //    return RedirectToAction(Descriptor.Vista);
+        //}
 
         /// <summary>
         /// END-POIN: desde el ApiDeArchivos. Sube un fichero al gestor documental o a la ruta indicada
@@ -408,44 +408,44 @@ namespace MVCSistemaDeElementos.Controllers
             throw new Exception($"Debe implementar la función de CargaDeElementos para la clase '{claseElemento}' en el controlador '{GetType().Name}'");
         }
 
-        public ViewResult ViewCrud()
+        public ViewResult ViewCrud(DescriptorDeCrud<TElemento> descriptor)
         {
             if (NegociosDeSe.ParsearDto(typeof(TElemento).Name) != enumNegocio.No_Definido)
-                Descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.ParsearDto(typeof(TElemento).Name));
+                descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.ParsearDto(typeof(TElemento).Name));
 
             var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            var vista = gestorDeVista.LeerVistaMvc($"{Descriptor.Controlador}.{Descriptor.Vista}");
+            var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");
 
-            Descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
-            Descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
+            descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
+            descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
 
             ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador,HttpContext);
-            Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            descriptor.UsuarioConectado = descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
-            var destino = $"{(Descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaBase}/")}{Descriptor.Vista}";
+            var destino = $"{(descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{descriptor.RutaBase}/")}{descriptor.Vista}";
             if (!this.ExisteLaVista(destino))
                 return RenderMensaje($"La vista {destino} no está definida");
 
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
 
-            if (!Descriptor.UsuarioConectado.EsAdministrador)
+            if (!descriptor.UsuarioConectado.EsAdministrador)
             {
-                var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
+                var hayPermisos = descriptor.GestorDeUsuario.TienePermisoFuncional(descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
                     return RenderMensaje($"Solicite permisos de acceso a {destino}"); 
 
-                hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
+                hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(Descriptor.Negocio)}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(descriptor.Negocio)}");
             }
 
 
-            Descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            return base.View(destino, Descriptor);
+            return base.View(destino, descriptor);
         }
 
         public ViewResult ViewCrud<T>(DescriptorDeCrud<T> descriptor)

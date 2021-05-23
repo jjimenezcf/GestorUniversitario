@@ -33,30 +33,30 @@ namespace MVCSistemaDeElementos.Controllers
         public IActionResult CrudDeAuditoria(string negocio)
         {
 
-            Descriptor = new DescriptorDeAuditoria(Contexto, ModoDescriptor.Mantenimiento);
+            var descriptor = new DescriptorDeAuditoria(Contexto, ModoDescriptor.Mantenimiento);
 
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-            Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
+            descriptor.UsuarioConectado = descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
-            var destino = $"{(Descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{Descriptor.RutaBase}/")}{Descriptor.Vista}";
+            var destino = $"{(descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{descriptor.RutaBase}/")}{descriptor.Vista}";
             if (!this.ExisteLaVista(destino))
                 return RenderMensaje($"La vista {destino} no está definida");
 
             string nombreDeLaVista = ControllerContext.RouteData.Values["action"].ToString();
             string nombreDelControlador = ControllerContext.RouteData.Values["controller"].ToString();
 
-            if (!Descriptor.UsuarioConectado.EsAdministrador)
+            if (!descriptor.UsuarioConectado.EsAdministrador)
             {
                 try
                 {
-                    var hayPermisos = Descriptor.GestorDeUsuario.TienePermisoFuncional(Descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
+                    var hayPermisos = descriptor.GestorDeUsuario.TienePermisoFuncional(descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                     if (!hayPermisos)
                         GestorDeErrores.Emitir($"Solicite permisos de acceso a {destino}");
 
-                    hayPermisos = Descriptor.GestorDeUsuario.TienePermisoDeDatos(Descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, Descriptor.Negocio);
+                    hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                     if (!hayPermisos)
-                        GestorDeErrores.Emitir($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(Descriptor.Negocio)}");
+                        GestorDeErrores.Emitir($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(descriptor.Negocio)}");
                 }
                 catch(Exception e)
                 {
@@ -65,12 +65,12 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
 
-            Descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(Contexto, Mapeador);
-            Descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, NegociosDeSe.Negocio(negocio));
+            descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(Contexto, Mapeador);
+            descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, NegociosDeSe.Negocio(negocio));
 
             ViewBag.DatosDeConexion = DatosDeConexion;
 
-            return base.View(destino, Descriptor);
+            return base.View(destino, descriptor);
         }
 
 

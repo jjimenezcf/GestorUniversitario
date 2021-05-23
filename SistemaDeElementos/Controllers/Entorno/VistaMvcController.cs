@@ -23,8 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudVistaMvc()
         {
-            Descriptor = new DescriptorDeVistaMvc(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeVistaMvc(Contexto, ModoDescriptor.Mantenimiento));
         }
     }
 }

@@ -24,8 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
         
         public IActionResult CrudDeNegocios()
         {
-            Descriptor = new DescriptorDeNegocio(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeNegocio(Contexto, ModoDescriptor.Mantenimiento));
         }
 
 

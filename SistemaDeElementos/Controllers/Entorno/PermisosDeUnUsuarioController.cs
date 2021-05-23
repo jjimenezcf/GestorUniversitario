@@ -26,8 +26,7 @@ namespace MVCSistemaDeElementos.Controllers
         [HttpPost]
         public IActionResult CrudPermisosDeUnUsuario()
         {
-            Descriptor = new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

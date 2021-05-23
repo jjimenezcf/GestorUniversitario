@@ -25,8 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
         [HttpPost]
         public IActionResult CrudPuestosDeUnRol()
         {
-            Descriptor = new DescriptorDePuestosDeUnRol(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDePuestosDeUnRol(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

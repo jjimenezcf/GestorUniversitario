@@ -24,8 +24,7 @@ namespace MVCSistemaDeElementos.Controllers.Callejero
 
         public IActionResult CrudPaises()
         {
-            Descriptor = new DescriptorDePais(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDePais(Contexto, ModoDescriptor.Mantenimiento));
         }
     }
 }

@@ -37,8 +37,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudUsuario()
         {
-            Descriptor = new DescriptorDeUsuario(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeUsuario(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

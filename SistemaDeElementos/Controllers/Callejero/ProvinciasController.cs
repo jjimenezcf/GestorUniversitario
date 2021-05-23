@@ -26,8 +26,7 @@ namespace SistemaDeElementos.Controllers.Callejero
 
         public IActionResult CrudProvincias()
         {
-            Descriptor = new DescriptorDeProvincias(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeProvincias(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

@@ -27,8 +27,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudMenu()
         {
-            Descriptor = new DescriptorDeMenu(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeMenu(Contexto, ModoDescriptor.Mantenimiento));
         }
 
 

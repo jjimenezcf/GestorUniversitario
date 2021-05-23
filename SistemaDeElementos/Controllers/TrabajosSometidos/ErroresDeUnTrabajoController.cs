@@ -25,8 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudDeErroresDeUnTrabajo()
         {
-            Descriptor = new DescriptorDeErroresDeUnTrabajo(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeErroresDeUnTrabajo(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override ParametrosDeNegocio AntesDeEjecutar_ModificarPorId(ErrorDeUnTrabajoDto elemento)

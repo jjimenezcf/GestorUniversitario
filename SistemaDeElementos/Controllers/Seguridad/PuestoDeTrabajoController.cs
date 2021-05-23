@@ -24,8 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudPuestoDeTrabajo()
         {
-            Descriptor = new DescriptorDePuestoDeTrabajo(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDePuestoDeTrabajo(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)

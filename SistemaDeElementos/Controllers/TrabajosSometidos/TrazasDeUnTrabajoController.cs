@@ -25,8 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudDeTrazasDeUnTrabajo()
         {
-            Descriptor = new DescriptorDeTrazasDeUnTrabajo(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeTrazasDeUnTrabajo(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override ParametrosDeNegocio AntesDeEjecutar_ModificarPorId(TrazaDeUnTrabajoDto elemento)

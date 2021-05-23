@@ -21,8 +21,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudClaseDePermiso()
         {
-            Descriptor = new DescriptorDeClaseDePermiso(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeClaseDePermiso(Contexto, ModoDescriptor.Mantenimiento));
         }
 
 

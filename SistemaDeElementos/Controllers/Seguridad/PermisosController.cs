@@ -24,8 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudPermiso()
         {
-            Descriptor = new DescriptorDePermiso(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDePermiso(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargarLista(string claseElemento, enumNegocio negocio, List<ClausulaDeFiltrado> filtros)

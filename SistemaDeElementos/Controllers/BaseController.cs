@@ -58,7 +58,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected ContextoSe Contexto { get; private set; }
 
-        protected DescriptorDeCrud<TElemento> Descriptor { get; set; }
+        //protected DescriptorDeCrud<TElemento> Descriptor { get; set; }
 
         public BaseController(GestorDeErrores gestorDeErrores, ContextoSe contexto, IMapper mapeador)
         {

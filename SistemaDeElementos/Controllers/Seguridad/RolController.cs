@@ -25,8 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudRol()
         {
-            Descriptor = new DescriptorDeRol(Contexto, ModoDescriptor.Mantenimiento);
-            return ViewCrud();
+            return ViewCrud(new DescriptorDeRol(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
