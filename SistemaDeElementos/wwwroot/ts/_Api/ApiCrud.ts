@@ -338,8 +338,10 @@ namespace ApiCrud {
                 let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
                 if (!EsTrue(permiteMultiSeleccion))
                     opcion.disabled = !(seleccionadas === 1);
-                else {
-                    if (seleccionadas === 1)
+
+                if (EsTrue(permiteMultiSeleccion)) {
+                    let numero: Number = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+                    if (numero === -1 || seleccionadas <= numero)
                         opcion.disabled = false;
                 }
             }
@@ -364,9 +366,18 @@ namespace ApiCrud {
             if (ApiControl.EstaBloqueada(opcion))
                 continue;
 
-            let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-            if (!EsTrue(permiteMultiSeleccion) && !opcion.disabled)
-                opcion.disabled = !(seleccionadas === 1);
+            if (!opcion.disabled) {
+                let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+                if (!EsTrue(permiteMultiSeleccion) ) {
+                    opcion.disabled = !(seleccionadas === 1);
+                    return;
+                }
+
+                let numero: Number = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+                if (numero !== -1)
+                    opcion.disabled = (seleccionadas > numero);
+            }
+            
         }
     }
 

@@ -1,14 +1,16 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePermisosDeUnPuesto : DescriptorDeCrud<PermisosDeUnPuestoDto>
     {
-        public DescriptorDePermisosDeUnPuesto(ModoDescriptor modo)
-        : base(nameof(PermisosDeUnPuestoController), nameof(PermisosDeUnPuestoController.CrudPermisosDeUnPuesto), modo, "Seguridad")
+        public DescriptorDePermisosDeUnPuesto(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(PermisosDeUnPuestoController), nameof(PermisosDeUnPuestoController.CrudPermisosDeUnPuesto), modo, "Seguridad")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PermisosDeUnPuestoDto>(bloque: fltGeneral

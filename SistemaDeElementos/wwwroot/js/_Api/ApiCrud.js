@@ -319,8 +319,9 @@ var ApiCrud;
                 let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
                 if (!EsTrue(permiteMultiSeleccion))
                     opcion.disabled = !(seleccionadas === 1);
-                else {
-                    if (seleccionadas === 1)
+                if (EsTrue(permiteMultiSeleccion)) {
+                    let numero = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+                    if (numero === -1 || seleccionadas <= numero)
                         opcion.disabled = false;
                 }
             }
@@ -343,9 +344,16 @@ var ApiCrud;
             let opcion = opciones[i];
             if (ApiControl.EstaBloqueada(opcion))
                 continue;
-            let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-            if (!EsTrue(permiteMultiSeleccion) && !opcion.disabled)
-                opcion.disabled = !(seleccionadas === 1);
+            if (!opcion.disabled) {
+                let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
+                if (!EsTrue(permiteMultiSeleccion)) {
+                    opcion.disabled = !(seleccionadas === 1);
+                    return;
+                }
+                let numero = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+                if (numero !== -1)
+                    opcion.disabled = (seleccionadas > numero);
+            }
         }
     }
     ApiCrud.DesactivarConMultiSeleccion = DesactivarConMultiSeleccion;

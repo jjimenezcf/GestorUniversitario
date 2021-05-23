@@ -1,13 +1,15 @@
 ﻿using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeVistaMvc : DescriptorDeCrud<VistaMvcDto>
     {
-        public DescriptorDeVistaMvc(ModoDescriptor modo)
-            : base(nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo, "Entorno")
+        public DescriptorDeVistaMvc(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo, "Entorno")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             

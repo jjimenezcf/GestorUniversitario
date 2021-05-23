@@ -1,13 +1,15 @@
 ﻿using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeClaseDePermiso : DescriptorDeCrud<ClasePermisoDto>
     {
-        public DescriptorDeClaseDePermiso(ModoDescriptor modo)
-            : base(nameof(ClaseDePermisoController), nameof(ClaseDePermisoController.CrudClaseDePermiso), modo, "Seguridad")
+        public DescriptorDeClaseDePermiso(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(ClaseDePermisoController), nameof(ClaseDePermisoController.CrudClaseDePermiso), modo, "Seguridad")
         {
         }
 

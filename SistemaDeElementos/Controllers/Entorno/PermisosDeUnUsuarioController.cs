@@ -18,15 +18,15 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestor,
-           errores,
-           new DescriptorDePermisosDeUnUsuario(ModoDescriptor.Mantenimiento)
+           errores
          )
         {
         }
 
         [HttpPost]
-        public IActionResult CrudPermisosDeUnUsuario(string restrictor, string orden)
+        public IActionResult CrudPermisosDeUnUsuario()
         {
+            Descriptor = new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

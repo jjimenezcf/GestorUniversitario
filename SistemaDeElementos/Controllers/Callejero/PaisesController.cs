@@ -16,8 +16,7 @@ namespace MVCSistemaDeElementos.Controllers.Callejero
          : base
          (
            gestorDePaises,
-           gestorDeErrores,
-           new DescriptorDePais(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
@@ -25,6 +24,7 @@ namespace MVCSistemaDeElementos.Controllers.Callejero
 
         public IActionResult CrudPaises()
         {
+            Descriptor = new DescriptorDePais(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
     }

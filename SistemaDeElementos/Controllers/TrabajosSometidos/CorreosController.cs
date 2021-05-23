@@ -15,8 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
         :base
         (
           gestorDeCorreos, 
-          gestorDeErrores, 
-          new DescriptorDeCorreos(ModoDescriptor.Mantenimiento)
+          gestorDeErrores
         )
         {
 
@@ -24,6 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
                 
         public IActionResult CrudDeCorreos()
         {
+            Descriptor = new DescriptorDeCorreos(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

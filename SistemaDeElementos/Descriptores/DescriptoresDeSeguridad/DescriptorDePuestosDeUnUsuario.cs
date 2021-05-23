@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -9,8 +10,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDePuestosDeUnUsuario : DescriptorDeCrud<PuestosDeUnUsuarioDto>
     {
         
-        public DescriptorDePuestosDeUnUsuario(ModoDescriptor modo)
-        : base(nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario), modo, "Seguridad")
+        public DescriptorDePuestosDeUnUsuario(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(PuestosDeUnUsuarioController), nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario), modo, "Seguridad")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PuestosDeUnUsuarioDto>(bloque: fltGeneral
@@ -24,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var modalDePuestos = new ModalDeRelacionarElementos<PuestosDeUnUsuarioDto, PuestoDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los puestos a relacionar"
-                              , crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.Relacion)
+                              , crudModal: new DescriptorDePuestoDeTrabajo(contexto, ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario));
             var relacionarPuestos = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl(), "Seleccionar los puestos de un usuario");
             var opcion = new OpcionDeMenu<PuestosDeUnUsuarioDto>(Mnt.ZonaMenu.Menu, relacionarPuestos, $"Puestos", enumModoDeAccesoDeDatos.Gestor);

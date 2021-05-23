@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -9,8 +10,9 @@ namespace MVCSistemaDeElementos.Descriptores
     public class DescriptorDeRolesDeUnPermiso : DescriptorDeCrud<RolesDeUnPermisoDto>
     {
 
-        public DescriptorDeRolesDeUnPermiso(ModoDescriptor modo)
-        : base(nameof(RolesDeUnPermisoController), nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso), modo, "Seguridad")
+        public DescriptorDeRolesDeUnPermiso(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(RolesDeUnPermisoController), nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso), modo, "Seguridad")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<RolesDeUnPermisoDto>(bloque: fltGeneral
@@ -23,7 +25,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var modalDeRoles = new ModalDeRelacionarElementos<RolesDeUnPermisoDto, RolDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los roles a relacionar"
-                              , crudModal: new DescriptorDeRol(ModoDescriptor.Relacion)
+                              , crudModal: new DescriptorDeRol(contexto, ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(RolesDeUnPermisoDto.IdPermiso));
             var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl(), "Seleccionar los roles donde incluir el permiso");
             var opcion = new OpcionDeMenu<RolesDeUnPermisoDto>(Mnt.ZonaMenu.Menu, relacionarRoles, $"Roles", enumModoDeAccesoDeDatos.Gestor);

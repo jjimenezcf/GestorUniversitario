@@ -38,12 +38,12 @@ namespace MVCSistemaDeElementos.Descriptores
 
             ModalDeUsuarios = new ModalParaSeleccionar<UsuarioDto>(this,
                                          tituloModal: "Seleccionar usuario",
-                                         crudModal: new DescriptorDeUsuario(ModoDescriptor.ParaSeleccionar),
+                                         crudModal: new DescriptorDeUsuario(Crud.Contexto, ModoDescriptor.ParaSeleccionar),
                                          propiedadRestrictora: "");
 
             ModalDePuestos = new ModalParaSeleccionar<PuestoDto>(this,
                                          tituloModal: "Seleccionar puestos de trabajo",
-                                         crudModal: new DescriptorDePuestoDeTrabajo(ModoDescriptor.ParaSeleccionar),
+                                         crudModal: new DescriptorDePuestoDeTrabajo(Crud.Contexto, ModoDescriptor.ParaSeleccionar),
                                          propiedadRestrictora: "");
 
 

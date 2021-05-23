@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -8,8 +9,9 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeRolesDeUnPuesto : DescriptorDeCrud<RolesDeUnPuestoDto>
     {
-        public DescriptorDeRolesDeUnPuesto(ModoDescriptor modo)
-        : base(nameof(RolesDeUnPuestoController), nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto), modo, "Seguridad")
+        public DescriptorDeRolesDeUnPuesto(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(RolesDeUnPuestoController), nameof(RolesDeUnPuestoController.CrudRolesDeUnPuesto), modo, "Seguridad")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<RolesDeUnPuestoDto>(bloque: fltGeneral
@@ -22,7 +24,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var modalDeRoles = new ModalDeRelacionarElementos<RolesDeUnPuestoDto, RolDto>(mantenimiento: Mnt
                               , tituloModal: "Seleccione los roles a relacionar"
-                              , crudModal: new DescriptorDeRol(ModoDescriptor.Relacion)
+                              , crudModal: new DescriptorDeRol(contexto,ModoDescriptor.Relacion)
                               , propiedadRestrictora: nameof(RolesDeUnPuestoDto.IdPuesto));
 
             var relacionarRoles = new RelacionarElementos(modalDeRoles.IdHtml, () => modalDeRoles.RenderControl(), "Añadir roles al puesto");

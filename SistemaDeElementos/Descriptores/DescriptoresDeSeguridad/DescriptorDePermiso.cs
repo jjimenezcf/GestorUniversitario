@@ -4,17 +4,19 @@ using ServicioDeDatos.Entorno;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos.Seguridad;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePermiso : DescriptorDeCrud<PermisoDto>
     {
-        public DescriptorDePermiso(ModoDescriptor modo)
-        : base(controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo, "Seguridad")
+        public DescriptorDePermiso(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(PermisosController), vista: nameof(PermisosController.CrudPermiso), modo: modo, "Seguridad")
         {            
             if (modo == ModoDescriptor.Mantenimiento)
             {
-                var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar);
+                var modalUsuario = new DescriptorDeUsuario(contexto, ModoDescriptor.SeleccionarParaFiltrar);
                 var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
                 var fltEspecificos = new BloqueDeFitro<PermisoDto>(filtro: Mnt.Filtro, titulo: "Específico", dimension: new Dimension(1, 2));
                 

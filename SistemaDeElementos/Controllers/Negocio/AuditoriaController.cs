@@ -27,12 +27,14 @@ namespace MVCSistemaDeElementos.Controllers
         public AuditoriaController(ContextoSe contexto, IMapper mapeador, GestorDeErrores gestorDeErrores)
         : base(gestorDeErrores, contexto, mapeador)
         {
-            Descriptor = new DescriptorDeAuditoria(ModoDescriptor.Mantenimiento);
         }
 
 
         public IActionResult CrudDeAuditoria(string negocio)
         {
+
+            Descriptor = new DescriptorDeAuditoria(Contexto, ModoDescriptor.Mantenimiento);
+
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);

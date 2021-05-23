@@ -94,6 +94,8 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         protected List<string> Parametros = new List<string>();
         public bool PermiteMultiSeleccion { get; set; } = false;
+        public int NumeroMaximoEnLaMultiseleccion { get; set; } = 1;
+
         public AccionDeMenuMnt(string tipoAccion, enumCssOpcionMenu claseDeAccion, string ayuda)
         : base(tipoAccion, claseDeAccion, ayuda)
         {
@@ -132,6 +134,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(TipoDeAccionDeMnt.EditarElemento, enumCssOpcionMenu.DeElemento, "Editar elemento")
         {
             PermiteMultiSeleccion = true;
+            NumeroMaximoEnLaMultiseleccion = -1;
         }
     }
 
@@ -313,12 +316,14 @@ namespace MVCSistemaDeElementos.Descriptores
             }
 
             var permite = (Accion is AccionDeMenuMnt) ? ((AccionDeMenuMnt)Accion).PermiteMultiSeleccion ? "S" : "N" : "N";
+            var numero = (Accion is AccionDeMenuMnt) ? ((AccionDeMenuMnt)Accion).NumeroMaximoEnLaMultiseleccion  : 0;
             var htmlOpcionMenu = $@"<input id=¨{IdHtml}¨
                                            type=¨button¨
                                            tipo=¨{Tipo.Render()}¨
                                            clase=¨{Css.Render(ClaseBoton)}¨
                                            permisos-necesarios=¨{PermisosNecesarios.Render()}¨
                                            permite-multi-seleccion=¨{permite}¨
+                                           numero-maximo-seleccionable={numero}
                                            value=¨{Etiqueta}¨
                                            onClick=¨{Accion.RenderAccion()}¨
                                            title=¨{Ayuda}¨

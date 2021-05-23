@@ -19,8 +19,7 @@ namespace MVCSistemaDeElementos.Controllers
         : base
         (
           gestorDeMenus,
-          gestorDeErrores,
-          new DescriptorDeMenu(ModoDescriptor.Mantenimiento)
+          gestorDeErrores          
         )
         {
             GestorDeMenus = gestorDeMenus;
@@ -28,6 +27,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudMenu()
         {
+            Descriptor = new DescriptorDeMenu(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

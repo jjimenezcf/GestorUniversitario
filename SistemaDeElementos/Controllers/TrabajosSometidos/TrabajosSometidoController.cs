@@ -24,8 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
         :base
         (
           gestorDeTrabajos, 
-          gestorDeErrores, 
-          new DescriptorDeTrabajosSometido(ModoDescriptor.Mantenimiento)
+          gestorDeErrores
         )
         {
 
@@ -34,6 +33,7 @@ namespace MVCSistemaDeElementos.Controllers
         
         public IActionResult CrudDeTrabajosSometido()
         {
+            Descriptor = new DescriptorDeTrabajosSometido(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

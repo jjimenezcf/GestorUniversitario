@@ -21,6 +21,7 @@ using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Archivos;
 using Enumerados;
 using ServicioDeCorreos;
+using ModeloDeDto.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -37,25 +38,11 @@ namespace MVCSistemaDeElementos.Controllers
         protected GestorDeElementos<TContexto, TRegistro, TElemento> GestorDeElementos { get; }
 
 
-        public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores, DescriptorDeCrud<TElemento> descriptor)
-        : this(gestorDeElementos, gestorErrores)
-        {
-            Descriptor = descriptor;
-            if (NegociosDeSe.ParsearDto(typeof(TElemento).Name) != enumNegocio.No_Definido)
-                Descriptor.negocioDtm =  GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.ParsearDto(typeof(TElemento).Name));
-
-            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            var vista = gestorDeVista.LeerVistaMvc($"{Descriptor.Controlador}.{Descriptor.Vista}");
-
-            Descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
-            Descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
-        }
-
-
         public EntidadController(GestorDeElementos<TContexto, TRegistro, TElemento> gestorDeElementos, GestorDeErrores gestorErrores)
         : base(gestorErrores, gestorDeElementos.Contexto, gestorDeElementos.Mapeador)
         {
             GestorDeElementos = gestorDeElementos;
+
         }
 
 
@@ -423,6 +410,15 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud()
         {
+            if (NegociosDeSe.ParsearDto(typeof(TElemento).Name) != enumNegocio.No_Definido)
+                Descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.ParsearDto(typeof(TElemento).Name));
+
+            var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
+            var vista = gestorDeVista.LeerVistaMvc($"{Descriptor.Controlador}.{Descriptor.Vista}");
+
+            Descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
+            Descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
+
             ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador,HttpContext);
             Descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             Descriptor.UsuarioConectado = Descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
@@ -502,8 +498,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected IEnumerable<TElemento> Leer(int posicion, int cantidad, string filtro, string orden)
         {
-            Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
-            Descriptor.Mnt.Datos.PosicionInicial = posicion;
+            //Descriptor.Mnt.Datos.CantidadPorLeer = cantidad;
+            //Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
             var opcionesDeMapeo = new Dictionary<string, object>();
             opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);

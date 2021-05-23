@@ -472,9 +472,9 @@ var Crud;
                 for (let i = 0; i < arrayIds.length; i++) {
                     var control = document.getElementById(`${arrayIds[i]}`);
                     clausula = this.ObtenerClausulaDeFiltradoParaElControl(control);
+                    if (clausula !== null)
+                        clausulas.push(clausula);
                 }
-                if (clausula !== null)
-                    clausulas.push(clausula);
                 this.FiltrosExcluyentes(clausulas);
             }
             return JSON.stringify(clausulas);
@@ -1200,10 +1200,9 @@ var Crud;
             if (this.ZonaDeMenu === null)
                 return;
             let opcionesDeElemento = this.OpcionesPorElemento;
-            let hacerLaInterseccion = this.InfoSelector.Cantidad > 1;
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion = opcionesDeElemento[i];
-                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
+                ModoAcceso.AplicarModoAccesoAlElemento(opcion, this.InfoSelector.Cantidad, modoAcceso);
             }
         }
         LeerElementoSeleccionado(id) {

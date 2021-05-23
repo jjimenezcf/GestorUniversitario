@@ -14,14 +14,14 @@ namespace MVCSistemaDeElementos.Controllers
         : base 
         (
          gestor,
-         errores,
-         new DescriptorDeClaseDePermiso(ModoDescriptor.Mantenimiento)
+         errores
         )
         {
         }
 
         public IActionResult CrudClaseDePermiso()
         {
+            Descriptor = new DescriptorDeClaseDePermiso(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

@@ -1,13 +1,15 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.TrabajosSometidos;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeCorreos : DescriptorDeCrud<CorreoDto>
     {
-        public DescriptorDeCorreos(ModoDescriptor modo)
-        : base(controlador: nameof(CorreosController)
+        public DescriptorDeCorreos(ContextoSe contexto, ModoDescriptor modo)
+        : base( contexto: contexto
+               , controlador: nameof(CorreosController)
                , vista: $"{nameof(CorreosController.CrudDeCorreos)}"
                , modo: modo
                , rutaBase: "TrabajosSometido")

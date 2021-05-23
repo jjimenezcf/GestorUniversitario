@@ -1,14 +1,16 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePermisosDeUnUsuario : DescriptorDeCrud<PermisosDeUnUsuarioDto>
     {
-        public DescriptorDePermisosDeUnUsuario(ModoDescriptor modo)
-        : base(nameof(PermisosDeUnUsuarioController), nameof(PermisosDeUnUsuarioController.CrudPermisosDeUnUsuario), modo, "Entorno")
+        public DescriptorDePermisosDeUnUsuario(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(PermisosDeUnUsuarioController), nameof(PermisosDeUnUsuarioController.CrudPermisosDeUnUsuario), modo, "Entorno")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PermisosDeUnUsuarioDto>(bloque: fltGeneral

@@ -1,17 +1,19 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Callejero;
 using MVCSistemaDeElementos.Controllers.Callejero;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores.Callejero
 {
     public class DescriptorDePais : DescriptorDeCrud<PaisDto>
     {
-        public DescriptorDePais(ModoDescriptor modo)
-            :base(nameof(PaisesController)
-                 ,nameof(PaisesController.CrudPaises)
-                 , modo
-                 , rutaBase: "Callejero")
+        public DescriptorDePais(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto
+               , nameof(PaisesController)
+               , nameof(PaisesController.CrudPaises)
+               , modo
+               , rutaBase: "Callejero")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new EditorFiltro<PaisDto>(bloque: fltGeneral
@@ -23,11 +25,11 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
 
 
         public override string RenderControl()
-    {
-        var render = base.RenderControl();
+        {
+            var render = base.RenderControl();
 
-        render = render +
-               $@"<script src=¨../../js/Callejero/Paises.js¨></script>
+            render = render +
+                   $@"<script src=¨../../js/Callejero/Paises.js¨></script>
                       <script>
                          try {{      
                            Callejero.CrearCrudDePaises('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
@@ -37,7 +39,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                          }}
                       </script>
                     ";
-        return render.Render();
+            return render.Render();
         }
     }
 

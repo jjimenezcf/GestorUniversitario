@@ -17,15 +17,15 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestor,
-           errores,
-           new DescriptorDeRolesDeUnPuesto(ModoDescriptor.Mantenimiento)
+           errores
          )
         {
         }
 
         [HttpPost]
-        public IActionResult CrudRolesDeUnPuesto(string restrictor, string orden)
+        public IActionResult CrudRolesDeUnPuesto()
         {
+            Descriptor = new DescriptorDeRolesDeUnPuesto(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

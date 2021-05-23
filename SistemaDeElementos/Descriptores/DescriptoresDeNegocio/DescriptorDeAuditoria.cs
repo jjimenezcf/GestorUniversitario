@@ -2,13 +2,15 @@
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Entorno;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeAuditoria : DescriptorDeCrud<AuditoriaDto>
     {
-        public DescriptorDeAuditoria(ModoDescriptor modo)
-        : base(controlador: nameof(AuditoriaController)
+        public DescriptorDeAuditoria(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(AuditoriaController)
                , vista: $"{nameof(AuditoriaController.CrudDeAuditoria)}"
                , modo: modo
               , rutaBase: "Negocio")
@@ -25,7 +27,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , ayuda: "elemento auditado"
                   , new Posicion { fila = 0, columna = 1 });
 
-            var modalUsuario = new DescriptorDeUsuario(ModoDescriptor.SeleccionarParaFiltrar);
+            var modalUsuario = new DescriptorDeUsuario(Contexto, ModoDescriptor.SeleccionarParaFiltrar);
             new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: fltGeneral,
                                               etiqueta: "Usuario",
                                               filtrarPor: UsuariosPor.AlgunUsuario,

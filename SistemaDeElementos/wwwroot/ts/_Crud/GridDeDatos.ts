@@ -581,10 +581,10 @@
                 for (let i = 0; i < arrayIds.length; i++) {
                     var control: HTMLElement = document.getElementById(`${arrayIds[i]}`);
                     clausula = this.ObtenerClausulaDeFiltradoParaElControl(control);
-                }
 
-                if (clausula !== null)
-                    clausulas.push(clausula);
+                    if (clausula !== null)
+                        clausulas.push(clausula);
+                }
 
                 this.FiltrosExcluyentes(clausulas);
             }
@@ -1479,10 +1479,10 @@
                 return;
 
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.OpcionesPorElemento;
-            let hacerLaInterseccion: boolean = this.InfoSelector.Cantidad > 1;
+            
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
-                ModoAcceso.AplicarModoAccesoAlElemento(opcion, hacerLaInterseccion, modoAcceso);
+                ModoAcceso.AplicarModoAccesoAlElemento(opcion, this.InfoSelector.Cantidad, modoAcceso);
             }
         }
 

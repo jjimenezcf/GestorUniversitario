@@ -16,8 +16,7 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestorDePuesto,
-           gestorDeErrores,
-           new DescriptorDePuestoDeTrabajo(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
@@ -25,6 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudPuestoDeTrabajo()
         {
+            Descriptor = new DescriptorDePuestoDeTrabajo(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

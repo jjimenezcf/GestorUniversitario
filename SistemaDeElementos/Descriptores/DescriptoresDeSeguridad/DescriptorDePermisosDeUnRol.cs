@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -8,8 +9,9 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePermisosDeUnRol : DescriptorDeCrud<PermisosDeUnRolDto>
     {
-        public DescriptorDePermisosDeUnRol(ModoDescriptor modo)
-        : base(nameof(PermisosDeUnRolController), nameof(PermisosDeUnRolController.CrudPermisosDeUnRol), modo, "Seguridad")
+        public DescriptorDePermisosDeUnRol(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(PermisosDeUnRolController), nameof(PermisosDeUnRolController.CrudPermisosDeUnRol), modo, "Seguridad")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new RestrictorDeFiltro<PermisosDeUnRolDto>(bloque: fltGeneral
@@ -27,7 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
             //- Al cerrar no hace nada
             var modalDePermisos =  new ModalDeRelacionarElementos<PermisosDeUnRolDto, PermisoDto>(mantenimiento: Mnt
                   ,tituloModal: "Seleccione los permisos a relacionar"
-                  ,crudModal: new DescriptorDePermiso(ModoDescriptor.Relacion)
+                  ,crudModal: new DescriptorDePermiso(Contexto, ModoDescriptor.Relacion)
                   ,propiedadRestrictora: nameof(PermisosDeUnRolDto.IdRol));
 
             var relacionarPermisos = new RelacionarElementos(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Seleccionar permisos a relacionar con el rol");

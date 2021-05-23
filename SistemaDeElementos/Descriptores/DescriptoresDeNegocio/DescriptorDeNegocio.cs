@@ -1,13 +1,15 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.Negocio;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeNegocio : DescriptorDeCrud<NegocioDto>
     {
-        public DescriptorDeNegocio(ModoDescriptor modo)
-        : base(controlador: nameof(NegocioController)
+        public DescriptorDeNegocio(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(NegocioController)
                , vista: $"{nameof(NegocioController.CrudDeNegocios)}"
                , modo: modo
               , rutaBase: "Negocio")

@@ -1,6 +1,8 @@
 ﻿using Enumerados;
 using GestorDeElementos;
+using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
+using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -117,12 +119,22 @@ namespace MVCSistemaDeElementos.Descriptores
             Menu.Add(opcion);
         }
 
-        internal void AnadirOpcionDeIrAEnviar()
+        internal void AnadirOpcionDeEnviareMail()
         {
             if (!(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeEnviar)))
                 return;
 
             var enviarElementos = new EnviarElementos();
+            if (Mnt.Crud.Negocio == enumNegocio.No_Definido)
+            {
+                enviarElementos.NumeroMaximoEnLaMultiseleccion = 1;
+            }
+            else
+            {   //Todo--> añadir variable de correos a enviar y variables de entidades de negocio
+                var negocioDtm = GestorDeNegocios.LeerNegocio(Mnt.Crud.Contexto, Mnt.Crud.Negocio);
+                enviarElementos.NumeroMaximoEnLaMultiseleccion = 5;
+            }
+
             var opcion = new OpcionDeMenu<TElemento>(Menu, enviarElementos, $"Enviar", enumModoDeAccesoDeDatos.Consultor);
             Menu.Add(opcion);
         }

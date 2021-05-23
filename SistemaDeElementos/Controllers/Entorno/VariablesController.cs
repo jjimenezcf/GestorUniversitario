@@ -15,8 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestorDeVariables,
-           gestorDeErrores,
-           new DescriptorDeVariable(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
@@ -24,6 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudVariable()
         {
+            Descriptor = new DescriptorDeVariable(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
     }

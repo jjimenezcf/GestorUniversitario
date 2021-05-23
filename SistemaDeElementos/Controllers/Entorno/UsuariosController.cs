@@ -28,8 +28,7 @@ namespace MVCSistemaDeElementos.Controllers
         : base
         (
           gestorDeUsuarios,
-          gestorDeErrores,
-          new DescriptorDeUsuario(ModoDescriptor.Mantenimiento)
+          gestorDeErrores
         )
         {
 
@@ -38,6 +37,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudUsuario()
         {
+            Descriptor = new DescriptorDeUsuario(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

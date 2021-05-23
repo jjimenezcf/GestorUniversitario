@@ -1,6 +1,7 @@
 ﻿using ModeloDeDto.Entorno;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -8,8 +9,9 @@ namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePuestoDeTrabajo : DescriptorDeCrud<PuestoDto>
     {
-        public DescriptorDePuestoDeTrabajo(ModoDescriptor modo)
-            : base(nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo, "Seguridad")
+        public DescriptorDePuestoDeTrabajo(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(PuestoDeTrabajoController), nameof(PuestoDeTrabajoController.CrudPuestoDeTrabajo), modo, "Seguridad")
         {
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(UsuariosDeUnPuestoController)
@@ -33,7 +35,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<PuestoDto, PermisosDeUnPuestoDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un Puesto"
-                              , crudModal: new DescriptorDePermisosDeUnPuesto(ModoDescriptor.Consulta)
+                              , crudModal: new DescriptorDePermisosDeUnPuesto(contexto, ModoDescriptor.Consulta)
                               , propiedadRestrictora: nameof(PermisosDeUnPuestoDto.IdPuesto));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Mostrar los permisos de un puesto de trabajo");

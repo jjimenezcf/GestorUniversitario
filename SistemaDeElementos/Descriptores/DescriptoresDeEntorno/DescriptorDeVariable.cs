@@ -1,13 +1,15 @@
 ﻿using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeVariable : DescriptorDeCrud<VariableDto>
     {
-        public DescriptorDeVariable(ModoDescriptor modo)
-            :base(nameof(VariablesController),nameof(VariablesController.CrudVariable),modo, "Entorno")
+        public DescriptorDeVariable(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(VariablesController),nameof(VariablesController.CrudVariable),modo, "Entorno")
         {
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
             new EditorFiltro<VariableDto>(bloque: fltGeneral

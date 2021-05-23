@@ -1,13 +1,15 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.TrabajosSometidos;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeTrazasDeUnTrabajo : DescriptorDeCrud<TrazaDeUnTrabajoDto>
     {
-        public DescriptorDeTrazasDeUnTrabajo(ModoDescriptor modo)
-        : base(controlador: nameof(TrazasDeUnTrabajoController)
+        public DescriptorDeTrazasDeUnTrabajo(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(TrazasDeUnTrabajoController)
                , vista: $"{nameof(TrazasDeUnTrabajoController.CrudDeTrazasDeUnTrabajo)}"
                , modo: modo
                , rutaBase: "TrabajosSometido")

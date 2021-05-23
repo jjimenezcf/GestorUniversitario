@@ -15,8 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
         :base
         (
           gestorDeNegocios, 
-          gestorDeErrores, 
-          new DescriptorDeNegocio(ModoDescriptor.Mantenimiento)
+          gestorDeErrores
         )
         {
 
@@ -25,6 +24,7 @@ namespace MVCSistemaDeElementos.Controllers
         
         public IActionResult CrudDeNegocios()
         {
+            Descriptor = new DescriptorDeNegocio(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

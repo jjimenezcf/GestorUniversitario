@@ -6,18 +6,20 @@ using ModeloDeDto;
 using GestorDeElementos;
 using ServicioDeDatos.Seguridad;
 using GestoresDeNegocio.Negocio;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeUsuario : DescriptorDeCrud<UsuarioDto>
     {
        
-        public DescriptorDeUsuario(ModoDescriptor modo): this(modo, null)
+        public DescriptorDeUsuario(ContextoSe contexto, ModoDescriptor modo): this(contexto, modo, null)
         {
 
         }
-        public DescriptorDeUsuario(ModoDescriptor modo, string id)
-        : base(controlador: nameof(UsuariosController)
+        public DescriptorDeUsuario(ContextoSe contexto, ModoDescriptor modo, string id)
+        : base(contexto,
+              controlador: nameof(UsuariosController)
                , vista: $"{nameof(UsuariosController.CrudUsuario)}"
                , modo: modo
               , rutaBase: "Entorno"
@@ -34,7 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        posicion: new Posicion(0,0),
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
-                       crudModal: new DescriptorDePermiso(ModoDescriptor.SeleccionarParaFiltrar),
+                       crudModal: new DescriptorDePermiso(Contexto, ModoDescriptor.SeleccionarParaFiltrar),
                        propiedadDondeMapear: ltrFiltros.Nombre.ToString());
 
                 
@@ -87,7 +89,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var modalDePermisos = new ModalDeConsultaDeRelaciones<UsuarioDto, PermisosDeUnUsuarioDto>(mantenimiento: Mnt
                               , tituloModal: "Permisos de un usuario"
-                              , crudModal: new DescriptorDePermisosDeUnUsuario(ModoDescriptor.Consulta)
+                              , crudModal: new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Consulta)
                               , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
 
             var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Mostrar los permisos de un usuario");

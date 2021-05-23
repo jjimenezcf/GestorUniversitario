@@ -17,8 +17,7 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestor,
-           gestorDeErrores,
-           new DescriptorDeRol(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
@@ -26,6 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudRol()
         {
+            Descriptor = new DescriptorDeRol(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

@@ -19,15 +19,15 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestor,
-           errores,
-           new DescriptorDeUsuariosDeUnPuesto(ModoDescriptor.Mantenimiento)
+           errores
          )
         {
         }
 
         [HttpPost]
-        public IActionResult CrudUsuariosDeUnPuesto(string restrictor, string orden)
+        public IActionResult CrudUsuariosDeUnPuesto()
         {
+            Descriptor = new DescriptorDeUsuariosDeUnPuesto(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

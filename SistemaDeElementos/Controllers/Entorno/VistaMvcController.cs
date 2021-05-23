@@ -15,8 +15,7 @@ namespace MVCSistemaDeElementos.Controllers
          : base
          (
            gestorDeVistas,
-           gestorDeErrores,
-           new DescriptorDeVistaMvc(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
@@ -24,6 +23,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudVistaMvc()
         {
+            Descriptor = new DescriptorDeVistaMvc(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
     }

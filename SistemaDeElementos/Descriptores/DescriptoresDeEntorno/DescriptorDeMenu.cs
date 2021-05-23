@@ -1,13 +1,15 @@
 ﻿using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeMenu : DescriptorDeCrud<MenuDto>
     {
-        public DescriptorDeMenu(ModoDescriptor modo)
-        : base(controlador: nameof(MenusController)
+        public DescriptorDeMenu(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(MenusController)
               , vista: nameof(MenusController.CrudMenu)
               , modo: modo
                , rutaBase: "Entorno")

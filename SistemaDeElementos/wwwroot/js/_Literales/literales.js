@@ -118,6 +118,7 @@ const atArchivo = {
 const atOpcionDeMenu = {
     permisosNecesarios: "permisos-necesarios",
     permiteMultiSeleccion: "permite-multi-seleccion",
+    numeroMaximoSeleccionable: "numero-maximo-seleccionable",
     clase: "clase",
     bloqueada: "bloqueada",
     oculta: "oculta"

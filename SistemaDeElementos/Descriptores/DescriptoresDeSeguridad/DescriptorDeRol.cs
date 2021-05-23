@@ -1,14 +1,16 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Seguridad;
 using MVCSistemaDeElementos.Controllers;
+using ServicioDeDatos;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeRol : DescriptorDeCrud<RolDto>
     {
-        public DescriptorDeRol(ModoDescriptor modo)
-            : base(nameof(RolController), nameof(RolController.CrudRol), modo, "Seguridad")
+        public DescriptorDeRol(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , nameof(RolController), nameof(RolController.CrudRol), modo, "Seguridad")
         {
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PuestosDeUnRolController)

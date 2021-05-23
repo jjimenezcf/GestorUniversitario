@@ -5,6 +5,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
+using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
@@ -28,6 +29,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeBorrado<TElemento> Borrado { get; private set; }
 
         public string Controlador { get; private set; }
+        public ContextoSe Contexto { get; }
         public ModoDescriptor Modo { get; private set; }
 
         public bool EsModal => Modo != ModoDescriptor.Mantenimiento;
@@ -58,7 +60,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public NegocioDtm negocioDtm = null;
 
-        public DescriptorDeCrud(string controlador, string vista, ModoDescriptor modo, string rutaBase, string id = null)
+        public DescriptorDeCrud(ContextoSe contexto, string controlador, string vista, ModoDescriptor modo, string rutaBase, string id = null)
         : base(
           padre: null,
           id: id == null ? $"{NombreCrud}" : id,
@@ -74,6 +76,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt = new DescriptorDeMantenimiento<TElemento>(crud: this, etiqueta: elemento);
             Controlador = controlador.Replace("Controller", "");
             Vista = $@"{vista}";
+            Contexto = contexto;
             Modo = modo;
 
             DefinirColumnasDelGrid();
@@ -82,15 +85,17 @@ namespace MVCSistemaDeElementos.Descriptores
             Editor = new DescriptorDeEdicion<TElemento>(crud: this, etiqueta: elemento);
             Exportador = new DescriptorDeExportacion<TElemento>(crud: this);
             if (modo == ModoDescriptor.Mantenimiento)
-               Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
-            Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
-            Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
-            Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
-            Mnt.ZonaMenu.AnadirOpcionDeIrAExportar();
-            Mnt.ZonaMenu.AnadirOpcionDeIrAEnviar();
-            Mnt.ZonaMenu.AnadirOpcionDeBorrar();
+            {
+                Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
+                Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
+                Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
+                Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
+                Mnt.ZonaMenu.AnadirOpcionDeIrAExportar();
+                Mnt.ZonaMenu.AnadirOpcionDeEnviareMail();
+                Mnt.ZonaMenu.AnadirOpcionDeBorrar();
 
-            DefinirDescriptorDeAuditoria();
+                DefinirDescriptorDeAuditoria();
+            }
 
         }
 

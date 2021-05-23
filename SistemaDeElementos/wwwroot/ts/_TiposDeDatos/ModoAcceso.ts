@@ -92,9 +92,16 @@
         }
     }
 
-    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, hayMasDeUnaSeleccionada: boolean, permisos: ModoAcceso.enumModoDeAccesoDeDatos) {
-        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion))
+    export function AplicarModoAccesoAlElemento(opcion: HTMLButtonElement, seleccionados: number, permisos: ModoAcceso.enumModoDeAccesoDeDatos) {
+
+        let hayMasDeUnaSeleccionada: boolean = seleccionados > 1;
+        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion)) {
+            let numeroMaximo: number = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+            if (numeroMaximo == -1 || numeroMaximo >= seleccionados) {
+                ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, false);
+            }
             return;
+        }
 
         let estaDeshabilitado = ApiControl.EstaBloqueada(opcion);
         let permisosNecesarios: string = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
@@ -102,6 +109,13 @@
         if (!EsTrue(permiteMultiSeleccion) && hayMasDeUnaSeleccionada) {
             ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
             return;
+        }
+        if (EsTrue(permiteMultiSeleccion)) {
+            let numeroMaximo: number = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+            if (numeroMaximo !== -1 && numeroMaximo < seleccionados) {
+                ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
+                return;
+            }
         }
 
         if (!ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisos))

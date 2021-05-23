@@ -1,4 +1,5 @@
 ﻿using ModeloDeDto.Callejero;
+using ServicioDeDatos;
 using SistemaDeElementos.Controllers.Callejero;
 using UtilidadesParaIu;
 
@@ -6,8 +7,9 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
 {
     public class DescriptorDeProvincias : DescriptorDeCrud<ProvinciaDto>
     {
-        public DescriptorDeProvincias(ModoDescriptor modo)
-            : base(nameof(ProvinciasController)
+        public DescriptorDeProvincias(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto
+               , nameof(ProvinciasController)
                  , nameof(ProvinciasController.CrudProvincias)
                  , modo
                  , rutaBase: "Callejero")

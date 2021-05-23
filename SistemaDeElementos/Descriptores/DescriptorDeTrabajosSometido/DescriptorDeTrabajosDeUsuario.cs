@@ -2,6 +2,7 @@
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.TrabajosSometidos;
 using ServicioDeDatos.Seguridad;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -30,8 +31,9 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
-        public DescriptorDeTrabajosDeUsuario(ModoDescriptor modo)
-        : base(controlador: nameof(TrabajosDeUsuarioController)
+        public DescriptorDeTrabajosDeUsuario(ContextoSe contexto, ModoDescriptor modo)
+        : base(contexto: contexto
+               , controlador: nameof(TrabajosDeUsuarioController)
                , vista: $"{nameof(TrabajosDeUsuarioController.CrudDeTrabajosDeUsuario)}"
                , modo: modo
                , rutaBase: "TrabajosSometido")

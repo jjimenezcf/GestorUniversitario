@@ -19,14 +19,14 @@ namespace SistemaDeElementos.Controllers.Callejero
          : base
          (
            gestorDeProvincias,
-           gestorDeErrores,
-           new DescriptorDeProvincias(ModoDescriptor.Mantenimiento)
+           gestorDeErrores
          )
         {
         }
 
         public IActionResult CrudProvincias()
         {
+            Descriptor = new DescriptorDeProvincias(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

@@ -1,13 +1,15 @@
 ﻿using UtilidadesParaIu;
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.TrabajosSometidos;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeErroresDeUnTrabajo : DescriptorDeCrud<ErrorDeUnTrabajoDto>
     {
-        public DescriptorDeErroresDeUnTrabajo(ModoDescriptor modo)
-        : base(controlador: nameof(ErroresDeUnTrabajoController)
+        public DescriptorDeErroresDeUnTrabajo(ContextoSe contexto, ModoDescriptor modo)
+        : base( contexto: contexto
+               , controlador: nameof(ErroresDeUnTrabajoController)
                , vista: $"{nameof(ErroresDeUnTrabajoController.CrudDeErroresDeUnTrabajo)}"
                , modo: modo
                , rutaBase: "TrabajosSometido")

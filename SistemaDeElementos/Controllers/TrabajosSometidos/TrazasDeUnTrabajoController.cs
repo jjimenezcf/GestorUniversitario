@@ -17,8 +17,7 @@ namespace MVCSistemaDeElementos.Controllers
         : base
         (
           gestorDeNegocios,
-          gestorDeErrores,
-          new DescriptorDeTrazasDeUnTrabajo(ModoDescriptor.Mantenimiento)
+          gestorDeErrores
         )
         {
 
@@ -26,6 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
 
         public IActionResult CrudDeTrazasDeUnTrabajo()
         {
+            Descriptor = new DescriptorDeTrazasDeUnTrabajo(Contexto, ModoDescriptor.Mantenimiento);
             return ViewCrud();
         }
 

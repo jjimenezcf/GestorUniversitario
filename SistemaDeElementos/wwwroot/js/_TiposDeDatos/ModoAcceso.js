@@ -82,15 +82,28 @@ var ModoAcceso;
         }
     }
     ModoAcceso.AplicarModoDeAccesoAlNegocio = AplicarModoDeAccesoAlNegocio;
-    function AplicarModoAccesoAlElemento(opcion, hayMasDeUnaSeleccionada, permisos) {
-        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion))
+    function AplicarModoAccesoAlElemento(opcion, seleccionados, permisos) {
+        let hayMasDeUnaSeleccionada = seleccionados > 1;
+        if (hayMasDeUnaSeleccionada && ApiControl.EstaBloqueada(opcion)) {
+            let numeroMaximo = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+            if (numeroMaximo == -1 || numeroMaximo >= seleccionados) {
+                ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, false);
+            }
             return;
+        }
         let estaDeshabilitado = ApiControl.EstaBloqueada(opcion);
         let permisosNecesarios = opcion.getAttribute(atOpcionDeMenu.permisosNecesarios);
         let permiteMultiSeleccion = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
         if (!EsTrue(permiteMultiSeleccion) && hayMasDeUnaSeleccionada) {
             ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
             return;
+        }
+        if (EsTrue(permiteMultiSeleccion)) {
+            let numeroMaximo = Numero(opcion.getAttribute(atOpcionDeMenu.numeroMaximoSeleccionable));
+            if (numeroMaximo !== -1 && numeroMaximo < seleccionados) {
+                ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
+                return;
+            }
         }
         if (!ModoAcceso.HayPermisos(ModoAcceso.Parsear(permisosNecesarios), permisos))
             ApiControl.BloquearDesbloquearOpcionDeMenu(opcion, true);
