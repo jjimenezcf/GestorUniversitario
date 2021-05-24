@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(contexto: contexto
                , nameof(RolesDeUnPermisoController), nameof(RolesDeUnPermisoController.CrudRolesDeUnPermiso), modo, "Seguridad")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new RestrictorDeFiltro<RolesDeUnPermisoDto>(bloque: fltGeneral
                   , etiqueta: "Permiso"
                   , propiedad: nameof(RolesDeUnPermisoDto.IdPermiso)

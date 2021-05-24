@@ -17,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.CrearElemento);
             Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.EliminarElemento);
 
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new RestrictorDeFiltro<ErrorDeUnTrabajoDto>(bloque: fltGeneral
                   , etiqueta: "Trabajo de Usuario"
                   , propiedad: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)

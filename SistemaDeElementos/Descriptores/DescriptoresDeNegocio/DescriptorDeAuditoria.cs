@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
               , rutaBase: "Negocio")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new RestrictorDeFiltro<AuditoriaDto>(bloque: fltGeneral
                   , etiqueta: "Negocio"
                   , propiedad: NegocioPor.idNegocio

@@ -1,6 +1,6 @@
 ﻿using Enumerados;
 
-namespace ModeloDeDto.Entorno
+namespace ModeloDeDto.Negocio
 {
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5)]
     public class ParametroDeNegocioDto : ElementoDto

@@ -2,6 +2,7 @@
 using ModeloDeDto.Callejero;
 using MVCSistemaDeElementos.Controllers.Callejero;
 using ServicioDeDatos;
+using SistemaDeElementos.Controllers.Callejero;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores.Callejero
@@ -15,12 +16,23 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                , modo
                , rutaBase: "Callejero")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new EditorFiltro<PaisDto>(bloque: fltGeneral
                 , etiqueta: "Codigo"
                 , propiedad: nameof(PaisDto.Codigo)
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 1, columna = 0 });
+
+            //Todo => permitir que una lista desplegable actue como restrictora
+            AnadirOpcionDeDependencias(Mnt
+                , controlador: nameof(ProvinciasController)
+                , vista: nameof(ProvinciasController.CrudProvincias)
+                , datosDependientes: nameof(ProvinciaDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<ProvinciaDto>.NombreMnt
+                , nombreOpcion: "Provincias"
+                , propiedadQueRestringe: nameof(PaisDto.Id)
+                , propiedadRestrictora: nameof(ProvinciaDto.IdPais)
+                , "Provincias de un pais");
         }
 
 

@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(contexto: contexto
                , nameof(VariablesController),nameof(VariablesController.CrudVariable),modo, "Entorno")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new EditorFiltro<VariableDto>(bloque: fltGeneral
                 , etiqueta: "Valor"
                 , propiedad: nameof(VariableDto.Valor)

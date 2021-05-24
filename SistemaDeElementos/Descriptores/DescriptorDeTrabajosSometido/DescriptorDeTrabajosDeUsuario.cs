@@ -70,7 +70,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                  , propiedadRestrictora: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)
                                  , "Consultar errores del trabajo de usuario");
 
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
                                 etiqueta: "Planificado",
                                 propiedad: nameof(TrabajoDeUsuarioDto.Planificado),

@@ -9,6 +9,12 @@ using Utilidades;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
+    public static class ltrBloques
+    {
+        public static string General = nameof(General);
+        public static string Comun = "Común";
+    }
+
 
     public class ZonaDeFiltro<TElemento> : ControlFiltroHtml where TElemento : ElementoDto
     {
@@ -26,9 +32,9 @@ namespace MVCSistemaDeElementos.Descriptores
         )
         {
             Tipo = enumTipoControl.ZonaDeFiltro;
-            var b1 = new BloqueDeFitro<TElemento>(this, "General", new Dimension(1, 2));
-            var b2 = new BloqueDeFitro<TElemento>(this, "Común", new Dimension(2, 2));
-            new EditorFiltro<TElemento>(bloque: b1, etiqueta: "Nombre", propiedad: ltrFiltros.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            var b1 = new BloqueDeFitro<TElemento>(this, ltrBloques.General , new Dimension(1, 2));
+            var b2 = new BloqueDeFitro<TElemento>(this, ltrBloques.Comun, new Dimension(2, 2));
+            new EditorFiltro<TElemento>(bloque: b1, etiqueta: nameof(INombre.Nombre), propiedad: ltrFiltros.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
 
             if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
             {

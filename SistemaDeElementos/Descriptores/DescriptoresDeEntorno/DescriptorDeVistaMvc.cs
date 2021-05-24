@@ -11,7 +11,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(contexto: contexto
                , nameof(VistaMvcController), nameof(VistaMvcController.CrudVistaMvc), modo, "Entorno")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             
             new EditorFiltro<VistaMvcDto>(bloque: fltGeneral
                 , etiqueta: "Controlador"

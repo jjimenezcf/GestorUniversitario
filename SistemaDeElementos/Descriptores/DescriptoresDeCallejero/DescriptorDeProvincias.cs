@@ -14,7 +14,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                  , modo
                  , rutaBase: "Callejero")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
 
             new ListasDinamicas<ProvinciaDto>(fltGeneral,
                 etiqueta: "País",

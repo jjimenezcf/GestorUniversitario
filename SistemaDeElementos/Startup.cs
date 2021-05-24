@@ -73,12 +73,12 @@ namespace MVCSistemaDeElementos
 
             services.AddScoped<GestorDeErrores>();
             services.AddScoped<GestorDeArbolDeMenu>();
-            services.AddScoped<GestorDeUsuarios>();
-            services.AddScoped<GestorDePermisos>();
             services.AddScoped<GestorDeVistaMvc>();
             services.AddScoped<GestorDeMenus>();
             services.AddScoped<GestorDeVariables>();
-            services.AddScoped<GestorDeVistaMvc>();
+
+            services.AddScoped<GestorDeUsuarios>();
+            services.AddScoped<GestorDePermisos>();
             services.AddScoped<GestorDePuestosDeTrabajo>();
             services.AddScoped<GestorDeClaseDePermisos>();
             services.AddScoped<GestorDePuestosDeUnUsuario>();
@@ -90,9 +90,13 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeRolesDeUnPermiso>();
             services.AddScoped<GestorDePermisosDeUnUsuario>();
             services.AddScoped<GestorDePermisosDeUnPuesto>();
+
             services.AddScoped<GestorDeNegocios>();
+            services.AddScoped<GestorDeParametrosDeNegocio>();
+
             services.AddScoped<GestorDePaises>();
             services.AddScoped<GestorDeProvincias>();
+
             services.AddScoped<GestorDeTrabajosSometido>();
             services.AddScoped<GestorDeTrabajosDeUsuario>();
             services.AddScoped<GestorDeTrazasDeUnTrabajo>();

@@ -12,7 +12,7 @@ namespace MVCSistemaDeElementos.Descriptores
         : base(contexto: contexto
                , nameof(PermisosDeUnPuestoController), nameof(PermisosDeUnPuestoController.CrudPermisosDeUnPuesto), modo, "Seguridad")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta("General");
+            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new RestrictorDeFiltro<PermisosDeUnPuestoDto>(bloque: fltGeneral
                   , etiqueta: "Puesto"
                   , propiedad: nameof(PermisosDeUnPuestoDto.IdPuesto)

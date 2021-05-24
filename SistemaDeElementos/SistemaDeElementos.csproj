@@ -149,6 +149,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Negocio\Negocio.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Negocio\ParametrosDeNegocio.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Seguridad\PermisosDeUnPuesto.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

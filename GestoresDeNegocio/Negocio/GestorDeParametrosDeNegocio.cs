@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ServicioDeDatos;
-using ModeloDeDto.Entorno;
 using GestorDeElementos;
 using ModeloDeDto;
 using Utilidades;
@@ -9,6 +8,7 @@ using ServicioDeDatos.Negocio;
 using Gestor.Errores;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto.Negocio;
 
 namespace GestoresDeNegocio.Negocio
 {
@@ -20,7 +20,7 @@ namespace GestoresDeNegocio.Negocio
             public MapearVariables()
             {
                 CreateMap<ParametroDeNegocioDtm, ParametroDeNegocioDto>()
-                .ForMember(dto => dto.Negocio, dtm => dtm.MapFrom(dtm => dtm.Negocio.Nombre);
+                .ForMember(dto => dto.Negocio, dtm => dtm.MapFrom(dtm => dtm.Negocio.Nombre));
 
                 CreateMap<ParametroDeNegocioDto, ParametroDeNegocioDtm>()
                 .ForMember(dtm => dtm.Negocio, dto => dto.Ignore());

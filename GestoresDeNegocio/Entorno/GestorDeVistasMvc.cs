@@ -45,6 +45,27 @@ namespace GestoresDeNegocio.Entorno
             return new GestorDeVistaMvc(contexto, mapeador);
         }
 
+
+        public static VistaMvcDtm CrearSiNoExiste(ContextoSe contexto, string nombre, string controlador, string accion, bool mostrarEnModal)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var v = gestor.LeerRegistroCacheado(nameof(VistaMvcDtm.Nombre), nombre, false, true);
+            if (v == null)
+                v = CrearVistaMvc(gestor, nombre, controlador, accion, mostrarEnModal);
+            return v;
+        }
+
+        private static VistaMvcDtm CrearVistaMvc(GestorDeVistaMvc gestor, string nombre, string controlador, string accion, bool mostrarEnModal)
+        {
+            var v = new VistaMvcDtm();
+            v.Nombre = nombre;
+            v.Controlador = controlador;
+            v.Accion = accion;
+            v.MostrarEnModal = mostrarEnModal;
+            v = gestor.PersistirRegistro(v, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+            return v;
+        }
+
         protected override IQueryable<VistaMvcDtm> AplicarJoins(IQueryable<VistaMvcDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
@@ -134,7 +155,9 @@ namespace GestoresDeNegocio.Entorno
                 }
 
                 if (vistas == null)
+                {
                     GestorDeErrores.Emitir($"Defina la vista {vista} en BD");
+                }
 
                 cache[$"{vista}"] = vistas[0];
             }

@@ -14,6 +14,15 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
               , rutaBase: "Negocio")
         {
+            AnadirOpcionDeDependencias(Mnt
+            , controlador: nameof(ParametrosDeNegocioController)
+            , vista: nameof(ParametrosDeNegocioController.CrudDeParametrosDeNegocio)
+            , datosDependientes: nameof(ParametroDeNegocioDto)
+            , navegarAlCrud: DescriptorDeMantenimiento<ParametroDeNegocioDto>.NombreMnt
+            , nombreOpcion: "Parámetros"
+            , propiedadQueRestringe: nameof(NegocioDto.Id)
+            , propiedadRestrictora: nameof(ParametroDeNegocioDto.IdNegocio)
+            , "Parametros de un negocio");
         }
 
         public override string RenderControl()
