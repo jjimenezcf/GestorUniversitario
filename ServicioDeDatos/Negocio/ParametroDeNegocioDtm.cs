@@ -10,7 +10,7 @@ namespace ServicioDeDatos.Negocio
     [Table("PARAMETRO", Schema = "NEGOCIO")]
     public class ParametroDeNegocioDtm : RegistroConNombre
     {
-        public string valor { get; set; }
+        public string Valor { get; set; }
 
         [Column("IDNEGOCIO", TypeName = "INT")]
         public int IdNegocio { get; set; }
@@ -25,7 +25,7 @@ namespace ServicioDeDatos.Negocio
         {
             modelBuilder.Entity<ParametroDeNegocioDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
 
-            modelBuilder.Entity<ParametroDeNegocioDtm>().Property(p => p.valor).HasColumnName("VALOR").HasColumnType("VARCHAR(250)").IsRequired(true);
+            modelBuilder.Entity<ParametroDeNegocioDtm>().Property(p => p.Valor).HasColumnName("VALOR").HasColumnType("VARCHAR(250)").IsRequired(true);
 
             modelBuilder.Entity<ParametroDeNegocioDtm>().Property(p => p.IdNegocio).HasColumnName("ID_NEGOCIO").HasColumnType("INT").IsRequired(true);
 
