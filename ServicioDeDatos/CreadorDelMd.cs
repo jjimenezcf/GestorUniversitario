@@ -124,7 +124,8 @@ namespace ServicioDeDatos
 
         private static void DefinirTablasDelEsquemaDeNegocio(ModelBuilder modelBuilder)
         {
-            TablaNegocio.Definir(modelBuilder);
+            TablaNegocio.Definir(modelBuilder); 
+            TablaParametro.Definir(modelBuilder);
             VistaModoDeAccesoAlNegocio.Definir(modelBuilder);
         }
 
