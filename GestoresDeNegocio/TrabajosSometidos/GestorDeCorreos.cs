@@ -13,11 +13,29 @@ using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
 using ModeloDeDto;
 using Gestor.Errores;
+using Utilidades;
+using ServicioDeDatos.Seguridad;
+using ServicioDeDatos.Entorno;
+using GestoresDeNegocio.Negocio;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
     public class GestorDeCorreos : GestorDeElementos<ContextoSe, CorreoDtm, CorreoDto>
     {
+
+        public class ltrParam
+        {
+            internal static readonly string idsDeUsuarios = nameof(idsDeUsuarios);
+            internal static readonly string idsDePuestos = nameof(idsDePuestos);
+            internal static readonly string receptores = nameof(receptores);
+            internal static readonly string asunto = nameof(asunto);
+            internal static readonly string cuerpo = nameof(cuerpo);
+            internal static readonly string elementos = nameof(elementos);
+            internal static readonly string archivos = nameof(archivos);
+            internal static readonly string elementosDeNegocio = nameof(elementosDeNegocio);
+        }
+
+
         public class MapearArchivos : Profile
         {
             public MapearArchivos()
@@ -38,7 +56,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<string> urlsDeElementos, List<string> archivos)
+        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<ElementoDeNegocio> elementos, List<string> archivos)
         {
             var correo = new CorreoDtm();
             correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
@@ -46,7 +64,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             correo.Receptores = receptores.ToJson();
             correo.Asunto = asunto;
             correo.Cuerpo = cuerpo;
-            correo.Elementos = urlsDeElementos.ToJson();
+            correo.Elementos = elementos.ToJson();
             correo.Archivos = archivos.ToJson();
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.PersistirRegistro(correo, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
@@ -65,14 +83,68 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.PersistirRegistro(correo, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
         }
+        public static CorreoDtm CrearCorreoDe(ContextoSe contexto, string parametrosJson)
+        {
+            Dictionary<string, object> parametros = parametrosJson.ToDiccionarioDeParametros();
+
+            ValidarParametrosDeCorreo(contexto, parametros);
+
+            return CrearCorreoDe(contexto
+                , GestorDeUsuarios.LeerUsuario(contexto, contexto.DatosDeConexion.IdUsuario).eMail
+                , (List<string>)parametros[ltrParam.receptores]
+                , (string)parametros[ltrParam.asunto]
+                , (string)parametros[ltrParam.cuerpo]
+                , (List<string>)parametros[ltrParam.elementos]
+                , (List<string>)parametros[ltrParam.archivos]);
+        }
+
+
+        private static void ValidarParametrosDeCorreo(ContextoSe contexto, Dictionary<string, object> parametros)
+        {
+            if (!parametros.ContainsKey(ltrParam.idsDeUsuarios) && !parametros.ContainsKey(ltrParam.idsDePuestos))
+                GestorDeErrores.Emitir("Debe indicar algún receptor");
+
+            var usuarios = parametros.ContainsKey(ltrParam.idsDeUsuarios) ? (List<int>)parametros[ltrParam.idsDeUsuarios] : new List<int>();
+            var puestos = parametros.ContainsKey(ltrParam.idsDePuestos) ? (List<int>)parametros[ltrParam.idsDePuestos] : new List<int>();
+
+            if (usuarios.Count == 0 && puestos.Count == 0)
+                GestorDeErrores.Emitir("Debe indicar algún receptor");
+
+            var receptores = "";
+            foreach(var idUsuario in usuarios)
+                receptores = $"{receptores};{GestorDeUsuarios.LeerUsuario(contexto, idUsuario).eMail}";
+            foreach (var idPuesto in puestos) 
+            {
+                List<UsuarioDtm> usuariosDeUnPuesto = GestorDePuestosDeTrabajo.LeerUsuarios(contexto, idPuesto);
+                foreach (var usuario in usuariosDeUnPuesto)
+                    receptores = $"{receptores};{GestorDeUsuarios.LeerUsuario(contexto, usuario.Id).eMail}";
+            }
+
+            parametros[ltrParam.receptores] = receptores.Substring(1).ToLista<string>().ToJson();
+
+            if (((string)parametros[ltrParam.asunto]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el asunto");
+            if (((string)parametros[ltrParam.cuerpo]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el cuerpo");
+
+            if (parametros.ContainsKey(ltrParam.elementosDeNegocio))
+            {
+                var elementosDeNegocio = (List<ElementoDeNegocio>)parametros[ltrParam.elementosDeNegocio];
+                var elementosValidados = new List<ElementoDeNegocio>();
+                foreach (var elemento in elementosDeNegocio)
+                {
+                    elementosValidados.Add(GestorDeNegocios.ValidarElementoDeNegocio(elemento));
+                }
+                parametros[ltrParam.elementos] = elementosValidados;
+            }
+
+        }
 
         private static string AdjuntarElementos(CorreoDtm correoDtm)
         {
-            var elementos = correoDtm.Elementos.JsonToLista<string>();
+            var elementos = correoDtm.Elementos.JsonToLista<ElementoDeNegocio>();
             var cuerpo = correoDtm.Cuerpo;
-            foreach (string elemento in elementos)
+            foreach (ElementoDeNegocio elemento in elementos)
             {
-                cuerpo = $"{cuerpo}{Environment.NewLine}{Environment.NewLine}{elemento}";
+                cuerpo = $"{cuerpo}{Environment.NewLine}{GestorDeNegocios.ComponerUrl(elemento)}";
             }
 
             return cuerpo;

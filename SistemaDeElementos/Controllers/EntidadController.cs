@@ -22,6 +22,7 @@ using GestoresDeNegocio.Archivos;
 using Enumerados;
 using ServicioDeCorreos;
 using ModeloDeDto.Entorno;
+using GestoresDeNegocio.TrabajosSometidos;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -75,7 +76,7 @@ namespace MVCSistemaDeElementos.Controllers
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var elemento = JsonConvert.DeserializeObject<TElemento>(elementoJson);
                 var parametros = AntesDeEjecutar_CrearElemento(elemento);
-                GestorDeElementos.PersistirElementoDto(elemento,parametros);
+                GestorDeElementos.PersistirElementoDto(elemento, parametros);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Registro creado";
                 GestorDeElementos.Commit(tran);
@@ -187,7 +188,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-              ApiController.PrepararError(e,r, "No se ha podido recuperar datos para el grid.");
+                ApiController.PrepararError(e, r, "No se ha podido recuperar datos para el grid.");
             }
 
             var a = new JsonResult(r);
@@ -207,7 +208,7 @@ namespace MVCSistemaDeElementos.Controllers
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
 
                 if (parametros.ContainsKey("sometido") && bool.Parse(parametros["sometido"].ToString()))
-                {                    
+                {
                     GestorDocumental.SometerExportacion(Contexto, parametros.ToJson());
                     r.Mensaje = $"Trabajo sometido correctamente";
                 }
@@ -234,6 +235,27 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+
+        //END-POINT: desde CrudMantenimiento.Ts
+        public JsonResult epEnviarPorCorreo(string parametrosJson = null)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+                GestorDeCorreos.CrearCorreoDe(Contexto, parametrosJson);
+
+                r.Mensaje = $"Correo enviado";
+                r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
+                r.Estado = enumEstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al enviar el correo.");
+            }
+            return new JsonResult(r);
+        }
 
         private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
         {
@@ -274,7 +296,7 @@ namespace MVCSistemaDeElementos.Controllers
             }
             catch (Exception e)
             {
-                ApiController.PrepararError(e,r, "No se ha podido leer los datos.");
+                ApiController.PrepararError(e, r, "No se ha podido leer los datos.");
             }
 
             return new JsonResult(r);
@@ -295,7 +317,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
-                elementos = CargarLista(claseElemento, NegociosDeSe.Negocio(negocio,true), filtros);
+                elementos = CargarLista(claseElemento, NegociosDeSe.Negocio(negocio, true), filtros);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -419,7 +441,7 @@ namespace MVCSistemaDeElementos.Controllers
             descriptor.Creador.AbrirEnModal = vista.MostrarEnModal;
             descriptor.Editor.AbrirEnModal = vista.MostrarEnModal;
 
-            ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador,HttpContext);
+            ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
             descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             descriptor.UsuarioConectado = descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
 
@@ -434,7 +456,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 var hayPermisos = descriptor.GestorDeUsuario.TienePermisoFuncional(descriptor.UsuarioConectado, $"{nombreDelControlador}.{nombreDeLaVista}");
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite permisos de acceso a {destino}"); 
+                    return RenderMensaje($"Solicite permisos de acceso a {destino}");
 
                 hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                 if (!hayPermisos)

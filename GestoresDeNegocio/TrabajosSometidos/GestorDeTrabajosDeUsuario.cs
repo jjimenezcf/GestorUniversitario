@@ -111,7 +111,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Error al ejecutar el trabajo {Trabajo.Trabajo.Nombre}"
                     , $"Error en la ejecución del trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado}, acceda al mantenimiento de trabajos de usuario para visualizar los errores"
-                    , null
+                    , new List<ElementoDeNegocio>()
                     , null);
             }
         }
@@ -120,13 +120,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             if (Trabajo.Trabajo.ComunicarFin)
             {
-                var urls = new List<string>();
-                urls.Add($"{CacheDeVariable.UrlBase}TrabajosDeUsuario/CrudDeTrabajosDeUsuario?id={Trabajo.Id}");
                 GestorDeCorreos.CrearCorreoPara(ContextoDelEntorno
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
                     , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " y a los errores" : "")} para ver el resultado"
-                    , urls
+                    , new List<ElementoDeNegocio> { new ElementoDeNegocio { idElemento = Trabajo.Id, negocio = enumNegocio.TrabajoDeUnUsuario} }
                     , null);
             }
         }

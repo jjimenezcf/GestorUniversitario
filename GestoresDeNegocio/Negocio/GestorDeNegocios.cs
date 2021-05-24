@@ -176,6 +176,20 @@ namespace GestoresDeNegocio.Negocio
             return (bool)cache[indice];
         }
 
+        internal static string ComponerUrl(ElementoDeNegocio elemento)
+        {
+            //todo --> indiacar el controlador y vista a usar para definir la url de acceso a un negocio
+            var controlador = "";
+            var vista = "";
+            return $"{CacheDeVariable.UrlBase}{controlador}/{vista}?id={elemento.idElemento}";
+        }
+
+        internal static ElementoDeNegocio ValidarElementoDeNegocio(ElementoDeNegocio elemento)
+        {
+            //todo --> Validar que viene el campo idNegocio/negocio, y el idElemento, complementar el que falta
+            return elemento;
+        }
+
         protected override void AntesDePersistir(NegocioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);

@@ -14,6 +14,7 @@ using ModeloDeDto.Entorno;
 using ModeloDeDto.Negocio;
 using ModeloDeDto.Seguridad;
 using ModeloDeDto.TrabajosSometidos;
+using Newtonsoft.Json;
 using ServicioDeDatos;
 using ServicioDeDatos.Archivos;
 using ServicioDeDatos.Callejero;
@@ -49,12 +50,20 @@ namespace GestorDeElementos
         Archivos,
         Pais,
         Provincia,
-        Correo
+        Correo,
+        TrabajoDeUnUsuario
     }
 
     public class NegocioAttribute : Attribute
     {
         public enumNegocio Negocio { get; set; } = enumNegocio.No_Definido;
+    }
+    public class ElementoDeNegocio
+    {
+        public int idElemento { get; set; }
+        public int idNegocio { get; set; }
+        public enumNegocio negocio { get; set; }
+
     }
 
     public static class NegociosDeSe
@@ -110,6 +119,14 @@ namespace GestorDeElementos
         public static bool EsUnRegistro(enumNegocio negocio)
         {
             return _Registros.Contains(negocio.ToString());
+        }
+
+        public static string ToJson(this List<ElementoDeNegocio> e)
+        {
+            if (e == null)
+                e = new List<ElementoDeNegocio>();
+
+            return JsonConvert.SerializeObject(e);
         }
 
         public static string ToString(enumNegocio negocio)

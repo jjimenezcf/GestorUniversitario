@@ -18,6 +18,7 @@ namespace Enumerados
         public object valor { get; set; }
     }
 
+
     public static class ParametrosJson
     {
         public static void ValidarJson(string json)
@@ -48,7 +49,8 @@ namespace Enumerados
         public static string ToJson(this List<Parametro> p)
         {
             if (p == null)
-                return "";
+                p = new List<Parametro>();
+
             return JsonConvert.SerializeObject(p);
         }
 

@@ -151,9 +151,9 @@ namespace GestoresDeNegocio.Archivos
                 , new List<string> { parametros[ltrExportacion.receptores].ToString() }
                 , "Exportación solicitada"
                 , "Se le adjunta el fichero con la exportación solicitada"
-                , null
+                , new List<ElementoDeNegocio>()
                 , new List<string>() { ficheroConRuta }
-                );
+                );;
         }
 
         private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

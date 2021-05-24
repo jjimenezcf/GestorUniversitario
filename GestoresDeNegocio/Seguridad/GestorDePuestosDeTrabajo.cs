@@ -5,6 +5,7 @@ using AutoMapper;
 using GestorDeElementos;
 using ModeloDeDto;
 using ModeloDeDto.Seguridad;
+using ServicioDeDatos.Entorno;
 using Utilidades;
 
 namespace ServicioDeDatos.Seguridad
@@ -57,6 +58,12 @@ namespace ServicioDeDatos.Seguridad
             }
 
             return registros;
+        }
+
+        internal static List<UsuarioDtm> LeerUsuarios(ContextoSe contexto, int idPuesto)
+        {
+            //todo --> leer los usuarios de un puesto
+            throw new NotImplementedException();
         }
     }
 }
