@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Cuerpo.Contenedores.Add(new ContenedorDeBloques(Cuerpo, "General", "Datos maestros"));
             var bloque = Cuerpo.Contenedores[0];
             bloque.Izquierdo.Add(new ControlDeArchivo(bloque, GestorDePaises.ParametroPais, "Fichero de paises", "Selecciona un fichero para importar los paises", "*.csv"));
-            bloque.Izquierdo.Add(new ControlDeArchivo(bloque, "csvProvincia", "Fichero de provincias", "Selecciona un fichero para importar provincias", "*.csv"));
+            bloque.Izquierdo.Add(new ControlDeArchivo(bloque, GestorDeProvincias.ParametroProvincia, "Fichero de provincias", "Selecciona un fichero para importar provincias", "*.csv"));
             bloque.Izquierdo.Add(new ControlDeArchivo(bloque, "csvMunicipio", "Fichero de municipio", "Selecciona un fichero para importar municipios", "*.csv"));
             bloque.Izquierdo.Add(new ControlDeArchivo(bloque, "csvTipoDeVias", "Fichero de tipos de vía", "Selecciona un fichero para importar tipos de vías", "*.csv"));
             bloque.Izquierdo.Add(new ControlDeArchivo(bloque, "csvCp", "Fichero de CP", "Selecciona un fichero para importar los códigos postales", "*.csv"));

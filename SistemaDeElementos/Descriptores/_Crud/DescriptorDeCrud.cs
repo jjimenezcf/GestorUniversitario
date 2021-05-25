@@ -4,6 +4,7 @@ using Enumerados;
 using GestorDeElementos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
+using GestoresDeNegocio.TrabajosSometidos;
 using ModeloDeDto;
 using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
@@ -86,12 +87,15 @@ namespace MVCSistemaDeElementos.Descriptores
             Exportador = new DescriptorDeExportacion<TElemento>(crud: this);
             if (modo == ModoDescriptor.Mantenimiento)
             {
-                Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
-                Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
                 Mnt.ZonaMenu.AnadirOpcionDeIrACrear();
                 Mnt.ZonaMenu.AnadirOpcionDeIrAEditar();
                 Mnt.ZonaMenu.AnadirOpcionDeIrAExportar();
-                Mnt.ZonaMenu.AnadirOpcionDeEnviareMail();
+                if (GestorDeCorreos.PermiteElEnvioDeCorreo<TElemento>())
+                {
+                    Cartero = new DescriptorDeEnviarCorreo<TElemento>(crud: this);
+                    Mnt.ZonaMenu.AnadirOpcionDeEnviareMail();
+                }
+                Borrado = new DescriptorDeBorrado<TElemento>(crud: this, etiqueta: elemento);
                 Mnt.ZonaMenu.AnadirOpcionDeBorrar();
 
                 DefinirDescriptorDeAuditoria();
@@ -200,6 +204,17 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             try
             {
+                var renderCorreo = "";
+                if (GestorDeCorreos.PermiteElEnvioDeCorreo<TElemento>())
+                {
+                    renderCorreo = $@"
+                  <!--  *******************  div de envío de correo *************** -->
+                  {Cartero.RenderDeEnvioDeCorreo()}
+                  <!--  **********  div de selector de receptor de correo****** -->
+                  {Cartero.RenderDeModalesParaSeleccionarReceptores()}";
+                }
+
+
                 var renderMnt = Mnt.RenderDelMantenimiento();
                 if (ModoDescriptor.Mantenimiento == Modo)
                     return $@"
@@ -210,13 +225,10 @@ namespace MVCSistemaDeElementos.Descriptores
                   {Editor.RenderDeEdicion()}
                   <!--  *******************  div de exportacion ******************* -->
                   {Exportador.RenderDeExportacion()}
-                  <!--  *******************  div de envío de correo *************** -->
-                  {Cartero.RenderDeEnvioDeCorreo()}
                   <!--  *******************  div de borrado ******************* -->
                   {Borrado.RenderDelBorrado()}
-                  <!--  **********  div de selector de receptor de correo****** -->
-                  {Cartero.RenderDeModalesParaSeleccionarReceptores()}";
-                
+                  {renderCorreo}";
+
                 if (ModoDescriptor.Consulta == Modo)
                     return $@"
                  {renderMnt}

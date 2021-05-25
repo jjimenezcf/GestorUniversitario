@@ -45,6 +45,26 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 CreateMap<CorreoDto, CorreoDtm>();
             }
         }
+
+        public static bool PermiteElEnvioDeCorreo<T>() where T : ElementoDto
+        {
+            var negocio = NegociosDeSe.ParsearDto(typeof(T).Name);
+
+            try
+            {
+                if (negocio != enumNegocio.No_Definido)
+                    NegociosDeSe.UrlDeAcceso(negocio);
+                else
+                    NegociosDeSe.UrlDeAcceso(typeof(T));
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+
         public GestorDeCorreos(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
@@ -111,9 +131,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 GestorDeErrores.Emitir("Debe indicar algún receptor");
 
             var receptores = "";
-            foreach(var idUsuario in usuarios)
+            foreach (var idUsuario in usuarios)
                 receptores = $"{receptores};{GestorDeUsuarios.LeerUsuario(contexto, idUsuario).eMail}";
-            foreach (var idPuesto in puestos) 
+            foreach (var idPuesto in puestos)
             {
                 List<UsuarioDtm> usuariosDeUnPuesto = GestorDePuestosDeTrabajo.LeerUsuarios(contexto, idPuesto);
                 foreach (var usuario in usuariosDeUnPuesto)
@@ -172,7 +192,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                         pendiente.Enviado = DateTime.Now;
                         gestor.PersistirRegistro(pendiente, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                     }
-                    catch(Exception ei)
+                    catch (Exception ei)
                     {
                         gestor.Contexto.AnotarExcepcion(ei);
                     }
@@ -196,7 +216,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
                 registro.Creado = DateTime.Now;
-            }            
+            }
         }
 
         protected override IQueryable<CorreoDtm> AplicarJoins(IQueryable<CorreoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

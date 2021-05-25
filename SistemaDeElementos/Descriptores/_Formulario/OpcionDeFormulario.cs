@@ -30,9 +30,6 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public object Ayuda { get; }
 
-
-        private OpcionHtml opcion;
-
         public OpcionDeFormulario(MenuDeFormulario menu, string id, string etiqueta, enumAccionDeFormulario accion, string ayuda)
         {
             Menu = menu;

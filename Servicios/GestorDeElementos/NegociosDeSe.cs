@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,8 +51,7 @@ namespace GestorDeElementos
         Archivos,
         Pais,
         Provincia,
-        Correo,
-        TrabajoDeUnUsuario
+        Correo
     }
 
     public class NegocioAttribute : Attribute
@@ -68,7 +68,6 @@ namespace GestorDeElementos
 
     public static class NegociosDeSe
     {
-
         private static List<enumNegocio> _negociosConSeguridad = new List<enumNegocio>
         {
            enumNegocio.Usuario,
@@ -113,13 +112,19 @@ namespace GestorDeElementos
 
         public static bool EsUnRegistro(string negocio)
         {
-            return _Registros.Contains(negocio);
+            return !EsUnNegocio(negocio);
         }
 
-        public static bool EsUnRegistro(enumNegocio negocio)
+        public static bool EsUnNegocio(string negocio)
         {
-            return _Registros.Contains(negocio.ToString());
+            return Negocio(negocio) != enumNegocio.No_Definido;
         }
+
+        public static bool EsUnNegocio(this enumNegocio negocio)
+        {
+            return negocio != enumNegocio.No_Definido;
+        }
+
 
         public static string ToJson(this List<ElementoDeNegocio> e)
         {
@@ -174,10 +179,7 @@ namespace GestorDeElementos
                 case "Correos": return enumNegocio.Correo;
             }
 
-            if (EsUnRegistro(negocio))
-                return enumNegocio.No_Definido;
-
-            throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
+            return enumNegocio.No_Definido;
         }
 
         public static enumNegocio ParsearDto(string registroDto)
@@ -239,6 +241,22 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dtm");
         }
 
+        public static string UrlDeAcceso(enumNegocio negocio)
+        {
+            switch (negocio)
+            {
+                //case enumNegocio.TrabajoDeUnUsuario: return "TrabajosDeUsuario/CrudDeTrabajosDeUsuario";
+            }
+            throw new Exception($"No se ha definido la UrlDeAcceso para {NegociosDeSe.ToString(negocio)}");
+        }
+
+        public static string UrlDeAcceso(Type tipo)
+        {
+            if (tipo == typeof(TrabajoDeUsuarioDto)) return "TrabajosDeUsuario/CrudDeTrabajosDeUsuario";
+
+            throw new Exception($"No se ha definido la UrlDeAcceso para {tipo.FullName}");
+        }
+
         internal static Type TipoDto(this enumNegocio negocio)
         {
             switch (negocio)
@@ -276,7 +294,7 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");
         }
 
-        public static IGestor CrearGestor(ContextoSe contexto, string dtm, string dto) 
+        public static IGestor CrearGestor(ContextoSe contexto, string dtm, string dto)
         {
             var cache = ServicioDeCaches.Obtener(nameof(CrearGestor));
             var clave = $"{dtm}-{dto}";
@@ -293,7 +311,7 @@ namespace GestorDeElementos
 
                         cache[clave] = clase.GetConstructor(new Type[] { typeof(ContextoSe), typeof(IMapper) });
                         if (cache[clave] == null)
-                           throw new Exception($"No se ha definido el constructor Gestor para la clase {clase.Name} con los parámetros de contexto y mapeador.");
+                            throw new Exception($"No se ha definido el constructor Gestor para la clase {clase.Name} con los parámetros de contexto y mapeador.");
 
                         break;
                     }

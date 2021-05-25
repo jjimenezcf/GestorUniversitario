@@ -124,7 +124,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
                     , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " y a los errores" : "")} para ver el resultado"
-                    , new List<ElementoDeNegocio> { new ElementoDeNegocio { idElemento = Trabajo.Id, negocio = enumNegocio.TrabajoDeUnUsuario} }
+                    , new List<ElementoDeNegocio> { new ElementoDeNegocio { idElemento = Trabajo.Id, negocio = enumNegocio.No_Definido} }
                     , null);
             }
         }

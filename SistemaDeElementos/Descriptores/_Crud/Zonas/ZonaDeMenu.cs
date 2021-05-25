@@ -130,8 +130,13 @@ namespace MVCSistemaDeElementos.Descriptores
                 enviarElementos.NumeroMaximoEnLaMultiseleccion = 1;
             }
             else
-            {   //Todo--> añadir variable de correos a enviar y variables de entidades de negocio
-                var negocioDtm = GestorDeNegocios.LeerNegocio(Mnt.Crud.Contexto, Mnt.Crud.Negocio);
+            {   
+                if (Mnt.Crud.Negocio.EsUnNegocio())
+                {
+                    //Todo--> añadir variable de correos a enviar y variables de entidades de negocio
+                    var negocioDtm = GestorDeNegocios.LeerNegocio(Mnt.Crud.Contexto, Mnt.Crud.Negocio);
+                }
+
                 enviarElementos.NumeroMaximoEnLaMultiseleccion = 5;
             }
 

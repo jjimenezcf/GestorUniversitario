@@ -46,7 +46,7 @@ namespace GestoresDeNegocio.Callejero
         public GestorDePaises(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
-
+            
         }
 
         public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)

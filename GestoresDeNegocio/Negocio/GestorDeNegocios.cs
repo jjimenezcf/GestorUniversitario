@@ -178,10 +178,8 @@ namespace GestoresDeNegocio.Negocio
 
         internal static string ComponerUrl(ElementoDeNegocio elemento)
         {
-            //todo --> indiacar el controlador y vista a usar para definir la url de acceso a un negocio
-            var controlador = "";
-            var vista = "";
-            return $"{CacheDeVariable.UrlBase}{controlador}/{vista}?id={elemento.idElemento}";
+            var url = NegociosDeSe.UrlDeAcceso(elemento.negocio);
+            return $"{CacheDeVariable.UrlBase}{url}?id={elemento.idElemento}";
         }
 
         internal static ElementoDeNegocio ValidarElementoDeNegocio(ElementoDeNegocio elemento)
