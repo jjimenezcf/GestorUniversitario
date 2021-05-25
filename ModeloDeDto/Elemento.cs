@@ -24,8 +24,8 @@ namespace ModeloDeDto
 
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, noContiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
 
-    public enum LadoDeRenderizacion { izquierdo, derecho }
-    public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
+    public enum enumModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
+
     public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
     public class IUPropiedadAttribute : Attribute
     {
@@ -96,7 +96,7 @@ namespace ModeloDeDto
         public string ExtensionesValidas { get; set; } = "*.*";
         public object RutaDestino { get; set; }
 
-        public bool EsVisible(ModoDeTrabajo modo)
+        public bool EsVisible(enumModoDeTrabajo modo)
         {
             if (enumTipoControl.ImagenDelCanvas == TipoDeControl)
                 return false;
@@ -104,31 +104,31 @@ namespace ModeloDeDto
             if (Visible)
                 return true;
 
-            if (modo == ModoDeTrabajo.Edicion)
+            if (modo == enumModoDeTrabajo.Edicion)
                 return VisibleAlEditar;
 
-            if (modo == ModoDeTrabajo.Nuevo)
+            if (modo == enumModoDeTrabajo.Nuevo)
                 return VisibleAlCrear;
 
-            if (modo == ModoDeTrabajo.Consulta)
+            if (modo == enumModoDeTrabajo.Consulta)
                 return VisibleAlConsultar;
 
-            if (modo == ModoDeTrabajo.Mantenimiento)
+            if (modo == enumModoDeTrabajo.Mantenimiento)
                 return VisibleEnGrid;
 
             return false;
         }
-        public bool EsEditable(ModoDeTrabajo modo)
+        public bool EsEditable(enumModoDeTrabajo modo)
         {
             if (enumTipoControl.RestrictorDeEdicion == TipoDeControl)
                 return false;
 
             if (EsVisible(modo))
             {
-                if (modo == ModoDeTrabajo.Edicion)
+                if (modo == enumModoDeTrabajo.Edicion)
                     return EditableAlEditar;
                 else
-                if (modo == ModoDeTrabajo.Nuevo)
+                if (modo == enumModoDeTrabajo.Nuevo)
                     return EditableAlCrear;
             }
 
@@ -309,11 +309,11 @@ namespace ModeloDeDto
 
         public Type ClaseDto()
         {
-            return ElementoDtoExtensiones.ObtenerTypoDto(TipoDto);
+            return ExtensionesDto.ObtenerTypoDto(TipoDto);
         }
     }
 
-    public static class ElementoDtoExtensiones
+    public static class ExtensionesDto
     {
         public static bool ImplementaAuditoria(this Type tipoElemento)
         {
@@ -338,7 +338,11 @@ namespace ModeloDeDto
 
         public static Type ObtenerTypoDto(string tipoDto)
         {
-            return Ensamblados.ObtenerType("ModeloDeDto.dll", tipoDto);
+            var cache = ServicioDeCaches.Obtener(nameof(ObtenerTypoDto));
+            if (!cache.ContainsKey(tipoDto))
+                cache[tipoDto] = Ensamblados.ObtenerType("ModeloDeDto.dll", tipoDto);
+
+            return (Type)cache[tipoDto];
         }
 
         public static string UrlParaMostrarUnDto(Type claseDto)

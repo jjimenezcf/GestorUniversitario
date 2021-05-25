@@ -131,7 +131,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         protected virtual string htmlRenderObjetoVacio()
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Nuevo, Crud.Controlador);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Nuevo, Crud.Controlador);
 
             var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ 
                                   name=¨table_propiedad¨  

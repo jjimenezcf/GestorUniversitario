@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), ModoDeTrabajo.Edicion, Crud.Controlador);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Edicion, Crud.Controlador);
             string htmContenedorEdt;
             if (AbrirEnModal)
             {

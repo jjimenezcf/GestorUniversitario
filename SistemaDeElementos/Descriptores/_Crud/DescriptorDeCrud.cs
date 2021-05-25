@@ -105,7 +105,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private void DefinirDescriptorDeAuditoria()
         {
-            if (ElementoDtoExtensiones.ImplementaAuditoria(typeof(TElemento)))
+            if (ExtensionesDto.ImplementaAuditoria(typeof(TElemento)))
             {
                 var expanDeAuditoria = new DescriptorDeExpansor(Editor, $"{Editor.Id}-audt", "Auditoría", "Información de auditoría");
 
@@ -152,7 +152,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
                 if (atributos != null)
                 {
-                    columna.Visible = atributos.EsVisible(ModoDeTrabajo.Mantenimiento);
+                    columna.Visible = atributos.EsVisible(enumModoDeTrabajo.Mantenimiento);
                     columna.Titulo = atributos.EtiquetaGrid;
                     columna.ConOrdenacion = atributos.Ordenar;
 

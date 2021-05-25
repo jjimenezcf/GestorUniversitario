@@ -145,7 +145,7 @@ namespace MVCSistemaDeElementos.Descriptores
     {
         private Dictionary<short, DescriptorDeFila> Filas = new Dictionary<short, DescriptorDeFila>();
         public Type Tipo;
-        public ModoDeTrabajo ModoDeTrabajo { get; private set; }
+        public enumModoDeTrabajo ModoDeTrabajo { get; private set; }
         public short NumeroDeFilas { get; private set; } = 0;
 
         public short NumeroDeColumnas { get; private set; } = 0;
@@ -154,7 +154,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string IdHtml => $"table-{Tipo.Name}-{ModoDeTrabajo}".ToLower();
 
-        public DescriptorDeTabla(Type tipo, ModoDeTrabajo modoDeTrabajo, string controlador)
+        public DescriptorDeTabla(Type tipo, enumModoDeTrabajo modoDeTrabajo, string controlador)
         {
             Tipo = tipo;
             Controlador = controlador;

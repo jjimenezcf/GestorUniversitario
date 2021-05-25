@@ -178,13 +178,27 @@ namespace GestoresDeNegocio.Negocio
 
         internal static string ComponerUrl(TipoDtoElmento elemento)
         {
-            var url = ElementoDtoExtensiones.UrlParaMostrarUnDto(elemento.ClaseDto());
+            var url = ExtensionesDto.UrlParaMostrarUnDto(elemento.ClaseDto());
             return $"{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}";
         }
 
-        internal static TipoDtoElmento ValidarElementoDeNegocio(TipoDtoElmento elemento)
+        internal static TipoDtoElmento ValidarElementoDto(TipoDtoElmento elemento)
         {
-            //todo --> Validar que viene el campo idNegocio/negocio, y el idElemento, complementar el que falta
+            if (elemento.IdElemento <= 0)
+                GestorDeErrores.Emitir("El elemento dto a validar no tiene indicado el Id");
+
+            if (elemento.TipoDto.IsNullOrEmpty())
+                GestorDeErrores.Emitir("El TipoDto a validar no puede ser nulo");
+
+            try
+            {
+                elemento.ClaseDto();
+            }
+            catch(Exception e)
+            {
+                GestorDeErrores.Emitir($"Error al obtener la clase del TipoDto {elemento.TipoDto}",e);
+            }
+
             return elemento;
         }
 

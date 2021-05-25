@@ -50,7 +50,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             try
             {
-                ElementoDtoExtensiones.UrlParaMostrarUnDto(typeof(T));
+                ExtensionesDto.UrlParaMostrarUnDto(typeof(T));
             }
             catch
             {
@@ -142,13 +142,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (parametros.ContainsKey(ltrParam.elementosDeNegocio))
             {
-                var elementosDeNegocio = (List<TipoDtoElmento>)parametros[ltrParam.elementosDeNegocio];
-                var elementosValidados = new List<TipoDtoElmento>();
-                foreach (var elemento in elementosDeNegocio)
+                var elementosDto = (List<TipoDtoElmento>)parametros[ltrParam.elementosDeNegocio];
+                var dtosValidados = new List<TipoDtoElmento>();
+                foreach (var elemento in elementosDto)
                 {
-                    elementosValidados.Add(GestorDeNegocios.ValidarElementoDeNegocio(elemento));
+                    dtosValidados.Add(GestorDeNegocios.ValidarElementoDto(elemento));
                 }
-                parametros[ltrParam.elementos] = elementosValidados;
+                parametros[ltrParam.elementos] = dtosValidados;
             }
 
         }

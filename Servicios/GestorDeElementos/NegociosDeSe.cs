@@ -252,8 +252,8 @@ namespace GestorDeElementos
             var elementoDto = ((NegocioDtm)cache[indice]).ElementoDto;
             if (elementoDto.IsNullOrEmpty()) GestorDeErrores.Emitir($"No se ha definido el elementoDto para el negocio {nombreNegocio}");
 
-            var tipoDto = ElementoDtoExtensiones.ObtenerTypoDto(elementoDto);
-            return ElementoDtoExtensiones.UrlParaMostrarUnDto(tipoDto);
+            var tipoDto = ExtensionesDto.ObtenerTypoDto(elementoDto);
+            return ExtensionesDto.UrlParaMostrarUnDto(tipoDto);
         }
 
         internal static Type TipoDto(this enumNegocio negocio)
