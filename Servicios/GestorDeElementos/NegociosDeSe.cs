@@ -59,13 +59,7 @@ namespace GestorDeElementos
     {
         public enumNegocio Negocio { get; set; } = enumNegocio.No_Definido;
     }
-    public class ElementoDeNegocio
-    {
-        public int idElemento { get; set; }
-        public int idNegocio { get; set; }
-        public enumNegocio negocio { get; set; }
 
-    }
 
     public static class NegociosDeSe
     {
@@ -127,15 +121,15 @@ namespace GestorDeElementos
         }
 
 
-        public static string ToJson(this List<ElementoDeNegocio> e)
+        public static string ToJson(this List<TipoDtoElmento> e)
         {
             if (e == null)
-                e = new List<ElementoDeNegocio>();
+                e = new List<TipoDtoElmento>();
 
             return JsonConvert.SerializeObject(e);
         }
 
-        public static string ToString(enumNegocio negocio)
+        public static string Nombre(this enumNegocio negocio)
         {
             if (negocio == enumNegocio.No_Definido)
                 return enumNegocio.No_Definido.ToString();
@@ -242,51 +236,24 @@ namespace GestorDeElementos
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dtm");
         }
 
-        public static string UrlDeAcceso(enumNegocio negocio)
+        public static string UrlParaMostrarUnNegocio(enumNegocio negocio)
         {
             var cache = ServicioDeCaches.Obtener(typeof(NegocioDtm).FullName);
-            var nombreNegocio = NegociosDeSe.ToString(negocio);
+            var nombreNegocio = negocio.Nombre();
             var indice = $"{nameof(INombre.Nombre)}-{nombreNegocio}";
             if (!cache.ContainsKey(indice))
             {
                 var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorNombre);
                 var valores = new Dictionary<string, object> { { $"@{nameof(INombre.Nombre)}", nombreNegocio } };
                 var negocios = consulta.LanzarConsulta(new DynamicParameters(valores));
-                if (negocios.Count == 1)
-                {
-                    cache[indice] = negocios[0];
-                }
+                if (negocios.Count != 1) GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio {nombreNegocio}");
+                cache[indice] = negocios[0];
             }
+            var elementoDto = ((NegocioDtm)cache[indice]).ElementoDto;
+            if (elementoDto.IsNullOrEmpty()) GestorDeErrores.Emitir($"No se ha definido el elementoDto para el negocio {nombreNegocio}");
 
-            if (cache.ContainsKey(indice))
-            {
-                var tipoDto = Ensamblados.ObtenerType("ModeloDeDto.dll", ((NegocioDtm)cache[indice]).ElementoDto);
-                return UrlDeAcceso(tipoDto);
-            }
-
-            switch (negocio)
-            {
-                //case enumNegocio.TrabajoDeUnUsuario: return "TrabajosDeUsuario/CrudDeTrabajosDeUsuario";
-            }
-            throw new Exception($"No se ha definido la UrlDeAcceso para {NegociosDeSe.ToString(negocio)}");
-        }
-
-        public static string UrlDeAcceso(Type tipo)
-        {
-            var cache = ServicioDeCaches.Obtener(nameof(UrlDeAcceso));
-
-            if (!cache.ContainsKey(tipo.FullName))
-            {
-                var consulta = new ConsultaSql<VistaMvcDtm>(VistaMvcSqls.LeerVistaPorDto);
-                var valores = new Dictionary<string, object> { { $"@{nameof(ElementoDto)}", tipo.FullName } };
-                var vistas = consulta.LanzarConsulta(new DynamicParameters(valores));
-                if (vistas.Count != 1)
-                    GestorDeErrores.Emitir($"No se ha definido la UrlDeAcceso para {tipo.FullName}, asócielo a la vista con la que se muestra");
-
-                cache[tipo.FullName] = $"{vistas[0].Controlador}/{vistas[0].Accion}";
-            }
-
-            return (string)cache[tipo.FullName];
+            var tipoDto = ElementoDtoExtensiones.ObtenerTypoDto(elementoDto);
+            return ElementoDtoExtensiones.UrlParaMostrarUnDto(tipoDto);
         }
 
         internal static Type TipoDto(this enumNegocio negocio)

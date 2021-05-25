@@ -151,7 +151,7 @@ namespace GestoresDeNegocio.Archivos
                 , new List<string> { parametros[ltrExportacion.receptores].ToString() }
                 , "Exportación solicitada"
                 , "Se le adjunta el fichero con la exportación solicitada"
-                , new List<ElementoDeNegocio>()
+                , new List<TipoDtoElmento>()
                 , new List<string>() { ficheroConRuta }
                 );;
         }

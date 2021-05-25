@@ -211,7 +211,7 @@ namespace GestoresDeNegocio.Entorno
             if (parametros.Operacion == enumTipoOperacion.Eliminar || parametros.Operacion == enumTipoOperacion.Modificar)
             {
                 ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");
-                ServicioDeCaches.EliminarElemento(nameof(NegociosDeSe.UrlDeAcceso), registro.ElementoDto);
+                ServicioDeCaches.EliminarElemento(nameof(ElementoDtoExtensiones.UrlParaMostrarUnDto), registro.ElementoDto);
             }
 
             ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));

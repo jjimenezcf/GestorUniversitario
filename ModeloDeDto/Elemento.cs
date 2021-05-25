@@ -6,6 +6,9 @@ using Enumerados;
 using ServicioDeDatos.Elemento;
 using System.IO;
 using System.Collections.Generic;
+using ServicioDeDatos.Entorno;
+using Dapper;
+using Gestor.Errores;
 
 namespace ModeloDeDto
 {
@@ -23,9 +26,7 @@ namespace ModeloDeDto
 
     public enum LadoDeRenderizacion { izquierdo, derecho }
     public enum ModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
-
     public enum Aliniacion { no_definida, izquierda, centrada, derecha, justificada };
-
     public class IUPropiedadAttribute : Attribute
     {
         private string etiquetaGrid;
@@ -196,6 +197,7 @@ namespace ModeloDeDto
     {
 
     }
+
     public class ElementoDto: IElementoDto
     {
         public static string DescargarGestionDocumental = "descargar-gestion-documental";
@@ -300,6 +302,13 @@ namespace ModeloDeDto
         public string Modificador { get; set; }
     }
 
+    public class TipoDtoElmento
+    {
+        public int idElemento { get; set; }
+        public string tipoDto { get; set; }
+        public Type ClaseDto => ElementoDtoExtensiones.ObtenerTypoDto(tipoDto);
+    }
+
     public static class ElementoDtoExtensiones
     {
         public static bool ImplementaAuditoria(this Type tipoElemento)
@@ -322,5 +331,31 @@ namespace ModeloDeDto
             excel.Exportar();
             return ficheroConRuta;
         }
+
+        public static Type ObtenerTypoDto(string tipoDto)
+        {
+           return Ensamblados.ObtenerType("ModeloDeDto.dll", tipoDto);
+        }
+
+        public static string UrlParaMostrarUnDto(Type claseDto)
+        {
+            var cache = ServicioDeCaches.Obtener(nameof(UrlParaMostrarUnDto));
+
+            if (!cache.ContainsKey(claseDto.FullName))
+            {
+                var consulta = new ConsultaSql<VistaMvcDtm>(VistaMvcSqls.LeerVistaPorDto);
+                var valores = new Dictionary<string, object> { { $"@{nameof(ElementoDto)}", claseDto.FullName } };
+                var vistas = consulta.LanzarConsulta(new DynamicParameters(valores));
+                
+                if (vistas.Count != 1)
+                    GestorDeErrores.Emitir($"No se ha indicado la vista para mostrar el dto {claseDto.FullName}");
+
+                cache[claseDto.FullName] = $"{vistas[0].Controlador}/{vistas[0].Accion}";
+            }
+
+            return (string)cache[claseDto.FullName];
+        }
+
+
     }
 }

@@ -74,7 +74,7 @@ namespace GestoresDeNegocio.Negocio
 
         public NegocioDtm LeerNegocio(enumNegocio negocio)
         {
-            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio), true, true, false, false);
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Nombre), negocio.Nombre(), true, true, false, false);
             return negocioDtm;
         }
 
@@ -149,7 +149,7 @@ namespace GestoresDeNegocio.Negocio
                 }
             }
 
-            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio));
+            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre());
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocios)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
 
@@ -176,13 +176,13 @@ namespace GestoresDeNegocio.Negocio
             return (bool)cache[indice];
         }
 
-        internal static string ComponerUrl(ElementoDeNegocio elemento)
+        internal static string ComponerUrl(TipoDtoElmento elemento)
         {
-            var url = NegociosDeSe.UrlDeAcceso(elemento.negocio);
+            var url = ElementoDtoExtensiones.UrlParaMostrarUnDto(elemento.ClaseDto);
             return $"{CacheDeVariable.UrlBase}{url}?id={elemento.idElemento}";
         }
 
-        internal static ElementoDeNegocio ValidarElementoDeNegocio(ElementoDeNegocio elemento)
+        internal static TipoDtoElmento ValidarElementoDeNegocio(TipoDtoElmento elemento)
         {
             //todo --> Validar que viene el campo idNegocio/negocio, y el idElemento, complementar el que falta
             return elemento;
@@ -214,7 +214,7 @@ namespace GestoresDeNegocio.Negocio
             if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Eliminar)
             {
                 var cache = $"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}";
-                var patron = $"Negocio:{NegociosDeSe.ToString(NegociosDeSe.Negocio(registro.Nombre))}";
+                var patron = $"Negocio:{NegociosDeSe.Nombre(NegociosDeSe.Negocio(registro.Nombre))}";
                 ServicioDeCaches.EliminarElementos(cache, patron);
             }
         }
@@ -246,9 +246,9 @@ namespace GestoresDeNegocio.Negocio
             if (!NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
-            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), NegociosDeSe.ToString(negocio),false,true);
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre(), false,true);
             if (registro == null)
-                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.ToString(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
+                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.Nombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
             return registro.Activo;
         }
     }

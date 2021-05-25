@@ -56,7 +56,7 @@ namespace MVCSistemaDeElementos.Descriptores
             set { _negocio = value; }
         }
 
-        public string RenderNegocio => negocioDtm == null ? NegociosDeSe.ToString(Negocio) : negocioDtm.Nombre;
+        public string RenderNegocio => negocioDtm == null ? Negocio.Nombre() : negocioDtm.Nombre;
         public int RenderIdDeNegocio => negocioDtm == null ? 0 : negocioDtm.Id;
 
         public NegocioDtm negocioDtm = null;

@@ -48,16 +48,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static bool PermiteElEnvioDeCorreo<T>() where T : ElementoDto
         {
-            var negocio = NegociosDeSe.NegocioDeUnDto(typeof(T).Name);
-
             try
             {
-                if (negocio != enumNegocio.No_Definido)
-                    NegociosDeSe.UrlDeAcceso(negocio);
-                else
-                    NegociosDeSe.UrlDeAcceso(typeof(T));
+                ElementoDtoExtensiones.UrlParaMostrarUnDto(typeof(T));
             }
-            catch(Exception e)
+            catch
             {
                return false;
             }
@@ -76,7 +71,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<ElementoDeNegocio> elementos, List<string> archivos)
+        public static CorreoDtm CrearCorreoPara(ContextoSe contexto, List<string> receptores, string asunto, string cuerpo, List<TipoDtoElmento> elementos, List<string> archivos)
         {
             var correo = new CorreoDtm();
             correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
@@ -147,8 +142,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (parametros.ContainsKey(ltrParam.elementosDeNegocio))
             {
-                var elementosDeNegocio = (List<ElementoDeNegocio>)parametros[ltrParam.elementosDeNegocio];
-                var elementosValidados = new List<ElementoDeNegocio>();
+                var elementosDeNegocio = (List<TipoDtoElmento>)parametros[ltrParam.elementosDeNegocio];
+                var elementosValidados = new List<TipoDtoElmento>();
                 foreach (var elemento in elementosDeNegocio)
                 {
                     elementosValidados.Add(GestorDeNegocios.ValidarElementoDeNegocio(elemento));
@@ -160,9 +155,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         private static string AdjuntarElementos(CorreoDtm correoDtm)
         {
-            var elementos = correoDtm.Elementos.JsonToLista<ElementoDeNegocio>();
+            var elementos = correoDtm.Elementos.JsonToLista<TipoDtoElmento>();
             var cuerpo = correoDtm.Cuerpo;
-            foreach (ElementoDeNegocio elemento in elementos)
+            foreach (TipoDtoElmento elemento in elementos)
             {
                 cuerpo = $"{cuerpo}{Environment.NewLine}{GestorDeNegocios.ComponerUrl(elemento)}";
             }

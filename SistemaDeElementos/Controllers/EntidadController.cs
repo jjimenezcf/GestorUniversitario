@@ -460,7 +460,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {NegociosDeSe.ToString(descriptor.Negocio)}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {descriptor.Negocio.Nombre()}");
             }
 
 
