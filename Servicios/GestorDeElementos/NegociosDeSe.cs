@@ -251,7 +251,7 @@ namespace GestorDeElementos
             {
                 var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorNombre);
                 var valores = new Dictionary<string, object> { { $"@{nameof(INombre.Nombre)}", nombreNegocio } };
-                var negocios = consulta.DebuggarConsulta($"{nameof(NegocioSqls.LeerNegocioPorNombre)}.txt", new DynamicParameters(valores));
+                var negocios = consulta.LanzarConsulta(new DynamicParameters(valores));
                 if (negocios.Count == 1)
                 {
                     cache[indice] = negocios[0];

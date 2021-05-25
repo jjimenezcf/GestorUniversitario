@@ -77,7 +77,7 @@ namespace ServicioDeDatos.Elemento
                         SqlParameterCollection spc = new SqlCommand().Parameters;
                         foreach(var nombre in parametros.ParameterNames)
                         {
-                            var valor = parametros.Get<string>(nombre);
+                            var valor = parametros.Get<object>(nombre);
                             spc.AddWithValue(nombre,valor);
                         }
                         //para[0] = new SqlParameter(nombre, SqlDbType.NVarChar) { Value = 2013 };
