@@ -90,6 +90,17 @@ namespace ModeloDeDto.Entorno
         ]
         public string Permiso { get; set; }
 
+        [IUPropiedad(
+            Etiqueta = "Elemento Dto",
+            Ayuda = "Espacio de nombre y clase que se muestra",
+            Tipo = typeof(string),
+            Fila = 5,
+            Columna = 0,
+            VisibleEnGrid =false
+            )
+        ]
+        public string ElementoDto { get; set; }
+
         [IUPropiedad(Visible = false)]
         public List<MenuDto> Menus { get; set; }
     }

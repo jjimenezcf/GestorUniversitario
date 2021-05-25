@@ -19,14 +19,24 @@ namespace ModeloDeDto.Negocio
         public string Nombre { get; set; }
 
         [IUPropiedad(
-          Etiqueta = "Elemento",
-          Ayuda = "Elemento de BD",
+          Etiqueta = "Elemento Dto",
+          Ayuda = "Elemento de la vista",
           Tipo = typeof(string),
-          Fila = 0,
+          Fila = 1,
+          Columna = 0
+          )
+        ]
+        public string ElementoDto { get; set; }
+
+        [IUPropiedad(
+          Etiqueta = "Elemento Dtm",
+          Ayuda = "Elemento de la BD",
+          Tipo = typeof(string),
+          Fila = 1,
           Columna = 1
           )
         ]
-        public string Elemento { get; set; }
+        public string ElementoDtm { get; set; }
 
         [IUPropiedad(
             Etiqueta = "Icono",
@@ -35,9 +45,9 @@ namespace ModeloDeDto.Negocio
             ExtensionesValidas = ".svg",
             RutaDestino = "/images/menu",
             Tipo = typeof(string),
-            Fila = 1,
+            Fila = 2,
             Columna = 0,
-            PorAnchoMnt = 15
+            VisibleEnGrid = false
             )
         ]
         public string Icono { get; set; }
@@ -48,7 +58,7 @@ namespace ModeloDeDto.Negocio
             Ayuda = "Permiso de administrador",
             EditableAlEditar = false,
             Tipo = typeof(string),
-            Fila = 2,
+            Fila = 3,
             Columna = 0,
             Obligatorio = false,
             VisibleEnGrid = false,
@@ -65,7 +75,7 @@ namespace ModeloDeDto.Negocio
             Ayuda = "Permiso de gestión",
             EditableAlEditar = false,
             Tipo = typeof(string),
-            Fila = 3,
+            Fila = 4,
             Columna = 0,
             Obligatorio = false,
             VisibleEnGrid = false,
@@ -81,7 +91,7 @@ namespace ModeloDeDto.Negocio
             Ayuda = "Permiso de consulta",
             EditableAlEditar = false,
             Tipo = typeof(string),
-            Fila = 4,
+            Fila = 5,
             Columna = 0,
             Obligatorio = false,
             VisibleEnGrid = false,
@@ -92,14 +102,12 @@ namespace ModeloDeDto.Negocio
         ]
         public string PermisoDeConsultor { get; set; }
 
-
-
         [IUPropiedad(
             Etiqueta = "Negocio activo",
             Ayuda = "indica si el negocio está activo",
             VisibleEnGrid = false,
             Obligatorio = true,
-            Fila = 5,
+            Fila = 6,
             Columna = 1,
             TipoDeControl = enumTipoControl.Check,
             ValorPorDefecto = false

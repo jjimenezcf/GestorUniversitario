@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dapper;
 using Gestor.Errores;
 using ModeloDeDto;
 using ModeloDeDto.Archivos;
@@ -182,9 +183,9 @@ namespace GestorDeElementos
             return enumNegocio.No_Definido;
         }
 
-        public static enumNegocio ParsearDto(string registroDto)
+        public static enumNegocio NegocioDeUnDto(string elementoDto)
         {
-            switch (registroDto)
+            switch (elementoDto)
             {
                 case nameof(UsuarioDto): return enumNegocio.Usuario;
                 case nameof(MenuDto): return enumNegocio.Menu;
@@ -202,7 +203,7 @@ namespace GestorDeElementos
             return enumNegocio.No_Definido;
         }
 
-        public static enumNegocio ParsearDtm(string registroDtm)
+        public static enumNegocio NegocioDeUnDtm(string registroDtm)
         {
             switch (registroDtm)
             {
@@ -243,6 +244,26 @@ namespace GestorDeElementos
 
         public static string UrlDeAcceso(enumNegocio negocio)
         {
+            var cache = ServicioDeCaches.Obtener(typeof(NegocioDtm).FullName);
+            var nombreNegocio = NegociosDeSe.ToString(negocio);
+            var indice = $"{nameof(INombre.Nombre)}-{nombreNegocio}";
+            if (!cache.ContainsKey(indice))
+            {
+                var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorNombre);
+                var valores = new Dictionary<string, object> { { $"@{nameof(INombre.Nombre)}", nombreNegocio } };
+                var negocios = consulta.DebuggarConsulta($"{nameof(NegocioSqls.LeerNegocioPorNombre)}.txt", new DynamicParameters(valores));
+                if (negocios.Count == 1)
+                {
+                    cache[indice] = negocios[0];
+                }
+            }
+
+            if (cache.ContainsKey(indice))
+            {
+                var tipoDto = Ensamblados.ObtenerType("ModeloDeDto.dll", ((NegocioDtm)cache[indice]).ElementoDto);
+                return UrlDeAcceso(tipoDto);
+            }
+
             switch (negocio)
             {
                 //case enumNegocio.TrabajoDeUnUsuario: return "TrabajosDeUsuario/CrudDeTrabajosDeUsuario";
@@ -252,9 +273,20 @@ namespace GestorDeElementos
 
         public static string UrlDeAcceso(Type tipo)
         {
-            if (tipo == typeof(TrabajoDeUsuarioDto)) return "TrabajosDeUsuario/CrudDeTrabajosDeUsuario";
+            var cache = ServicioDeCaches.Obtener(nameof(UrlDeAcceso));
 
-            throw new Exception($"No se ha definido la UrlDeAcceso para {tipo.FullName}");
+            if (!cache.ContainsKey(tipo.FullName))
+            {
+                var consulta = new ConsultaSql<VistaMvcDtm>(VistaMvcSqls.LeerVistaPorDto);
+                var valores = new Dictionary<string, object> { { $"@{nameof(ElementoDto)}", tipo.FullName } };
+                var vistas = consulta.LanzarConsulta(new DynamicParameters(valores));
+                if (vistas.Count != 1)
+                    GestorDeErrores.Emitir($"No se ha definido la UrlDeAcceso para {tipo.FullName}, asócielo a la vista con la que se muestra");
+
+                cache[tipo.FullName] = $"{vistas[0].Controlador}/{vistas[0].Accion}";
+            }
+
+            return (string)cache[tipo.FullName];
         }
 
         internal static Type TipoDto(this enumNegocio negocio)

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210525155536_añadir campo elementodto a vistamvc")]
+    partial class añadircampoelementodtoavistamvc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -639,14 +641,10 @@ namespace Migraciones.Migrations
                         .HasDefaultValue(true)
                         .HasColumnName("ACTIVO");
 
-                    b.Property<string>("ElementoDtm")
+                    b.Property<string>("Elemento")
                         .IsRequired()
                         .HasColumnType("VARCHAR(250)")
-                        .HasColumnName("ELEMENTO_DTM");
-
-                    b.Property<string>("ElementoDto")
-                        .HasColumnType("VARCHAR(250)")
-                        .HasColumnName("ELEMENTO_DTO");
+                        .HasColumnName("ELEMENTO");
 
                     b.Property<string>("Icono")
                         .HasColumnType("VARCHAR(250)")

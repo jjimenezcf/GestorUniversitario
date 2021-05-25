@@ -87,13 +87,13 @@ namespace GestoresDeNegocio.Negocio
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
-                if (filtro.Clausula.ToLower() == nameof(NegocioDtm.Elemento).ToLower())
+                if (filtro.Clausula.ToLower() == nameof(NegocioDtm.ElementoDtm).ToLower())
                 {
                     if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return registros.Where(x => x.Elemento == filtro.Valor);
+                        return registros.Where(x => x.ElementoDtm == filtro.Valor);
 
                     if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return registros.Where(x => x.Elemento.Contains(filtro.Valor));
+                        return registros.Where(x => x.ElementoDtm.Contains(filtro.Valor));
 
                     if (filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
                     {
@@ -222,14 +222,14 @@ namespace GestoresDeNegocio.Negocio
         protected override void AntesDePersistirValidarRegistro(NegocioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistirValidarRegistro(registro, parametros);
-            if (registro.Elemento.IsNullOrEmpty())
+            if (registro.ElementoDtm.IsNullOrEmpty())
                 GestorDeErrores.Emitir($"Ha de indicar la clase del objeto {registro.Nombre} es obligatorio");
 
             var encontrado = false;
             var ensamblado = Assembly.Load(nameof(ServicioDeDatos));
             foreach (var clase in ensamblado.DefinedTypes)
             {
-                if (clase.Name == registro.Elemento)
+                if (clase.Name == registro.ElementoDtm)
                 {
                     encontrado = true;
                     break;
@@ -237,7 +237,7 @@ namespace GestoresDeNegocio.Negocio
             }
 
             if (!encontrado)
-                GestorDeErrores.Emitir($"La clase del elemento {registro.Elemento} del negocio {registro.Nombre} debe existir");
+                GestorDeErrores.Emitir($"La clase del elemento {registro.ElementoDtm} del negocio {registro.Nombre} debe existir");
 
         }
 

@@ -10,9 +10,8 @@ namespace ServicioDeDatos.Negocio
     [Table("NEGOCIO", Schema = "NEGOCIO")]
     public class NegocioDtm : RegistroConNombre
     {
-        [Required]
-        [Column("ELEMENTO", TypeName = "VARCHAR(250)")]
-        public string Elemento { get; set; }
+        public string ElementoDtm { get; set; }
+        public string ElementoDto { get; set; }
 
         [Column("ICONO", TypeName = "VARCHAR(250)")]
         public string Icono { get; set; }
@@ -33,18 +32,34 @@ namespace ServicioDeDatos.Negocio
         public PermisoDtm PermisoDeGestor { get; set; }
         public PermisoDtm PermisoDeConsultor { get; set; }
         public PermisoDtm PermisoDeAdministrador { get; set; }
+
+
     }
 
+    public static class NegocioSqls
+    {
+        public static readonly string LeerNegocioPorNombre = @"
+SELECT [ID]
+      ,[ELEMENTO_DTM] as ElementoDtm
+      ,[ICONO]
+      ,[ACTIVO]
+      ,[IDPERMISO_GESTOR] as IdPermisoDeGestor
+      ,[IDPERMISO_CONSULTOR] as IdPermisoDeConsultor
+      ,[IDPERMISO_ADMINISTRADOR] as IdPermisoDeAdministrador
+      ,[NOMBRE]
+      ,[ELEMENTO_DTO] as ElementoDto
+FROM [NEGOCIO].[NEGOCIO]
+WHERE [NOMBRE] like @Nombre";
+    }
 
     public static class TablaNegocio
     {
         public static void Definir(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<NegocioDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
-
-            modelBuilder.Entity<NegocioDtm>().Property(p => p.Elemento).IsRequired(true);
-
             modelBuilder.Entity<NegocioDtm>().Property(p => p.Activo).IsRequired(true).HasDefaultValue(true);
+            modelBuilder.Entity<NegocioDtm>().Property(p => p.ElementoDtm).HasColumnName("ELEMENTO_DTM").HasColumnType("VARCHAR(250)").IsRequired(true);
+            modelBuilder.Entity<NegocioDtm>().Property(p => p.ElementoDto).HasColumnName("ELEMENTO_DTO").HasColumnType("VARCHAR(250)").IsRequired(false);
 
             modelBuilder.Entity<NegocioDtm>()
             .HasOne(p => p.PermisoDeGestor)
@@ -91,5 +106,7 @@ namespace ServicioDeDatos.Negocio
 
         }
     }
+
+
 
 }

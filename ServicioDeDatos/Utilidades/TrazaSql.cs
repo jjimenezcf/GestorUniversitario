@@ -10,6 +10,13 @@ namespace ServicioDeDatos.Utilidades
         private double duraciAcomulada = 0;
         private int sentenciasEjecutadas = 0;
 
+
+        public static TrazaSql CrearTraza(string fichero)
+        {
+            return new TrazaSql(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{DateTime.Now}-{fichero}", $"Traza de debuguer");
+        }
+
+
         public TrazaSql(NivelDeTraza nivel, string ruta, string fichero, string mensajeInicial)
             : base(nivel, ruta, fichero)
         {

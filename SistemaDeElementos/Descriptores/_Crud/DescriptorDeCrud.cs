@@ -48,7 +48,7 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 if (_negocio == enumNegocio.No_Definido)
                 {
-                    _negocio = NegociosDeSe.ParsearDto(typeof(TElemento).Name);
+                    _negocio = NegociosDeSe.NegocioDeUnDto(typeof(TElemento).Name);
                 }
                 return _negocio;
 

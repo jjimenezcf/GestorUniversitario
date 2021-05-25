@@ -296,7 +296,7 @@ namespace GestorDeElementos
 
                 if (Auditoria.ImplementaAuditoria(typeof(TRegistro)))
                 {
-                    var negocio = NegociosDeSe.ParsearDtm(typeof(TRegistro).Name);
+                    var negocio = NegociosDeSe.NegocioDeUnDtm(typeof(TRegistro).Name);
                     var auditar = parametros.Operacion == enumTipoOperacion.Modificar ? parametros.registroEnBd : registro;
                     AuditoriaDeElementos.RegistrarAuditoria(Contexto, negocio, parametros.Operacion, (IElementoDtm)auditar);
                 }
@@ -355,7 +355,7 @@ namespace GestorDeElementos
         }
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
-            var negocio = NegociosDeSe.ParsearDtm(registro.GetType().Name);
+            var negocio = NegociosDeSe.NegocioDeUnDtm(registro.GetType().Name);
             ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())

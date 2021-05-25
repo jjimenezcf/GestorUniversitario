@@ -30,8 +30,25 @@ namespace ServicioDeDatos.Entorno
         public int IdPermiso { get; set; }
         
         public PermisoDtm Permiso { get; set; }
-    }
 
+        public string ElementoDto { get; set; }
+
+    }
+    public static class VistaMvcSqls
+    {
+        public static readonly string LeerVistaPorDto = @"
+SELECT [ID]
+      ,[NOMBRE]
+      ,[CONTROLADOR]
+      ,[ACCION]
+      ,[PARAMETROS]
+      ,[MODAL]
+      ,[IDPERMISO]
+      ,[ELEMENTO_DTO] as ElementoDto
+FROM [ENTORNO].[VISTA_MVC]
+WHERE [ELEMENTO_DTO] = @ElementoDto
+";
+    }
     public static class TablaVistaMvc
     {
         public static void Definir(ModelBuilder modelBuilder)
@@ -39,6 +56,8 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<VistaMvcDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
 
             modelBuilder.Entity<VistaMvcDtm>().Property(p => p.Parametros).IsRequired(false);
+
+            modelBuilder.Entity<VistaMvcDtm>().Property(p => p.ElementoDto).HasColumnName("ELEMENTO_DTO").HasColumnType("VARCHAR(250)").IsRequired(false);
 
             modelBuilder.Entity<VistaMvcDtm>().Property(p => p.MostrarEnModal).IsRequired(true).HasDefaultValue(false);
 
@@ -70,4 +89,6 @@ namespace ServicioDeDatos.Entorno
             modelBuilder.Entity<VistaMvcDtm>().HasIndex(v => new { v.Nombre }).IsUnique(true).HasDatabaseName("IND_VISTAMVC_NOMBRE");
         }
     }
+
+
 }

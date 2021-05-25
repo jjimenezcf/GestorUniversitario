@@ -215,7 +215,7 @@ namespace MVCSistemaDeElementos.Controllers
         }
         protected virtual enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(TElemento elemento)
         {
-            return GestorDeNegocios.LeerModoDeAccesoAlElemento(Contexto, NegociosDeSe.ParsearDto(elemento.GetType().Name), elemento.Id);
+            return GestorDeNegocios.LeerModoDeAccesoAlElemento(Contexto, NegociosDeSe.NegocioDeUnDto(elemento.GetType().Name), elemento.Id);
         }
 
         private static void ValidarExtension(IFormFile fichero, string extensiones)

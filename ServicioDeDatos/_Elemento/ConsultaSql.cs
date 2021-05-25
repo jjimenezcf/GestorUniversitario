@@ -39,7 +39,23 @@ namespace ServicioDeDatos.Elemento
             Sentencia = sentencia;
             Traza = traza;
         }
-        public List<T> LanzarConsulta(object parametros = null)
+
+        public List<T> DebuggarConsulta(string fichero, DynamicParameters parametros = null)
+        {
+            List<T> resultado = null;
+            Traza = TrazaSql.CrearTraza(fichero);
+            try
+            {
+                resultado = LanzarConsulta(parametros);
+            }
+            finally
+            {
+                Traza.Cerrar();
+            }
+            return resultado;
+        }
+
+        public List<T> LanzarConsulta(DynamicParameters parametros = null)
         {
             List<T> resultado = null;
 
@@ -58,7 +74,14 @@ namespace ServicioDeDatos.Elemento
                     if (Traza != null)
                     {
                         cronometro.Stop();
-                        Traza.AnotarTrazaSql(Sentencia, null, cronometro.ElapsedMilliseconds);
+                        SqlParameterCollection spc = new SqlCommand().Parameters;
+                        foreach(var nombre in parametros.ParameterNames)
+                        {
+                            var valor = parametros.Get<string>(nombre);
+                            spc.AddWithValue(nombre,valor);
+                        }
+                        //para[0] = new SqlParameter(nombre, SqlDbType.NVarChar) { Value = 2013 };
+                        Traza.AnotarTrazaSql(Sentencia, spc, cronometro.ElapsedMilliseconds);
                     }
                 }
                 catch (Exception e)

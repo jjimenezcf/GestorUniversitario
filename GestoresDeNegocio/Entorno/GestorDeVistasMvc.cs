@@ -201,14 +201,25 @@ namespace GestoresDeNegocio.Entorno
         {
             base.DespuesDePersistir(registro, parametros);
             var RegistroEnBD = ((VistaMvcDtm)parametros.registroEnBd);
+
             if (parametros.Operacion == enumTipoOperacion.Modificar && RegistroEnBD.Nombre != registro.Nombre)
                 GestorDePermisos.ModificarPermisoFuncional(Contexto, Mapeador, RegistroEnBD.Permiso, registro.Nombre, enumClaseDePermiso.Vista);
 
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
                 GestorDePermisos.Eliminar(Contexto, Mapeador, RegistroEnBD.Permiso);
 
-            ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");
+            if (parametros.Operacion == enumTipoOperacion.Eliminar || parametros.Operacion == enumTipoOperacion.Modificar)
+            {
+                ServicioDeCaches.EliminarElemento(nameof(LeerVistaMvc), $"{registro.Controlador}.{ registro.Accion}");
+                ServicioDeCaches.EliminarElemento(nameof(NegociosDeSe.UrlDeAcceso), registro.ElementoDto);
+            }
+
             ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
+        }
+
+        protected override void DespuesDeMapearElemento(VistaMvcDtm registro, VistaMvcDto elemento, ParametrosDeMapeo parametros)
+        {
+            base.DespuesDeMapearElemento(registro, elemento, parametros);
         }
 
 

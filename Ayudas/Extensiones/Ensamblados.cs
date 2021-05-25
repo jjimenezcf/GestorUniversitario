@@ -15,6 +15,16 @@ namespace Utilidades
             return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).Replace(@"file:\","");
         }
 
+        public static Type ObtenerType(string dll, string nombreCompletoDeClase)
+        {
+            var rutaDeBinarios = RutaDeBinarios();
+            var assembly = Assembly.LoadFile($@"{RutaDeBinarios()}\{dll}");
+            var tipo = assembly.GetType(nombreCompletoDeClase);
+            if (tipo == null)
+                throw new Exception($"la clase {nombreCompletoDeClase} no se encuentra el tipo {nombreCompletoDeClase} dentro de la ruta de binarios {rutaDeBinarios}");
+            return tipo;
+        }
+
         public static MethodInfo ValidarMetodoEstatico(string dll, string nombreCompletoDeClase, string nombreMetodo)
         {
             var assembly = Assembly.LoadFrom(dll.Replace(@"file:\", ""));

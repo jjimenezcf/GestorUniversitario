@@ -48,7 +48,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static bool PermiteElEnvioDeCorreo<T>() where T : ElementoDto
         {
-            var negocio = NegociosDeSe.ParsearDto(typeof(T).Name);
+            var negocio = NegociosDeSe.NegocioDeUnDto(typeof(T).Name);
 
             try
             {
@@ -57,9 +57,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 else
                     NegociosDeSe.UrlDeAcceso(typeof(T));
             }
-            catch
+            catch(Exception e)
             {
-                return false;
+               return false;
             }
             return true;
         }
