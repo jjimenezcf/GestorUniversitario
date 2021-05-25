@@ -12,11 +12,11 @@ namespace ServicioDeDatos.Negocio
     {
 
     }
-    
+
     public class AuditoriaDtm : Registro
     {
         public int IdElemento { get; set; }
-        
+
         public int IdUsuario { get; set; }
 
         public string Operacion { get; set; }
@@ -25,10 +25,12 @@ namespace ServicioDeDatos.Negocio
 
         public DateTime AuditadoEl { get; set; }
     }
-
-    public static class Auditoria
+    public static class AuditoriaSql
     {
-        public static string sqlLeerPorId =
+        public static string FiltroPorUsuario = nameof(FiltroPorUsuario);
+        public static string AplicarFiltroPorUsuario = $"And ID_USUARIO in ([{ClausulasDeConsultas.ListaDeValores}])";
+        
+        public static string LeerPorId =
 $@"
 select ID as Id
      , ID_ELEMENTO as IdElemento
@@ -40,7 +42,7 @@ from [Esquema].[Tabla] T1 WITH(NOLOCK)
 where ID = @Id
 ";
 
-        public static string sqlAuditoriaDeUnElemento =
+        public static string AuditoriaDeUnElemento =
 $@"
 select ID as Id
      , ID_ELEMENTO as IdElemento
@@ -54,17 +56,18 @@ where ID_ELEMENTO = @idElemento
 order by AUDITADO_EL DESC 
 OFFSET @posicion ROWS FETCH NEXT @cantidad ROWS ONLY
 ";
-        public static string sqlTotalAuditoria =
+        public static string TotalAuditoria =
 $@"
 select count(*) as cantidad
 from Esquema.Tabla T1 WITH(NOLOCK)
 where ID_ELEMENTO = @idElemento
 ";
+    }
 
-        public static string FiltroPorUsuario = nameof(FiltroPorUsuario);
 
-        public static string AplicarFiltroPorUsuario = $"And ID_USUARIO in ([{ClausulasDeConsultas.ListaDeValores}])";
 
+    public static class Auditoria
+    {
         internal static void DefinirCamposDeAuditoriaDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : AuditoriaDtm
         {
             var nombreDeTabla = GeneradorMd.NombreDeTabla(typeof(TEntity));

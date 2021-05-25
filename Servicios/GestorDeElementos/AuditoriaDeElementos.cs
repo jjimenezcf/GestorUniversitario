@@ -40,7 +40,7 @@ namespace GestorDeElementos
 
         public AuditoriaDtm LeerRegistroPorId(int id, bool emitirError = true)
         {
-            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlLeerPorId.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, AuditoriaSql.LeerPorId.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
             var restrictores = new Dictionary<string, object> { { "@Id", id } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
 
@@ -52,9 +52,9 @@ namespace GestorDeElementos
 
         public IEnumerable<AuditoriaDtm> LeerRegistros(int idElemento, List<int> usuarios, int posicion, int cantidad)
         {
-            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, Auditoria.sqlAuditoriaDeUnElemento.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var consulta = new ConsultaSql<AuditoriaDtm>(Contexto.Traza, AuditoriaSql.AuditoriaDeUnElemento.Replace("[Esquema].[Tabla]", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
 
-            consulta.AplicarClausulaIn(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario, usuarios);
+            consulta.AplicarClausulaIn(AuditoriaSql.FiltroPorUsuario, AuditoriaSql.AplicarFiltroPorUsuario, usuarios);
 
             var restrictores = new Dictionary<string, object> { { "@posicion", posicion }, { "@cantidad", cantidad }, { "@idElemento", idElemento } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictores));
@@ -63,9 +63,9 @@ namespace GestorDeElementos
 
         public int ContarRegistros(int idElemento, List<int> usuarios)
         {
-            var consulta = new ConsultaSql<RegistrosAfectados>(Contexto.Traza, Auditoria.sqlTotalAuditoria.Replace("Esquema.Tabla", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
+            var consulta = new ConsultaSql<RegistrosAfectados>(Contexto.Traza, AuditoriaSql.TotalAuditoria.Replace("Esquema.Tabla", $"{esquemaDeAuditoria}.{tablaDeAuditoria}"));
 
-            consulta.AplicarClausulaIn(Auditoria.FiltroPorUsuario, Auditoria.AplicarFiltroPorUsuario, usuarios);
+            consulta.AplicarClausulaIn(AuditoriaSql.FiltroPorUsuario, AuditoriaSql.AplicarFiltroPorUsuario, usuarios);
 
             var restrictor = new Dictionary<string, object> { { "@idElemento", idElemento } };
             var registros = consulta.LanzarConsulta(new DynamicParameters(restrictor));
