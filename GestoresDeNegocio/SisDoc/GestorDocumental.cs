@@ -153,7 +153,7 @@ namespace GestoresDeNegocio.Archivos
                 , "Se le adjunta el fichero con la exportación solicitada"
                 , new List<TipoDtoElmento>()
                 , new List<string>() { ficheroConRuta }
-                );;
+                );
         }
 
         private static string GenerarExcel<T>(ContextoSe contexto, List<T> elementos)

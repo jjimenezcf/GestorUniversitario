@@ -178,8 +178,8 @@ namespace GestoresDeNegocio.Negocio
 
         internal static string ComponerUrl(TipoDtoElmento elemento)
         {
-            var url = ElementoDtoExtensiones.UrlParaMostrarUnDto(elemento.ClaseDto);
-            return $"{CacheDeVariable.UrlBase}{url}?id={elemento.idElemento}";
+            var url = ElementoDtoExtensiones.UrlParaMostrarUnDto(elemento.ClaseDto());
+            return $"{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}";
         }
 
         internal static TipoDtoElmento ValidarElementoDeNegocio(TipoDtoElmento elemento)

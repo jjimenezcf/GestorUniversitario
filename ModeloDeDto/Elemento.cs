@@ -198,7 +198,7 @@ namespace ModeloDeDto
 
     }
 
-    public class ElementoDto: IElementoDto
+    public class ElementoDto : IElementoDto
     {
         public static string DescargarGestionDocumental = "descargar-gestion-documental";
 
@@ -304,9 +304,13 @@ namespace ModeloDeDto
 
     public class TipoDtoElmento
     {
-        public int idElemento { get; set; }
-        public string tipoDto { get; set; }
-        public Type ClaseDto => ElementoDtoExtensiones.ObtenerTypoDto(tipoDto);
+        public string TipoDto { get; set; }
+        public int IdElemento { get; set; }
+
+        public Type ClaseDto()
+        {
+            return ElementoDtoExtensiones.ObtenerTypoDto(TipoDto);
+        }
     }
 
     public static class ElementoDtoExtensiones
@@ -334,7 +338,7 @@ namespace ModeloDeDto
 
         public static Type ObtenerTypoDto(string tipoDto)
         {
-           return Ensamblados.ObtenerType("ModeloDeDto.dll", tipoDto);
+            return Ensamblados.ObtenerType("ModeloDeDto.dll", tipoDto);
         }
 
         public static string UrlParaMostrarUnDto(Type claseDto)
@@ -346,7 +350,7 @@ namespace ModeloDeDto
                 var consulta = new ConsultaSql<VistaMvcDtm>(VistaMvcSqls.LeerVistaPorDto);
                 var valores = new Dictionary<string, object> { { $"@{nameof(ElementoDto)}", claseDto.FullName } };
                 var vistas = consulta.LanzarConsulta(new DynamicParameters(valores));
-                
+
                 if (vistas.Count != 1)
                     GestorDeErrores.Emitir($"No se ha indicado la vista para mostrar el dto {claseDto.FullName}");
 
