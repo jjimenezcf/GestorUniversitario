@@ -68,17 +68,22 @@
         };
 
         public CerrarModalParaSeleccionar() {   
-            for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
-                let elemento: Elemento = this.InfoSelector.LeerElemento(i);
+            if (this.InfoSelector.Cantidad >= 1) {
+                this.EditorAsociado.setAttribute(atSelectorDeElementos.Seleccionados, "");
+                this.EditorAsociado.value = "";
 
-                if (IsNullOrEmpty(this.EditorAsociado.value)) {
-                    this._selector.setAttribute(atSelectorDeElementos.Seleccionados, `${elemento.Id}`);
-                    this.EditorAsociado.value = elemento.Texto;
-                }
-                else {
-                    let seleccionados = this._selector.getAttribute(atSelectorDeElementos.Seleccionados);
-                    this._selector.setAttribute(atSelectorDeElementos.Seleccionados, `${seleccionados},${elemento.Id}`);
-                    this.EditorAsociado.value = `${this.EditorAsociado.value} | ${elemento.Texto}`;
+                for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
+                    let elemento: Elemento = this.InfoSelector.LeerElemento(i);
+
+                    if (IsNullOrEmpty(this.EditorAsociado.value)) {
+                        this.EditorAsociado.setAttribute(atSelectorDeElementos.Seleccionados, `${elemento.Id}`);
+                        this.EditorAsociado.value = elemento.Texto;
+                    }
+                    else {
+                        let seleccionados = this.EditorAsociado.getAttribute(atSelectorDeElementos.Seleccionados);
+                        this.EditorAsociado.setAttribute(atSelectorDeElementos.Seleccionados, `${seleccionados},${elemento.Id}`);
+                        this.EditorAsociado.value = `${this.EditorAsociado.value} | ${elemento.Texto}`;
+                    }
                 }
             }
             this.CerrarModalConGrid();

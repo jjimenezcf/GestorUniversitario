@@ -8,6 +8,7 @@ using GestorDeElementos;
 using GestoresDeNegocio.Archivos;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
+using GestoresDeNegocio.TrabajosSometidos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -169,6 +170,28 @@ namespace MVCSistemaDeElementos.Controllers
             }
             return new JsonResult(r);
         }
+
+        //END-POINT: desde CrudMantenimiento.Ts
+        public JsonResult epEnviarPorCorreo(string parametrosJson)
+        {
+            var r = new Resultado();
+
+            try
+            {
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+                GestorDeCorreos.CrearCorreoDe(Contexto, parametrosJson);
+
+                r.Mensaje = $"Correo enviado";
+                r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
+                r.Estado = enumEstadoPeticion.Ok;
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al enviar el correo.");
+            }
+            return new JsonResult(r);
+        }
+
 
         //END-POINT: Desde CrudEdicion.ts
         public JsonResult epLeerPorId(int id, string parametrosJson = null)

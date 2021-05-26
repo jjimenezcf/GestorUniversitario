@@ -264,6 +264,21 @@
 
 namespace ApiCrud {
 
+    export function CrearEnlaceAlElemento(divDeElementos: HTMLDivElement, elemento: Elemento) {
+        let a = document.createElement("a");
+        let url: string = `${window.location}`;
+        if (url.indexOf("?id=") <= 0)
+            url = url + `?id=${elemento.Id}`;
+        a.setAttribute("href", url);
+        a.target = "_blank";
+        a.setAttribute(atControl.idElemento, elemento.Id.toString())
+        let aTexto = document.createTextNode(elemento.Texto);
+        a.appendChild(aTexto);
+        divDeElementos.appendChild(a);
+        var br = document.createElement("br");
+        divDeElementos.appendChild(br);
+    }
+
     export function MapearControlesDesdeLaIuAlJson(crud: Crud.CrudBase, panel: HTMLDivElement, modoDeTrabajo: string): JSON {
 
         let elementoJson: JSON = crud.AntesDeMapearDatosDeIU(crud, panel, modoDeTrabajo);
@@ -302,8 +317,19 @@ namespace ApiCrud {
         CerrarModal(modal);
     } 
 
+    export function OcultarModalPorId(id: string) {
+        let modal: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        OcultarModal(modal);
+    } 
+
     export function CerrarModal(modal: HTMLDivElement) {
         BlanquearSelectoresDeElemento(modal);
+        OcultarModal(modal);
+    }
+
+    export function OcultarModal(modal: HTMLDivElement) {
         modal.style.display = "none";
     }
 

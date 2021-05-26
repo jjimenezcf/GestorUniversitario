@@ -250,6 +250,21 @@ var ApiControl;
 })(ApiControl || (ApiControl = {}));
 var ApiCrud;
 (function (ApiCrud) {
+    function CrearEnlaceAlElemento(divDeElementos, elemento) {
+        let a = document.createElement("a");
+        let url = `${window.location}`;
+        if (url.indexOf("?id=") <= 0)
+            url = url + `?id=${elemento.Id}`;
+        a.setAttribute("href", url);
+        a.target = "_blank";
+        a.setAttribute(atControl.idElemento, elemento.Id.toString());
+        let aTexto = document.createTextNode(elemento.Texto);
+        a.appendChild(aTexto);
+        divDeElementos.appendChild(a);
+        var br = document.createElement("br");
+        divDeElementos.appendChild(br);
+    }
+    ApiCrud.CrearEnlaceAlElemento = CrearEnlaceAlElemento;
     function MapearControlesDesdeLaIuAlJson(crud, panel, modoDeTrabajo) {
         let elementoJson = crud.AntesDeMapearDatosDeIU(crud, panel, modoDeTrabajo);
         MapearAlJson.ListasDeElementos(panel, elementoJson);
@@ -286,11 +301,22 @@ var ApiCrud;
         CerrarModal(modal);
     }
     ApiCrud.CerrarModalPorId = CerrarModalPorId;
+    function OcultarModalPorId(id) {
+        let modal = document.getElementById(id);
+        if (NoDefinida(modal))
+            throw new Error(`La modal ${id} no está definida`);
+        OcultarModal(modal);
+    }
+    ApiCrud.OcultarModalPorId = OcultarModalPorId;
     function CerrarModal(modal) {
         BlanquearSelectoresDeElemento(modal);
-        modal.style.display = "none";
+        OcultarModal(modal);
     }
     ApiCrud.CerrarModal = CerrarModal;
+    function OcultarModal(modal) {
+        modal.style.display = "none";
+    }
+    ApiCrud.OcultarModal = OcultarModal;
     function AbrirModalPorId(id) {
         let modal = document.getElementById(id);
         if (NoDefinida(modal))

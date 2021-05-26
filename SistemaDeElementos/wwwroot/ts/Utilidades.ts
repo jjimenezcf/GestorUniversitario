@@ -135,7 +135,20 @@ function IsNullOrEmpty(valor: string): boolean {
     return NoDefinida(valor);
 }
 
+function ToLista(cadena: string, separador: string = ';'): Array<string> {
+    let resultado = new Array<string>();
 
+    if (IsNullOrEmpty(cadena))
+        return resultado;
+
+    let subcadenas = cadena.split(`${separador}`);
+    for (let i = 0; i < subcadenas.length; i++) {
+        if (!IsNullOrEmpty(subcadenas[i])) {
+            resultado.push(subcadenas[i]);
+        }
+    }
+    return resultado;
+}
 
 function PadLeft(cadena: string, rellenarCon: string): string {
 

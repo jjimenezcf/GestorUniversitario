@@ -42,7 +42,7 @@ var ApiDePeticiones;
     ApiDePeticiones.LeerElementoPorId = LeerElementoPorId;
     function Exportar(llamador, controlador, parametros) {
         return new Promise((resolve, reject) => {
-            let url = `/${controlador}/${Ajax.EndPoint.Exportar}?${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
+            let url = `/${controlador}/${Ajax.EndPoint.Exportar}?${Ajax.Param.parametros}=${Encriptar(literal.ClaveDeEncriptacion, JSON.stringify(parametros))}`;
             let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.EndPoint.Exportar, parametros, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
                 resolve(peticion);
             }, (peticion) => {
@@ -52,5 +52,17 @@ var ApiDePeticiones;
         });
     }
     ApiDePeticiones.Exportar = Exportar;
+    function EnviarCorreo(llamador, controlador, parametros) {
+        return new Promise((resolve, reject) => {
+            let url = `/${controlador}/${Ajax.EndPoint.EnviarCorreo}?${Ajax.Param.parametros}=${Encriptar(literal.ClaveDeEncriptacion, JSON.stringify(parametros))}`;
+            let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.EndPoint.EnviarCorreo, parametros, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                resolve(peticion);
+            }, (peticion) => {
+                reject(peticion);
+            });
+            a.Ejecutar();
+        });
+    }
+    ApiDePeticiones.EnviarCorreo = EnviarCorreo;
 })(ApiDePeticiones || (ApiDePeticiones = {}));
 //# sourceMappingURL=ApiDePeticiones.js.map

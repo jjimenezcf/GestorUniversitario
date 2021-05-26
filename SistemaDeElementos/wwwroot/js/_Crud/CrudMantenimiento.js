@@ -44,6 +44,10 @@ var Crud;
             return document.getElementById(idModal);
         }
         ;
+        get ModalDeEnviarCorreo_DivDeElementos() {
+            return document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`);
+        }
+        ;
         get OpcionesGenerales() {
             return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
         }
@@ -367,30 +371,46 @@ var Crud;
         ModalEnviarCorreo_Abrir() {
             this.ModoTrabajo = ModoTrabajo.enviandoCorreo;
             this.ModalDeEnviarCorreo.style.display = 'block';
-            for (let i = 0; i < this.InfoSelector.Cantidad; i++) {
-                let divDeElementos = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`);
-                this.crearEnlaceAlElemento(divDeElementos, this.InfoSelector.LeerElemento(i));
-            }
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++)
+                ApiCrud.CrearEnlaceAlElemento(this.ModalDeEnviarCorreo_DivDeElementos, this.InfoSelector.LeerElemento(i));
             EntornoSe.AjustarModalesAbiertas();
-        }
-        crearEnlaceAlElemento(divDeElementos, elemento) {
-            let a = document.createElement("a");
-            let url = `${window.location}`;
-            if (url.indexOf("?id=") <= 0)
-                url = url + `?id=${elemento.Id}`;
-            a.setAttribute("href", url);
-            a.target = "_blank";
-            let aTexto = document.createTextNode(elemento.Texto);
-            a.appendChild(aTexto);
-            divDeElementos.appendChild(a);
-            var br = document.createElement("br");
-            divDeElementos.appendChild(br);
         }
         ModalEnviarCorreo_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            let divDeElementos = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`);
-            divDeElementos.innerHTML = "";
+            this.ModalDeEnviarCorreo_DivDeElementos.innerHTML = "";
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
+        }
+        ModalEnviarCorreo_Enviar() {
+            let parametros = this.ParametrosDeEnviarCorreos();
+            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
+                .then((peticion) => this.DespuesDeExportar(peticion))
+                .catch((peticion) => this.ErrorAlExportar(peticion));
+        }
+        ParametrosDeEnviarCorreos() {
+            let parametros = new Array();
+            let idPuestos = this.ModalDeEnviarCorreo.id + '_selector-puestos_editor';
+            let idUsuarios = this.ModalDeEnviarCorreo.id + '_selector-usuario_editor';
+            let idAsunto = this.ModalDeEnviarCorreo.id + '_asunto';
+            let idCuerpo = this.ModalDeEnviarCorreo.id + '_mensaje';
+            let idAjuntos = this.ModalDeEnviarCorreo.id + '_elementos_ref';
+            let idsDeUsuarios = document.getElementById(idUsuarios).getAttribute(atSelectorDeElementos.Seleccionados);
+            let usuarios = ToLista(idsDeUsuarios, ',');
+            let idsDePuestos = document.getElementById(idPuestos).getAttribute(atSelectorDeElementos.Seleccionados);
+            let puestos = ToLista(idsDePuestos, ',');
+            let asunto = document.getElementById(idAsunto).value;
+            let cuerpo = document.getElementById(idCuerpo).value;
+            let divAdjuntos = document.getElementById(idAjuntos);
+            let adjuntos = [];
+            let refAdjuntos = divAdjuntos.querySelectorAll("a");
+            for (let i = 0; i < refAdjuntos.length; i++)
+                adjuntos.push(`${this.Negocio}:${refAdjuntos[i].getAttribute(atControl.idElemento)}`);
+            parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
+            parametros.push(new Parametro('usuarios', usuarios));
+            parametros.push(new Parametro('puestos', puestos));
+            parametros.push(new Parametro('asunto', asunto));
+            parametros.push(new Parametro('cuerpo', cuerpo));
+            parametros.push(new Parametro('adjuntos', adjuntos));
+            return parametros;
         }
         ObtenerModalParaSeleccionar(idModal) {
             for (let i = 0; i < this.ModalesParaSeleccionar.length; i++) {
@@ -416,7 +436,7 @@ var Crud;
             this.AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector);
         }
         AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector) {
-            ApiCrud.CerrarModalPorId(idModalQueSeCierra);
+            ApiCrud.OcultarModalPorId(idModalQueSeCierra);
             let modal = this.ObtenerModalParaSeleccionar(idModalQueSeAbre);
             if (NoDefinida(modal))
                 throw new Error(`Modal ${idModalQueSeAbre} no definida`);

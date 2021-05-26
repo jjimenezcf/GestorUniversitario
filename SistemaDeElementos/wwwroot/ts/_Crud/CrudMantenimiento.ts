@@ -46,6 +46,10 @@
             return document.getElementById(idModal) as HTMLDivElement;
         };
 
+        protected get ModalDeEnviarCorreo_DivDeElementos(): HTMLDivElement {
+            return document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`) as HTMLDivElement;
+        };
+
         public ModalesDeSeleccion: Array<ModalSeleccion> = new Array<ModalSeleccion>();
         public ModalesParaRelacionar: Array<ModalParaRelacionar> = new Array<ModalParaRelacionar>();
         public ModalesParaConsultarRelaciones: Array<ModalParaConsultarRelaciones> = new Array<ModalParaConsultarRelaciones>();
@@ -103,7 +107,7 @@
 
         protected EditarRegistro(id: number) {
             this.FiltrarPorId(id)
-                .then(() => this.IraEditar()); 
+                .then(() => this.IraEditar());
         }
 
         protected InicializarOrdenacion() {
@@ -446,32 +450,59 @@
         public ModalEnviarCorreo_Abrir() {
             this.ModoTrabajo = ModoTrabajo.enviandoCorreo;
             this.ModalDeEnviarCorreo.style.display = 'block';
-            for (let i = 0; i < this.InfoSelector.Cantidad; i++) {
-                let divDeElementos: HTMLDivElement = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`) as HTMLDivElement;
-                this.crearEnlaceAlElemento(divDeElementos, this.InfoSelector.LeerElemento(i))
-            }
+            for (let i = 0; i < this.InfoSelector.Cantidad; i++)
+                ApiCrud.CrearEnlaceAlElemento(this.ModalDeEnviarCorreo_DivDeElementos, this.InfoSelector.LeerElemento(i));
+
             EntornoSe.AjustarModalesAbiertas();
-        }
-        private crearEnlaceAlElemento(divDeElementos: HTMLDivElement, elemento: Elemento) {
-            let a = document.createElement("a");
-            let url: string = `${window.location}`;
-            if (url.indexOf("?id=") <= 0)
-                url = url + `?id=${elemento.Id}`;
-            a.setAttribute("href", url);
-            a.target = "_blank"
-            let aTexto = document.createTextNode(elemento.Texto);
-            a.appendChild(aTexto);
-            divDeElementos.appendChild(a);
-            var br = document.createElement("br");
-            divDeElementos.appendChild(br);
         }
 
         public ModalEnviarCorreo_Cerrar() {
             this.ModoTrabajo = ModoTrabajo.mantenimiento;
-            let divDeElementos: HTMLDivElement = document.getElementById(`${this.ModalDeEnviarCorreo.id}_elementos_ref`) as HTMLDivElement;
-            divDeElementos.innerHTML="";
+            this.ModalDeEnviarCorreo_DivDeElementos.innerHTML = "";
             ApiCrud.CerrarModal(this.ModalDeEnviarCorreo);
-        } 
+        }
+
+
+        public ModalEnviarCorreo_Enviar(): void {
+            let parametros: Array<Parametro> = this.ParametrosDeEnviarCorreos();
+            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
+                .then((peticion) => this.DespuesDeExportar(peticion))
+                .catch((peticion) => this.ErrorAlExportar(peticion));
+        }
+
+
+        public ParametrosDeEnviarCorreos(): Array<Parametro> {
+            let parametros: Array<Parametro> = new Array<Parametro>();
+            let idPuestos: string = this.ModalDeEnviarCorreo.id + '_selector-puestos_editor';
+            let idUsuarios: string = this.ModalDeEnviarCorreo.id + '_selector-usuario_editor';
+            let idAsunto: string = this.ModalDeEnviarCorreo.id + '_asunto';
+            let idCuerpo: string = this.ModalDeEnviarCorreo.id + '_mensaje';
+            let idAjuntos: string = this.ModalDeEnviarCorreo.id + '_elementos_ref';
+
+            let idsDeUsuarios: string = (document.getElementById(idUsuarios) as HTMLInputElement).getAttribute(atSelectorDeElementos.Seleccionados);
+            let usuarios: Array<string> = ToLista(idsDeUsuarios, ',');
+
+            let idsDePuestos: string = (document.getElementById(idPuestos) as HTMLInputElement).getAttribute(atSelectorDeElementos.Seleccionados);
+            let puestos: Array<string> = ToLista(idsDePuestos, ',');
+
+            let asunto: string = (document.getElementById(idAsunto) as HTMLInputElement).value;
+            let cuerpo: string = (document.getElementById(idCuerpo) as HTMLInputElement).value;
+
+            let divAdjuntos: HTMLDivElement = (document.getElementById(idAjuntos) as HTMLDivElement);
+            let adjuntos: string[] = []
+            let refAdjuntos = divAdjuntos.querySelectorAll("a");
+            for (let i: number = 0; i < refAdjuntos.length; i++) 
+                adjuntos.push(`${this.Negocio}:${refAdjuntos[i].getAttribute(atControl.idElemento)}`);
+            
+
+            parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
+            parametros.push(new Parametro('usuarios', usuarios));
+            parametros.push(new Parametro('puestos', puestos));
+            parametros.push(new Parametro('asunto', asunto));
+            parametros.push(new Parametro('cuerpo', cuerpo));
+            parametros.push(new Parametro('adjuntos', adjuntos));
+            return parametros;
+        }
 
         public ObtenerModalParaSeleccionar(idModal: string): ModalParaSeleccionar {
             for (let i: number = 0; i < this.ModalesParaSeleccionar.length; i++) {
@@ -488,8 +519,8 @@
         public ObtenerFocoEnSelector(idSelector: string) {
             let selector: HTMLDivElement = ApiCrud.ObtenerSelector(idSelector);
             let editor: HTMLInputElement = ApiCrud.ObtenerEditorAsociadoAlSelector(selector);
-            editor.setAttribute(atSelectorDeElementos.ValorAlEntrar, editor.value)
-        } 
+            editor.setAttribute(atSelectorDeElementos.ValorAlEntrar, editor.value);
+        }
 
         public PerderElFocoEnUnSelectorDesdeUnaModal(idModalQueSeAbre: string, idModalQueSeCierra: string, idSelector: string) {
             let selector: HTMLDivElement = ApiCrud.ObtenerSelector(idSelector);
@@ -499,11 +530,11 @@
                 return;
 
             this.AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector);
-        } 
+        }
 
         public AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre: string, idModalQueSeCierra: string, idSelector: string) {
-            
-            ApiCrud.CerrarModalPorId(idModalQueSeCierra);
+
+            ApiCrud.OcultarModalPorId(idModalQueSeCierra);
 
             let modal: ModalParaSeleccionar = this.ObtenerModalParaSeleccionar(idModalQueSeAbre);
             if (NoDefinida(modal))
@@ -514,7 +545,7 @@
             selector.setAttribute(atSelectorDeElementos.ModalPadre, idModalQueSeCierra);
 
             modal.AbrirModalParaSeleccionar(selector);
-        } 
+        }
 
         public ModalExportacion_Abrir() {
             this.ModoTrabajo = ModoTrabajo.exportando;

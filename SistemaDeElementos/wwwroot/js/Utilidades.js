@@ -111,6 +111,18 @@ function NoDefinida(valor) {
 function IsNullOrEmpty(valor) {
     return NoDefinida(valor);
 }
+function ToLista(cadena, separador = ';') {
+    let resultado = new Array();
+    if (IsNullOrEmpty(cadena))
+        return resultado;
+    let subcadenas = cadena.split(`${separador}`);
+    for (let i = 0; i < subcadenas.length; i++) {
+        if (!IsNullOrEmpty(subcadenas[i])) {
+            resultado.push(subcadenas[i]);
+        }
+    }
+    return resultado;
+}
 function PadLeft(cadena, rellenarCon) {
     if (cadena == null || NoDefinida(cadena))
         return rellenarCon;

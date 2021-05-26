@@ -1,6 +1,7 @@
 const newLine = "\n";
 const TipoMensaje = { Info: "informativo", Error: "Error", Warning: "Revision" };
 const literal = {
+    ClaveDeEncriptacion: "SistemaDeElementos",
     controlador: "controlador",
     idNegocio: "id-negocio",
     negocio: "negocio",
@@ -29,6 +30,7 @@ const atControl = {
     filtro: "control-de-filtro",
     tablaDeDatos: "tabla-de-datos",
     id: literal.id,
+    idElemento: "idElemento",
     crudModal: 'crud-modal',
     propiedadRestrictora: 'propiedad-restrictora',
     propiedadMostrar: 'propiedad-mostrar',
@@ -243,7 +245,8 @@ const Ajax = {
         CrearRelaciones: "epCrearRelaciones",
         LeerModoDeAccesoAlNegocio: "epLeerModoDeAccesoAlNegocio",
         LeerModoDeAccesoAlElemento: "epLeerModoDeAccesoAlElemento",
-        Exportar: "epExportar"
+        Exportar: "epExportar",
+        EnviarCorreo: "epEnviarPorCorreo"
     },
     EpDeAcceso: {
         ReferenciarFoto: "epReferenciarFoto",

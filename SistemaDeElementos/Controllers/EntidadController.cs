@@ -235,28 +235,6 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-
-        //END-POINT: desde CrudMantenimiento.Ts
-        public JsonResult epEnviarPorCorreo(string parametrosJson = null)
-        {
-            var r = new Resultado();
-
-            try
-            {
-                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-                GestorDeCorreos.CrearCorreoDe(Contexto, parametrosJson);
-
-                r.Mensaje = $"Correo enviado";
-                r.ModoDeAcceso = enumModoDeAccesoDeDatos.Consultor.Render();
-                r.Estado = enumEstadoPeticion.Ok;
-            }
-            catch (Exception e)
-            {
-                ApiController.PrepararError(e, r, "Error al enviar el correo.");
-            }
-            return new JsonResult(r);
-        }
-
         private List<Dictionary<string, object>> ElementosLeidos(List<TElemento> elementos)
         {
             var listaDeElementos = new List<Dictionary<string, object>>();

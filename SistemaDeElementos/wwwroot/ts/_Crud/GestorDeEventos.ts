@@ -263,6 +263,7 @@
                     let idCheck: string = parIn[1];
                     let idOrigen: string = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(idCheck, idOrigen);
+                    break;
                 }
                 case Evento.ModalParaSeleccionarElementos.Buscar: {
                     modal.RecargarGrid();
@@ -466,6 +467,10 @@
             switch (accion) {
                 case Evento.ModalEnviarCorreo.Cerrar: {
                     crudMnt.ModalEnviarCorreo_Cerrar();
+                    break;
+                }
+                case Evento.ModalEnviarCorreo.Enviar: {
+                    crudMnt.ModalEnviarCorreo_Enviar();
                     break;
                 }
                 default: {
