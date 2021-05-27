@@ -170,6 +170,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 case enumTipoDeModal.ModalDeConsulta:
                     evento = $"javascript:Crud.{GestorDeEventos.EventosModalDeConsultaDeRelaciones}('{TipoDeAccionDeMnt.TeclaPulsada}', '{Mnt.Datos.IdHtmlModal}');";
                     break;
+                case enumTipoDeModal.ModalParaSeleccionar:
+                    evento = $"javascript:Crud.{GestorDeEventos.EventosModalParaSeleccionar}('{TipoDeAccionDeMnt.TeclaPulsada}', '{Mnt.Datos.IdHtmlModal}');";
+                    break;
                 default:
                     throw new Exception($"Ha de definir el evento de pulsar una tecla para la modal del tipo {tipoDeModal}");
             }

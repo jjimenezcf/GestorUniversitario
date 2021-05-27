@@ -285,6 +285,17 @@ var Crud;
                     modal.CerrarModalParaSeleccionar();
                     break;
                 }
+                case Evento.ModalParaSeleccionarElementos.MostrarSoloSeleccionadas: {
+                    var input = modal.InputSeleccionadas;
+                    var etiqueta = modal.EtiquetasSeleccionadas;
+                    var tbodyDelGrid = modal.CuerpoTablaGrid;
+                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
+                    break;
+                }
+                case Evento.ModalParaSeleccionarElementos.TeclaPulsada: {
+                    modal.TeclaPulsada(modal, event);
+                    break;
+                }
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos para seleccionar`);
                     break;

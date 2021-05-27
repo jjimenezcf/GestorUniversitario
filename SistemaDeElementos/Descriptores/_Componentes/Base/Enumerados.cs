@@ -4,7 +4,7 @@ using ServicioDeDatos.Seguridad;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
-    public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta }
+    public enum enumTipoDeModal { ModalDeSeleccion, ModalDeRelacion, ModalDeConsulta, ModalParaSeleccionar }
 
     public enum GestorDeEventos { EventosModalDeConsultaDeRelaciones
             , EventosModalDeCrearRelaciones
