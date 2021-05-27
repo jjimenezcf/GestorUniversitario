@@ -179,7 +179,8 @@ namespace GestoresDeNegocio.Negocio
         internal static string ComponerUrl(TipoDtoElmento elemento)
         {
             var url = ExtensionesDto.UrlParaMostrarUnDto(elemento.ClaseDto());
-            return $"{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}";
+            var refHtml = $@"<a href='{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}' target='_blank' idelemento='2041'>{elemento.Referencia}</a>";
+            return refHtml;
         }
 
         internal static TipoDtoElmento ValidarElementoDto(TipoDtoElmento elemento)
@@ -189,6 +190,9 @@ namespace GestoresDeNegocio.Negocio
 
             if (elemento.TipoDto.IsNullOrEmpty())
                 GestorDeErrores.Emitir("El TipoDto a validar no puede ser nulo");
+
+            if (elemento.Referencia.IsNullOrEmpty())
+                GestorDeErrores.Emitir("La referencia del elemnto ser nula");
 
             try
             {

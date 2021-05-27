@@ -113,8 +113,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderEditorAsunto()
         {
             var otrosAtributosEditor = new Dictionary<string, string>();
-            otrosAtributosEditor["estilo"] = "style='padding :0px;'";
-            otrosAtributosEditor["LongitudMaxima"] = "maxlength=¨255¨"; ;
+            otrosAtributosEditor["LongitudMaxima"] = "maxlength='255'"; ;
             otrosAtributosEditor["Obligatorio"] = "obligatorio='S'";
 
             var otrosAtributosEtiqueta = new Dictionary<string, string>();

@@ -111,7 +111,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Error al ejecutar el trabajo {Trabajo.Trabajo.Nombre}"
                     , $"Error en la ejecución del trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado}, acceda al mantenimiento de trabajos de usuario para visualizar los errores"
-                    , new List<TipoDtoElmento> { new TipoDtoElmento { TipoDto = typeof(TrabajoDeUsuarioDto).FullName, IdElemento = Trabajo.Id } }
+                    , new List<TipoDtoElmento> { new TipoDtoElmento { TipoDto = typeof(TrabajoDeUsuarioDto).FullName, IdElemento = Trabajo.Id, Referencia = Trabajo.Trabajo.Nombre } }
                     , null);
             }
         }
@@ -124,7 +124,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     , new List<string> { Trabajo.Sometedor.eMail }
                     , $"Trabajo {Trabajo.Trabajo.Nombre} finalizado{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " con errores" : "")}"
                     , $"El trabajo {Trabajo.Trabajo.Nombre} de fecha {Trabajo.Encolado} ha finalizado, acceda a la traza{(Trabajo.Estado == enumEstadosDeUnTrabajo.conErrores.ToDtm() ? " y a los errores" : "")} para ver el resultado"
-                    , new List<TipoDtoElmento> { new TipoDtoElmento { TipoDto = typeof(TrabajoDeUsuarioDto).FullName, IdElemento = Trabajo.Id } }
+                    , new List<TipoDtoElmento> { new TipoDtoElmento { TipoDto = typeof(TrabajoDeUsuarioDto).FullName, IdElemento = Trabajo.Id, Referencia = Trabajo.Trabajo.Nombre } }
                     , null);
             }
         }

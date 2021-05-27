@@ -382,9 +382,15 @@ var Crud;
         }
         ModalEnviarCorreo_Enviar() {
             let parametros = this.ParametrosDeEnviarCorreos();
-            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
-                .then((peticion) => this.DespuesDeExportar(peticion))
-                .catch((peticion) => this.ErrorAlExportar(peticion));
+            ApiDePeticiones.EnviarCorreo(this, this.Controlador, parametros)
+                .then((peticion) => this.DespuesDeEnviarCorreo(peticion))
+                .catch((peticion) => this.ErrorAlEnviarCorreo(peticion));
+        }
+        DespuesDeEnviarCorreo(peticion) {
+            MensajesSe.Info(peticion.resultado.mensaje);
+        }
+        ErrorAlEnviarCorreo(peticion) {
+            MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
         }
         ParametrosDeEnviarCorreos() {
             let parametros = new Array();
@@ -397,13 +403,17 @@ var Crud;
             let usuarios = ToLista(idsDeUsuarios, ',');
             let idsDePuestos = document.getElementById(idPuestos).getAttribute(atSelectorDeElementos.Seleccionados);
             let puestos = ToLista(idsDePuestos, ',');
+            if (puestos.length == 0 && usuarios.length == 0)
+                throw new Error("Al menos debe definir un receptor");
             let asunto = document.getElementById(idAsunto).value;
             let cuerpo = document.getElementById(idCuerpo).value;
+            if (IsNullOrEmpty(asunto))
+                throw new Error("Debe indicar el asunto");
             let divAdjuntos = document.getElementById(idAjuntos);
             let adjuntos = [];
             let refAdjuntos = divAdjuntos.querySelectorAll("a");
             for (let i = 0; i < refAdjuntos.length; i++)
-                adjuntos.push(`${this.Negocio}:${refAdjuntos[i].getAttribute(atControl.idElemento)}`);
+                adjuntos.push(`${this.Dto}:${refAdjuntos[i].getAttribute(atControl.idElemento)}:${refAdjuntos[i].text}`);
             parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
             parametros.push(new Parametro('usuarios', usuarios));
             parametros.push(new Parametro('puestos', puestos));

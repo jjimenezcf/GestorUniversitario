@@ -107,6 +107,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         zona-de-menu=¨{ZonaMenu.IdHtml}¨ 
                         controlador=¨{Crud.Controlador}¨ 
                         negocio=¨{Crud.RenderNegocio}¨
+                        dto=¨{Crud.RenderDto}¨
                         id-negocio=¨{Crud.RenderIdDeNegocio}¨>
                      ";
 

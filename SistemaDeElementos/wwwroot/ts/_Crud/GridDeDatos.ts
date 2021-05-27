@@ -367,7 +367,9 @@
         public get Negocio() {
             return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);
         }
-
+        public get Dto() {
+            return this.CuerpoCabecera.getAttribute(atMantenimniento.dto);
+        }
         private _idHtmlFiltro: string;
         public get ZonaDeFiltro(): HTMLDivElement {
             return document.getElementById(this._idHtmlFiltro) as HTMLDivElement;

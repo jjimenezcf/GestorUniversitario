@@ -306,6 +306,7 @@ namespace ModeloDeDto
     {
         public string TipoDto { get; set; }
         public int IdElemento { get; set; }
+        public string Referencia { get; set; }
 
         public Type ClaseDto()
         {

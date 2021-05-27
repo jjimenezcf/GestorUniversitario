@@ -305,6 +305,9 @@ var Crud;
         get Negocio() {
             return this.CuerpoCabecera.getAttribute(atMantenimniento.negocio);
         }
+        get Dto() {
+            return this.CuerpoCabecera.getAttribute(atMantenimniento.dto);
+        }
         get ZonaDeFiltro() {
             return document.getElementById(this._idHtmlFiltro);
         }

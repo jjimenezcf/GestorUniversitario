@@ -465,11 +465,18 @@
 
         public ModalEnviarCorreo_Enviar(): void {
             let parametros: Array<Parametro> = this.ParametrosDeEnviarCorreos();
-            ApiDePeticiones.Exportar(this, this.Controlador, parametros)
-                .then((peticion) => this.DespuesDeExportar(peticion))
-                .catch((peticion) => this.ErrorAlExportar(peticion));
+            ApiDePeticiones.EnviarCorreo(this, this.Controlador, parametros)
+                .then((peticion) => this.DespuesDeEnviarCorreo(peticion))
+                .catch((peticion) => this.ErrorAlEnviarCorreo(peticion));
         }
 
+        public DespuesDeEnviarCorreo(peticion: ApiDeAjax.DescriptorAjax): any {
+            MensajesSe.Info(peticion.resultado.mensaje);
+        }
+
+        public ErrorAlEnviarCorreo(peticion: ApiDeAjax.DescriptorAjax): any {
+            MensajesSe.Error(peticion.nombre, peticion.resultado.mensaje, peticion.resultado.consola);
+        }
 
         public ParametrosDeEnviarCorreos(): Array<Parametro> {
             let parametros: Array<Parametro> = new Array<Parametro>();
@@ -485,15 +492,21 @@
             let idsDePuestos: string = (document.getElementById(idPuestos) as HTMLInputElement).getAttribute(atSelectorDeElementos.Seleccionados);
             let puestos: Array<string> = ToLista(idsDePuestos, ',');
 
+            if (puestos.length == 0 && usuarios.length == 0)
+                throw new Error("Al menos debe definir un receptor");
+
             let asunto: string = (document.getElementById(idAsunto) as HTMLInputElement).value;
             let cuerpo: string = (document.getElementById(idCuerpo) as HTMLInputElement).value;
 
+            if (IsNullOrEmpty(asunto))
+                throw new Error("Debe indicar el asunto");
+
             let divAdjuntos: HTMLDivElement = (document.getElementById(idAjuntos) as HTMLDivElement);
-            let adjuntos: string[] = []
+            let adjuntos: string[] = [];
             let refAdjuntos = divAdjuntos.querySelectorAll("a");
-            for (let i: number = 0; i < refAdjuntos.length; i++) 
-                adjuntos.push(`${this.Negocio}:${refAdjuntos[i].getAttribute(atControl.idElemento)}`);
-            
+            for (let i: number = 0; i < refAdjuntos.length; i++)
+                adjuntos.push(`${this.Dto}:${refAdjuntos[i].getAttribute(atControl.idElemento)}:${refAdjuntos[i].text}`);
+
 
             parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
             parametros.push(new Parametro('usuarios', usuarios));

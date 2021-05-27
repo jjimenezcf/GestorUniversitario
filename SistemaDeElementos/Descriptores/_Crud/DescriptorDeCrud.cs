@@ -56,6 +56,8 @@ namespace MVCSistemaDeElementos.Descriptores
             set { _negocio = value; }
         }
 
+        public string RenderDto => typeof(TElemento).FullName;
+
         public string RenderNegocio => negocioDtm == null ? Negocio.Nombre() : negocioDtm.Nombre;
         public int RenderIdDeNegocio => negocioDtm == null ? 0 : negocioDtm.Id;
 

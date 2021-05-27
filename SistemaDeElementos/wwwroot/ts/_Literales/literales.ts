@@ -64,6 +64,7 @@ const atMantenimniento = {
     zonaDeFiltro: "zona-de-filtro",
     controlador: literal.controlador,
     negocio: literal.negocio,
+    dto: "dto",
     idNegocio: literal.idNegocio,
     zonaMenu: "zona-de-menu",
     gridDelMnt: "grid-del-mnt"
