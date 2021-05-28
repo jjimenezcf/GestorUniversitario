@@ -80,7 +80,7 @@ var MensajesSe;
     MensajesSe.Info = Info;
     function Error(origen, mensaje, consola) {
         _Almacen.Error(origen, mensaje);
-        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.error, mensaje, consola);
     }
     MensajesSe.Error = Error;
     function MostrarMensajes() {
@@ -168,7 +168,8 @@ var MensajesSe;
     }
     function Notificar(tipo, mensaje, mensajeDeConsola) {
         var control = document.getElementById("Mensaje");
-        var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
+        var posicion = enumTipoMensaje.error ? mensaje.indexOf(`Error:`) : mensaje.indexOf(`Informativo:`);
+        var mensajeConTipo = posicion === -1 ? `${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}: ${mensaje}` : mensaje;
         if (control)
             control.value = `${mensajeConTipo}`;
         if (IsNullOrEmpty(mensajeDeConsola))

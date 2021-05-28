@@ -159,7 +159,8 @@ const atSelectorDeElementos = {
     Boton: "idBotonSelector",
     IdEditorDeFiltro: "idEditorDelFiltro",
     ValorAlEntrar: "valor-al-entrar",
-    Seleccionados: "idseleccionados"
+    Seleccionados: "idseleccionados",
+    CerrarAutomaticamente: 'cerrar-automaticamente'
 };
 
 const atSelectorDeFecha = {

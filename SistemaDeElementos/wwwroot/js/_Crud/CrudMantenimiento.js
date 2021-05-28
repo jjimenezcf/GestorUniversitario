@@ -443,6 +443,7 @@ var Crud;
             let valorAlEntrar = editor.getAttribute(atSelectorDeElementos.ValorAlEntrar);
             if (editor.value === valorAlEntrar || IsNullOrEmpty(editor.value))
                 return;
+            selector.setAttribute(atSelectorDeElementos.CerrarAutomaticamente, 'S');
             this.AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector);
         }
         AbrirModalParaSeleccionarDesdeUnaModal(idModalQueSeAbre, idModalQueSeCierra, idSelector) {

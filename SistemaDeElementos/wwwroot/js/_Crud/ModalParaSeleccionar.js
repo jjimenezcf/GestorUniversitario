@@ -45,8 +45,17 @@ var Crud;
                     if (!NoDefinida(idModal))
                         ApiCrud.AbrirModalPorId(idModal);
                 }
+                else {
+                    let cerrar = EsTrue(selector.getAttribute(atSelectorDeElementos.CerrarAutomaticamente));
+                    if (this.Navegador.Total === 1 && this.Navegador.Cantidad >= 1 && cerrar) {
+                        this.InfoSelector.InsertarElemento(this.DatosDelGrid.ObtenerPorPosicion(0));
+                        this.CerrarModalParaSeleccionar();
+                    }
+                }
             })
                 .catch((valor) => {
+                if (valor instanceof Error)
+                    MensajesSe.Error("RecargarGrid", valor.message);
                 ApiCrud.CerrarModal(this.Modal);
                 let idModal = selector.getAttribute(atSelectorDeElementos.ModalPadre);
                 if (!NoDefinida(idModal))

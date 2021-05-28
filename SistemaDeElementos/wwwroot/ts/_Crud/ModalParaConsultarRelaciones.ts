@@ -39,6 +39,8 @@
                         ApiCrud.CerrarModal(this.Modal);
                 })
                 .catch((valor) => {
+                    if (valor instanceof Error)
+                        MensajesSe.Error("RecargarGrid", valor.message);
                     ApiCrud.CerrarModal(this.Modal);
                 }
                 );

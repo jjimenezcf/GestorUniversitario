@@ -571,7 +571,7 @@
         }
     }
 
-    export function EventosSelectorEnModal(accion: string, parametros: string) {
+    export function EventosDeSelectorDeElementosEnModal(accion: string, parametros: string) {
         try {
             let parIn: Array<string> = parametros.split("#");
             switch (accion) {

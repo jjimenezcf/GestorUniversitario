@@ -71,8 +71,8 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderEditorDelSelector()
         {
             var otrosAtributosEditor = new Dictionary<string, string>();
-            otrosAtributosEditor["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
-            otrosAtributosEditor["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
+            otrosAtributosEditor["onBlur"] = $"onblur = ¨Crud.{GestorDeEventos.EventosDeSelectorDeElementosEnModal}('{TipoDeAccionSelectorEnModal.PerderFoco}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨";
+            otrosAtributosEditor["onFocus"] = $"onfocus = ¨Crud.{GestorDeEventos.EventosDeSelectorDeElementosEnModal}('{TipoDeAccionSelectorEnModal.ObtenerFoco}','{IdHtml}')¨";
 
 
             var otrosAtributosEtiqueta = new Dictionary<string, string>();
@@ -94,7 +94,7 @@ namespace MVCSistemaDeElementos.Descriptores
                           type=¨button¨ 
                           class=¨{enumCssControlesDto.BotonSelector.Render()}¨ 
                           value=¨...¨ 
-                          onClick = ¨Crud.{GestorDeEventos.EventosSelectorEnModal}('{TipoDeAccionSelectorEnModal.OpcionSeleccionada}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨
+                          onClick = ¨Crud.{GestorDeEventos.EventosDeSelectorDeElementosEnModal}('{TipoDeAccionSelectorEnModal.OpcionSeleccionada}','{Modal.IdHtml}#{Padre.IdHtml}#{IdHtml}')¨
                           title=¨{Ayuda}¨/>
                 </div>
                  ";

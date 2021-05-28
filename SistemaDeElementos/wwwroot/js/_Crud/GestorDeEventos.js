@@ -564,7 +564,7 @@ var Crud;
         }
     }
     Crud.EventosDeExpansores = EventosDeExpansores;
-    function EventosSelectorEnModal(accion, parametros) {
+    function EventosDeSelectorDeElementosEnModal(accion, parametros) {
         try {
             let parIn = parametros.split("#");
             switch (accion) {
@@ -596,6 +596,6 @@ var Crud;
             MensajesSe.Error(`Modal de edición, accion: ${accion}`, error.message);
         }
     }
-    Crud.EventosSelectorEnModal = EventosSelectorEnModal;
+    Crud.EventosDeSelectorDeElementosEnModal = EventosDeSelectorDeElementosEnModal;
 })(Crud || (Crud = {}));
 //# sourceMappingURL=GestorDeEventos.js.map

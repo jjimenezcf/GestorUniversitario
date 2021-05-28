@@ -96,7 +96,7 @@
 
     export function Error(origen: string, mensaje: string, consola?: string) {
         _Almacen.Error(origen, mensaje);
-        MensajesSe.Apilar(enumTipoMensaje.informativo, mensaje, consola);
+        MensajesSe.Apilar(enumTipoMensaje.error, mensaje, consola);
     }
 
     export function MostrarMensajes() {
@@ -165,7 +165,7 @@
         let n: clsNotificacion = new clsNotificacion(tipo, mensaje);
         if (IsNull(Notificaciones))
             AsignarMemoria();
-        
+
         Notificaciones.push(n);
         Notificar(tipo, mensaje, mensajeDeConsola);
     }
@@ -188,12 +188,13 @@
     }
 
     function AsignarMemoria() {
-            MensajesSe.Notificaciones = [] as MensajesSe.clsNotificacion[];
+        MensajesSe.Notificaciones = [] as MensajesSe.clsNotificacion[];
     }
 
     function Notificar(tipo: enumTipoMensaje, mensaje: string, mensajeDeConsola?: string) {
         var control = <HTMLInputElement>document.getElementById("Mensaje");
-        var mensajeConTipo = `(${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}) ${mensaje}`;
+        var posicion = enumTipoMensaje.error ? mensaje.indexOf(`Error:`) : mensaje.indexOf(`Informativo:`)
+        var mensajeConTipo = posicion === -1 ? `${tipo === enumTipoMensaje.informativo ? 'Informativo' : 'Error'}: ${mensaje}` : mensaje;
         if (control)
             control.value = `${mensajeConTipo}`;
 

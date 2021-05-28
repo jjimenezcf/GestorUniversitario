@@ -244,12 +244,19 @@
             this._fecha = new Date(Date.now());
         };
 
-        public Obtener(id: number): Elemento {
+        public ObtenerPorId(id: number): Elemento {
             for (let i: number = 0; i < this._elementos.length; i++) {
                 if (this._elementos[i].Id === id)
                     return this._elementos[i];
             }
             return null;
+        }
+
+        public ObtenerPorPosicion(pos: number): Elemento {
+            if (pos >= this._elementos.length || pos < 0) 
+                return null;
+
+            return this._elementos[pos];
         }
 
         private anadirElementos(registros: [], expresionMostrar: string) {
@@ -288,14 +295,25 @@
             return null;
         }
 
-        public Obtener(id: number): Elemento {
+        public ObtenerPorId(id: number): Elemento {
             let p: PaginaDelGrid = this.Pagina(this._paginaActual);
             if (p === null)
                 throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`);
 
-            let e: Elemento = p.Obtener(id);
+            let e: Elemento = p.ObtenerPorId(id);
             if (e === null)
                 throw Error(`El elemento con id ${id} no se encuentra en la página actual del grid`);
+            return e;
+        }
+
+        public ObtenerPorPosicion(pos: number): Elemento {
+            let p: PaginaDelGrid = this.Pagina(this._paginaActual);
+            if (p === null)
+                throw Error(`la página ${this._paginaActual} no se encuentra en la lista de páginas del grid`);
+
+            let e: Elemento = p.ObtenerPorPosicion(pos);
+            if (e === null)
+                throw Error(`La posición ${pos} no está definida en la página actual`);
             return e;
         }
 
@@ -756,7 +774,7 @@
 
         protected ActualizarInfoSelector(grid: GridDeDatos, elemento: Elemento): void {
             grid.InfoSelector.Quitar(elemento.Id);
-            elemento = grid.DatosDelGrid.Obtener(elemento.Id);
+            elemento = grid.DatosDelGrid.ObtenerPorId(elemento.Id);
             grid.InfoSelector.InsertarElemento(elemento);
             grid.Navegador.InformarElementosSeleccionados(grid.InfoSelector.Cantidad);
             grid.AplicarModoAccesoAlElemento(elemento);
@@ -819,7 +837,7 @@
         protected ActualizarInformacionDelGrid(grid: GridDeDatos) {
             if (!grid.EsModalConGrid && grid.Estado.Contiene(atGrid.idSeleccionado)) {
                 let idSeleccionado: number = Numero(grid.Estado.Obtener(atGrid.idSeleccionado));
-                let elemento: Elemento = this.DatosDelGrid.Obtener(idSeleccionado);
+                let elemento: Elemento = this.DatosDelGrid.ObtenerPorId(idSeleccionado);
                 grid.AnadirAlInfoSelector(grid, elemento);
                 grid.Estado.Quitar(atGrid.idSeleccionado);
                 grid.Estado.Quitar(atGrid.nombreSeleccionado);
@@ -840,7 +858,7 @@
             let celda: HTMLTableDataCellElement = this.ObtenerCelda(fila, propiedad);
             let input: HTMLInputElement = celda.querySelector("input");
             if (input === null)
-                throw new Error(`la celda asociada a la propiedad '${propiedad}' no tiene un control input definido`);
+                throw Error(`la celda asociada a la propiedad '${propiedad}' no tiene un control input definido`);
 
             return input.value;
         }
@@ -864,7 +882,7 @@
             }
             return null;
 
-            //throw new Error(`No se ha localizado una fila con la propiedad Id definida`);
+            //throw Error(`No se ha localizado una fila con la propiedad Id definida`);
         }
 
         private ObtenerCelda(fila: HTMLTableRowElement, propiedadBuscada: string): HTMLTableDataCellElement {
@@ -874,7 +892,7 @@
                 if (propiedadCelda.toLocaleLowerCase() === propiedadBuscada)
                     return celda;
             }
-            throw new Error(`No se ha localizado una celda con la propiedad '${propiedadBuscada}' definida`);
+            throw Error(`No se ha localizado una celda con la propiedad '${propiedadBuscada}' definida`);
         }
 
         public AntesDeNavegar(valores: Diccionario<any>) {
@@ -926,10 +944,10 @@
         private PrepararParametrosDeDependencias(infoSelector: InfoSelector, parametros: string): Tipos.DatosParaDependencias {
 
             if (infoSelector.Cantidad != 1)
-                throw new Error("Debe seleccionar un elemento para poder gestionar sus dependencias");
+                throw Error("Debe seleccionar un elemento para poder gestionar sus dependencias");
             let partes = parametros.split('#');
             if (partes.length != 4)
-                throw new Error("Los parámetros de dependencias están mal definidos");
+                throw Error("Los parámetros de dependencias están mal definidos");
 
 
             let elemento: Elemento = infoSelector.LeerElemento(0);
@@ -956,10 +974,10 @@
         private PrepararParametrosDeRelacionarCon(infoSelector: InfoSelector, parametros: string): Tipos.DatosParaRelacionar {
 
             if (infoSelector.Cantidad != 1)
-                throw new Error("Debe seleccionar un elemento para poder relacionarlo");
+                throw Error("Debe seleccionar un elemento para poder relacionarlo");
             let partes = parametros.split('#');
             if (partes.length != 4)
-                throw new Error("Los parámetros de relación están mal definidos");
+                throw Error("Los parámetros de relación están mal definidos");
 
 
             let elemento: Elemento = infoSelector.LeerElemento(0);
@@ -1309,7 +1327,7 @@
                 let valor: any = this.BuscarValorDeColumnaRegistro(registro, columnaCabecera.propiedad);
                 if (columnaCabecera.propiedad === atControl.id) {
                     if (!IsNumber(valor))
-                        throw new Error("El id del elemento leido debe ser numérico");
+                        throw Error("El id del elemento leido debe ser numérico");
                     idDelElemento = Numero(valor);
                 }
 
@@ -1373,7 +1391,7 @@
                             if (this.EsCrud)
                                 a = `${GestorDeEventos.delMantenimiento}('fila-pulsada', '${idCheckDeSeleccion}#${idControlHtml}');`;
                             else
-                                throw new Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
+                                throw Error("No se ha definido el gestor de eventos a asociar a la pulsación de una fila en el grid");
 
             return a;
         }
@@ -1457,7 +1475,7 @@
 
             let id: number = this.ObtenerElIdDelElementoDelaFila(idCheck);
             if (check.checked) {
-                let elemento: Elemento = this.DatosDelGrid.Obtener(id);
+                let elemento: Elemento = this.DatosDelGrid.ObtenerPorId(id);
                 this.AnadirAlInfoSelector(this, elemento);
             }
             else {
@@ -1481,7 +1499,7 @@
                 return;
 
             let opcionesDeElemento: NodeListOf<HTMLButtonElement> = this.OpcionesPorElemento;
-            
+
             for (var i = 0; i < opcionesDeElemento.length; i++) {
                 let opcion: HTMLButtonElement = opcionesDeElemento[i];
                 ModoAcceso.AplicarModoAccesoAlElemento(opcion, this.InfoSelector.Cantidad, modoAcceso);

@@ -15,7 +15,7 @@ namespace MVCSistemaDeElementos.Descriptores
             , EventosModalDeSeleccion
             , EventosModalParaSeleccionar
             , EventosDeListaDinamica
-            , EventosSelectorEnModal
+            , EventosDeSelectorDeElementosEnModal
     }
 
     public static class TipoAccionDeListaDinamica
