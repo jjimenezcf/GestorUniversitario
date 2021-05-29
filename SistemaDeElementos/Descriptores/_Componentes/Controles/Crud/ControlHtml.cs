@@ -98,7 +98,27 @@ namespace MVCSistemaDeElementos.Descriptores
 
     public abstract class ControlHtml
     {
-        public string Id { get; private set; }
+        private string _id;
+        private static List<string> _ListaDeIdsAsignados = new List<string>();
+        private int _PosicionControl;
+
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                string idTmp = value;
+                int cont = 1;
+                while (_ListaDeIdsAsignados.Contains(idTmp))
+                {
+                    idTmp = $"{value}_{cont}";
+                    cont++;
+                }
+                _ListaDeIdsAsignados.Add(idTmp);
+                _PosicionControl = _ListaDeIdsAsignados.Count - 1;
+                _id = idTmp;
+            }
+        }
         public string IdHtml => Id.ToLower();
         public string Etiqueta { get; set; }
         public string Propiedad { get; private set; }
@@ -129,6 +149,11 @@ namespace MVCSistemaDeElementos.Descriptores
             return RenderEtiqueta(IdHtml, Etiqueta);
         }
 
+        public void BlanquearListaDeIds()
+        {
+            _ListaDeIdsAsignados.Clear();
+        }
+
         public abstract string RenderControl();
 
         public virtual string RenderAtributos(string atributos = "")
@@ -140,10 +165,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public void CambiarAtributos(string etiqueta, string propiedad, string ayuda)
         {
-            Etiqueta = etiqueta;
             Id = $"{Padre.Id}_{Tipo.Render()}_{propiedad}";
             Propiedad = propiedad;
-            Ayuda = ayuda;
+            CambiarEtiqueta(etiqueta, ayuda);
+        }
+
+        public void CambiarEtiqueta(string etiqueta, string ayuda)
+        {
+            Etiqueta = etiqueta;
+            if (!ayuda.IsNullOrEmpty())
+                Ayuda = ayuda;
         }
 
         public static string RenderEtiqueta(string idControl, string etiqueta, Dictionary<string, string> otrosAtributos = null, Dictionary<string, string> otrosAtributosDelContenedor = null)
@@ -215,7 +246,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string RenderDivConEtiquetaParaLinks(string idHtml, string etiqueta, Dictionary<string, string> otrosAtributosEtiqueta = null, Dictionary<string, string> otrosAtributosDelContenedor = null)
         {
-            var html =$@"<div id='{idHtml}' name='contenedor-control' class='{enumCssControlesDto.ContenedorEtiqueta.Render()}'>
+            var html = $@"<div id='{idHtml}' name='contenedor-control' class='{enumCssControlesDto.ContenedorEtiqueta.Render()}'>
                             {RenderEtiqueta(idHtml, etiqueta, otrosAtributosEtiqueta, otrosAtributosDelContenedor)}
                             <div id='{idHtml}_ref' class='{enumCssControlesDto.ContenedorReferencias.Render()}'>
                             </div>
@@ -284,7 +315,7 @@ namespace MVCSistemaDeElementos.Descriptores
             htmlEditor = htmlEditor.Replace("[obligatorio]", otrosAtributos.ContainsKey("obligatorio") ? otrosAtributos["obligatorio"] + Environment.NewLine : "");
             htmlEditor = htmlEditor.Replace("[LongitudMaxima]", otrosAtributos.ContainsKey("LongitudMaxima") ? otrosAtributos["LongitudMaxima"] + Environment.NewLine : "");
 
-            var remplazo = otrosAtributos.ContainsKey("valorPorDefecto") && !otrosAtributos["valorPorDefecto"].ToString().IsNullOrEmpty() 
+            var remplazo = otrosAtributos.ContainsKey("valorPorDefecto") && !otrosAtributos["valorPorDefecto"].ToString().IsNullOrEmpty()
                 ? $"valorPorDefecto=¨{otrosAtributos["valorPorDefecto"]}¨{Environment.NewLine}value=¨{otrosAtributos["valorPorDefecto"]}¨"
                 : "";
             htmlEditor = htmlEditor.Replace("[ValorPorDefecto]", remplazo);
@@ -292,7 +323,7 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmlEditor;
         }
 
-        public static string RenderEditorConEtiquetaEncima(string idHtml, string etiqueta, string propiedad, string ayuda,Dictionary<string, string> otrosAtributosEditor = null, Dictionary<string, string> otrosAtributosEtiqueta = null)
+        public static string RenderEditorConEtiquetaEncima(string idHtml, string etiqueta, string propiedad, string ayuda, Dictionary<string, string> otrosAtributosEditor = null, Dictionary<string, string> otrosAtributosEtiqueta = null)
         {
             if (otrosAtributosEditor == null)
                 otrosAtributosEditor = new Dictionary<string, string>();

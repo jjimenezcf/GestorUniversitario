@@ -117,12 +117,22 @@ namespace MVCSistemaDeElementos.Descriptores
                    </div>";
         }
 
-        internal ControlFiltroHtml BuscarControl(string propiedad)
+        internal ControlFiltroHtml BuscarControlPorPropiedad(string propiedad)
         {
             foreach (ControlFiltroHtml c in Controles)
             {
 
                 if (c.Id == $"{Id}_{c.Tipo.Render()}_{propiedad}")
+                    return c;
+            }
+            return null;
+        }
+        internal ControlFiltroHtml BuscarControlPorEtiqueta(string etiqueta)
+        {
+            foreach (ControlFiltroHtml c in Controles)
+            {
+
+                if (c.Etiqueta == etiqueta)
                     return c;
             }
             return null;

@@ -73,7 +73,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string checkDeSometido()
         {
             var accion = $"onClick = ¨Crud.{GestorDeEventos.EventosModalDeExportacion}('{TipoDeAccionDeExportar.PulsarSometer}')¨";
-            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", ltrExportacion.sometido, true, "Someter", accion) +
+            return RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_sometido", ltrCorreos.sometido, true, "Someter", accion) +
                    RenderCheck(PlantillasHtml.checkDto, $"{IdHtml}_mostradas", "", true, "Las mostradas", accion);
         }
 
@@ -87,7 +87,7 @@ namespace MVCSistemaDeElementos.Descriptores
             var otrosAtributosEtiqueta = new Dictionary<string, string>();
             otrosAtributosEtiqueta["estilo"] = "style='padding :0px;'";
 
-            return RenderEditorConEtiquetaEncima($"{IdHtml}_correos", "Mensaje", ltrExportacion.receptores, "Indique los correos de e-mail receptores", otrosAtributosEditor, otrosAtributosEtiqueta);
+            return RenderEditorConEtiquetaEncima($"{IdHtml}_correos", "Mensaje", ltrCorreos.receptores, "Indique los correos de e-mail receptores", otrosAtributosEditor, otrosAtributosEtiqueta);
 
         }
     }

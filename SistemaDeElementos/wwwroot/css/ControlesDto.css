@@ -261,6 +261,11 @@ a {
     /*margin-right: 20px;*/
 }
 
+    .contenedor-area-de-texto > .area-de-texto-dto[readonly] {
+        background-color: #e9ecef;
+        opacity: 1
+    }
+
 
 .etiqueta-dto {
     width: 100%;

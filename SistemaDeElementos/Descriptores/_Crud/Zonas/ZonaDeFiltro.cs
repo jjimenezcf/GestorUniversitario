@@ -96,17 +96,30 @@ namespace MVCSistemaDeElementos.Descriptores
         }
 
 
-        public ControlFiltroHtml BuscarControl(string propiedad)
+        public ControlFiltroHtml BuscarControlPorPropiedad(string propiedad)
         {
             ControlFiltroHtml c = null;
             foreach (var b in Bloques)
             {
-                c = b.BuscarControl(propiedad);
+                c = b.BuscarControlPorPropiedad(propiedad);
                 if (c != null)
                     return c;
             }
             return c;
         }
+
+        public ControlFiltroHtml BuscarControlPorEtiqueta(string etiqueta)
+        {
+            ControlFiltroHtml c = null;
+            foreach (var b in Bloques)
+            {
+                c = b.BuscarControlPorEtiqueta(etiqueta);
+                if (c != null)
+                    return c;
+            }
+            return c;
+        }
+
 
         public void AnadirBloque(BloqueDeFitro<TElemento> bloque)
         {

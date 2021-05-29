@@ -15,20 +15,19 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
               , rutaBase: "Negocio")
         {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
-            new RestrictorDeFiltro<AuditoriaDto>(bloque: fltGeneral
+            new RestrictorDeFiltro<AuditoriaDto>(bloque: Mnt.BloqueGeneral
                   , etiqueta: "Negocio"
                   , propiedad: NegocioPor.idNegocio
                   , ayuda: "negocio del elemento"
                   , new Posicion { fila = 0, columna = 0 });
-            new RestrictorDeFiltro<AuditoriaDto>(bloque: fltGeneral
+            new RestrictorDeFiltro<AuditoriaDto>(bloque: Mnt.BloqueGeneral
                   , etiqueta: "Elemento"
                   , propiedad: nameof(AuditoriaDto.IdElemento)
                   , ayuda: "elemento auditado"
                   , new Posicion { fila = 0, columna = 1 });
 
             var modalUsuario = new DescriptorDeUsuario(Contexto, ModoDescriptor.SeleccionarParaFiltrar);
-            new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: fltGeneral,
+            new SelectorDeFiltro<AuditoriaDto, UsuarioDto>(padre: Mnt.BloqueGeneral,
                                               etiqueta: "Usuario",
                                               filtrarPor: UsuariosPor.AlgunUsuario,
                                               ayuda: "Seleccionar usuario",

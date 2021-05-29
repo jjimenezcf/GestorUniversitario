@@ -148,7 +148,7 @@ namespace GestoresDeNegocio.Archivos
             var ficheroConRuta = GenerarExcel(entorno.contextoDelProceso, elementos);
 
             GestorDeCorreos.CrearCorreoPara(entorno.contextoDelProceso
-                , new List<string> { parametros[ltrExportacion.receptores].ToString() }
+                , new List<string> { parametros[ltrCorreos.receptores].ToString() }
                 , "Exportación solicitada"
                 , "Se le adjunta el fichero con la exportación solicitada"
                 , new List<TipoDtoElmento>()

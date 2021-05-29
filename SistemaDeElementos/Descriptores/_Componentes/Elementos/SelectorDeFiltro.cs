@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public SelectorDeFiltro(BloqueDeFitro<TElemento> padre, string etiqueta, string filtrarPor, string ayuda, Posicion posicion, string paraFiltrar, string paraMostrar, DescriptorDeCrud<TSeleccionado> crudModal, string propiedadDondeMapear)
         : base(
           padre: padre
-          , id: $"{padre.Id}_{enumTipoControl.SelectorDeFiltro.Render()}_{filtrarPor}" //  $"{typeof(Tseleccionado).Name.Replace("Elemento", "")}_{TipoControl.Selector}"
+          , id: $"{padre.Id}_{enumTipoControl.SelectorDeFiltro.Render()}_{filtrarPor}" 
           , etiqueta
           , filtrarPor
           , ayuda
@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string RenderSelector()
         {
-            ControlHtml edt = CrudModal.Mnt.Filtro.BuscarControl(PropiedadDondeMapear);
+            ControlHtml edt = CrudModal.Mnt.Filtro.BuscarControlPorPropiedad(PropiedadDondeMapear);
 
             return $@"<div class=¨{Css.Render(enumCssFiltro.ContenedorSelector)}¨>
                        <input id=¨{IdHtml}¨ 

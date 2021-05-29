@@ -2,6 +2,9 @@
 using MVCSistemaDeElementos.Controllers;
 using ModeloDeDto.TrabajosSometidos;
 using ServicioDeDatos;
+using ModeloDeDto.Entorno;
+using ModeloDeDto;
+using ServicioDeDatos.Elemento;
 
 namespace MVCSistemaDeElementos.Descriptores
 {
@@ -14,6 +17,49 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
                , rutaBase: "TrabajosSometido")
         {
+            RenombrarEtiqueta(nameof(INombre.Nombre), "Texto", "Buscar en el asunto o cuerpo del mensaje");
+            var UsuarioReceptor = new DescriptorDeUsuario(Contexto, ModoDescriptor.SeleccionarParaFiltrar);
+            new SelectorDeFiltro<CorreoDto, UsuarioDto>(padre: Mnt.BloqueGeneral,
+                                              etiqueta: "Receptor",
+                                              filtrarPor: UsuariosPor.eMail,
+                                              ayuda: "Seleccionar usuario receptor",
+                                              posicion: new Posicion() { fila = 0, columna = 1 },
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.NombreCompleto),
+                                              crudModal: UsuarioReceptor,
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+
+            var UsuarioCreador = new DescriptorDeUsuario(Contexto, ModoDescriptor.SeleccionarParaFiltrar);
+            new SelectorDeFiltro<CorreoDto, UsuarioDto>(padre: Mnt.BloqueComun,
+                                              etiqueta: "Usuario",
+                                              filtrarPor: nameof(CorreoDto.IdUsuario),
+                                              ayuda: "Usuario creador del correo",
+                                              posicion: new Posicion() { fila = 0, columna = 0 },
+                                              paraFiltrar: nameof(UsuarioDto.Id),
+                                              paraMostrar: nameof(UsuarioDto.NombreCompleto),
+                                              crudModal: UsuarioCreador,
+                                              propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
+            new CheckFiltro<CorreoDto>(Mnt.BloqueComun,
+                etiqueta: "Mostrar los enviados",
+                filtrarPor: nameof(ltrCorreos.seHaEnviado),
+                ayuda: "Sólo los enviados",
+                valorInicial: false,
+                filtrarPorFalse: false,
+                posicion: new Posicion(1, 0));
+
+            new FiltroEntreFechas<CorreoDto>(bloque: Mnt.BloqueComun,
+                    etiqueta: "creado entre",
+                    propiedad: nameof(CorreoDto.Enviado),
+                    ayuda: "correos creados entre las fechas indicadas",
+                    posicion: new Posicion() { fila = 2, columna = 0 });
+
+            new FiltroEntreFechas<CorreoDto>(bloque: Mnt.BloqueComun,
+                                etiqueta: "Enviado entre",
+                                propiedad: nameof(CorreoDto.Enviado) ,
+                                ayuda: "correos enviados entre las fechas indicadas",
+                                posicion: new Posicion() { fila = 3, columna = 0 });
+
+            Editor.MenuDeEdicion.QuitarOpcionDeMenu(TipoDeAccionDeEdicion.ModificarElemento);
         }
 
         public override string RenderControl()

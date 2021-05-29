@@ -100,7 +100,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public override string RenderControl()
         {
             var render = base.RenderControl();
-
+            
             render = render +
                    $@"<script src=¨../../js/{RutaBase}/Usuario.js¨></script>
                       <script>

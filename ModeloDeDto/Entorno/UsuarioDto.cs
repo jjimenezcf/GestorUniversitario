@@ -9,6 +9,7 @@ namespace ModeloDeDto.Entorno
         public static string NombreCompleto = nameof(NombreCompleto).ToLower();
         public static string Permisos = nameof(Permisos).ToLower();
         public static string AlgunUsuario = nameof(AlgunUsuario).ToLower();
+        public static string eMail = nameof(eMail).ToLower();
     }
 
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, MostrarExpresion = ExpresionElemento)]

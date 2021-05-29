@@ -133,9 +133,18 @@ namespace MVCSistemaDeElementos.Descriptores
             }
         }
 
+        public ControlFiltroHtml RenombrarEtiqueta(string etiquetaAnterior, string nuevaEtiqueta, string ayuda = null)
+        {
+            var control = Mnt.Filtro.BuscarControlPorEtiqueta(etiquetaAnterior);
+            if (control == null)
+                throw new Exception($"Se ha solicitado cambiar la etiqueta {etiquetaAnterior} por {nuevaEtiqueta} y no se ha encontrado el control");
+            control.CambiarEtiqueta(nuevaEtiqueta, ayuda);
+            return control;
+        }
+
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
-            return Mnt.Filtro.BuscarControl(propiedad);
+            return Mnt.Filtro.BuscarControlPorPropiedad(propiedad);
         }
 
         public void CambiarModo(ModoDescriptor modo)
@@ -229,7 +238,9 @@ namespace MVCSistemaDeElementos.Descriptores
                   {Exportador.RenderDeExportacion()}
                   <!--  *******************  div de borrado ******************* -->
                   {Borrado.RenderDelBorrado()}
-                  {renderCorreo}";
+                  {renderCorreo}
+                  <!--  *******************  modales de filtrado ******************* -->
+                  {Mnt.Filtro.RenderizarLasModalesDelFiltro()}";
 
                 if (ModoDescriptor.Consulta == Modo)
                     return $@"
@@ -244,6 +255,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 return $@"
                    <input id=error>{e.Message}</input>
                 ";
+            }
+            finally
+            {
+                BlanquearListaDeIds();
             }
         }
 

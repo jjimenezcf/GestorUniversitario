@@ -1,4 +1,5 @@
-﻿using Enumerados;
+﻿using System;
+using Enumerados;
 using GestorDeElementos;
 using GestoresDeNegocio.Negocio;
 using ModeloDeDto;
@@ -196,9 +197,11 @@ namespace MVCSistemaDeElementos.Descriptores
                 if (opcion.Accion.TipoDeAccion == tipoDeAccion)
                 {
                     Menu.OpcionesDeMenu.Remove(opcion);
-                    break;
+                    return;
                 }
             }
+
+            throw new Exception($"Se ha solicitado quitar la opción de menú {tipoDeAccion}, y no se ha localizado en {Menu.Id}");
         }
     }
 }

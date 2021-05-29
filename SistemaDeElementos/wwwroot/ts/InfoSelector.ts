@@ -12,7 +12,11 @@ class Elemento {
         return this._registro;
     }
     public get Id(): number {
-        return this._registro["Id"];
+        if (this._registro.hasOwnProperty("id"))
+           return this._registro["id"];
+        if(this._registro.hasOwnProperty("Id"))
+            return this._registro["Id"];
+        throw Error("No existe la propiedad ID en el registro asociado al elemento")
     }
     public get Texto(): string {
         return this.mostrar();

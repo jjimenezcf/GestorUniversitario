@@ -13,6 +13,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public ZonaDeMenu<TElemento> ZonaMenu { get; private set; }
         public ZonaDeFiltro<TElemento> Filtro { get; private set; }
         public ZonaDeDatos<TElemento> Datos { get; set; }
+        public BloqueDeFitro<TElemento> BloqueGeneral => Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
+        public BloqueDeFitro<TElemento> BloqueComun => Filtro.ObtenerBloquePorEtiqueta(ltrBloques.Comun);
 
         //public new string IdHtml => NombreMnt;
 
@@ -92,7 +94,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 }
             }
 
-            htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderizarLasModalesDelFiltro();
+            //htmContenedorMnt = htmContenedorMnt + Environment.NewLine + Filtro.RenderizarLasModalesDelFiltro();
 
             return htmContenedorMnt.Render();
         }

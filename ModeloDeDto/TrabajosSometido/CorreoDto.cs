@@ -4,12 +4,13 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.TrabajosSometidos
 {
-    public static class ltrExportacion
+    public static class ltrCorreos
     {
         public static readonly string receptores = nameof(receptores);
         public static readonly string sometido = nameof(sometido);
         public static readonly string asunto = nameof(asunto);
         public static readonly string cuerpo = nameof(cuerpo);
+        public static readonly string seHaEnviado = nameof(seHaEnviado);
     }
 
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeBorrar = false)]
@@ -134,11 +135,11 @@ namespace ModeloDeDto.TrabajosSometidos
             TipoDeControl = enumTipoControl.SelectorDeFechaHora,
             Fila = 1,
             Columna = 1,
-            VisibleEnGrid = false,
+            VisibleEnGrid = true,
             EditableAlCrear = false,
             EditableAlEditar = false,
             Obligatorio = true,
-            Ordenar = false
+            Ordenar = true
            )
         ]
         public DateTime Creado { get; set; }
