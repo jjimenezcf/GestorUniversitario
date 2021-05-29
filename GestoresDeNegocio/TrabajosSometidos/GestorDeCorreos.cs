@@ -241,15 +241,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
                 if (filtro.Clausula.ToLower() == nameof(ElementoDtm.Nombre).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        registros = registros.Where(x => x.Asunto.Contains(filtro.Valor));
-                    else
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        registros = registros.Where(x => x.Asunto.Equals(filtro.Valor));
-                    else
-                        GestorDeErrores.Emitir($"Se ha solicitado filtrar por {filtro.Criterio} en el gestor {nameof(GestorDeTrabajosDeUsuario)} y no se ha implementado el filtro");
-                }
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(CorreoDtm.Asunto));
+
+                if (filtro.Clausula.ToLower() == ltrCorreos.seHaEnviado.ToLower())
+                    registros = Filtrar.AplicarFiltroPorFechaNoNula(registros, nameof(CorreoDtm.Enviado));
+
+                if (filtro.Clausula.ToLower() == ltrCorreos.NoSeHaEnviado.ToLower())
+                    registros = Filtrar.AplicarFiltroPorFechaNula(registros, nameof(CorreoDtm.Enviado));
+
             }
 
             return registros;

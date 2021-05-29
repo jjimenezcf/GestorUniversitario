@@ -11,6 +11,7 @@ namespace ModeloDeDto.TrabajosSometidos
         public static readonly string asunto = nameof(asunto);
         public static readonly string cuerpo = nameof(cuerpo);
         public static readonly string seHaEnviado = nameof(seHaEnviado);
+        public static readonly string NoSeHaEnviado = nameof(NoSeHaEnviado);
     }
 
     [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeBorrar = false)]

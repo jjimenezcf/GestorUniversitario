@@ -123,9 +123,14 @@ namespace GestorDeElementos
             return registros;
         }
 
-        private static IQueryable<TRegistro> AplicarFiltroPorFechaNula<TRegistro>(IQueryable<TRegistro> registros, string propiedad)
+        public static IQueryable<TRegistro> AplicarFiltroPorFechaNula<TRegistro>(IQueryable<TRegistro> registros, string propiedad)
         {
-            var expresionFecha = $"x.{propiedad} = null || x.{propiedad} = DateTime({"0001"},{"01"},{"01"},{"00"},{"00"},{"00"})";
+            var expresionFecha = $"x.{propiedad} == null || x.{propiedad} = DateTime({"0001"},{"01"},{"01"},{"00"},{"00"},{"00"})";
+            return registros.AplicarFiltroPorExpresion($"x => {expresionFecha}");
+        }
+        public static IQueryable<TRegistro> AplicarFiltroPorFechaNoNula<TRegistro>(IQueryable<TRegistro> registros, string propiedad)
+        {
+            var expresionFecha = $"x.{propiedad} != null && x.{propiedad} != DateTime({"0001"},{"01"},{"01"},{"00"},{"00"},{"00"})";
             return registros.AplicarFiltroPorExpresion($"x => {expresionFecha}");
         }
 

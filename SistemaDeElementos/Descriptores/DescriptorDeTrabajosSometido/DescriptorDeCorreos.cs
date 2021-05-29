@@ -45,19 +45,27 @@ namespace MVCSistemaDeElementos.Descriptores
                 ayuda: "Sólo los enviados",
                 valorInicial: false,
                 filtrarPorFalse: false,
-                posicion: new Posicion(1, 0));
+                posicion: new Posicion(0, 1));
+         
+            new CheckFiltro<CorreoDto>(Mnt.BloqueComun,
+                etiqueta: "Mostrar los no enviados",
+                filtrarPor: nameof(ltrCorreos.NoSeHaEnviado),
+                ayuda: "Sólo los no enviados",
+                valorInicial: false,
+                filtrarPorFalse: false,
+                posicion: new Posicion(1, 1));
 
             new FiltroEntreFechas<CorreoDto>(bloque: Mnt.BloqueComun,
                     etiqueta: "creado entre",
-                    propiedad: nameof(CorreoDto.Enviado),
+                    propiedad: nameof(CorreoDto.Creado),
                     ayuda: "correos creados entre las fechas indicadas",
-                    posicion: new Posicion() { fila = 2, columna = 0 });
+                    posicion: new Posicion() { fila = 1, columna = 0 });
 
             new FiltroEntreFechas<CorreoDto>(bloque: Mnt.BloqueComun,
                                 etiqueta: "Enviado entre",
                                 propiedad: nameof(CorreoDto.Enviado) ,
                                 ayuda: "correos enviados entre las fechas indicadas",
-                                posicion: new Posicion() { fila = 3, columna = 0 });
+                                posicion: new Posicion() { fila = 2, columna = 0 });
 
             Editor.MenuDeEdicion.QuitarOpcionDeMenu(TipoDeAccionDeEdicion.ModificarElemento);
         }
