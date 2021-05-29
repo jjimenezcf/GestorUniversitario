@@ -119,6 +119,8 @@ namespace ServicioDeDatos
             ModeloDePais.Auditoria(modelBuilder);
             ModeloDeProvinvia.Provincia(modelBuilder);
             ModeloDeProvinvia.Auditoria(modelBuilder);
+            ModeloDeMunicipio.Municipio(modelBuilder);
+            ModeloDeMunicipio.Auditoria(modelBuilder);
         }
 
 
