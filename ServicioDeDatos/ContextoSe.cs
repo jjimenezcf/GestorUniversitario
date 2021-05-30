@@ -34,6 +34,8 @@ namespace ServicioDeDatos
         public bool EsAdministrador { get; set; }
         public string Version { get; set; }
         public string Menu { get; set; }
+        public bool CreandoModelo { get; set; } = false;
+
     }
 
     public class ConstructorDelContexto : IDesignTimeDbContextFactory<ContextoSe>
@@ -148,11 +150,11 @@ namespace ServicioDeDatos
         /// NECESARIO PARA EJECUTAR LAS MIGRACIONES EN UN PROYECTO APARTE
         /// </summary>
         /// <param name="options"></param>
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
-        //    options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO")).UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var conexion = Configuracion.GetConnectionString(Literal.CadenaDeConexion);
+            options.UseSqlServer(conexion, x => x.MigrationsHistoryTable("__Migraciones", "ENTORNO")).UseSqlServer(conexion, x => x.MigrationsAssembly("Migraciones"));
+        }
 
         public void InicializarDatosDeConexion()
         {

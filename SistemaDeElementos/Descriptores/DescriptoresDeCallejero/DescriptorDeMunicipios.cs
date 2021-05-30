@@ -5,19 +5,20 @@ using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores.Callejero
 {
-    public class DescriptorDeProvincias : DescriptorDeCrud<ProvinciaDto>
+    public class DescriptorDeMunicipios : DescriptorDeCrud<MunicipioDto>
     {
-        public DescriptorDeProvincias(ContextoSe contexto, ModoDescriptor modo)
+        public DescriptorDeMunicipios(ContextoSe contexto, ModoDescriptor modo)
         : base(contexto
-               , nameof(ProvinciasController)
-                 , nameof(ProvinciasController.CrudProvincias)
+               , nameof(MunicipiosController)
+                 , nameof(MunicipiosController.CrudMunicipios)
                  , modo
                  , rutaBase: "Callejero")
         {
-            
-            new ListasDinamicas<ProvinciaDto>(Mnt.BloqueGeneral,
+
+
+            new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
                 etiqueta: "País",
-                filtrarPor: nameof(ProvinciaDto.IdPais),
+                filtrarPor: nameof(MunicipioDto.IdProvincia),
                 ayuda: "seleccione al país",
                 seleccionarDe: nameof(PaisDto),
                 buscarPor: nameof(PaisDto.Nombre),
@@ -25,9 +26,9 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
                 posicion: new Posicion(0, 0));
 
-            new EditorFiltro<ProvinciaDto>(bloque: Mnt.BloqueGeneral
+            new EditorFiltro<MunicipioDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"
-                , propiedad: nameof(ProvinciaDto.Codigo)
+                , propiedad: nameof(MunicipioDto.Codigo)
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 1, columna = 0 });
         }
@@ -38,10 +39,10 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../js/Callejero/Provincias.js¨></script>
+                   $@"<script src=¨../../js/Callejero/Municipios.js¨></script>
                       <script>
                          try {{      
-                           Callejero.CrearCrudDeProvincias('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
+                           Callejero.CrearCrudDeMunicipios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
                          }}
                          catch(error) {{                           
                             MensajesSe.Error('Creando el crud', error.message);
@@ -52,4 +53,3 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
         }
     }
 }
-

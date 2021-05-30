@@ -15,6 +15,7 @@ using Gestor.Errores;
 using System;
 using System.Reflection;
 using ModeloDeDto;
+using ServicioDeDatos.Elemento;
 
 namespace GestoresDeNegocio.Negocio
 {
@@ -60,6 +61,16 @@ namespace GestoresDeNegocio.Negocio
             return gestor.LeerModoDeAccesoAlElemento(contexto.DatosDeConexion.IdUsuario, negocio, id);
         }
 
+        public static NegocioDtm CrearNegocioSiNoExiste(ContextoSe contexto, enumNegocio negocio, Type dtm, Type dto, string icono)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var negocioDtm =  gestor.LeerNegocio(negocio, errorSiNoHay:false);
+            if (negocioDtm == null)
+            {
+               negocioDtm = gestor.CrearNegocio(negocio, dtm, dto, icono);
+            }
+            return negocioDtm;
+        }
         public static NegocioDtm LeerNegocio(ContextoSe contexto, enumNegocio negocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
@@ -72,10 +83,22 @@ namespace GestoresDeNegocio.Negocio
             return gestor.LeerRegistroPorId(idNegocio);
         }
 
-        public NegocioDtm LeerNegocio(enumNegocio negocio)
+        public NegocioDtm LeerNegocio(enumNegocio negocio, bool errorSiNoHay = true)
         {
-            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Nombre), negocio.Nombre(), true, true, false, false);
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Nombre), negocio.Nombre(), errorSiNoHay, true, false, false);
             return negocioDtm;
+        }
+
+        public NegocioDtm CrearNegocio(enumNegocio negocio,  Type dtm, Type dto, string icono)
+        {
+            var negocioDtm = new NegocioDtm();
+            negocioDtm.Nombre = NegociosDeSe.Nombre(negocio);
+            negocioDtm.ElementoDtm = dtm.FullName;
+            negocioDtm.ElementoDto = dto.FullName;
+            negocioDtm.Icono = icono;
+            negocioDtm.Activo = true;
+            var p = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
+            return PersistirRegistro(negocioDtm, p );
         }
 
         protected override IQueryable<NegocioDtm> AplicarFiltros(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -247,7 +270,7 @@ namespace GestoresDeNegocio.Negocio
             var ensamblado = Assembly.Load(nameof(ServicioDeDatos));
             foreach (var clase in ensamblado.DefinedTypes)
             {
-                if (clase.Name == registro.ElementoDtm)
+                if (clase.FullName == registro.ElementoDtm)
                 {
                     encontrado = true;
                     break;

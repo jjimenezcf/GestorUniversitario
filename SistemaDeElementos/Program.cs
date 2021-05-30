@@ -4,6 +4,12 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using GestoresDeNegocio.Negocio;
+using ServicioDeDatos.Negocio;
+using ModeloDeDto.Negocio;
+using GestorDeElementos;
+using ModeloDeDto.Callejero;
+using ServicioDeDatos.Callejero;
 
 namespace MVCSistemaDeElementos
 {
@@ -12,56 +18,34 @@ namespace MVCSistemaDeElementos
         public static void Main(string[] args)
         {
             var servidorWeb = CreateWebHostBuilder(args).Build();
-            //CrearBdSiNoExiste(servidorWeb);
+            InicializarBD(servidorWeb);
             servidorWeb.Run();
         }
 
-        private static void CrearBdSiNoExiste(IWebHost sevidorWeb)
+        private static void InicializarBD(IWebHost sevidorWeb)
         {
             var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
-            //IniciarContextoDeEntorno(services);
-            //IniciarContextoDeSeguro(services);
+            InicializarNegocios(services);
         }
 
-        private static void IniciarContextoDeSeguro(IServiceProvider services)
+        private static void InicializarNegocios(IServiceProvider services)
         {
-            var ctoPermisos = services.GetRequiredService<ContextoSe>();
-            try
+            var scope = services.CreateScope();
+            using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeNegocios>())
             {
-                ctoPermisos.Database.Migrate();
-               // ctoPermisos.IniciarTraza();
+                gestor.Contexto.IniciarTraza(nameof(InicializarNegocios));
+                try
+                {
+                    gestor.Contexto.DatosDeConexion.CreandoModelo = true;
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Municipio, typeof(MunicipioDtm), typeof(MunicipioDto), "");
+                }
+                finally
+                {
+                    gestor.Contexto.DatosDeConexion.CreandoModelo = false;
+                }
             }
-            catch (Exception ex)
-            {
-                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo(CacheDeVariable.ServidorDeCorreo, "Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {ctoPermisos.GetType().Name}", ex);
-            }
-            finally
-            {
-                if (ctoPermisos != null)
-                    ctoPermisos.CerrarTraza();
-            }
-        }
 
-        private static void IniciarContextoDeEntorno(IServiceProvider services)
-        {
-            var contexto = services.GetRequiredService<ContextoSe>();
-            try
-            {
-               // contexto.Database.Migrate();
-                //contexto.IniciarTraza();
-            }
-            catch (Exception ex)
-            {
-                Gestor.Errores.GestorDeErrores.EnviarExcepcionPorCorreo(CacheDeVariable.ServidorDeCorreo, "Error al inicializar la BD.", ex);
-                throw new Exception($"Error al conectarse al contexto {contexto.GetType().Name}", ex);
-            }
-            finally
-            {
-                if (contexto != null)
-                    contexto.CerrarTraza();
-            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

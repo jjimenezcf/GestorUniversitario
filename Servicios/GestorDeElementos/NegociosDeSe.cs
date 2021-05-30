@@ -52,6 +52,7 @@ namespace GestorDeElementos
         Archivos,
         Pais,
         Provincia,
+        Municipio,
         Correo
     }
 
@@ -63,6 +64,8 @@ namespace GestorDeElementos
 
     public static class NegociosDeSe
     {
+        public  static readonly string ValidarSeguridad = nameof(ValidarSeguridad);
+
         private static List<enumNegocio> _negociosConSeguridad = new List<enumNegocio>
         {
            enumNegocio.Usuario,
@@ -74,7 +77,8 @@ namespace GestorDeElementos
            enumNegocio.Puesto,
            enumNegocio.Rol,
            enumNegocio.Pais,
-           enumNegocio.Provincia
+           enumNegocio.Provincia,
+           enumNegocio.Municipio
         };
 
         private static List<enumNegocio> _negociosDeParametrizacion = new List<enumNegocio>
@@ -133,7 +137,7 @@ namespace GestorDeElementos
         {
             if (negocio == enumNegocio.No_Definido)
                 return enumNegocio.No_Definido.ToString();
-
+            
             switch (negocio)
             {
                 case enumNegocio.Usuario: return "Usuarios";
@@ -146,9 +150,10 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return "Roles";
                 case enumNegocio.Pais: return "Paises";
                 case enumNegocio.Provincia: return "Provincias";
+                case enumNegocio.Municipio: return "Municipios";
                 case enumNegocio.Correo: return "Correos";
             }
-            throw new Exception($"El negocio {negocio} no está definido, no se puede parsear");
+            throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su nombre");
         }
 
         public static enumNegocio Negocio(string negocio, bool nullValido = false)
@@ -191,6 +196,7 @@ namespace GestorDeElementos
                 case nameof(PuestoDto): return enumNegocio.Puesto;
                 case nameof(PaisDto): return enumNegocio.Pais;
                 case nameof(ProvinciaDto): return enumNegocio.Provincia;
+                case nameof(MunicipioDto): return enumNegocio.Municipio;
                 case nameof(CorreoDto): return enumNegocio.Correo;
             }
 
@@ -211,6 +217,7 @@ namespace GestorDeElementos
                 case nameof(PuestoDtm): return enumNegocio.Puesto;
                 case nameof(PaisDtm): return enumNegocio.Pais;
                 case nameof(ProvinciaDtm): return enumNegocio.Provincia;
+                case nameof(MunicipioDtm): return enumNegocio.Municipio;
                 case nameof(CorreoDtm): return enumNegocio.Correo;
             }
 
@@ -231,6 +238,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return typeof(RolDtm);
                 case enumNegocio.Pais: return typeof(PaisDtm);
                 case enumNegocio.Provincia: return typeof(ProvinciaDtm);
+                case enumNegocio.Municipio: return typeof(MunicipioDtm);
                 case enumNegocio.Correo: return typeof(CorreoDtm);
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dtm");
@@ -270,6 +278,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return typeof(RolDto);
                 case enumNegocio.Pais: return typeof(PaisDto);
                 case enumNegocio.Provincia: return typeof(ProvinciaDto);
+                case enumNegocio.Municipio: return typeof(MunicipioDto);
                 case enumNegocio.Correo: return typeof(CorreoDto);
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su tipo Dto");
@@ -288,6 +297,7 @@ namespace GestorDeElementos
                 case enumNegocio.Rol: return new RolDtm();
                 case enumNegocio.Pais: return new PaisDtm();
                 case enumNegocio.Provincia: return new ProvinciaDtm();
+                case enumNegocio.Municipio: return new MunicipioDtm();
                 case enumNegocio.Correo: return new CorreoDtm();
             }
             throw new Exception($"El negocio {negocio} no está definido, no se puede obtener un objeto dtm");

@@ -101,13 +101,6 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        protected override IQueryable<ProvinciaDtm> AplicarJoins(IQueryable<ProvinciaDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, filtros, joins, parametros);
-            registros = registros.Include(p => p.Pais);
-            return registros;
-        }
-
         private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string codigoPais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, int idTrazaInformativa)
         {
             ParametrosDeNegocio operacion;
@@ -143,6 +136,19 @@ namespace GestoresDeNegocio.Callejero
             }
 
             return gestor.PersistirRegistro(p, operacion);
+        }
+
+        protected override IQueryable<ProvinciaDtm> AplicarJoins(IQueryable<ProvinciaDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.Pais);
+            return registros;
+        }
+
+        public List<ProvinciaDto> LeerProvincias(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
     }

@@ -273,7 +273,8 @@ namespace GestoresDeNegocio.Seguridad
             registro.Nombre = nombrePermiso;
             registro.IdClase = claseDePermiso.Id;
             registro.IdTipo = tipoDePermiso.Id;
-            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+            var p = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
+            PersistirRegistro(registro, p);
             return registro;
         }
 

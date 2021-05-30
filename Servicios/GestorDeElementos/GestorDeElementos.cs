@@ -353,10 +353,13 @@ namespace GestorDeElementos
                 }
             }
         }
+
         protected virtual void AntesDePersistirValidarRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             var negocio = NegociosDeSe.NegocioDeUnDtm(registro.GetType().Name);
-            ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
+
+            if (!Contexto.DatosDeConexion.CreandoModelo && (!parametros.Parametros.ContainsKey(NegociosDeSe.ValidarSeguridad) || (bool)parametros.Parametros[NegociosDeSe.ValidarSeguridad]))
+               ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
