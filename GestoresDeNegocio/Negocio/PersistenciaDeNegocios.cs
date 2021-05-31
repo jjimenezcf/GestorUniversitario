@@ -18,6 +18,7 @@ namespace GestoresDeNegocio.Negocio
     {
         public static void PersistirNegocios(GestorDeNegocios gestor)
         {
+            return;
             gestor.Contexto.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             gestor.Contexto.IniciarTraza(nameof(PersistirNegocios));
             try

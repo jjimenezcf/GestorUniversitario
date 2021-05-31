@@ -144,23 +144,20 @@ namespace GestorDeElementos
 
         public static enumNegocio NegocioDeUnDto(string elementoDto)
         {
-            switch (elementoDto)
+
+            var negocioDtm = LeerNegocioPorDto(elementoDto);
+
+            if (negocioDtm == null)
+                return enumNegocio.No_Definido;
+
+            foreach (enumNegocio valor in Enum.GetValues(typeof(enumNegocio)))
             {
-                case nameof(UsuarioDto): return enumNegocio.Usuario;
-                case nameof(MenuDto): return enumNegocio.Menu;
-                case nameof(VistaMvcDto): return enumNegocio.VistaMvc;
-                case nameof(VariableDto): return enumNegocio.Variable;
-                case nameof(NegocioDto): return enumNegocio.Negocio;
-                case nameof(PermisoDto): return enumNegocio.Permiso;
-                case nameof(RolDto): return enumNegocio.Rol;
-                case nameof(PuestoDto): return enumNegocio.Puesto;
-                case nameof(PaisDto): return enumNegocio.Pais;
-                case nameof(ProvinciaDto): return enumNegocio.Provincia;
-                case nameof(MunicipioDto): return enumNegocio.Municipio;
-                case nameof(CorreoDto): return enumNegocio.Correo;
+                var texto = valor.ToDescription();
+                if (texto == negocioDtm.Enumerado)
+                    return valor;
             }
 
-            return enumNegocio.No_Definido;
+            throw new Exception($"No se ha localizado como negocio el dto {elementoDto}");
         }
 
         public static enumNegocio NegocioDeUnDtm(string registroDtm)
@@ -247,6 +244,27 @@ namespace GestorDeElementos
                 
                 if (negocios.Count > 1)
                     GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio {nombreNegocio}");
+
+                if (negocios.Count == 0)
+                    return null;
+
+                cache[indice] = negocios[0];
+            }
+            return (NegocioDtm)cache[indice];
+        }
+
+        public static NegocioDtm LeerNegocioPorDto(string elementoDto)
+        {
+            var cache = ServicioDeCaches.Obtener($"{nameof(NegociosDeSe)}.{nameof(LeerNegocioPorDto)}");
+            var indice = $"{nameof(elementoDto)}-{elementoDto}";
+            if (!cache.ContainsKey(indice))
+            {
+                var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorDto);
+                var valores = new Dictionary<string, object> { { $"@{nameof(elementoDto)}", elementoDto } };
+                var negocios = consulta.LanzarConsulta(new DynamicParameters(valores));
+
+                if (negocios.Count > 1)
+                    GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio al leer por dto {elementoDto}");
 
                 if (negocios.Count == 0)
                     return null;

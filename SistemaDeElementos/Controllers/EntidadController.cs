@@ -250,7 +250,7 @@ namespace MVCSistemaDeElementos.Controllers
                         object valor = elemento.GetType().GetProperty(propiedad.Name).GetValue(elemento);
                         registro[propiedad.Name] = valor == null ? "" : valor;
                     }
-                    var ma = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.NegocioDeUnDto(elemento.GetType().Name), registro[nameof(ElementoDto.Id)].ToString().Entero());
+                    var ma = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.NegocioDeUnDto(elemento.GetType().FullName), registro[nameof(ElementoDto.Id)].ToString().Entero());
                     registro[nameof(Resultado.ModoDeAcceso)] = ma.Render();
                     listaDeElementos.Add(registro);
                 }
@@ -410,8 +410,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         public ViewResult ViewCrud(DescriptorDeCrud<TElemento> descriptor)
         {
-            if (NegociosDeSe.NegocioDeUnDto(typeof(TElemento).Name) != enumNegocio.No_Definido)
-                descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.NegocioDeUnDto(typeof(TElemento).Name));
+            if (NegociosDeSe.NegocioDeUnDto(typeof(TElemento).FullName) != enumNegocio.No_Definido)
+                descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(GestorDeElementos.Contexto, NegociosDeSe.NegocioDeUnDto(typeof(TElemento).FullName));
 
             var gestorDeVista = GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
             var vista = gestorDeVista.LeerVistaMvc($"{descriptor.Controlador}.{descriptor.Vista}");

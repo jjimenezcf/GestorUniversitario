@@ -60,6 +60,7 @@ FROM [NEGOCIO].[NEGOCIO]";
 
         public static readonly string LeerNegocioPorNombre = $@"{LeerNegocio}{Environment.NewLine} WHERE [NOMBRE] like @Nombre";
         public static readonly string LeerNegocioPorEnumerado = $@"{LeerNegocio}{Environment.NewLine} WHERE [ENUMERADO] like @Enumerado";
+        public static readonly string LeerNegocioPorDto = $@"{LeerNegocio}{Environment.NewLine} WHERE [ELEMENTO_DTO] like @elementoDto";
 
         private static readonly string Actualizar = $@"
 UPDATE [NEGOCIO].[NEGOCIO]

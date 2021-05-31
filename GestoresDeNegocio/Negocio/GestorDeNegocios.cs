@@ -263,6 +263,10 @@ namespace GestoresDeNegocio.Negocio
                 cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorNombre)}";
                 indice = $"{nameof(INombre)}-{registro.Nombre}";
                 ServicioDeCaches.EliminarElemento(cache, indice);
+
+                cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorDto)}";
+                indice = $"elementoDto-{registro.ElementoDto}";
+                ServicioDeCaches.EliminarElemento(cache, indice);
             }
         }
 
