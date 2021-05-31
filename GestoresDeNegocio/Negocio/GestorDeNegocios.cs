@@ -44,37 +44,24 @@ namespace GestoresDeNegocio.Negocio
         {
 
         }
+
         public static GestorDeNegocios Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeNegocios(contexto, mapeador);
         }
-
 
         public static enumModoDeAccesoDeDatos LeerModoDeAcceso(ContextoSe contexto, enumNegocio negocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.LeerModoDeAccesoAlNegocio(contexto.DatosDeConexion.IdUsuario, negocio);
         }
+
         public static enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(ContextoSe contexto, enumNegocio negocio, int id)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             return gestor.LeerModoDeAccesoAlElemento(contexto.DatosDeConexion.IdUsuario, negocio, id);
         }
 
-        public static NegocioDtm CrearNegocioSiNoExiste(ContextoSe contexto, enumNegocio negocio, Type dtm, Type dto, string icono)
-        {
-            var gestor = Gestor(contexto, contexto.Mapeador);
-            var negocioDtm =  gestor.LeerNegocio(negocio, errorSiNoHay:false);
-            if (negocioDtm == null)
-            {
-               negocioDtm = gestor.CrearNegocio(negocio, dtm, dto, icono);
-            }
-            else
-            {
-                negocioDtm = gestor.ActualizarNegocio(negocioDtm, dtm, dto);
-            }
-            return negocioDtm;
-        }
         public static NegocioDtm LeerNegocio(ContextoSe contexto, enumNegocio negocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
@@ -87,79 +74,29 @@ namespace GestoresDeNegocio.Negocio
             return gestor.LeerRegistroPorId(idNegocio);
         }
 
+        internal static string ComponerUrl(TipoDtoElmento elemento)
+        {
+            var url = ExtensionesDto.UrlParaMostrarUnDto(elemento.ClaseDto());
+            var refHtml = $@"<a href='{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}' target='_blank' idelemento='2041'>{elemento.Referencia}</a>";
+            return refHtml;
+        }
+
         public NegocioDtm LeerNegocio(enumNegocio negocio, bool errorSiNoHay = true)
         {
             var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, false, false);
             return negocioDtm;
         }
 
-        public NegocioDtm CrearNegocio(enumNegocio negocio,  Type dtm, Type dto, string icono)
+        public bool NegocioActivo(enumNegocio negocio)
         {
-            var negocioDtm = new NegocioDtm();
-            negocioDtm.Nombre = NegociosDeSe.Nombre(negocio);
-            negocioDtm.ElementoDtm = dtm.FullName;
-            negocioDtm.ElementoDto = dto.FullName;
-            negocioDtm.Icono = icono;
-            negocioDtm.Activo = true;
-            var p = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-            return PersistirRegistro(negocioDtm, p );
+            if (!NegociosDeSe.UsaSeguridad(negocio))
+                return true;
+
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre(), false, true);
+            if (registro == null)
+                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.Nombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
+            return registro.Activo;
         }
-
-        public NegocioDtm ActualizarNegocio(NegocioDtm leido,  Type dtm, Type dto)
-        {
-            leido.ElementoDtm = dtm.FullName;
-            leido.ElementoDto = dto.FullName;
-
-            var p = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
-            p.Parametros["ActualizarSeguridad"] = false;
-            return PersistirRegistro(leido, p);
-        }
-
-        protected override IQueryable<NegocioDtm> AplicarFiltros(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarFiltros(registros, filtros, parametros);
-
-            if (HayFiltroPorId)
-                return registros;
-
-            foreach (ClausulaDeFiltrado filtro in filtros)
-            {
-                if (filtro.Clausula.ToLower() == nameof(NegocioDtm.ElementoDtm).ToLower())
-                {
-                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
-                        return registros.Where(x => x.ElementoDtm == filtro.Valor);
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
-                        return registros.Where(x => x.ElementoDtm.Contains(filtro.Valor));
-
-                    if (filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
-                    {
-                        var ids = filtro.Valor.Split(',');
-                        int[] lista = Array.Empty<int>();
-                        int i = 0;
-                        foreach (string s in ids)
-                        {
-                            lista[i] = s.Entero();
-                            i++;
-                        }
-
-                        return registros.Where(x => lista.Contains(x.Id));
-                    }
-                }
-            }
-
-            return registros;
-        }
-
-        protected override IQueryable<NegocioDtm> AplicarJoins(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, filtros, joins, parametros);
-            registros = registros.Include(p => p.PermisoDeAdministrador);
-            registros = registros.Include(p => p.PermisoDeConsultor);
-            registros = registros.Include(p => p.PermisoDeGestor);
-            return registros;
-        }
-
 
         public bool TienePermisos(UsuarioDtm usuarioConectado, enumModoDeAccesoDeDatos permisosNecesarios, enumNegocio negocio)
         {
@@ -213,13 +150,6 @@ namespace GestoresDeNegocio.Negocio
             return (bool)cache[indice];
         }
 
-        internal static string ComponerUrl(TipoDtoElmento elemento)
-        {
-            var url = ExtensionesDto.UrlParaMostrarUnDto(elemento.ClaseDto());
-            var refHtml = $@"<a href='{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}' target='_blank' idelemento='2041'>{elemento.Referencia}</a>";
-            return refHtml;
-        }
-
         internal static TipoDtoElmento ValidarElementoDto(TipoDtoElmento elemento)
         {
             if (elemento.IdElemento <= 0)
@@ -243,6 +173,51 @@ namespace GestoresDeNegocio.Negocio
             return elemento;
         }
 
+        protected override IQueryable<NegocioDtm> AplicarFiltros(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            if (HayFiltroPorId)
+                return registros;
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(NegocioDtm.ElementoDtm).ToLower())
+                {
+                    if (filtro.Criterio == CriteriosDeFiltrado.igual)
+                        return registros.Where(x => x.ElementoDtm == filtro.Valor);
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.contiene)
+                        return registros.Where(x => x.ElementoDtm.Contains(filtro.Valor));
+
+                    if (filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe)
+                    {
+                        var ids = filtro.Valor.Split(',');
+                        int[] lista = Array.Empty<int>();
+                        int i = 0;
+                        foreach (string s in ids)
+                        {
+                            lista[i] = s.Entero();
+                            i++;
+                        }
+
+                        return registros.Where(x => lista.Contains(x.Id));
+                    }
+                }
+            }
+
+            return registros;
+        }
+
+        protected override IQueryable<NegocioDtm> AplicarJoins(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            registros = registros.Include(p => p.PermisoDeAdministrador);
+            registros = registros.Include(p => p.PermisoDeConsultor);
+            registros = registros.Include(p => p.PermisoDeGestor);
+            return registros;
+        }
+
         protected override void AntesDePersistir(NegocioDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
@@ -254,18 +229,27 @@ namespace GestoresDeNegocio.Negocio
                 registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
             }
 
-            if (parametros.Operacion == enumTipoOperacion.Modificar && (!parametros.Parametros.ContainsKey("ActualizarSeguridad") || (bool)parametros.Parametros["ActualizarSeguridad"]))
+            if (parametros.Operacion == enumTipoOperacion.Modificar && (!parametros.Parametros.ContainsKey(NegociosDeSe.ActualizarSeguridad) || (bool)parametros.Parametros[NegociosDeSe.ActualizarSeguridad]))
             {
                 var registroEnBD = (NegocioDtm)parametros.registroEnBd;
                 registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
                 registro.IdPermisoDeGestor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
                 registro.IdPermisoDeConsultor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
+
+                if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
+                {
+                    registro.PermisoDeAdministrador = null;
+                    registro.PermisoDeConsultor = null;
+                    registro.PermisoDeGestor = null;
+                }
+
             }
         }
 
         protected override void DespuesDePersistir(NegocioDtm registro, ParametrosDeNegocio parametros)
         {
             base.DespuesDePersistir(registro, parametros);
+
             if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Eliminar)
             {
                 var cache = $"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}";
@@ -304,15 +288,5 @@ namespace GestoresDeNegocio.Negocio
 
         }
 
-        public bool NegocioActivo(enumNegocio negocio)
-        {
-            if (!NegociosDeSe.UsaSeguridad(negocio))
-                return true;
-
-            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre(), false,true);
-            if (registro == null)
-                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.Nombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
-            return registro.Activo;
-        }
     }
 }

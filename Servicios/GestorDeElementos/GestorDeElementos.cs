@@ -101,7 +101,7 @@ namespace GestorDeElementos
     }
 
 
-    public class GestorDeElementos<TContexto, TRegistro, TElemento>: IGestor, IDisposable
+    public class GestorDeElementos<TContexto, TRegistro, TElemento> : IGestor, IDisposable
         where TRegistro : Registro
         where TElemento : ElementoDto
         where TContexto : ContextoSe
@@ -118,6 +118,8 @@ namespace GestorDeElementos
 
         public string ClaseDto => typeof(TElemento).Name;
         public string ClaseDtm => typeof(TRegistro).Name;
+
+        public static string Traqueado = nameof(Traqueado);
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         : this(contexto)
@@ -279,6 +281,9 @@ namespace GestorDeElementos
             var transaccion = Contexto.IniciarTransaccion();
             try
             {
+                if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
+                    Contexto.ChangeTracker.Clear();
+
                 AntesDePersistir(registro, parametros);
 
                 if (parametros.Operacion == enumTipoOperacion.Insertar)
@@ -359,7 +364,7 @@ namespace GestorDeElementos
             var negocio = NegociosDeSe.NegocioDeUnDtm(registro.GetType().Name);
 
             if (!Contexto.DatosDeConexion.CreandoModelo && (!parametros.Parametros.ContainsKey(NegociosDeSe.ValidarSeguridad) || (bool)parametros.Parametros[NegociosDeSe.ValidarSeguridad]))
-               ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
+                ValidarPermisosDePersistencia(parametros.Operacion, negocio, registro);
 
             if ((parametros.Operacion == enumTipoOperacion.Insertar || parametros.Operacion == enumTipoOperacion.Modificar) && registro.ImplementaNombre())
             {
@@ -493,6 +498,7 @@ namespace GestorDeElementos
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            parametros.Parametros[Traqueado] = traqueado;
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, parametros);
             if (!traqueado)
                 return registros.AsNoTracking().ToList();
@@ -557,6 +563,9 @@ namespace GestorDeElementos
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
             registros = AplicarJoins(registros, filtros, joins, parametros);
+
+            if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
+                registros = registros.AsNoTracking();
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);

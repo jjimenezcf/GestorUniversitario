@@ -65,6 +65,8 @@ namespace GestorDeElementos
     public static class NegociosDeSe
     {
         public  static readonly string ValidarSeguridad = nameof(ValidarSeguridad);
+        public static readonly string ActualizarSeguridad = nameof(ActualizarSeguridad);
+        
 
         private static List<string> _Registros = new List<string>
         {

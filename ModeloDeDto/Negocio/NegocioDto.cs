@@ -2,8 +2,7 @@
 
 namespace ModeloDeDto.Negocio
 {
-    [IUDto(AnchoEtiqueta = 20
-          , AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeCrear = false)]
     public class NegocioDto : ElementoDto
     {
         [IUPropiedad(
@@ -13,11 +12,26 @@ namespace ModeloDeDto.Negocio
           Fila = 0,
           Columna = 0,
           Ordenar = true,
-          PorAnchoMnt = 50
+          PorAnchoMnt = 50,
+          EditableAlCrear = false
           )
         ]
         public string Nombre { get; set; }
+       
+        //-------------------------------------------------        
+        [IUPropiedad(
+          Etiqueta = "Enumerado",
+          Ayuda = "Enumerado asociado al negocio",
+          Tipo = typeof(string),
+          Fila = 0,
+          Columna = 1,
+          EditableAlCrear = false,
+          EditableAlEditar = false
+          )
+          ]
+        public string Enumerado { get; set; }
 
+        //-------------------------------------------------
         [IUPropiedad(
           Etiqueta = "Elemento Dto",
           Ayuda = "Elemento de la vista",
@@ -28,6 +42,7 @@ namespace ModeloDeDto.Negocio
         ]
         public string ElementoDto { get; set; }
 
+        //-------------------------------------------------
         [IUPropiedad(
           Etiqueta = "Elemento Dtm",
           Ayuda = "Elemento de la BD",
@@ -38,6 +53,7 @@ namespace ModeloDeDto.Negocio
         ]
         public string ElementoDtm { get; set; }
 
+        //-------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Icono",
             Ayuda = "Seleccione un icono",
@@ -53,6 +69,7 @@ namespace ModeloDeDto.Negocio
         public string Icono { get; set; }
 
 
+        //-------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Administrador",
             Ayuda = "Permiso de administrador",
@@ -70,6 +87,7 @@ namespace ModeloDeDto.Negocio
         public string PermisoDeAdministrador { get; set; }
 
 
+        //-------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Gestión",
             Ayuda = "Permiso de gestión",
@@ -86,6 +104,7 @@ namespace ModeloDeDto.Negocio
         ]
         public string PermisoDeGestor { get; set; }
 
+        //-------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Consulta",
             Ayuda = "Permiso de consulta",
@@ -102,8 +121,23 @@ namespace ModeloDeDto.Negocio
         ]
         public string PermisoDeConsultor { get; set; }
 
+        //-------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Negocio activo",
+            Ayuda = "indica si el negocio está activo",
+            VisibleEnGrid = false,
+            Obligatorio = true,
+            Fila = 6,
+            Columna = 0,
+            TipoDeControl = enumTipoControl.Check,
+            ValorPorDefecto = false
+            )
+        ]
+        public bool Activo { get; set; }
+
+        //-------------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Usa seguridad",
             Ayuda = "indica si el negocio está activo",
             VisibleEnGrid = false,
             Obligatorio = true,
@@ -113,6 +147,20 @@ namespace ModeloDeDto.Negocio
             ValorPorDefecto = false
             )
         ]
-        public bool Activo { get; set; }
+        public bool UsaSeguridad { get; set; }
+
+        //-------------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Es de parametrización",
+            Ayuda = "indica si el negocio está activo",
+            VisibleEnGrid = false,
+            Obligatorio = true,
+            Fila = 7,
+            Columna = 0,
+            TipoDeControl = enumTipoControl.Check,
+            ValorPorDefecto = false
+            )
+        ]
+        public bool EsDeParametrizacion { get; set; }
     }
 }
