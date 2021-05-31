@@ -213,12 +213,18 @@ var MapearAlControl;
         htmlCanvas.height = 100;
         var canvas = htmlCanvas.getContext('2d');
         var img = new Image();
+        var err = new Image();
+        err.src = "/images/menu/not-found.svg";
         img.src = url;
         img.onload = function () {
             canvas.drawImage(img, 0, 0, 100, 100);
         };
+        img.onerror = cargarImagenPorDefecto;
     }
     MapearAlControl.Url = Url;
+    function cargarImagenPorDefecto(e) {
+        e.target.src = '/images/menu/not-found.svg';
+    }
     function Fecha(control, fecha) {
         var fechaLeida = new Date(fecha);
         if (FechaValida(fechaLeida)) {
