@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using GestoresDeNegocio.Negocio;
+using GestoresDeNegocio.Entorno;
 
 namespace MVCSistemaDeElementos
 {
@@ -20,6 +21,7 @@ namespace MVCSistemaDeElementos
             var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
             InicializarNegocios(services);
+            InicializarVistas(services);
         }
 
         private static void InicializarNegocios(IServiceProvider services)
@@ -29,7 +31,15 @@ namespace MVCSistemaDeElementos
             {
                 PersistenciaDeNegocios.PersistirNegocios(gestor);
             }
+        }
 
+        private static void InicializarVistas(IServiceProvider services)
+        {
+            var scope = services.CreateScope();
+            using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeVistaMvc>())
+            {
+                PersistenciaDeVistas.PersistirVista(gestor);
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

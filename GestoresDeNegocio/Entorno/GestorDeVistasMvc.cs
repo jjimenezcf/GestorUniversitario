@@ -45,24 +45,15 @@ namespace GestoresDeNegocio.Entorno
             return new GestorDeVistaMvc(contexto, mapeador);
         }
 
-
-        public static VistaMvcDtm CrearSiNoExiste(ContextoSe contexto, string nombre, string controlador, string accion, bool mostrarEnModal)
-        {
-            var gestor = Gestor(contexto, contexto.Mapeador);
-            var v = gestor.LeerRegistroCacheado(nameof(VistaMvcDtm.Nombre), nombre, false, true);
-            if (v == null)
-                v = CrearVistaMvc(gestor, nombre, controlador, accion, mostrarEnModal);
-            return v;
-        }
-
-        private static VistaMvcDtm CrearVistaMvc(GestorDeVistaMvc gestor, string nombre, string controlador, string accion, bool mostrarEnModal)
+        public VistaMvcDtm CrearVistaMvc(string nombre, string controlador, string accion, bool mostrarEnModal, string elementoDto)
         {
             var v = new VistaMvcDtm();
             v.Nombre = nombre;
             v.Controlador = controlador;
             v.Accion = accion;
             v.MostrarEnModal = mostrarEnModal;
-            v = gestor.PersistirRegistro(v, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+            v.ElementoDto = elementoDto;
+            v = PersistirRegistro(v, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
             return v;
         }
 
@@ -186,12 +177,16 @@ namespace GestoresDeNegocio.Entorno
         protected override void AntesDePersistir(VistaMvcDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);
+
+            if (!registro.ElementoDto.IsNullOrEmpty())
+               ExtensionesDto.ObtenerTypoDto(registro.ElementoDto);
+
             if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
                 var permiso = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Vista);
                 registro.IdPermiso = permiso.Id;
             }
-            if (parametros.Operacion == enumTipoOperacion.Modificar /*&& registro.IdPermiso == null*/)
+            if (parametros.Operacion == enumTipoOperacion.Modificar)
             {
                 registro.IdPermiso = ((VistaMvcDtm)parametros.registroEnBd).IdPermiso;
             }

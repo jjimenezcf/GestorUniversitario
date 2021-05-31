@@ -4,8 +4,7 @@ using Enumerados;
 namespace ModeloDeDto.Entorno
 {
 
-    [IUDto(AnchoEtiqueta = 20
-         , AnchoSeparador = 5)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeCrear = false, OpcionDeEditar =true, OpcionDeBorrar = false)]
     public class VistaMvcDto : ElementoDto
     {
         [IUPropiedad(
@@ -15,11 +14,12 @@ namespace ModeloDeDto.Entorno
             Fila = 1,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15
+            EditableAlEditar = false
             )
         ]
         public string Nombre { get; set; }
 
+        //--------------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Controlador",
             Ayuda = "Nombre del controlador",
@@ -27,11 +27,12 @@ namespace ModeloDeDto.Entorno
             Fila = 2,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15
+            EditableAlEditar = false
             )
         ]
         public string Controlador { get; set; }
 
+        //----------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Accion",
             Ayuda = "Nombre de la acción",
@@ -39,12 +40,12 @@ namespace ModeloDeDto.Entorno
             Fila = 2,
             Columna = 1,
             Ordenar = true,
-            PorAnchoMnt = 15
+            EditableAlEditar = false
             )
         ]
         public string Accion { get; set; }
 
-
+        //-------------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Parametros",
             Ayuda = "Lista de parámetros de entrada",
@@ -52,13 +53,13 @@ namespace ModeloDeDto.Entorno
             Fila = 3,
             Columna = 0,
             Ordenar = true,
-            PorAnchoMnt = 15,
             Obligatorio = false,
             VisibleEnGrid =false
             )
         ]
         public string Parametros { get; set; }
 
+        //------------------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Mostrar en modal",
             Ayuda = "indica si se ha de mostrar en modal la creación o edición",
@@ -73,7 +74,7 @@ namespace ModeloDeDto.Entorno
         ]
         public string MostrarEnModal { get; set; }
 
-
+        //------------------------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Permiso",
             Ayuda = "Permiso de acceso",
@@ -90,13 +91,15 @@ namespace ModeloDeDto.Entorno
         ]
         public string Permiso { get; set; }
 
+        //----------------------------------------------------------
         [IUPropiedad(
             Etiqueta = "Elemento Dto",
             Ayuda = "Espacio de nombre y clase que se muestra",
             Tipo = typeof(string),
             Fila = 5,
             Columna = 0,
-            VisibleEnGrid =false
+            VisibleEnGrid =true,
+            EditableAlEditar = false
             )
         ]
         public string ElementoDto { get; set; }
