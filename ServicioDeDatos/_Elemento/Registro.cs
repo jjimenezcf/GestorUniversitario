@@ -190,6 +190,14 @@ namespace ServicioDeDatos.Elemento
         {
             return tipoRegistro.GetInterfaces().Contains(typeof(IElementoDtm));
         }
+        public static Type ObtenerTypoDtm(string tipoDtm)
+        {
+            var cache = ServicioDeCaches.Obtener(nameof(ObtenerTypoDtm));
+            if (!cache.ContainsKey(tipoDtm))
+                cache[tipoDtm] = Ensamblados.ObtenerType("ServicioDeDatos.dll", tipoDtm);
+
+            return (Type)cache[tipoDtm];
+        }
 
     }
 

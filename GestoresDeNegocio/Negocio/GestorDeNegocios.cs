@@ -89,6 +89,9 @@ namespace GestoresDeNegocio.Negocio
 
         public bool NegocioActivo(enumNegocio negocio)
         {
+            if (negocio == enumNegocio.No_Definido)
+                return true;
+
             if (!NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
@@ -265,7 +268,11 @@ namespace GestoresDeNegocio.Negocio
                 ServicioDeCaches.EliminarElemento(cache, indice);
 
                 cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorDto)}";
-                indice = $"elementoDto-{registro.ElementoDto}";
+                indice = $"{nameof(NegociosDeSe.Dto)}-{registro.ElementoDto}";
+                ServicioDeCaches.EliminarElemento(cache, indice);
+
+                cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorDtm)}";
+                indice = $"{nameof(NegociosDeSe.Dtm)}-{registro.ElementoDtm}";
                 ServicioDeCaches.EliminarElemento(cache, indice);
             }
         }
