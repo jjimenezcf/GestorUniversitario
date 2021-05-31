@@ -22,6 +22,7 @@ namespace MVCSistemaDeElementos
             var services = scope.ServiceProvider;
             InicializarNegocios(services);
             InicializarVistas(services);
+            InicializarMenus(services);
         }
 
         private static void InicializarNegocios(IServiceProvider services)
@@ -38,7 +39,16 @@ namespace MVCSistemaDeElementos
             var scope = services.CreateScope();
             using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeVistaMvc>())
             {
-                PersistenciaDeVistas.PersistirVista(gestor);
+                PersistenciaDeVistas.PersistirVistas(gestor);
+            }
+        }
+
+        private static void InicializarMenus(IServiceProvider services)
+        {
+            var scope = services.CreateScope();
+            using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeMenus>())
+            {
+                PersistenciaDeMenus.PersistirMenus(gestor);
             }
         }
 

@@ -15,10 +15,11 @@ namespace GestoresDeNegocio.Entorno
 {
     public static class PersistenciaDeVistas
     {
-        public static void PersistirVista(GestorDeVistaMvc gestor)
+        public static void PersistirVistas(GestorDeVistaMvc gestor)
         {
+            return;
             gestor.Contexto.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            gestor.Contexto.IniciarTraza(nameof(PersistirVista));
+            gestor.Contexto.IniciarTraza(nameof(PersistirVistas));
             try
             {
                 gestor.Contexto.DatosDeConexion.CreandoModelo = true;
@@ -48,7 +49,6 @@ namespace GestoresDeNegocio.Entorno
                 CrearVistaSiNoExiste(gestor, "Auditoría de elementos", "Auditoria", "CrudDeAuditoria", false, typeof(AuditoriaDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Correos de usuario", "Correos", "CrudDeCorreos", false, typeof(CorreoDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Parámetros de Negocio", "ParametrosDeNegocio", "CrudDeParametrosDeNegocio", true, typeof(ParametroDeNegocioDto).FullName);
-                CrearVistaSiNoExiste(gestor, "Municipios", "Municipios", "CrudMunicipios", true, typeof(MunicipioDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Municipios", "Municipios", "CrudMunicipios", true, typeof(MunicipioDto).FullName);
             }
             finally

@@ -17,12 +17,12 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
 
 
             new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
-                etiqueta: "País",
+                etiqueta: "Provincia",
                 filtrarPor: nameof(MunicipioDto.IdProvincia),
-                ayuda: "seleccione al país",
-                seleccionarDe: nameof(PaisDto),
-                buscarPor: nameof(PaisDto.Nombre),
-                mostrarExpresion: $"([{nameof(PaisDto.Codigo)}]) [{nameof(PaisDto.Nombre)}]",
+                ayuda: "seleccione la provincia",
+                seleccionarDe: nameof(ProvinciaDto),
+                buscarPor: nameof(ProvinciaDto.Nombre),
+                mostrarExpresion: $"([{nameof(ProvinciaDto.Codigo)}]) [{nameof(ProvinciaDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
                 posicion: new Posicion(0, 0));
 

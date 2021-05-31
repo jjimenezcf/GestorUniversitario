@@ -46,6 +46,21 @@ namespace ModeloDeDto.Callejero
         //----------------------------------------------
 
         [IUPropiedad(
+            Etiqueta = "DC",
+            Ayuda = "Dígito postal",
+            Tipo = typeof(string),
+            Fila = 2,
+            Columna = 0,
+            Obligatorio = true,
+            LongitudMaxima = 3,
+            Alineada = Aliniacion.derecha
+          )
+        ]
+        public string DC { get; set; }
+
+        //----------------------------------------------
+
+        [IUPropiedad(
             Etiqueta = "Municipio",
             Ayuda = "Indique el nombre del municipio",
             Tipo = typeof(string),
@@ -58,21 +73,6 @@ namespace ModeloDeDto.Callejero
           )
         ]
         public string Nombre { get; set; }
-
-        //----------------------------------------------
-
-        [IUPropiedad(
-            Etiqueta = "DC",
-            Ayuda = "Dígito postal",
-            Tipo = typeof(string),
-            Fila = 1,
-            Columna = 0,
-            Obligatorio = true,
-            LongitudMaxima = 3,
-            Alineada = Aliniacion.derecha
-          )
-        ]
-        public string DC { get; set; }
 
 
     }
