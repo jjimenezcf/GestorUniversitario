@@ -159,7 +159,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
-                var modoDeAcceso = LeerModoAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio));
+                var modoDeAcceso = LeerModoAccesoAlNegocio(DatosDeConexion.IdUsuario, NegociosDeSe.ToEnumerado(negocio));
                 r.ModoDeAcceso = modoDeAcceso.Render();
                 r.consola = $"El usuario {DatosDeConexion.Login} tiene permisos de {modoDeAcceso}";
                 r.Estado = enumEstadoPeticion.Ok;

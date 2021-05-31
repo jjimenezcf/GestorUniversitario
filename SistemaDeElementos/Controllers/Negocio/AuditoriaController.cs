@@ -53,7 +53,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                     hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                     if (!hayPermisos)
-                        GestorDeErrores.Emitir($"Solicite al menos permisos de consulta sobre los elementos de negocio {descriptor.Negocio.Nombre()}");
+                        GestorDeErrores.Emitir($"Solicite al menos permisos de consulta sobre los elementos de negocio {descriptor.Negocio.ToNombre()}");
                 }
                 catch(Exception e)
                 {
@@ -63,7 +63,7 @@ namespace MVCSistemaDeElementos.Controllers
 
 
             descriptor.GestorDeNegocio = GestorDeNegocios.Gestor(Contexto, Mapeador);
-            descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, NegociosDeSe.Negocio(negocio));
+            descriptor.negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, NegociosDeSe.ToEnumerado(negocio));
 
             ViewBag.DatosDeConexion = DatosDeConexion;
 
@@ -83,13 +83,13 @@ namespace MVCSistemaDeElementos.Controllers
                 List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
                 var restrictor = ObtenerRestrictores(filtros);
                 var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, restrictor.idNegocio);
-                var modoAcceso = LeerModoAccesoAlNegocio(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocioDtm.Nombre));
+                var modoAcceso = LeerModoAccesoAlNegocio(Contexto.DatosDeConexion.IdUsuario, NegociosDeSe.ToEnumerado(negocioDtm.Nombre));
                 if (modoAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene acceso a los datos de auditoría del negocio {negocioDtm.Nombre}");
 
                 var datos = ApiController.LeerDatosParaElGrid(
-                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios, pos, can)
-                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios));
+                    () => AuditoriaDeNegocio.LeerElementos(Contexto, NegociosDeSe.ToEnumerado(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios, pos, can)
+                  , () => AuditoriaDeNegocio.ContarElementos(Contexto, NegociosDeSe.ToEnumerado(negocioDtm.Nombre), restrictor.idElemento, restrictor.usuarios));
 
                 var infoObtenida = new ResultadoDeLectura();
                 infoObtenida.registros = ApiController.ElementosLeidos(Contexto, datos.elementos.ToList(), () => { return enumModoDeAccesoDeDatos.Consultor; });
@@ -132,7 +132,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             var negocioDtm = GestorDeNegocios.LeerNegocio(Contexto, id32);
 
-            return AuditoriaDeNegocio.LeerElemento(Contexto, NegociosDeSe.Negocio(negocioDtm.Nombre), id);
+            return AuditoriaDeNegocio.LeerElemento(Contexto, NegociosDeSe.ToEnumerado(negocioDtm.Nombre), id);
         }
         protected override enumModoDeAccesoDeDatos LeerModoDeAccesoAlElemento(AuditoriaDto elemento)
         {

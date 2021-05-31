@@ -2,7 +2,7 @@
 
 namespace ModeloDeDto.Negocio
 {
-    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeCrear = false)]
+    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeCrear = false, OpcionDeBorrar = false)]
     public class NegocioDto : ElementoDto
     {
         [IUPropiedad(
@@ -12,7 +12,6 @@ namespace ModeloDeDto.Negocio
           Fila = 0,
           Columna = 0,
           Ordenar = true,
-          PorAnchoMnt = 50,
           EditableAlCrear = false
           )
         ]

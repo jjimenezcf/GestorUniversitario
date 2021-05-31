@@ -295,7 +295,7 @@ namespace MVCSistemaDeElementos.Controllers
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
-                elementos = CargarLista(claseElemento, NegociosDeSe.Negocio(negocio, true), filtros);
+                elementos = CargarLista(claseElemento, NegociosDeSe.ToEnumerado(negocio, nullValido: true), filtros);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -378,7 +378,7 @@ namespace MVCSistemaDeElementos.Controllers
                 opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
 
                 var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
-                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.Negocio(negocio), id);
+                modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ToEnumerado(negocio), id);
                 if (modoDeAcceso == enumModoDeAccesoDeDatos.SinPermiso)
                     GestorDeErrores.Emitir("El usuario conectado no tiene acceso al elemento solicitado");
 
@@ -438,7 +438,7 @@ namespace MVCSistemaDeElementos.Controllers
 
                 hayPermisos = descriptor.GestorDeUsuario.TienePermisoDeDatos(descriptor.UsuarioConectado, enumModoDeAccesoDeDatos.Consultor, descriptor.Negocio);
                 if (!hayPermisos)
-                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {descriptor.Negocio.Nombre()}");
+                    return RenderMensaje($"Solicite al menos permisos de consulta sobre los elementos de negocio {descriptor.Negocio.ToNombre()}");
             }
 
 

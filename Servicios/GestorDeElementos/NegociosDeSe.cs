@@ -93,7 +93,7 @@ namespace GestorDeElementos
 
         public static bool EsUnNegocio(string negocio)
         {
-            return Negocio(negocio) != enumNegocio.No_Definido;
+            return ToEnumerado(negocio) != enumNegocio.No_Definido;
         }
 
         public static bool EsUnNegocio(this enumNegocio negocio)
@@ -109,7 +109,7 @@ namespace GestorDeElementos
             return JsonConvert.SerializeObject(e);
         }
 
-        public static string Nombre(this enumNegocio negocio)
+        public static string ToNombre(this enumNegocio negocio)
         {
             if (negocio == enumNegocio.No_Definido)
                 return enumNegocio.No_Definido.ToString();
@@ -119,15 +119,15 @@ namespace GestorDeElementos
             return negocioDtm.Nombre;
         }
 
-        public static enumNegocio Negocio(string negocio, bool nullValido = false)
+        public static enumNegocio ToEnumerado(string nombre, bool nullValido = false)
         {
-            if (negocio == null && nullValido)
+            if (nombre == null && nullValido)
                 return enumNegocio.No_Definido;
 
-            if (negocio == enumNegocio.No_Definido.ToString())
+            if (nombre == enumNegocio.No_Definido.ToString())
                 return enumNegocio.No_Definido;
 
-            var negocioDtm = LeerNegocioPorNombre(negocio);
+            var negocioDtm = LeerNegocioPorNombre(nombre);
 
             if (negocioDtm == null)
                 return enumNegocio.No_Definido;
@@ -139,7 +139,7 @@ namespace GestorDeElementos
                     return valor;
             }
 
-            throw new Exception($"No se ha localizado como negocio el enumerado {negocio}");
+            throw new Exception($"No se ha localizado como negocio el enumerado {nombre}");
         }
 
         public static enumNegocio NegocioDeUnDto(string elementoDto)

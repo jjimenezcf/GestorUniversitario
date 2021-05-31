@@ -92,9 +92,9 @@ namespace GestoresDeNegocio.Negocio
             if (!NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
-            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre(), false, true);
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre(), false, true);
             if (registro == null)
-                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.Nombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
+                GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.ToNombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
             return registro.Activo;
         }
 
@@ -123,7 +123,7 @@ namespace GestoresDeNegocio.Negocio
                 }
             }
 
-            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.Nombre());
+            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre());
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocios)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
 
@@ -253,7 +253,7 @@ namespace GestoresDeNegocio.Negocio
             if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Eliminar)
             {
                 var cache = $"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}";
-                var patron = $"Negocio:{NegociosDeSe.Nombre(NegociosDeSe.Negocio(registro.Nombre))}";
+                var patron = $"Negocio:registro.Nombre";
                 ServicioDeCaches.EliminarElementos(cache, patron);
 
                 cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorEnumerado)}";

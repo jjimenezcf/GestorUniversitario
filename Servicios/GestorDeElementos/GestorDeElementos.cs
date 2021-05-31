@@ -804,7 +804,7 @@ namespace GestorDeElementos
                 return true;
 
             if (!Contexto.DatosDeConexion.EsAdministrador && NegociosDeSe.EsDeParametrizacion(negocio))
-                GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos de parametrización sobre el negocio {negocio.Nombre()}");
+                GestorDeErrores.Emitir($"El usuario {Contexto.DatosDeConexion.Login} no tiene permisos de parametrización sobre el negocio {negocio.ToNombre()}");
 
             var modoAcceso = LeerModoDeAccesoAlNegocio(Contexto.DatosDeConexion.IdUsuario, negocio);
             var hayPermisos = modoAcceso == enumModoDeAccesoDeDatos.Administrador;
@@ -864,7 +864,7 @@ namespace GestorDeElementos
             enumModoDeAccesoDeDatos modoDelUsuario = enumModoDeAccesoDeDatos.SinPermiso;
 
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}");
-            var indice = $"Usuario:{idUsuario} Negocio:{negocio.Nombre()}";
+            var indice = $"Usuario:{idUsuario} Negocio:{negocio.ToNombre()}";
             if (!cache.ContainsKey(indice))
             {
                 var modosLeidos = ModosDeAccesoAlNegocio(idUsuario, negocio);
@@ -906,7 +906,7 @@ namespace GestorDeElementos
 
         private List<ModoDeAccesoAlNegocioDtm> ModosDeAccesoAlNegocio(int idUsuario, enumNegocio negocio)
         {
-            var nombreNegocio = negocio.Nombre();
+            var nombreNegocio = negocio.ToNombre();
 
             var modosDeAcceso = Contexto
                .ModoAccesoAlNegocio
