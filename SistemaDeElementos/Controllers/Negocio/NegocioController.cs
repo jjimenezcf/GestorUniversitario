@@ -5,6 +5,8 @@ using MVCSistemaDeElementos.Descriptores;
 using GestoresDeNegocio.Negocio;
 using ModeloDeDto.Negocio;
 using ServicioDeDatos.Negocio;
+using GestorDeElementos;
+using System;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -25,6 +27,16 @@ namespace MVCSistemaDeElementos.Controllers
         public IActionResult CrudDeNegocios()
         {
             return ViewCrud(new DescriptorDeNegocio(Contexto, ModoDescriptor.Mantenimiento));
+        }
+
+        protected override ParametrosDeNegocio AntesDeEjecutar_CrearElemento(NegocioDto elemento)
+        {
+            throw new Exception("No se pueden crear negocios desde la aplicación");
+        }
+
+        protected override ParametrosDeNegocio AntesDeEjecutar_BorrarPorId(NegocioDto elemento)
+        {
+            throw new Exception("No se pueden borrar negocios desde la aplicación");
         }
 
 

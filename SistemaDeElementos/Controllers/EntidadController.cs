@@ -144,7 +144,8 @@ namespace MVCSistemaDeElementos.Controllers
                 foreach (var id in listaIds)
                 {
                     var elemento = GestorDeElementos.LeerElementoPorId(id);
-                    GestorDeElementos.PersistirElementoDto(elemento, new ParametrosDeNegocio(enumTipoOperacion.Eliminar));
+                    var p = AntesDeEjecutar_BorrarPorId(elemento);
+                    GestorDeElementos.PersistirElementoDto(elemento, p);
                 }
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = listaIds.Count > 1 ? "Registros eliminados" : "Registro eliminado";
@@ -157,6 +158,11 @@ namespace MVCSistemaDeElementos.Controllers
             }
 
             return new JsonResult(r);
+        }
+
+        protected virtual ParametrosDeNegocio AntesDeEjecutar_BorrarPorId(TElemento elemento)
+        {
+            return new ParametrosDeNegocio(enumTipoOperacion.Eliminar);
         }
 
         //END-POINT: Desde GridDeDatos.ts
