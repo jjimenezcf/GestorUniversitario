@@ -212,7 +212,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\Users\jjime\Documents\Programas\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\Users\jjimenezc\desarrollo\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>

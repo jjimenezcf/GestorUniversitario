@@ -10,6 +10,12 @@ using ModeloDeDto.Negocio;
 using GestorDeElementos;
 using ModeloDeDto.Callejero;
 using ServicioDeDatos.Callejero;
+using ServicioDeDatos.Entorno;
+using ModeloDeDto.Entorno;
+using ServicioDeDatos.Seguridad;
+using ModeloDeDto.Seguridad;
+using ServicioDeDatos.TrabajosSometidos;
+using ModeloDeDto.TrabajosSometidos;
 
 namespace MVCSistemaDeElementos
 {
@@ -38,7 +44,18 @@ namespace MVCSistemaDeElementos
                 try
                 {
                     gestor.Contexto.DatosDeConexion.CreandoModelo = true;
-                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Municipio, typeof(MunicipioDtm), typeof(MunicipioDto), "");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Usuario, typeof(UsuarioDtm), typeof(UsuarioDto), "usuario.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.VistaMvc, typeof(VistaMvcDtm), typeof(VistaMvcDto), "vista.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Variable, typeof(VariableDtm), typeof(VariableDto), "cog-solid.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Menu, typeof(MenuDtm), typeof(MenuDto), "funcionalidad-3.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Puesto, typeof(PuestoDtm), typeof(PuestoDto), "puestoDeTrabajo.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Permiso, typeof(PermisoDtm), typeof(PermisoDto), "acceso.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Negocio, typeof(NegocioDtm), typeof(NegocioDto), "red.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Rol, typeof(RolDtm), typeof(RolDto), "roles.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Pais, typeof(PaisDtm), typeof(PaisDto), "paises_1.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Provincia, typeof(ProvinciaDtm), typeof(ProvinciaDto), "provincias_1.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Correo, typeof(CorreoDtm), typeof(CorreoDto), "Correo_1.svg");
+                    GestorDeNegocios.CrearNegocioSiNoExiste(gestor.Contexto, enumNegocio.Municipio, typeof(MunicipioDtm), typeof(MunicipioDto), "cambio.svg");
                 }
                 finally
                 {

@@ -34,18 +34,18 @@ namespace GestorDeElementos
         No_Definido,
         Usuario,
         VistaMvc,
-        Menu,
-        PermisosDeUnUsuario,
         Variable,
-        Negocio,
-        ClasePermiso,
+        Menu,
+        Puesto,
+        PermisosDeUnUsuario,
         Permiso,
+        Negocio,
+        Rol,
+        ClasePermiso,
         PermisosDeUnPuesto,
         PermisosDeUnRol,
-        Puesto,
         PuestosDeUnRol,
         PuestosDeUnUsuario,
-        Rol,
         RolesDeUnPermiso,
         RolesDeUnPuesto,
         TipoPermiso,
@@ -66,33 +66,6 @@ namespace GestorDeElementos
     {
         public  static readonly string ValidarSeguridad = nameof(ValidarSeguridad);
 
-        private static List<enumNegocio> _negociosConSeguridad = new List<enumNegocio>
-        {
-           enumNegocio.Usuario,
-           enumNegocio.VistaMvc,
-           enumNegocio.Menu,
-           enumNegocio.Variable,
-           enumNegocio.Negocio,
-           enumNegocio.Permiso,
-           enumNegocio.Puesto,
-           enumNegocio.Rol,
-           enumNegocio.Pais,
-           enumNegocio.Provincia,
-           enumNegocio.Municipio
-        };
-
-        private static List<enumNegocio> _negociosDeParametrizacion = new List<enumNegocio>
-        {
-           enumNegocio.VistaMvc,
-           enumNegocio.Menu,
-           enumNegocio.Variable,
-           enumNegocio.Negocio,
-           enumNegocio.Permiso,
-           enumNegocio.Usuario,
-           enumNegocio.Correo
-        };
-
-
         private static List<string> _Registros = new List<string>
         {
            nameof(PermisosDeUnPuestoDtm).Replace("Dtm",""),
@@ -101,12 +74,14 @@ namespace GestorDeElementos
 
         public static bool EsDeParametrizacion(enumNegocio negocio)
         {
-            return _negociosDeParametrizacion.Contains(negocio);
+            var negocioDto = LeerNegocioPorEnumerado(negocio);
+            return negocioDto.EsDeParametrizacion;
         }
 
         public static bool UsaSeguridad(enumNegocio negocio)
         {
-            return _negociosConSeguridad.Contains(negocio);
+            var negocioDto = LeerNegocioPorEnumerado(negocio);
+            return negocioDto.EsDeParametrizacion;
         }
 
         public static bool EsUnRegistro(string negocio)
@@ -124,7 +99,6 @@ namespace GestorDeElementos
             return negocio != enumNegocio.No_Definido;
         }
 
-
         public static string ToJson(this List<TipoDtoElmento> e)
         {
             if (e == null)
@@ -137,23 +111,10 @@ namespace GestorDeElementos
         {
             if (negocio == enumNegocio.No_Definido)
                 return enumNegocio.No_Definido.ToString();
-            
-            switch (negocio)
-            {
-                case enumNegocio.Usuario: return "Usuarios";
-                case enumNegocio.VistaMvc: return "Vistas";
-                case enumNegocio.Variable: return "Variables";
-                case enumNegocio.Menu: return "Menus";
-                case enumNegocio.Puesto: return "Puestos";
-                case enumNegocio.Negocio: return "Negocios";
-                case enumNegocio.Permiso: return "Permisos";
-                case enumNegocio.Rol: return "Roles";
-                case enumNegocio.Pais: return "Paises";
-                case enumNegocio.Provincia: return "Provincias";
-                case enumNegocio.Municipio: return "Municipios";
-                case enumNegocio.Correo: return "Correos";
-            }
-            throw new Exception($"El negocio {negocio} no está definido, no se puede obtener su nombre");
+
+            var negocioDtm = LeerNegocioPorEnumerado(negocio);
+
+            return negocioDtm.Nombre;
         }
 
         public static enumNegocio Negocio(string negocio, bool nullValido = false)
@@ -164,22 +125,19 @@ namespace GestorDeElementos
             if (negocio == enumNegocio.No_Definido.ToString())
                 return enumNegocio.No_Definido;
 
-            switch (negocio)
+            var negocioDtm = LeerNegocioPorNombre(negocio);
+
+            if (negocioDtm == null)
+                return enumNegocio.No_Definido;
+
+            foreach (enumNegocio valor in Enum.GetValues(typeof(enumNegocio)))
             {
-                case "Usuarios": return enumNegocio.Usuario;
-                case "Vistas": return enumNegocio.VistaMvc;
-                case "Permisos": return enumNegocio.Permiso;
-                case "Menus": return enumNegocio.Menu;
-                case "Variables": return enumNegocio.Variable;
-                case "Negocios": return enumNegocio.Negocio;
-                case "Puestos": return enumNegocio.Puesto;
-                case "Roles": return enumNegocio.Rol;
-                case "Paises": return enumNegocio.Pais;
-                case "Provincias": return enumNegocio.Provincia;
-                case "Correos": return enumNegocio.Correo;
+                var texto = valor.ToDescription();
+                if (texto == negocioDtm.Enumerado)
+                    return valor;
             }
 
-            return enumNegocio.No_Definido;
+            throw new Exception($"No se ha localizado como negocio el enumerado {negocio}");
         }
 
         public static enumNegocio NegocioDeUnDto(string elementoDto)
@@ -246,22 +204,54 @@ namespace GestorDeElementos
 
         public static string UrlParaMostrarUnNegocio(enumNegocio negocio)
         {
-            var cache = ServicioDeCaches.Obtener(typeof(NegocioDtm).FullName);
-            var nombreNegocio = negocio.Nombre();
+            var negocioDto = LeerNegocioPorEnumerado(negocio);
+            var elementoDto = negocioDto.ElementoDto;
+            
+            if (elementoDto.IsNullOrEmpty()) 
+                GestorDeErrores.Emitir($"No se ha definido el elementoDto para el negocio {negocioDto.Nombre}");
+
+            var tipoDto = ExtensionesDto.ObtenerTypoDto(elementoDto);
+            return ExtensionesDto.UrlParaMostrarUnDto(tipoDto);
+        }
+
+        public static NegocioDtm LeerNegocioPorEnumerado(enumNegocio negocio)
+        {
+            var cache = ServicioDeCaches.Obtener($"{nameof(NegociosDeSe)}.{nameof(LeerNegocioPorEnumerado)}");
+            var nombreEnumerado = negocio.ToString();
+            var indice = $"{nameof(enumNegocio)}-{nombreEnumerado}";
+            if (!cache.ContainsKey(indice))
+            {
+                var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorEnumerado);
+                var valores = new Dictionary<string, object> { { $"@{nameof(NegocioDtm.Enumerado)}", nombreEnumerado } };
+                var negocios = consulta.LanzarConsulta(new DynamicParameters(valores));
+                
+                if (negocios.Count != 1)
+                    GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio con el enumerado {nombreEnumerado}");
+                
+                cache[indice] = negocios[0];
+            }
+            return (NegocioDtm)cache[indice];
+        }
+
+        public static NegocioDtm LeerNegocioPorNombre(string nombreNegocio)
+        {
+            var cache = ServicioDeCaches.Obtener($"{nameof(NegociosDeSe)}.{nameof(LeerNegocioPorNombre)}");
             var indice = $"{nameof(INombre.Nombre)}-{nombreNegocio}";
             if (!cache.ContainsKey(indice))
             {
                 var consulta = new ConsultaSql<NegocioDtm>(NegocioSqls.LeerNegocioPorNombre);
                 var valores = new Dictionary<string, object> { { $"@{nameof(INombre.Nombre)}", nombreNegocio } };
                 var negocios = consulta.LanzarConsulta(new DynamicParameters(valores));
-                if (negocios.Count != 1) GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio {nombreNegocio}");
+                
+                if (negocios.Count > 1)
+                    GestorDeErrores.Emitir($"No se ha localizado de forma unívoca el negocio {nombreNegocio}");
+
+                if (negocios.Count == 0)
+                    return null;
+
                 cache[indice] = negocios[0];
             }
-            var elementoDto = ((NegocioDtm)cache[indice]).ElementoDto;
-            if (elementoDto.IsNullOrEmpty()) GestorDeErrores.Emitir($"No se ha definido el elementoDto para el negocio {nombreNegocio}");
-
-            var tipoDto = ExtensionesDto.ObtenerTypoDto(elementoDto);
-            return ExtensionesDto.UrlParaMostrarUnDto(tipoDto);
+            return (NegocioDtm)cache[indice];
         }
 
         internal static Type TipoDto(this enumNegocio negocio)

@@ -69,6 +69,10 @@ namespace GestoresDeNegocio.Negocio
             {
                negocioDtm = gestor.CrearNegocio(negocio, dtm, dto, icono);
             }
+            else
+            {
+                negocioDtm = gestor.ActualizarNegocio(negocioDtm, dtm, dto);
+            }
             return negocioDtm;
         }
         public static NegocioDtm LeerNegocio(ContextoSe contexto, enumNegocio negocio)
@@ -85,7 +89,7 @@ namespace GestoresDeNegocio.Negocio
 
         public NegocioDtm LeerNegocio(enumNegocio negocio, bool errorSiNoHay = true)
         {
-            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Nombre), negocio.Nombre(), errorSiNoHay, true, false, false);
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, false, false);
             return negocioDtm;
         }
 
@@ -99,6 +103,16 @@ namespace GestoresDeNegocio.Negocio
             negocioDtm.Activo = true;
             var p = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
             return PersistirRegistro(negocioDtm, p );
+        }
+
+        public NegocioDtm ActualizarNegocio(NegocioDtm leido,  Type dtm, Type dto)
+        {
+            leido.ElementoDtm = dtm.FullName;
+            leido.ElementoDto = dto.FullName;
+
+            var p = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
+            p.Parametros["ActualizarSeguridad"] = false;
+            return PersistirRegistro(leido, p);
         }
 
         protected override IQueryable<NegocioDtm> AplicarFiltros(IQueryable<NegocioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
@@ -240,7 +254,7 @@ namespace GestoresDeNegocio.Negocio
                 registro.IdPermisoDeConsultor = GestorDePermisos.CrearObtener(Contexto, Mapeador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
             }
 
-            if (parametros.Operacion == enumTipoOperacion.Modificar)
+            if (parametros.Operacion == enumTipoOperacion.Modificar && (!parametros.Parametros.ContainsKey("ActualizarSeguridad") || (bool)parametros.Parametros["ActualizarSeguridad"]))
             {
                 var registroEnBD = (NegocioDtm)parametros.registroEnBd;
                 registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
@@ -257,6 +271,14 @@ namespace GestoresDeNegocio.Negocio
                 var cache = $"{nameof(GestorDeElementos)}.{nameof(LeerModoDeAccesoAlNegocio)}";
                 var patron = $"Negocio:{NegociosDeSe.Nombre(NegociosDeSe.Negocio(registro.Nombre))}";
                 ServicioDeCaches.EliminarElementos(cache, patron);
+
+                cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorEnumerado)}";
+                var indice = $"{nameof(enumNegocio)}-{registro.Enumerado}";
+                ServicioDeCaches.EliminarElemento(cache, indice);
+
+                cache = $"{nameof(NegociosDeSe)}.{nameof(NegociosDeSe.LeerNegocioPorNombre)}";
+                indice = $"{nameof(INombre)}-{registro.Nombre}";
+                ServicioDeCaches.EliminarElemento(cache, indice);
             }
         }
 

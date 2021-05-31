@@ -495,7 +495,7 @@ namespace GestorDeElementos
             var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, parametros);
             if (!traqueado)
-                registros = registros.AsNoTracking();
+                return registros.AsNoTracking().ToList();
             return registros.ToList();
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -33,12 +34,16 @@ namespace ServicioDeDatos.Negocio
         public PermisoDtm PermisoDeConsultor { get; set; }
         public PermisoDtm PermisoDeAdministrador { get; set; }
 
+        public bool UsaSeguridad { get; set; }
+        public bool EsDeParametrizacion { get; set; }
+        public string Enumerado { get; set; }
+
 
     }
 
     public static class NegocioSqls
     {
-        public static readonly string LeerNegocioPorNombre = @"
+        private static readonly string LeerNegocio = @"
 SELECT [ID]
       ,[ELEMENTO_DTM] as ElementoDtm
       ,[ICONO]
@@ -48,8 +53,29 @@ SELECT [ID]
       ,[IDPERMISO_ADMINISTRADOR] as IdPermisoDeAdministrador
       ,[NOMBRE]
       ,[ELEMENTO_DTO] as ElementoDto
-FROM [NEGOCIO].[NEGOCIO]
-WHERE [NOMBRE] like @Nombre";
+      ,[USA_SEGURIDAD] as UsaSeguridad
+      ,[ES_DE_PARAMETRIZACION] as EsDeParametrizacion
+      ,[ENUMERADO] as Enumerado
+FROM [NEGOCIO].[NEGOCIO]";
+
+        public static readonly string LeerNegocioPorNombre = $@"{LeerNegocio}{Environment.NewLine} WHERE [NOMBRE] like @Nombre";
+        public static readonly string LeerNegocioPorEnumerado = $@"{LeerNegocio}{Environment.NewLine} WHERE [ENUMERADO] like @Enumerado";
+
+        private static readonly string Actualizar = $@"
+UPDATE [NEGOCIO].[NEGOCIO]
+   SET [ELEMENTO_DTM] = @ElementoDtm
+      ,[ICONO] =  @Icono
+      ,[ACTIVO] = @Activo
+      ,[IDPERMISO_GESTOR] = @IdPermisoGestor
+      ,[IDPERMISO_CONSULTOR] = @IdPermisoConsultor
+      ,[IDPERMISO_ADMINISTRADOR] = @IdPermisoAdministrador
+      ,[NOMBRE] = @Nombre
+      ,[ELEMENTO_DTO] = @ElementoDto
+      ,[ENUMERADO] = @Enumerado
+      ,[ES_DE_PARAMETRIZACION] = @EsDeParametrizacion
+      ,[USA_SEGURIDAD] = @UsaSeguridad
+ WHERE ID = @ID
+";
     }
 
     public static class TablaNegocio
@@ -60,6 +86,11 @@ WHERE [NOMBRE] like @Nombre";
             modelBuilder.Entity<NegocioDtm>().Property(p => p.Activo).IsRequired(true).HasDefaultValue(true);
             modelBuilder.Entity<NegocioDtm>().Property(p => p.ElementoDtm).HasColumnName("ELEMENTO_DTM").HasColumnType("VARCHAR(250)").IsRequired(true);
             modelBuilder.Entity<NegocioDtm>().Property(p => p.ElementoDto).HasColumnName("ELEMENTO_DTO").HasColumnType("VARCHAR(250)").IsRequired(false);
+
+            modelBuilder.Entity<NegocioDtm>().Property(p => p.UsaSeguridad).HasColumnName("USA_SEGURIDAD").HasColumnType("BIT").IsRequired(true).HasDefaultValue(true);
+            modelBuilder.Entity<NegocioDtm>().Property(p => p.EsDeParametrizacion).HasColumnName("ES_DE_PARAMETRIZACION").HasColumnType("BIT").IsRequired(true).HasDefaultValue(false);
+
+            modelBuilder.Entity<NegocioDtm>().Property(p => p.Enumerado).HasColumnName("ENUMERADO").HasColumnType("VARCHAR(250)").IsRequired(true);
 
             modelBuilder.Entity<NegocioDtm>()
             .HasOne(p => p.PermisoDeGestor)

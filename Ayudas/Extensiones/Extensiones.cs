@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace Utilidades
@@ -165,7 +166,6 @@ namespace Utilidades
 
     }
 
-
     public static class Excepciones
     {
         public static string MensajeCompleto(this Exception exc, bool mostrarPila = false)
@@ -187,6 +187,29 @@ namespace Utilidades
             return result;
         }
 
+    }
+
+    public static class EnumExtensions
+    {
+        public static string ToDescription<T>(this T valorEnumerado)
+        {
+            var type = valorEnumerado.GetType();
+            if (!type.IsEnum)
+            {
+                throw new Exception($"{nameof(valorEnumerado)} debe ser un valor de enumerado");
+            }
+            var memberInfo = type.GetMember(valorEnumerado.ToString());
+            if (memberInfo.Length > 0)
+            {
+                var attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                if (attrs.Length > 0)
+                {
+                    return ((DescriptionAttribute)attrs[0]).Description;
+                }
+            }
+            return valorEnumerado.ToString();
+        }
     }
 
 }
