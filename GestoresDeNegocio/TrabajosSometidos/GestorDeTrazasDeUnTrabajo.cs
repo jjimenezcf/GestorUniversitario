@@ -69,7 +69,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 return AnotarTraza(contextoTu, tu, traza);
 
             var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
-            var t = gestorTraza.LeerRegistroPorId(id, false);
+            var t = gestorTraza.LeerRegistroPorId(id, true, true, true);
             t.Traza = traza;
             gestorTraza.PersistirRegistro(t, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
 
@@ -86,7 +86,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
             ClausulaDeFiltrado clausulaDeFiltrado = new ClausulaDeFiltrado() { Clausula = nameof(TrazaDeUnTrabajoDtm.IdTrabajoDeUsuario), Criterio = ModeloDeDto.CriteriosDeFiltrado.igual, Valor = id.ToString() };
-            var traza = gestorTraza.LeerUltimoRegistro(new List<ClausulaDeFiltrado>() { clausulaDeFiltrado });
+            var traza = gestorTraza.LeerUltimoRegistro(new List<ClausulaDeFiltrado>() { clausulaDeFiltrado }, null, new ParametrosDeNegocio(enumTipoOperacion.LeerConBloqueo));
             return traza;
         }
     }

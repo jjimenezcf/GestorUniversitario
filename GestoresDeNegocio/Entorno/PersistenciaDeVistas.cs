@@ -17,8 +17,6 @@ namespace GestoresDeNegocio.Entorno
     {
         public static void PersistirVistas(GestorDeVistaMvc gestor)
         {
-            return;
-            gestor.Contexto.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             gestor.Contexto.IniciarTraza(nameof(PersistirVistas));
             try
             {

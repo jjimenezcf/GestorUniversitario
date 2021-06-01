@@ -14,7 +14,6 @@ namespace GestoresDeNegocio.Entorno
     {
         public static void PersistirMenus(GestorDeMenus gestor)
         {
-            gestor.Contexto.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             gestor.Contexto.IniciarTraza(nameof(PersistirMenus));
             try
             {

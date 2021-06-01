@@ -18,8 +18,6 @@ namespace GestoresDeNegocio.Negocio
     {
         public static void PersistirNegocios(GestorDeNegocios gestor)
         {
-            return;
-            gestor.Contexto.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             gestor.Contexto.IniciarTraza(nameof(PersistirNegocios));
             try
             {
@@ -45,7 +43,7 @@ namespace GestoresDeNegocio.Negocio
 
         private static NegocioDtm CrearNegocioSiNoExiste(GestorDeNegocios gestor, enumNegocio negocio, string nombre, Type dtm, Type dto, string icono)
         {
-            var negocioDtm = gestor.LeerNegocio(negocio, errorSiNoHay: false);
+            var negocioDtm = gestor.LeerNegocioParaModificar(negocio, errorSiNoHay: false);
             if (negocioDtm == null)
             {
                 negocioDtm = CrearNegocio(gestor, negocio, nombre,  dtm, dto, icono);
@@ -77,7 +75,6 @@ namespace GestoresDeNegocio.Negocio
 
             var p = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
             p.Parametros[NegociosDeSe.ActualizarSeguridad] = true;
-            p.Parametros[GestorDeNegocios.Traqueado] = false;
             return gestor.PersistirRegistro(leido, p);
         }
 

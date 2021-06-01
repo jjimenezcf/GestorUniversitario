@@ -67,7 +67,7 @@ namespace GestoresDeNegocio.Seguridad
             }
             else
             {
-                var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso);
+                var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso, true, false, false);
                 if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Vista))
                     ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
                 if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Negocio))

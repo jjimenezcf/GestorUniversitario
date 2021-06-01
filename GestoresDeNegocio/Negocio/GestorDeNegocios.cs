@@ -71,7 +71,7 @@ namespace GestoresDeNegocio.Negocio
         public static NegocioDtm LeerNegocio(ContextoSe contexto, int idNegocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistroPorId(idNegocio);
+            return gestor.LeerRegistroPorId(idNegocio, true, false, false);
         }
 
         internal static string ComponerUrl(TipoDtoElmento elemento)
@@ -84,6 +84,12 @@ namespace GestoresDeNegocio.Negocio
         public NegocioDtm LeerNegocio(enumNegocio negocio, bool errorSiNoHay = true)
         {
             var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, false, false);
+            return negocioDtm;
+        }
+
+        public NegocioDtm LeerNegocioParaModificar(enumNegocio negocio, bool errorSiNoHay = true)
+        {
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, true, false);
             return negocioDtm;
         }
 
@@ -234,18 +240,10 @@ namespace GestoresDeNegocio.Negocio
 
             if (parametros.Operacion == enumTipoOperacion.Modificar && (!parametros.Parametros.ContainsKey(NegociosDeSe.ActualizarSeguridad) || (bool)parametros.Parametros[NegociosDeSe.ActualizarSeguridad]))
             {
-                var registroEnBD = (NegocioDtm)parametros.registroEnBd;
+                var registroEnBD = registro;
                 registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
                 registro.IdPermisoDeGestor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
                 registro.IdPermisoDeConsultor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
-
-                if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
-                {
-                    registro.PermisoDeAdministrador = null;
-                    registro.PermisoDeConsultor = null;
-                    registro.PermisoDeGestor = null;
-                }
-
             }
         }
 

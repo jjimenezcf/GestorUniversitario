@@ -78,12 +78,19 @@ namespace GestorDeElementos
     public class ParametrosDeNegocio
     {
         public enumTipoOperacion Operacion { get; private set; }
+        public bool LeerParaActualizar { get; set; } = false;
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
         public IRegistro registroEnBd = null;
 
         public ParametrosDeNegocio(enumTipoOperacion tipo)
         {
             Operacion = tipo;
+
+            if (tipo == enumTipoOperacion.LeerConBloqueo)
+                LeerParaActualizar = true;
+
+            if (tipo == enumTipoOperacion.LeerSinBloqueo)
+                LeerParaActualizar = false;
         }
     }
 
@@ -118,8 +125,6 @@ namespace GestorDeElementos
 
         public string ClaseDto => typeof(TElemento).Name;
         public string ClaseDtm => typeof(TRegistro).Name;
-
-        public static string Traqueado = nameof(Traqueado);
 
         public GestorDeElementos(TContexto contexto, IMapper mapeador)
         : this(contexto)
@@ -276,14 +281,11 @@ namespace GestorDeElementos
         public TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             if (parametros.Operacion != enumTipoOperacion.Insertar)
-                parametros.registroEnBd = LeerRegistroPorId(registro.Id);
+                parametros.registroEnBd = LeerRegistroPorId(registro.Id, false, false, false);
 
             var transaccion = Contexto.IniciarTransaccion();
             try
             {
-                if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
-                    Contexto.ChangeTracker.Clear();
-
                 AntesDePersistir(registro, parametros);
 
                 if (parametros.Operacion == enumTipoOperacion.Insertar)
@@ -394,7 +396,7 @@ namespace GestorDeElementos
             TRegistro elementoDtm;
             var parametros = opcionesDelMapeo == null ? new ParametrosDeMapeo() : new ParametrosDeMapeo() { Opciones = opcionesDelMapeo };
 
-            elementoDtm = LeerRegistroPorId(id);
+            elementoDtm = LeerRegistroPorId(id, true, false, false);
             return MapearElemento(elementoDtm, parametros);
         }
 
@@ -419,7 +421,7 @@ namespace GestorDeElementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache = true, bool traqueado = false, bool conBloqueo = false)
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache , bool traqueado , bool conBloqueo )
         {
             if (!usarLaCache)
                 return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado, conBloqueo);
@@ -498,10 +500,11 @@ namespace GestorDeElementos
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
             var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
-            parametros.Parametros[Traqueado] = traqueado;
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, parametros);
+
             if (!traqueado)
                 return registros.AsNoTracking().ToList();
+
             return registros.ToList();
         }
 
@@ -530,15 +533,16 @@ namespace GestorDeElementos
                 transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted;
                 using (var transactionScope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required, transactionOptions))
                 {
-                    elementosDeBd = registros.AsNoTracking().ToList();
+                    elementosDeBd = parametros.LeerParaActualizar ? registros.ToList() : registros.AsNoTracking().ToList();
                     transactionScope.Complete();
                 }
             }
             else
-                elementosDeBd = registros.AsNoTracking().ToList();
+                elementosDeBd = parametros.LeerParaActualizar ? registros.ToList() : registros.AsNoTracking().ToList();
 
             return elementosDeBd;
         }
+
         public TRegistro LeerUltimoRegistro(List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)
         {
             if (parametros == null)
@@ -547,7 +551,8 @@ namespace GestorDeElementos
             var orden = new ClausulaDeOrdenacion() { OrdenarPor = nameof(IRegistro.Id), Modo = ModoDeOrdenancion.descendente };
 
             var registros = DefinirConsulta(0, -1, filtros, new List<ClausulaDeOrdenacion> { orden }, joins, parametros);
-            var registro = registros.AsNoTracking().FirstOrDefault();
+
+            var registro = parametros.LeerParaActualizar ? registros.FirstOrDefault(): registros.AsNoTracking().FirstOrDefault();
 
             return registro;
         }
@@ -563,9 +568,6 @@ namespace GestorDeElementos
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
             registros = AplicarJoins(registros, filtros, joins, parametros);
-
-            if (parametros.Parametros.ContainsKey(Traqueado) && !((bool)parametros.Parametros[Traqueado]))
-                registros = registros.AsNoTracking();
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);

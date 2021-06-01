@@ -220,17 +220,17 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario)
         {
             var gestorTu = Gestor(contextoTu);
-            var tu = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, false);
-            var entorno = new EntornoDeTrabajo(gestorTu, tu);
+            var tuDtm = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
+            var entorno = new EntornoDeTrabajo(gestorTu, tuDtm);
 
             entorno.PonerSemaforo();
             var tran = entorno.IniciarTransaccion();
 
             try
             {
-                tu.Iniciado = DateTime.Now;
-                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
-                tu = entorno.GestorDelTrabajo.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+                tuDtm.Iniciado = DateTime.Now;
+                tuDtm.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.iniciado);
+                tuDtm = entorno.GestorDelTrabajo.PersistirRegistro(tuDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                 entorno.Commit(tran);
             }
             catch (Exception e)
@@ -286,19 +286,19 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+            var tuDtm = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
             try
             {
-                if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
-                    throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tu.Estado)}");
-                tu.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
-                gestor.PersistirRegistro(tu, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
-                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"Trabajo bloqueado por el usuario {contexto.DatosDeConexion.Login}");
+                if (tuDtm.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
+                    throw new Exception($"El trabajo no se puede bloquear, ha de estar en estado pendiente y está en estado {TrabajoSometido.ToDto(tuDtm.Estado)}");
+                tuDtm.Estado = TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado);
+                gestor.PersistirRegistro(tuDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tuDtm, $"Trabajo bloqueado por el usuario {contexto.DatosDeConexion.Login}");
             }
             catch (Exception e)
             {
-                GestorDeErroresDeUnTrabajo.AnotarError(contexto, tu, e);
-                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tu, $"El usuario {contexto.DatosDeConexion.Login} no ha podido bloquear el trabajo");
+                GestorDeErroresDeUnTrabajo.AnotarError(contexto, tuDtm, e);
+                GestorDeTrazasDeUnTrabajo.AnotarTraza(contexto, tuDtm, $"El usuario {contexto.DatosDeConexion.Login} no ha podido bloquear el trabajo");
                 throw;
             }
         }
@@ -306,7 +306,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
             try
             {
                 if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
@@ -326,7 +326,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Resometer(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, false);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
 
             if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error) &&
                 tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores) &&

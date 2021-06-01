@@ -61,7 +61,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                var usuario = GestorDeElementos.LeerRegistroPorId(GestorDeElementos.Contexto.DatosDeConexion.IdUsuario);
+                var usuario = GestorDeElementos.LeerRegistroPorId(GestorDeElementos.Contexto.DatosDeConexion.IdUsuario, true, false, false);
                 r.consola = $"registro de usuario de conexión leido correctamente";
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Datos = new UsuarioDeConexion() { login = usuario.Login, id = usuario.Id, mail = usuario.eMail, administrador = DatosDeConexion.EsAdministrador ? "S" : "N" };

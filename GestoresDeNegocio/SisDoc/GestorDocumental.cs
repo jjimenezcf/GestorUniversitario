@@ -62,7 +62,7 @@ namespace GestoresDeNegocio.Archivos
 
         private string DescargarArchivoInterno(int idArchivo)
         {
-            var archivo = LeerRegistroPorId(idArchivo);
+            var archivo = LeerRegistroPorId(idArchivo, true, false, false);
             var rutaConFichero = GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn);
             return rutaConFichero;
         }
