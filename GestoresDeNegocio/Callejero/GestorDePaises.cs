@@ -46,7 +46,7 @@ namespace GestoresDeNegocio.Callejero
         public GestorDePaises(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
-            
+
         }
 
         public static GestorDePaises Gestor(ContextoSe contexto, IMapper mapeador)
@@ -61,10 +61,10 @@ namespace GestoresDeNegocio.Callejero
             return MapearElementos(registros).ToList();
         }
 
-        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string codigoPais)
+        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string iso2Pais, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), codigoPais, true, true, false, false);
+            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), iso2Pais, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
         }
 
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
@@ -140,7 +140,7 @@ namespace GestoresDeNegocio.Callejero
                     if (fila["E"].IsNullOrEmpty())
                         GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el prefijo telefónico, celda E, no puede ser nulo");
 
-                    ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"],fila["D"], fila["E"], idTrazaInformativa);
+                    ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"], fila["D"], fila["E"], idTrazaInformativa);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -157,7 +157,7 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, int idTrazaInformativa )
+        private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, int idTrazaInformativa)
         {
             ParametrosDeNegocio operacion;
             var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, false, false);
@@ -170,7 +170,7 @@ namespace GestoresDeNegocio.Callejero
                 p.ISO2 = Iso2;
                 p.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-                entorno.AnotarTraza(idTrazaInformativa,$"Creando el pais {nombrePais}");
+                entorno.AnotarTraza(idTrazaInformativa, $"Creando el pais {nombrePais}");
             }
             else
             {

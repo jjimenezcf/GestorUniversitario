@@ -27,4 +27,10 @@ namespace ServicioDeDatos.TrabajosSometidos
             mb.Entity<SemaforoDeTrabajosDtm>().HasAlternateKey(p => p.IdTrabajoUsuario).HasName($"AK_SEMAFORO_TRABAJO_ID_TRABAJO");
         }
     }
+
+    public static class SemaforoDeTrabajosSql
+    {
+        public static string CrearSemaforo = "insert into trabajo.semaforo (ID_TRABAJO, INICIADO, LOGIN) VALUES(@Id,@Iniciado,@Login)";
+        public static string BorrarSemaforo = "Delete from trabajo.semaforo where ID_TRABAJO = @Id";
+    }
 }

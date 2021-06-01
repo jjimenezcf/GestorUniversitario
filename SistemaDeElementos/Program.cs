@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using GestoresDeNegocio.Negocio;
 using GestoresDeNegocio.Entorno;
+using ServicioDeDatos;
 
 namespace MVCSistemaDeElementos
 {
@@ -20,9 +21,13 @@ namespace MVCSistemaDeElementos
         {
             var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
-            InicializarNegocios(services);
-            InicializarVistas(services);
-            InicializarMenus(services);
+            if (CacheDeVariable.CrearRegistrosDeEntorno)
+            {
+                InicializarNegocios(services);
+                InicializarVistas(services);
+                InicializarMenus(services);
+                CacheDeVariable.Modificar(Variable.CFG_Crear_Registros_De_Entorno, "N");
+            }
         }
 
         private static void InicializarNegocios(IServiceProvider services)

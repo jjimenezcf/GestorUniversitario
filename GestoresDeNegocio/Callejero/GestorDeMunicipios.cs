@@ -11,6 +11,7 @@ using System;
 using GestoresDeNegocio.Archivos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -48,6 +49,26 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDeMunicipios(contexto, mapeador); ;
         }
 
+        private static MunicipioDtm LeerMunicipioPorCodigo(ContextoSe contexto, string iso2Pais, string codigoProvincia, string codigoMunicipio,bool paraActualizar,  bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            var filtro1 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Pais.ISO2), CriteriosDeFiltrado.igual, iso2Pais);
+            var filtro2 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Codigo), CriteriosDeFiltrado.igual, codigoProvincia);
+            var filtro3 = new ClausulaDeFiltrado(nameof(MunicipioDtm.Codigo), CriteriosDeFiltrado.igual, codigoMunicipio);
+            filtros.Add(filtro1);
+            filtros.Add(filtro2);
+            filtros.Add(filtro3);
+            List<MunicipioDtm> municipios = gestor.LeerRegistros(0, -1, filtros, null, null, new ParametrosDeNegocio(paraActualizar? enumTipoOperacion.LeerConBloqueo: enumTipoOperacion.LeerSinBloqueo));
+
+            if (municipios.Count == 0 && errorSiNoHay)
+                GestorDeErrores.Emitir($"No se ha localizado la provincia para el municipio con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
+            if (municipios.Count > 1 && errorSiMasDeUno)
+                GestorDeErrores.Emitir($"Se han localizado más de un registro de provincia con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
+
+            return municipios.Count == 1 ? municipios[0] : null;
+        }
+
         protected override IQueryable<MunicipioDtm> AplicarJoins(IQueryable<MunicipioDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
@@ -58,7 +79,7 @@ namespace GestoresDeNegocio.Callejero
 
         internal static void ImportarFicheroDeMunicipios(EntornoDeTrabajo entorno, int idArchivo)
         {
-            var gestorProceso = GestorDeMunicipios.Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
+            var gestorProceso = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
             var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
@@ -83,7 +104,7 @@ namespace GestoresDeNegocio.Callejero
                         throw new Exception($"El contenido de la fila {linea} debe ser: código de provincia, código municipio, DC, nombre del municipio");
 
                     ProcesarMunicipioLeido(entorno, gestorProceso,
-                        codigoPais: fila["A"],
+                        iso2Pais: fila["A"],
                         codigoProvincia: fila["B"],
                         codigoMunicipio: fila["C"],
                         DC: fila["D"],
@@ -106,21 +127,42 @@ namespace GestoresDeNegocio.Callejero
 
         }
 
-        private static void ProcesarMunicipioLeido(EntornoDeTrabajo entorno, GestorDeMunicipios gestorProceso, string codigoPais, string codigoProvincia, string codigoMunicipio, string DC, string nombreMunicipio, int idTrazaInformativa)
+        private static MunicipioDtm ProcesarMunicipioLeido(EntornoDeTrabajo entorno, GestorDeMunicipios gestorProceso, string iso2Pais, string codigoProvincia, string codigoMunicipio, string DC, string nombreMunicipio, int idTrazaInformativa)
         {
+            ParametrosDeNegocio operacion;
+            var municipioDtm = LeerMunicipioPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, codigoMunicipio, paraActualizar: true, errorSiNoHay: false);
+            if (municipioDtm == null) 
+            {
+                var provinciaDtm = GestorDeProvincias.LeerProvinciaPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, paraActualizar: false);
+                
+                municipioDtm = new MunicipioDtm();
+                municipioDtm.IdProvincia = provinciaDtm.Id;
+                municipioDtm.Codigo = codigoMunicipio;
+                municipioDtm.Nombre = nombreMunicipio;
+                municipioDtm.DC = DC;
+                operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
+                entorno.AnotarTraza(idTrazaInformativa, $"Creando el municipio {nombreMunicipio}");
+            }
+            else
+            {
+                if (municipioDtm.Nombre != nombreMunicipio || municipioDtm.Codigo != codigoMunicipio || municipioDtm.DC != DC )
+                {
+                    municipioDtm.Nombre = nombreMunicipio;
+                    municipioDtm.DC = DC;
+                    municipioDtm.Codigo = codigoMunicipio;
+                    operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
+                    entorno.AnotarTraza(idTrazaInformativa, $"Modificando el municipio {nombreMunicipio}");
+                }
+                else
+                {
+                    entorno.AnotarTraza(idTrazaInformativa, $"el municipio {nombreMunicipio} ya exite");
+                    return municipioDtm;
+                }
+            }
 
+            return gestorProceso.PersistirRegistro(municipioDtm, operacion);
 
         }
 
-        private static List<MunicipioDtm> BuscarMunicipio(GestorDeMunicipios gestor, string codigoProvincia, string  codigoMunicipio)
-        {
-            var filtros = new List<ClausulaDeFiltrado>();
-            var filtro1 = new ClausulaDeFiltrado(nameof(MunicipioDtm.Provincia.Codigo), CriteriosDeFiltrado.igual, codigoProvincia);
-            var filtro2 = new ClausulaDeFiltrado(nameof(MunicipioDtm.Codigo), CriteriosDeFiltrado.igual, codigoMunicipio);
-            filtros.Add(filtro1);
-            filtros.Add(filtro2);
-            List<MunicipioDtm> municipioDtm = gestor.LeerRegistros(0, -1, filtros);
-            return municipioDtm;
-        }
     }
 }

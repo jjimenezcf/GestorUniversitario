@@ -55,10 +55,29 @@ namespace ServicioDeDatos.Elemento
             return resultado;
         }
 
+        public int DebuggarSentencia(string fichero, DynamicParameters parametros = null)
+        {
+            Traza = TrazaSql.CrearTraza(fichero);
+            try
+            {
+                return EjecutarSentencia(parametros);
+            }
+            finally
+            {
+                Traza.Cerrar();
+            }
+        }
+
         public List<T> LanzarConsulta(DynamicParameters parametros = null)
         {
             List<T> resultado = null;
 
+            SqlParameterCollection spc = new SqlCommand().Parameters;
+            foreach (var nombre in parametros.ParameterNames)
+            {
+                var valor = parametros.Get<object>(nombre);
+                spc.AddWithValue(nombre, valor);
+            }
 
             using (IDbConnection db = new SqlConnection(CadenaDeConexion))
             {
@@ -74,13 +93,6 @@ namespace ServicioDeDatos.Elemento
                     if (Traza != null)
                     {
                         cronometro.Stop();
-                        SqlParameterCollection spc = new SqlCommand().Parameters;
-                        foreach(var nombre in parametros.ParameterNames)
-                        {
-                            var valor = parametros.Get<object>(nombre);
-                            spc.AddWithValue(nombre,valor);
-                        }
-                        //para[0] = new SqlParameter(nombre, SqlDbType.NVarChar) { Value = 2013 };
                         Traza.AnotarTrazaSql(Sentencia, spc, cronometro.ElapsedMilliseconds);
                     }
                 }
@@ -89,6 +101,7 @@ namespace ServicioDeDatos.Elemento
                     if (Traza != null)
                     {
                         cronometro.Stop();
+                        Traza.AnotarParametros(spc);
                         Traza.AnotarExcepcion(e);
                     }
                     throw;
@@ -124,9 +137,16 @@ namespace ServicioDeDatos.Elemento
                 EliminarCriterio(filtro);
         }
 
-        public int EjecutarConsulta(object parametros = null)
+        public int EjecutarSentencia(DynamicParameters parametros = null)
         {
             int resultado = 0;
+
+            SqlParameterCollection spc = new SqlCommand().Parameters;
+            foreach (var nombre in parametros.ParameterNames)
+            {
+                var valor = parametros.Get<object>(nombre);
+                spc.AddWithValue(nombre, valor);
+            }
 
             using (IDbConnection db = new SqlConnection(CadenaDeConexion))
             {
@@ -140,8 +160,8 @@ namespace ServicioDeDatos.Elemento
 
                     if (Traza != null)
                     {
-                        cronometro.Stop();
-                        Traza.AnotarTrazaSql(Sentencia, null, cronometro.ElapsedMilliseconds);
+                        cronometro.Stop(); 
+                        Traza.AnotarTrazaSql(Sentencia, spc, cronometro.ElapsedMilliseconds);
                     }
                 }
                 catch (Exception e)
@@ -150,6 +170,7 @@ namespace ServicioDeDatos.Elemento
                     {
                         cronometro.Stop();
                         Traza.AnotarMensaje("Sentencia que se ha intentado ejecutar", Sentencia);
+                        Traza.AnotarParametros(spc);
                         Traza.AnotarExcepcion(e);
                     }
                     throw;

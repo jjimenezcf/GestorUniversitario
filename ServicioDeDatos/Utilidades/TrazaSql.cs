@@ -78,6 +78,17 @@ namespace ServicioDeDatos.Utilidades
                 Separador();
             }
         }
+
+        public void AnotarParametros(DbParameterCollection dbParametros)
+        {
+            if (Abierta)
+            {
+                var parametros = dbParametros.ParsearParametros();
+                string logTraza = $"Parámetros:      {Environment.NewLine}{parametros}";
+                Registrar(logTraza);
+                Separador();
+            }
+        }
     }
 
 

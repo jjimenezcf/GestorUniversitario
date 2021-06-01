@@ -10,6 +10,8 @@ using GestoresDeNegocio.TrabajosSometidos;
 using System;
 using GestoresDeNegocio.Archivos;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -51,6 +53,23 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDeProvincias(contexto, mapeador); ;
         }
 
+        internal static ProvinciaDtm LeerProvinciaPorCodigo(ContextoSe contexto, string iso2Pais, string codigoProvincia, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            var filtro1 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Pais.ISO2), CriteriosDeFiltrado.igual, iso2Pais);
+            var filtro2 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Codigo), CriteriosDeFiltrado.igual, codigoProvincia);
+            filtros.Add(filtro1);
+            filtros.Add(filtro2);
+            List<ProvinciaDtm> provincias = gestor.LeerRegistros(0, -1, filtros, null, null, new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo));
+
+            if (provincias.Count == 0 && errorSiNoHay)
+                GestorDeErrores.Emitir($"No se ha localizado la provincia para el código del pais {iso2Pais} y codigo de provincia {codigoProvincia}");
+            if (provincias.Count > 1 && errorSiMasDeUno)
+                GestorDeErrores.Emitir($"Se han localizado más de un registro de provincia con el código del pais {iso2Pais} y codigo de provincia {codigoProvincia}");
+
+            return provincias.Count == 1 ? provincias[0] : null;
+        }
 
         public static void ImportarFicheroDeProvincias(EntornoDeTrabajo entorno, int idArchivo)
         {
@@ -79,7 +98,7 @@ namespace GestoresDeNegocio.Callejero
                         throw new Exception($"El contenido de la fila {linea} debe ser: nombre de la provincia, nombre en ingles, iso de 2 iso de 3 y prefijo telefónico");
 
                     ProcesarProvinciaLeida(entorno, gestorProceso,
-                        codigoPais:fila["E"],
+                        iso2Pais:fila["E"],
                         nombreProvincia: fila["C"],
                         sigla: fila["A"], 
                         codigo: fila["B"],
@@ -101,13 +120,13 @@ namespace GestoresDeNegocio.Callejero
             entorno.AnotarTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string codigoPais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, int idTrazaInformativa)
+        private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string iso2Pais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, int idTrazaInformativa)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(ProvinciaDtm.Codigo), codigo, false, true, true, true);
+            var p = LeerProvinciaPorCodigo(gestor.Contexto, iso2Pais, codigo, paraActualizar: true, errorSiNoHay: false);
             if (p == null)
             {
-                var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, codigoPais);
+                var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, iso2Pais, paraActualizar: false, errorSiNoHay: false);
                 p = new ProvinciaDtm();
                 p.Codigo = codigo;
                 p.Nombre = nombreProvincia;

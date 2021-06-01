@@ -30,19 +30,11 @@ namespace ServicioDeDatos.Entorno
 
     public static class VariableSqls
     {
-        public static string CrearVariable =
-$@"
-INSERT INTO SistemaDeElementos.ENTORNO.VARIABLE
-(NOMBRE, DESCRIPCION, VALOR)
-VALUES(@variable, @descripcion, @valor);
-";
+        public static string CrearVariable ="INSERT INTO SistemaDeElementos.ENTORNO.VARIABLE (NOMBRE, DESCRIPCION, VALOR) VALUES(@variable, @descripcion, @valor)"; 
+        
+        public static string ModificarVariable = "UPDATE SistemaDeElementos.ENTORNO.VARIABLE SET VALOR = @valor WHERE NOMBRE like @variable";
 
-        public static string LeerValorDeVariable =
-$@"
-SELECT ID, NOMBRE, DESCRIPCION, VALOR
-FROM SistemaDeElementos.ENTORNO.VARIABLE
-WHERE NOMBRE like @variable;
-";
+        public static string LeerValorDeVariable ="SELECT ID, NOMBRE, DESCRIPCION, VALOR FROM SistemaDeElementos.ENTORNO.VARIABLE WHERE NOMBRE like @variable";
 
     }
 }
