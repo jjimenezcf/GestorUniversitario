@@ -93,8 +93,8 @@ namespace GestoresDeNegocio.Callejero
             {
                 switch (archivo.parametro)
                 {
-                    case GestorDePaises.ParametroPais:
-                        GestorDePaises.ImportarFicheroDePaises(entorno, archivo.valor);
+                    case ParametroPais:
+                        ImportarFicheroDePaises(entorno, archivo.valor);
                         break;
                     case GestorDeProvincias.ParametroProvincia:
                         GestorDeProvincias.ImportarFicheroDeProvincias(entorno, archivo.valor);
@@ -111,8 +111,8 @@ namespace GestoresDeNegocio.Callejero
 
         private static void ImportarFicheroDePaises(EntornoDeTrabajo entorno, int idArchivo)
         {
-            var gestor = GestorDePaises.Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
-            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
+            var gestor = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
+            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo, entorno.ProcesoIniciadoPorLaCola);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
             entorno.CrearTraza($"Inicio del proceso");

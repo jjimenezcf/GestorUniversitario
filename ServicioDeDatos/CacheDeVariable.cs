@@ -20,6 +20,7 @@ namespace ServicioDeDatos
         public static readonly string CFG_Servidor_De_Correo = nameof(CFG_Servidor_De_Correo);
         public static readonly string CFG_UrlBase = nameof(CFG_UrlBase);
         public static readonly string CFG_Crear_Registros_De_Entorno = nameof(CFG_Crear_Registros_De_Entorno);
+        public static readonly string CFG_Ruta_De_Descarga = nameof(CFG_Ruta_De_Descarga);
 
 
         public static readonly string Cola_Activa = nameof(Cola_Activa);
@@ -34,17 +35,19 @@ namespace ServicioDeDatos
     {
         private static ConcurrentDictionary<string, object> cacheVariables = ServicioDeCaches.Obtener(typeof(VariableDtm).FullName);
 
-        public static string ServidorDeArchivos => ObtenerVariable(Variable.CFG_Servidor_Archivos, "Define la ruta donde se localiza el servidor de archivos", @"c:\temp\SistemaDocumental");
+        public static string Cfg_ServidorDeArchivos => ObtenerVariable(Variable.CFG_Servidor_Archivos, "Define la ruta donde se localiza el servidor de archivos", @"c:\temp\SistemaDocumental");
 
-        public static string ServidorDeCorreo => ObtenerVariable(Variable.CFG_Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
+        public static string Cfg_ServidorDeCorreo => ObtenerVariable(Variable.CFG_Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
 
-        public static bool HayQueDebuggar => ObtenerVariable(Variable.CFG_Debugar_Sqls, "Indica si hay que debugar", "S") == "S";
+        public static bool Cfg_HayQueDebuggar => ObtenerVariable(Variable.CFG_Debugar_Sqls, "Indica si hay que debugar", "S") == "S";
 
-        public static string Version => ObtenerVariable(Variable.CFG_Version, "Versión del sistema de elementos", "0.1");
+        public static string Cfg_Version => ObtenerVariable(Variable.CFG_Version, "Versión del sistema de elementos", "0.1");
 
-        public static string UrlBase => ObtenerVariable(Variable.CFG_UrlBase, "Indica el sitio WEB donde está ubicado", "https://localhost:44396/");
+        public static string Cfg_UrlBase => ObtenerVariable(Variable.CFG_UrlBase, "Indica el sitio WEB donde está ubicado", "https://localhost:44396/");
 
-        public static bool CrearRegistrosDeEntorno => ObtenerVariable(Variable.CFG_Crear_Registros_De_Entorno, "Indica si al iniciar el sitio web se han de crear registros en el entorno", "N") == "S";
+        public static string Cfg_RutaDeDescarga => ObtenerVariable(Variable.CFG_Ruta_De_Descarga, "Indica la dirección absoluta de donde se dejan los ficheros temporales que se descargan", @"C:\temp\descargas");
+
+        public static bool Cfg_CrearRegistrosDeEntorno => ObtenerVariable(Variable.CFG_Crear_Registros_De_Entorno, "Indica si al iniciar el sitio web se han de crear registros en el entorno", "N") == "S";
 
         public static string Cola_Receptor => ObtenerVariable(Variable.Cola_Receptor, "Indica el mail del receptor de mensajes de soporte de la cola de trabajos sometidos", "juan.jimenez@emuasa.es");
 
@@ -98,7 +101,7 @@ namespace ServicioDeDatos
         {
             var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.CrearVariable);
             var valores = new Dictionary<string, object> { { $"@{nameof(variable)}", variable }, { $"@{nameof(descripcion)}", descripcion }, { $"@{nameof(valor)}", valor } };
-            if (HayQueDebuggar)
+            if (Cfg_HayQueDebuggar)
                 sentencia.DebuggarSentencia($"{variable}.txt", new DynamicParameters(valores));
             else
                 sentencia.EjecutarSentencia(new DynamicParameters(valores));
@@ -115,7 +118,7 @@ namespace ServicioDeDatos
         {
             var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.ModificarVariable);
             var valores = new Dictionary<string, object> { { $"@{nameof(valor)}", valor }, { $"@{nameof(variable)}", variable } };
-            if (HayQueDebuggar)
+            if (Cfg_HayQueDebuggar)
                 sentencia.DebuggarSentencia($"{variable}.txt", new DynamicParameters(valores));
             else
                 sentencia.EjecutarSentencia(new DynamicParameters(valores));

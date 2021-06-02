@@ -173,7 +173,7 @@ namespace GestoresDeNegocio.Entorno
             base.DespuesDeMapearElemento(registro, elemento, parametros);
             if (registro.Archivo != null && parametros.Opciones.ContainsKey(ElementoDto.DescargarGestionDocumental) && Equals(parametros.Opciones[ElementoDto.DescargarGestionDocumental], true) )
             {
-                elemento.Foto = GestorDeElementos.Utilidades.DescargarUrlDeArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn);
+                elemento.Foto = GestorDeElementos.Utilidades.DescargarUrlDeArchivo(registro.Archivo.Id, registro.Archivo.Nombre, registro.Archivo.AlmacenadoEn,true);
             }
         }
 

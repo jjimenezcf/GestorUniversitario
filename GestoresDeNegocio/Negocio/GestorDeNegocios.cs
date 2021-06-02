@@ -77,7 +77,7 @@ namespace GestoresDeNegocio.Negocio
         internal static string ComponerUrl(TipoDtoElmento elemento)
         {
             var url = ExtensionesDto.UrlParaMostrarUnDto(elemento.ClaseDto());
-            var refHtml = $@"<a href='{CacheDeVariable.UrlBase}{url}?id={elemento.IdElemento}' target='_blank' idelemento='2041'>{elemento.Referencia}</a>";
+            var refHtml = $@"<a href='{CacheDeVariable.Cfg_UrlBase}{url}?id={elemento.IdElemento}' target='_blank' idelemento='2041'>{elemento.Referencia}</a>";
             return refHtml;
         }
 

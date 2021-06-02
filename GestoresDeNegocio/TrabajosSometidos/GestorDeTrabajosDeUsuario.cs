@@ -50,6 +50,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
         }
 
+        public bool ProcesoIniciadoPorLaCola { get; internal set; }
+
         public EntornoDeTrabajo(GestorDeTrabajosDeUsuario gestor, TrabajoDeUsuarioDtm trabajoUsuario)
         {
             GestorDelTrabajo = gestor;
@@ -139,7 +141,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var trabajosPorEjecutar = LeerTrabajoPendiente();
 
             if (trabajosPorEjecutar.Count == 1)
-                GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id);
+                GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id, true);
 
             GestorDeCorreos.EnviarCorreoPendientes(contexto: gestor.Contexto);
 
@@ -217,11 +219,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return tu;
         }
 
-        public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario)
+        public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario, bool iniciadoPorLaCola)
         {
             var gestorTu = Gestor(contextoTu);
             var tuDtm = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
             var entorno = new EntornoDeTrabajo(gestorTu, tuDtm);
+            entorno.ProcesoIniciadoPorLaCola = iniciadoPorLaCola;
 
             entorno.PonerSemaforo();
             var tran = entorno.IniciarTransaccion();

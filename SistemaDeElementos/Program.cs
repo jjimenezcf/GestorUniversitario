@@ -21,7 +21,7 @@ namespace MVCSistemaDeElementos
         {
             var scope = sevidorWeb.Services.CreateScope();
             var services = scope.ServiceProvider;
-            if (CacheDeVariable.CrearRegistrosDeEntorno)
+            if (CacheDeVariable.Cfg_CrearRegistrosDeEntorno)
             {
                 InicializarNegocios(services);
                 InicializarVistas(services);

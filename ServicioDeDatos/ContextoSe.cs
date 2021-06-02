@@ -99,9 +99,9 @@ namespace ServicioDeDatos
 
         public bool HayTransaccion => Transaccion != null;
 
-        public bool Debuggar => CacheDeVariable.HayQueDebuggar;
+        public bool Debuggar => CacheDeVariable.Cfg_HayQueDebuggar;
 
-        private string ObtenerVersion => CacheDeVariable.Version;
+        private string ObtenerVersion => CacheDeVariable.Cfg_Version;
 
 
         public TrazaSql Traza { get; private set; }

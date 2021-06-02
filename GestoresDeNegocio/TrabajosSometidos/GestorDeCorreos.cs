@@ -75,7 +75,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var correo = new CorreoDtm();
             correo.IdUsuario = contexto.DatosDeConexion.IdUsuario;
-            correo.Emisor = new ServicioDeCorreo(CacheDeVariable.ServidorDeCorreo).Emisor;
+            correo.Emisor = new ServicioDeCorreo(CacheDeVariable.Cfg_ServidorDeCorreo).Emisor;
             correo.Receptores = receptores.ToJson();
             correo.Asunto = asunto;
             correo.Cuerpo = cuerpo;
@@ -192,7 +192,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 {
                     try
                     {
-                        ServicioDeCorreo.EnviarCorreoPara(CacheDeVariable.ServidorDeCorreo
+                        ServicioDeCorreo.EnviarCorreoPara(CacheDeVariable.Cfg_ServidorDeCorreo
                             , new List<string> { "juan.jimenez@gmail.com" }
                             , "Fallo al enviar cooreos"
                             , $"Error al enviar el correo con id  {pendiente.Id}{Environment.NewLine}{GestorDeErrores.Mensaje(e)}"
@@ -213,7 +213,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var receptores = correoDtm.Receptores.JsonToLista<string>();
             string cuerpo = AdjuntarElementos(correoDtm);
 
-            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos);
+            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos);
             correoDtm.Enviado = DateTime.Now;
             PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }

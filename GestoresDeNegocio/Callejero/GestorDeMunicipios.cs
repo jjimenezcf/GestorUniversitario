@@ -54,9 +54,9 @@ namespace GestoresDeNegocio.Callejero
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();
-            var filtro1 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Pais.ISO2), CriteriosDeFiltrado.igual, iso2Pais);
-            var filtro2 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Codigo), CriteriosDeFiltrado.igual, codigoProvincia);
-            var filtro3 = new ClausulaDeFiltrado(nameof(MunicipioDtm.Codigo), CriteriosDeFiltrado.igual, codigoMunicipio);
+            var filtro1 = new ClausulaDeFiltrado(nameof(iso2Pais), CriteriosDeFiltrado.igual, iso2Pais);
+            var filtro2 = new ClausulaDeFiltrado(nameof(codigoProvincia), CriteriosDeFiltrado.igual, codigoProvincia);
+            var filtro3 = new ClausulaDeFiltrado(nameof(codigoMunicipio), CriteriosDeFiltrado.igual, codigoMunicipio);
             filtros.Add(filtro1);
             filtros.Add(filtro2);
             filtros.Add(filtro3);
@@ -86,6 +86,15 @@ namespace GestoresDeNegocio.Callejero
             {
                 if (filtro.Clausula.ToLower() == nameof(MunicipioDto.IdPais).ToLower())
                     registros = registros.Where(x => x.Provincia.Pais.Id == filtro.Valor.Entero());
+
+                if (filtro.Clausula.ToLower() == "iso2Pais".ToLower())
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, "Provincia.Pais.ISO2");
+
+                if (filtro.Clausula.ToLower() == "codigoProvincia".ToLower())
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, "Provincia.Codigo");
+
+                if (filtro.Clausula.ToLower() == "codigoMunicipio".ToLower())
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(MunicipioDtm.Codigo));
             }
 
             return registros;
@@ -96,7 +105,7 @@ namespace GestoresDeNegocio.Callejero
         internal static void ImportarFicheroDeMunicipios(EntornoDeTrabajo entorno, int idArchivo)
         {
             var gestorProceso = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
-            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
+            var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo, entorno.ProcesoIniciadoPorLaCola);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 1;
             entorno.CrearTraza($"Inicio del proceso");

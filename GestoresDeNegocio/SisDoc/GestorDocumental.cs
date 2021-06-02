@@ -41,10 +41,10 @@ namespace GestoresDeNegocio.Archivos
             return gestor.SubirArchivoInterno(rutaConFichero);
         }
 
-        public static string DescargarArchivo(ContextoSe contexto, int idArchivo)
+        public static string DescargarArchivo(ContextoSe contexto, int idArchivo, bool solicitadoPorLaCola)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.DescargarArchivoInterno(idArchivo);
+            return gestor.DescargarArchivoInterno(idArchivo, solicitadoPorLaCola);
         }
 
 
@@ -60,10 +60,10 @@ namespace GestoresDeNegocio.Archivos
         }
 
 
-        private string DescargarArchivoInterno(int idArchivo)
+        private string DescargarArchivoInterno(int idArchivo, bool solicitadoPorLaCola)
         {
             var archivo = LeerRegistroPorId(idArchivo, true, false, false);
-            var rutaConFichero = GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn);
+            var rutaConFichero = GestorDeElementos.Utilidades.DescargarArchivo(archivo.Id, archivo.Nombre, archivo.AlmacenadoEn, solicitadoPorLaCola);
             return rutaConFichero;
         }
 

@@ -13,9 +13,9 @@ namespace GestorDeElementos
 {
     public static class Utilidades
     {
-        public static string DescargarUrlDeArchivo(int id, string nombreFichero, string almacenadoEn)
+        public static string DescargarUrlDeArchivo(int id, string nombreFichero, string almacenadoEn, bool solicitadoPorLaCola)
         {
-            var archivo = DescargarArchivo(id, nombreFichero, almacenadoEn);
+            var archivo = DescargarArchivo(id, nombreFichero, almacenadoEn, solicitadoPorLaCola);
             return UrlDeArchivo(archivo);
         }
 
@@ -26,9 +26,9 @@ namespace GestorDeElementos
             return urlArchivoRelativa;
         }
 
-        public static string DescargarArchivo(int id, string nombreFichero, string almacenadoEn)
+        public static string DescargarArchivo(int id, string nombreFichero, string almacenadoEn, bool solicitadoPorLaCola)
         {
-            var rutaDeDescarga = $@".\wwwroot\Archivos";
+            var rutaDeDescarga = !solicitadoPorLaCola ? $@".\wwwroot\Archivos": CacheDeVariable.Cfg_RutaDeDescarga;
             var ficheroCacheado = $"{id}.se";
             var ficheroConRutaEnLaGd = $@"{almacenadoEn}\{ficheroCacheado}";
             var ficheroConRutaCacheado = $@"{rutaDeDescarga}\{ficheroCacheado}";

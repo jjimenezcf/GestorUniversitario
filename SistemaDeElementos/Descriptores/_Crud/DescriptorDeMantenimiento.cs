@@ -110,6 +110,10 @@ namespace MVCSistemaDeElementos.Descriptores
             {
                 OrdenacionInicial = $"{ltrFiltros.Nombre}:{ltrFiltros.Nombre}:{enumModoOrdenacion.ascendente.Render()}";
             }
+            var clausulaDeOrdenInicial = "";
+            if (!OrdenacionInicial.IsNullOrEmpty())
+                clausulaDeOrdenInicial = $"{Environment.NewLine}orden-inicial='{OrdenacionInicial.ToLower()}'";
+
 
             var propiedades = $@" id='{IdHtml}' 
                         class='{Css.Render(enumCssCuerpo.CuerpoCabecera)}' 
@@ -119,8 +123,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         controlador='{Crud.Controlador}' 
                         negocio='{Crud.RenderNegocio}'
                         dto='{Crud.RenderDto}'
-                        id-negocio='{Crud.RenderIdDeNegocio}'
-                        orden-inicial='{OrdenacionInicial.ToLower()}'>
+                        id-negocio='{Crud.RenderIdDeNegocio}'{clausulaDeOrdenInicial}>
                      ";
 
             return ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo ?

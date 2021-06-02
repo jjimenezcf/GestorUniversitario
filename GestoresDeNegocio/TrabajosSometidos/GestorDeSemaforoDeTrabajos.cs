@@ -23,7 +23,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 { $"@{nameof(TrabajoDeUsuarioDtm.Iniciado)}", DateTime.Now }, 
                 { $"@{nameof(TrabajoDeUsuarioDtm.Sometedor.Login)}", tu.Sometedor.Login } };
             var semaforo = 0;
-            if (CacheDeVariable.HayQueDebuggar)
+            if (CacheDeVariable.Cfg_HayQueDebuggar)
                 semaforo = sentencia.DebuggarSentencia($"{nameof(PonerSemaforo)}.txt", new DynamicParameters(valores));
             else
                 semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
@@ -38,7 +38,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             var valores = new Dictionary<string, object> {{ $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id } };
             var semaforo = 0;
-            if (CacheDeVariable.HayQueDebuggar)
+            if (CacheDeVariable.Cfg_HayQueDebuggar)
                 semaforo = sentencia.DebuggarSentencia($"{nameof(QuitarSemaforo)}.txt", new DynamicParameters(valores));
             else
                 semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));

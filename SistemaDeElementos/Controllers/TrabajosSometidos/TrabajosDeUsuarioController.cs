@@ -52,7 +52,7 @@ namespace MVCSistemaDeElementos.Controllers
             try
             {
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto, idTrabajoUsuario);
+                GestorDeTrabajosDeUsuario.Iniciar(GestorDeElementos.Contexto, idTrabajoUsuario, false);
                 r.Estado = enumEstadoPeticion.Ok;
                 r.Mensaje = "Trabajo iniciado";
             }
