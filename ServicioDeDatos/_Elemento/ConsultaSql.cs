@@ -71,7 +71,8 @@ namespace ServicioDeDatos.Elemento
         public List<T> LanzarConsulta(DynamicParameters parametros = null)
         {
             List<T> resultado = null;
-
+            if (parametros == null)
+                parametros = new DynamicParameters();
             SqlParameterCollection spc = new SqlCommand().Parameters;
             foreach (var nombre in parametros.ParameterNames)
             {
@@ -140,6 +141,9 @@ namespace ServicioDeDatos.Elemento
         public int EjecutarSentencia(DynamicParameters parametros = null)
         {
             int resultado = 0;
+
+            if (parametros == null)
+                parametros = new DynamicParameters();
 
             SqlParameterCollection spc = new SqlCommand().Parameters;
             foreach (var nombre in parametros.ParameterNames)
