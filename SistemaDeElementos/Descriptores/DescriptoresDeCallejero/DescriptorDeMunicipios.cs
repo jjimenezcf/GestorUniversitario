@@ -15,6 +15,15 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                  , rutaBase: "Callejero")
         {
 
+            new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
+                etiqueta: "Pais",
+                filtrarPor: nameof(MunicipioDto.IdProvincia),
+                ayuda: "seleccione el país",
+                seleccionarDe: nameof(PaisDto),
+                buscarPor: nameof(PaisDto.Nombre),
+                mostrarExpresion: $"([{nameof(PaisDto.Codigo)}]) [{nameof(PaisDto.Nombre)}]",
+                criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
+                posicion: new Posicion(0, 0));
 
             new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
                 etiqueta: "Provincia",
@@ -24,13 +33,15 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 buscarPor: nameof(ProvinciaDto.Nombre),
                 mostrarExpresion: $"([{nameof(ProvinciaDto.Codigo)}]) [{nameof(ProvinciaDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 0));
+                posicion: new Posicion(0, 1));
 
             new EditorFiltro<MunicipioDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"
                 , propiedad: nameof(MunicipioDto.Codigo)
                 , ayuda: "buscar por codigo"
-                , new Posicion { fila = 1, columna = 0 });
+                , new Posicion { fila = 0, columna = 2 });
+
+            RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1,0), "Municipio", "Buscar Buscar por nombre de municipio");
         }
 
 

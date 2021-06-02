@@ -124,7 +124,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public string Propiedad { get; private set; }
         public string PropiedadHtml => Propiedad.ToLower();
         public string Ayuda { get; set; }
-        public Posicion Posicion { get; private set; }
+        public Posicion Posicion { get; set; }
         public enumTipoControl Tipo { get; protected set; }
 
         public bool Visible { get; set; } = true;

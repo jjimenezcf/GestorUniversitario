@@ -57,23 +57,16 @@ namespace GestoresDeNegocio.TrabajosSometidos
             registros = registros.Include(p => p.TrabajoDeUsuario.Trabajo);
             return registros;
         }
-        internal static int AnotarTraza(ContextoSe contextoTu, TrabajoDeUsuarioDtm tu, string traza)
+        internal static TrazaDeUnTrabajoDtm AnotarTraza(ContextoSe contextoTu, TrabajoDeUsuarioDtm tu, string traza)
         {
             var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
-            return gestorTraza.CrearTraza(tu, traza).Id;
+            return gestorTraza.CrearTraza(tu, traza);
         }
 
-        internal static int AnotarTraza(ContextoSe contextoTu, TrabajoDeUsuarioDtm tu, int id, string traza)
+        internal static TrazaDeUnTrabajoDtm ActualizarTraza(ContextoSe contextoTu, TrazaDeUnTrabajoDtm trazaDtm)
         {
-            if (id <= 0)
-                return AnotarTraza(contextoTu, tu, traza);
-
             var gestorTraza = Gestor(contextoTu, contextoTu.Mapeador);
-            var t = gestorTraza.LeerRegistroPorId(id, true, true, true);
-            t.Traza = traza;
-            gestorTraza.PersistirRegistro(t, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
-
-            return id;
+            return gestorTraza.PersistirRegistro(trazaDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
 
         internal static void EliminarTrazas(ContextoSe contexto, int id)

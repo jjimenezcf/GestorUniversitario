@@ -37,7 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
             AjustarDimensionDeLaTabla();
         }
 
-        private void AjustarDimensionDeLaTabla()
+        public void AjustarDimensionDeLaTabla()
         {
             foreach (var control in Controles)
                 if (control.Tipo != enumTipoControl.GridModal && control.Posicion.fila >= Tabla.Dimension.Filas)

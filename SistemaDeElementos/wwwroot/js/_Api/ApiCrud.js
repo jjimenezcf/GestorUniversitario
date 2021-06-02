@@ -247,6 +247,14 @@ var ApiControl;
         }
         return resultado;
     }
+    function MapearComoOrdenar(columna, propiedad, ordenarPor, modo) {
+        if (!IsNullOrEmpty(modo)) {
+            columna.setAttribute(atControl.ordenarPor, ordenarPor);
+            columna.setAttribute(atControl.modoOrdenacion, modo);
+            this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
+        }
+    }
+    ApiControl.MapearComoOrdenar = MapearComoOrdenar;
 })(ApiControl || (ApiControl = {}));
 var ApiCrud;
 (function (ApiCrud) {

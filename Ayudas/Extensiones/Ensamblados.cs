@@ -78,6 +78,23 @@ namespace Utilidades
             return props;
         }
 
+        public static bool TienenLaPropiedad(this Type tipo, string propiedad)
+        {
+            var cache = ServicioDeCaches.Obtener(nameof(Type.GetProperties));
+            var indice = tipo.FullName; 
+            if (!cache.ContainsKey(indice))
+                cache[indice] = tipo.GetProperties();
+
+            PropertyInfo[] props = (PropertyInfo[])cache[indice];
+
+            foreach(var p in props)
+            {
+                if (p.Name == propiedad) return true;
+            }
+
+            return false;
+        }
+
         /*
          *             
             //Type d1 = typeof(GestorDeElementos<,,>);

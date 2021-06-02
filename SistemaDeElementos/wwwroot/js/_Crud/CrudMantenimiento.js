@@ -74,10 +74,6 @@ var Crud;
                     const params = new URLSearchParams(querystring);
                     if (params.has("id"))
                         this.EditarRegistro(Numero(params.get("id")));
-                    else {
-                        this.InicializarOrdenacion();
-                        this.Buscar(atGrid.accion.buscar, 0);
-                    }
                     this.InicializarOrdenacion();
                     this.Buscar(atGrid.accion.buscar, 0);
                 }
@@ -91,14 +87,22 @@ var Crud;
                 .then(() => this.IraEditar());
         }
         InicializarOrdenacion() {
+            let ordenacionInicial = this.CuerpoCabecera.getAttribute(atControl.ordenInicial);
+            let lista = ToLista(ordenacionInicial, ";");
             let columnas = this.CabeceraTablaGrid.querySelectorAll("th");
             for (let i = 0; i < columnas.length; i++) {
                 let columna = columnas[i];
-                let modo = columna.getAttribute(atControl.modoOrdenacion);
-                if (!IsNullOrEmpty(modo) && modo !== ModoOrdenacion.sinOrden) {
-                    let propiedad = columna.getAttribute(atControl.propiedad);
-                    let ordenarPor = columna.getAttribute(atControl.ordenarPor);
-                    this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
+                let propiedad = columna.getAttribute(atControl.propiedad);
+                for (let j = 0; j < lista.length; j++) {
+                    if (IsNullOrEmpty(lista[j]))
+                        continue;
+                    let partes = lista[j].split(":");
+                    if (partes.length !== 3) {
+                        MensajesSe.Error("InicializarOrdenacion", `La tripleta de ordenación ${lista[j]} está mal definida, ha de tener ternas separadas por ; con el patron siguiente: (Propiedad:OrdenarPor:Modo)`);
+                        return;
+                    }
+                    if (partes[0] === propiedad)
+                        ApiControl.MapearComoOrdenar(columna, partes[0].trim(), partes[1].trim(), partes[2].trim());
                 }
             }
         }

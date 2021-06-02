@@ -56,25 +56,25 @@ namespace GestoresDeNegocio.TrabajosSometidos
             Trabajo = trabajoUsuario;
         }
 
-        public int AnotarTraza(string traza)
+        public TrazaDeUnTrabajoDtm CrearTraza(string traza)
         {
-            return AnotarTraza(0, traza);
+            return GestorDeTrazasDeUnTrabajo.AnotarTraza(ContextoDelEntorno, Trabajo, traza);
         }
 
-        public int AnotarTraza(int id, string traza)
+        public TrazaDeUnTrabajoDtm ActualizarTraza(TrazaDeUnTrabajoDtm trazaDtm, string traza)
         {
-            return GestorDeTrazasDeUnTrabajo.AnotarTraza(ContextoDelEntorno, Trabajo, id, traza);
-        }
-
-        internal void ModificarUltimaTraza(string traza)
-        {
-            TrazaDeUnTrabajoDtm registroDeTraza = GestorDeTrazasDeUnTrabajo.LeerUltimaTraza(ContextoDelEntorno, Trabajo.Id);
-            AnotarTraza(registroDeTraza.Id, traza);
+            trazaDtm.Traza = traza;
+            return GestorDeTrazasDeUnTrabajo.ActualizarTraza(ContextoDelEntorno, trazaDtm);
         }
 
         public void AnotarError(Exception e)
         {
             GestorDeErroresDeUnTrabajo.AnotarError(ContextoDelEntorno, Trabajo, e);
+        }
+
+        public void AnotarError(string error, Exception e)
+        {
+            GestorDeErroresDeUnTrabajo.CrearError(ContextoDelEntorno, Trabajo, error, GestorDeErrores.Detalle(e));
         }
 
         public bool IniciarTransaccion()
@@ -93,13 +93,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public void PonerSemaforo()
         {
             GestorDeSemaforoDeTrabajos.PonerSemaforo(Trabajo);
-            AnotarTraza($"Trabajo iniciado por el usuario {ContextoDelEntorno.DatosDeConexion.Login}");
+            CrearTraza($"Trabajo iniciado por el usuario {ContextoDelEntorno.DatosDeConexion.Login}");
         }
 
         public void QuitarSemaforo(string traza)
         {
             GestorDeSemaforoDeTrabajos.QuitarSemaforo(Trabajo);
-            AnotarTraza(traza);
+            CrearTraza(traza);
         }
 
         internal void ComunicarError(Exception e)

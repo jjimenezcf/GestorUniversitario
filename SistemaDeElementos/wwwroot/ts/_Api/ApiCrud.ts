@@ -260,6 +260,14 @@
         return resultado;
     }
 
+   export function MapearComoOrdenar(columna: HTMLTableHeaderCellElement, propiedad: string, ordenarPor: string, modo: string) {
+        if (!IsNullOrEmpty(modo)) {
+            columna.setAttribute(atControl.ordenarPor, ordenarPor);
+            columna.setAttribute(atControl.modoOrdenacion, modo);
+            this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
+        }
+    }
+
 }
 
 namespace ApiCrud {

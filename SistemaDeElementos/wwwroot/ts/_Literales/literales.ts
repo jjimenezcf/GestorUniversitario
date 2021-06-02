@@ -43,6 +43,7 @@ const atControl = {
     controlador: literal.controlador,
     obligatorio: "obligatorio",
     modoOrdenacion: "modo-ordenacion",
+    ordenInicial: "orden-inicial",
     expresionElemento: "expresion-elemento",
     tipo: "tipo",
     imagenVinculada: "imagen-vinculada",

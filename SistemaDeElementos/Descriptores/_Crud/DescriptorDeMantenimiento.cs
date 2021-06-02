@@ -1,6 +1,8 @@
 ﻿using System;
 using Enumerados;
 using ModeloDeDto;
+using ServicioDeDatos.Elemento;
+using Utilidades;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -15,6 +17,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public ZonaDeDatos<TElemento> Datos { get; set; }
         public BloqueDeFitro<TElemento> BloqueGeneral => Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
         public BloqueDeFitro<TElemento> BloqueComun => Filtro.ObtenerBloquePorEtiqueta(ltrBloques.Comun);
+
+        public string OrdenacionInicial { get; set; }
 
         //public new string IdHtml => NombreMnt;
 
@@ -102,15 +106,21 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderCuerpoCabecera(string htmlTitulo, string htmlMenu)
         {
-            var propiedades = $@" id=¨{IdHtml}¨ 
-                        class=¨{Css.Render(enumCssCuerpo.CuerpoCabecera)}¨ 
-                        grid-del-mnt=¨{Datos.IdHtml}¨ 
-                        zona-de-filtro=¨{Filtro.IdHtml}¨ 
-                        zona-de-menu=¨{ZonaMenu.IdHtml}¨ 
-                        controlador=¨{Crud.Controlador}¨ 
-                        negocio=¨{Crud.RenderNegocio}¨
-                        dto=¨{Crud.RenderDto}¨
-                        id-negocio=¨{Crud.RenderIdDeNegocio}¨>
+            if (OrdenacionInicial.IsNullOrEmpty() && typeof(TElemento).TienenLaPropiedad(nameof(INombre)))
+            {
+                OrdenacionInicial = $"{nameof(INombre)}:{nameof(INombre)}:{enumModoOrdenacion.ascendente.Render()}";
+            }
+
+            var propiedades = $@" id='{IdHtml}' 
+                        class='{Css.Render(enumCssCuerpo.CuerpoCabecera)}' 
+                        grid-del-mnt='{Datos.IdHtml}' 
+                        zona-de-filtro='{Filtro.IdHtml}' 
+                        zona-de-menu='{ZonaMenu.IdHtml}' 
+                        controlador='{Crud.Controlador}' 
+                        negocio='{Crud.RenderNegocio}'
+                        dto='{Crud.RenderDto}'
+                        id-negocio='{Crud.RenderIdDeNegocio}'
+                        orden-inicial='{OrdenacionInicial}'>
                      ";
 
             return ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo ?

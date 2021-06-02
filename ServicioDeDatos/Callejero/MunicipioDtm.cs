@@ -42,7 +42,7 @@ namespace ServicioDeDatos.Callejero
                 .HasColumnType("INT")
                 .IsRequired(true);
 
-            modelBuilder.Entity<MunicipioDtm>().HasAlternateKey(p => p.Codigo).HasName("AK_MUNICIPIO_CODIGO");
+            //modelBuilder.Entity<MunicipioDtm>().HasAlternateKey(p => p.Codigo).HasName("AK_MUNICIPIO_CODIGO");
 
             modelBuilder.Entity<MunicipioDtm>()
                         .HasIndex(p => p.IdProvincia)

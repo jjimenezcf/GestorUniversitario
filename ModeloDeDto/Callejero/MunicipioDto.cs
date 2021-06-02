@@ -13,6 +13,24 @@ namespace ModeloDeDto.Callejero
     public class MunicipioDto : AuditoriaDto
     {
         [IUPropiedad(
+            Etiqueta = nameof(Pais),
+            Ayuda = "Seleccione el país",
+            TipoDeControl = enumTipoControl.ListaDinamica,
+            SeleccionarDe = typeof(ProvinciaDto),
+            GuardarEn = nameof(IdPais),
+            Fila = 0,
+            Columna = 0,
+            Obligatorio = true,
+            Ordenar = true
+            )
+         ]
+        public string Pais { get; set; }
+
+        [IUPropiedad(Etiqueta = "Id del pais", Visible = false)]
+        public int IdPais { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(
             Etiqueta = nameof(Provincia),
             Ayuda = "Seleccione la provincia",
             TipoDeControl = enumTipoControl.ListaDinamica,
@@ -20,13 +38,29 @@ namespace ModeloDeDto.Callejero
             GuardarEn = nameof(IdProvincia),
             Fila = 0,
             Columna = 0,
-            Obligatorio = true
+            Obligatorio = true,
+            Ordenar = true
             )
         ]
         public string Provincia { get; set; }
 
         [IUPropiedad(Etiqueta = "Id de la provincia", Visible = false)]
         public int IdProvincia { get; set; }
+        //----------------------------------------------
+
+        [IUPropiedad(
+            Etiqueta = "Municipio",
+            Ayuda = "Indique el nombre del municipio",
+            Tipo = typeof(string),
+            Fila = 1,
+            Columna = 1,
+            Ordenar = true,
+            PorAnchoMnt = 50,
+            Obligatorio = true,
+            LongitudMaxima = 250
+          )
+        ]
+        public string Nombre { get; set; }
 
         //----------------------------------------------
         [IUPropiedad(
@@ -58,21 +92,6 @@ namespace ModeloDeDto.Callejero
         ]
         public string DC { get; set; }
 
-        //----------------------------------------------
-
-        [IUPropiedad(
-            Etiqueta = "Municipio",
-            Ayuda = "Indique el nombre del municipio",
-            Tipo = typeof(string),
-            Fila = 1,
-            Columna = 1,
-            Ordenar = true,
-            PorAnchoMnt = 50,
-            Obligatorio = true,
-            LongitudMaxima = 250
-          )
-        ]
-        public string Nombre { get; set; }
 
 
     }

@@ -14,9 +14,6 @@ namespace MVCSistemaDeElementos.Descriptores
                , modo: modo
                , rutaBase: "TrabajosSometido")
         {
-            Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.CrearElemento);
-            Mnt.ZonaMenu.QuitarOpcionDeMenu(TipoDeAccionDeMnt.EliminarElemento);
-
             var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
             new RestrictorDeFiltro<ErrorDeUnTrabajoDto>(bloque: fltGeneral
                   , etiqueta: "Trabajo de Usuario"

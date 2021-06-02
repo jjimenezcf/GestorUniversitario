@@ -12,6 +12,7 @@ using GestoresDeNegocio.Archivos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -77,9 +78,9 @@ namespace GestoresDeNegocio.Callejero
             var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
-            entorno.AnotarTraza($"Inicio del proceso");
-            var idTraza = entorno.AnotarTraza($"Procesando la fila {linea}");
-            var idTrazaInformativa = entorno.AnotarTraza($"Traza informativa del proceso");
+            entorno.CrearTraza($"Inicio del proceso");
+            var trazaPrcDtm = entorno.CrearTraza($"Procesando la fila {linea}");
+            var trazaInfDtm = entorno.CrearTraza($"Traza informativa del proceso");
             foreach (var fila in fichero)
             {
                 var tran = gestorProceso.IniciarTransaccion();
@@ -103,7 +104,7 @@ namespace GestoresDeNegocio.Callejero
                         sigla: fila["A"], 
                         codigo: fila["B"],
                         prefijoTelefono: fila["D"],
-                        idTrazaInformativa);
+                        trazaInfDtm);
                     gestorProceso.Commit(tran);
                 }
                 catch (Exception e)
@@ -113,14 +114,14 @@ namespace GestoresDeNegocio.Callejero
                 }
                 finally
                 {
-                    entorno.AnotarTraza(idTraza, $"Procesando la fila {linea}");
+                    entorno.ActualizarTraza(trazaPrcDtm, $"Procesando la fila {linea}");
                 }
             }
 
-            entorno.AnotarTraza($"Procesadas un total de {linea} filas");
+            entorno.CrearTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string iso2Pais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, int idTrazaInformativa)
+        private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string iso2Pais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
             var p = LeerProvinciaPorCodigo(gestor.Contexto, iso2Pais, codigo, paraActualizar: true, errorSiNoHay: false);
@@ -134,7 +135,7 @@ namespace GestoresDeNegocio.Callejero
                 p.IdPais = pais.Id;
                 p.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-                entorno.AnotarTraza(idTrazaInformativa, $"Creando la provincia {nombreProvincia}");
+                entorno.ActualizarTraza(trazaInfDtm, $"Creando la provincia {nombreProvincia}");
             }
             else
             {
@@ -145,11 +146,11 @@ namespace GestoresDeNegocio.Callejero
                     p.Codigo = codigo;
                     p.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
-                    entorno.AnotarTraza(idTrazaInformativa, $"Modificando la provincia {nombreProvincia}");
+                    entorno.ActualizarTraza(trazaInfDtm, $"Modificando la provincia {nombreProvincia}");
                 }
                 else
                 {
-                    entorno.AnotarTraza(idTrazaInformativa, $"La provincia {nombreProvincia} ya exite");
+                    entorno.ActualizarTraza(trazaInfDtm, $"La provincia {nombreProvincia} ya exite");
                     return p;
                 }
             }

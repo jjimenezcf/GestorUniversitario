@@ -12,6 +12,7 @@ using GestoresDeNegocio.Archivos;
 using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -25,10 +26,10 @@ namespace GestoresDeNegocio.Callejero
             public MapearVariables()
             {
                 CreateMap<MunicipioDtm, MunicipioDto>()
-                    .ForMember(dto => dto.Provincia, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Codigo}) {dtm.Provincia.Nombre}"));
+                    .ForMember(dto => dto.Provincia, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Codigo}) {dtm.Provincia.Nombre}"))
+                    .ForMember(dto => dto.Pais, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Pais.Codigo}) {dtm.Provincia.Pais.Nombre}"));
 
                 CreateMap<MunicipioDto, MunicipioDtm>()
-                .ForMember(dtm => dtm.Provincia, dto => dto.Ignore())
                 .ForMember(dtm => dtm.FechaCreacion, dto => dto.Ignore())
                 .ForMember(dtm => dtm.FechaModificacion, dto => dto.Ignore())
                 .ForMember(dtm => dtm.IdUsuaCrea, dto => dto.Ignore())
@@ -82,16 +83,15 @@ namespace GestoresDeNegocio.Callejero
             var gestorProceso = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
             var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
-            var linea = 0;
-            entorno.AnotarTraza($"Inicio del proceso");
-            var idTraza = entorno.AnotarTraza($"Procesando la fila {linea}");
-            var idTrazaInformativa = entorno.AnotarTraza($"Traza informativa del proceso");
+            var linea = 1;
+            entorno.CrearTraza($"Inicio del proceso");
+            var trazaPrcDtm = entorno.CrearTraza($"Procesando la fila {linea}");
+            var trazaInfDtm = entorno.CrearTraza($"Traza informativa del proceso");
             foreach (var fila in fichero)
             {
                 var tran = gestorProceso.IniciarTransaccion();
                 try
                 {
-                    linea++;
                     if (fila.EnBlanco)
                         continue;
 
@@ -109,25 +109,26 @@ namespace GestoresDeNegocio.Callejero
                         codigoMunicipio: fila["C"],
                         DC: fila["D"],
                         nombreMunicipio: fila["E"],
-                        idTrazaInformativa);
+                        trazaInfDtm);
                     gestorProceso.Commit(tran);
                 }
                 catch (Exception e)
                 {
                     gestorProceso.Rollback(tran);
-                    entorno.AnotarError(e);
+                    entorno.AnotarError($"Error al procesar la fila {linea}", e);
                 }
                 finally
                 {
-                    entorno.AnotarTraza(idTraza, $"Procesando la fila {linea}");
+                    entorno.ActualizarTraza(trazaPrcDtm, $"Procesando la fila {linea}");
+                    linea++;
                 }
             }
 
-            entorno.AnotarTraza($"Procesadas un total de {linea} filas");
+            entorno.CrearTraza($"Procesadas un total de {linea} filas");
 
         }
 
-        private static MunicipioDtm ProcesarMunicipioLeido(EntornoDeTrabajo entorno, GestorDeMunicipios gestorProceso, string iso2Pais, string codigoProvincia, string codigoMunicipio, string DC, string nombreMunicipio, int idTrazaInformativa)
+        private static MunicipioDtm ProcesarMunicipioLeido(EntornoDeTrabajo entorno, GestorDeMunicipios gestorProceso, string iso2Pais, string codigoProvincia, string codigoMunicipio, string DC, string nombreMunicipio, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
             var municipioDtm = LeerMunicipioPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, codigoMunicipio, paraActualizar: true, errorSiNoHay: false);
@@ -141,7 +142,7 @@ namespace GestoresDeNegocio.Callejero
                 municipioDtm.Nombre = nombreMunicipio;
                 municipioDtm.DC = DC;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-                entorno.AnotarTraza(idTrazaInformativa, $"Creando el municipio {nombreMunicipio}");
+                entorno.ActualizarTraza(trazaInfDtm, $"Creando el municipio {nombreMunicipio}");
             }
             else
             {
@@ -151,11 +152,11 @@ namespace GestoresDeNegocio.Callejero
                     municipioDtm.DC = DC;
                     municipioDtm.Codigo = codigoMunicipio;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
-                    entorno.AnotarTraza(idTrazaInformativa, $"Modificando el municipio {nombreMunicipio}");
+                    entorno.ActualizarTraza(trazaInfDtm, $"Modificando el municipio {nombreMunicipio}");
                 }
                 else
                 {
-                    entorno.AnotarTraza(idTrazaInformativa, $"el municipio {nombreMunicipio} ya exite");
+                    entorno.ActualizarTraza(trazaInfDtm, $"el municipio {nombreMunicipio} ya exite");
                     return municipioDtm;
                 }
             }

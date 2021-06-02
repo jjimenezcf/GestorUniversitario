@@ -21,6 +21,8 @@ namespace MVCSistemaDeElementos.Descriptores
         public DescriptorDeMantenimiento<TElemento> Mnt => (DescriptorDeMantenimiento<TElemento>)Padre;
         public List<BloqueDeFitro<TElemento>> Bloques { get; private set; } = new List<BloqueDeFitro<TElemento>>();
 
+        public EditorFiltro<TElemento> FiltroDeNombre;
+
         public ZonaDeFiltro(DescriptorDeMantenimiento<TElemento> mnt)
         : base(
           padre: mnt,
@@ -34,7 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = enumTipoControl.ZonaDeFiltro;
             var b1 = new BloqueDeFitro<TElemento>(this, ltrBloques.General , new Dimension(1, 2));
             var b2 = new BloqueDeFitro<TElemento>(this, ltrBloques.Comun, new Dimension(2, 2));
-            new EditorFiltro<TElemento>(bloque: b1, etiqueta: nameof(INombre.Nombre), propiedad: ltrFiltros.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
+            FiltroDeNombre = new EditorFiltro<TElemento>(bloque: b1, etiqueta: nameof(INombre.Nombre), propiedad: ltrFiltros.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
 
             if (ExtensionesDto.ImplementaAuditoria(typeof(TElemento)))
             {

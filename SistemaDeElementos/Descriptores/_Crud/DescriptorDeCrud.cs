@@ -10,6 +10,7 @@ using ServicioDeDatos;
 using ServicioDeDatos.Entorno;
 using ServicioDeDatos.Negocio;
 using ServicioDeDatos.Seguridad;
+using Utilidades;
 using UtilidadesParaIu;
 
 namespace MVCSistemaDeElementos.Descriptores
@@ -141,6 +142,15 @@ namespace MVCSistemaDeElementos.Descriptores
             control.CambiarEtiqueta(nuevaEtiqueta, ayuda);
             return control;
         }
+        public ControlFiltroHtml RecolocarControl(ControlFiltroHtml control, Posicion posicion,  string nuevaEtiqueta = null, string ayuda = null)
+        {
+            control.Posicion = posicion;
+            ((BloqueDeFitro<TElemento>)control.Padre).AjustarDimensionDeLaTabla();
+
+            if (!nuevaEtiqueta.IsNullOrEmpty())
+                 control.CambiarEtiqueta(nuevaEtiqueta, ayuda);
+            return control;
+        }
 
         public ControlFiltroHtml BuscarControlEnFiltro(string propiedad)
         {
@@ -166,10 +176,6 @@ namespace MVCSistemaDeElementos.Descriptores
                     columna.Visible = atributos.EsVisible(enumModoDeTrabajo.Mantenimiento);
                     columna.Titulo = atributos.EtiquetaGrid;
                     columna.ConOrdenacion = atributos.Ordenar;
-
-                    if (p.Name.ToLower() == ltrFiltros.Nombre && atributos.Ordenar)
-                        columna.cssOrdenacion = enumCssOrdenacion.Ascendente;
-
                     columna.OrdenarPor = atributos.OrdenarPor;
                     columna.Alineada = atributos.Alineada == Aliniacion.no_definida ? columna.Tipo.Alineada() : atributos.Alineada;
                     columna.PorAnchoMnt = atributos.PorAnchoMnt;

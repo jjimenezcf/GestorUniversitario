@@ -14,6 +14,7 @@ using GestoresDeNegocio.Archivos;
 using System.Linq;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -114,9 +115,9 @@ namespace GestoresDeNegocio.Callejero
             var rutaFichero = GestorDocumental.DescargarArchivo(entorno.contextoDelProceso, idArchivo);
             var fichero = new FicheroCsv(rutaFichero);
             var linea = 0;
-            entorno.AnotarTraza($"Inicio del proceso");
-            var idTraza = entorno.AnotarTraza($"Procesando la fila {linea}");
-            var idTrazaInformativa = entorno.AnotarTraza($"Traza informativa del proceso");
+            entorno.CrearTraza($"Inicio del proceso");
+            var trazaPrcDtm = entorno.CrearTraza($"Procesando la fila {linea}");
+            var trazaInfDtm = entorno.CrearTraza($"Traza informativa del proceso");
             foreach (var fila in fichero)
             {
                 var tran = gestor.IniciarTransaccion();
@@ -140,7 +141,7 @@ namespace GestoresDeNegocio.Callejero
                     if (fila["E"].IsNullOrEmpty())
                         GestorDeErrores.Emitir($"El contenido de la fila {linea} donde se indica el prefijo telefónico, celda E, no puede ser nulo");
 
-                    ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"], fila["D"], fila["E"], idTrazaInformativa);
+                    ProcesarPaisLeido(entorno, gestor, fila["A"], fila["B"], fila["C"], fila["D"], fila["E"], trazaInfDtm);
                     gestor.Commit(tran);
                 }
                 catch (Exception e)
@@ -150,14 +151,14 @@ namespace GestoresDeNegocio.Callejero
                 }
                 finally
                 {
-                    entorno.AnotarTraza(idTraza, $"Procesando la fila {linea}");
+                    entorno.ActualizarTraza(trazaPrcDtm, $"Procesando la fila {linea}");
                 }
             }
 
-            entorno.AnotarTraza($"Procesadas un total de {linea} filas");
+            entorno.CrearTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, int idTrazaInformativa)
+        private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
             var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, false, false);
@@ -170,7 +171,7 @@ namespace GestoresDeNegocio.Callejero
                 p.ISO2 = Iso2;
                 p.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-                entorno.AnotarTraza(idTrazaInformativa, $"Creando el pais {nombrePais}");
+                entorno.ActualizarTraza(trazaInfDtm, $"Creando el pais {nombrePais}");
             }
             else
             {
@@ -181,11 +182,11 @@ namespace GestoresDeNegocio.Callejero
                     p.ISO2 = Iso2;
                     p.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
-                    entorno.AnotarTraza(idTrazaInformativa, $"Modificando el pais {nombrePais}");
+                    entorno.ActualizarTraza(trazaInfDtm, $"Modificando el pais {nombrePais}");
                 }
                 else
                 {
-                    entorno.AnotarTraza(idTrazaInformativa, $"El pais {nombrePais} ya existe");
+                    entorno.ActualizarTraza(trazaInfDtm, $"El pais {nombrePais} ya existe");
                     return p;
                 }
             }
