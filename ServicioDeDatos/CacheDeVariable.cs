@@ -38,7 +38,7 @@ namespace ServicioDeDatos
 
         public static string ServidorDeCorreo => ObtenerVariable(Variable.CFG_Servidor_De_Correo, "Define el nombre de la sección del fichero appsetting.json donde se encuentran las características del servidor de correo a utilizar", "CorreoDeGmail");
 
-        public static bool HayQueDebuggar => ObtenerVariable(Variable.CFG_Version, "Indica si hay que debugar", "S") == "S";
+        public static bool HayQueDebuggar => ObtenerVariable(Variable.CFG_Debugar_Sqls, "Indica si hay que debugar", "S") == "S";
 
         public static string Version => ObtenerVariable(Variable.CFG_Version, "Versión del sistema de elementos", "0.1");
 

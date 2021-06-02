@@ -106,9 +106,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderCuerpoCabecera(string htmlTitulo, string htmlMenu)
         {
-            if (OrdenacionInicial.IsNullOrEmpty() && typeof(TElemento).TienenLaPropiedad(nameof(INombre)))
+            if (OrdenacionInicial.IsNullOrEmpty() && typeof(TElemento).TienenLaPropiedad(ltrFiltros.Nombre))
             {
-                OrdenacionInicial = $"{nameof(INombre)}:{nameof(INombre)}:{enumModoOrdenacion.ascendente.Render()}";
+                OrdenacionInicial = $"{ltrFiltros.Nombre}:{ltrFiltros.Nombre}:{enumModoOrdenacion.ascendente.Render()}";
             }
 
             var propiedades = $@" id='{IdHtml}' 
@@ -120,7 +120,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         negocio='{Crud.RenderNegocio}'
                         dto='{Crud.RenderDto}'
                         id-negocio='{Crud.RenderIdDeNegocio}'
-                        orden-inicial='{OrdenacionInicial}'>
+                        orden-inicial='{OrdenacionInicial.ToLower()}'>
                      ";
 
             return ModoDescriptor.Mantenimiento == ((DescriptorDeCrud<TElemento>)Padre).Modo ?
@@ -158,8 +158,8 @@ namespace MVCSistemaDeElementos.Descriptores
         {
             var htmlParteSuperiror = $@"
                                 <!--  ******************* menú ******************* -->
-                                <div id = ¨{IdHtml}.MenuDelMnt¨ class=¨{Css.Render(enumCssMnt.MntMenuContenedor)}¨>  
-                                   <div id = ¨{IdHtml}¨  class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssMnt.MntMenuZona)}¨>     
+                                <div id = ¨contenedor.{IdHtml}.MenuDelMnt¨ class=¨{Css.Render(enumCssMnt.MntMenuContenedor)}¨>  
+                                   <div id = ¨contenedor.{IdHtml}.ZonaMenuDelMnt¨  class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssMnt.MntMenuZona)}¨>     
                                      {ZonaMenu.RenderControl()} 
                                     </div>
                                     <div id = ¨div.mostrar.{IdHtml}¨ class=¨{Css.Render(enumCssDiv.DivVisible)} {Css.Render(enumCssMnt.MntFiltroExpansor)}¨>     

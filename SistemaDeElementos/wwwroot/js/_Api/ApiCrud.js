@@ -247,12 +247,9 @@ var ApiControl;
         }
         return resultado;
     }
-    function MapearComoOrdenar(columna, propiedad, ordenarPor, modo) {
-        if (!IsNullOrEmpty(modo)) {
-            columna.setAttribute(atControl.ordenarPor, ordenarPor);
-            columna.setAttribute(atControl.modoOrdenacion, modo);
-            this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
-        }
+    function MapearComoOrdenar(columna, orden) {
+        columna.setAttribute(atControl.ordenarPor, orden.OrdenarPor);
+        columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
     }
     ApiControl.MapearComoOrdenar = MapearComoOrdenar;
 })(ApiControl || (ApiControl = {}));

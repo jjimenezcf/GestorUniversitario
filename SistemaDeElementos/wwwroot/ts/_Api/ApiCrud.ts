@@ -260,12 +260,9 @@
         return resultado;
     }
 
-   export function MapearComoOrdenar(columna: HTMLTableHeaderCellElement, propiedad: string, ordenarPor: string, modo: string) {
-        if (!IsNullOrEmpty(modo)) {
-            columna.setAttribute(atControl.ordenarPor, ordenarPor);
-            columna.setAttribute(atControl.modoOrdenacion, modo);
-            this.Ordenacion.Actualizar(columna.id, propiedad, modo, ordenarPor);
-        }
+    export function MapearComoOrdenar(columna: HTMLTableHeaderCellElement, orden: Tipos.Orden) {
+            columna.setAttribute(atControl.ordenarPor, orden.OrdenarPor);
+            columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
     }
 
 }

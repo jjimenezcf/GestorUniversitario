@@ -85,11 +85,10 @@ namespace Utilidades
             if (!cache.ContainsKey(indice))
                 cache[indice] = tipo.GetProperties();
 
-            PropertyInfo[] props = (PropertyInfo[])cache[indice];
-
-            foreach(var p in props)
+            foreach(var p in (PropertyInfo[])cache[indice])
             {
-                if (p.Name == propiedad) return true;
+                if (p.Name.ToLower() == propiedad.ToLower())
+                    return true;
             }
 
             return false;

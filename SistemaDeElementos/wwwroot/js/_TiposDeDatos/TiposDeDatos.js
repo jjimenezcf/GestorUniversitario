@@ -67,6 +67,12 @@ var Tipos;
         Leer(i) {
             return this.lista[i];
         }
+        LeerPorPropiedad(propiedad) {
+            for (let i = 0; i < this.lista.length; i++) {
+                if (this.lista[i].Propiedad == propiedad)
+                    return this.lista[i];
+            }
+        }
     }
     Tipos.Ordenacion = Ordenacion;
     class DatosRestrictor {

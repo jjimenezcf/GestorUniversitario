@@ -118,7 +118,7 @@ function ToLista(cadena, separador = ';') {
     let subcadenas = cadena.split(`${separador}`);
     for (let i = 0; i < subcadenas.length; i++) {
         if (!IsNullOrEmpty(subcadenas[i])) {
-            resultado.push(subcadenas[i]);
+            resultado.push(subcadenas[i].replace("\n", "").trim());
         }
     }
     return resultado;

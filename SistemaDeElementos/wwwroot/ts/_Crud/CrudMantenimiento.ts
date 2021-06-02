@@ -126,8 +126,11 @@
                         return;
                     }
 
-                    if (partes[0] === propiedad)
-                        ApiControl.MapearComoOrdenar(columna, partes[0].trim(), partes[1].trim(), partes[2].trim());
+                    if (partes[0] === propiedad) {
+                        this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim());
+                        ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
+                    }
+
                 }
             }
         }

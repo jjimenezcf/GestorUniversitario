@@ -85,6 +85,13 @@
         public Leer(i: number): Tipos.Orden {
             return this.lista[i];
         }
+
+        public LeerPorPropiedad(propiedad: string): Tipos.Orden {
+            for (let i = 0; i < this.lista.length; i++) {
+                if (this.lista[i].Propiedad == propiedad)
+                    return this.lista[i];
+            }
+        }
     }
 
 
