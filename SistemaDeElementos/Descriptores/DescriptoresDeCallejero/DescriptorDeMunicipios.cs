@@ -17,7 +17,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
 
             new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
                 etiqueta: "Pais",
-                filtrarPor: nameof(MunicipioDto.IdProvincia),
+                filtrarPor: nameof(MunicipioDto.IdPais),
                 ayuda: "seleccione el país",
                 seleccionarDe: nameof(PaisDto),
                 buscarPor: nameof(PaisDto.Nombre),

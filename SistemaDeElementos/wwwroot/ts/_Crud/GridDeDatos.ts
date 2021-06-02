@@ -1230,7 +1230,7 @@
         private SiHayErrorAlCargarElGrid(peticion: ApiDeAjax.DescriptorAjax) {
             let grid: GridDeDatos = peticion.llamador as GridDeDatos;
             try {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, peticion.resultado.mensaje);
+                MensajesSe.Error("SiHayErrorAlCargarElGrid", peticion.resultado.mensaje, peticion.resultado.consola);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');

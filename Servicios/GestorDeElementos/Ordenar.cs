@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Gestor.Errores;
 using Newtonsoft.Json;
 using ServicioDeDatos.Elemento;
 
@@ -91,7 +92,7 @@ namespace GestorDeElementos
             }
             catch (Exception e)
             {
-                throw new Exception($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}", e);
+                GestorDeErrores.Emitir($"Una de las propiedades de ordenación está mal definida. {JsonConvert.SerializeObject(ordenacion)}", e);
             }
 
 

@@ -991,7 +991,7 @@ var Crud;
         SiHayErrorAlCargarElGrid(peticion) {
             let grid = peticion.llamador;
             try {
-                MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, peticion.resultado.mensaje);
+                MensajesSe.Error("SiHayErrorAlCargarElGrid", peticion.resultado.mensaje, peticion.resultado.consola);
             }
             finally {
                 grid.Grid.setAttribute(atGrid.cargando, 'N');

@@ -78,6 +78,21 @@ namespace GestoresDeNegocio.Callejero
             return registros;
         }
 
+        protected override IQueryable<MunicipioDtm> AplicarFiltros(IQueryable<MunicipioDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros =  base.AplicarFiltros(registros, filtros, parametros);
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(MunicipioDto.IdPais).ToLower())
+                    registros = registros.Where(x => x.Provincia.Pais.Id == filtro.Valor.Entero());
+            }
+
+            return registros;
+
+
+        }
+
         internal static void ImportarFicheroDeMunicipios(EntornoDeTrabajo entorno, int idArchivo)
         {
             var gestorProceso = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);

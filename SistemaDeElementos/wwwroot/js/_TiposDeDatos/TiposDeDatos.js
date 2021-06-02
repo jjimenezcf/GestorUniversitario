@@ -38,13 +38,15 @@ var Tipos;
                 if (this.lista[i].Propiedad === propiedad) {
                     this.lista[i].Modo = modo;
                     this.lista[i].ccsClase = modo;
-                    ApiControl.AjustarColumnaDelGrid(this.lista[i]);
-                    return;
+                    return ApiControl.AjustarColumnaDelGrid(this.lista[i]);
                 }
             }
             let orden = new Tipos.Orden(idcolumna, propiedad, modo, ordenarPor);
-            this.lista.push(orden);
-            ApiControl.AjustarColumnaDelGrid(orden);
+            if (ApiControl.AjustarColumnaDelGrid(orden)) {
+                this.lista.push(orden);
+                return true;
+            }
+            return false;
         }
         Quitar(propiedad) {
             for (let i = 0; i < this.lista.length; i++) {
@@ -52,17 +54,16 @@ var Tipos;
                     this.lista[i].Modo = ModoOrdenacion.sinOrden;
                     this.lista[i].ccsClase = ModoOrdenacion.sinOrden;
                     let orden = this.lista[i];
-                    ApiControl.AjustarColumnaDelGrid(orden);
                     this.lista.splice(i, 1);
-                    return;
+                    return ApiControl.AjustarColumnaDelGrid(orden);
                 }
             }
         }
         Actualizar(idcolumna, propiedad, modo, ordenarPor) {
             if (modo === ModoOrdenacion.sinOrden)
-                this.Quitar(propiedad);
+                return this.Quitar(propiedad);
             else
-                this.Anadir(idcolumna, propiedad, modo, ordenarPor);
+                return this.Anadir(idcolumna, propiedad, modo, ordenarPor);
         }
         Leer(i) {
             return this.lista[i];

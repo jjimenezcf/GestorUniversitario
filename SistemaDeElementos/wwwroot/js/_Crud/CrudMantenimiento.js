@@ -102,8 +102,8 @@ var Crud;
                         return;
                     }
                     if (partes[0] === propiedad) {
-                        this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim());
-                        ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
+                        if (this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim()))
+                            ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
                     }
                 }
             }

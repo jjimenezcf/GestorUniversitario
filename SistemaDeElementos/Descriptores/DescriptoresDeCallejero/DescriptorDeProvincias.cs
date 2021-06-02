@@ -29,7 +29,11 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , etiqueta: "Codigo"
                 , propiedad: nameof(ProvinciaDto.Codigo)
                 , ayuda: "buscar por codigo"
-                , new Posicion { fila = 1, columna = 0 });
+                , new Posicion { fila = 0, columna = 1 });
+
+            RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1, 0), "Provincia", "Buscar Buscar por nombre de provincia");
+            Mnt.OrdenacionInicial = @$"{nameof(ProvinciaDto.Pais)}:pais.nombre:{enumModoOrdenacion.ascendente.Render()};
+                                       {nameof(ProvinciaDto.Nombre)}:nombre:{enumModoOrdenacion.ascendente.Render()}";
         }
 
 

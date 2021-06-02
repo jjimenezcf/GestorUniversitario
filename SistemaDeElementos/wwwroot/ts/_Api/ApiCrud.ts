@@ -107,7 +107,7 @@
     export function BloquearEditorPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
         let editor: HTMLInputElement = BuscarEditor(panel, propiedad);
         if (editor !== null) {
-           return BloquearEditor(editor);
+            return BloquearEditor(editor);
         }
         return false;
     }
@@ -206,11 +206,22 @@
         return null;
     }
 
-    export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden) {
+    export function AjustarColumnaDelGrid(columanDeOrdenacion: Tipos.Orden): boolean {
         let columna: HTMLTableHeaderCellElement = document.getElementById(columanDeOrdenacion.IdColumna) as HTMLTableHeaderCellElement;
-        columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
+        if (NoDefinida(columna)) {
+            MensajesSe.Error("AjustarColumnaDelGrid", `la columna ${columanDeOrdenacion.IdColumna} no está definida en el Grid`);
+            return false;
+        }
+
         let a: HTMLElement = columna.getElementsByTagName('a')[0] as HTMLElement;
+        if (NoDefinida(a)) {
+            MensajesSe.Error("AjustarColumnaDelGrid", `el orden aplicado a la propiedad ${columanDeOrdenacion.Propiedad} no se puede aplicar`);
+            return false;
+        }
+
+        columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
         a.setAttribute("class", columanDeOrdenacion.ccsClase);
+        return true;
     }
 
     export function BlanquearEditor(editor: HTMLInputElement): void {
@@ -261,8 +272,8 @@
     }
 
     export function MapearComoOrdenar(columna: HTMLTableHeaderCellElement, orden: Tipos.Orden) {
-            columna.setAttribute(atControl.ordenarPor, orden.OrdenarPor);
-            columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
+        columna.setAttribute(atControl.ordenarPor, orden.OrdenarPor);
+        columna.setAttribute(atControl.modoOrdenacion, orden.Modo);
     }
 
 }
@@ -276,7 +287,7 @@ namespace ApiCrud {
             url = url + `?id=${elemento.Id}`;
         a.setAttribute("href", url);
         a.target = "_blank";
-        a.setAttribute(atControl.idElemento, elemento.Id.toString())
+        a.setAttribute(atControl.idElemento, elemento.Id.toString());
         let aTexto = document.createTextNode(elemento.Texto);
         a.appendChild(aTexto);
         divDeElementos.appendChild(a);
@@ -320,14 +331,14 @@ namespace ApiCrud {
         if (NoDefinida(modal))
             throw new Error(`La modal ${id} no está definida`);
         CerrarModal(modal);
-    } 
+    }
 
     export function OcultarModalPorId(id: string) {
         let modal: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
         if (NoDefinida(modal))
             throw new Error(`La modal ${id} no está definida`);
         OcultarModal(modal);
-    } 
+    }
 
     export function CerrarModal(modal: HTMLDivElement) {
         BlanquearSelectoresDeElemento(modal);
@@ -343,7 +354,7 @@ namespace ApiCrud {
         if (NoDefinida(modal))
             throw new Error(`La modal ${id} no está definida`);
         AbriModal(modal);
-    } 
+    }
 
     export function AbriModal(modal: HTMLDivElement) {
         modal.style.display = 'block';
@@ -399,7 +410,7 @@ namespace ApiCrud {
 
             if (!opcion.disabled) {
                 let permiteMultiSeleccion: string = opcion.getAttribute(atOpcionDeMenu.permiteMultiSeleccion);
-                if (!EsTrue(permiteMultiSeleccion) ) {
+                if (!EsTrue(permiteMultiSeleccion)) {
                     opcion.disabled = !(seleccionadas === 1);
                     return;
                 }
@@ -408,7 +419,7 @@ namespace ApiCrud {
                 if (numero !== -1)
                     opcion.disabled = (seleccionadas > numero);
             }
-            
+
         }
     }
 
@@ -466,7 +477,7 @@ namespace ApiCrud {
             selectores[i].setAttribute(atSelectorDeElementos.Seleccionados, '');
             let idEditor = selectores[i].getAttribute(atSelectorDeElementos.EditorAsociado);
             let editor: HTMLInputElement = document.getElementById(idEditor) as HTMLInputElement;
-            ApiControl.BlanquearEditor(editor)
+            ApiControl.BlanquearEditor(editor);
         }
     }
 

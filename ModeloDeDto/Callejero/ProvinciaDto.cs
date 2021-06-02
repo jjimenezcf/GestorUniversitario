@@ -16,7 +16,8 @@ namespace ModeloDeDto.Callejero
             GuardarEn = nameof(IdPais),
             Fila = 0,
             Columna = 0,
-            Obligatorio = true
+            Obligatorio = true,
+            Ordenar = true
             )
         ]
         public string Pais { get; set; }
@@ -24,6 +25,21 @@ namespace ModeloDeDto.Callejero
         [IUPropiedad(Etiqueta = "Id del pais",
             Visible = false)]
         public int IdPais { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Provincia",
+            Ayuda = "Indique el nombre de la provincia",
+            Tipo = typeof(string),
+            Fila = 1,
+            Columna = 1,
+            Ordenar = true,
+            PorAnchoMnt = 50,
+            Obligatorio = true,
+            LongitudMaxima = 250
+          )
+        ]
+        public string Nombre { get; set; }
 
         //----------------------------------------------
         [IUPropiedad(
@@ -42,21 +58,6 @@ namespace ModeloDeDto.Callejero
 
         //----------------------------------------------
 
-        [IUPropiedad(
-            Etiqueta = "Provincia",
-            Ayuda = "Indique el nombre de la provincia",
-            Tipo = typeof(string),
-            Fila = 1,
-            Columna = 1,
-            Ordenar = true,
-            PorAnchoMnt = 50,
-            Obligatorio = true,
-            LongitudMaxima = 250
-          )
-        ]
-        public string Nombre { get; set; }
-
-        //----------------------------------------------
 
         [IUPropiedad(
             Etiqueta = "Sigla",

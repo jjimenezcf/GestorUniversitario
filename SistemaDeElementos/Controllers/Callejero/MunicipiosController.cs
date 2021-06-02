@@ -31,6 +31,9 @@ namespace SistemaDeElementos.Controllers.Callejero
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
         {
+            if (claseElemento == nameof(PaisDto))
+                return GestorDePaises.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPaises(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+
             if (claseElemento == nameof(ProvinciaDto))
                 return GestorDeProvincias.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerProvincias(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
 

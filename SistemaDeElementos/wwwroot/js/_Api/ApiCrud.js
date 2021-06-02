@@ -197,9 +197,18 @@ var ApiControl;
     }
     function AjustarColumnaDelGrid(columanDeOrdenacion) {
         let columna = document.getElementById(columanDeOrdenacion.IdColumna);
-        columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
+        if (NoDefinida(columna)) {
+            MensajesSe.Error("AjustarColumnaDelGrid", `la columna ${columanDeOrdenacion.IdColumna} no está definida en el Grid`);
+            return false;
+        }
         let a = columna.getElementsByTagName('a')[0];
+        if (NoDefinida(a)) {
+            MensajesSe.Error("AjustarColumnaDelGrid", `el orden aplicado a la propiedad ${columanDeOrdenacion.Propiedad} no se puede aplicar`);
+            return false;
+        }
+        columna.setAttribute(atControl.modoOrdenacion, columanDeOrdenacion.Modo);
         a.setAttribute("class", columanDeOrdenacion.ccsClase);
+        return true;
     }
     ApiControl.AjustarColumnaDelGrid = AjustarColumnaDelGrid;
     function BlanquearEditor(editor) {
