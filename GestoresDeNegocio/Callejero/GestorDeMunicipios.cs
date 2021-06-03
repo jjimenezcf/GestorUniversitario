@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
 using ServicioDeDatos.TrabajosSometidos;
+using GestoresDeNegocio.Entorno;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -176,6 +177,7 @@ namespace GestoresDeNegocio.Callejero
                     municipioDtm.DC = DC;
                     municipioDtm.Codigo = codigoMunicipio;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
+                    municipioDtm.UsuarioModificador = null;
                     entorno.ActualizarTraza(trazaInfDtm, $"Modificando el municipio {nombreMunicipio}");
                 }
                 else
@@ -184,7 +186,6 @@ namespace GestoresDeNegocio.Callejero
                     return municipioDtm;
                 }
             }
-
             return gestorProceso.PersistirRegistro(municipioDtm, operacion);
 
         }
