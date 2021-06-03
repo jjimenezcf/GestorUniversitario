@@ -97,7 +97,8 @@ namespace MVCSistemaDeElementos.Controllers
 
         protected override TElemento LeerPorId(int id, Dictionary<string, object> parametros)
         {
-            parametros.Add(ElementoDto.DescargarGestionDocumental, true);
+            parametros.Add(ltrParametrosDto.DescargarGestionDocumental, true);
+            parametros.Add(ltrParametrosDto.solicitadoPorLaCola, false);
             return GestorDeElementos.LeerElementoPorId(id, parametros);
         }
 
@@ -221,7 +222,7 @@ namespace MVCSistemaDeElementos.Controllers
                 else
                 {
                     var opcionesDeMapeo = new Dictionary<string, object>();
-                    opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+                    opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, false);
                     var cantidad = !parametros.ContainsKey(ltrFiltros.cantidad) ? -1 : parametros[ltrFiltros.cantidad].ToString().Entero();
                     var posicion = !parametros.ContainsKey(ltrFiltros.posicion) ? 0 : parametros[ltrFiltros.posicion].ToString().Entero();
                     List<ClausulaDeFiltrado> filtros = !parametros.ContainsKey(ltrFiltros.filtro) || parametros[ltrFiltros.filtro].ToString().IsNullOrEmpty() ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(parametros["filtro"].ToString());
@@ -381,7 +382,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var modoDeAcceso = enumModoDeAccesoDeDatos.SinPermiso;
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
                 var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+                opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, false);
 
                 var elemento = GestorDeElementos.LeerElementoPorId(id, opcionesDeMapeo);
                 modoDeAcceso = GestorDeElementos.LeerModoDeAccesoAlElemento(DatosDeConexion.IdUsuario, NegociosDeSe.ToEnumerado(negocio), id);
@@ -508,7 +509,7 @@ namespace MVCSistemaDeElementos.Controllers
             //Descriptor.Mnt.Datos.PosicionInicial = posicion;
 
             var opcionesDeMapeo = new Dictionary<string, object>();
-            opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+            opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, false);
 
             List<ClausulaDeFiltrado> filtros = filtro == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtro);
             List<ClausulaDeOrdenacion> ordenes = orden == null ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(orden);

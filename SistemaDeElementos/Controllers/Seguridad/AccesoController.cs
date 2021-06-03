@@ -50,7 +50,7 @@ namespace SistemaDeElementos.Controllers.Seguridad
 
                 List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(restrictor);
                 var opcionesDeMapeo = new Dictionary<string, object>();
-                opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, true);
+                opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, true);
 
                 var elementos = _gestordeUsuarios.LeerElementos(0, -1, filtros, null, opcionesDeMapeo).ToList();
 

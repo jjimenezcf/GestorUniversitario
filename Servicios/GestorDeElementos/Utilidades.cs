@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using AutoMapper;
+using Gestor.Errores;
 using ModeloDeDto;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
@@ -29,6 +30,17 @@ namespace GestorDeElementos
         public static string DescargarArchivo(int id, string nombreFichero, string almacenadoEn, bool solicitadoPorLaCola)
         {
             var rutaDeDescarga = !solicitadoPorLaCola ? $@".\wwwroot\Archivos": CacheDeVariable.Cfg_RutaDeDescarga;
+
+            if (!Directory.Exists(rutaDeDescarga))
+                try
+                {
+                    Directory.CreateDirectory(rutaDeDescarga);
+                }
+                catch(Exception e)
+                {
+                    GestorDeErrores.Emitir($"Error al crear un directorio {rutaDeDescarga}",e);
+                }
+
             var ficheroCacheado = $"{id}.se";
             var ficheroConRutaEnLaGd = $@"{almacenadoEn}\{ficheroCacheado}";
             var ficheroConRutaCacheado = $@"{rutaDeDescarga}\{ficheroCacheado}";

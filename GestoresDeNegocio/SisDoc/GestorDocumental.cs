@@ -140,7 +140,7 @@ namespace GestoresDeNegocio.Archivos
             List<ClausulaDeOrdenacion> orden = !parametros.ContainsKey(ltrFiltros.orden) || parametros[ltrFiltros.orden].ToString().IsNullOrEmpty() ? new List<ClausulaDeOrdenacion>() : JsonConvert.DeserializeObject<List<ClausulaDeOrdenacion>>(parametros["orden"].ToString());
 
             var opcionesDeMapeo = new Dictionary<string, object>();
-            opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+            opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, false);
 
             Type clase = gestor.GetType();
             MethodInfo metodo = clase.GetMethod(nameof(GestorDeElementos<ContextoSe, Registro, ElementoDto>.LeerElementos));

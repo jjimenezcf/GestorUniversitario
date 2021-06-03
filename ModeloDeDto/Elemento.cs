@@ -22,6 +22,12 @@ namespace ModeloDeDto
         public static string cantidad = nameof(cantidad).ToLower();
     }
 
+    public static class ltrParametrosDto
+    {
+        public static string DescargarGestionDocumental = "descargar-gestion-documental";
+        public static string solicitadoPorLaCola = nameof(solicitadoPorLaCola);
+    }
+
     public enum CriteriosDeFiltrado { igual, mayor, menor, esNulo, noEsNulo, contiene, noContiene, comienza, termina, mayorIgual, menorIgual, diferente, esAlgunoDe, entreFechas }
 
     public enum enumModoDeTrabajo { Nuevo, Consulta, Edicion, Mantenimiento }
@@ -200,8 +206,6 @@ namespace ModeloDeDto
 
     public class ElementoDto : IElementoDto
     {
-        public static string DescargarGestionDocumental = "descargar-gestion-documental";
-
         [IUPropiedad(
             Etiqueta = "Id",
             Ayuda = "id del elemento",

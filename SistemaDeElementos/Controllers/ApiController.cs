@@ -54,7 +54,7 @@ namespace MVCSistemaDeElementos.Controllers
             int total;
             IEnumerable<T> elementos;
             var opcionesDeMapeo = new Dictionary<string, object>();
-            opcionesDeMapeo.Add(ElementoDto.DescargarGestionDocumental, false);
+            opcionesDeMapeo.Add(ltrParametrosDto.DescargarGestionDocumental, false);
             elementos = Leer();
             total = Contar();
             return (elementos, total);
