@@ -17,13 +17,14 @@ using Utilidades;
 using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Entorno;
 using GestoresDeNegocio.Negocio;
+using System.ComponentModel;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
     public class GestorDeCorreos : GestorDeElementos<ContextoSe, CorreoDtm, CorreoDto>
     {
 
-        public class ltrParam
+        public class ltrParamCorreos
         {
             internal static readonly string usuarios = nameof(usuarios);
             internal static readonly string puestos = nameof(puestos);
@@ -33,6 +34,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             internal static readonly string adjuntos = nameof(adjuntos);
             internal static readonly string archivos = nameof(archivos);
             internal static readonly string elementosDeNegocio = nameof(elementosDeNegocio);
+            internal static readonly string LeerUsuarioDtm = nameof(LeerUsuarioDtm);
         }
 
 
@@ -103,28 +105,28 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             Dictionary<string, object> parametros = parametrosJson.ToDiccionarioDeParametros();
 
-            if (!parametros.ContainsKey(ltrParam.archivos))
-                parametros[ltrParam.archivos] = new List<string>();
+            if (!parametros.ContainsKey(ltrParamCorreos.archivos))
+                parametros[ltrParamCorreos.archivos] = new List<string>();
 
             ValidarParametrosDeCorreo(contexto, parametros);
 
             return CrearCorreoDe(contexto
                 , GestorDeUsuarios.LeerUsuario(contexto, contexto.DatosDeConexion.IdUsuario).eMail
-                , (List<string>)parametros[ltrParam.receptores]
-                , (string)parametros[ltrParam.asunto]
-                , (string)parametros[ltrParam.cuerpo]
-                , (List<TipoDtoElmento>)parametros[ltrParam.adjuntos]
-                , (List<string>)parametros[ltrParam.archivos]);
+                , (List<string>)parametros[ltrParamCorreos.receptores]
+                , (string)parametros[ltrParamCorreos.asunto]
+                , (string)parametros[ltrParamCorreos.cuerpo]
+                , (List<TipoDtoElmento>)parametros[ltrParamCorreos.adjuntos]
+                , (List<string>)parametros[ltrParamCorreos.archivos]);
         }
 
 
         private static void ValidarParametrosDeCorreo(ContextoSe contexto, Dictionary<string, object> parametros)
         {
-            if (!parametros.ContainsKey(ltrParam.usuarios) && !parametros.ContainsKey(ltrParam.puestos))
+            if (!parametros.ContainsKey(ltrParamCorreos.usuarios) && !parametros.ContainsKey(ltrParamCorreos.puestos))
                 GestorDeErrores.Emitir("Debe indicar algún receptor");
 
-            var usuarios = parametros.ContainsKey(ltrParam.usuarios) ? parametros[ltrParam.usuarios].ToString().JsonToLista<int>() : new List<int>();
-            var puestos = parametros.ContainsKey(ltrParam.puestos) ? parametros[ltrParam.puestos].ToString().JsonToLista<int>() : new List<int>();
+            var usuarios = parametros.ContainsKey(ltrParamCorreos.usuarios) ? parametros[ltrParamCorreos.usuarios].ToString().JsonToLista<int>() : new List<int>();
+            var puestos = parametros.ContainsKey(ltrParamCorreos.puestos) ? parametros[ltrParamCorreos.puestos].ToString().JsonToLista<int>() : new List<int>();
 
             if (usuarios.Count == 0 && puestos.Count == 0)
                 GestorDeErrores.Emitir("Debe indicar algún receptor");
@@ -139,15 +141,15 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     receptores = $"{receptores};{GestorDeUsuarios.LeerUsuario(contexto, usuario.Id).eMail}";
             }
 
-            parametros[ltrParam.receptores] = receptores.Substring(1).ToLista<string>();
+            parametros[ltrParamCorreos.receptores] = receptores.Substring(1).ToLista<string>();
 
-            if (((string)parametros[ltrParam.asunto]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el asunto");
-            if (((string)parametros[ltrParam.cuerpo]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el cuerpo");
+            if (((string)parametros[ltrParamCorreos.asunto]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el asunto");
+            if (((string)parametros[ltrParamCorreos.cuerpo]).IsNullOrEmpty()) GestorDeErrores.Emitir("Debe indicar el cuerpo");
 
-            if (parametros.ContainsKey(ltrParam.adjuntos))
+            if (parametros.ContainsKey(ltrParamCorreos.adjuntos))
             {
                 var lista = new List<TipoDtoElmento>();
-                var elementosDto = parametros[ltrParam.adjuntos].ToString().JsonToLista<string>();
+                var elementosDto = parametros[ltrParamCorreos.adjuntos].ToString().JsonToLista<string>();
                 foreach (var elementoDto in elementosDto)
                 {
                     var partes = elementoDto.Split(":");
@@ -159,7 +161,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                     lista.Add(GestorDeNegocios.ValidarElementoDto(elemento));
                  }
 
-                parametros[ltrParam.adjuntos] = lista;
+                parametros[ltrParamCorreos.adjuntos] = lista;
             }
 
             //TODO: Validar que las rutas de los archivos o los Ids de los archivos existen
@@ -178,11 +180,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return cuerpo;
         }
 
+
         internal static void EnviarCorreoPendientes(ContextoSe contexto)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             var filtro = new ClausulaDeFiltrado(nameof(CorreoDtm.Enviado), CriteriosDeFiltrado.esNulo);
-            var pendientes = gestor.LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { filtro });
+            var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
+            parametros.Parametros[ltrParamCorreos.LeerUsuarioDtm] = false;
+            var pendientes = gestor.LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { filtro }, null, null, parametros);
             foreach (var pendiente in pendientes)
                 try
                 {
@@ -230,7 +235,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
         protected override IQueryable<CorreoDtm> AplicarJoins(IQueryable<CorreoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
-            registros = registros.Include(p => p.Usuario);
+            if (!parametros.Parametros.ContainsKey(ltrParamCorreos.LeerUsuarioDtm) || (parametros.Parametros.ContainsKey(ltrParamCorreos.LeerUsuarioDtm) && (bool)parametros.Parametros[ltrParamCorreos.LeerUsuarioDtm]))
+                registros = registros.Include(p => p.Usuario);
             return registros;
         }
 
@@ -243,10 +249,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 if (filtro.Clausula.ToLower() == nameof(ElementoDtm.Nombre).ToLower())
                     registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(CorreoDtm.Asunto));
 
-                if (filtro.Clausula.ToLower() == ltrCorreos.seHaEnviado.ToLower())
+                if (filtro.Clausula.ToLower() == ltrFltCorreosDto.seHaEnviado.ToLower())
                     registros = Filtrar.AplicarFiltroPorFechaNoNula(registros, nameof(CorreoDtm.Enviado));
 
-                if (filtro.Clausula.ToLower() == ltrCorreos.NoSeHaEnviado.ToLower())
+                if (filtro.Clausula.ToLower() == ltrFltCorreosDto.NoSeHaEnviado.ToLower())
                     registros = Filtrar.AplicarFiltroPorFechaNula(registros, nameof(CorreoDtm.Enviado));
 
             }

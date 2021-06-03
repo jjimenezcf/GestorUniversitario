@@ -4,7 +4,7 @@ using ModeloDeDto.Entorno;
 
 namespace ModeloDeDto.TrabajosSometidos
 {
-    public static class ltrCorreos
+    public static class ltrFltCorreosDto
     {
         public static readonly string receptores = nameof(receptores);
         public static readonly string sometido = nameof(sometido);

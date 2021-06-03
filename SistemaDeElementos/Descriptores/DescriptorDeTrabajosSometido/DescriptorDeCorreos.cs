@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                               propiedadDondeMapear: UsuariosPor.NombreCompleto.ToString());
             new CheckFiltro<CorreoDto>(Mnt.BloqueComun,
                 etiqueta: "Mostrar los enviados",
-                filtrarPor: nameof(ltrCorreos.seHaEnviado),
+                filtrarPor: nameof(ltrFltCorreosDto.seHaEnviado),
                 ayuda: "Sólo los enviados",
                 valorInicial: false,
                 filtrarPorFalse: false,
@@ -49,7 +49,7 @@ namespace MVCSistemaDeElementos.Descriptores
          
             new CheckFiltro<CorreoDto>(Mnt.BloqueComun,
                 etiqueta: "Mostrar los no enviados",
-                filtrarPor: nameof(ltrCorreos.NoSeHaEnviado),
+                filtrarPor: nameof(ltrFltCorreosDto.NoSeHaEnviado),
                 ayuda: "Sólo los no enviados",
                 valorInicial: false,
                 filtrarPorFalse: false,
