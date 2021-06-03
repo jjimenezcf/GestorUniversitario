@@ -62,7 +62,9 @@ namespace GestoresDeNegocio.Callejero
             var filtro2 = new ClausulaDeFiltrado(nameof(ProvinciaDtm.Codigo), CriteriosDeFiltrado.igual, codigoProvincia);
             filtros.Add(filtro1);
             filtros.Add(filtro2);
-            List<ProvinciaDtm> provincias = gestor.LeerRegistros(0, -1, filtros, null, null, new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo));
+            var p = new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            p.Parametros.Add(ltrJoinAudt.IncluirUsuarioDtm, false);
+            List<ProvinciaDtm> provincias = gestor.LeerRegistros(0, -1, filtros, null, null, p);
 
             if (provincias.Count == 0 && errorSiNoHay)
                 GestorDeErrores.Emitir($"No se ha localizado la provincia para el código del pais {iso2Pais} y codigo de provincia {codigoProvincia}");
@@ -124,38 +126,39 @@ namespace GestoresDeNegocio.Callejero
         private static ProvinciaDtm ProcesarProvinciaLeida(EntornoDeTrabajo entorno, GestorDeProvincias gestor, string iso2Pais, string nombreProvincia, string sigla, string codigo, string prefijoTelefono, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = LeerProvinciaPorCodigo(gestor.Contexto, iso2Pais, codigo, paraActualizar: true, errorSiNoHay: false);
-            if (p == null)
+            var provinciaDtm = LeerProvinciaPorCodigo(gestor.Contexto, iso2Pais, codigo, paraActualizar: false, errorSiNoHay: false);
+            if (provinciaDtm == null)
             {
                 var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, iso2Pais, paraActualizar: false, errorSiNoHay: false);
-                p = new ProvinciaDtm();
-                p.Codigo = codigo;
-                p.Nombre = nombreProvincia;
-                p.Sigla = sigla;
-                p.IdPais = pais.Id;
-                p.Prefijo = prefijoTelefono;
+                provinciaDtm = new ProvinciaDtm();
+                provinciaDtm.Codigo = codigo;
+                provinciaDtm.Nombre = nombreProvincia;
+                provinciaDtm.Sigla = sigla;
+                provinciaDtm.IdPais = pais.Id;
+                provinciaDtm.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
                 entorno.ActualizarTraza(trazaInfDtm, $"Creando la provincia {nombreProvincia}");
             }
             else
             {
-                if (p.Nombre != nombreProvincia || p.Codigo != codigo || p.Sigla != sigla || p.Prefijo != prefijoTelefono)
+                if (provinciaDtm.Nombre != nombreProvincia || provinciaDtm.Codigo != codigo || provinciaDtm.Sigla != sigla || provinciaDtm.Prefijo != prefijoTelefono)
                 {
-                    p.Nombre = nombreProvincia;
-                    p.Sigla = sigla;
-                    p.Codigo = codigo;
-                    p.Prefijo = prefijoTelefono;
+                    provinciaDtm.Nombre = nombreProvincia;
+                    provinciaDtm.Sigla = sigla;
+                    provinciaDtm.Codigo = codigo;
+                    provinciaDtm.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
                     entorno.ActualizarTraza(trazaInfDtm, $"Modificando la provincia {nombreProvincia}");
                 }
                 else
                 {
                     entorno.ActualizarTraza(trazaInfDtm, $"La provincia {nombreProvincia} ya exite");
-                    return p;
+                    return provinciaDtm;
                 }
             }
 
-            return gestor.PersistirRegistro(p, operacion);
+            provinciaDtm.Pais = null;
+            return gestor.PersistirRegistro(provinciaDtm, operacion);
         }
 
         protected override IQueryable<ProvinciaDtm> AplicarJoins(IQueryable<ProvinciaDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

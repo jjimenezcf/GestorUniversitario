@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Utilidades;
 
@@ -11,17 +13,17 @@ namespace ServicioDeCorreos
 
     public class ServicioDeCorreo
     {
-        private  SmtpClient SmtpCliente;
+        private SmtpClient SmtpCliente;
 
-        private  IConfigurationSection ServidorDeCorreo { get; set; }
+        private IConfigurationSection ServidorDeCorreo { get; set; }
 
 
         private string Sistema => ServidorDeCorreo["Sistema"].ToUpper();
-        public  string Emisor => ServidorDeCorreo["usuario"];
-        private  string Servidor => ServidorDeCorreo["servidor"];
-        private  bool SSL => ServidorDeCorreo["sslActivo"] == "true";
-        private  int Puerto => ServidorDeCorreo["puerto"].Entero();
-        private  string Password => ServidorDeCorreo["clave"];
+        public string Emisor => ServidorDeCorreo["usuario"];
+        private string Servidor => ServidorDeCorreo["servidor"];
+        private bool SSL => ServidorDeCorreo["sslActivo"] == "true";
+        private int Puerto => ServidorDeCorreo["puerto"].Entero();
+        private string Password => ServidorDeCorreo["clave"];
 
         public ServicioDeCorreo(string servidor)
         {
@@ -55,12 +57,12 @@ namespace ServicioDeCorreos
             ServidorDeCorreo = configuration.GetSection("ServidorDeCorreo").GetSection(servidor);
         }
 
-        internal void EnviarPara(List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)
+        internal void EnviarPara(List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, ManejadorDeCorreo manejador)
         {
-            EnviarDe(Emisor, receptores, asunto, mensaje, esHtlm, archivos, prioridad);
+            EnviarDe(Emisor, receptores, asunto, mensaje, esHtlm, archivos, manejador);
         }
 
-        internal void EnviarDe(string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, MailPriority prioridad)
+        internal void EnviarDe(string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm, List<string> archivos, ManejadorDeCorreo manejador)
         {
 
             if (Sistema != "EMUASA" && Sistema != "GMAIL")
@@ -82,26 +84,46 @@ namespace ServicioDeCorreos
 
             };
 
-            if (archivos != null) foreach (var archivo in archivos)
+            if (archivos != null)
+                foreach (var archivo in archivos)
                 {
                     var attach = new Attachment(archivo);
                     email.Attachments.Add(attach);
                 }
 
-                SmtpCliente.Send(email);
+            SmtpCliente.SendCompleted += new SendCompletedEventHandler(despuesDeEnviarElCorreo);
+
+            SmtpCliente.SendAsync(email, manejador);
+            manejador.GestorDeCorreo.InvokeMember("IndicarQueElCorreoHaSidoEnviado", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
         }
 
-        public static void EnviarCorreoPara(string servidor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
+        private static void despuesDeEnviarElCorreo(object sender, AsyncCompletedEventArgs e)
+        {
+            var manejador = (ManejadorDeCorreo)e.UserState;
+            manejador.GestorDeCorreo.InvokeMember("IndicarQueElCorreoHaSidoEnviado", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
+        }
+
+
+        public static void EnviarCorreoPara(string servidor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, ManejadorDeCorreo manejador = null)
         {
             var servicio = new ServicioDeCorreo(servidor);
-            servicio.EnviarPara(receptores, asunto, mensaje, esHtlm, archivos, prioridad);
+            servicio.EnviarPara(receptores, asunto, mensaje, esHtlm, archivos, manejador);
         }
 
-        public static void EnviarCorreoDe(string servidor, string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, MailPriority prioridad = MailPriority.Normal)
+        public static void EnviarCorreoDe(string servidor, string emisor, List<string> receptores, string asunto, string mensaje, bool esHtlm = true, List<string> archivos = null, ManejadorDeCorreo manejador = null)
         {
             var servicio = new ServicioDeCorreo(servidor);
-            servicio.EnviarDe(emisor, receptores, asunto, mensaje, esHtlm, archivos, prioridad);
+            servicio.EnviarDe(emisor, receptores, asunto, mensaje, esHtlm, archivos, manejador);
         }
 
+
+        public class ManejadorDeCorreo
+        {
+            public Type GestorDeCorreo;
+            public object Contexto;
+            public object CorreoDtm;
+        }
     }
+
+
 }

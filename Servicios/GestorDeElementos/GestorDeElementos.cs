@@ -623,7 +623,10 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            if (ApiDeRegistro.ImplementaUnElemento(typeof(TRegistro)))
+            if (ApiDeRegistro.ImplementaUnElemento(typeof(TRegistro)) &&
+                 (!parametros.Parametros.ContainsKey(ltrJoinAudt.IncluirUsuarioDtm) || 
+                   parametros.Parametros.ContainsKey(ltrJoinAudt.IncluirUsuarioDtm) && (bool)parametros.Parametros[ltrJoinAudt.IncluirUsuarioDtm])
+               )
             {
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioCreador);
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioModificador);
@@ -941,6 +944,11 @@ namespace GestorDeElementos
         public void Dispose()
         {
             Contexto.Dispose();
+        }
+
+        public static class ltrJoinAudt
+        {
+            public static readonly string IncluirUsuarioDtm = nameof(IncluirUsuarioDtm);
         }
 
 

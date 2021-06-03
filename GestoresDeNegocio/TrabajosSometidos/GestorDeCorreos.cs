@@ -18,6 +18,7 @@ using ServicioDeDatos.Seguridad;
 using ServicioDeDatos.Entorno;
 using GestoresDeNegocio.Negocio;
 using System.ComponentModel;
+using static ServicioDeCorreos.ServicioDeCorreo;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -218,9 +219,21 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var receptores = correoDtm.Receptores.JsonToLista<string>();
             string cuerpo = AdjuntarElementos(correoDtm);
 
-            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos);
+            var manejador = new ManejadorDeCorreo();
+            manejador.CorreoDtm = correoDtm;
+            manejador.Contexto = Contexto;
+            manejador.GestorDeCorreo = typeof(GestorDeCorreos);
+
+            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos, manejador);
+            //correoDtm.Enviado = DateTime.Now;
+            //PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+        }
+
+        public static void IndicarQueElCorreoHaSidoEnviado(ContextoSe contexto,  CorreoDtm correoDtm)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
             correoDtm.Enviado = DateTime.Now;
-            PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+            gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
 
         protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)

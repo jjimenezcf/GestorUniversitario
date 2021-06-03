@@ -61,7 +61,9 @@ namespace GestoresDeNegocio.Callejero
             filtros.Add(filtro1);
             filtros.Add(filtro2);
             filtros.Add(filtro3);
-            List<MunicipioDtm> municipios = gestor.LeerRegistros(0, -1, filtros, null, null, new ParametrosDeNegocio(paraActualizar? enumTipoOperacion.LeerConBloqueo: enumTipoOperacion.LeerSinBloqueo));
+            var p = new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            p.Parametros.Add(ltrJoinAudt.IncluirUsuarioDtm, false);
+            List<MunicipioDtm> municipios = gestor.LeerRegistros(0, -1, filtros, null, null, p);
 
             if (municipios.Count == 0 && errorSiNoHay)
                 GestorDeErrores.Emitir($"No se ha localizado la provincia para el municipio con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
@@ -156,7 +158,7 @@ namespace GestoresDeNegocio.Callejero
         private static MunicipioDtm ProcesarMunicipioLeido(EntornoDeTrabajo entorno, GestorDeMunicipios gestorProceso, string iso2Pais, string codigoProvincia, string codigoMunicipio, string DC, string nombreMunicipio, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var municipioDtm = LeerMunicipioPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, codigoMunicipio, paraActualizar: true, errorSiNoHay: false);
+            var municipioDtm = LeerMunicipioPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, codigoMunicipio, paraActualizar: false, errorSiNoHay: false);
             if (municipioDtm == null) 
             {
                 var provinciaDtm = GestorDeProvincias.LeerProvinciaPorCodigo(gestorProceso.Contexto, iso2Pais, codigoProvincia, paraActualizar: false);
@@ -186,6 +188,7 @@ namespace GestoresDeNegocio.Callejero
                     return municipioDtm;
                 }
             }
+            municipioDtm.Provincia = null;
             return gestorProceso.PersistirRegistro(municipioDtm, operacion);
 
         }
