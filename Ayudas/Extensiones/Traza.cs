@@ -60,6 +60,33 @@ namespace Utilidades
             _nivel = nivel;
         }
 
+        public void NuevaTraza(string fichero)
+        {
+
+            if (_nivel == NivelDeTraza.Off)
+                return;
+
+            if (_Abierta)
+                Cerrar();
+
+            var nuevoFichero = Path.Combine(_ruta, fichero);
+            var i = 1;
+            while (File.Exists(nuevoFichero))
+            {
+                nuevoFichero = Path.Combine(_ruta, $"{Path.GetFileNameWithoutExtension(nuevoFichero)}_{i}{Path.GetExtension(nuevoFichero)}");
+                i++;
+            }
+
+            try
+            {
+                _sw = new StreamWriter(nuevoFichero, true);
+                _Abierta = true;
+            }
+            catch
+            {
+                _Abierta = false;
+            }
+        }
 
         /// <summary>
         /// Constructor sin parametros.

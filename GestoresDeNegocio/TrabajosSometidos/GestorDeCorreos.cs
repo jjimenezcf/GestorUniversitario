@@ -236,6 +236,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
             gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
         }
 
+        public static void AnotarTraza(ContextoSe contexto, CorreoDtm correoDtm)
+        {
+            contexto.Traza.NuevaTraza("EnvioDeCorreo.txt");
+            contexto.Traza.AnotarMensaje("Correo enviado", $"El correo {correoDtm.Asunto} se ha enviado");
+            contexto.Traza.Cerrar();
+        }
+
         protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)
         {
             base.AntesDePersistir(registro, parametros);

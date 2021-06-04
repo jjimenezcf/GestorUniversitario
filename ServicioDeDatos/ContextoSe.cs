@@ -179,14 +179,14 @@ namespace ServicioDeDatos
                 Traza.Abrir(true);
         }
 
-        public void CerrarTraza()
+        public void CerrarTraza(string mensaje = null)
         {
             if (Traza != null)
             {
                 if (!Traza.Abierta)
                     Traza.Abrir(true);
 
-                Traza.CerrarTraza("Conexión cerrada");
+                Traza.CerrarTraza(mensaje.IsNullOrEmpty()? "Conexión cerrada": mensaje);
             }
         }
 
@@ -206,12 +206,6 @@ namespace ServicioDeDatos
             Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Login}");
             Interceptor.Traza = Traza;
         }
-
-        //public override void Dispose()
-        //{
-        //    base.Dispose();
-        //    CerrarTraza();
-        //}
 
     }
     public class InterceptadorDeConsultas : DbCommandInterceptor

@@ -139,18 +139,36 @@ namespace GestoresDeNegocio.TrabajosSometidos
             CumplimentarDatosDeConexion(gestor, usuario);
 
             var trabajosPorEjecutar = LeerTrabajoPendiente();
-
             if (trabajosPorEjecutar.Count == 1)
-                GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id, true);
+            {
+                
+                if (CacheDeVariable.Cola_Trazar)
+                    gestor.Contexto.IniciarTraza(trabajosPorEjecutar[0].Nombre);
+                try
+                {
+                    GestorDeTrabajosDeUsuario.Iniciar(gestor.Contexto, trabajosPorEjecutar[0].Id, true);
+                }
+                catch
+                {
+                    gestor.Contexto.CerrarTraza("Trabajo finalizado con errores");
+                    throw;
+                }
+                finally
+                {
+                    if (CacheDeVariable.Cola_Trazar)
+                        gestor.Contexto.CerrarTraza("Trabajo finalizado correctamente");
+                }
+            }
+
 
             GestorDeCorreos.EnviarCorreoPendientes(contexto: gestor.Contexto);
 
             return Task.FromResult(new resultadoDelProceso());
         }
 
-        private static List<TrabajoDeUsuarioDtm> LeerTrabajoPendiente()
+        private static List<TrabajoDeUsuarioDapper> LeerTrabajoPendiente()
         {
-            var consulta = new ConsultaSql<TrabajoDeUsuarioDtm>(TrabajosDeUsuarioSql.LeerTrabajoPendiente);
+            var consulta = new ConsultaSql<TrabajoDeUsuarioDapper>(TrabajosDeUsuarioSql.LeerTrabajoPendiente);
             var trabajos = consulta.LanzarConsulta(new DynamicParameters(null));
             return trabajos;
         }

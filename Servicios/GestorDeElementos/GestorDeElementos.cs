@@ -404,6 +404,7 @@ namespace GestorDeElementos
         {
             if (!opcionesDeMapeo.ContainsKey(nameof(ParametrosDeNegocio.Operacion)))
                 opcionesDeMapeo.Add(nameof(ParametrosDeNegocio.Operacion), enumTipoOperacion.LeerSinBloqueo.ToString());
+
             var to = opcionesDeMapeo[nameof(ParametrosDeNegocio.Operacion)].ToTipoOperacion();
             var p = new ParametrosDeNegocio(to);
 

@@ -100,7 +100,7 @@ namespace ServicioDeCorreos
         private static void despuesDeEnviarElCorreo(object sender, AsyncCompletedEventArgs e)
         {
             var manejador = (ManejadorDeCorreo)e.UserState;
-            manejador.GestorDeCorreo.InvokeMember("IndicarQueElCorreoHaSidoEnviado", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
+            manejador.GestorDeCorreo.InvokeMember("AnotarTraza", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
         }
 
 

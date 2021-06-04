@@ -40,24 +40,9 @@ namespace ColaDeTrabajosSometidos
                     var scope = _servicios.CreateScope();
                     using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeTrabajosDeUsuario>())
                     {
-                        if (CacheDeVariable.Cola_Trazar)
-                            gestor.Contexto.IniciarTraza(nameof(BackgroundCola));
-                       
+
                         Task t = gestor.ProcesarCola(Usuario);
-                        try
-                        {
-                            await t;
-                        }
-                        catch (Exception e)
-                        {
-                            if (CacheDeVariable.Cola_Trazar)
-                                gestor.Contexto.AnotarExcepcion(e);
-                        }
-                        finally
-                        {
-                            if (CacheDeVariable.Cola_Trazar)
-                                gestor.Contexto.CerrarTraza();
-                        }
+                        await t;
                     }
                 }
                 await Task.Delay(10000, stoppingToken);

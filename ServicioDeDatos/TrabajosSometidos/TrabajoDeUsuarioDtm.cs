@@ -112,15 +112,23 @@ namespace ServicioDeDatos.TrabajosSometidos
 
         }
     }
+    public class TrabajoDeUsuarioDapper: IRegistro
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+
+    }
 
     public static class TrabajosDeUsuarioSql
     {
         public static string LeerTrabajoPendiente = @"
-SELECT top(1)  ID, ENTRADA, ESTADO, ID_EJECUTOR, ID_SOMETEDOR, ID_TRABAJO, INICIADO, PARAMETROS, PERIODICIDAD, PLANIFICADO, TERMINADO
-FROM TRABAJO.USUARIO 
+SELECT top(1)  T1.ID as Id
+, T2.NOMBRE as Nombre
+FROM TRABAJO.USUARIO T1
+INNER JOIN TRABAJO.TRABAJO T2 ON T2.ID = T1.ID_TRABAJO
 WHERE ESTADO = 'PT'
  AND (INICIADO = '0001-01-01T00:00:00.0000000' OR INICIADO IS NULL)
- and id not in (select ID_TRABAJO from TRABAJO.SEMAFORO with(nolock))
+ and t1.ID not in (select ID_TRABAJO from TRABAJO.SEMAFORO with(nolock))
  ORDER BY PLANIFICADO
 ";
     }
