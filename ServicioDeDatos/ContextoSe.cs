@@ -167,13 +167,13 @@ namespace ServicioDeDatos
             DatosDeConexion.Version = ObtenerVersion;
         }
 
-        public void IniciarTraza(string nombre = "traza")
+        public void IniciarTraza(string nombre = "traza", bool indicarFecha = true)
         {
             if (!Debuggar)
                 return;
 
             if (Traza == null)
-                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{nombre}_{DateTime.Now}.txt");
+                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{nombre}{(indicarFecha ? $"_{DateTime.Now}": "")}.txt");
             else
             if (!Traza.Abierta)
                 Traza.Abrir(true);

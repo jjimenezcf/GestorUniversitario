@@ -29,8 +29,13 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static string terminando = nameof(terminando);
     }
 
-    public class resultadoDelProceso
+    public class ResultadoDelProceso 
     {
+        public bool Resultado { get; }
+        public ResultadoDelProceso(bool resultado)
+        {
+            Resultado = resultado;
+        }
     }
 
     public class EntornoDeTrabajo
@@ -161,9 +166,10 @@ namespace GestoresDeNegocio.TrabajosSometidos
             }
 
 
-            GestorDeCorreos.EnviarCorreoPendientes(contexto: gestor.Contexto);
+            var gestorDeCorreos = GestorDeCorreos.Gestor(gestor.Contexto, gestor.Contexto.Mapeador);
+            gestorDeCorreos.EnviarCorreoPendientesAsync();
 
-            return Task.FromResult(new resultadoDelProceso());
+            return Task.FromResult(new ResultadoDelProceso(true));
         }
 
         private static List<TrabajoDeUsuarioDapper> LeerTrabajoPendiente()

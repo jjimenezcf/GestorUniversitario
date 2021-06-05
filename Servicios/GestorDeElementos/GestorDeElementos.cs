@@ -944,7 +944,7 @@ namespace GestorDeElementos
 
         public void Dispose()
         {
-            Contexto.Dispose();
+            
         }
 
         public static class ltrJoinAudt

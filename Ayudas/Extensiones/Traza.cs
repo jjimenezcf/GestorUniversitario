@@ -40,9 +40,9 @@ namespace Utilidades
     public class Traza
     {
         private StreamWriter _sw;
-        private readonly string _fichero;
-        private readonly string _ruta;
-        private readonly NivelDeTraza _nivel;
+        private string _fichero;
+        private string _ruta;
+        private NivelDeTraza _nivel;
         private bool _Abierta { get; set; }
         private bool escribirNivel => _nivel != NivelDeTraza.Siempre;
 
@@ -55,9 +55,7 @@ namespace Utilidades
         /// </summary>
         public Traza(NivelDeTraza nivel, string ruta, string fichero)
         {
-            _fichero = fichero.RemplazarCaracteres("_");
-            _ruta = ruta;
-            _nivel = nivel;
+            InicializarTraza(nivel, ruta, fichero);
         }
 
         public void NuevaTraza(string fichero)
@@ -66,26 +64,21 @@ namespace Utilidades
             if (_nivel == NivelDeTraza.Off)
                 return;
 
-            if (_Abierta)
+            if (_Abierta && _fichero != fichero.RemplazarCaracteres("_"))
+            {
                 Cerrar();
-
-            var nuevoFichero = Path.Combine(_ruta, fichero);
-            var i = 1;
-            while (File.Exists(nuevoFichero))
-            {
-                nuevoFichero = Path.Combine(_ruta, $"{Path.GetFileNameWithoutExtension(nuevoFichero)}_{i}{Path.GetExtension(nuevoFichero)}");
-                i++;
+                InicializarTraza(_nivel, _ruta, fichero);
+                Abrir(true);
             }
 
-            try
-            {
-                _sw = new StreamWriter(nuevoFichero, true);
-                _Abierta = true;
-            }
-            catch
-            {
-                _Abierta = false;
-            }
+
+        }
+
+        private void InicializarTraza(NivelDeTraza nivel, string ruta, string fichero)
+        {
+            _fichero = fichero.RemplazarCaracteres("_");
+            _ruta = ruta;
+            _nivel = nivel;
         }
 
         /// <summary>

@@ -19,6 +19,8 @@ using ServicioDeDatos.Entorno;
 using GestoresDeNegocio.Negocio;
 using System.ComponentModel;
 using static ServicioDeCorreos.ServicioDeCorreo;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -68,7 +70,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
         }
 
-        private static GestorDeCorreos Gestor(ContextoSe contexto, IMapper mapeador)
+        public static GestorDeCorreos Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeCorreos(contexto, mapeador);
         }
@@ -182,17 +184,18 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        internal static void EnviarCorreoPendientes(ContextoSe contexto)
+        internal async void EnviarCorreoPendientesAsync()
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
             var filtro = new ClausulaDeFiltrado(nameof(CorreoDtm.Enviado), CriteriosDeFiltrado.esNulo);
             var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
             parametros.Parametros[ltrParamCorreos.LeerUsuarioDtm] = false;
-            var pendientes = gestor.LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { filtro }, null, null, parametros);
+            var pendientes = LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { filtro }, null, null, parametros);
             foreach (var pendiente in pendientes)
                 try
                 {
-                    gestor.EnviarCorreoDe(pendiente);
+
+                    SpinWait.SpinUntil(() => ServicioDeCorreo.EnviandoCorreo, 40000);
+                    await EnviarCorreoDeAsync(pendiente); 
                 }
                 catch (Exception e)
                 {
@@ -204,16 +207,16 @@ namespace GestoresDeNegocio.TrabajosSometidos
                             , $"Error al enviar el correo con id  {pendiente.Id}{Environment.NewLine}{GestorDeErrores.Mensaje(e)}"
                             );
                         pendiente.Enviado = DateTime.Now;
-                        gestor.PersistirRegistro(pendiente, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+                        PersistirRegistro(pendiente, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
                     }
                     catch (Exception ei)
                     {
-                        gestor.Contexto.AnotarExcepcion(ei);
+                        Contexto.AnotarExcepcion(ei);
                     }
                 }
         }
 
-        private void EnviarCorreoDe(CorreoDtm correoDtm)
+        private Task EnviarCorreoDeAsync(CorreoDtm correoDtm)
         {
             var archivos = correoDtm.Archivos.JsonToLista<string>();
             var receptores = correoDtm.Receptores.JsonToLista<string>();
@@ -225,22 +228,36 @@ namespace GestoresDeNegocio.TrabajosSometidos
             manejador.GestorDeCorreo = typeof(GestorDeCorreos);
 
             ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos, manejador);
-            //correoDtm.Enviado = DateTime.Now;
-            //PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+
+            return Task.FromResult(new ResultadoDelProceso(true));
+
         }
 
+        // Método invocados por reflexión desde el servidor de correos
         public static void IndicarQueElCorreoHaSidoEnviado(ContextoSe contexto,  CorreoDtm correoDtm)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
+
+            contexto.IniciarTraza("EnviosDeCorreo_Envio");
             correoDtm.Enviado = DateTime.Now;
             gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+            contexto.CerrarTraza("Fin de anotación de envío");
         }
 
+        // Método invocados por reflexión desde el servidor de correos
         public static void AnotarTraza(ContextoSe contexto, CorreoDtm correoDtm)
         {
-            contexto.Traza.NuevaTraza("EnvioDeCorreo.txt");
-            contexto.Traza.AnotarMensaje("Correo enviado", $"El correo {correoDtm.Asunto} se ha enviado");
-            contexto.Traza.Cerrar();
+            contexto.IniciarTraza("EnviosDeCorreo_Cancelacion");
+            contexto.Traza.AnotarMensaje("Correo enviado", $"El correo {correoDtm.Asunto} se ha cancelado");
+            contexto.CerrarTraza("Fin de anotación de cancelación");
+        }
+
+        // Método invocados por reflexión desde el servidor de correos
+        public static void AnotarExcepcion(ContextoSe contexto, CorreoDtm correoDtm, Exception error)
+        {
+            contexto.IniciarTraza("EnviosDeCorreo_Error");
+            contexto.Traza.AnotarMensaje("Error en el envío", $"El correo {correoDtm.Asunto} NO se ha podido enviar.{Environment.NewLine}Error {error.Message}");
+            contexto.CerrarTraza("Fin de anotación de error");
         }
 
         protected override void AntesDePersistir(CorreoDtm registro, ParametrosDeNegocio parametros)

@@ -68,6 +68,10 @@ namespace MVCSistemaDeElementos.Descriptores
                                 posicion: new Posicion() { fila = 2, columna = 0 });
 
             Editor.MenuDeEdicion.QuitarOpcionDeMenu(TipoDeAccionDeEdicion.ModificarElemento);
+
+            Mnt.OrdenacionInicial = @$"{nameof(CorreoDto.Creado)}:creado:{enumModoOrdenacion.descendente.Render()};
+                                       {nameof(CorreoDto.Enviado)}:enviado:{enumModoOrdenacion.ascendente.Render()}";
+
         }
 
         public override string RenderControl()

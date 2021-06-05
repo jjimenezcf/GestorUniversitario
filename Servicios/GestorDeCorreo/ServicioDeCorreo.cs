@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Utilidades;
 
@@ -13,6 +14,8 @@ namespace ServicioDeCorreos
 
     public class ServicioDeCorreo
     {
+        public static bool EnviandoCorreo { get; set; } = false;
+
         private SmtpClient SmtpCliente;
 
         private IConfigurationSection ServidorDeCorreo { get; set; }
@@ -94,13 +97,31 @@ namespace ServicioDeCorreos
             SmtpCliente.SendCompleted += new SendCompletedEventHandler(despuesDeEnviarElCorreo);
 
             SmtpCliente.SendAsync(email, manejador);
-            manejador.GestorDeCorreo.InvokeMember("IndicarQueElCorreoHaSidoEnviado", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
         }
 
         private static void despuesDeEnviarElCorreo(object sender, AsyncCompletedEventArgs e)
         {
+            EnviandoCorreo = true;
             var manejador = (ManejadorDeCorreo)e.UserState;
-            manejador.GestorDeCorreo.InvokeMember("AnotarTraza", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
+            try
+            {
+                if (e.Cancelled)
+                {
+                    manejador.GestorDeCorreo.InvokeMember("AnotarTraza", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm, "Se ha cancelado el envío de correos" });
+                }
+                if (e.Error != null)
+                {
+                    manejador.GestorDeCorreo.InvokeMember("AnotarExcepcion", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm, e.Error });
+                }
+                else
+                {
+                    manejador.GestorDeCorreo.InvokeMember("IndicarQueElCorreoHaSidoEnviado", BindingFlags.InvokeMethod, null, null, new object[] { manejador.Contexto, manejador.CorreoDtm });
+                }
+            }
+            finally
+            {
+                EnviandoCorreo = false;
+            }
         }
 
 
