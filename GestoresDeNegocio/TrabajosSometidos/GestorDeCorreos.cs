@@ -21,6 +21,7 @@ using System.ComponentModel;
 using static ServicioDeCorreos.ServicioDeCorreo;
 using System.Threading.Tasks;
 using System.Threading;
+using Dapper;
 
 namespace GestoresDeNegocio.TrabajosSometidos
 {
@@ -193,8 +194,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
             foreach (var pendiente in pendientes)
                 try
                 {
-
-                    SpinWait.SpinUntil(() => ServicioDeCorreo.EnviandoCorreo, 40000);
+                    //Preguantar a J.Campos
+                    //SpinWait.SpinUntil(() => ServicioDeCorreo.EnviandoCorreo, 40000);
                     await EnviarCorreoDeAsync(pendiente); 
                 }
                 catch (Exception e)
@@ -233,15 +234,21 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         }
 
+        public static void ActualizarFechaDeEnvio(CorreoDtm correoDtm)
+        {
+            var sentencia = new ConsultaSql<CorreoDtm>(CorreoSql.ActualizarFechaDeEnvio, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(ActualizarFechaDeEnvio)}.txt");
+            var valores = new Dictionary<string, object> { { $"@{nameof(CorreoDtm.Enviado)}", DateTime.Now }, { $"@{nameof(CorreoDtm.Id)}", correoDtm.Id } };
+            sentencia.EjecutarSentencia(new DynamicParameters(valores));
+        }
+
         // Método invocados por reflexión desde el servidor de correos
         public static void IndicarQueElCorreoHaSidoEnviado(ContextoSe contexto,  CorreoDtm correoDtm)
         {
-            var gestor = Gestor(contexto, contexto.Mapeador);
-
-            contexto.IniciarTraza("EnviosDeCorreo_Envio");
             correoDtm.Enviado = DateTime.Now;
-            gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
-            contexto.CerrarTraza("Fin de anotación de envío");
+            //Preguntar a J.Campos
+            //var gestor = Gestor(contexto, contexto.Mapeador);
+            //gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+            ActualizarFechaDeEnvio(correoDtm);
         }
 
         // Método invocados por reflexión desde el servidor de correos

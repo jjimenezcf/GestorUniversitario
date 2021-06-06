@@ -58,6 +58,7 @@ namespace Utilidades
             InicializarTraza(nivel, ruta, fichero);
         }
 
+
         public void NuevaTraza(string fichero)
         {
 
@@ -98,17 +99,19 @@ namespace Utilidades
                 Directory.CreateDirectory(_ruta);
             }
 
-            var fichero = Path.Combine(_ruta, _fichero);
-            var i = 1;
-            while (File.Exists(fichero))
+            var nombre = $"{Path.GetFileNameWithoutExtension(_fichero)}";
+            var extension = Path.GetExtension(_fichero);
+            var rutaFichero = Path.Combine(_ruta, $"{nombre}_{0.ToString().PadLeft(3, '0')}{extension}");
+            var i = 0;
+            while (File.Exists(rutaFichero))
             {
-                fichero = Path.Combine(_ruta, $"{Path.GetFileNameWithoutExtension(fichero)}_{i}{Path.GetExtension(fichero)}");
                 i++;
+                rutaFichero = Path.Combine(_ruta, $"{nombre}_{i.ToString().PadLeft(3,'0')}{extension}");
             }
 
             try
             {
-                _sw = new StreamWriter(fichero, anadir);
+                _sw = new StreamWriter(rutaFichero, anadir);
                 _Abierta = true;
             }
             catch

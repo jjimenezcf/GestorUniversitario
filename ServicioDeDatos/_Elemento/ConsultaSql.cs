@@ -25,13 +25,22 @@ namespace ServicioDeDatos.Elemento
         public string Conexion;
 
         public string Sentencia { get; private set; }
+        public bool HayQueDebugar { get; }
+        public string Fichero { get; }
         public TrazaSql Traza { get; set; }
 
         public static string CadenaDeConexion => ContextoSe.ObtenerDatosDeConexion().CadenaConexion;
 
-        public ConsultaSql(string sentencia)
+        public ConsultaSql(string sentencia) : 
+            this(sentencia, false, "")
+        {
+        }
+
+        public ConsultaSql(string sentencia, bool hayQueDebugar, string fichero)
         {
             Sentencia = sentencia;
+            HayQueDebugar = hayQueDebugar;
+            Fichero = fichero;
         }
 
         public ConsultaSql(TrazaSql traza, string sentencia)
@@ -40,35 +49,22 @@ namespace ServicioDeDatos.Elemento
             Traza = traza;
         }
 
-        public List<T> DebuggarConsulta(string fichero, DynamicParameters parametros = null)
+        public List<T> LanzarConsulta(DynamicParameters parametros = null)
         {
             List<T> resultado = null;
-            Traza = TrazaSql.CrearTraza(fichero);
+            if (HayQueDebugar) Traza = TrazaSql.CrearTraza(Fichero);
             try
             {
-                resultado = LanzarConsulta(parametros);
+                resultado = Lanzar(parametros);
             }
             finally
             {
-                Traza.Cerrar();
+              if (HayQueDebugar)  Traza.Cerrar();
             }
             return resultado;
         }
 
-        public int DebuggarSentencia(string fichero, DynamicParameters parametros = null)
-        {
-            Traza = TrazaSql.CrearTraza(fichero);
-            try
-            {
-                return EjecutarSentencia(parametros);
-            }
-            finally
-            {
-                Traza.Cerrar();
-            }
-        }
-
-        public List<T> LanzarConsulta(DynamicParameters parametros = null)
+        private List<T> Lanzar(DynamicParameters parametros = null)
         {
             List<T> resultado = null;
             if (parametros == null)
@@ -111,6 +107,65 @@ namespace ServicioDeDatos.Elemento
             return resultado;
         }
 
+        public int EjecutarSentencia(DynamicParameters parametros = null)
+        {
+            if (HayQueDebugar) Traza = TrazaSql.CrearTraza(Fichero);
+            try
+            {
+                return Ejecutar(parametros);
+            }
+            finally
+            {
+                if (HayQueDebugar) Traza.Cerrar();
+            }
+        }
+
+        private int Ejecutar(DynamicParameters parametros = null)
+        {
+            int resultado = 0;
+
+            if (parametros == null)
+                parametros = new DynamicParameters();
+
+            SqlParameterCollection spc = new SqlCommand().Parameters;
+            foreach (var nombre in parametros.ParameterNames)
+            {
+                var valor = parametros.Get<object>(nombre);
+                spc.AddWithValue(nombre, valor);
+            }
+
+            using (IDbConnection db = new SqlConnection(CadenaDeConexion))
+            {
+                var cronometro = new Stopwatch();
+                try
+                {
+                    if (Traza != null)
+                        cronometro.Start();
+                    db.Open();
+                    resultado = db.Execute(Sentencia, parametros);
+
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarTrazaSql(Sentencia, spc, cronometro.ElapsedMilliseconds);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (Traza != null)
+                    {
+                        cronometro.Stop();
+                        Traza.AnotarMensaje("Sentencia que se ha intentado ejecutar", Sentencia);
+                        Traza.AnotarParametros(spc);
+                        Traza.AnotarExcepcion(e);
+                    }
+                    throw;
+                }
+            }
+            return resultado;
+        }
+
+
         public void EliminarCriterio(string filtro)
         {
           Sentencia = Sentencia.Replace($"[{filtro}]", "");
@@ -138,50 +193,6 @@ namespace ServicioDeDatos.Elemento
                 EliminarCriterio(filtro);
         }
 
-        public int EjecutarSentencia(DynamicParameters parametros = null)
-        {
-            int resultado = 0;
-
-            if (parametros == null)
-                parametros = new DynamicParameters();
-
-            SqlParameterCollection spc = new SqlCommand().Parameters;
-            foreach (var nombre in parametros.ParameterNames)
-            {
-                var valor = parametros.Get<object>(nombre);
-                spc.AddWithValue(nombre, valor);
-            }
-
-            using (IDbConnection db = new SqlConnection(CadenaDeConexion))
-            {
-                var cronometro = new Stopwatch(); 
-                try
-                {
-                    if (Traza != null)
-                        cronometro.Start();
-                    db.Open();
-                    resultado = db.Execute(Sentencia, parametros);
-
-                    if (Traza != null)
-                    {
-                        cronometro.Stop(); 
-                        Traza.AnotarTrazaSql(Sentencia, spc, cronometro.ElapsedMilliseconds);
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (Traza != null)
-                    {
-                        cronometro.Stop();
-                        Traza.AnotarMensaje("Sentencia que se ha intentado ejecutar", Sentencia);
-                        Traza.AnotarParametros(spc);
-                        Traza.AnotarExcepcion(e);
-                    }
-                    throw;
-                }
-            }
-            return resultado;
-        }
     }
 }
 

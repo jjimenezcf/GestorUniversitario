@@ -13,7 +13,12 @@ namespace ServicioDeDatos.Utilidades
 
         public static TrazaSql CrearTraza(string fichero)
         {
-            return new TrazaSql(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{DateTime.Now}-{fichero}", $"Traza de debuguer");
+            if (fichero.EndsWith(".txt"))
+            {
+                fichero = fichero.Replace(".txt", "");
+            }
+            fichero = $"{fichero}_{DateTime.Now}.txt";
+            return new TrazaSql(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{fichero}", $"Traza de debuguer");
         }
 
 
@@ -89,6 +94,7 @@ namespace ServicioDeDatos.Utilidades
                 Separador();
             }
         }
+
     }
 
 

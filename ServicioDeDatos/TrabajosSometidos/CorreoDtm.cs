@@ -45,4 +45,11 @@ namespace ServicioDeDatos.TrabajosSometidos
             mb.Entity<CorreoDtm>().HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.IdUsuario).HasConstraintName("FK_TRABAJO_DE_USUARIO_ID_USUARIO").OnDelete(DeleteBehavior.Restrict);
         }
     }
+
+
+    public static class CorreoSql
+    {
+        public static string ActualizarFechaDeEnvio = "UPDATE SistemaDeElementos.TRABAJO.CORREO SET ENVIADO = @Enviado WHERE ID = @Id";
+
+    }
 }

@@ -16,17 +16,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void PonerSemaforo(TrabajoDeUsuarioDtm tu)
         {
-            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.CrearSemaforo);
+            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.CrearSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(PonerSemaforo)}.txt");
 
             var valores = new Dictionary<string, object> {
-                { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id }, 
-                { $"@{nameof(TrabajoDeUsuarioDtm.Iniciado)}", DateTime.Now }, 
+                { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id },
+                { $"@{nameof(TrabajoDeUsuarioDtm.Iniciado)}", DateTime.Now },
                 { $"@{nameof(TrabajoDeUsuarioDtm.Sometedor.Login)}", tu.Sometedor.Login } };
             var semaforo = 0;
-            if (CacheDeVariable.Cfg_HayQueDebuggar)
-                semaforo = sentencia.DebuggarSentencia($"{nameof(PonerSemaforo)}.txt", new DynamicParameters(valores));
-            else
-                semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
+            semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
 
             if (semaforo == 0)
                 throw new Exception($"No se ha podido bloquear el trabajo {tu.Trabajo.Nombre} del usuario {tu.Sometedor.Login}");
@@ -34,14 +31,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void QuitarSemaforo(TrabajoDeUsuarioDtm tu)
         {
-            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.BorrarSemaforo);
+            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.BorrarSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(QuitarSemaforo)}.txt");
 
-            var valores = new Dictionary<string, object> {{ $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id } };
+            var valores = new Dictionary<string, object> { { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id } };
             var semaforo = 0;
-            if (CacheDeVariable.Cfg_HayQueDebuggar)
-                semaforo = sentencia.DebuggarSentencia($"{nameof(QuitarSemaforo)}.txt", new DynamicParameters(valores));
-            else
-                semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
+            semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
 
             if (semaforo == 0)
                 throw new Exception($"No se ha podido bloquear el trabajo {tu.Trabajo.Nombre} del usuario {tu.Sometedor.Login}");

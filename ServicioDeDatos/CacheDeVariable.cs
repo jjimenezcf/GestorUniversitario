@@ -99,12 +99,9 @@ namespace ServicioDeDatos
 
         private static string CrearVariable(string variable, string descripcion, string valor)
         {
-            var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.CrearVariable);
+            var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.CrearVariable, Cfg_HayQueDebuggar, $"{variable}.txt");
             var valores = new Dictionary<string, object> { { $"@{nameof(variable)}", variable }, { $"@{nameof(descripcion)}", descripcion }, { $"@{nameof(valor)}", valor } };
-            if (Cfg_HayQueDebuggar)
-                sentencia.DebuggarSentencia($"{variable}.txt", new DynamicParameters(valores));
-            else
-                sentencia.EjecutarSentencia(new DynamicParameters(valores));
+            sentencia.EjecutarSentencia(new DynamicParameters(valores));
             return valor;
         }
 
@@ -116,13 +113,9 @@ namespace ServicioDeDatos
 
         public static void Modificar(string variable, string valor)
         {
-            var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.ModificarVariable);
+            var sentencia = new ConsultaSql<VariableDtm>(VariableSqls.ModificarVariable, Cfg_HayQueDebuggar, $"{variable}.txt");
             var valores = new Dictionary<string, object> { { $"@{nameof(valor)}", valor }, { $"@{nameof(variable)}", variable } };
-            if (Cfg_HayQueDebuggar)
-                sentencia.DebuggarSentencia($"{variable}.txt", new DynamicParameters(valores));
-            else
-                sentencia.EjecutarSentencia(new DynamicParameters(valores));
-
+            sentencia.EjecutarSentencia(new DynamicParameters(valores));
             BorrarCache(variable);
         }
     }
