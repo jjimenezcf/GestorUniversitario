@@ -16,7 +16,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void PonerSemaforo(TrabajoDeUsuarioDtm tu)
         {
-            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.CrearSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(PonerSemaforo)}.txt");
+            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.CrearSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(PonerSemaforo)}");
 
             var valores = new Dictionary<string, object> {
                 { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id },
@@ -31,7 +31,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void QuitarSemaforo(TrabajoDeUsuarioDtm tu)
         {
-            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.BorrarSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(QuitarSemaforo)}.txt");
+            var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.BorrarSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(QuitarSemaforo)}");
 
             var valores = new Dictionary<string, object> { { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id } };
             var semaforo = 0;

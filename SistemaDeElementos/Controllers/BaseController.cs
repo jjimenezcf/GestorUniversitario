@@ -66,7 +66,7 @@ namespace MVCSistemaDeElementos.Controllers
             GestorDeErrores = gestorDeErrores;
             Contexto = contexto;
             Contexto.Mapeador = mapeador;
-            Contexto.IniciarTraza();
+            Contexto.IniciarTraza(GetType().Name);
         }
 
         protected override void Dispose(bool disposing)

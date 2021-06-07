@@ -167,13 +167,13 @@ namespace ServicioDeDatos
             DatosDeConexion.Version = ObtenerVersion;
         }
 
-        public void IniciarTraza(string nombre = "traza", bool indicarFecha = true)
+        public void IniciarTraza(string fichero = "traza")
         {
             if (!Debuggar)
                 return;
 
             if (Traza == null)
-                CrearTraza(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{nombre}{(indicarFecha ? $"_{DateTime.Now}": "")}.txt");
+                CrearTraza(NivelDeTraza.Siempre, fichero);
             else
             if (!Traza.Abierta)
                 Traza.Abrir(true);
@@ -201,9 +201,9 @@ namespace ServicioDeDatos
             }
         }
 
-        private void CrearTraza(NivelDeTraza nivel, string ruta, string fichero)
+        private void CrearTraza(NivelDeTraza nivel, string fichero)
         {
-            Traza = new TrazaSql(nivel, ruta, fichero, $"Traza iniciada por {DatosDeConexion.Login}");
+            Traza = TrazaSql.CrearTraza(fichero, nivel);
             Interceptor.Traza = Traza;
         }
 

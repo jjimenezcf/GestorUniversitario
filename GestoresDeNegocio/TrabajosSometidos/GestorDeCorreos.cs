@@ -236,7 +236,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
         public static void ActualizarFechaDeEnvio(CorreoDtm correoDtm)
         {
-            var sentencia = new ConsultaSql<CorreoDtm>(CorreoSql.ActualizarFechaDeEnvio, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(ActualizarFechaDeEnvio)}.txt");
+            var sentencia = new ConsultaSql<CorreoDtm>(CorreoSql.ActualizarFechaDeEnvio, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(ActualizarFechaDeEnvio)}");
             var valores = new Dictionary<string, object> { { $"@{nameof(CorreoDtm.Enviado)}", DateTime.Now }, { $"@{nameof(CorreoDtm.Id)}", correoDtm.Id } };
             sentencia.EjecutarSentencia(new DynamicParameters(valores));
         }

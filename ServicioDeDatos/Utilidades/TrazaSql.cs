@@ -11,14 +11,11 @@ namespace ServicioDeDatos.Utilidades
         private int sentenciasEjecutadas = 0;
 
 
-        public static TrazaSql CrearTraza(string fichero)
+        public static TrazaSql CrearTraza(string fichero, NivelDeTraza nivel = NivelDeTraza.Siempre, string mensajeInicial = "Traza de debuguer")
         {
-            if (fichero.EndsWith(".txt"))
-            {
-                fichero = fichero.Replace(".txt", "");
-            }
+            fichero = fichero.Replace(".txt", "");
             fichero = $"{fichero}_{DateTime.Now}.txt";
-            return new TrazaSql(NivelDeTraza.Siempre, @"c:\Temp\Trazas", $"{fichero}", $"Traza de debuguer");
+            return new TrazaSql(nivel, @"c:\Temp\Trazas", fichero, mensajeInicial);
         }
 
 
@@ -61,7 +58,7 @@ namespace ServicioDeDatos.Utilidades
                 sentenciasEjecutadas++;
             }
         }
-        
+
 
         public void AnotarExcepcion(Exception exc)
         {
