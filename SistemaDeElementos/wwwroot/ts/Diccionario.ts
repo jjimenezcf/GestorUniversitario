@@ -57,6 +57,15 @@ class Diccionario<T> implements IDiccionario<T> {
         return undefined;
     }
 
+
+    public Sacar(clave: string): T {
+        let objeto: T = this.Obtener(clave);
+        if (objeto !== undefined)
+            this.Quitar(clave);
+
+        return objeto;
+    }
+
     public Valor(posicion: number): T {
         if (this._valores.length <= posicion)
             return undefined;

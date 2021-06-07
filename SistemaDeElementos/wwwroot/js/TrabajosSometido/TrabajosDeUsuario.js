@@ -176,11 +176,11 @@ var TrabajosSometido;
         InicializarControlesDeCreacion(peticion) {
             super.InicializarControlesDeCreacion(peticion);
             if (!Registro.EsAdministrador()) {
-                ApiControl.BloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+                ApiControl.BloquearListaDinamicaPorPropiedad(this.PanelDeCrear, 'ejecutor');
                 ApiControl.BloquearOpcionDeMenu(this.PanelDeCrear, 'Crear');
             }
             else {
-                ApiControl.DesbloquearListaDinamica(this.PanelDeCrear, 'ejecutor');
+                ApiControl.DesbloquearListaDinamicaPorPropiedad(this.PanelDeCrear, 'ejecutor');
                 ApiControl.DesbloquearOpcionDeMenu(this.PanelDeCrear, 'Crear');
             }
         }

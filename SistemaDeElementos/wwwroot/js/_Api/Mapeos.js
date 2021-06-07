@@ -272,6 +272,19 @@ var MapearAlControl;
         }
     }
     MapearAlControl.RestrictoresDeEdicion = RestrictoresDeEdicion;
+    function PropiedadDeFiltrado(panel, propiedadRestrictora, id, texto) {
+        let controles = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedadRestrictora}"]`);
+        if (controles.length > 1)
+            MensajesSe.EmitirExcepcion("PropiedadDeFiltrado", `Hay más de un control con la propiedad ${propiedadRestrictora}`);
+        for (let i = 0; i < controles.length; i++) {
+            if (controles[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                let tipo = controles[i].getAttribute(atControl.tipo);
+                if (tipo === TipoControl.ListaDinamica)
+                    FijarValorEnListaDinamica(controles[i], id, texto);
+            }
+        }
+    }
+    MapearAlControl.PropiedadDeFiltrado = PropiedadDeFiltrado;
     function Restrictor(restrictor, id, texto) {
         restrictor.setAttribute(atControl.valorInput, texto);
         restrictor.setAttribute(atControl.restrictor, id.toString());
@@ -315,10 +328,22 @@ var MapearAlControl;
         return false;
     }
     MapearAlControl.HoraDate = HoraDate;
-    function ListaDinamica(input, valor) {
+    function ProponerValorEnListaDinamica(input, id, texto) {
+        if (Numero(id) > 0) {
+            let listaDinamica = new Tipos.ListaDinamica(input);
+            listaDinamica.AgregarOpcion(id, texto);
+        }
+        ListaDinamica(input, id, texto);
+    }
+    MapearAlControl.ProponerValorEnListaDinamica = ProponerValorEnListaDinamica;
+    function FijarValorEnListaDinamica(input, id, texto) {
+        ProponerValorEnListaDinamica(input, id, texto);
+        ApiControl.BloquearListaDinamica(input, true);
+    }
+    MapearAlControl.FijarValorEnListaDinamica = FijarValorEnListaDinamica;
+    function ListaDinamica(input, valor, texto) {
         input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
-        if (Numero(valor) === 0)
-            input.value = "";
+        input.value = Numero(valor) === 0 ? "" : texto;
     }
     MapearAlControl.ListaDinamica = ListaDinamica;
 })(MapearAlControl || (MapearAlControl = {}));

@@ -193,23 +193,32 @@
         public AplicarRestrictores(): void {
 
             if (this.Estado.Contiene(Sesion.restrictores)) {
-                let restrictores: Tipos.DatosRestrictor[] = this.Estado.Obtener(Sesion.restrictores) as Tipos.DatosRestrictor[];
+                let restrictores: Tipos.DatosRestrictor[] = this.Estado.Sacar(Sesion.restrictores) as Tipos.DatosRestrictor[];
+                this.Estado.Quitar(Sesion.restrictores);
+                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
                 for (let i = 0; i < restrictores.length; i++) {
                     this.AplicarRestrictor(restrictores[i]);
                 }
             }
 
             if (this.Estado.Contiene(Sesion.restrictor)) {
-                let restrictor: Tipos.DatosRestrictor = this.Estado.Obtener(Sesion.restrictor);
+                let restrictor: Tipos.DatosRestrictor = this.Estado.Sacar(Sesion.restrictor);
+                this.Estado.Quitar(Sesion.restrictor);
+                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
                 this.AplicarRestrictor(restrictor);
             }
         }
 
         private AplicarRestrictor(restrictor: Tipos.DatosRestrictor): void {
-            this.ValidarRestrictorDeFiltrado();
-            MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            if (this.ValidarRestrictorDeFiltrado()) {
+                MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            }
+            else {
+                MapearAlControl.PropiedadDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            }
+
         }
 
         private InicializarSelectores() {
@@ -426,10 +435,11 @@
                 modal.TextoSelectorCambiado();
         }
 
-        private ValidarRestrictorDeFiltrado() {
+        private ValidarRestrictorDeFiltrado(): boolean {
             let restrictoresDeFiltro: NodeListOf<HTMLInputElement> = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
             if (restrictoresDeFiltro.length == 0)
-                throw new Error("No se ha definido un Editor del tipo Restrictor en la zona de filtrado");
+                return false;
+            return true;
         }
 
         public OcultarMostrarFiltro(): void {

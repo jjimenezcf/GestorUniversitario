@@ -150,13 +150,7 @@
                 let id: number = this.BuscarValorEnJson(guardarEn, elementoJson) as number;
                 let valor: string = this.BuscarValorEnJson(propiedad, elementoJson) as string;
 
-                if (Numero(id) > 0) {
-                    let listaDinamica = new Tipos.ListaDinamica(input);
-                    listaDinamica.AgregarOpcion(id, valor);
-                    input.value = valor;
-                }
-
-                MapearAlControl.ListaDinamica(input, id);
+                MapearAlControl.ProponerValorEnListaDinamica(input, id, valor);
             }
         }
 
@@ -428,8 +422,8 @@
 
         public SeleccionarListaDinamica(input: HTMLInputElement) {
             let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(input);
-            let valor: number = lista.BuscarSeleccionado(input.value);
-            MapearAlControl.ListaDinamica(input, valor);
+            let id: number = lista.BuscarSeleccionado(input.value);
+            MapearAlControl.ListaDinamica(input, id, input.value);
         }
 
 

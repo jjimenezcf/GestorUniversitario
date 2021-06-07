@@ -115,12 +115,7 @@ var Crud;
                 let guardarEn = input.getAttribute(atListasDinamicasDto.guardarEn);
                 let id = this.BuscarValorEnJson(guardarEn, elementoJson);
                 let valor = this.BuscarValorEnJson(propiedad, elementoJson);
-                if (Numero(id) > 0) {
-                    let listaDinamica = new Tipos.ListaDinamica(input);
-                    listaDinamica.AgregarOpcion(id, valor);
-                    input.value = valor;
-                }
-                MapearAlControl.ListaDinamica(input, id);
+                MapearAlControl.ProponerValorEnListaDinamica(input, id, valor);
             }
         }
         MapearPropiedadesDelElemento(panel, propiedad, valorPropiedadJson) {
@@ -343,8 +338,8 @@ var Crud;
         }
         SeleccionarListaDinamica(input) {
             let lista = new Tipos.ListaDinamica(input);
-            let valor = lista.BuscarSeleccionado(input.value);
-            MapearAlControl.ListaDinamica(input, valor);
+            let id = lista.BuscarSeleccionado(input.value);
+            MapearAlControl.ListaDinamica(input, id, input.value);
         }
         // funciones de carga de elementos para los selectores   ************************************************************************************
         CargarListaDinamica(input) {

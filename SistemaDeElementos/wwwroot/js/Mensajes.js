@@ -83,6 +83,11 @@ var MensajesSe;
         MensajesSe.Apilar(enumTipoMensaje.error, mensaje, consola);
     }
     MensajesSe.Error = Error;
+    function EmitirExcepcion(origen, mensaje, consola) {
+        Error(origen, mensaje, consola);
+        throw EvalError(mensaje);
+    }
+    MensajesSe.EmitirExcepcion = EmitirExcepcion;
     function MostrarMensajes() {
         let modal = document.getElementById("id-modal-historial");
         MapearMensajesAlGrid();

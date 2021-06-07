@@ -80,17 +80,17 @@ var ApiControl;
     ApiControl.EstaBloqueada = EstaBloqueada;
     function EstaOculta(opcion) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
     ApiControl.EstaOculta = EstaOculta;
-    function BloquearListaDinamica(panel, propiedad) {
+    function BloquearListaDinamicaPorPropiedad(panel, propiedad) {
         let lista = BuscarLista(panel, propiedad);
-        if (lista !== null) {
+        if (!NoDefinida(lista)) {
             lista.disabled = true;
             lista.readOnly = true;
             return true;
         }
         return false;
     }
-    ApiControl.BloquearListaDinamica = BloquearListaDinamica;
-    function DesbloquearListaDinamica(panel, propiedad) {
+    ApiControl.BloquearListaDinamicaPorPropiedad = BloquearListaDinamicaPorPropiedad;
+    function DesbloquearListaDinamicaPorPropiedad(panel, propiedad) {
         let lista = BuscarLista(panel, propiedad);
         if (lista !== null) {
             lista.disabled = false;
@@ -99,7 +99,12 @@ var ApiControl;
         }
         return false;
     }
-    ApiControl.DesbloquearListaDinamica = DesbloquearListaDinamica;
+    ApiControl.DesbloquearListaDinamicaPorPropiedad = DesbloquearListaDinamicaPorPropiedad;
+    function BloquearListaDinamica(lista, bloquear) {
+        lista.disabled = bloquear;
+        lista.readOnly = bloquear;
+    }
+    ApiControl.BloquearListaDinamica = BloquearListaDinamica;
     function BloquearEditorPorPropiedad(panel, propiedad) {
         let editor = BuscarEditor(panel, propiedad);
         if (editor !== null) {

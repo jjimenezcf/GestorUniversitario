@@ -84,9 +84,9 @@
 
     export function EstaOculta(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
 
-    export function BloquearListaDinamica(panel: HTMLDivElement, propiedad: string): boolean {
+    export function BloquearListaDinamicaPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
         let lista: HTMLInputElement = BuscarLista(panel, propiedad);
-        if (lista !== null) {
+        if (!NoDefinida(lista)) {
             lista.disabled = true;
             lista.readOnly = true;
             return true;
@@ -94,7 +94,7 @@
         return false;
     }
 
-    export function DesbloquearListaDinamica(panel: HTMLDivElement, propiedad: string): boolean {
+    export function DesbloquearListaDinamicaPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
         let lista: HTMLInputElement = BuscarLista(panel, propiedad);
         if (lista !== null) {
             lista.disabled = false;
@@ -102,6 +102,11 @@
             return true;
         }
         return false;
+    }
+
+    export function BloquearListaDinamica(lista: HTMLInputElement, bloquear: boolean): void {
+        lista.disabled = bloquear;
+        lista.readOnly = bloquear;
     }
 
     export function BloquearEditorPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {

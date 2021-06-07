@@ -37,6 +37,12 @@ class Diccionario {
             return this._valores.slice(pos)[0];
         return undefined;
     }
+    Sacar(clave) {
+        let objeto = this.Obtener(clave);
+        if (objeto !== undefined)
+            this.Quitar(clave);
+        return objeto;
+    }
     Valor(posicion) {
         if (this._valores.length <= posicion)
             return undefined;

@@ -2,7 +2,6 @@
 
     export enum enumTipoMensaje { informativo, advertencia, error };
 
-
     export class clsNotificacion {
         _tipo: enumTipoMensaje;
         public get tipo(): enumTipoMensaje {
@@ -97,6 +96,11 @@
     export function Error(origen: string, mensaje: string, consola?: string) {
         _Almacen.Error(origen, mensaje);
         MensajesSe.Apilar(enumTipoMensaje.error, mensaje, consola);
+    }
+
+    export function EmitirExcepcion(origen: string, mensaje: string, consola?: string) {
+        Error(origen, mensaje, consola);
+        throw EvalError(mensaje);
     }
 
     export function MostrarMensajes() {

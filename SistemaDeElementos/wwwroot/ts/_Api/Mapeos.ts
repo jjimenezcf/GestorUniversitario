@@ -298,6 +298,23 @@ namespace MapearAlControl {
         }
     }
 
+
+    export function PropiedadDeFiltrado(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
+        let controles: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedadRestrictora}"]`) as NodeListOf<HTMLInputElement>;
+
+        if (controles.length > 1)
+            MensajesSe.EmitirExcepcion("PropiedadDeFiltrado", `Hay más de un control con la propiedad ${propiedadRestrictora}`);
+
+        for (let i = 0; i < controles.length; i++) {
+            if (controles[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                let tipo: string = controles[i].getAttribute(atControl.tipo);
+                if (tipo === TipoControl.ListaDinamica)
+                    FijarValorEnListaDinamica(controles[i], id, texto);
+            }
+        }
+    }
+
+
     export function Restrictor(restrictor: HTMLInputElement, id: number, texto: string): void {
         restrictor.setAttribute(atControl.valorInput, texto);
         restrictor.setAttribute(atControl.restrictor, id.toString());
@@ -341,11 +358,23 @@ namespace MapearAlControl {
         return false;
     }
 
-    export function ListaDinamica(input: HTMLInputElement, valor: number) {
-        input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
-        if (Numero(valor) === 0)
-            input.value = "";
+
+    export function ProponerValorEnListaDinamica(input: HTMLInputElement, id: number, texto: string) {
+        if (Numero(id) > 0) {
+            let listaDinamica = new Tipos.ListaDinamica(input);
+            listaDinamica.AgregarOpcion(id, texto);
+        }
+        ListaDinamica(input, id, texto);
     }
 
+    export function FijarValorEnListaDinamica(input: HTMLInputElement, id: number, texto: string) {
+        ProponerValorEnListaDinamica(input, id, texto);
+        ApiControl.BloquearListaDinamica(input, true);
+    }
+
+    export function ListaDinamica(input: HTMLInputElement, valor: number, texto: string) {
+        input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
+        input.value = Numero(valor) === 0 ? "" : texto;
+    }
 }
 
