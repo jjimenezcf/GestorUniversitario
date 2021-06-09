@@ -36,6 +36,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = enumTipoControl.ZonaDeFiltro;
             var b1 = new BloqueDeFitro<TElemento>(this, ltrBloques.General , new Dimension(1, 2));
             var b2 = new BloqueDeFitro<TElemento>(this, ltrBloques.Comun, new Dimension(2, 2));
+            b1.Plegado = true;
             FiltroDeNombre = new EditorFiltro<TElemento>(bloque: b1, etiqueta: nameof(INombre.Nombre), propiedad: ltrFiltros.Nombre, ayuda: "buscar por nombre", new Posicion { fila = 0, columna = 0 });
 
             if (ExtensionesDto.ImplementaAuditoria(typeof(TElemento)))

@@ -314,6 +314,7 @@ var ApiCrud;
     ApiCrud.BlanquearControlesDeIU = BlanquearControlesDeIU;
     function MostrarPanel(panel) {
         panel.classList.remove(ClaseCss.divNoVisible);
+        panel.classList.add(ClaseCss.divVisible);
     }
     ApiCrud.MostrarPanel = MostrarPanel;
     function OcultarPanel(panel) {

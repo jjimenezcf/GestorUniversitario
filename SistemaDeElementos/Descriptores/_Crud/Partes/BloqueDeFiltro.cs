@@ -15,6 +15,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public bool HayExpansor { get; private set; } = false;
 
+        public bool Plegado { get; set; } = false;
+
         public BloqueDeFitro(ZonaDeFiltro<TElemento> filtro, string titulo, Dimension dimension)
         : base(
           padre: filtro,
@@ -28,6 +30,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Tipo = enumTipoControl.Bloque;
             Tabla = new TablaFiltro(this, dimension, new List<ControlFiltroHtml>());
             filtro.Bloques.Add(this);
+            Plegado = false;
         }
 
 
@@ -110,8 +113,8 @@ namespace MVCSistemaDeElementos.Descriptores
                            href=¨javascript:Crud.{GestorDeEventos.EventosDelMantenimiento}('{TipoDeAccionDeMnt.OcultarMostrarBloque}', '{IdHtml}');¨>                           
                         bloque: {Etiqueta}
                         </a>
-                        <input id=¨expandir.{IdHtml}.input¨ type=¨hidden¨ value=¨1¨> 
-                        <div id=¨{IdHtml}¨  class=¨{Css.Render(enumCssDiv.DivVisible)}¨>
+                        <input id=¨expandir.{IdHtml}.input¨ type=¨hidden¨ value={(Plegado ? "1" : "0")}> 
+                        <div id=¨{IdHtml}¨  class=¨{Css.Render(Plegado ? enumCssDiv.DivVisible : enumCssDiv.DivOculto)}¨>
                           {Tabla.RenderControl()}
                         </div>
                    </div>";

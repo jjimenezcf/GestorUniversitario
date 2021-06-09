@@ -334,6 +334,7 @@ namespace ApiCrud {
 
     export function MostrarPanel(panel: HTMLDivElement) {
         panel.classList.remove(ClaseCss.divNoVisible);
+        panel.classList.add(ClaseCss.divVisible);
     }
 
     export function OcultarPanel(panel: HTMLDivElement) {

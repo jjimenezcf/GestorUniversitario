@@ -37,9 +37,7 @@ namespace MVCSistemaDeElementos.Descriptores
                        paraFiltrar: nameof(PermisoDto.Id),
                        paraMostrar: nameof(PermisoDto.Nombre),
                        crudModal: new DescriptorDePermiso(Contexto, ModoDescriptor.SeleccionarParaFiltrar),
-                       propiedadDondeMapear: ltrFiltros.Nombre.ToString());
-
-                
+                       propiedadDondeMapear: ltrFiltros.Nombre.ToString());                
 
                 new ListasDinamicas<UsuarioDto>(bloque: bloque,
                                                 etiqueta: "Puesto de trabajo",

@@ -1,30 +1,20 @@
 ﻿
 
+Próximas tareas
+---------------------------------------------
 
-- Añadir filtros a usuarios (selector de puesto) y órdenes
-- Añadir filtro a puestos (selector de rol) y órdenes
-- Añadir filtro a roles (selector de permiso) y órdenes
-- Añadir ordenación a los grid de roles-permisos, roles-puestos y usuarios-puestos 
-- Al grabar un usuario que asigne a la clave el valor actual
-- Crud de Paises
-- Ocultar o mostrar el filtro en modal
-- Crud de provincia
-- Crud de municipio
-- Crud de barrio
+- Crud de tipos de vías
 - Crud de C.Postales
+- Relación de municipios con códigos postales
+- Crud de barrio
 - Relación de C.Postales por municipio
 - Relación de C.Postales por barrios
-- Crud de tipos de vías
 - Crud de calle 
 - Relación de calle con municipio
 - Relación de calle con barrios
 - Relación de calle con códigos postales
 
-- Definición de Trabajos sometidos
-- Trabajos sometidos de un usuario
-- Proceso de envío de mensajes
-- Proceso de exportación a excel
-- Proceso de importación de callejero
+
 
 Realizado
 ---------------------------------------------
@@ -61,6 +51,28 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 	- se lee al entrar (de BD o cache) en el controlador base
 - Poder comprimir la zona de filtrado y cada uno de sus bloques de manera independiente
 - ver error de al navegar, no pasa el restrictor, y es por que he quitado html elementos
+
+
+- Añadir filtros a usuarios (selector de puesto) y órdenes
+- Añadir filtro a puestos (selector de rol) y órdenes
+- Añadir filtro a roles (selector de permiso) y órdenes
+- Añadir ordenación a los grid de roles-permisos, roles-puestos y usuarios-puestos 
+- Al grabar un usuario que asigne a la clave el valor actual
+- Crud de Paises
+- Ocultar o mostrar el filtro en modal
+- Crud de provincia
+- Crud de municipio
+
+- Definición de Trabajos sometidos
+- Trabajos sometidos de un usuario
+- Proceso de envío de mensajes
+- Proceso de exportación a excel
+- Proceso de importación de callejero
+- Cola de trabajos sometidos
+
+
+- Mostrar el filtro abierto general, el resto cerrado
+
 
 
 Cosas del Layout
