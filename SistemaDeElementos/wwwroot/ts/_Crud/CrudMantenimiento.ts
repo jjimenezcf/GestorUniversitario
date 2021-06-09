@@ -65,7 +65,7 @@
         }
 
         public NavegarDesdeElBrowser() {
-            MensajesSe.Info('Ha llamado al método navegar');
+            //MensajesSe.Info('Ha llamado al método navegar');
         }
 
         public Inicializar(idPanelMnt: string) {
@@ -109,7 +109,7 @@
 
         protected InicializarOrdenacion() {
             let ordenacionInicial = this.CuerpoCabecera.getAttribute(atControl.ordenInicial);
-            let lista = ToLista(ordenacionInicial, ";")
+            let lista = ToLista(ordenacionInicial, ";");
             let columnas: NodeListOf<HTMLTableHeaderCellElement> = this.CabeceraTablaGrid.querySelectorAll("th") as NodeListOf<HTMLTableHeaderCellElement>;
             for (let i: number = 0; i < columnas.length; i++) {
                 let columna = columnas[i];
@@ -126,8 +126,8 @@
                     }
 
                     if (partes[0] === propiedad) {
-                         if (this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim()))
-                             ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
+                        if (this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim()))
+                            ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
                     }
 
                 }
@@ -137,7 +137,7 @@
 
         private TrasRestaurar(valor: boolean): void {
             if (valor && this.Estado.Obtener("EditarAlVolver")) {
-                this.Estado.Quitar("EditarAlVolver");                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+                this.Estado.Quitar("EditarAlVolver"); EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
                 EntornoSe.Historial.Persistir();
                 this.IraEditar();
             }
@@ -199,14 +199,14 @@
         }
 
         private AplicarRestrictor(restrictor: Tipos.DatosRestrictor): void {
-            if (this.ValidarRestrictorDeFiltrado()) {
-                MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            }
-            else {
-                MapearAlControl.PropiedadDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            }
+            MapearPanelDeFiltro.MapearRestrictores(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+
+            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteCrear)))
+                MapearPanelDeCreacion.MapearRestrictores(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+
+            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteEditar)))
+                MapearPanelDeEdicion.MapearRestrictores(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+
             this.DespuesDeAplicarUnRestrictor(restrictor);
         }
 

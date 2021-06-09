@@ -52,7 +52,7 @@ var Crud;
             return this.ZonaDeMenu.querySelectorAll(`input[${atOpcionDeMenu.clase}="${ClaseDeOpcioDeMenu.DeVista}"]`);
         }
         NavegarDesdeElBrowser() {
-            MensajesSe.Info('Ha llamado al método navegar');
+            //MensajesSe.Info('Ha llamado al método navegar');
         }
         Inicializar(idPanelMnt) {
             const querystring = window.location.search;
@@ -167,14 +167,11 @@ var Crud;
             }
         }
         AplicarRestrictor(restrictor) {
-            if (this.ValidarRestrictorDeFiltrado()) {
-                MapearAlControl.RestrictoresDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                MapearAlControl.RestrictoresDeEdicion(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-                MapearAlControl.RestrictoresDeEdicion(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            }
-            else {
-                MapearAlControl.PropiedadDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-            }
+            MapearPanelDeFiltro.MapearRestrictores(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteCrear)))
+                MapearPanelDeCreacion.MapearRestrictores(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteEditar)))
+                MapearPanelDeEdicion.MapearRestrictores(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
             this.DespuesDeAplicarUnRestrictor(restrictor);
         }
         DespuesDeAplicarUnRestrictor(restrictor) {

@@ -46,6 +46,8 @@ var Crud;
         InicializarListasDinamicas(panel) {
             let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
             for (let i = 0; i < listas.length; i++) {
+                if (listas[i].disabled && !IsNullOrEmpty(listas[i].value) && Numero(listas[i].getAttribute(atListasDinamicas.idSeleccionado)) > 0)
+                    continue;
                 let lista = new Tipos.ListaDinamica(listas[i]);
                 lista.Borrar();
             }
@@ -308,16 +310,6 @@ var Crud;
             let select = controlPadre.getElementsByTagName('select');
             for (var i = 0; i < select.length; i++) {
                 var control = select[i];
-                var dto = control.getAttribute(atControl.propiedad);
-                if (dto === propiedadDto)
-                    return control;
-            }
-            return null;
-        }
-        BuscarListaDinamica(controlPadre, propiedadDto) {
-            let inputs = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
-            for (var i = 0; i < inputs.length; i++) {
-                var control = inputs[i];
                 var dto = control.getAttribute(atControl.propiedad);
                 if (dto === propiedadDto)
                     return control;

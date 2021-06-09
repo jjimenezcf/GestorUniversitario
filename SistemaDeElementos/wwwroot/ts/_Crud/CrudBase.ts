@@ -60,6 +60,10 @@
         protected InicializarListasDinamicas(panel: HTMLDivElement): void {
             let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < listas.length; i++) {
+
+                if (listas[i].disabled && !IsNullOrEmpty(listas[i].value) && Numero(listas[i].getAttribute(atListasDinamicas.idSeleccionado)) > 0)
+                    continue;
+
                 let lista: Tipos.ListaDinamica = new Tipos.ListaDinamica(listas[i]);
                 lista.Borrar();
             }
@@ -390,18 +394,6 @@
             return null;
         }
 
-        protected BuscarListaDinamica(controlPadre: HTMLDivElement, propiedadDto: string): HTMLInputElement {
-
-            let inputs: NodeListOf<HTMLInputElement> = controlPadre.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
-
-            for (var i = 0; i < inputs.length; i++) {
-                var control = inputs[i] as HTMLInputElement;
-                var dto = control.getAttribute(atControl.propiedad);
-                if (dto === propiedadDto)
-                    return control;
-            }
-            return null;
-        }
 
         public AntesDeMapearDatosDeIU(crud: CrudBase, panel: HTMLDivElement, modoDeTrabajo: string): JSON {
             if (modoDeTrabajo === ModoTrabajo.creando)

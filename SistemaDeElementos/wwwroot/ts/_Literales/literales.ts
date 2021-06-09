@@ -68,7 +68,11 @@ const atMantenimniento = {
     dto: "dto",
     idNegocio: literal.idNegocio,
     zonaMenu: "zona-de-menu",
-    gridDelMnt: "grid-del-mnt"
+    gridDelMnt: "grid-del-mnt",
+    permiteCrear: "permite-crear",
+    permiteEditar: "permite-editar",
+    permiteBorrar: "permite-borrar",
+
 };
 
 const ModoOrdenacion = {

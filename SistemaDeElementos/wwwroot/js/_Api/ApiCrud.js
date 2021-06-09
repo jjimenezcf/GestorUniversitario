@@ -81,7 +81,7 @@ var ApiControl;
     function EstaOculta(opcion) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
     ApiControl.EstaOculta = EstaOculta;
     function BloquearListaDinamicaPorPropiedad(panel, propiedad) {
-        let lista = BuscarLista(panel, propiedad);
+        let lista = BuscarListaDinamica(panel, propiedad, atControl.propiedad);
         if (!NoDefinida(lista)) {
             lista.disabled = true;
             lista.readOnly = true;
@@ -91,7 +91,7 @@ var ApiControl;
     }
     ApiControl.BloquearListaDinamicaPorPropiedad = BloquearListaDinamicaPorPropiedad;
     function DesbloquearListaDinamicaPorPropiedad(panel, propiedad) {
-        let lista = BuscarLista(panel, propiedad);
+        let lista = BuscarListaDinamica(panel, propiedad, atControl.propiedad);
         if (lista !== null) {
             lista.disabled = false;
             lista.readOnly = false;
@@ -139,6 +139,14 @@ var ApiControl;
         return false;
     }
     ApiControl.DesbloquearEditor = DesbloquearEditor;
+    function BuscarListaDinamicaPorGuardarEn(panel, guardarEn) {
+        return BuscarListaDinamica(panel, guardarEn, atListasDinamicasDto.guardarEn);
+    }
+    ApiControl.BuscarListaDinamicaPorGuardarEn = BuscarListaDinamicaPorGuardarEn;
+    function BuscarListaDinamicaPorPropiedad(panel, propiedad) {
+        return BuscarListaDinamica(panel, propiedad, atControl.propiedad);
+    }
+    ApiControl.BuscarListaDinamicaPorPropiedad = BuscarListaDinamicaPorPropiedad;
     function BuscarEditor(panel, propiedad) {
         let editores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`);
         for (let i = 0; i < editores.length; i++) {
@@ -149,11 +157,11 @@ var ApiControl;
         }
         return null;
     }
-    function BuscarLista(panel, propiedad) {
+    function BuscarListaDinamica(panel, propiedad, atributo) {
         let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
         for (let i = 0; i < listas.length; i++) {
             let lista = listas[i];
-            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+            if (lista.getAttribute(atributo).toLocaleLowerCase() == propiedad.toLocaleLowerCase()) {
                 return lista;
             }
         }

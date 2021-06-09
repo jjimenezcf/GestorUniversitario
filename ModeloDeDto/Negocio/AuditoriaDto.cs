@@ -17,10 +17,10 @@ namespace ModeloDeDto.Negocio
     {
         //--------------------------------------------
         [IUPropiedad(
-            Etiqueta = "Elemento",
-            Ayuda = "Auditorial del elemento",
+            Etiqueta = "Negocio",
+            Ayuda = "Auditorial del negocio",
             TipoDeControl = enumTipoControl.RestrictorDeEdicion,
-            MostrarExpresion = nameof(Elemento),
+            MostrarExpresion = nameof(Negocio),
             Fila = 0,
             Columna = 0,
             EditableAlCrear = false,
@@ -28,9 +28,26 @@ namespace ModeloDeDto.Negocio
             VisibleEnGrid = false
             )
         ]
-        public int IdElemento { get; set; }
+        public int IdNegocio { get; set; }
+
+        [IUPropiedad(Visible = false)]
+        public string Negocio { get; set; }
 
         //--------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Elemento",
+            Ayuda = "Auditorial del elemento",
+            TipoDeControl = enumTipoControl.RestrictorDeEdicion,
+            MostrarExpresion = nameof(Elemento),
+            Fila = 0,
+            Columna = 1,
+            EditableAlCrear = false,
+            EditableAlEditar = false,
+            VisibleEnGrid = false
+            )
+        ]
+        public int IdElemento { get; set; }
+
         [IUPropiedad(Visible = false)]
         public string Elemento { get; set; }
        

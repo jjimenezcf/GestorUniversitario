@@ -203,6 +203,73 @@ var MapearAlJson;
     }
 })(MapearAlJson || (MapearAlJson = {}));
 ;
+var MapearPanelDeFiltro;
+(function (MapearPanelDeFiltro) {
+    function MapearRestrictores(zonaDeFiltro, propiedad, id, texto) {
+        let mapeado = RestrictoresDeFiltrado(zonaDeFiltro, propiedad, id, texto);
+        if (!mapeado)
+            MapearAlControl.Propiedad(zonaDeFiltro, propiedad, id, texto);
+    }
+    MapearPanelDeFiltro.MapearRestrictores = MapearRestrictores;
+    function RestrictoresDeFiltrado(panel, propiedadRestrictora, id, texto) {
+        let restrictores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`);
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+})(MapearPanelDeFiltro || (MapearPanelDeFiltro = {}));
+var MapearPanelDeCreacion;
+(function (MapearPanelDeCreacion) {
+    function MapearRestrictores(zonaDeCreacion, propiedad, id, texto) {
+        let mapeado = RestrictoresDeCreacion(zonaDeCreacion, propiedad, id, texto);
+        if (!mapeado) {
+            let lista = ApiControl.BuscarListaDinamicaPorGuardarEn(zonaDeCreacion, propiedad);
+            if (Definida(lista))
+                MapearAlControl.FijarValorEnListaDinamica(lista, id, texto);
+            else
+                MapearAlControl.Propiedad(zonaDeCreacion, propiedad, id, texto);
+        }
+    }
+    MapearPanelDeCreacion.MapearRestrictores = MapearRestrictores;
+    function RestrictoresDeCreacion(panel, propiedad, id, texto) {
+        let restrictores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`);
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+})(MapearPanelDeCreacion || (MapearPanelDeCreacion = {}));
+var MapearPanelDeEdicion;
+(function (MapearPanelDeEdicion) {
+    function MapearRestrictores(zonaDeEdicion, propiedad, id, texto) {
+        let mapeado = RestrictoresDeEdicion(zonaDeEdicion, propiedad, id, texto);
+        if (!mapeado) {
+            let lista = ApiControl.BuscarListaDinamicaPorGuardarEn(zonaDeEdicion, propiedad);
+            if (Definida(lista))
+                MapearAlControl.FijarValorEnListaDinamica(lista, id, texto);
+            else
+                MapearAlControl.Propiedad(zonaDeEdicion, propiedad, id, texto);
+        }
+    }
+    MapearPanelDeEdicion.MapearRestrictores = MapearRestrictores;
+    function RestrictoresDeEdicion(panel, propiedad, id, texto) {
+        let restrictores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`);
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+})(MapearPanelDeEdicion || (MapearPanelDeEdicion = {}));
 var MapearAlControl;
 (function (MapearAlControl) {
     function Url(visor, url) {
@@ -254,37 +321,26 @@ var MapearAlControl;
         area.textContent = texto;
     }
     MapearAlControl.Texto = Texto;
-    function RestrictoresDeFiltrado(panel, propiedadRestrictora, id, texto) {
-        let restrictores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`);
-        for (let i = 0; i < restrictores.length; i++) {
-            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
-                Restrictor(restrictores[i], id, texto);
-            }
-        }
-    }
-    MapearAlControl.RestrictoresDeFiltrado = RestrictoresDeFiltrado;
-    function RestrictoresDeEdicion(panel, propiedadRestrictora, id, texto) {
+    function RestrictoresDeEdicion(panel, propiedad, id, texto) {
         let restrictores = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`);
         for (let i = 0; i < restrictores.length; i++) {
-            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
                 Restrictor(restrictores[i], id, texto);
             }
         }
     }
     MapearAlControl.RestrictoresDeEdicion = RestrictoresDeEdicion;
-    function PropiedadDeFiltrado(panel, propiedadRestrictora, id, texto) {
-        let controles = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedadRestrictora}"]`);
+    function Propiedad(panel, propiedad, id, texto) {
+        let controles = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedad}"]`);
         if (controles.length > 1)
-            MensajesSe.EmitirExcepcion("PropiedadDeFiltrado", `Hay más de un control con la propiedad ${propiedadRestrictora}`);
-        for (let i = 0; i < controles.length; i++) {
-            if (controles[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
-                let tipo = controles[i].getAttribute(atControl.tipo);
-                if (tipo === TipoControl.ListaDinamica)
-                    FijarValorEnListaDinamica(controles[i], id, texto);
-            }
-        }
+            MensajesSe.EmitirExcepcion("Mapeo de propiedad", `Hay más de un control con la propiedad ${propiedad} en el panel ${panel.id}`);
+        if (controles.length === 0)
+            MensajesSe.EmitirExcepcion("Mapeo de propiedad", `No existe la propiedad ${propiedad} en el panel ${panel.id}`);
+        let tipo = controles[0].getAttribute(atControl.tipo);
+        if (tipo === TipoControl.ListaDinamica)
+            FijarValorEnListaDinamica(controles[0], id, texto);
     }
-    MapearAlControl.PropiedadDeFiltrado = PropiedadDeFiltrado;
+    MapearAlControl.Propiedad = Propiedad;
     function Restrictor(restrictor, id, texto) {
         restrictor.setAttribute(atControl.valorInput, texto);
         restrictor.setAttribute(atControl.restrictor, id.toString());

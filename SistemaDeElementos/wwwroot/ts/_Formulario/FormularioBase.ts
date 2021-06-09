@@ -40,7 +40,7 @@
         }
 
         public NavegarDesdeElBrowser() {
-            MensajesSe.Info('Ha llamado al método navegar');
+            //MensajesSe.Info('Ha llamado al método navegar');
         }
 
         public Inicializar(): void {

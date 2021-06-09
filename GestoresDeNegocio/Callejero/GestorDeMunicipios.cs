@@ -28,7 +28,8 @@ namespace GestoresDeNegocio.Callejero
             {
                 CreateMap<MunicipioDtm, MunicipioDto>()
                     .ForMember(dto => dto.Provincia, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Codigo}) {dtm.Provincia.Nombre}"))
-                    .ForMember(dto => dto.Pais, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Pais.Codigo}) {dtm.Provincia.Pais.Nombre}"));
+                    .ForMember(dto => dto.Pais, dtm => dtm.MapFrom(dtm => $"({dtm.Provincia.Pais.Codigo}) {dtm.Provincia.Pais.Nombre}"))
+                    .ForMember(dto => dto.IdPais, dtm => dtm.MapFrom(dtm => dtm.Provincia.Pais.Id));
 
                 CreateMap<MunicipioDto, MunicipioDtm>()
                 .ForMember(dtm => dtm.FechaCreacion, dto => dto.Ignore())

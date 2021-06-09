@@ -121,6 +121,10 @@ function IsNull(objeto: any): boolean {
     return false;
 }
 
+function Definida(valor: any) {
+    return !NoDefinida(valor);
+};
+
 function NoDefinida(valor: any) {
     if (IsNull(valor) || valor === undefined)
         return true;

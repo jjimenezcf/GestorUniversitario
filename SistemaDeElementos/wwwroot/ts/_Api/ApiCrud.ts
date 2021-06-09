@@ -85,7 +85,7 @@
     export function EstaOculta(opcion: HTMLButtonElement) { return opcion.getAttribute(atOpcionDeMenu.oculta) === "S" || opcion.hidden; }
 
     export function BloquearListaDinamicaPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
-        let lista: HTMLInputElement = BuscarLista(panel, propiedad);
+        let lista: HTMLInputElement = BuscarListaDinamica(panel, propiedad, atControl.propiedad);
         if (!NoDefinida(lista)) {
             lista.disabled = true;
             lista.readOnly = true;
@@ -95,7 +95,7 @@
     }
 
     export function DesbloquearListaDinamicaPorPropiedad(panel: HTMLDivElement, propiedad: string): boolean {
-        let lista: HTMLInputElement = BuscarLista(panel, propiedad);
+        let lista: HTMLInputElement = BuscarListaDinamica(panel, propiedad, atControl.propiedad);
         if (lista !== null) {
             lista.disabled = false;
             lista.readOnly = false;
@@ -143,6 +143,16 @@
         return false;
     }
 
+
+    export function BuscarListaDinamicaPorGuardarEn(panel: HTMLDivElement, guardarEn: string): HTMLInputElement {
+        return BuscarListaDinamica(panel, guardarEn, atListasDinamicasDto.guardarEn);
+    }
+
+    export function BuscarListaDinamicaPorPropiedad(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
+        return BuscarListaDinamica(panel, propiedad, atControl.propiedad);
+    }
+
+
     function BuscarEditor(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
         let editores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.Editor}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < editores.length; i++) {
@@ -154,11 +164,11 @@
         return null;
     }
 
-    function BuscarLista(panel: HTMLDivElement, propiedad: string): HTMLInputElement {
+    function BuscarListaDinamica(panel: HTMLDivElement, propiedad: string, atributo: string): HTMLInputElement {
         let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < listas.length; i++) {
-            let lista: HTMLInputElement = listas[i];
-            if (lista.getAttribute(atControl.propiedad) == propiedad.toLocaleLowerCase()) {
+            let lista: HTMLInputElement = listas[i] as HTMLInputElement;
+            if (lista.getAttribute(atributo).toLocaleLowerCase() == propiedad.toLocaleLowerCase()) {
                 return lista;
             }
         }

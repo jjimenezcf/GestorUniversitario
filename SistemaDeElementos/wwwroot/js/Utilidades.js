@@ -100,6 +100,10 @@ function IsNull(objeto) {
         return true;
     return false;
 }
+function Definida(valor) {
+    return !NoDefinida(valor);
+}
+;
 function NoDefinida(valor) {
     if (IsNull(valor) || valor === undefined)
         return true;

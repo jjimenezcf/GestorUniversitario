@@ -123,6 +123,9 @@ namespace MVCSistemaDeElementos.Descriptores
                         controlador='{Crud.Controlador}' 
                         negocio='{Crud.RenderNegocio}'
                         dto='{Crud.RenderDto}'
+                        permite-crear = {(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeCrear))}
+                        permite-editar = {(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeEditar))}
+                        permite-borrar = {(bool)ElementoDto.ValorDelAtributo(typeof(TElemento), nameof(IUDtoAttribute.OpcionDeBorrar))}
                         id-negocio='{Crud.RenderIdDeNegocio}'{clausulaDeOrdenInicial}>
                      ";
 

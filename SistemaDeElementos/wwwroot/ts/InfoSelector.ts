@@ -42,10 +42,18 @@ class Elemento {
     }
 
     private mostrar(): string {
+
+        if (NoDefinida(this.ExpresionMostrar)) {
+            if (NoDefinida(this._registro.hasOwnProperty("Nombre")))
+                MensajesSe.EmitirExcepcion("Obtener exprexión a mostrar", "Se debe definir la expresión a mostrar del elemento");
+            else
+                this.ExpresionMostrar = "Nombre";
+        }
+
         if (this._registro.hasOwnProperty(this.ExpresionMostrar))
             return this._registro[this.ExpresionMostrar];
 
-        let expresion: string = this.ExpresionMostrar.toLowerCase();
+        let expresion: string = this.ExpresionMostrar.toLocaleLowerCase();
         let propiedades: string[] = Object.keys(this._registro);
         for (let j = 0; j < propiedades.length; j++) {
             let propiedad: string = propiedades[j];

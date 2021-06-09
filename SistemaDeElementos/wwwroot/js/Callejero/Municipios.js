@@ -24,8 +24,12 @@ var Callejero;
         MapearPais(peticion) {
             let idPais = this.BuscarValorEnJson("idpais", peticion.resultado.datos);
             let pais = this.BuscarValorEnJson("pais", peticion.resultado.datos);
-            let lista = this.BuscarListaDinamica(this.ZonaDeFiltro, "idpais");
-            MapearAlControl.FijarValorEnListaDinamica(lista, idPais, pais);
+            let listaDeFiltro = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeFiltro, idPais, pais);
+            let listaDeCreacion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeCreacion, idPais, pais);
+            let listaDeEdicion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeEdicion, idPais, pais);
         }
     }
     Callejero.CrudDeMunicipios = CrudDeMunicipios;

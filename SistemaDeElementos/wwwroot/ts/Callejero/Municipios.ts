@@ -28,8 +28,14 @@
         public MapearPais(peticion: ApiDeAjax.DescriptorAjax): void {
             let idPais: number = this.BuscarValorEnJson("idpais", peticion.resultado.datos) as number;
             let pais: string = this.BuscarValorEnJson("pais", peticion.resultado.datos) as string;
-            let lista: HTMLInputElement = this.BuscarListaDinamica(this.ZonaDeFiltro, "idpais");
-            MapearAlControl.FijarValorEnListaDinamica(lista, idPais, pais);
+            let listaDeFiltro: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeFiltro, idPais, pais);
+
+            let listaDeCreacion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeCreacion, idPais, pais);
+
+            let listaDeEdicion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(listaDeEdicion, idPais, pais);
         }
     }
 

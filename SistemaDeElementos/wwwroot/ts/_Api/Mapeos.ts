@@ -227,6 +227,80 @@
 
 };
 
+namespace MapearPanelDeFiltro {
+
+    export function MapearRestrictores(zonaDeFiltro: HTMLDivElement, propiedad: string, id: number, texto: string) {
+        let mapeado: boolean = RestrictoresDeFiltrado(zonaDeFiltro, propiedad, id, texto);
+        if (!mapeado) MapearAlControl.Propiedad(zonaDeFiltro, propiedad, id, texto);
+    }
+
+    function RestrictoresDeFiltrado(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string): boolean {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
+
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
+namespace MapearPanelDeCreacion {
+
+    export function MapearRestrictores(zonaDeCreacion: HTMLDivElement, propiedad: string, id: number, texto: string) {
+        let mapeado: boolean = RestrictoresDeCreacion(zonaDeCreacion, propiedad, id, texto);
+        if (!mapeado) {
+            let lista: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(zonaDeCreacion, propiedad);
+            if (Definida(lista))
+                MapearAlControl.FijarValorEnListaDinamica(lista, id, texto);
+            else
+               MapearAlControl.Propiedad(zonaDeCreacion, propiedad, id, texto);
+        }
+    }
+
+    function RestrictoresDeCreacion(panel: HTMLDivElement, propiedad: string, id: number, texto: string): boolean {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
+namespace MapearPanelDeEdicion {
+
+    export function MapearRestrictores(zonaDeEdicion: HTMLDivElement, propiedad: string, id: number, texto: string) {
+        let mapeado: boolean = RestrictoresDeEdicion(zonaDeEdicion, propiedad, id, texto);
+        if (!mapeado) {
+            let lista: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(zonaDeEdicion, propiedad);
+            if (Definida(lista)) 
+                MapearAlControl.FijarValorEnListaDinamica(lista, id, texto);
+            else
+                MapearAlControl.Propiedad(zonaDeEdicion, propiedad, id, texto);
+        }
+    }
+
+    function RestrictoresDeEdicion(panel: HTMLDivElement, propiedad: string, id: number, texto: string): boolean {
+        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
+
+        for (let i = 0; i < restrictores.length; i++) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
+                MapearAlControl.Restrictor(restrictores[i], id, texto);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
 namespace MapearAlControl {
 
     export function Url(visor: HTMLImageElement, url: any) {
@@ -279,39 +353,30 @@ namespace MapearAlControl {
         area.textContent = texto;
     }
 
-    export function RestrictoresDeFiltrado(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
-        let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeFiltro}"]`) as NodeListOf<HTMLInputElement>;
 
-        for (let i = 0; i < restrictores.length; i++) {
-            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
-                Restrictor(restrictores[i], id, texto);
-            }
-        }
-    }
-    export function RestrictoresDeEdicion(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
+
+    export function RestrictoresDeEdicion(panel: HTMLDivElement, propiedad: string, id: number, texto: string) {
         let restrictores: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.restrictorDeEdicion}"]`) as NodeListOf<HTMLInputElement>;
 
         for (let i = 0; i < restrictores.length; i++) {
-            if (restrictores[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
+            if (restrictores[i].getAttribute(atControl.propiedad) === propiedad) {
                 Restrictor(restrictores[i], id, texto);
             }
         }
     }
 
-
-    export function PropiedadDeFiltrado(panel: HTMLDivElement, propiedadRestrictora: string, id: number, texto: string) {
-        let controles: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedadRestrictora}"]`) as NodeListOf<HTMLInputElement>;
+    export function Propiedad(panel: HTMLDivElement, propiedad: string, id: number, texto: string) {
+        let controles: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.propiedad}="${propiedad}"]`) as NodeListOf<HTMLInputElement>;
 
         if (controles.length > 1)
-            MensajesSe.EmitirExcepcion("PropiedadDeFiltrado", `Hay más de un control con la propiedad ${propiedadRestrictora}`);
+            MensajesSe.EmitirExcepcion("Mapeo de propiedad", `Hay más de un control con la propiedad ${propiedad} en el panel ${panel.id}`);
 
-        for (let i = 0; i < controles.length; i++) {
-            if (controles[i].getAttribute(atControl.propiedad) === propiedadRestrictora) {
-                let tipo: string = controles[i].getAttribute(atControl.tipo);
-                if (tipo === TipoControl.ListaDinamica)
-                    FijarValorEnListaDinamica(controles[i], id, texto);
-            }
-        }
+        if (controles.length === 0)
+            MensajesSe.EmitirExcepcion("Mapeo de propiedad", `No existe la propiedad ${propiedad} en el panel ${panel.id}`);
+
+        let tipo: string = controles[0].getAttribute(atControl.tipo);
+        if (tipo === TipoControl.ListaDinamica)
+            FijarValorEnListaDinamica(controles[0], id, texto);
     }
 
 

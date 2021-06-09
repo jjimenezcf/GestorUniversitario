@@ -26,7 +26,7 @@ var Formulario;
             return this._controlador;
         }
         NavegarDesdeElBrowser() {
-            MensajesSe.Info('Ha llamado al método navegar');
+            //MensajesSe.Info('Ha llamado al método navegar');
         }
         Inicializar() {
             if (EntornoSe.Historial.HayHistorial(this._idFormulario))
