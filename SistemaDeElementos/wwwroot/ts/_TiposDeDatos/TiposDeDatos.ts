@@ -213,10 +213,10 @@
         public PropiedadQueRestringe: string;
         public PropiedadRestrictora: string;
         public MostrarEnElRestrictor: string;
-        public FiltroRestrictor: Tipos.DatosRestrictor;
+        public FiltroRestrictor: Array<Tipos.DatosRestrictor>;
 
         constructor() {
-            this.FiltroRestrictor = null;
+            this.FiltroRestrictor = new Array <Tipos.DatosRestrictor>();
         }
     }
 

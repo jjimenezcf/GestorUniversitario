@@ -749,13 +749,13 @@ var Crud;
         AntesDeNavegar(valores) {
             super.AntesDeNavegar(valores);
             this.Estado.Agregar(atGrid.id, this.Navegador.Datos);
-            let datosRestrictor = valores.Obtener(Sesion.restrictor);
+            let restrictores = valores.Obtener(Sesion.restrictores);
             let idSeleccionado = valores.Obtener(Sesion.idSeleccionado);
             this.Estado.Agregar(atGrid.idSeleccionado, idSeleccionado);
-            this.Estado.Agregar(atGrid.nombreSeleccionado, datosRestrictor.Texto);
+            this.Estado.Agregar(atGrid.nombreSeleccionado, restrictores[0].Texto);
             let paginaDestino = valores.Obtener(Sesion.paginaDestino);
             let estadoPaginaDestino = EntornoSe.Historial.ObtenerEstadoDePagina(paginaDestino);
-            estadoPaginaDestino.Agregar(Sesion.restrictor, datosRestrictor);
+            estadoPaginaDestino.Agregar(Sesion.restrictores, restrictores);
             estadoPaginaDestino.Quitar(atGrid.idSeleccionado);
             estadoPaginaDestino.Quitar(atGrid.nombreSeleccionado);
             EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
@@ -764,7 +764,7 @@ var Crud;
             try {
                 let datos = this.PrepararParametrosDeDependencias(this._infoSelector, parametrosDeEntrada);
                 if (datos.FiltroRestrictor !== null)
-                    ApiRuote.NavegarARelacionar(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
+                    ApiRuote.NavegarADependientes(this, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
             }
             catch (error) {
                 MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, error.message);
@@ -807,7 +807,7 @@ var Crud;
             else {
                 let idRestrictor = Numero(valorDeLaColumna);
                 let filtro = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
-                datos.FiltroRestrictor = filtro;
+                datos.FiltroRestrictor.push(filtro);
             }
             return datos;
         }
@@ -845,7 +845,7 @@ var Crud;
             let datos = peticion.DatosDeEntrada;
             let idRestrictor = Numero(peticion.resultado.datos[datos.PropiedadQueRestringe]);
             let filtro = new Tipos.DatosRestrictor(datos.PropiedadRestrictora, idRestrictor, datos.MostrarEnElRestrictor);
-            datos.FiltroRestrictor = filtro;
+            datos.FiltroRestrictor.push(filtro);
             ApiRuote.NavegarADependientes(grid, datos.idOpcionDeMenu, datos.idSeleccionado, datos.FiltroRestrictor);
         }
         LeerElementoParaRelacionar(datos) {

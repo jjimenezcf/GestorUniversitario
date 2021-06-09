@@ -537,7 +537,7 @@ const Variables = {
 
 const Sesion = {
     historial: "historial",
-    restrictor: "restrictor",
+    //restrictor: "restrictor",
     restrictores: "restrictores",
     idSeleccionado: "idSeleccionado",
     paginaDestino: "pagina-destino",

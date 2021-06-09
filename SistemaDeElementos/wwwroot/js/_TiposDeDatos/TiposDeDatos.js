@@ -151,7 +151,7 @@ var Tipos;
     Tipos.DatosParaRelacionar = DatosParaRelacionar;
     class DatosParaDependencias {
         constructor() {
-            this.FiltroRestrictor = null;
+            this.FiltroRestrictor = new Array();
         }
     }
     Tipos.DatosParaDependencias = DatosParaDependencias;

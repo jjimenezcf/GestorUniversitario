@@ -516,35 +516,27 @@ namespace ApiRuote {
         ordenInput.value = "";
 
         let valores: Diccionario<any> = new Diccionario<any>();
+        let filtros: Tipos.DatosRestrictor[]=[];
+        filtros.push(filtroRestrictor);
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
-        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.restrictores, filtros);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
         Navegar(crud, form, valores);
     }
 
 
-    export function NavegarADependientes(crud: Crud.GridDeDatos, idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: Tipos.DatosRestrictor) {
-
-        let filtroJson: string = ApiFiltro.DefinirRestrictorNumerico(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
+    export function NavegarADependientes(crud: Crud.GridDeDatos, idOpcionDeMenu: string, idSeleccionado: number, filtroRestrictor: Array<Tipos.DatosRestrictor>) {
 
         let form: HTMLFormElement = document.getElementById(idOpcionDeMenu) as HTMLFormElement;
 
-        if (form === null) {
+        if (form === null) 
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
-        }
 
         let navegarAlCrud: string = form.getAttribute(atNavegar.navegarAlCrud);
-        let idRestrictor: string = form.getAttribute(atNavegar.idRestrictor) as string;
-        let idOrden: string = form.getAttribute(atNavegar.orden) as string;
-
-        let restrictor: HTMLInputElement = document.getElementById(idRestrictor) as HTMLInputElement;
-        restrictor.value = filtroJson;
-        let ordenInput: HTMLInputElement = document.getElementById(idOrden) as HTMLInputElement;
-        ordenInput.value = "";
 
         let valores: Diccionario<any> = new Diccionario<any>();
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
-        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.restrictores, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
         Navegar(crud, form, valores);
     }

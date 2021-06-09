@@ -13,8 +13,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                  , nameof(ProvinciasController.CrudProvincias)
                  , modo
                  , rutaBase: "Callejero")
-        {
-            
+        {            
             new ListasDinamicas<ProvinciaDto>(Mnt.BloqueGeneral,
                 etiqueta: "País",
                 filtrarPor: nameof(ProvinciaDto.IdPais),
@@ -30,6 +29,16 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedad: nameof(ProvinciaDto.Codigo)
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 0, columna = 1 });
+
+            AnadirOpcionDeDependencias(Mnt
+                , controlador: nameof(MunicipiosController)
+                , vista: nameof(MunicipiosController.CrudMunicipios)
+                , datosDependientes: nameof(MunicipioDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<MunicipioDto>.NombreMnt
+                , nombreOpcion: "Municipios"
+                , propiedadQueRestringe: nameof(ProvinciaDto.Id)
+                , propiedadRestrictora: nameof(MunicipioDto.IdProvincia)
+                , "Municipios de una provincia");
 
             RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1, 0), "Provincia", "Buscar Buscar por nombre de provincia");
             Mnt.OrdenacionInicial = @$"{nameof(ProvinciaDto.Pais)}:pais.nombre:{enumModoOrdenacion.ascendente.Render()};

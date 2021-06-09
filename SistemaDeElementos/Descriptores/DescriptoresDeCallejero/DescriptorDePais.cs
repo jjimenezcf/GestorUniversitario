@@ -15,15 +15,13 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                , nameof(PaisesController.CrudPaises)
                , modo
                , rutaBase: "Callejero")
-        {
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
-            new EditorFiltro<PaisDto>(bloque: fltGeneral
+        {            
+            new EditorFiltro<PaisDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"
                 , propiedad: nameof(PaisDto.Codigo)
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 1, columna = 0 });
 
-            //Todo => permitir que una lista desplegable actue como restrictora
             AnadirOpcionDeDependencias(Mnt
                 , controlador: nameof(ProvinciasController)
                 , vista: nameof(ProvinciasController.CrudProvincias)

@@ -69,6 +69,8 @@
         }
 
         public Inicializar(idPanelMnt: string) {
+            const querystring = window.location.search;
+            const params = new URLSearchParams(querystring);
             try {
 
                 if (IsNullOrEmpty(idPanelMnt))
@@ -81,16 +83,13 @@
                 this.InicializarMenus();
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
 
-                this.AplicarRestrictores();
+                if (params.has("origen")) this.AplicarRestrictores(params.get("origen"));
 
                 if (this.Navegador.EsRestauracion) {
                     this.RestaurarPagina()
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
-                    const querystring = window.location.search;
-                    const params = new URLSearchParams(querystring);
-
                     if (params.has("id"))
                         this.EditarRegistro(Numero(params.get("id")));
 
@@ -190,22 +189,12 @@
             return alturaCabeceraPnlControl + alturaCabeceraMnt;
         }
 
-        public AplicarRestrictores(): void {
-
+        private AplicarRestrictores(origen: string): void {
             if (this.Estado.Contiene(Sesion.restrictores)) {
-                let restrictores: Tipos.DatosRestrictor[] = this.Estado.Sacar(Sesion.restrictores) as Tipos.DatosRestrictor[];
-                this.Estado.Quitar(Sesion.restrictores);
-                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+                let restrictores: Tipos.DatosRestrictor[] = this.Estado.Obtener(Sesion.restrictores) as Tipos.DatosRestrictor[];
                 for (let i = 0; i < restrictores.length; i++) {
                     this.AplicarRestrictor(restrictores[i]);
                 }
-            }
-
-            if (this.Estado.Contiene(Sesion.restrictor)) {
-                let restrictor: Tipos.DatosRestrictor = this.Estado.Sacar(Sesion.restrictor);
-                this.Estado.Quitar(Sesion.restrictor);
-                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
-                this.AplicarRestrictor(restrictor);
             }
         }
 
@@ -218,7 +207,12 @@
             else {
                 MapearAlControl.PropiedadDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
             }
+            this.DespuesDeAplicarUnRestrictor(restrictor);
+        }
 
+        protected DespuesDeAplicarUnRestrictor(restrictor: Tipos.DatosRestrictor): void {
+            //método para sobrecargar que analiza el tipo de restrictor aplicado y obtirnr información de si se ha de restringir o mapear más información
+            //P.eje: Al mapear una provincia al filtro de municipios, mapear el país
         }
 
         private InicializarSelectores() {

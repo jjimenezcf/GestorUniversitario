@@ -479,28 +479,22 @@ var ApiRuote;
         let ordenInput = document.getElementById(idOrden);
         ordenInput.value = "";
         let valores = new Diccionario();
+        let filtros = [];
+        filtros.push(filtroRestrictor);
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
-        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.restrictores, filtros);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
         Navegar(crud, form, valores);
     }
     ApiRuote.NavegarARelacionar = NavegarARelacionar;
     function NavegarADependientes(crud, idOpcionDeMenu, idSeleccionado, filtroRestrictor) {
-        let filtroJson = ApiFiltro.DefinirRestrictorNumerico(filtroRestrictor.Propiedad, filtroRestrictor.Valor);
         let form = document.getElementById(idOpcionDeMenu);
-        if (form === null) {
+        if (form === null)
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
-        }
         let navegarAlCrud = form.getAttribute(atNavegar.navegarAlCrud);
-        let idRestrictor = form.getAttribute(atNavegar.idRestrictor);
-        let idOrden = form.getAttribute(atNavegar.orden);
-        let restrictor = document.getElementById(idRestrictor);
-        restrictor.value = filtroJson;
-        let ordenInput = document.getElementById(idOrden);
-        ordenInput.value = "";
         let valores = new Diccionario();
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
-        valores.Agregar(Sesion.restrictor, filtroRestrictor);
+        valores.Agregar(Sesion.restrictores, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
         Navegar(crud, form, valores);
     }

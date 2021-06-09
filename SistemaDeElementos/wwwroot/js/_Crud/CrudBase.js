@@ -66,9 +66,11 @@ var Crud;
             archivos.forEach((archivo) => { ApiDeArchivos.BlanquearArchivo(archivo, true); });
         }
         AntesDeNavegar(valores) {
+            //Diccionario de valores que se le pasará al método navegar
+            //permite sobrecargar dicho método para añadir información a la página a la que se navega o desde la que se navega
         }
         SiHayErrorTrasPeticionAjax(peticion) {
-            MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje);
+            MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje, peticion.resultado.consola);
         }
         // funciones para mapear un elemento Json a los controles de un panel
         MapearElementoLeido(panel, elementoJson) {

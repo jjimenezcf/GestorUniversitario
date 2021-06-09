@@ -293,7 +293,7 @@ namespace MVCSistemaDeElementos.Descriptores
         internal static void AnadirOpciondeRelacion(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string relacionarCon, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
         {
             var accionDeRelacion = new AccionDeRelacionarElemenetos(
-                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
+                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}?origen=relacion"
                   , relacionarCon: relacionarCon
                   , nombreDelMnt: navegarAlCrud
                   , propiedadQueRestringe: propiedadQueRestringe
@@ -307,12 +307,12 @@ namespace MVCSistemaDeElementos.Descriptores
         internal static void AnadirOpcionDeDependencias(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string datosDependientes, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
         {
             var accionDeDependencias = new AccionDeGetionarDatosDependientes(
-                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}"
+                    urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}?origen=dependencia"
                   , datosDependientes: datosDependientes
                   , nombreDelMnt: navegarAlCrud
                   , propiedadQueRestringe: propiedadQueRestringe
                   , propiedadRestrictora: propiedadRestrictora
-                  , ayuda);
+                  , ayuda) ;
 
             var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeDependencias, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);

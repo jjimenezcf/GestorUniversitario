@@ -87,10 +87,12 @@
 
 
         public AntesDeNavegar(valores: Diccionario<any>) {
+            //Diccionario de valores que se le pasará al método navegar
+            //permite sobrecargar dicho método para añadir información a la página a la que se navega o desde la que se navega
         }
 
         protected SiHayErrorTrasPeticionAjax(peticion: ApiDeAjax.DescriptorAjax) {
-            MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje);
+            MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje, peticion.resultado.consola);
         }
 
 
@@ -171,7 +173,7 @@
             }
         }
 
-        private BuscarValorEnJson(propiedad: string, valorPropiedadJson: any) {
+        protected BuscarValorEnJson(propiedad: string, valorPropiedadJson: any) {
             var tipoDeObjeto = typeof valorPropiedadJson;
             if (tipoDeObjeto === "object") {
                 for (var p in valorPropiedadJson) {

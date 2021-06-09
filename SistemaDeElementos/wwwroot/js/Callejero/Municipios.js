@@ -14,6 +14,19 @@ var Callejero;
             this.crudDeCreacion = new CrudCreacionMunicipio(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionMunicipio(this, idPanelEdicion);
         }
+        DespuesDeAplicarUnRestrictor(restrictor) {
+            super.DespuesDeAplicarUnRestrictor(restrictor);
+            let idProvincia = restrictor.Valor;
+            ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array())
+                .then((peticion) => this.MapearPais(peticion))
+                .catch((peticion) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola));
+        }
+        MapearPais(peticion) {
+            let idPais = this.BuscarValorEnJson("idpais", peticion.resultado.datos);
+            let pais = this.BuscarValorEnJson("pais", peticion.resultado.datos);
+            let lista = this.BuscarListaDinamica(this.ZonaDeFiltro, "idpais");
+            MapearAlControl.FijarValorEnListaDinamica(lista, idPais, pais);
+        }
     }
     Callejero.CrudDeMunicipios = CrudDeMunicipios;
     class CrudCreacionMunicipio extends Crud.CrudCreacion {

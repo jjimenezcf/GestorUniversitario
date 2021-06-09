@@ -55,6 +55,8 @@ var Crud;
             MensajesSe.Info('Ha llamado al método navegar');
         }
         Inicializar(idPanelMnt) {
+            const querystring = window.location.search;
+            const params = new URLSearchParams(querystring);
             try {
                 if (IsNullOrEmpty(idPanelMnt))
                     idPanelMnt = this.IdCuerpoCabecera;
@@ -64,14 +66,13 @@ var Crud;
                 this.InicializarListasDeElementos(this.ZonaDeFiltro, this.Navegador.Controlador);
                 this.InicializarMenus();
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
-                this.AplicarRestrictores();
+                if (params.has("origen"))
+                    this.AplicarRestrictores(params.get("origen"));
                 if (this.Navegador.EsRestauracion) {
                     this.RestaurarPagina()
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
-                    const querystring = window.location.search;
-                    const params = new URLSearchParams(querystring);
                     if (params.has("id"))
                         this.EditarRegistro(Numero(params.get("id")));
                     this.InicializarOrdenacion();
@@ -157,20 +158,12 @@ var Crud;
             let alturaCabeceraMnt = this.CuerpoCabecera.getBoundingClientRect().height;
             return alturaCabeceraPnlControl + alturaCabeceraMnt;
         }
-        AplicarRestrictores() {
+        AplicarRestrictores(origen) {
             if (this.Estado.Contiene(Sesion.restrictores)) {
-                let restrictores = this.Estado.Sacar(Sesion.restrictores);
-                this.Estado.Quitar(Sesion.restrictores);
-                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
+                let restrictores = this.Estado.Obtener(Sesion.restrictores);
                 for (let i = 0; i < restrictores.length; i++) {
                     this.AplicarRestrictor(restrictores[i]);
                 }
-            }
-            if (this.Estado.Contiene(Sesion.restrictor)) {
-                let restrictor = this.Estado.Sacar(Sesion.restrictor);
-                this.Estado.Quitar(Sesion.restrictor);
-                EntornoSe.Historial.GuardarEstadoDePagina(this.Estado);
-                this.AplicarRestrictor(restrictor);
             }
         }
         AplicarRestrictor(restrictor) {
@@ -182,6 +175,11 @@ var Crud;
             else {
                 MapearAlControl.PropiedadDeFiltrado(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
             }
+            this.DespuesDeAplicarUnRestrictor(restrictor);
+        }
+        DespuesDeAplicarUnRestrictor(restrictor) {
+            //método para sobrecargar que analiza el tipo de restrictor aplicado y obtirnr información de si se ha de restringir o mapear más información
+            //P.eje: Al mapear una provincia al filtro de municipios, mapear el país
         }
         InicializarSelectores() {
             let selectores = this.ZonaDeFiltro.querySelectorAll(`input[tipo="${TipoControl.Selector}"]`);

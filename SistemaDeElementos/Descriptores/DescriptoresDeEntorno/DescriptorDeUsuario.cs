@@ -76,7 +76,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
             }
             BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");
-            
+
+            var modalDePermisos = new ModalDeConsultaDeRelaciones<UsuarioDto, PermisosDeUnUsuarioDto>(mantenimiento: Mnt
+                              , tituloModal: "Permisos de un usuario"
+                              , crudModal: new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Consulta)
+                              , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
+
+            var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Mostrar los permisos de un usuario");
+            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor);
+            Mnt.ZonaMenu.Menu.Add(opcion);
+
             AnadirOpciondeRelacion(Mnt
                 , controlador: nameof(PuestosDeUnUsuarioController)
                 , vista: nameof(PuestosDeUnUsuarioController.CrudPuestosDeUnUsuario)
@@ -87,14 +96,6 @@ namespace MVCSistemaDeElementos.Descriptores
                 , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario)
                 , "Añadir puestos al usuario seleccionado");
 
-            var modalDePermisos = new ModalDeConsultaDeRelaciones<UsuarioDto, PermisosDeUnUsuarioDto>(mantenimiento: Mnt
-                              , tituloModal: "Permisos de un usuario"
-                              , crudModal: new DescriptorDePermisosDeUnUsuario(Contexto, ModoDescriptor.Consulta)
-                              , propiedadRestrictora: nameof(PermisosDeUnUsuarioDto.IdUsuario));
-
-            var mostrarPermisos = new ConsultarRelaciones(modalDePermisos.IdHtml, () => modalDePermisos.RenderControl(), "Mostrar los permisos de un usuario");
-            var opcion = new OpcionDeMenu<UsuarioDto>(Mnt.ZonaMenu.Menu, mostrarPermisos, $"Permisos", enumModoDeAccesoDeDatos.Consultor);
-            Mnt.ZonaMenu.Menu.Add(opcion);
         }
 
         public override string RenderControl()
