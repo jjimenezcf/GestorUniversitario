@@ -102,6 +102,9 @@ namespace GestoresDeNegocio.Callejero
                     case GestorDeMunicipios.ParametroMunicipio:
                         GestorDeMunicipios.ImportarFicheroDeMunicipios(entorno, archivo.valor);
                         break;
+                    case GestorDeTiposDeVia.ParametroTipoDeVia:
+                        GestorDeTiposDeVia.ImportarFicheroDeTiposDeVia(entorno, archivo.valor);
+                        break;
                     default:
                         GestorDeErrores.Emitir($"No es valido el parámetro {archivo.parametro} en el proceso {nameof(ImportarCallejero)}");
                         break;

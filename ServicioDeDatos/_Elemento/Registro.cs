@@ -104,6 +104,16 @@ namespace ServicioDeDatos.Elemento
                         .HasDatabaseName($"I_{nombreDeTabla}_IDUSUMODI");
 
         }
+        internal static void DefinirCamposDelRegistroConNombreDtm<TEntity>(ModelBuilder modelBuilder) where TEntity : RegistroConNombre
+        {
+            var nombreDeTabla = NombreDeTabla(typeof(TEntity));
+
+            modelBuilder.Entity<MenuDtm>().Property(p => p.Nombre).HasColumnName("NOMBRE").HasColumnType("VARCHAR(250)").IsRequired();
+            modelBuilder.Entity<TEntity>()
+                        .HasIndex(p => p.Nombre)
+                        .HasDatabaseName($"I_{nombreDeTabla}_NOMBRE");
+
+        }
 
     }
 

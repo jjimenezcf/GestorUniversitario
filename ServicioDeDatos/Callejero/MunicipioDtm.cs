@@ -22,7 +22,7 @@ namespace ServicioDeDatos.Callejero
     {
         //public new virtual MunicipioDtm Elemento { get; set; }
     }
-    public static class ModeloDeMunicipio
+    public static partial class ModeloDeCallejero
     {
         public static void Municipio(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,7 @@ namespace ServicioDeDatos.Callejero
             .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public static void Auditoria(ModelBuilder modelBuilder)
+        public static void MunicipioAudt(ModelBuilder modelBuilder)
         {
             Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnMunicipioDtm>(modelBuilder);
 

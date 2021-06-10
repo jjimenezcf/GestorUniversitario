@@ -22,7 +22,7 @@ namespace ServicioDeDatos.Callejero
     {
     }
 
-    public static class ModeloDePais
+    public static partial class ModeloDeCallejero
     {
         public static void Pais(ModelBuilder modelBuilder)
         {
@@ -55,7 +55,7 @@ namespace ServicioDeDatos.Callejero
 
         }
 
-        public static void Auditoria(ModelBuilder modelBuilder)
+        public static void PaisAudt(ModelBuilder modelBuilder)
         {
             Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnPaisDtm>(modelBuilder);
 

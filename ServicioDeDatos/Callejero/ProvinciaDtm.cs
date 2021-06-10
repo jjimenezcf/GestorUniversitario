@@ -24,7 +24,7 @@ namespace ServicioDeDatos.Callejero
         //public new virtual ProvinciaDtm Elemento { get; set; }
     }
 
-    public static class ModeloDeProvinvia
+    public static partial class ModeloDeCallejero
     {
         public static void Provincia(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace ServicioDeDatos.Callejero
             .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public static void Auditoria(ModelBuilder modelBuilder)
+        public static void ProvinciaAudt(ModelBuilder modelBuilder)
         {
             Negocio.Auditoria.DefinirCamposDeAuditoriaDtm<AuditoriaDeUnaProvinciaDtm>(modelBuilder);
 

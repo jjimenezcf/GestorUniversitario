@@ -115,12 +115,13 @@ namespace ServicioDeDatos
 
         private static void DefinirTablasDelCallejero(ModelBuilder modelBuilder)
         {
-            ModeloDePais.Pais(modelBuilder);
-            ModeloDePais.Auditoria(modelBuilder);
-            ModeloDeProvinvia.Provincia(modelBuilder);
-            ModeloDeProvinvia.Auditoria(modelBuilder);
-            ModeloDeMunicipio.Municipio(modelBuilder);
-            ModeloDeMunicipio.Auditoria(modelBuilder);
+            ModeloDeCallejero.Pais(modelBuilder);
+            ModeloDeCallejero.PaisAudt(modelBuilder);
+            ModeloDeCallejero.Provincia(modelBuilder);
+            ModeloDeCallejero.ProvinciaAudt(modelBuilder);
+            ModeloDeCallejero.Municipio(modelBuilder);
+            ModeloDeCallejero.MunicipioAudt(modelBuilder);
+            ModeloDeCallejero.TipoVia(modelBuilder);
         }
 
 
