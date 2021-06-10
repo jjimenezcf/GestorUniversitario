@@ -3,7 +3,6 @@
 Próximas tareas
 ---------------------------------------------
 
-- Crud de tipos de vías
 - Crud de C.Postales
 - Relación de municipios con códigos postales
 - Crud de barrio
@@ -58,10 +57,7 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 - Añadir filtro a roles (selector de permiso) y órdenes
 - Añadir ordenación a los grid de roles-permisos, roles-puestos y usuarios-puestos 
 - Al grabar un usuario que asigne a la clave el valor actual
-- Crud de Paises
 - Ocultar o mostrar el filtro en modal
-- Crud de provincia
-- Crud de municipio
 
 - Definición de Trabajos sometidos
 - Trabajos sometidos de un usuario
@@ -69,6 +65,11 @@ si se pulsa seleccionar llamará a un ep que añadirá todos los registros selec
 - Proceso de exportación a excel
 - Proceso de importación de callejero
 - Cola de trabajos sometidos
+
+- Crud de Paises
+- Crud de provincia
+- Crud de municipio
+- Crud de tipos de vías
 
 
 - Mostrar el filtro abierto general, el resto cerrado
