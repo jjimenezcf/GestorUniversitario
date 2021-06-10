@@ -7,19 +7,15 @@ using ModeloDeDto.Callejero;
 using Gestor.Errores;
 using Utilidades;
 using GestoresDeNegocio.TrabajosSometidos;
-using System.Reflection;
 using System;
-using Newtonsoft.Json;
 using GestoresDeNegocio.Archivos;
 using System.Linq;
-using GestoresDeNegocio.Entorno;
-using GestoresDeNegocio.Negocio;
 using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Callejero
 {
 
-    public class GestorDeTiposDeVia : GestorDeElementos<ContextoSe, TipoViaDtm, TipoViaDto>
+    public class GestorDeTiposDeVia : GestorDeElementos<ContextoSe, TipoDeViaDtm, TipoDeViaDto>
     {
 
         class archivoParaImportar
@@ -34,8 +30,8 @@ namespace GestoresDeNegocio.Callejero
         {
             public MapearVariables()
             {
-                CreateMap<TipoViaDtm, TipoViaDto>();
-                CreateMap<TipoViaDto, TipoViaDtm>();
+                CreateMap<TipoDeViaDtm, TipoDeViaDto>();
+                CreateMap<TipoDeViaDto, TipoDeViaDtm>();
             }
         }
 
@@ -51,16 +47,16 @@ namespace GestoresDeNegocio.Callejero
         }
 
 
-        public List<TipoViaDto> LeerTiposDeVia(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        public List<TipoDeViaDto> LeerTiposDeVia(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
             return MapearElementos(registros).ToList();
         }
 
-        internal static TipoViaDtm LeerTipoDeViaPorSigla(ContextoSe contexto, string sigla, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        internal static TipoDeViaDtm LeerTipoDeViaPorSigla(ContextoSe contexto, string sigla, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(TipoViaDtm.Sigla), sigla, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
+            return gestor.LeerRegistro(nameof(TipoDeViaDtm.Sigla), sigla, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
         }
 
 
@@ -107,14 +103,14 @@ namespace GestoresDeNegocio.Callejero
             entorno.CrearTraza($"Procesadas un total de {linea} filas");
         }
 
-        private static TipoViaDtm ProcesarTipoDeViaLeido(EntornoDeTrabajo entorno, GestorDeTiposDeVia gestor, string sigla, string nombre, TrazaDeUnTrabajoDtm trazaInfDtm)
+        private static TipoDeViaDtm ProcesarTipoDeViaLeido(EntornoDeTrabajo entorno, GestorDeTiposDeVia gestor, string sigla, string nombre, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(TipoViaDtm.Sigla), sigla, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: true, conBloqueo: false);
+            var p = gestor.LeerRegistro(nameof(TipoDeViaDtm.Sigla), sigla, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: true, conBloqueo: false);
             //var p = LeerTipoDeViaPorSigla(entorno.contextoDelProceso, sigla, paraActualizar: true); 
             if (p == null)
             {
-                p = new TipoViaDtm();
+                p = new TipoDeViaDtm();
                 p.Sigla = sigla;
                 p.Nombre = nombre;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);

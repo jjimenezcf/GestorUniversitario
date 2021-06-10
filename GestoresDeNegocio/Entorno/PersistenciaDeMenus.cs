@@ -18,7 +18,11 @@ namespace GestoresDeNegocio.Entorno
             try
             {
                 gestor.Contexto.DatosDeConexion.CreandoModelo = true;
+                CrearMenuSiNoExiste(gestor, nombre: "Tipos de vía", descripcion: "Mantenimiento de tipos de vía", icono: "TipoDeVia.svg", padre: "Maestros.Callejero", vista: "Tipos de vía", orden: 1);
+                CrearMenuSiNoExiste(gestor, nombre: "Paises", descripcion: "Gestión de paises", icono: "paises.svg", padre: "Maestros.Callejero", vista: "Paises", orden: 10);
+                CrearMenuSiNoExiste(gestor, nombre: "Provincias", descripcion: "Mantenimiento de provincias", icono: "provincias.svg", padre: "Maestros.Callejero", vista: "Provincias", orden: 20);
                 CrearMenuSiNoExiste(gestor, nombre: "Municipios", descripcion: "Mantenimiento de Municipios", icono: "municipio2.svg", padre: "Maestros.Callejero", vista: "Municipios", orden: 30);
+                CrearMenuSiNoExiste(gestor, nombre: "Importar", descripcion: "Importa entidades del callejero", icono: "importar.svg", padre: "Maestros.Callejero", vista: "Importación callejero", orden: 999);
             }
             finally
             {

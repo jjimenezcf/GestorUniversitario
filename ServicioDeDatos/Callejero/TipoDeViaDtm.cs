@@ -9,7 +9,7 @@ using ServicioDeDatos.Negocio;
 namespace ServicioDeDatos.Callejero
 {
     [Table("TIPO_VIA", Schema = "CALLEJERO")]
-    public class TipoViaDtm : RegistroConNombre
+    public class TipoDeViaDtm : RegistroConNombre
     {
         public string Sigla { get; set; }
     }
@@ -18,14 +18,14 @@ namespace ServicioDeDatos.Callejero
     {
         public static void TipoVia(ModelBuilder modelBuilder)
         {
-            GeneradorMd.DefinirCamposDelRegistroConNombreDtm<TipoViaDtm>(modelBuilder);
+            GeneradorMd.DefinirCamposDelRegistroConNombreDtm<TipoDeViaDtm>(modelBuilder);
             
-            modelBuilder.Entity<TipoViaDtm>().Property(v => v.Sigla)
+            modelBuilder.Entity<TipoDeViaDtm>().Property(v => v.Sigla)
                 .HasColumnName("SIGLA")
                 .HasColumnType("VARCHAR(4)")
                 .IsRequired(true);
 
-            modelBuilder.Entity<TipoViaDtm>().HasAlternateKey(p => p.Sigla).HasName("AK_TIPO_VIA_SIGLA");
+            modelBuilder.Entity<TipoDeViaDtm>().HasAlternateKey(p => p.Sigla).HasName("AK_TIPO_VIA_SIGLA");
         }
 
     }

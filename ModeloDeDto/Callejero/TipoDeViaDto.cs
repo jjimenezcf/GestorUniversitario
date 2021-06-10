@@ -5,7 +5,7 @@ namespace ModeloDeDto.Callejero
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5
          , MostrarExpresion = "[Codigo]")]
-    public class TipoViaDto : ElementoDto
+    public class TipoDeViaDto : ElementoDto
     {
 
         [IUPropiedad(
@@ -17,10 +17,11 @@ namespace ModeloDeDto.Callejero
             Ordenar = true,
             Obligatorio = true,
             LongitudMaxima = 4,
+            PorAnchoMnt = 5,
             Alineada = Aliniacion.derecha
           )
         ]
-        public string Codigo { get; set; }
+        public string Sigla { get; set; }
 
         //----------------------------------------------
         [IUPropiedad(
@@ -30,7 +31,6 @@ namespace ModeloDeDto.Callejero
             Fila = 0,
             Columna = 1,
             Ordenar = true,
-            PorAnchoMnt = 70,
             Obligatorio = true,
             LongitudMaxima = 250
           )

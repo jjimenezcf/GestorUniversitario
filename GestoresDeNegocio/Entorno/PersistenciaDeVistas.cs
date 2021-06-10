@@ -48,6 +48,7 @@ namespace GestoresDeNegocio.Entorno
                 CrearVistaSiNoExiste(gestor, "Correos de usuario", "Correos", "CrudDeCorreos", false, typeof(CorreoDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Parámetros de Negocio", "ParametrosDeNegocio", "CrudDeParametrosDeNegocio", true, typeof(ParametroDeNegocioDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Municipios", "Municipios", "CrudMunicipios", true, typeof(MunicipioDto).FullName);
+                CrearVistaSiNoExiste(gestor, "Tipos de vía", "TiposDeVia", "CrudTiposDeVia", true, typeof(TipoDeViaDto).FullName);
             }
             finally
             {

@@ -134,6 +134,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Callejero\Paises.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Callejero\TiposDeVia.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Entorno\PermisosDeUnUsuario.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
