@@ -1,10 +1,19 @@
-﻿
+﻿Ejecutando
+---------------------------------------------
+- Gestor de C.Postales (*)
+- Gestor de relación con provincias
+- Gestor de relación con municipios
+- proceso de importación de csv (*)
+- crud de cp
+- crud de relación con municipios
+- crud de relación con provincias
+- Crear vistas
+- Añadir navegavilidad al crud de prvincias
+- Añadir navegavilidad al crud de municipio
 
 Próximas tareas
 ---------------------------------------------
 
-- Crud de C.Postales
-- Relación de municipios con códigos postales
 - Crud de barrio
 - Relación de C.Postales por municipio
 - Relación de C.Postales por barrios

@@ -16,7 +16,7 @@ namespace ServicioDeDatos.Callejero
 
     public static partial class ModeloDeCallejero
     {
-        public static void TipoVia(ModelBuilder modelBuilder)
+        public static void TipoDeVia(ModelBuilder modelBuilder)
         {
             GeneradorMd.DefinirCamposDelRegistroConNombreDtm<TipoDeViaDtm>(modelBuilder);
             

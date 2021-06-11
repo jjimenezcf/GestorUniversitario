@@ -127,7 +127,7 @@ namespace GestoresDeNegocio.Callejero
                 }
                 else
                 {
-                    entorno.ActualizarTraza(trazaInfDtm, $"El TipoDeVia {sigla} ya existe");
+                    entorno.ActualizarTraza(trazaInfDtm, $"El tipo de vía {sigla} ya existe");
                     return p;
                 }
             }
