@@ -33,7 +33,8 @@ namespace GestoresDeNegocio.Negocio
                 CrearNegocioSiNoExiste(gestor, enumNegocio.Pais, "Paises", typeof(PaisDtm), typeof(PaisDto), "paises_1.svg");
                 CrearNegocioSiNoExiste(gestor, enumNegocio.Provincia, "Provincias", typeof(ProvinciaDtm), typeof(ProvinciaDto), "provincias_1.svg");
                 CrearNegocioSiNoExiste(gestor, enumNegocio.Correo, "Correos", typeof(CorreoDtm), typeof(CorreoDto), "Correo_1.svg");
-                CrearNegocioSiNoExiste(gestor, enumNegocio.Municipio, "Municipios", typeof(MunicipioDtm), typeof(MunicipioDto), "");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Municipio, "Municipios", typeof(MunicipioDtm), typeof(MunicipioDto), "municipio2.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.TipoDeVia, "Tipos de vía", typeof(TipoDeViaDtm), typeof(TipoDeViaDto), "TipoDeVia.svg");
             }
             finally
             {
