@@ -53,6 +53,7 @@ namespace GestorDeElementos
         Pais,
         Provincia,
         Municipio,
+        TipoDeVia,
         Correo
     }
 

@@ -14,10 +14,13 @@ namespace ModeloDeDto.TrabajosSometidos
         public static readonly string NoSeHaEnviado = nameof(NoSeHaEnviado);
     }
 
-    [IUDto(AnchoEtiqueta = 20, AnchoSeparador = 5, OpcionDeBorrar = false)]
+    [IUDto(AnchoEtiqueta = 20
+        , AnchoSeparador = 5
+        , OpcionDeBorrar = false
+        , MostrarExpresion = "[Creado]: [Asunto]")]
     public class CorreoDto : ElementoDto
     {
-        public static readonly string ExpresionElemento = $"{nameof(Creado)}: {nameof(Asunto)}";
+        //public static readonly string ExpresionElemento = $"[{nameof(Creado)}]: [{nameof(Asunto)}]";
 
         //--------------------------------------------
         [IUPropiedad(

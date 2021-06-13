@@ -4,7 +4,7 @@ namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5
-         , MostrarExpresion = "[Codigo]")]
+         , MostrarExpresion = "[Nombre]")]
     public class TipoDeViaDto : ElementoDto
     {
 
