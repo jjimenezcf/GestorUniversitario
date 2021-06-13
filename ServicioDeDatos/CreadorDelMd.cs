@@ -123,6 +123,7 @@ namespace ServicioDeDatos
             ModeloDeCallejero.MunicipioAudt(modelBuilder);
             ModeloDeCallejero.TipoDeVia(modelBuilder);
             ModeloDeCallejero.CodigoPostal(modelBuilder);
+            ModeloDeCallejero.ProvinciaCp(modelBuilder);
         }
 
 
