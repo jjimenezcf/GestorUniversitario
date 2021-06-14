@@ -38,7 +38,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             internal static readonly string adjuntos = nameof(adjuntos);
             internal static readonly string archivos = nameof(archivos);
             internal static readonly string elementosDeNegocio = nameof(elementosDeNegocio);
-            internal static readonly string LeerUsuarioDtm = nameof(LeerUsuarioDtm);
+            internal static readonly string JoinConUsuarios = nameof(JoinConUsuarios);
         }
 
 
@@ -189,7 +189,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             var filtro = new ClausulaDeFiltrado(nameof(CorreoDtm.Enviado), CriteriosDeFiltrado.esNulo);
             var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
-            parametros.Parametros[ltrParamCorreos.LeerUsuarioDtm] = false;
+            parametros.Parametros[ltrParamCorreos.JoinConUsuarios] = false;
             var pendientes = LeerRegistros(0, -1, new List<ClausulaDeFiltrado> { filtro }, null, null, parametros);
             foreach (var pendiente in pendientes)
                 try
@@ -279,7 +279,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         protected override IQueryable<CorreoDtm> AplicarJoins(IQueryable<CorreoDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
-            if (!parametros.Parametros.ContainsKey(ltrParamCorreos.LeerUsuarioDtm) || (parametros.Parametros.ContainsKey(ltrParamCorreos.LeerUsuarioDtm) && (bool)parametros.Parametros[ltrParamCorreos.LeerUsuarioDtm]))
+            if (HacerJoinCon(parametros,ltrParamCorreos.JoinConUsuarios))
                 registros = registros.Include(p => p.Usuario);
             return registros;
         }

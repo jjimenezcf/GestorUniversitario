@@ -24,7 +24,13 @@ namespace GestoresDeNegocio.Callejero
             public int valor { get; set; }
         }
 
-        public const string ParametroTipoDeVia = "csvCodigosPostales";
+        public class ltrCps
+        {
+            internal static readonly string NombreProvincia = nameof(NombreProvincia);
+            internal static readonly string NombreMunicipio = nameof(NombreMunicipio);
+            internal const string csvCp = nameof(csvCp);
+        }
+
 
         public class MapearVariables : Profile
         {
@@ -108,7 +114,7 @@ namespace GestoresDeNegocio.Callejero
         private static CodigoPostalDtm ProcesarCodigosPostales(EntornoDeTrabajo entorno, GestorDeCodigosPostales gestor, string provincia, string municipio, string cp, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: true, conBloqueo: false);
+            var p = gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
             if (p == null)
             {
                 p = new CodigoPostalDtm();
@@ -121,7 +127,8 @@ namespace GestoresDeNegocio.Callejero
                 entorno.ActualizarTraza(trazaInfDtm, $"El codigo postal {cp} ya existe");
                 return p;
             }
-
+            operacion.Parametros[ltrCps.NombreProvincia] = provincia;
+            operacion.Parametros[ltrCps.NombreMunicipio] = municipio;
             return gestor.PersistirRegistro(p, operacion);
         }
 
@@ -130,9 +137,15 @@ namespace GestoresDeNegocio.Callejero
             base.AntesDePersistir(registro, parametros);
             if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
-                //TODO:
-                //Validar que existe una provincia con los dos primeros dígitos del código postal a crear
-                //validar que el municipio con el que se ha de relacionar es de la provincia anterior
+                if (parametros.Parametros.ContainsKey(ltrCps.NombreProvincia) && parametros.Parametros.ContainsKey(ltrCps.NombreMunicipio))
+                {
+                    var np = parametros.Parametros[ltrCps.NombreProvincia].ToString();
+                    var nm = parametros.Parametros[ltrCps.NombreMunicipio].ToString();
+                    var municipioDtm = GestorDeMunicipios.LeerMunicipioPorNombre(Contexto, "ES", np, nm, paraActualizar: false, errorSiNoHay: false);
+                    if (municipioDtm != null)
+                        parametros.Parametros[nameof(MunicipioDtm)] = municipioDtm;
+                }
+
             }
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
             {
@@ -146,9 +159,17 @@ namespace GestoresDeNegocio.Callejero
             base.DespuesDePersistir(registro, parametros);
             if (parametros.Operacion == enumTipoOperacion.Insertar)
             {
-                //TODO:
                 //relacionar con la provincia usando los dos primeros caractéres
-                //relacionar con el municipio usando lo indicado en elos parámetros
+                var gestorProvincias = GestorDeProvincias.Gestor(Contexto, Contexto.Mapeador);
+                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.cp.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+                GestorDeCpsDeUnaProvincia.CrearRelacion(Contexto, registro, provinciaDtm);
+
+                //relacionar con el municipio usando lo indicado en los parámetros
+                if (parametros.Parametros.ContainsKey(nameof(MunicipioDtm)))
+                {
+                    var municipioDtm = (MunicipioDtm)parametros.Parametros[nameof(MunicipioDtm)];
+                    GestorDeCpsDeUnMunicipio.CrearRelacion(Contexto, registro, municipioDtm);
+                }
             }
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
             {

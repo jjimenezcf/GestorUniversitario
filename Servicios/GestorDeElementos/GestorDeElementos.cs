@@ -491,6 +491,25 @@ namespace GestorDeElementos
             return registros[0];
         }
 
+        public TRegistro LeerRegistro(List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros, bool errorSiNoHay, bool errorSiHayMasDeUno)
+        {
+            List<TRegistro> registros = LeerRegistros(0, -1, filtros, null, null, parametros);
+
+            if (errorSiNoHay && registros.Count == 0)
+                GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para los filtros indicados en la clase {typeof(TRegistro).Name}");
+
+            if (errorSiHayMasDeUno && registros.Count > 1)
+                GestorDeErrores.Emitir($"Hay más de un registro para los filtros indicados en la clase {typeof(TRegistro).Name}");
+
+            if (registros.Count == 0)
+                return null;
+
+            if (registros.Count > 1)
+                return registros[0];
+
+            return registros[0];
+        }
+
         private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado, bool ConBloqueo)
         {
             var filtro = new ClausulaDeFiltrado()
@@ -624,10 +643,7 @@ namespace GestorDeElementos
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
         {
-            if (ApiDeRegistro.ImplementaUnElemento(typeof(TRegistro)) &&
-                 (!parametros.Parametros.ContainsKey(ltrJoinAudt.IncluirUsuarioDtm) || 
-                   parametros.Parametros.ContainsKey(ltrJoinAudt.IncluirUsuarioDtm) && (bool)parametros.Parametros[ltrJoinAudt.IncluirUsuarioDtm])
-               )
+            if (ApiDeRegistro.ImplementaUnElemento(typeof(TRegistro)) && HacerJoinCon(parametros, ltrJoinAudt.IncluirUsuarioDtm))
             {
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioCreador);
                 registros = registros.Include(e => ((IElementoDtm)e).UsuarioModificador);
@@ -635,6 +651,12 @@ namespace GestorDeElementos
             return registros;
         }
 
+        protected bool HacerJoinCon(ParametrosDeNegocio parametros, string join)
+        {
+            if (!parametros.Parametros.ContainsKey(join))
+                return true;
+            return (bool)parametros.Parametros[join];
+        }
 
         #endregion
 

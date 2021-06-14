@@ -52,6 +52,19 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDeMunicipios(contexto, mapeador); ;
         }
 
+        public static MunicipioDtm LeerMunicipioPorClave(ContextoSe contexto, int idProvincia, string codigoMunicipio, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            var filtro1 = new ClausulaDeFiltrado(nameof(MunicipioDtm.IdProvincia), CriteriosDeFiltrado.igual, idProvincia.ToString());
+            var filtro3 = new ClausulaDeFiltrado(nameof(codigoMunicipio), CriteriosDeFiltrado.igual, codigoMunicipio);
+            filtros.Add(filtro1);
+            filtros.Add(filtro3);
+            var p = new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            p.Parametros.Add(ltrJoinAudt.IncluirUsuarioDtm, false);
+            return gestor.LeerRegistro(filtros, p, errorSiNoHay, errorSiMasDeUno);
+        }
+
         private static MunicipioDtm LeerMunicipioPorCodigo(ContextoSe contexto, string iso2Pais, string codigoProvincia, string codigoMunicipio,bool paraActualizar,  bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
@@ -67,9 +80,31 @@ namespace GestoresDeNegocio.Callejero
             List<MunicipioDtm> municipios = gestor.LeerRegistros(0, -1, filtros, null, null, p);
 
             if (municipios.Count == 0 && errorSiNoHay)
-                GestorDeErrores.Emitir($"No se ha localizado la provincia para el municipio con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
+                GestorDeErrores.Emitir($"No se ha localizado el municipio con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
             if (municipios.Count > 1 && errorSiMasDeUno)
-                GestorDeErrores.Emitir($"Se han localizado más de un registro de provincia con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
+                GestorDeErrores.Emitir($"Se han localizado más de un registro con Iso2 del pais {iso2Pais}, codigo de provincia {codigoProvincia} y código municipio {codigoMunicipio}");
+
+            return municipios.Count == 1 ? municipios[0] : null;
+        }
+
+        public static MunicipioDtm LeerMunicipioPorNombre(ContextoSe contexto, string iso2Pais, string nombreProvincia, string nombreMunicipio, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        {
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            var filtros = new List<ClausulaDeFiltrado>();
+            var filtro1 = new ClausulaDeFiltrado(nameof(iso2Pais), CriteriosDeFiltrado.igual, iso2Pais);
+            var filtro2 = new ClausulaDeFiltrado(nameof(nombreProvincia), CriteriosDeFiltrado.igual, nombreProvincia);
+            var filtro3 = new ClausulaDeFiltrado(nameof(nombreMunicipio), CriteriosDeFiltrado.igual, nombreMunicipio);
+            filtros.Add(filtro1);
+            filtros.Add(filtro2);
+            filtros.Add(filtro3);
+            var p = new ParametrosDeNegocio(paraActualizar ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+            p.Parametros.Add(ltrJoinAudt.IncluirUsuarioDtm, false);
+            List<MunicipioDtm> municipios = gestor.LeerRegistros(0, -1, filtros, null, null, p);
+
+            if (municipios.Count == 0 && errorSiNoHay)
+                GestorDeErrores.Emitir($"No se ha localizado el municipio con Iso2 del pais {iso2Pais}, provincia {nombreProvincia} y municipio {nombreMunicipio}");
+            if (municipios.Count > 1 && errorSiMasDeUno)
+                GestorDeErrores.Emitir($"Se han localizado más de un registro con Iso2 del pais {iso2Pais}, provincia {nombreProvincia} y municipio {nombreMunicipio}");
 
             return municipios.Count == 1 ? municipios[0] : null;
         }
@@ -99,6 +134,12 @@ namespace GestoresDeNegocio.Callejero
 
                 if (filtro.Clausula.ToLower() == "codigoMunicipio".ToLower())
                     registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(MunicipioDtm.Codigo));
+
+                if (filtro.Clausula.ToLower() == "nombreProvincia".ToLower())
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, "Provincia.Nombre");
+
+                if (filtro.Clausula.ToLower() == "nombreMunicipio".ToLower())
+                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(MunicipioDtm.Nombre));
             }
 
             return registros;

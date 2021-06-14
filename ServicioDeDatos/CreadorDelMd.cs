@@ -124,6 +124,7 @@ namespace ServicioDeDatos
             ModeloDeCallejero.TipoDeVia(modelBuilder);
             ModeloDeCallejero.CodigoPostal(modelBuilder);
             ModeloDeCallejero.ProvinciaCp(modelBuilder);
+            ModeloDeCallejero.MunicipioCp(modelBuilder);
         }
 
 
