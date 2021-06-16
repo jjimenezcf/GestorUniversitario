@@ -37,7 +37,10 @@ var Formulario;
         }
         Cerrar() {
             if (this.AntesDeCerrar()) {
-                window.history.back();
+                if (document.referrer.includes('/Acceso/Conectar'))
+                    location.href = document.referrer.replace('/Acceso/Conectar', '');
+                else
+                    window.history.back();
             }
         }
         AntesDeCerrar() {
