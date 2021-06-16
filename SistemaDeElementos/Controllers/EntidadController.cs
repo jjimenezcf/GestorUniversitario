@@ -355,11 +355,10 @@ namespace MVCSistemaDeElementos.Controllers
                 var mensajeInformativo = "";
                 foreach (var idParaRelacionar in listaIds)
                 {
-                    string mensaje = GestorDeElementos.CrearRelacion(id, idParaRelacionar);
-                    if (mensaje.IsNullOrEmpty())
+                    if (!GestorDeElementos.CrearRelacion(id, idParaRelacionar, false).existe)
                         relacionados++;
                     else
-                        mensajeInformativo = mensajeInformativo + Environment.NewLine + mensaje;
+                        mensajeInformativo = mensajeInformativo + Environment.NewLine + $"Existe la relación {id} con {idParaRelacionar}";
                 }
                 r.Total = relacionados;
                 r.consola = mensajeInformativo;

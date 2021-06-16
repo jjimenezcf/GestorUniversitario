@@ -114,22 +114,23 @@ namespace GestoresDeNegocio.Callejero
         private static CodigoPostalDtm ProcesarCodigosPostales(EntornoDeTrabajo entorno, GestorDeCodigosPostales gestor, string provincia, string municipio, string cp, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
-            if (p == null)
+            var codigoPostalDtm = gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+            if (codigoPostalDtm == null)
             {
-                p = new CodigoPostalDtm();
-                p.cp = cp;
+                codigoPostalDtm = new CodigoPostalDtm();
+                codigoPostalDtm.cp = cp;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
-                entorno.ActualizarTraza(trazaInfDtm, $"Creando el tipo de vía {cp}");
+                entorno.ActualizarTraza(trazaInfDtm, $"Creando el codigo postal {cp}");
             }
             else
             {
                 entorno.ActualizarTraza(trazaInfDtm, $"El codigo postal {cp} ya existe");
-                return p;
+                GestorDeCpsDeUnMunicipio.CrearRelacionConMunicipioSiNoExiste(entorno.contextoDelProceso, codigoPostalDtm, "ES", provincia, municipio);
+                return codigoPostalDtm;
             }
             operacion.Parametros[ltrCps.NombreProvincia] = provincia;
             operacion.Parametros[ltrCps.NombreMunicipio] = municipio;
-            return gestor.PersistirRegistro(p, operacion);
+            return gestor.PersistirRegistro(codigoPostalDtm, operacion);
         }
 
         protected override void AntesDePersistir(CodigoPostalDtm registro, ParametrosDeNegocio parametros)

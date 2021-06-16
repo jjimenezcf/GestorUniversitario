@@ -36,6 +36,7 @@ namespace GestoresDeNegocio.Callejero
         public GestorDeCpsDeUnaProvincia(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
+            InvertirMapeoDeRelacion = true;
         }
 
 
@@ -47,7 +48,7 @@ namespace GestoresDeNegocio.Callejero
         public static void CrearRelacion(ContextoSe contexto, CodigoPostalDtm cp, ProvinciaDtm provincia)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            gestor.CrearRelacion(cp.Id, provincia.Id);
+            gestor.CrearRelacion(cp.Id, provincia.Id, false);
         }
 
 

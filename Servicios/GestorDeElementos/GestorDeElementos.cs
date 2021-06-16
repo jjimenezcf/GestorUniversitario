@@ -215,7 +215,7 @@ namespace GestorDeElementos
             elementoDto.Id = registro.Id;
         }
 
-        public string CrearRelacion(int idElemento1, int idElemento2)
+        public (TRegistro relacio, bool existe) CrearRelacion(int idElemento1, int idElemento2, bool errorSiYaExiste)
         {
             var registro = ApiDeRegistro.RegistroVacio<TRegistro>();
             if (!registro.ImplementaUnaRelacion())
@@ -224,13 +224,17 @@ namespace GestorDeElementos
             var filtros = new List<ClausulaDeFiltrado>();
             DefinirFiltroDeRelacion(registro, filtros, idElemento1, idElemento2);
             var registros = ValidarAntesDeRelacionar(filtros).ToList();
-            if (registros.Count != 0)
-                return $"El registro {registro} ya existe";
+            
+            if (registros.Count != 0 && errorSiYaExiste)
+                GestorDeErrores.Emitir($"El registro {registro} ya existe");
 
-            MapearDatosDeRelacion(registro, idElemento1, idElemento2);
-            PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar));
+            if (registros.Count == 0)
+            {
+                MapearDatosDeRelacion(registro, idElemento1, idElemento2);
+               return (PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar)), false);
+            }
 
-            return "";
+            return (registros[0], true);
         }
 
         public List<TRegistro> ValidarAntesDeRelacionar(List<ClausulaDeFiltrado> filtros)
@@ -257,6 +261,9 @@ namespace GestorDeElementos
 
                 if (c.Valor.Entero() > 0)
                     filtros.Add(c);
+
+                if (filtros.Count == 2)
+                    break;
             }
         }
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)

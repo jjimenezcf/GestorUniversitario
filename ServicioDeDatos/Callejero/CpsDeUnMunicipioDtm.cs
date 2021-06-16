@@ -60,7 +60,7 @@ namespace ServicioDeDatos.Callejero
             .HasConstraintName($"FK_MUNICIPIO_CP_ID_CP")
             .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<CpsDeUnMunicipioDtm>().HasAlternateKey(p => p.IdCp).HasName("AK_MUNICIPIO_CP_ID_CP");
+            modelBuilder.Entity<CpsDeUnMunicipioDtm>().HasAlternateKey(p => new { p.IdCp, p.IdMunicipio }).HasName("AK_MUNICIPIO_CP");
         }
     }
 

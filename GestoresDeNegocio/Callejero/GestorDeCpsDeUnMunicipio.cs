@@ -6,6 +6,7 @@ using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -36,6 +37,7 @@ namespace GestoresDeNegocio.Callejero
         public GestorDeCpsDeUnMunicipio(ContextoSe contexto, IMapper mapeador)
             : base(contexto, mapeador)
         {
+            InvertirMapeoDeRelacion = true;
         }
 
 
@@ -44,10 +46,17 @@ namespace GestoresDeNegocio.Callejero
             return new GestorDeCpsDeUnMunicipio(contexto, mapeador);
         }
 
-        public static void CrearRelacion(ContextoSe contexto, CodigoPostalDtm cp, MunicipioDtm municipio)
+        public static void CrearRelacion(ContextoSe contexto, CodigoPostalDtm cp, MunicipioDtm municipioDtm)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            gestor.CrearRelacion(cp.Id, municipio.Id);
+            gestor.CrearRelacion(cp.Id, municipioDtm.Id, false);
+        }
+
+        internal static void CrearRelacionConMunicipioSiNoExiste(ContextoSe contexto, CodigoPostalDtm codigoPostalDtm,string iso2Pais, string provincia,  string municipio)
+        {
+            var municipioDtm = GestorDeMunicipios.LeerMunicipioPorNombre(contexto, iso2Pais, provincia, municipio, paraActualizar: false, errorSiNoHay: false, errorSiMasDeUno: true);
+            if (municipioDtm != null)
+                CrearRelacion(contexto, codigoPostalDtm, municipioDtm);
         }
 
 
@@ -78,6 +87,5 @@ namespace GestoresDeNegocio.Callejero
             return registros;
 
         }
-
     }
 }
