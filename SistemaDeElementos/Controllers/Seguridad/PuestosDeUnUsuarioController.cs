@@ -12,7 +12,7 @@ using GestoresDeNegocio.Entorno;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class PuestosDeUnUsuarioController :  EntidadController<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
+    public class PuestosDeUnUsuarioController :  RelacionController<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
     {
 
         public PuestosDeUnUsuarioController(GestorDePuestosDeUnUsuario gestor, GestorDeErrores errores)

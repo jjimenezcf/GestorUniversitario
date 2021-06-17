@@ -314,7 +314,7 @@ namespace MVCSistemaDeElementos.Descriptores
                   , propiedadRestrictora: propiedadRestrictora
                   , ayuda) ;
 
-            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeDependencias, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Gestor, enumCssOpcionMenu.DeElemento);
+            var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeDependencias, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
     }

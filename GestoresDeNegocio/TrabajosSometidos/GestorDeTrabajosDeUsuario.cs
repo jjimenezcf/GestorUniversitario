@@ -61,6 +61,9 @@ namespace GestoresDeNegocio.TrabajosSometidos
         {
             GestorDelTrabajo = gestor;
             Trabajo = trabajoUsuario;
+            gestor.Contexto.EsElContextosDeUnEntorno = true;
+            gestor.Contexto.NombreDelTrabajo = Trabajo.Trabajo.Nombre;
+
         }
 
         public TrazaDeUnTrabajoDtm CrearTraza(string traza)
@@ -169,6 +172,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var gestorDeCorreos = GestorDeCorreos.Gestor(gestor.Contexto, gestor.Contexto.Mapeador);
             gestorDeCorreos.EnviarCorreoPendientesAsync();
 
+            TrabajosDeEntorno.SometerBorrarTrazas(gestor.Contexto);
+
             return Task.FromResult(new ResultadoDelProceso(true));
         }
 
@@ -219,20 +224,33 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
         public static GestorDeTrabajosDeUsuario Gestor(ContextoSe contexto)
-        {
+        {            
             return new GestorDeTrabajosDeUsuario(contexto, contexto.Mapeador);
         }
 
+        internal static TrabajoDeUsuarioDtm CrearSiNoEstaPendiente(ContextoSe contexto, TrabajoSometidoDtm ts, Dictionary<string,object> datosDeCreacion)
+        {
+            var filtro1 = new ClausulaDeFiltrado { Clausula = nameof(TrabajoDeUsuarioDtm.IdTrabajo), Criterio = CriteriosDeFiltrado.igual, Valor = ts.Id.ToString() };
+            var filtro2 = new ClausulaDeFiltrado { Clausula = nameof(TrabajoDeUsuarioDtm.Estado), Criterio = CriteriosDeFiltrado.igual, Valor = enumEstadosDeUnTrabajo.Pendiente.ToDtm() };
+            var filtros = new List<ClausulaDeFiltrado> { filtro1, filtro2 };
+            var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo, aplicarJoin: false);
+            var gestor = Gestor(contexto);
+            var trabajosDtm = gestor.LeerRegistros(0, -1, filtros, null, null, parametros);
+            if (trabajosDtm.Count == 0)
+              return  Crear(contexto, ts, datosDeCreacion);
 
-        internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, string parametros)
+            return trabajosDtm[0];
+        }
+
+        internal static TrabajoDeUsuarioDtm Crear(ContextoSe contexto, TrabajoSometidoDtm ts, Dictionary<string, object> datosDeCreacion)
         {
             var tu = new TrabajoDeUsuarioDtm();
             tu.IdSometedor = contexto.DatosDeConexion.IdUsuario;
             tu.IdEjecutor = ts.IdEjecutor == null ? tu.IdSometedor : (int)ts.IdEjecutor;
             tu.IdTrabajo = ts.Id;
             tu.Estado = enumEstadosDeUnTrabajo.Pendiente.ToDtm();
-            tu.Planificado = DateTime.Now;
-            tu.Parametros = parametros;
+            tu.Planificado = datosDeCreacion.ContainsKey(nameof(TrabajoDeUsuarioDtm.Planificado)) ? (DateTime) datosDeCreacion[nameof(TrabajoDeUsuarioDtm.Planificado)] : DateTime.Now;
+            tu.Parametros = datosDeCreacion.ContainsKey(nameof(TrabajoDeUsuarioDtm.Parametros)) ? datosDeCreacion[nameof(TrabajoDeUsuarioDtm.Parametros)].ToString() : new List<string>().ToJson();
             return Crear(contexto, tu);
         }
 

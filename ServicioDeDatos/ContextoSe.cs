@@ -55,7 +55,7 @@ namespace ServicioDeDatos
 
     public static class Transaccion
     {
-        
+
         public static bool IniciarTransaccion(this ContextoSe contexto)
         {
             if (contexto.Database.CurrentTransaction == null)
@@ -95,11 +95,24 @@ namespace ServicioDeDatos
 
         public IMapper Mapeador { get; set; }
 
-        internal  IDbContextTransaction Transaccion { get; set; }
+        internal IDbContextTransaction Transaccion { get; set; }
 
         public bool HayTransaccion => Transaccion != null;
 
-        public bool Debuggar => CacheDeVariable.Cfg_HayQueDebuggar;
+        public bool Debuggar
+        {
+            get
+            {
+                if (EsElContextosDeUnEntorno)
+                    return true;
+                else
+                    return CacheDeVariable.Cfg_HayQueDebuggar;
+            }
+        }
+
+        public bool EsElContextosDeUnEntorno { get; set; } = false;
+
+        public string NombreDelTrabajo { get; set; }
 
         private string ObtenerVersion => CacheDeVariable.Cfg_Version;
 
@@ -110,7 +123,7 @@ namespace ServicioDeDatos
 
         public static ContextoSe ObtenerContexto(ContextoSe contexto)
         {
-           // return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
+            // return ObtenerContexto(nameof(ContextoSe), () => new ConstructorDelContexto().CreateDbContext(new string[] { }));
             //return new ConstructorDelContexto().CreateDbContext(new string[] { });
             var opciones = new DbContextOptionsBuilder<ContextoSe>();
             var datosDeConexion = ObtenerDatosDeConexion();
@@ -167,10 +180,13 @@ namespace ServicioDeDatos
             DatosDeConexion.Version = ObtenerVersion;
         }
 
-        public void IniciarTraza(string fichero = "traza")
+        public void IniciarTraza(string fichero)
         {
             if (!Debuggar)
                 return;
+
+            if (EsElContextosDeUnEntorno)
+                fichero = NombreDelTrabajo;
 
             if (Traza == null)
                 CrearTraza(NivelDeTraza.Siempre, fichero);
@@ -186,7 +202,7 @@ namespace ServicioDeDatos
                 if (!Traza.Abierta)
                     Traza.Abrir(true);
 
-                Traza.CerrarTraza(mensaje.IsNullOrEmpty()? "Conexión cerrada": mensaje);
+                Traza.CerrarTraza(mensaje.IsNullOrEmpty() ? "Conexión cerrada" : mensaje);
             }
         }
 

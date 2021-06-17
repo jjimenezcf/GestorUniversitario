@@ -15,7 +15,7 @@ using System;
 namespace GestoresDeNegocio.Seguridad
 {
 
-    public class GestorDeUsuariosDeUnPuesto : GestorDeElementos<ContextoSe, PuestosDeUnUsuarioDtm, UsuariosDeUnPuestoDto>
+    public class GestorDeUsuariosDeUnPuesto : GestorDeRelaciones<ContextoSe, PuestosDeUnUsuarioDtm, UsuariosDeUnPuestoDto>
     {
         public class MapearClasePermiso : Profile
         {
@@ -25,14 +25,15 @@ namespace GestoresDeNegocio.Seguridad
                     .ForMember(dto => dto.Puesto, dtm => dtm.MapFrom(dtm => dtm.Puesto.Nombre))
                     .ForMember(dto => dto.Usuario, dtm => dtm.MapFrom(dtm => $"({dtm.Usuario.Login}) {dtm.Usuario.Apellido}, {dtm.Usuario.Nombre}"));
 
-                CreateMap<UsuariosDeUnPuestoDto, PuestosDeUnUsuarioDtm>();
+                CreateMap<UsuariosDeUnPuestoDto, PuestosDeUnUsuarioDtm>()
+                    .ForMember(dtm => dtm.Usuario, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.Puesto, dto => dto.Ignore());
             }
         }
 
         public GestorDeUsuariosDeUnPuesto(ContextoSe contexto, IMapper mapeador)
-        : base(contexto, mapeador)
+        : base(contexto, mapeador, true)
         {
-            InvertirMapeoDeRelacion = true;
         }
 
         internal static GestorDeUsuariosDeUnPuesto Gestor(ContextoSe contexto, IMapper mapeador)

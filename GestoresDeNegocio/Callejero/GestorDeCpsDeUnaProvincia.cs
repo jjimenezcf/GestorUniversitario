@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GestoresDeNegocio.Callejero
 {
 
-    public class GestorDeCpsDeUnaProvincia : GestorDeElementos<ContextoSe, CpsDeUnaProvinciaDtm, CpsDeUnaProvinciaDto>
+    public class GestorDeCpsDeUnaProvincia : GestorDeRelaciones<ContextoSe, CpsDeUnaProvinciaDtm, CpsDeUnaProvinciaDto>
     {
         public class ltrCpsDeUnaProvincia
         {
@@ -34,9 +34,8 @@ namespace GestoresDeNegocio.Callejero
 
 
         public GestorDeCpsDeUnaProvincia(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+            : base(contexto, mapeador, true)
         {
-            InvertirMapeoDeRelacion = true;
         }
 
 

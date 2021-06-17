@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class PuestosDeUnRolController :  EntidadController<ContextoSe, RolesDeUnPuestoDtm, PuestosDeUnRolDto>
+    public class PuestosDeUnRolController :  RelacionController<ContextoSe, RolesDeUnPuestoDtm, PuestosDeUnRolDto>
     {
 
         public PuestosDeUnRolController(GestorDePuestosDeUnRol gestor, GestorDeErrores errores)

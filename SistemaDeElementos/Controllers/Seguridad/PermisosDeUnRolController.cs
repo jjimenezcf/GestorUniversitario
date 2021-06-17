@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class PermisosDeUnRolController : EntidadController<ContextoSe, PermisosDeUnRolDtm, PermisosDeUnRolDto>
+    public class PermisosDeUnRolController : RelacionController<ContextoSe, PermisosDeUnRolDtm, PermisosDeUnRolDto>
     {
          public PermisosDeUnRolController(GestorDePermisosDeUnRol gestor, GestorDeErrores errores)
          : base

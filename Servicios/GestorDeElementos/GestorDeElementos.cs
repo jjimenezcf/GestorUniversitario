@@ -79,10 +79,13 @@ namespace GestorDeElementos
     {
         public enumTipoOperacion Operacion { get; private set; }
         public bool LeerParaActualizar { get; set; } = false;
+
+        public bool AplicarJoin { get; }
+
         public Dictionary<string, object> Parametros = new Dictionary<string, object>();
         public IRegistro registroEnBd = null;
 
-        public ParametrosDeNegocio(enumTipoOperacion tipo)
+        public ParametrosDeNegocio(enumTipoOperacion tipo, bool aplicarJoin = true)
         {
             Operacion = tipo;
 
@@ -91,6 +94,8 @@ namespace GestorDeElementos
 
             if (tipo == enumTipoOperacion.LeerSinBloqueo)
                 LeerParaActualizar = false;
+            
+            AplicarJoin = aplicarJoin;
         }
     }
 
@@ -120,7 +125,6 @@ namespace GestorDeElementos
 
         //private TRegistro RegistroEnBD { get; set; }
 
-        protected bool InvertirMapeoDeRelacion { get; set; } = false;
         public bool HayFiltroPorId { get; private set; } = false;
 
         public string ClaseDto => typeof(TElemento).Name;
@@ -215,57 +219,7 @@ namespace GestorDeElementos
             elementoDto.Id = registro.Id;
         }
 
-        public (TRegistro relacio, bool existe) CrearRelacion(int idElemento1, int idElemento2, bool errorSiYaExiste)
-        {
-            var registro = ApiDeRegistro.RegistroVacio<TRegistro>();
-            if (!registro.ImplementaUnaRelacion())
-                throw new Exception($"El registro {typeof(TRegistro)} no es de relación.");
 
-            var filtros = new List<ClausulaDeFiltrado>();
-            DefinirFiltroDeRelacion(registro, filtros, idElemento1, idElemento2);
-            var registros = ValidarAntesDeRelacionar(filtros).ToList();
-            
-            if (registros.Count != 0 && errorSiYaExiste)
-                GestorDeErrores.Emitir($"El registro {registro} ya existe");
-
-            if (registros.Count == 0)
-            {
-                MapearDatosDeRelacion(registro, idElemento1, idElemento2);
-               return (PersistirRegistro(registro, new ParametrosDeNegocio(enumTipoOperacion.Insertar)), false);
-            }
-
-            return (registros[0], true);
-        }
-
-        public List<TRegistro> ValidarAntesDeRelacionar(List<ClausulaDeFiltrado> filtros)
-        {
-            return LeerRegistros(0, 1, filtros, null, null, null);
-        }
-
-        private void DefinirFiltroDeRelacion(TRegistro registro, List<ClausulaDeFiltrado> filtros, int idElemento1, int idElemento2)
-        {
-            var propiedades = registro.PropiedadesDelObjeto();
-            foreach (var propiedad in propiedades)
-            {
-                var c = new ClausulaDeFiltrado
-                {
-                    Clausula = propiedad.Name,
-                    Criterio = CriteriosDeFiltrado.igual
-                };
-
-                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())
-                    c.Valor = InvertirMapeoDeRelacion ? idElemento2.ToString() : idElemento1.ToString();
-
-                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento2)).ToString())
-                    c.Valor = InvertirMapeoDeRelacion ? idElemento1.ToString() : idElemento2.ToString();
-
-                if (c.Valor.Entero() > 0)
-                    filtros.Add(c);
-
-                if (filtros.Count == 2)
-                    break;
-            }
-        }
         protected void PersistirRegistros(List<TRegistro> registros, ParametrosDeNegocio parametros)
         {
             var transaccion = Contexto.IniciarTransaccion();
@@ -594,7 +548,8 @@ namespace GestorDeElementos
 
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
-            registros = AplicarJoins(registros, filtros, joins, parametros);
+            if (parametros.AplicarJoin)
+               registros = AplicarJoins(registros, filtros, joins, parametros);
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
@@ -814,20 +769,6 @@ namespace GestorDeElementos
             }
         }
 
-        private void MapearDatosDeRelacion(TRegistro registro, int idElemento1, int idElemento2)
-        {
-            var propiedades = registro.PropiedadesDelObjeto();
-            foreach (var propiedad in propiedades)
-            {
-                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento1)).ToString())
-                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento2 : idElemento1);
-
-                if (propiedad.Name == registro.ValorPropiedad(nameof(IRelacion.NombreDeLaPropiedadDelIdElemento2)).ToString())
-                    propiedad.SetValue(registro, InvertirMapeoDeRelacion ? idElemento1 : idElemento2);
-            }
-
-            //throw new Exception($"El gestor: {this} no tiene definida la función de {nameof(MapearDatosDeRelacion)}.");
-        }
 
         #endregion
 

@@ -11,7 +11,7 @@ using System;
 namespace GestoresDeNegocio.Callejero
 {
 
-    public class GestorDeCpsDeUnMunicipio : GestorDeElementos<ContextoSe, CpsDeUnMunicipioDtm, CpsDeUnMunicipioDto>
+    public class GestorDeCpsDeUnMunicipio : GestorDeRelaciones<ContextoSe, CpsDeUnMunicipioDtm, CpsDeUnMunicipioDto>
     {
         public class ltrCpsDeUnMunicipio
         {
@@ -35,9 +35,8 @@ namespace GestoresDeNegocio.Callejero
 
 
         public GestorDeCpsDeUnMunicipio(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+        : base(contexto, mapeador, true)
         {
-            InvertirMapeoDeRelacion = true;
         }
 
 

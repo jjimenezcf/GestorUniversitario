@@ -12,7 +12,7 @@ using Utilidades;
 
 namespace GestoresDeNegocio.Seguridad
 {
-    public class GestorDePuestosDeUnRol : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, PuestosDeUnRolDto>
+    public class GestorDePuestosDeUnRol : GestorDeRelaciones<ContextoSe, RolesDeUnPuestoDtm, PuestosDeUnRolDto>
     {
 
         public class MapearPuestosDeUnRol : Profile
@@ -30,9 +30,8 @@ namespace GestoresDeNegocio.Seguridad
         }
 
         public GestorDePuestosDeUnRol(ContextoSe contexto, IMapper mapeador)
-        : base(contexto, mapeador)
+        : base(contexto, mapeador, true)
         {
-            InvertirMapeoDeRelacion = true;
         }
 
         internal static GestorDePuestosDeUnUsuario Gestor(ContextoSe contexto, IMapper mapeador)

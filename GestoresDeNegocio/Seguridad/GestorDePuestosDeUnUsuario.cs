@@ -17,7 +17,7 @@ using ModeloDeDto;
 namespace GestoresDeNegocio.Seguridad
 {
 
-    public class GestorDePuestosDeUnUsuario : GestorDeElementos<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
+    public class GestorDePuestosDeUnUsuario : GestorDeRelaciones<ContextoSe, PuestosDeUnUsuarioDtm, PuestosDeUnUsuarioDto>
     {
 
         public class MapearClasePermiso : Profile
@@ -35,7 +35,7 @@ namespace GestoresDeNegocio.Seguridad
         }
 
         public GestorDePuestosDeUnUsuario(ContextoSe contexto, IMapper mapeador)
-        : base(contexto, mapeador)
+        : base(contexto, mapeador, false)
         {
 
 

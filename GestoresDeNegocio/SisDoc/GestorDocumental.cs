@@ -20,6 +20,7 @@ using Enumerados;
 using System.Linq;
 using ModeloDeDto.TrabajosSometidos;
 using ServicioDeCorreos;
+using ServicioDeDatos.TrabajosSometidos;
 
 namespace GestoresDeNegocio.Archivos
 {
@@ -107,7 +108,7 @@ namespace GestoresDeNegocio.Archivos
             var ts = GestorDeTrabajosSometido.Obtener(contexto, "Exportar a excel", dll, clase, nameof(SometerExportacion).Replace("Someter", ""));
             // crear trabajo de usuario
 
-            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
+            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, new Dictionary<string, object> { { nameof(TrabajoDeUsuarioDtm.Parametros), new List<string>().ToJson() } });
             //liberarlo
         }
 

@@ -14,7 +14,7 @@ using Utilidades;
 namespace GestoresDeNegocio.Seguridad
 {
 
-    public class GestorDeRolesDeUnPuesto : GestorDeElementos<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
+    public class GestorDeRolesDeUnPuesto : GestorDeRelaciones<ContextoSe, RolesDeUnPuestoDtm, RolesDeUnPuestoDto>
     {
 
         public class MapearRolesDeUnPuesto : Profile
@@ -32,7 +32,7 @@ namespace GestoresDeNegocio.Seguridad
         }
 
         public GestorDeRolesDeUnPuesto(ContextoSe contexto, IMapper mapeador)
-        : base(contexto, mapeador)
+        : base(contexto, mapeador, false)
         {
 
 

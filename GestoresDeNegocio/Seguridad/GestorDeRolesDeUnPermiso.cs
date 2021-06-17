@@ -13,7 +13,7 @@ using Utilidades;
 namespace GestoresDeNegocio.Seguridad
 {
 
-    public class GestorDeRolesDeUnPermiso : GestorDeElementos<ContextoSe, PermisosDeUnRolDtm, RolesDeUnPermisoDto>
+    public class GestorDeRolesDeUnPermiso : GestorDeRelaciones<ContextoSe, PermisosDeUnRolDtm, RolesDeUnPermisoDto>
     {
 
         public class MapearRolesDeUnPermiso : Profile
@@ -31,9 +31,8 @@ namespace GestoresDeNegocio.Seguridad
         }
 
         public GestorDeRolesDeUnPermiso(ContextoSe contexto, IMapper mapeador)
-            : base(contexto, mapeador)
+            : base(contexto, mapeador, true)
         {
-            InvertirMapeoDeRelacion = true;
         }
 
 

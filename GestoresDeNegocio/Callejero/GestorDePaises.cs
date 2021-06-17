@@ -15,6 +15,7 @@ using System.Linq;
 using GestoresDeNegocio.Entorno;
 using GestoresDeNegocio.Negocio;
 using ServicioDeDatos.TrabajosSometidos;
+using Enumerados;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -78,7 +79,7 @@ namespace GestoresDeNegocio.Callejero
             var ts = GestorDeTrabajosSometido.Obtener(contexto, "Importar callejero", dll, clase, nameof(SometerImportarCallejero).Replace("Someter", ""));
             // crear trabajo de usuario
 
-            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, parametros);
+            var tu = GestorDeTrabajosDeUsuario.Crear(contexto, ts, new Dictionary<string, object> { { nameof(TrabajoDeUsuarioDtm.Parametros), new List<string>().ToJson() } });
             //liberarlo
         }
 

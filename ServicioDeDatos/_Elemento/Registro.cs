@@ -132,7 +132,7 @@ namespace ServicioDeDatos.Elemento
         public UsuarioDtm UsuarioModificador { get; set; }
     }
 
-    public interface IRelacion
+    public interface IRelacion: IRegistro
     {
 
         [IgnoreDataMember]

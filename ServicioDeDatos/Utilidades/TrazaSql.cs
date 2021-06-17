@@ -10,12 +10,14 @@ namespace ServicioDeDatos.Utilidades
         private double duraciAcomulada = 0;
         private int sentenciasEjecutadas = 0;
 
+        public static string ruta = @"c:\Temp\Trazas";
+
 
         public static TrazaSql CrearTraza(string fichero, NivelDeTraza nivel = NivelDeTraza.Siempre, string mensajeInicial = "Traza de debuguer")
         {
             fichero = fichero.Replace(".txt", "");
             fichero = $"{fichero}_{DateTime.Now}.txt";
-            return new TrazaSql(nivel, @"c:\Temp\Trazas", fichero, mensajeInicial);
+            return new TrazaSql(nivel, ruta, fichero, mensajeInicial);
         }
 
 
