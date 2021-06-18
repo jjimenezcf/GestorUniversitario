@@ -53,6 +53,7 @@ namespace ServicioDeDatos.TrabajosSometidos
 
             throw new Exception($"El estado de un trabajo {estadoDtm} no está definido en la BD");
         }
+
         public static string ToDtm(string estadoDto)
         {
             switch (estadoDto)
@@ -67,6 +68,22 @@ namespace ServicioDeDatos.TrabajosSometidos
 
             throw new Exception($"El estado de un trabajo '{estadoDto}' no es válido");
         }
+
+        public static string EnumeradoToDtm(string estado)
+        {
+            switch (estado)
+            {
+                case nameof(enumEstadosDeUnTrabajo.conErrores): return "TR";
+                case nameof(enumEstadosDeUnTrabajo.Pendiente): return "PT";
+                case nameof(enumEstadosDeUnTrabajo.Bloqueado): return "BL";
+                case nameof(enumEstadosDeUnTrabajo.iniciado): return "EJ";
+                case nameof(enumEstadosDeUnTrabajo.Terminado): return "OK";
+                case nameof(enumEstadosDeUnTrabajo.Error): return "ER";
+            }
+
+            throw new Exception($"El estado de un trabajo '{estado}' no es válido");
+        }
+
     }
 
 

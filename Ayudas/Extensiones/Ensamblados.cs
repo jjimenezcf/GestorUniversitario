@@ -94,6 +94,19 @@ namespace Utilidades
             return false;
         }
 
+        public static Dictionary<string, string> ToDiccionario(this Type tipo, Func<string, string> ObtenerValor)
+        {
+            var opciones = new Dictionary<string, string>();
+            foreach (var valor in Enum.GetValues(tipo))
+            {
+                var texto = valor.ToDescription();
+                var clave = ObtenerValor(valor.ToString());
+                opciones.Add(clave, texto);
+            }
+
+            return opciones;
+        }
+
         /*
          *             
             //Type d1 = typeof(GestorDeElementos<,,>);
