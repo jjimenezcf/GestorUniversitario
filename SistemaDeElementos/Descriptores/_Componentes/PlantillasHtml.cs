@@ -82,6 +82,16 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public static string listaDeElementosFlt = listaDeElementos.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
 
+        private static string listaDeValores = 
+                          $@"<div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
+                                  <select [RestoDeAtributos] >                                          
+                                          [opcionesDeLaLista]
+                                  </select>
+                             </div>";
+
+        public static string listaDeValoresFlt = listaDeValores.Replace("[RestoDeAtributos]", atributosComunesDeUnControlflt);
+
+
         public static string opcionNavegar = @$" 
                            <div id=¨[IdHtmlContenedor]¨ name=¨contenedor-control¨ class=¨[CssContenedor]¨>
                                     <input id=¨[IdHtml]¨

@@ -5,6 +5,7 @@
 - Gestor de relación con municipios (*)
 - proceso de importación de csv (*)
 - proceso de borrado de trazas de sql (*)
+- Añadir al filtro lista de valores
 
 - crud de cp
 - crud de relación con municipios

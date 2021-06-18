@@ -24,6 +24,7 @@ namespace Enumerados
     {     SelectorDeFiltro
         , SelectorDeElemento
         , ListaDeElemento
+        , ListaDeValores
         , ListaDinamica
         , Editor
         , RestrictorDeFiltro
@@ -109,6 +110,7 @@ namespace Enumerados
                 case enumTipoControl.ModalDeConsulta: return "modal-de-consulta";
                 case enumTipoControl.ModalDeSeleccion: return "modal-de-seleccion";
                 case enumTipoControl.FiltroEntreFechas: return "filtro-entre-fechas";
+                case enumTipoControl.ListaDeValores: return "lista-de-valores";
             }
             throw new Exception($"El tipo de control {tipo} no está definido como renderizarlo");
     }

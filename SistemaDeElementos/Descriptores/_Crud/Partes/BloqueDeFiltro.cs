@@ -78,6 +78,12 @@ namespace MVCSistemaDeElementos.Descriptores
             AnadirControl(s);
             AnadirControl(s.Modal);
         }
+
+        public void AnadirLista<t1>(ListaDeValores<t1> s) where t1 : ElementoDto
+        {
+            AnadirControl(s);
+        }
+
         public ControlHtml ObtenerControl(string id)
         {
 

@@ -81,6 +81,13 @@ namespace MVCSistemaDeElementos.Descriptores
                                 propiedad: nameof(TrabajoDeUsuarioDto.Iniciado),
                                 ayuda: "trabajos ejecutados entre",
                                 posicion: new Posicion() { fila = 2, columna = 0 });
+            var opciones = new System.Collections.Generic.Dictionary<string, string> { { "PD", "Pendiente" }, { "BK", "Bloqueado" } };
+            new ListaDeValores<TrabajoDeUsuarioDto>(fltGeneral
+                , "Estado"
+                , "Seleccione el estado por el que filtrar"
+                , opciones
+                , nameof(TrabajoDeUsuarioDto.Estado)
+                , new Posicion() { fila = 3, columna = 0 });
 
             Mnt.OrdenacionInicial = @$"{nameof(TrabajoDeUsuarioDto.Planificado)}:planificado:{enumModoOrdenacion.descendente.Render()};
                                        {nameof(TrabajoDeUsuarioDto.Iniciado)}:iniciado:{enumModoOrdenacion.ascendente.Render()}";
