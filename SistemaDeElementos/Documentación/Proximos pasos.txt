@@ -1,9 +1,11 @@
 ﻿Ejecutando
 ---------------------------------------------
 - Gestor de C.Postales (*)
-- Gestor de relación con provincias
-- Gestor de relación con municipios
+- Gestor de relación con provincias (*)
+- Gestor de relación con municipios (*)
 - proceso de importación de csv (*)
+- proceso de borrado de trazas de sql (*)
+
 - crud de cp
 - crud de relación con municipios
 - crud de relación con provincias
@@ -14,6 +16,9 @@
 Próximas tareas
 ---------------------------------------------
 
+- Añadir al menus del grid 
+	- Anular selección
+	- Anular ordenación
 - Crud de barrio
 - Relación de C.Postales por municipio
 - Relación de C.Postales por barrios

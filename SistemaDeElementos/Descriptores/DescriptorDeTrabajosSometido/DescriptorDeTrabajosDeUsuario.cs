@@ -82,6 +82,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                 ayuda: "trabajos ejecutados entre",
                                 posicion: new Posicion() { fila = 2, columna = 0 });
 
+            Mnt.OrdenacionInicial = @$"{nameof(TrabajoDeUsuarioDto.Planificado)}:planificado:{enumModoOrdenacion.descendente.Render()};
+                                       {nameof(TrabajoDeUsuarioDto.Iniciado)}:iniciado:{enumModoOrdenacion.ascendente.Render()}";
+
         }
 
         public override string RenderControl()

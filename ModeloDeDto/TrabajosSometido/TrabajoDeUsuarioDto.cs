@@ -91,7 +91,8 @@ namespace ModeloDeDto.TrabajosSometidos
            Columna = 0,
            VisibleEnGrid = true,
            EditableAlEditar = false,
-           VisibleAlCrear = false
+           VisibleAlCrear = false,
+           Ordenar = true
            )
         ]
         public string Estado { get; set; }
@@ -106,7 +107,8 @@ namespace ModeloDeDto.TrabajosSometidos
            VisibleEnGrid = true,
            EditableAlCrear = false,
            EditableAlEditar = false,
-           Obligatorio = true
+           Obligatorio = true,
+           Ordenar = true
            )
         ]
         public DateTime Encolado { get; set; }
