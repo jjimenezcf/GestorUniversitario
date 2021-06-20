@@ -530,6 +530,11 @@ var Crud;
                     clausula = this.ObtenerClausulaEntreFechas(control);
                     break;
                 }
+                case TipoControl.ListaDeValores: {
+                    clausula = this.ObtenerClausulaListaDeValores(control);
+                    break;
+                }
+                /* de un tipo */
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                 }
@@ -631,6 +636,16 @@ var Crud;
             var valor = selet.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor) && Number(valor) > 0) {
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            }
+            return clausula;
+        }
+        ObtenerClausulaListaDeValores(selet) {
+            var propiedad = selet.getAttribute(atControl.propiedad);
+            var criterio = atCriterio.igual;
+            var valor = selet.value;
+            var clausula = null;
+            if (!IsNullOrEmpty(valor) && Number(valor) != -1) {
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             }
             return clausula;

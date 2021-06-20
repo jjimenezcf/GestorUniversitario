@@ -109,6 +109,41 @@
         }
     }
 
+    export function EventosMenuDelGrid(accion: string, idGrid: string): void {
+        let grid: HTMLDivElement = document.getElementById(idGrid) as HTMLDivElement;
+        if (NoDefinida(grid)) {
+            MensajesSe.Error('EventosMenuDelGrid', `El grid ${idGrid} no está definido. Acción: ${accion}`);
+            return;
+        }
+
+        try {
+            switch (accion) {
+                case Evento.OpcionesDelGrid.SeleccionarTodo: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AnularOrden: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AnularSeleccion: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AplicarOrdenInicial: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.Buscar: {
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error.message);
+        }
+    }
+
     export function EventosModalDeSeleccion(accion: string, parametros: string): void {
 
         let parIn: Array<string> = parametros.split("#");

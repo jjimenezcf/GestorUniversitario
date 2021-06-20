@@ -109,6 +109,40 @@ var Crud;
         }
     }
     Crud.EventosDelMantenimiento = EventosDelMantenimiento;
+    function EventosMenuDelGrid(accion, idGrid) {
+        let grid = document.getElementById(idGrid);
+        if (NoDefinida(grid)) {
+            MensajesSe.Error('EventosMenuDelGrid', `El grid ${idGrid} no está definido. Acción: ${accion}`);
+            return;
+        }
+        try {
+            switch (accion) {
+                case Evento.OpcionesDelGrid.SeleccionarTodo: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AnularOrden: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AnularSeleccion: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.AplicarOrdenInicial: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.Buscar: {
+                    break;
+                }
+                default: {
+                    MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `la opción ${accion} no está definida en el gestor de eventos de selección`);
+                    break;
+                }
+            }
+        }
+        catch (error) {
+            MensajesSe.Error(`Modal de selección, accion: ${accion}`, error.message);
+        }
+    }
+    Crud.EventosMenuDelGrid = EventosMenuDelGrid;
     function EventosModalDeSeleccion(accion, parametros) {
         let parIn = parametros.split("#");
         let modal = Crud.crudMnt.ObtenerModalDeSeleccion(parIn[0]);

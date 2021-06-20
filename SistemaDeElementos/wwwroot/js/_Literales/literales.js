@@ -317,6 +317,13 @@ const LiteralMnt = {
     idCuerpoDePagina: "cuerpo-de-pagina"
 };
 const Evento = {
+    OpcionesDelGrid: {
+        SeleccionarTodo: "seleccionar-todo",
+        AnularSeleccion: "anular-seleccion",
+        AnularOrden: "anular-orden",
+        AplicarOrdenInicial: "aplicar-orden-inicial",
+        Buscar: "buscar",
+    },
     ModalSeleccionDeFiltro: {
         Abrir: "abrir-modal-seleccion",
         Seleccionar: "seleccionar-elementos",
@@ -462,6 +469,7 @@ const TipoControl = {
     FiltroEntreFechas: "filtro-entre-fechas",
     AreaDeTexto: "area-de-texto",
     ListaDinamica: "lista-dinamica",
+    ListaDeValores: "lista-de-valores",
     Archivo: "archivo",
     VisorDeArchivo: "visor-archivo",
     UrlDeArchivo: "url-archivo",

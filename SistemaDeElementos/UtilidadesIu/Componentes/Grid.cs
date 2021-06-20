@@ -60,7 +60,7 @@ namespace UtilidadesParaIu
 
         public string NavegadorToHtml()
         {
-           return RenderNavegadorGrid(this) + RenderOpcionesGrid();
+           return RenderNavegadorGrid(this) ;
         }
 
         private static string RenderColumnaCabecera(ColumnaDelGrid<TElemento> columna)
@@ -307,8 +307,7 @@ namespace UtilidadesParaIu
                  </div>
             </div>
             <div id = ¨div.seleccion.{grid.IdHtml}¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Opcion)}¨>     
-              <a id = ¨div.seleccion.{grid.IdHtml}.ref¨ href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{parametros}');¨>Seleccionadas</a>
-              <input id=¨div.seleccion.{grid.IdHtml}.input¨ type=¨hidden¨ value=¨0¨ >  
+              {RenderOpcionesGrid(grid.IdHtml, gestorDeEventos, parametros)}
             </div>
             <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Mensaje)}¨>
                Seleccionadas: 0 de {grid.TotalEnBd}
@@ -320,9 +319,56 @@ namespace UtilidadesParaIu
             return htmlContenedorNavegador.Replace("htmlNavegadorGrid", htmlNavegadorGrid);
         }
 
-        private static string RenderOpcionesGrid()
+        private static string RenderOpcionesGrid(string IdHtmlGrid, string gestorDeEventos, string parametros)
         {
-            var htmlOpcionesGrid = "";
+            var htmlOpcionesGrid = @$"             
+
+            <nav class='menu-del-grid'>
+                <ul>
+                    <li class='menu-del-grid-li'>
+                        <center><a href='#'>Opciones</a></center>
+                        <ul>
+                            <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'><a href='#'>Buscar</a></li>
+                            <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
+                                <a href='#'>Seleccionar</a>
+                                <ul>
+                                    <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.SeleccionarTodo}', '{IdHtmlGrid}');¨>seleccionar todo</a>
+                                    </li>
+                                    <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AnularSeleccion}', '{IdHtmlGrid}');¨>anular selección</a>
+                                    </li>
+                                    <li class='menu-del-grid-li-li'>
+                                        <a id='div.seleccion.{IdHtmlGrid}.ref' href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{parametros}');¨>Seleccionadas</a>
+                                        <input id=¨div.seleccion.{IdHtmlGrid}.input¨ type=¨hidden¨ value=¨0¨ > 
+                                    </li>
+                                </ul>
+                            <li class='menu-del-grid-li-li'>
+                                <a href='#'>Ordenación</a>
+                                <ul>
+                                    <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AnularOrden}', '{IdHtmlGrid}');¨>anular orden</a>
+                                    </li>
+                                    <li class='menu-del-grid-li-li'>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AplicarOrdenInicial}', '{IdHtmlGrid}');¨>orden inicial</a>
+                                    </li>
+                                </ul>
+                            <li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            ";
+
+            /*
+             * 
+             *        
+              <a id = ¨div.seleccion.{IdHtmlGrid}.ref¨ href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{parametros}');¨>Seleccionadas</a>
+              <input id=¨div.seleccion.{IdHtmlGrid}.input¨ type=¨hidden¨ value=¨0¨ >  
+             * 
+             * */
+
             return htmlOpcionesGrid;
         }
 
@@ -333,7 +379,7 @@ namespace UtilidadesParaIu
                                </table>
                              ";
 
-            var htmlGrid = grid.ZonaDeDatos.Mnt.Crud.EsModal ? htmlTabla + RenderNavegadorGrid(grid) + RenderOpcionesGrid() : htmlTabla;
+            var htmlGrid = grid.ZonaDeDatos.Mnt.Crud.EsModal ? htmlTabla + RenderNavegadorGrid(grid) : htmlTabla;
 
             return htmlGrid;
         }

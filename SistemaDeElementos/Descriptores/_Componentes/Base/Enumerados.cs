@@ -16,6 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores
             , EventosModalParaSeleccionar
             , EventosDeListaDinamica
             , EventosDeSelectorDeElementosEnModal
+            , EventosMenuDelGrid
     }
 
     public static class TipoAccionDeListaDinamica
@@ -38,6 +39,10 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
         public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
         public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
+        public const string SeleccionarTodo = "seleccionar-todo";
+        public const string AnularSeleccion = "anular-seleccion";
+        public const string AnularOrden = "anular-ordenacion";
+        public const string AplicarOrdenInicial = "aplicar-orden-inicial";
         public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
         public const string FilaPulsada = "fila-pulsada";

@@ -644,6 +644,11 @@
                     clausula = this.ObtenerClausulaEntreFechas(control as HTMLInputElement);
                     break;
                 }
+                case TipoControl.ListaDeValores: {
+                    clausula = this.ObtenerClausulaListaDeValores(control as HTMLSelectElement);
+                    break;
+                }
+                    /* de un tipo */
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                 }
@@ -761,6 +766,17 @@
             var valor = selet.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor) && Number(valor) > 0) {
+                clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
+            }
+            return clausula;
+        }
+
+        private ObtenerClausulaListaDeValores(selet: HTMLSelectElement): ClausulaDeFiltrado {
+            var propiedad = selet.getAttribute(atControl.propiedad);
+            var criterio = atCriterio.igual;
+            var valor = selet.value;
+            var clausula = null;
+            if (!IsNullOrEmpty(valor) && Number(valor) != -1) {
                 clausula = new ClausulaDeFiltrado(propiedad, criterio, valor);
             }
             return clausula;

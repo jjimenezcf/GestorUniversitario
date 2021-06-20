@@ -65,7 +65,7 @@ cuerpo-datos > tr:after {
     padding: unset;
 }
 
-.columna-alineacion-derecha{
+.columna-alineacion-derecha {
     padding-right: 10px;
 }
 
@@ -138,3 +138,62 @@ cuerpo-datos > tr:after {
     border-radius: 10px
 }
 
+ul, ol {
+    list-style: none;
+}
+
+
+.menu-del-grid {
+}
+
+    .menu-del-grid:hover ul li:hover ul {
+        position: absolute;
+        margin-top: 100px;
+        bottom: 100%;
+    }
+
+    .menu-del-grid a {
+        display: block;
+        text-decoration: none;
+        background: #ffffff;
+    }
+
+
+.menu-del-grid-li {
+    width: 140px;
+    border: none;
+    padding-bottom: 6px;
+    position: relative;
+    float: left;
+}
+
+
+.menu-del-grid-li-li {
+    width: 200px;
+    color: #B0BD97;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    background: #B0BD97;
+    position: relative;
+    float: left;
+}
+
+.menu-del-grid ul li ul, .menu-del-grid:hover ul li ul, .menu-del-grid:hover ul li:hover ul li ul {
+    display: none;
+}
+
+.menu-del-grid:hover ul, .menu-del-grid:hover ul li:hover ul, .menu-del-grid:hover ul li:hover ul li:hover ul {
+    display:block;
+}
+
+    .menu-del-grid:hover ul li:hover ul li:hover ul {
+        position: absolute;
+        margin-left: 100px;
+        margin-top: 4px;
+    }
+
+    .menu-del-grid:hover ul li:hover ul {
+        position: absolute
+    }

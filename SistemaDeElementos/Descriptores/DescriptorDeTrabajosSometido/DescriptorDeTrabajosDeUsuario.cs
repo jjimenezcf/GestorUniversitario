@@ -74,26 +74,25 @@ namespace MVCSistemaDeElementos.Descriptores
                                  , propiedadRestrictora: nameof(ErrorDeUnTrabajoDto.IdTrabajoDeUsuario)
                                  , "Consultar errores del trabajo de usuario");
 
-            var fltGeneral = Mnt.Filtro.ObtenerBloquePorEtiqueta(ltrBloques.General);
-            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
+            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque:Mnt.BloqueComun,
                                 etiqueta: "Planificado",
                                 propiedad: nameof(TrabajoDeUsuarioDto.Planificado),
                                 ayuda: "trabajos planificados entre",
-                                posicion: new Posicion() { fila = 1, columna = 0 });
-            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: fltGeneral,
+                                posicion: new Posicion() { fila = 0, columna = 0 });
+            new FiltroEntreFechas<TrabajoDeUsuarioDto>(bloque: Mnt.BloqueComun,
                                 etiqueta: "Ejecutado entre",
                                 propiedad: nameof(TrabajoDeUsuarioDto.Iniciado),
                                 ayuda: "trabajos ejecutados entre",
-                                posicion: new Posicion() { fila = 2, columna = 0 });
+                                posicion: new Posicion() { fila = 1, columna = 0 });
             
             Dictionary<string, string> opciones = typeof(enumEstadosDeUnTrabajo).ToDiccionario((x) => TrabajoSometido.EnumeradoToDtm(x));
 
-            new ListaDeValores<TrabajoDeUsuarioDto>(fltGeneral
+            new ListaDeValores<TrabajoDeUsuarioDto>(Mnt.BloqueGeneral
                 , "Estado"
                 , "Seleccione el estado por el que filtrar"
                 , opciones
                 , nameof(TrabajoDeUsuarioDto.Estado)
-                , new Posicion() { fila = 3, columna = 0 });
+                , new Posicion() { fila = 0, columna = 1 });
 
             Mnt.OrdenacionInicial = @$"{nameof(TrabajoDeUsuarioDto.Planificado)}:planificado:{enumModoOrdenacion.descendente.Render()};
                                        {nameof(TrabajoDeUsuarioDto.Iniciado)}:iniciado:{enumModoOrdenacion.ascendente.Render()}";

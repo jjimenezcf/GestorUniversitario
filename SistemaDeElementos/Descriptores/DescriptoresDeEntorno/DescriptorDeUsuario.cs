@@ -94,6 +94,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 , propiedadRestrictora: nameof(PuestosDeUnUsuarioDto.IdUsuario)
                 , "Añadir puestos al usuario seleccionado");
 
+            Mnt.OrdenacionInicial = @$"{nameof(UsuarioDto.NombreCompleto)}:nombre:{enumModoOrdenacion.ascendente.Render()}";
         }
 
         public override string RenderControl()
