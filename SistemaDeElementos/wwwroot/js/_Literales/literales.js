@@ -322,6 +322,7 @@ const Evento = {
         AnularSeleccion: "anular-seleccion",
         AnularOrden: "anular-orden",
         AplicarOrdenInicial: "aplicar-orden-inicial",
+        MostrarLasSeleccionadas: "mostrar-solo-seleccionadas",
         Buscar: "buscar",
     },
     ModalSeleccionDeFiltro: {

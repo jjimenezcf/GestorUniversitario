@@ -208,6 +208,55 @@ var Crud;
             mantenimiento.ModoAccesoDelUsuario = modoDeAccesoDelUsuario;
             ModoAcceso.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
+        ObtenerGrid(idModal) {
+            if (IsNullOrEmpty(idModal))
+                return this;
+            let grid = this.ModalDeSeleccionAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+            grid = this.ModalParaSeleccionAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+            grid = this.ModalParaConsultarRelacionesAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+            grid = this.ModalParaRelacionesAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+            MensajesSe.EmitirExcepcion("ObtenerGrid", `Se busca la modal con id ${idModal} y no se ha encontrado`);
+        }
+        ModalParaRelacionesAsociada(idModal) {
+            for (let i = 0; i < this.ModalesParaRelacionar.length; i++) {
+                let modal = this.ModalesParaRelacionar[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            return undefined;
+        }
+        ModalParaConsultarRelacionesAsociada(idModal) {
+            for (let i = 0; i < this.ModalesParaConsultarRelaciones.length; i++) {
+                let modal = this.ModalesParaConsultarRelaciones[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            return undefined;
+        }
+        ModalParaSeleccionAsociada(idModal) {
+            for (let i = 0; i < this.ModalesParaSeleccionar.length; i++) {
+                let modal = this.ModalesParaSeleccionar[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            return undefined;
+        }
+        ModalDeSeleccionAsociada(idModal) {
+            for (let i = 0; i < this.ModalesDeSeleccion.length; i++) {
+                let modal = this.ModalesDeSeleccion[i];
+                if (modal.IdModal === idModal)
+                    return modal;
+            }
+            return undefined;
+        }
         ObtenerModalDeSeleccion(idModal) {
             for (let i = 0; i < this.ModalesDeSeleccion.length; i++) {
                 let modal = this.ModalesDeSeleccion[i];

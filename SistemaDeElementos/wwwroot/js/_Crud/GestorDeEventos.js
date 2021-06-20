@@ -109,12 +109,8 @@ var Crud;
         }
     }
     Crud.EventosDelMantenimiento = EventosDelMantenimiento;
-    function EventosMenuDelGrid(accion, idGrid) {
-        let grid = document.getElementById(idGrid);
-        if (NoDefinida(grid)) {
-            MensajesSe.Error('EventosMenuDelGrid', `El grid ${idGrid} no está definido. Acción: ${accion}`);
-            return;
-        }
+    function EventosMenuDelGrid(accion, idModal) {
+        let grid = Crud.crudMnt.ObtenerGrid(idModal);
         try {
             switch (accion) {
                 case Evento.OpcionesDelGrid.SeleccionarTodo: {
@@ -127,6 +123,10 @@ var Crud;
                     break;
                 }
                 case Evento.OpcionesDelGrid.AplicarOrdenInicial: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.MostrarLasSeleccionadas: {
+                    Crud.crudMnt.MostrarSoloSeleccionadas(grid.InputSeleccionadas, grid.EtiquetasSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
                     break;
                 }
                 case Evento.OpcionesDelGrid.Buscar: {

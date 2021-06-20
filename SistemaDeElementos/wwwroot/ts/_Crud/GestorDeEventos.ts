@@ -109,12 +109,8 @@
         }
     }
 
-    export function EventosMenuDelGrid(accion: string, idGrid: string): void {
-        let grid: HTMLDivElement = document.getElementById(idGrid) as HTMLDivElement;
-        if (NoDefinida(grid)) {
-            MensajesSe.Error('EventosMenuDelGrid', `El grid ${idGrid} no está definido. Acción: ${accion}`);
-            return;
-        }
+    export function EventosMenuDelGrid(accion: string, idModal: string): void {
+        let grid: GridDeDatos = crudMnt.ObtenerGrid(idModal);
 
         try {
             switch (accion) {
@@ -128,6 +124,10 @@
                     break;
                 }
                 case Evento.OpcionesDelGrid.AplicarOrdenInicial: {
+                    break;
+                }
+                case Evento.OpcionesDelGrid.MostrarLasSeleccionadas: {
+                    crudMnt.MostrarSoloSeleccionadas(grid.InputSeleccionadas, grid.EtiquetasSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector)
                     break;
                 }
                 case Evento.OpcionesDelGrid.Buscar: {

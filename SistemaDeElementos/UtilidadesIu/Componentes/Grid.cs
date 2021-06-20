@@ -263,14 +263,14 @@ namespace UtilidadesParaIu
         private static string RenderNavegadorGrid(Grid<TElemento> grid)
         {
             var gestorDeEventos = RenderGestorDeEventos(grid.ZonaDeDatos.Mnt.Crud.Modo);
-            var parametros = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento
+            var idHtmlModal = grid.ZonaDeDatos.Mnt.Crud.Modo == ModoDescriptor.Mantenimiento
                 ? ""
                 : $"{grid.ZonaDeDatos.IdHtmlModal}";
 
-            var accionUltimos = $"Crud.{gestorDeEventos}('obtener-ultimos','{parametros}')";
-            var accionBuscar = $"Crud.{gestorDeEventos}('buscar-elementos','{parametros}')";
-            var accionAnterior = $"Crud.{gestorDeEventos}('obtener-anteriores','{parametros}')";
-            var accionSiguiente = $"Crud.{gestorDeEventos}('obtener-siguientes','{parametros}')";
+            var accionUltimos = $"Crud.{gestorDeEventos}('obtener-ultimos','{idHtmlModal}')";
+            var accionBuscar = $"Crud.{gestorDeEventos}('buscar-elementos','{idHtmlModal}')";
+            var accionAnterior = $"Crud.{gestorDeEventos}('obtener-anteriores','{idHtmlModal}')";
+            var accionSiguiente = $"Crud.{gestorDeEventos}('obtener-siguientes','{idHtmlModal}')";
             var esModal = grid.ZonaDeDatos.Mnt.Crud.EsModal;
 
             var htmlContenedorNavegador = esModal
@@ -307,7 +307,7 @@ namespace UtilidadesParaIu
                  </div>
             </div>
             <div id = ¨div.seleccion.{grid.IdHtml}¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Opcion)}¨>     
-              {RenderOpcionesGrid(grid.IdHtml, gestorDeEventos, parametros)}
+              {RenderOpcionesGrid(idHtmlModal,  grid.IdHtml)}
             </div>
             <div id= ¨{grid.IdHtml}_mensaje¨ class=¨{AplicarCss(esModal, enumCssNavegadorEnModal.Mensaje)}¨>
                Seleccionadas: 0 de {grid.TotalEnBd}
@@ -319,7 +319,7 @@ namespace UtilidadesParaIu
             return htmlContenedorNavegador.Replace("htmlNavegadorGrid", htmlNavegadorGrid);
         }
 
-        private static string RenderOpcionesGrid(string IdHtmlGrid, string gestorDeEventos, string parametros)
+        private static string RenderOpcionesGrid(string IdHtmlModal, string IdHtmlGrid)
         {
             var htmlOpcionesGrid = @$"             
 
@@ -333,13 +333,13 @@ namespace UtilidadesParaIu
                                 <a href='#'>Seleccionar</a>
                                 <ul>
                                     <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
-                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.SeleccionarTodo}', '{IdHtmlGrid}');¨>seleccionar todo</a>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.SeleccionarTodo}', '{IdHtmlModal}');¨>seleccionar todo</a>
                                     </li>
                                     <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
-                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AnularSeleccion}', '{IdHtmlGrid}');¨>anular selección</a>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.AnularSeleccion}', '{IdHtmlModal}');¨>anular selección</a>
                                     </li>
                                     <li class='menu-del-grid-li-li'>
-                                        <a id='div.seleccion.{IdHtmlGrid}.ref' href=¨javascript:Crud.{gestorDeEventos}('{TipoDeAccionDeMnt.MostrarSoloSeleccionadas}', '{parametros}');¨>Seleccionadas</a>
+                                        <a id='div.seleccion.{IdHtmlGrid}.ref' href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.MostrarSoloSeleccionadas}', '{IdHtmlModal}');¨>Seleccionadas</a>
                                         <input id=¨div.seleccion.{IdHtmlGrid}.input¨ type=¨hidden¨ value=¨0¨ > 
                                     </li>
                                 </ul>
@@ -347,10 +347,10 @@ namespace UtilidadesParaIu
                                 <a href='#'>Ordenación</a>
                                 <ul>
                                     <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
-                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AnularOrden}', '{IdHtmlGrid}');¨>anular orden</a>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.AnularOrden}', '{IdHtmlModal}');¨>anular orden</a>
                                     </li>
                                     <li class='menu-del-grid-li-li'>
-                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoDeAccionDeMnt.AplicarOrdenInicial}', '{IdHtmlGrid}');¨>orden inicial</a>
+                                        <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.AplicarOrdenInicial}', '{IdHtmlModal}');¨>orden inicial</a>
                                     </li>
                                 </ul>
                             <li>

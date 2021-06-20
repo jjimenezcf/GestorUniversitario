@@ -249,6 +249,65 @@
             ModoAcceso.AplicarModoDeAccesoAlNegocio(mantenimiento.OpcionesGenerales, modoDeAccesoDelUsuario);
         }
 
+        public ObtenerGrid(idModal: string): GridDeDatos {
+
+            if (IsNullOrEmpty(idModal))
+                return this;
+
+            let grid: GridDeDatos = this.ModalDeSeleccionAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+
+            grid = this.ModalParaSeleccionAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+
+            grid = this.ModalParaConsultarRelacionesAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+
+            grid = this.ModalParaRelacionesAsociada(idModal);
+            if (Definida(grid))
+                return grid;
+
+            MensajesSe.EmitirExcepcion("ObtenerGrid", `Se busca la modal con id ${idModal} y no se ha encontrado`)
+        }
+
+        private ModalParaRelacionesAsociada(idModal: string): GridDeDatos {
+            for (let i: number = 0; i < this.ModalesParaRelacionar.length; i++) {
+                let modal: ModalParaRelacionar = this.ModalesParaRelacionar[i];
+                if (modal.IdModal === idModal)
+                    return modal as GridDeDatos;
+            }
+            return undefined;
+        }
+
+        private ModalParaConsultarRelacionesAsociada(idModal: string): GridDeDatos {
+            for (let i: number = 0; i < this.ModalesParaConsultarRelaciones.length; i++) {
+                let modal: ModalParaConsultarRelaciones = this.ModalesParaConsultarRelaciones[i];
+                if (modal.IdModal === idModal)
+                    return modal as GridDeDatos;
+            }
+            return undefined;
+        }
+
+        private ModalParaSeleccionAsociada(idModal: string): GridDeDatos {
+            for (let i: number = 0; i < this.ModalesParaSeleccionar.length; i++) {
+                let modal: ModalParaSeleccionar = this.ModalesParaSeleccionar[i];
+                if (modal.IdModal === idModal)
+                    return modal as GridDeDatos;
+            }
+            return undefined;
+        }
+
+        private ModalDeSeleccionAsociada(idModal: string): GridDeDatos {
+            for (let i: number = 0; i < this.ModalesDeSeleccion.length; i++) {
+                let modal: ModalSeleccion = this.ModalesDeSeleccion[i];
+                if (modal.IdModal === idModal)
+                    return modal as GridDeDatos;
+            }
+            return undefined;
+        }
 
         public ObtenerModalDeSeleccion(idModal: string): ModalSeleccion {
             for (let i: number = 0; i < this.ModalesDeSeleccion.length; i++) {
@@ -270,7 +329,6 @@
             this.ModalesParaRelacionar.push(modal);
             return modal;
         }
-
 
         public ObtenerModalParaConsultarRelaciones(idModal: string): ModalParaConsultarRelaciones {
             for (let i: number = 0; i < this.ModalesParaConsultarRelaciones.length; i++) {

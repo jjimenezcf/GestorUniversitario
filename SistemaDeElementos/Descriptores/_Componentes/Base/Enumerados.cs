@@ -38,17 +38,23 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string GestionarDependencias = "gestionar-dependencias";
         public const string AbrirModalParaRelacionar = "abrir-modal-para-relacionar";
         public const string AbrirModalParaConsultarRelaciones = "abrir-modal-para-consultar-relaciones";
-        public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
-        public const string SeleccionarTodo = "seleccionar-todo";
-        public const string AnularSeleccion = "anular-seleccion";
-        public const string AnularOrden = "anular-ordenacion";
-        public const string AplicarOrdenInicial = "aplicar-orden-inicial";
         public const string OcultarMostrarFiltro = "ocultar-mostrar-filtro";
         public const string OcultarMostrarBloque = "ocultar-mostrar-bloque";
         public const string FilaPulsada = "fila-pulsada";
         public const string TeclaPulsada = "tecla-pulsada";
         public const string OcultarMostrarColumnas = "ocultar-mostrar-columnas";
     }
+
+    public static class TipoAccionDeGrid
+    {
+        public const string MostrarSoloSeleccionadas = "mostrar-solo-seleccionadas";
+        public const string SeleccionarTodo = "seleccionar-todo";
+        public const string AnularSeleccion = "anular-seleccion";
+        public const string AnularOrden = "anular-ordenacion";
+        public const string AplicarOrdenInicial = "aplicar-orden-inicial";
+
+    }
+
     public static class TipoDeAccionFormulario
     {
         public const string Cerrar = "cerrar";

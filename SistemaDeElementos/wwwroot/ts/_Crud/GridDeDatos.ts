@@ -338,7 +338,7 @@
         public DatosDelGrid: DatosDelGrid = new DatosDelGrid();
 
         private _idGrid: string;
-        protected get IdGrid(): string {
+        public get IdGrid(): string {
             return this._idGrid;
         }
 
