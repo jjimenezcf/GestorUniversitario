@@ -335,7 +335,6 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
     ModalExportacion: {
@@ -358,7 +357,6 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
     ModalParaSeleccionarElementos: {
@@ -369,7 +367,6 @@ const Evento = {
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
         Cerrar: "cerrar-seleccionar",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
     ModalParaConsultaDeRelaciones: {
@@ -380,7 +377,6 @@ const Evento = {
         ObtenerSiguientes: "obtener-siguientes",
         ObtenerUltimos: "obtener-ultimos",
         OrdenarPor: "ordenar-por",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada"
     },
     ModalCreacion: {
@@ -418,7 +414,6 @@ const Evento = {
         CambiarSelector: "cambiar-selector",
         OcultarMostrarFiltro: "ocultar-mostrar-filtro",
         OcultarMostrarBloque: "ocultar-mostrar-bloque",
-        MostrarSoloSeleccionadas: "mostrar-solo-seleccionadas",
         TeclaPulsada: "tecla-pulsada",
         MostrarAuditoria: "mostrar-auditoria",
         OcultarMostrarColumnas: "ocultar-mostrar-columnas"

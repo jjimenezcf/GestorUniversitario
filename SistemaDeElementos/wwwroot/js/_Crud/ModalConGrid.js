@@ -13,6 +13,7 @@ var Crud;
         ;
         CerrarModalConGrid() {
             try {
+                this.ResetearSoloSeleccionadas();
                 let referenciaCheck = `chksel.${this.IdGrid}`;
                 this.blanquearCheck(referenciaCheck);
                 this.InfoSelector.QuitarTodos();

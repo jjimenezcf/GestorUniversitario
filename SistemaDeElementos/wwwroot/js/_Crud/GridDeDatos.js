@@ -1293,6 +1293,13 @@ var Crud;
             }
             this.AplicarQueFilasMostrar(inputDeSeleccionadas, tbodyDelGrid, seleccionadas);
         }
+        ResetearSoloSeleccionadas() {
+            if (Numero(this.InputSeleccionadas.value) === 0)
+                return;
+            this.InputSeleccionadas.value = "0";
+            this.EtiquetasSeleccionadas.innerText = "Seleccionadas";
+            this.AplicarQueFilasMostrar(this.InputSeleccionadas, this.CuerpoTablaGrid, this.InfoSelector);
+        }
         TeclaPulsada(grid, e) {
             if (e.keyCode === 13 && !e.shiftKey) {
                 grid.CargarGrid(atGrid.accion.buscar, 0);

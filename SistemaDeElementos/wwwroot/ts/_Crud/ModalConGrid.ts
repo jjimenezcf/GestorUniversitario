@@ -15,6 +15,7 @@
 
         protected CerrarModalConGrid() {
             try {
+                this.ResetearSoloSeleccionadas();
                 let referenciaCheck: string = `chksel.${this.IdGrid}`;
                 this.blanquearCheck(referenciaCheck);
                 this.InfoSelector.QuitarTodos();

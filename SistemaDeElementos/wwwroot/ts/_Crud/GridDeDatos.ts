@@ -253,7 +253,7 @@
         }
 
         public ObtenerPorPosicion(pos: number): Elemento {
-            if (pos >= this._elementos.length || pos < 0) 
+            if (pos >= this._elementos.length || pos < 0)
                 return null;
 
             return this._elementos[pos];
@@ -648,7 +648,7 @@
                     clausula = this.ObtenerClausulaListaDeValores(control as HTMLSelectElement);
                     break;
                 }
-                    /* de un tipo */
+                /* de un tipo */
                 default: {
                     MensajesSe.Apilar(MensajesSe.enumTipoMensaje.error, `No está implementado como definir la cláusula de filtrado de un tipo ${tipo}`);
                 }
@@ -1604,6 +1604,15 @@
                 etiquetaSeleccionadas.innerText = "Todas las filas";
             }
             this.AplicarQueFilasMostrar(inputDeSeleccionadas, tbodyDelGrid, seleccionadas);
+        }
+
+        protected ResetearSoloSeleccionadas(): void {
+            if (Numero(this.InputSeleccionadas.value) === 0)
+                return;
+
+            this.InputSeleccionadas.value = "0";
+            this.EtiquetasSeleccionadas.innerText = "Seleccionadas";
+            this.AplicarQueFilasMostrar(this.InputSeleccionadas, this.CuerpoTablaGrid, this.InfoSelector);
         }
 
         public TeclaPulsada(grid: GridDeDatos, e): void {

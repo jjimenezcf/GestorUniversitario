@@ -81,10 +81,6 @@ var Crud;
                     Crud.crudMnt.OcultarMostrarBloque(idHtmlBloque);
                     break;
                 }
-                case Evento.Mnt.MostrarSoloSeleccionadas: {
-                    Crud.crudMnt.MostrarSoloSeleccionadas(Crud.crudMnt.InputSeleccionadas, Crud.crudMnt.EtiquetasSeleccionadas, Crud.crudMnt.CuerpoTablaGrid, Crud.crudMnt.InfoSelector);
-                    break;
-                }
                 case Evento.Mnt.TeclaPulsada: {
                     Crud.crudMnt.TeclaPulsada(Crud.crudMnt, event);
                     break;
@@ -191,13 +187,6 @@ var Crud;
                     modal.OrdenarPor(columna);
                     break;
                 }
-                case Evento.ModalSeleccionDeFiltro.MostrarSoloSeleccionadas: {
-                    var input = modal.InputSeleccionadas;
-                    var etiqueta = modal.EtiquetasSeleccionadas;
-                    var tbodyDelGrid = modal.CuerpoTablaGrid;
-                    Crud.crudMnt.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
-                    break;
-                }
                 case Evento.ModalSeleccionDeFiltro.TeclaPulsada: {
                     modal.TeclaPulsada(modal, event);
                     break;
@@ -257,13 +246,6 @@ var Crud;
                     modal.FilaPulsada(idCheck, idOrigen);
                     break;
                 }
-                case Evento.ModalParaRelacionar.MostrarSoloSeleccionadas: {
-                    var input = modal.InputSeleccionadas;
-                    var etiqueta = modal.EtiquetasSeleccionadas;
-                    var tbodyDelGrid = modal.CuerpoTablaGrid;
-                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
-                    break;
-                }
                 case Evento.ModalParaRelacionar.TeclaPulsada: {
                     modal.TeclaPulsada(modal, event);
                     break;
@@ -319,13 +301,6 @@ var Crud;
                     modal.CerrarModalParaSeleccionar();
                     break;
                 }
-                case Evento.ModalParaSeleccionarElementos.MostrarSoloSeleccionadas: {
-                    var input = modal.InputSeleccionadas;
-                    var etiqueta = modal.EtiquetasSeleccionadas;
-                    var tbodyDelGrid = modal.CuerpoTablaGrid;
-                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
-                    break;
-                }
                 case Evento.ModalParaSeleccionarElementos.TeclaPulsada: {
                     modal.TeclaPulsada(modal, event);
                     break;
@@ -379,13 +354,6 @@ var Crud;
                     let idCheck = parIn[1];
                     let idOrigen = parIn[2]; // si se ha pulsado en el check o en la fila
                     modal.FilaPulsada(idCheck, idOrigen);
-                    break;
-                }
-                case Evento.ModalParaConsultaDeRelaciones.MostrarSoloSeleccionadas: {
-                    var input = modal.InputSeleccionadas;
-                    var etiqueta = modal.EtiquetasSeleccionadas;
-                    var tbodyDelGrid = modal.CuerpoTablaGrid;
-                    modal.MostrarSoloSeleccionadas(input, etiqueta, tbodyDelGrid, modal.InfoSelector);
                     break;
                 }
                 case Evento.ModalParaConsultaDeRelaciones.TeclaPulsada: {
