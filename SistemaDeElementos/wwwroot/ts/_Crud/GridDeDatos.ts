@@ -1128,6 +1128,13 @@
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
 
+        public RecargarGrid(): Promise<boolean> {
+            this.DatosDelGrid.InicializarCache();
+            this.Navegador.Pagina = 1;
+            this.Navegador.Posicion = 0;
+            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
+        }
+
         protected CargarGrid(accion: string, posicion: number) {
 
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')

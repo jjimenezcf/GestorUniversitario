@@ -28,10 +28,6 @@ var Crud;
                 check.checked = false;
             });
         }
-        RecargarGrid() {
-            this.DatosDelGrid.InicializarCache();
-            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
-        }
     }
     Crud.ModalConGrid = ModalConGrid;
 })(Crud || (Crud = {}));

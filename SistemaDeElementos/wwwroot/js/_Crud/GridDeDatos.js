@@ -929,6 +929,12 @@ var Crud;
             else
                 this.CargarGrid(atGrid.accion.siguiente, posicion);
         }
+        RecargarGrid() {
+            this.DatosDelGrid.InicializarCache();
+            this.Navegador.Pagina = 1;
+            this.Navegador.Posicion = 0;
+            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
+        }
         CargarGrid(accion, posicion) {
             if (this.Grid.getAttribute(atGrid.cargando) == 'S')
                 return;

@@ -328,7 +328,8 @@ namespace UtilidadesParaIu
                     <li class='menu-del-grid-li'>
                         <center><a href='#'>Opciones</a></center>
                         <ul>
-                            <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'><a href='#'>Buscar</a></li>
+                            <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
+                                <a href=¨javascript:Crud.{GestorDeEventos.EventosMenuDelGrid}('{TipoAccionDeGrid.RecargarGrid}', '{IdHtmlModal}');¨>Buscar</a></li>
                             <li class='menu-del-grid-li-li' style='padding-bottom: 0px;'>
                                 <a href='#'>Seleccionar</a>
                                 <ul>

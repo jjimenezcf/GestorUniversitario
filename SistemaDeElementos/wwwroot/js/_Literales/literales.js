@@ -323,7 +323,7 @@ const Evento = {
         AnularOrden: "anular-orden",
         AplicarOrdenInicial: "aplicar-orden-inicial",
         MostrarLasSeleccionadas: "mostrar-solo-seleccionadas",
-        Buscar: "buscar",
+        RecargarGrid: "recargar-grid",
     },
     ModalSeleccionDeFiltro: {
         Abrir: "abrir-modal-seleccion",

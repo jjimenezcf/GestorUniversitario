@@ -125,7 +125,8 @@ var Crud;
                     Crud.crudMnt.MostrarSoloSeleccionadas(grid.InputSeleccionadas, grid.EtiquetasSeleccionadas, grid.CuerpoTablaGrid, grid.InfoSelector);
                     break;
                 }
-                case Evento.OpcionesDelGrid.Buscar: {
+                case Evento.OpcionesDelGrid.RecargarGrid: {
+                    grid.RecargarGrid();
                     break;
                 }
                 default: {
@@ -167,7 +168,8 @@ var Crud;
                     break;
                 }
                 case Evento.ModalSeleccionDeFiltro.Buscar: {
-                    modal.RecargarGrid();
+                    EventosMenuDelGrid(Evento.OpcionesDelGrid.RecargarGrid, parIn[0]);
+                    //modal.RecargarGrid();
                     break;
                 }
                 case Evento.ModalSeleccionDeFiltro.ObtenerSiguientes: {
@@ -220,7 +222,8 @@ var Crud;
                     break;
                 }
                 case Evento.ModalParaRelacionar.Buscar: {
-                    modal.RecargarGrid();
+                    EventosMenuDelGrid(Evento.OpcionesDelGrid.RecargarGrid, parIn[0]);
+                    //modal.RecargarGrid();
                     break;
                 }
                 case Evento.ModalParaRelacionar.ObtenerSiguientes: {
@@ -277,7 +280,8 @@ var Crud;
                     break;
                 }
                 case Evento.ModalParaSeleccionarElementos.Buscar: {
-                    modal.RecargarGrid();
+                    EventosMenuDelGrid(Evento.OpcionesDelGrid.RecargarGrid, parIn[0]);
+                    //modal.RecargarGrid();
                     break;
                 }
                 case Evento.ModalParaSeleccionarElementos.ObtenerSiguientes: {
@@ -330,7 +334,8 @@ var Crud;
                     break;
                 }
                 case Evento.ModalParaConsultaDeRelaciones.Buscar: {
-                    modal.RecargarGrid();
+                    EventosMenuDelGrid(Evento.OpcionesDelGrid.RecargarGrid, parIn[0]);
+                    //modal.RecargarGrid();
                     break;
                 }
                 case Evento.ModalParaConsultaDeRelaciones.ObtenerSiguientes: {

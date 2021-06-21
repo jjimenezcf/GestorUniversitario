@@ -52,6 +52,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public const string AnularSeleccion = "anular-seleccion";
         public const string AnularOrden = "anular-ordenacion";
         public const string AplicarOrdenInicial = "aplicar-orden-inicial";
+        public const string RecargarGrid = "recargar-grid";
 
     }
 

@@ -33,10 +33,10 @@
             );
         }
 
-        public RecargarGrid(): Promise<boolean> {
-            this.DatosDelGrid.InicializarCache();
-            return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
-        }
+        //public RecargarGrid(): Promise<boolean> {
+        //    this.DatosDelGrid.InicializarCache();
+        //    return this.PromesaDeCargarGrid(atGrid.accion.buscar, 0);
+        //}
 
     }
 }
