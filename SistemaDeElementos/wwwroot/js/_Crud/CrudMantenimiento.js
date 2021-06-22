@@ -87,28 +87,6 @@ var Crud;
             this.FiltrarPorId(id)
                 .then(() => this.IraEditar());
         }
-        InicializarOrdenacion() {
-            let ordenacionInicial = this.CuerpoCabecera.getAttribute(atControl.ordenInicial);
-            let lista = ToLista(ordenacionInicial, ";");
-            let columnas = this.CabeceraTablaGrid.querySelectorAll("th");
-            for (let i = 0; i < columnas.length; i++) {
-                let columna = columnas[i];
-                let propiedad = columna.getAttribute(atControl.propiedad);
-                for (let j = 0; j < lista.length; j++) {
-                    if (IsNullOrEmpty(lista[j]))
-                        continue;
-                    let partes = lista[j].split(":");
-                    if (partes.length !== 3) {
-                        MensajesSe.Error("InicializarOrdenacion", `La tripleta de ordenación ${lista[j]} está mal definida, ha de tener ternas separadas por ; con el patron siguiente: (Propiedad:OrdenarPor:Modo)`);
-                        return;
-                    }
-                    if (partes[0] === propiedad) {
-                        if (this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim()))
-                            ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
-                    }
-                }
-            }
-        }
         TrasRestaurar(valor) {
             if (valor && this.Estado.Obtener("EditarAlVolver")) {
                 this.Estado.Quitar("EditarAlVolver");

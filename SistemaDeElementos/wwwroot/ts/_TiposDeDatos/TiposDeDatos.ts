@@ -4,12 +4,15 @@
     export class Orden {
         public IdColumna: string;
         public Propiedad: string;
-        public Modo: string;
+        private _modo: string;
         private _ordenarPor: string;
-        private _cssClase: string;
 
         get ccsClase(): string {
-            return this._cssClase;
+            if (this._modo === ModoOrdenacion.ascedente)
+                return ClaseCss.ordenAscendente;
+            if (this._modo === ModoOrdenacion.descendente)
+                return ClaseCss.ordenDescendente;
+            return ClaseCss.sinOrden;
         }
 
         get OrdenarPor(): string {
@@ -18,20 +21,18 @@
             return this._ordenarPor;
         }
 
-        set ccsClase(modo: string) {
-            if (modo === ModoOrdenacion.ascedente)
-                this._cssClase = ClaseCss.ordenAscendente;
-            else if (modo === ModoOrdenacion.descendente)
-                this._cssClase = ClaseCss.ordenDescendente;
-            else if (modo === ModoOrdenacion.sinOrden)
-                this._cssClase = ClaseCss.sinOrden;
+        get Modo(): string {
+            return this._modo;
+        }
+
+        set Modo(modo: string) {
+            this._modo = modo;
         }
 
         constructor(idcolumna: string, propiedad: string, modo: string, ordenarPor: string) {
             this.Modo = modo;
             this.Propiedad = propiedad;
             this.IdColumna = idcolumna;
-            this.ccsClase = modo;
             this._ordenarPor = ordenarPor;
         }
     }
@@ -52,12 +53,18 @@
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad === propiedad) {
                     this.lista[i].Modo = modo;
-                    this.lista[i].ccsClase = modo;
+                    //if (modo = ModoOrdenacion.ascedente)
+                    //    this.lista[i].ccsClase = ClaseCss.ordenAscendente;
+                    //else
+                    //    if (modo = ModoOrdenacion.descendente)
+                    //        this.lista[i].ccsClase = ClaseCss.ordenDescendente;
+                    //    else
+                    //        this.lista[i].ccsClase = ClaseCss.sinOrden;
                     return ApiControl.AjustarColumnaDelGrid(this.lista[i]);
                 }
             }
             let orden: Tipos.Orden = new Tipos.Orden(idcolumna, propiedad, modo, ordenarPor);
-            
+
             if (ApiControl.AjustarColumnaDelGrid(orden)) {
                 this.lista.push(orden);
                 return true;
@@ -68,13 +75,22 @@
         private Quitar(propiedad: string): boolean {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad == propiedad) {
-                    this.lista[i].Modo = ModoOrdenacion.sinOrden;
-                    this.lista[i].ccsClase = ModoOrdenacion.sinOrden;
                     let orden: Tipos.Orden = this.lista[i] as Tipos.Orden;
+                    orden.Modo = ModoOrdenacion.sinOrden;
                     this.lista.splice(i, 1);
                     return ApiControl.AjustarColumnaDelGrid(orden);
                 }
             }
+        }
+
+        public AnularOrdenacion(): void {
+            for (let i = this.lista.length-1; i>= 0  ; i--) {
+                let orden: Tipos.Orden = this.lista[i] as Tipos.Orden;
+                orden.Modo = ModoOrdenacion.sinOrden;
+                ApiControl.AjustarColumnaDelGrid(orden);
+                this.lista.splice(i, 1);
+            }
+
         }
 
         public Actualizar(idcolumna: string, propiedad: string, modo: string, ordenarPor: string): boolean {
@@ -216,7 +232,7 @@
         public FiltroRestrictor: Array<Tipos.DatosRestrictor>;
 
         constructor() {
-            this.FiltroRestrictor = new Array <Tipos.DatosRestrictor>();
+            this.FiltroRestrictor = new Array<Tipos.DatosRestrictor>();
         }
     }
 

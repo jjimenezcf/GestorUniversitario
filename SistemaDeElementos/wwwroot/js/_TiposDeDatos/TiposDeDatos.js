@@ -5,24 +5,25 @@ var Tipos;
             this.Modo = modo;
             this.Propiedad = propiedad;
             this.IdColumna = idcolumna;
-            this.ccsClase = modo;
             this._ordenarPor = ordenarPor;
         }
         get ccsClase() {
-            return this._cssClase;
+            if (this._modo === ModoOrdenacion.ascedente)
+                return ClaseCss.ordenAscendente;
+            if (this._modo === ModoOrdenacion.descendente)
+                return ClaseCss.ordenDescendente;
+            return ClaseCss.sinOrden;
         }
         get OrdenarPor() {
             if (IsNullOrEmpty(this._ordenarPor))
                 return this.Propiedad;
             return this._ordenarPor;
         }
-        set ccsClase(modo) {
-            if (modo === ModoOrdenacion.ascedente)
-                this._cssClase = ClaseCss.ordenAscendente;
-            else if (modo === ModoOrdenacion.descendente)
-                this._cssClase = ClaseCss.ordenDescendente;
-            else if (modo === ModoOrdenacion.sinOrden)
-                this._cssClase = ClaseCss.sinOrden;
+        get Modo() {
+            return this._modo;
+        }
+        set Modo(modo) {
+            this._modo = modo;
         }
     }
     Tipos.Orden = Orden;
@@ -37,7 +38,13 @@ var Tipos;
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad === propiedad) {
                     this.lista[i].Modo = modo;
-                    this.lista[i].ccsClase = modo;
+                    //if (modo = ModoOrdenacion.ascedente)
+                    //    this.lista[i].ccsClase = ClaseCss.ordenAscendente;
+                    //else
+                    //    if (modo = ModoOrdenacion.descendente)
+                    //        this.lista[i].ccsClase = ClaseCss.ordenDescendente;
+                    //    else
+                    //        this.lista[i].ccsClase = ClaseCss.sinOrden;
                     return ApiControl.AjustarColumnaDelGrid(this.lista[i]);
                 }
             }
@@ -51,12 +58,19 @@ var Tipos;
         Quitar(propiedad) {
             for (let i = 0; i < this.lista.length; i++) {
                 if (this.lista[i].Propiedad == propiedad) {
-                    this.lista[i].Modo = ModoOrdenacion.sinOrden;
-                    this.lista[i].ccsClase = ModoOrdenacion.sinOrden;
                     let orden = this.lista[i];
+                    orden.Modo = ModoOrdenacion.sinOrden;
                     this.lista.splice(i, 1);
                     return ApiControl.AjustarColumnaDelGrid(orden);
                 }
+            }
+        }
+        AnularOrdenacion() {
+            for (let i = this.lista.length - 1; i >= 0; i--) {
+                let orden = this.lista[i];
+                orden.Modo = ModoOrdenacion.sinOrden;
+                ApiControl.AjustarColumnaDelGrid(orden);
+                this.lista.splice(i, 1);
             }
         }
         Actualizar(idcolumna, propiedad, modo, ordenarPor) {

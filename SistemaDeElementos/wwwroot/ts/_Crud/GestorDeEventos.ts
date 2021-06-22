@@ -114,12 +114,14 @@
                     break;
                 }
                 case Evento.OpcionesDelGrid.AnularOrden: {
+                    grid.AnularOrdenacion();
                     break;
                 }
                 case Evento.OpcionesDelGrid.AnularSeleccion: {
                     break;
                 }
                 case Evento.OpcionesDelGrid.AplicarOrdenInicial: {
+                    grid.InicializarOrdenacion()
                     break;
                 }
                 case Evento.OpcionesDelGrid.MostrarLasSeleccionadas: {

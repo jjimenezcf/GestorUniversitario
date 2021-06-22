@@ -494,6 +494,39 @@
             }
         }
 
+        public AnularOrdenacion() {
+            this.Ordenacion.AnularOrdenacion();
+            this.RecargarGrid();
+        }
+
+        public InicializarOrdenacion() {
+            this.Ordenacion.AnularOrdenacion();
+            let ordenacionInicial = this.CuerpoCabecera.getAttribute(atControl.ordenInicial);
+            let lista = ToLista(ordenacionInicial, ";");
+            let columnas: NodeListOf<HTMLTableHeaderCellElement> = this.CabeceraTablaGrid.querySelectorAll("th") as NodeListOf<HTMLTableHeaderCellElement>;
+            for (let i: number = 0; i < columnas.length; i++) {
+                let columna = columnas[i];
+                let propiedad: string = columna.getAttribute(atControl.propiedad);
+                for (let j: number = 0; j < lista.length; j++) {
+                    if (IsNullOrEmpty(lista[j]))
+                        continue;
+
+                    let partes = lista[j].split(":");
+
+                    if (partes.length !== 3) {
+                        MensajesSe.Error("InicializarOrdenacion", `La tripleta de ordenación ${lista[j]} está mal definida, ha de tener ternas separadas por ; con el patron siguiente: (Propiedad:OrdenarPor:Modo)`);
+                        return;
+                    }
+
+                    if (partes[0] === propiedad) {
+                        if (this.Ordenacion.Actualizar(columna.id, propiedad, partes[2].trim(), partes[1].trim()))
+                            ApiControl.MapearComoOrdenar(columna, this.Ordenacion.LeerPorPropiedad(propiedad));
+                    }
+                }
+            }
+            this.RecargarGrid();
+        }
+
         protected PosicionarGrid(): void {
             this.Grid.style.position = 'fixed';
             let posicionGrid: number = this.PosicionGrid();

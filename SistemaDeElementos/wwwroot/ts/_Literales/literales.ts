@@ -352,7 +352,7 @@ const Evento = {
     OpcionesDelGrid: {
         SeleccionarTodo: "seleccionar-todo",
         AnularSeleccion: "anular-seleccion",
-        AnularOrden: "anular-orden",
+        AnularOrden: "anular-ordenacion",
         AplicarOrdenInicial: "aplicar-orden-inicial",
         MostrarLasSeleccionadas: "mostrar-solo-seleccionadas",
         RecargarGrid: "recargar-grid",
