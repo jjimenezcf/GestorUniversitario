@@ -24,7 +24,7 @@ namespace GestoresDeNegocio.Callejero
             public MapearPermisosDeUnRol()
             {
                 CreateMap<CpsDeUnMunicipioDtm, CpsDeUnMunicipioDto>()
-                    .ForMember(dto => dto.CodigoPostal, dtm => dtm.MapFrom(dtm => dtm.CodigoPostal.cp))
+                    .ForMember(dto => dto.CodigoPostal, dtm => dtm.MapFrom(dtm => dtm.CodigoPostal.Codigo))
                     .ForMember(dto => dto.Municipio, dtm => dtm.MapFrom(dtm => $"({dtm.Municipio.Codigo}) {dtm.Municipio.Nombre}"));
 
                 CreateMap<CpsDeUnMunicipioDto, CpsDeUnMunicipioDtm>()

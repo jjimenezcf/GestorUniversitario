@@ -14,7 +14,7 @@ namespace ModeloDeDto.Callejero
             Ordenar = true,
             Obligatorio = true,
             LongitudMaxima = 5,
-            Alineada = Aliniacion.derecha
+            Alineada = Aliniacion.izquierda
           )
         ]
         public string Codigo { get; set; }

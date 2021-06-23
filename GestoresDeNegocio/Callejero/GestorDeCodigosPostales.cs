@@ -62,7 +62,7 @@ namespace GestoresDeNegocio.Callejero
         internal static CodigoPostalDtm LeerTipoDeViaPorCp(ContextoSe contexto, string cp, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
+            return gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
         }
 
 
@@ -114,11 +114,11 @@ namespace GestoresDeNegocio.Callejero
         private static CodigoPostalDtm ProcesarCodigosPostales(EntornoDeTrabajo entorno, GestorDeCodigosPostales gestor, string provincia, string municipio, string cp, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var codigoPostalDtm = gestor.LeerRegistro(nameof(CodigoPostalDtm.cp), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+            var codigoPostalDtm = gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
             if (codigoPostalDtm == null)
             {
                 codigoPostalDtm = new CodigoPostalDtm();
-                codigoPostalDtm.cp = cp;
+                codigoPostalDtm.Codigo = cp;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
                 entorno.ActualizarTraza(trazaInfDtm, $"Creando el codigo postal {cp}");
             }
@@ -162,7 +162,7 @@ namespace GestoresDeNegocio.Callejero
             {
                 //relacionar con la provincia usando los dos primeros caractéres
                 var gestorProvincias = GestorDeProvincias.Gestor(Contexto, Contexto.Mapeador);
-                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.cp.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.Codigo.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
                 GestorDeCpsDeUnaProvincia.CrearRelacion(Contexto, registro, provinciaDtm);
 
                 //relacionar con el municipio usando lo indicado en los parámetros

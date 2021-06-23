@@ -7,18 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\SisDoc\**" />
     <Compile Remove="Descriptores\_Componentes\NewFolder\**" />
     <Compile Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
     <Compile Remove="Descriptores\_Componentes\Plantillas\**" />
+    <Content Remove="Controllers\SisDoc\**" />
     <Content Remove="Descriptores\_Componentes\NewFolder\**" />
     <Content Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
     <Content Remove="Descriptores\_Componentes\Plantillas\**" />
+    <EmbeddedResource Remove="Controllers\SisDoc\**" />
     <EmbeddedResource Remove="Descriptores\_Componentes\NewFolder\**" />
     <EmbeddedResource Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
     <EmbeddedResource Remove="Descriptores\_Componentes\Plantillas\**" />
+    <None Remove="Controllers\SisDoc\**" />
     <None Remove="Descriptores\_Componentes\NewFolder\**" />
     <None Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
     <None Remove="Descriptores\_Componentes\Plantillas\**" />
+    <TypeScriptCompile Remove="Controllers\SisDoc\**" />
     <TypeScriptCompile Remove="Descriptores\_Componentes\NewFolder\**" />
     <TypeScriptCompile Remove="Descriptores\_Componentes\Plantillas - Copia\**" />
     <TypeScriptCompile Remove="Descriptores\_Componentes\Plantillas\**" />
@@ -124,10 +129,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\SisDoc\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <TypeScriptCompile Update="wwwroot\ts\Callejero\CodigosPostales.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Callejero\ImportarCallejero.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -215,7 +219,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\Users\jjime\Documents\Programas\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\Users\jjimenezc\desarrollo\SistemaDeElementos\SistemaDeElementos\wwwroot\js</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
