@@ -1197,7 +1197,7 @@ var Crud;
             celdaDelTd.setAttribute(atControl.eventoJs.onclick, eventoOnClick);
             input.readOnly = true;
             input.hidden = celdaDelTd.hidden;
-            input.value = valor;
+            input.value = IsNumber(valor) ? valor : valor.replace(/\r?\n|\r/g, " | ");
             celdaDelTd.append(input);
         }
         insertarCheckEnElTd(idFila, celdaDelTd, propiedad) {

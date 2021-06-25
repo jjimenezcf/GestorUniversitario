@@ -27,6 +27,7 @@ namespace ModeloDeDto.Callejero
         //----------------------------------------------------------------
 
         [IUPropiedad(Etiqueta = "Municipios"
+            , TipoDeControl = enumTipoControl.AreaDeTexto
             , EditableAlCrear = false
             , EditableAlEditar = false)]
         public string Municipios { get; set; }
