@@ -38,7 +38,9 @@ namespace GestoresDeNegocio.Callejero
             public MapearVariables()
             {
                 CreateMap<CodigoPostalDtm, CodigoPostalDto>();
-                CreateMap<CodigoPostalDto, CodigoPostalDtm>();
+                CreateMap<CodigoPostalDto, CodigoPostalDtm>()
+                    .ForMember(dtm => dtm.Provincia, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.Municipios, dto => dto.Ignore());
             }
         }
 
@@ -180,16 +182,6 @@ namespace GestoresDeNegocio.Callejero
                 //eliminar relación con el municipio
             }
 
-        }
-
-        protected override IQueryable<CodigoPostalDtm> AplicarJoins(IQueryable<CodigoPostalDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
-        {
-            registros = base.AplicarJoins(registros, filtros, joins, parametros);
-            
-            if (parametros.AplicarJoin)
-                registros = registros.Include(x => x.cpsProvincias);
-            
-            return registros;
         }
 
     }

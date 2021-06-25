@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioDeDatos;
 
-namespace Migraciones.Migrations
+namespace GestorDeEntorno.Migrations
 {
     [DbContext(typeof(ContextoSe))]
-    partial class ContextoUniversitarioModelSnapshot : ModelSnapshot
+    [Migration("20210625194237_columnas calculadas de provincias")]
+    partial class columnascalculadasdeprovincias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,12 +204,6 @@ namespace Migraciones.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(5)")
                         .HasColumnName("CP");
-
-                    b.Property<string>("Municipios")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("VARCHAR(250)")
-                        .HasColumnName("MUNICIPIOS")
-                        .HasComputedColumnSql("CALLEJERO.OBTENER_MUNICIPIOS(CP)");
 
                     b.Property<string>("Provincia")
                         .ValueGeneratedOnAddOrUpdate()

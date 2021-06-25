@@ -18,6 +18,8 @@ namespace ModeloDeDto.Entorno
         ]
         public int? idPadre { get; set; }
 
+        //----------------------------------------------------------------
+
         [IUPropiedad(
             Etiqueta = "Padre",
             Ayuda = "Indique el menú padre",
@@ -33,6 +35,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public  string Padre { get; set; }
+        //----------------------------------------------------------------
 
         [IUPropiedad(
             Etiqueta = "Menu",
@@ -45,7 +48,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public string Nombre { get; set; }
-
+        //----------------------------------------------------------------
 
         [IUPropiedad(
             Etiqueta = "Icono",
@@ -60,6 +63,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public string Icono { get; set; }
+        //----------------------------------------------------------------
 
         [IUPropiedad(
             Etiqueta = "Descripción",
@@ -71,6 +75,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public string Descripcion { get; set; }
+        //----------------------------------------------------------------
 
         [IUPropiedad(
             Visible = false
@@ -94,8 +99,8 @@ namespace ModeloDeDto.Entorno
         [IUPropiedad(Etiqueta = "Id de la vista",
             Visible = false)]
         public int? idVistaMvc { get; set; }
-
         //--------------------------------------------
+
         [IUPropiedad(
             Etiqueta = "Orden",
             Ayuda = "orden del menú",
@@ -107,6 +112,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public string Orden { get; set; }
+        //----------------------------------------------------------------
 
 
         [IUPropiedad(
@@ -122,6 +128,7 @@ namespace ModeloDeDto.Entorno
             )
         ]
         public bool Activo { get; set; }
+        //----------------------------------------------------------------
 
         //[IUPropiedad(
         //    Etiqueta = "Permiso",

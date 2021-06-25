@@ -18,5 +18,17 @@ namespace ModeloDeDto.Callejero
           )
         ]
         public string Codigo { get; set; }
+        //----------------------------------------------------------------
+
+        [IUPropiedad(Etiqueta ="Provincia"
+            , EditableAlCrear = false
+            , EditableAlEditar =false)]
+        public string Provincia { get; set; }
+        //----------------------------------------------------------------
+
+        [IUPropiedad(Etiqueta = "Municipios"
+            , EditableAlCrear = false
+            , EditableAlEditar = false)]
+        public string Municipios { get; set; }
     }
 }

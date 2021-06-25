@@ -10,8 +10,8 @@ namespace ServicioDeDatos.Callejero
     {
         public string Codigo { get; set; }
 
-        [Ignore]
-        public CpsDeUnaProvinciaDtm cpsProvincias { get; set; }
+        public string Provincia { get; }
+        public string Municipios { get; }
     }
 
     public static partial class ModeloDeCallejero
@@ -24,6 +24,9 @@ namespace ServicioDeDatos.Callejero
                 .IsRequired(true);
 
             modelBuilder.Entity<CodigoPostalDtm>().HasAlternateKey(p => p.Codigo).HasName("AK_CODIGO_POSTAL_CP");
+
+            modelBuilder.Entity<CodigoPostalDtm>().Property(v => v.Provincia).HasColumnName("PROVINCIA").HasColumnType("VARCHAR(250)").HasComputedColumnSql("CALLEJERO.OBTENER_PROVINCIA(CP)");
+            modelBuilder.Entity<CodigoPostalDtm>().Property(v => v.Municipios).HasColumnName("MUNICIPIOS").HasColumnType("VARCHAR(250)").HasComputedColumnSql("CALLEJERO.OBTENER_MUNICIPIOS(CP)");
         }
     }
 
