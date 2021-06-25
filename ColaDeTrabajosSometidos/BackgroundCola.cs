@@ -27,7 +27,7 @@ namespace ColaDeTrabajosSometidos
             var scope = _servicios.CreateScope();
             using (var gestor = scope.ServiceProvider.GetRequiredService<GestorDeUsuarios>())
             {
-                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), CacheDeVariable.Cola_LoginDeEjecutor);
+                Usuario = gestor.LeerRegistroCacheado(nameof(UsuarioDtm.Login), CacheDeVariable.Cola_LoginDeEjecutor, true, true, false);
             }
         }
 

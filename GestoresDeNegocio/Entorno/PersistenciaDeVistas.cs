@@ -59,7 +59,7 @@ namespace GestoresDeNegocio.Entorno
 
         private static VistaMvcDtm CrearVistaSiNoExiste(GestorDeVistaMvc gestor, string nombre, string controlador, string accion, bool modal, string elementoDto)
         {
-            var v = gestor.LeerRegistroCacheado(nameof(VistaMvcDtm.Nombre), nombre, false, true);
+            var v = gestor.LeerRegistroCacheado(nameof(VistaMvcDtm.Nombre), nombre, false, true, false);
             if (v == null)
                 v = gestor.CrearVistaMvc(nombre, controlador, accion, modal, elementoDto);
             return v;

@@ -63,10 +63,11 @@ namespace GestoresDeNegocio.Callejero
             return MapearElementos(registros).ToList();
         }
 
-        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string iso2Pais, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        internal static PaisDtm LeerPaisPorCodigo(ContextoSe contexto, string iso2Pais, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(PaisDtm.ISO2), iso2Pais, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
+            var filtros = new List<ClausulaDeFiltrado> { new ClausulaDeFiltrado(nameof(PaisDtm.ISO2), ModeloDeDto.CriteriosDeFiltrado.igual, iso2Pais) };
+            return gestor.LeerRegistroCacheado(filtros, apliacarJoin: false, errorSiNoHay, errorSiMasDeUno);
         }
 
         public static void SometerImportarCallejero(ContextoSe contexto, string parametros)
@@ -168,37 +169,37 @@ namespace GestoresDeNegocio.Callejero
         private static PaisDtm ProcesarPaisLeido(EntornoDeTrabajo entorno, GestorDePaises gestor, string nombrePais, string nombreEnIngles, string Iso2, string codigoPais, string prefijoTelefono, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, false, false);
-            if (p == null)
+            var pais = gestor.LeerRegistro(nameof(PaisDtm.Codigo), codigoPais, false, true, false, false, false);
+            if (pais == null)
             {
-                p = new PaisDtm();
-                p.Codigo = codigoPais;
-                p.Nombre = nombrePais;
-                p.NombreIngles = nombreEnIngles;
-                p.ISO2 = Iso2;
-                p.Prefijo = prefijoTelefono;
+                pais = new PaisDtm();
+                pais.Codigo = codigoPais;
+                pais.Nombre = nombrePais;
+                pais.NombreIngles = nombreEnIngles;
+                pais.ISO2 = Iso2;
+                pais.Prefijo = prefijoTelefono;
                 operacion = new ParametrosDeNegocio(enumTipoOperacion.Insertar);
                 entorno.ActualizarTraza(trazaInfDtm, $"Creando el pais {nombrePais}");
             }
             else
             {
-                if (p.Nombre != nombrePais || p.ISO2 != Iso2 || p.NombreIngles != nombreEnIngles || p.Prefijo != prefijoTelefono)
+                if (pais.Nombre != nombrePais || pais.ISO2 != Iso2 || pais.NombreIngles != nombreEnIngles || pais.Prefijo != prefijoTelefono)
                 {
-                    p.Nombre = nombrePais;
-                    p.NombreIngles = nombreEnIngles;
-                    p.ISO2 = Iso2;
-                    p.Prefijo = prefijoTelefono;
+                    pais.Nombre = nombrePais;
+                    pais.NombreIngles = nombreEnIngles;
+                    pais.ISO2 = Iso2;
+                    pais.Prefijo = prefijoTelefono;
                     operacion = new ParametrosDeNegocio(enumTipoOperacion.Modificar);
                     entorno.ActualizarTraza(trazaInfDtm, $"Modificando el pais {nombrePais}");
                 }
                 else
                 {
                     entorno.ActualizarTraza(trazaInfDtm, $"El pais {nombrePais} ya existe");
-                    return p;
+                    return pais;
                 }
             }
 
-            return gestor.PersistirRegistro(p, operacion);
+            return gestor.PersistirRegistro(pais, operacion);
         }
 
     }

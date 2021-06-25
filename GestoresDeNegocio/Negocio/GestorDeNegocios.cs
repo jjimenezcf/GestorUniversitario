@@ -71,7 +71,7 @@ namespace GestoresDeNegocio.Negocio
         public static NegocioDtm LeerNegocio(ContextoSe contexto, int idNegocio)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistroPorId(idNegocio, true, false, false);
+            return gestor.LeerRegistroPorId(idNegocio, true, false, false, aplicarJoin: false);
         }
 
         internal static string ComponerUrl(TipoDtoElmento elemento)
@@ -83,13 +83,13 @@ namespace GestoresDeNegocio.Negocio
 
         public NegocioDtm LeerNegocio(enumNegocio negocio, bool errorSiNoHay = true)
         {
-            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, false, false);
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, false, false, aplicarJoin: false);
             return negocioDtm;
         }
 
         public NegocioDtm LeerNegocioParaModificar(enumNegocio negocio, bool errorSiNoHay = true)
         {
-            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, true, false);
+            var negocioDtm = LeerRegistro(nameof(NegocioDtm.Enumerado), negocio.ToString(), errorSiNoHay, true, true, false, aplicarJoin: false);
             return negocioDtm;
         }
 
@@ -101,7 +101,7 @@ namespace GestoresDeNegocio.Negocio
             if (!NegociosDeSe.UsaSeguridad(negocio))
                 return true;
 
-            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre(), false, true);
+            var registro = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre(), false, true, false);
             if (registro == null)
                 GestorDeErrores.Emitir($"El negocio de {NegociosDeSe.ToNombre(negocio)} no está definido, y se ha indicado por programa que usa seguridad, defínalo como negocio");
             return registro.Activo;
@@ -132,7 +132,7 @@ namespace GestoresDeNegocio.Negocio
                 }
             }
 
-            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre());
+            var negocioDtm = LeerRegistroCacheado(nameof(NegocioDtm.Nombre), negocio.ToNombre(), errorSiNoHay: true, errorSiHayMasDeUno: true, aplicarJoin: false);
             var cache = ServicioDeCaches.Obtener($"{nameof(GestorDeNegocios)}.{nameof(TienePermisos)}");
             var indice = $"{usuarioConectado.Id}.{negocioDtm.Id}.{permisosNecesarios}";
 

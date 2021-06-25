@@ -264,7 +264,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Iniciar(ContextoSe contextoTu, int idTrabajoDeUsuario, bool iniciadoPorLaCola)
         {
             var gestorTu = Gestor(contextoTu);
-            var tuDtm = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
+            var tuDtm = gestorTu.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true, aplicarJoin: true);
             var entorno = new EntornoDeTrabajo(gestorTu, tuDtm);
             entorno.ProcesoIniciadoPorLaCola = iniciadoPorLaCola;
 
@@ -331,7 +331,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Bloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tuDtm = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
+            var tuDtm = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true, aplicarJoin: true);
             try
             {
                 if (tuDtm.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Pendiente))
@@ -351,7 +351,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Desbloquear(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true, aplicarJoin: true);
             try
             {
                 if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Bloqueado))
@@ -371,7 +371,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void Resometer(ContextoSe contexto, int idTrabajoDeUsuario)
         {
             var gestor = Gestor(contexto);
-            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true);
+            var tu = gestor.LeerRegistroPorId(idTrabajoDeUsuario, true, true, true, aplicarJoin:true);
 
             if (tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.Error) &&
                 tu.Estado != TrabajoSometido.ToDtm(enumEstadosDeUnTrabajo.conErrores) &&

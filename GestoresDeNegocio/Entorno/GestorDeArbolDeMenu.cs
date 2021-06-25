@@ -60,7 +60,7 @@ namespace GestoresDeNegocio.Entorno
         {
 
             var gestor = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            var usuarioDtm = gestor.LeerRegistro(nameof(UsuarioDtm.Login),usuario,false,false,false, false);
+            var usuarioDtm = gestor.LeerRegistro(nameof(UsuarioDtm.Login),usuario,false,false,false, false, false);
             if (usuarioDtm == null)
                 GestorDeErrores.Emitir($"Usuario {usuario} no válido");
 

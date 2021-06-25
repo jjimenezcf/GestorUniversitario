@@ -67,7 +67,7 @@ namespace GestoresDeNegocio.Seguridad
             }
             else
             {
-                var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso, true, false, false);
+                var permiso = gestorDePermisos.LeerRegistroPorId(idPermiso, true, false, false, aplicarJoin: true);
                 if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Vista))
                     ServicioDeCaches.EliminarCache(nameof(GestorDeArbolDeMenu.LeerArbolDeMenu));
                 if (permiso.Clase.Nombre == ClaseDePermiso.ToString(enumClaseDePermiso.Negocio))
@@ -94,7 +94,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             var nombreDelPermiso = ComponerNombreDelPermisoDeDatos(nombre, clase, modoAcceso);
             var gestorDePermiso = Gestor(contexto, mapeador);
-            var permiso = gestorDePermiso.LeerRegistro(nameof(PermisoDtm.Nombre), nombreDelPermiso, errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var permiso = gestorDePermiso.LeerRegistro(nameof(PermisoDtm.Nombre), nombreDelPermiso, errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (permiso == null)
                 permiso = CrearPermisoDeDatos(gestorDePermiso, nombreDelPermiso, clase, modoAcceso);
             return permiso;
@@ -105,7 +105,7 @@ namespace GestoresDeNegocio.Seguridad
         {
             var nombreDelPermiso = ComponerNombrePermisoFuncional(nombre, clase);
             var gestorDePermiso = Gestor(contexto, mapeador);
-            var permiso = gestorDePermiso.LeerRegistro(nameof(PermisoDtm.Nombre), nombreDelPermiso, errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var permiso = gestorDePermiso.LeerRegistro(nameof(PermisoDtm.Nombre), nombreDelPermiso, errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (permiso == null)
                 permiso = CrearPermisoFuncional(gestorDePermiso, nombreDelPermiso, clase);
             return permiso;
@@ -152,13 +152,13 @@ namespace GestoresDeNegocio.Seguridad
         {
             PermisoDtm permiso;
             var gestorDeClase = GestorDeClaseDePermisos.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var claseDePermiso = gestorDeClase.LeerRegistro(nameof(ClasePermisoDtm.Nombre), clase.ToString(), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var claseDePermiso = gestorDeClase.LeerRegistro(nameof(ClasePermisoDtm.Nombre), clase.ToString(), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (claseDePermiso == null)
                 claseDePermiso = gestorDeClase.Crear(clase);
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(modoDeAcceso), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(modoDeAcceso), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (tipoDePermiso == null)
                 tipoDePermiso = gestorDeTipo.CrearTipoPermisoDeDatos(modoDeAcceso);
 
@@ -171,13 +171,13 @@ namespace GestoresDeNegocio.Seguridad
         {
             PermisoDtm permiso;
             var gestorDeClase = GestorDeClaseDePermisos.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var claseDePermiso = gestorDeClase.LeerRegistro(nameof(ClasePermisoDtm.Nombre), clase.ToString(), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var claseDePermiso = gestorDeClase.LeerRegistro(nameof(ClasePermisoDtm.Nombre), clase.ToString(), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (claseDePermiso == null)
                 claseDePermiso = gestorDeClase.Crear(clase);
 
 
             var gestorDeTipo = GestorDeTipoPermiso.Gestor(gestorDePermiso.Contexto, gestorDePermiso.Mapeador);
-            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(enumModoDeAccesoFuncional.Acceso), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false);
+            var tipoDePermiso = gestorDeTipo.LeerRegistro(nameof(TipoPermisoDtm.Nombre), ModoDeAcceso.ToString(enumModoDeAccesoFuncional.Acceso), errorSiNoHay: false, errorSiHayMasDeUno: false, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (tipoDePermiso == null)
                 tipoDePermiso = gestorDeTipo.CrearTipoPermisoFuncional(enumModoDeAccesoFuncional.Acceso);
 

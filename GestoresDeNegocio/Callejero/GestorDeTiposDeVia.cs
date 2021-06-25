@@ -47,19 +47,6 @@ namespace GestoresDeNegocio.Callejero
         }
 
 
-        public List<TipoDeViaDto> LeerTiposDeVia(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
-        {
-            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
-            return MapearElementos(registros).ToList();
-        }
-
-        internal static TipoDeViaDtm LeerTipoDeViaPorSigla(ContextoSe contexto, string sigla, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
-        {
-            var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(TipoDeViaDtm.Sigla), sigla, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
-        }
-
-
         public static void ImportarFicheroDeTiposDeVia(EntornoDeTrabajo entorno, int idArchivo)
         {
             var gestor = Gestor(entorno.contextoDelProceso, entorno.contextoDelProceso.Mapeador);
@@ -106,7 +93,7 @@ namespace GestoresDeNegocio.Callejero
         private static TipoDeViaDtm ProcesarTipoDeViaLeido(EntornoDeTrabajo entorno, GestorDeTiposDeVia gestor, string sigla, string nombre, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var p = gestor.LeerRegistro(nameof(TipoDeViaDtm.Sigla), sigla, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: true, conBloqueo: false);
+            var p = gestor.LeerRegistro(nameof(TipoDeViaDtm.Sigla), sigla, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: true, conBloqueo: false, false);
             //var p = LeerTipoDeViaPorSigla(entorno.contextoDelProceso, sigla, paraActualizar: true); 
             if (p == null)
             {

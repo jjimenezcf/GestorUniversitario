@@ -129,7 +129,7 @@ namespace GestoresDeNegocio.Callejero
             var provinciaDtm = LeerProvinciaPorCodigo(gestor.Contexto, iso2Pais, codigo, paraActualizar: false, errorSiNoHay: false);
             if (provinciaDtm == null)
             {
-                var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, iso2Pais, paraActualizar: false, errorSiNoHay: false);
+                var pais = GestorDePaises.LeerPaisPorCodigo(gestor.Contexto, iso2Pais, errorSiNoHay: false);
                 provinciaDtm = new ProvinciaDtm();
                 provinciaDtm.Codigo = codigo;
                 provinciaDtm.Nombre = nombreProvincia;

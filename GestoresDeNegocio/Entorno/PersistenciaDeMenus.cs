@@ -59,7 +59,7 @@ namespace GestoresDeNegocio.Entorno
                 menuDtm.IdPadre = idPadre;
 
                 var gestorDeVista = GestorDeVistaMvc.Gestor(gestorDeMenu.Contexto, gestorDeMenu.Contexto.Mapeador);
-                var vistaDtm = gestorDeVista.LeerRegistro(nameof(VistaMvcDtm.Nombre), vista, true, true, false, false);
+                var vistaDtm = gestorDeVista.LeerRegistro(nameof(VistaMvcDtm.Nombre), vista, true, true, false, false, aplicarJoin: false);
                 menuDtm.IdVistaMvc = vistaDtm.Id;
 
                 gestorDeMenu.PersistirRegistro(menuDtm, new ParametrosDeNegocio(enumTipoOperacion.Insertar));

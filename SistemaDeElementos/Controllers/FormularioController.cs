@@ -34,7 +34,7 @@ namespace MVCSistemaDeElementos.Controllers
         {
             ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
             formulario.GestorDeUsuario = GestorDeUsuarios.Gestor(Contexto, Mapeador);
-            formulario.UsuarioConectado = formulario.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            formulario.UsuarioConectado = formulario.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login, errorSiNoHay: true, errorSiHayMasDeUno: true, aplicarJoin: false);
             ViewBag.DatosDeConexion = DatosDeConexion;
 
             var destino = $"{(formulario.RutaVista.IsNullOrEmpty() ? "" : $"../{formulario.RutaVista}/")}{formulario.Vista}";

@@ -55,7 +55,7 @@ namespace GestoresDeNegocio.Entorno
                 return (VariableDtm)cache[indice];
 
             var gestor = Gestor(contextoSe, contextoSe.Mapeador);
-            var registro = gestor.LeerRegistroCacheado(nameof(VariableDtm.Nombre), variable, emitirErrorSiNoExiste, true);
+            var registro = gestor.LeerRegistroCacheado(nameof(VariableDtm.Nombre), variable, emitirErrorSiNoExiste, true, false);
             return registro;
         }
 

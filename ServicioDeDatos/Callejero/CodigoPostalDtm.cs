@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using AutoMapper.Configuration.Annotations;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
 
@@ -8,6 +9,9 @@ namespace ServicioDeDatos.Callejero
     public class CodigoPostalDtm : Registro
     {
         public string Codigo { get; set; }
+
+        [Ignore]
+        public CpsDeUnaProvinciaDtm cpsProvincias { get; set; }
     }
 
     public static partial class ModeloDeCallejero

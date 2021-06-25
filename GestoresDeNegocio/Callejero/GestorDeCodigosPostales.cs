@@ -11,6 +11,7 @@ using System;
 using GestoresDeNegocio.Archivos;
 using System.Linq;
 using ServicioDeDatos.TrabajosSometidos;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -62,7 +63,7 @@ namespace GestoresDeNegocio.Callejero
         internal static CodigoPostalDtm LeerTipoDeViaPorCp(ContextoSe contexto, string cp, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false);
+            return gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay, errorSiMasDeUno, paraActualizar ? true : false, paraActualizar ? true : false, aplicarJoin: false);
         }
 
 
@@ -114,7 +115,7 @@ namespace GestoresDeNegocio.Callejero
         private static CodigoPostalDtm ProcesarCodigosPostales(EntornoDeTrabajo entorno, GestorDeCodigosPostales gestor, string provincia, string municipio, string cp, TrazaDeUnTrabajoDtm trazaInfDtm)
         {
             ParametrosDeNegocio operacion;
-            var codigoPostalDtm = gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+            var codigoPostalDtm = gestor.LeerRegistro(nameof(CodigoPostalDtm.Codigo), cp, errorSiNoHay: false, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false, aplicarJoin: false);
             if (codigoPostalDtm == null)
             {
                 codigoPostalDtm = new CodigoPostalDtm();
@@ -162,7 +163,7 @@ namespace GestoresDeNegocio.Callejero
             {
                 //relacionar con la provincia usando los dos primeros caractéres
                 var gestorProvincias = GestorDeProvincias.Gestor(Contexto, Contexto.Mapeador);
-                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.Codigo.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false);
+                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.Codigo.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false, aplicarJoin:false);
                 GestorDeCpsDeUnaProvincia.CrearRelacion(Contexto, registro, provinciaDtm);
 
                 //relacionar con el municipio usando lo indicado en los parámetros
@@ -179,6 +180,16 @@ namespace GestoresDeNegocio.Callejero
                 //eliminar relación con el municipio
             }
 
+        }
+
+        protected override IQueryable<CodigoPostalDtm> AplicarJoins(IQueryable<CodigoPostalDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarJoins(registros, filtros, joins, parametros);
+            
+            if (parametros.AplicarJoin)
+                registros = registros.Include(x => x.cpsProvincias);
+            
+            return registros;
         }
 
     }

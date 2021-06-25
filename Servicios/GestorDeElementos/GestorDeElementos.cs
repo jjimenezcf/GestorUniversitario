@@ -242,7 +242,7 @@ namespace GestorDeElementos
         public TRegistro PersistirRegistro(TRegistro registro, ParametrosDeNegocio parametros)
         {
             if (parametros.Operacion != enumTipoOperacion.Insertar)
-                parametros.registroEnBd = LeerRegistroPorId(registro.Id, false, false, false);
+                parametros.registroEnBd = LeerRegistroPorId(registro.Id, false, false, false, aplicarJoin: false);
 
             var transaccion = Contexto.IniciarTransaccion();
             try
@@ -290,10 +290,16 @@ namespace GestorDeElementos
             foreach (var propiedad in propiedades)
             {
                 if (typeof(TRegistro).ImplementaNombre() && propiedad.Name == nameof(INombre.Nombre))
-                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(INombre.Nombre)}-{registro.ValorPropiedad(nameof(INombre.Nombre))}");
+                {
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(INombre.Nombre)}-{registro.ValorPropiedad(nameof(INombre.Nombre))}-1");
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(INombre.Nombre)}-{registro.ValorPropiedad(nameof(INombre.Nombre))}-0");
+                }
 
                 if (propiedad.Name == nameof(registro.Id))
-                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}");
+                {
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}-1");
+                    ServicioDeCaches.EliminarElemento(typeof(TRegistro).FullName, $"{nameof(registro.Id)}-{registro.Id}-0");
+                }
             }
 
             ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
@@ -357,7 +363,7 @@ namespace GestorDeElementos
             TRegistro elementoDtm;
             var parametros = opcionesDelMapeo == null ? new ParametrosDeMapeo() : new ParametrosDeMapeo() { Opciones = opcionesDelMapeo };
 
-            elementoDtm = LeerRegistroPorId(id, true, false, false);
+            elementoDtm = LeerRegistroPorId(id, true, false, false, aplicarJoin: true);
             return MapearElemento(elementoDtm, parametros);
         }
 
@@ -383,16 +389,16 @@ namespace GestorDeElementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache , bool traqueado , bool conBloqueo )
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache , bool traqueado , bool conBloqueo, bool aplicarJoin )
         {
             if (!usarLaCache)
-                return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado, conBloqueo);
+                return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado, conBloqueo, aplicarJoin);
 
-            return LeerRegistroCacheado(nameof(IRegistro.Id), id.ToString());
+            return LeerRegistroCacheado(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, aplicarJoin);
         }
 
 
-        public TRegistro LeerRegistroCacheado(List<ClausulaDeFiltrado> filtros, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
+        public TRegistro LeerRegistroCacheado(List<ClausulaDeFiltrado> filtros, bool apliacarJoin, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
         {
             string indice = "";
             foreach (var filtro in filtros)
@@ -400,7 +406,7 @@ namespace GestorDeElementos
             var cache = ServicioDeCaches.Obtener($"{typeof(TRegistro).FullName}-ak");
             if (!cache.ContainsKey(indice))
             {
-                var registros = LeerRegistros(0, -1, filtros);
+                var registros = LeerRegistros(0, -1, filtros,null,null,new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo,apliacarJoin));
 
                 if (errorSiNoHay && registros.Count == 0)
                     GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el filtro proporcionado");
@@ -418,13 +424,13 @@ namespace GestorDeElementos
             }
             return (TRegistro)cache[indice];
         }
-        public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true)
+        public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool aplicarJoin)
         {
-            var indice = $"{propiedad}-{valor}";
+            var indice = $"{propiedad}-{valor}-{(!aplicarJoin? "0":"1")}";
             var cache = ServicioDeCaches.Obtener(typeof(TRegistro).FullName);
             if (!cache.ContainsKey(indice))
             {
-                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno, traqueado: false, conBloqueo: false);
+                var a = LeerRegistro(propiedad, valor, errorSiNoHay, errorSiHayMasDeUno, traqueado: false, conBloqueo: false, aplicarJoin);
                 if (a == null)
                     return null;
 
@@ -433,9 +439,9 @@ namespace GestorDeElementos
             return (TRegistro)cache[indice];
         }
 
-        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool traqueado, bool conBloqueo)
+        public TRegistro LeerRegistro(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool traqueado, bool conBloqueo, bool aplicarJoin)
         {
-            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor, traqueado, conBloqueo);
+            List<TRegistro> registros = LeerRegistroInterno(propiedad, valor, traqueado, conBloqueo, aplicarJoin);
 
             if (errorSiNoHay && registros.Count == 0)
                 GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el valor {valor} en la clase {typeof(TRegistro).Name}");
@@ -471,7 +477,7 @@ namespace GestorDeElementos
             return registros[0];
         }
 
-        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado, bool ConBloqueo)
+        private List<TRegistro> LeerRegistroInterno(string propiedad, string valor, bool traqueado, bool ConBloqueo, bool aplicarJoin)
         {
             var filtro = new ClausulaDeFiltrado()
             {
@@ -480,7 +486,8 @@ namespace GestorDeElementos
                 Valor = valor
             };
             var filtros = new List<ClausulaDeFiltrado>() { filtro };
-            var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo);
+
+            var parametros = new ParametrosDeNegocio(ConBloqueo ? enumTipoOperacion.LeerConBloqueo : enumTipoOperacion.LeerSinBloqueo, aplicarJoin);
             IQueryable<TRegistro> registros = DefinirConsulta(0, -1, filtros, null, null, parametros);
 
             if (!traqueado)

@@ -388,7 +388,7 @@ namespace MVCSistemaDeElementos.Controllers
 
             ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
             descriptor.GestorDeUsuario = GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador);
-            descriptor.UsuarioConectado = descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login);
+            descriptor.UsuarioConectado = descriptor.GestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), DatosDeConexion.Login, errorSiNoHay: true, errorSiHayMasDeUno: true, aplicarJoin: false);
 
             var destino = $"{(descriptor.RutaBase.IsNullOrEmpty() ? "" : $"../{descriptor.RutaBase}/")}{descriptor.Vista}";
             if (!this.ExisteLaVista(destino))

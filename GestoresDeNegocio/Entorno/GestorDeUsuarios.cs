@@ -42,13 +42,13 @@ namespace GestoresDeNegocio.Entorno
         internal static UsuarioDtm LeerUsuario(ContextoSe contexto, int idUsuario)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistroPorId(idUsuario,true, false, false);
+            return gestor.LeerRegistroPorId(idUsuario,true, false, false, aplicarJoin: false);
         }
 
         internal static UsuarioDtm LeerUsuario(ContextoSe contexto, string login)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            return gestor.LeerRegistro(nameof(UsuarioDtm.Login), login, true,true, false,false);
+            return gestor.LeerRegistro(nameof(UsuarioDtm.Login), login, true,true, false,false, aplicarJoin: false);
         }
 
         public static GestorDeUsuarios Gestor(ContextoSe contexto, IMapper mapeador)
@@ -155,7 +155,10 @@ namespace GestoresDeNegocio.Entorno
         {
             base.DespuesDePersistir(registro, parametros);
             if (parametros.Operacion != enumTipoOperacion.Insertar)
-                ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}");
+            {
+                ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}-0");
+                ServicioDeCaches.EliminarElemento(cache: typeof(UsuarioDtm).FullName, clave: $"{nameof(UsuarioDtm.Login)}-{registro.Login}-1");
+            }
         }
 
         private void ValidarDatos(UsuarioDto usuarioDto)
@@ -178,6 +181,7 @@ namespace GestoresDeNegocio.Entorno
             }
         }
 
+        
         public List<UsuarioDto> LeerUsuarios(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
@@ -189,7 +193,7 @@ namespace GestoresDeNegocio.Entorno
             UsuarioDtm usuariodtm = null;
             try
             {
-                usuariodtm = LeerRegistroCacheado(nameof(UsuarioDtm.Login), login, true, true);
+                usuariodtm = LeerRegistroCacheado(nameof(UsuarioDtm.Login), login, true, true, false);
                 if (GestorDePassword.Leer(login) != password)
                     throw new Exception("Login/password incorrecto");
             }

@@ -25,7 +25,7 @@ namespace MVCSistemaDeElementos.Controllers
         {
             contexto.DatosDeConexion.Login = ApiController.ObtenerUsuarioDeLaRequest(httpContext);
             var gestorDeUsuario = GestorDeUsuarios.Gestor(contexto, mapeador);
-            var usuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), contexto.DatosDeConexion.Login);
+            var usuario = gestorDeUsuario.LeerRegistroCacheado(nameof(UsuarioDtm.Login), contexto.DatosDeConexion.Login, errorSiNoHay: true, errorSiHayMasDeUno: true, aplicarJoin: false);
             contexto.DatosDeConexion.IdUsuario = usuario.Id;
             contexto.DatosDeConexion.EsAdministrador = usuario.EsAdministrador;
             contexto.Mapeador = mapeador;
