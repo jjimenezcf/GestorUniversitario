@@ -304,7 +304,7 @@ namespace MVCSistemaDeElementos.Descriptores
             Mnt.ZonaMenu.Menu.Add(opcion);
         }
 
-        internal static void AnadirOpcionDeDependencias(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string datosDependientes, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
+        internal static OpcionDeMenu<TElemento> AnadirOpcionDeDependencias(DescriptorDeMantenimiento<TElemento> Mnt, string controlador, string vista, string datosDependientes, string navegarAlCrud, string nombreOpcion, string propiedadQueRestringe, string propiedadRestrictora, string ayuda)
         {
             var accionDeDependencias = new AccionDeGetionarDatosDependientes(
                     urlDelCrud: $@"/{controlador.Replace("Controller", "")}/{vista}?origen=dependencia"
@@ -316,6 +316,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
             var opcion = new OpcionDeMenu<TElemento>(menu: Mnt.ZonaMenu.Menu, accion: accionDeDependencias, tipoAccion: TipoDeLlamada.Post, titulo: $"{nombreOpcion}", enumModoDeAccesoDeDatos.Consultor, enumCssOpcionMenu.DeElemento);
             Mnt.ZonaMenu.Menu.Add(opcion);
+            return opcion;
         }
     }
 

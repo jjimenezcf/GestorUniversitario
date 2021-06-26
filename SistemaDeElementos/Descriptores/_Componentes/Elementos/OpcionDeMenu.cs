@@ -273,6 +273,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public enumCssOpcionMenu ClaseBoton { get; private set; }
 
+        public bool SoloMapearEnElFiltro { get; internal set; } = false;
+
         public OpcionDeMenu(Menu<TElemento> menu, AccionDeMenu accion, string titulo, enumModoDeAccesoDeDatos permisosNecesarios)
         : this(menu, accion, TipoDeLlamada.Get, titulo, permisosNecesarios, accion.ClaseDeAccion)
         {
@@ -353,7 +355,11 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderAccionDeDependencias(string disbled)
         {
             return $@"
-                    <form id=¨{IdHtml}¨ action=¨{((AccionDeGetionarDatosDependientes)Accion).UrlDelCrudDeDependientes}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeGetionarDatosDependientes)Accion).NavegarAlCrud}¨ restrictor=¨{IdHtml}-restrictor¨ orden=¨{IdHtml}-orden¨ style=¨display: inline-block;¨ >
+                    <form id=¨{IdHtml}¨ action=¨{((AccionDeGetionarDatosDependientes)Accion).UrlDelCrudDeDependientes}¨ method=¨post¨ navegar-al-crud=¨{((AccionDeGetionarDatosDependientes)Accion).NavegarAlCrud}¨ 
+                               restrictor=¨{IdHtml}-restrictor¨ 
+                               orden=¨{IdHtml}-orden¨ 
+                               solo-mapear-en-el-filtro = {SoloMapearEnElFiltro}
+                               style=¨display: inline-block;¨ >
                         <input id=¨{IdHtml}-restrictor¨ type=¨hidden¨ name =¨restrictor¨ >
                         <input id=¨{IdHtml}-orden¨ type=¨hidden¨ name = ¨orden¨ >
                         <input type=¨button¨ 

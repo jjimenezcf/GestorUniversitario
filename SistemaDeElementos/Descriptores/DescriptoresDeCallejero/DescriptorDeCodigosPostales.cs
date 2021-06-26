@@ -26,7 +26,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedadRestrictora: nameof(CpsDeUnaProvinciaDto.IdCp)
                 , "Provincias de un CP");
 
-            AnadirOpcionDeDependencias(Mnt
+           var opcionMunicipios = AnadirOpcionDeDependencias(Mnt
                 , controlador: nameof(MunicipiosController)
                 , vista: nameof(MunicipiosController.CrudMunicipios)
                 , datosDependientes: nameof(MunicipioDto)
@@ -35,6 +35,8 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedadQueRestringe: nameof(CodigoPostalDto.Id)
                 , propiedadRestrictora: nameof(CpsDeUnMunicipioDto.IdCp)
                 , "Municipios de un CP");
+
+            opcionMunicipios.SoloMapearEnElFiltro = true;
 
             BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Código Postal", nameof(CodigoPostalDto.Codigo), "Buscar por 'código postal'");
 

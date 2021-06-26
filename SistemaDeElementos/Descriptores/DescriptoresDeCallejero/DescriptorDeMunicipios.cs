@@ -41,6 +41,12 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , ayuda: "buscar por codigo"
                 , new Posicion { fila = 0, columna = 2 });
 
+            new EditorFiltro<MunicipioDto>(bloque: Mnt.BloqueGeneral
+                , etiqueta: "CP"
+                , propiedad: nameof(CpsDeUnMunicipioDto.IdCp)
+                , ayuda: "buscar por codigo postal"
+                , new Posicion { fila = 1, columna = 1 });
+
             RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1,0), "Municipio", "Buscar Buscar por nombre de municipio");
             Mnt.OrdenacionInicial = @$"{nameof(MunicipioDto.Pais)}:provincia.pais.nombre:{enumModoOrdenacion.ascendente.Render()};
                                        {nameof(MunicipioDto.Provincia)}:provincia.nombre:{enumModoOrdenacion.ascendente.Render()};
