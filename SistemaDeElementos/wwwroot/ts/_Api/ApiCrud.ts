@@ -544,11 +544,13 @@ namespace ApiRuote {
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
 
         let navegarAlCrud: string = form.getAttribute(atNavegar.navegarAlCrud);
+        let soloMapearEnELFiltro: boolean = EsTrue(form.getAttribute(atNavegar.soloMapearEnElFiltro));
 
         let valores: Diccionario<any> = new Diccionario<any>();
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictores, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
+        valores.Agregar(Sesion.SoloMapearEnElFiltro, soloMapearEnELFiltro);
         Navegar(crud, form, valores);
     }
 

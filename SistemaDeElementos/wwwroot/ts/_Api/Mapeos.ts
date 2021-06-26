@@ -375,8 +375,13 @@ namespace MapearAlControl {
             MensajesSe.EmitirExcepcion("Mapeo de propiedad", `No existe la propiedad ${propiedad} en el panel ${panel.id}`);
 
         let tipo: string = controles[0].getAttribute(atControl.tipo);
+
         if (tipo === TipoControl.ListaDinamica)
             FijarValorEnListaDinamica(controles[0], id, texto);
+
+        if (tipo === TipoControl.Editor)
+            FijarValorEnEditor(controles[0], id, texto);
+
     }
 
 
@@ -423,7 +428,6 @@ namespace MapearAlControl {
         return false;
     }
 
-
     export function ProponerValorEnListaDinamica(input: HTMLInputElement, id: number, texto: string) {
         if (Numero(id) > 0) {
             let listaDinamica = new Tipos.ListaDinamica(input);
@@ -437,9 +441,17 @@ namespace MapearAlControl {
         ApiControl.BloquearListaDinamica(input, true);
     }
 
+
     export function ListaDinamica(input: HTMLInputElement, valor: number, texto: string) {
         input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
         input.value = Numero(valor) === 0 ? "" : texto;
     }
+
+    export function FijarValorEnEditor(input: HTMLInputElement, id: number, texto: string) {
+        Restrictor(input, id, texto)
+        ApiControl.BloquearEditor(input);
+    }
+
+
 }
 

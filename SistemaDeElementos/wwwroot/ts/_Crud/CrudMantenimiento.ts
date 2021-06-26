@@ -83,15 +83,15 @@
                 this.InicializarMenus();
                 this.InicializarSelectoresDeFecha(this.ZonaDeFiltro);
 
-                if (params.has("origen")) this.AplicarRestrictores(params.get("origen"));
+                if (params.has(atParametrosUrl.origen)) this.AplicarRestrictores(params.get(atParametrosUrl.origen));
 
                 if (this.Navegador.EsRestauracion) {
                     this.RestaurarPagina()
                         .then((valor) => this.TrasRestaurar(valor));
                 }
                 else {
-                    if (params.has("id"))
-                        this.EditarRegistro(Numero(params.get("id")));
+                    if (params.has(atParametrosUrl.id))
+                        this.EditarRegistro(Numero(params.get(atParametrosUrl.id)));
 
                     this.InicializarOrdenacion();
                     this.Buscar(atGrid.accion.buscar, 0);
@@ -173,12 +173,13 @@
 
         private AplicarRestrictor(restrictor: Tipos.DatosRestrictor): void {
             MapearPanelDeFiltro.MapearRestrictores(this.ZonaDeFiltro, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            if (!EsTrue(this.Estado.Obtener(Sesion.SoloMapearEnElFiltro))) {
+                if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteCrear)))
+                    MapearPanelDeCreacion.MapearRestrictores(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
 
-            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteCrear)))
-                MapearPanelDeCreacion.MapearRestrictores(this.crudDeCreacion.PanelDeCrear, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
-
-            if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteEditar)))
-                MapearPanelDeEdicion.MapearRestrictores(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+                if (EsTrue(this.CuerpoCabecera.getAttribute(atMantenimniento.permiteEditar)))
+                    MapearPanelDeEdicion.MapearRestrictores(this.crudDeEdicion.PanelDeEditar, restrictor.Propiedad, restrictor.Valor, restrictor.Texto);
+            }
 
             this.DespuesDeAplicarUnRestrictor(restrictor);
         }
@@ -243,7 +244,7 @@
             if (Definida(grid))
                 return grid;
 
-            MensajesSe.EmitirExcepcion("ObtenerGrid", `Se busca la modal con id ${idModal} y no se ha encontrado`)
+            MensajesSe.EmitirExcepcion("ObtenerGrid", `Se busca la modal con id ${idModal} y no se ha encontrado`);
         }
 
         private ModalParaRelacionesAsociada(idModal: string): GridDeDatos {

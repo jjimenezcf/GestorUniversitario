@@ -68,8 +68,10 @@ var Crud;
             archivos.forEach((archivo) => { ApiDeArchivos.BlanquearArchivo(archivo, true); });
         }
         AntesDeNavegar(valores) {
-            //Diccionario de valores que se le pasará al método navegar
-            //permite sobrecargar dicho método para añadir información a la página a la que se navega o desde la que se navega
+            let paginaDestino = valores.Obtener(Sesion.paginaDestino);
+            let estadoPaginaDestino = EntornoSe.Historial.ObtenerEstadoDePagina(paginaDestino);
+            estadoPaginaDestino.Agregar(Sesion.SoloMapearEnElFiltro, valores.Obtener(Sesion.SoloMapearEnElFiltro));
+            EntornoSe.Historial.GuardarEstadoDePagina(estadoPaginaDestino);
         }
         SiHayErrorTrasPeticionAjax(peticion) {
             MensajesSe.Error("SiHayErrorTrasPeticionAjax", peticion.resultado.mensaje, peticion.resultado.consola);

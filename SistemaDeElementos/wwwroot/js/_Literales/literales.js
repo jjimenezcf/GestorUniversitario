@@ -201,7 +201,8 @@ const atCriterio = {
 const atNavegar = {
     navegarAlCrud: 'navegar-al-crud',
     idRestrictor: atControl.restrictor,
-    orden: 'orden'
+    orden: 'orden',
+    soloMapearEnElFiltro: "solo-mapear-en-el-filtro"
 };
 const TagName = {
     input: "input",
@@ -504,12 +505,16 @@ const Variables = {
 };
 const Sesion = {
     historial: "historial",
-    //restrictor: "restrictor",
     restrictores: "restrictores",
     idSeleccionado: "idSeleccionado",
     paginaDestino: "pagina-destino",
     paginaActual: "pagina-actual",
-    urlActual: "url-actual"
+    urlActual: "url-actual",
+    SoloMapearEnElFiltro: "solo-mapear-en-el-filtro"
+};
+const atParametrosUrl = {
+    origen: "origen",
+    id: "id"
 };
 const GestorDeEventos = {
     deSeleccionDeFiltro: "Crud.EventosModalDeSeleccion",

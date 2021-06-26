@@ -339,6 +339,8 @@ var MapearAlControl;
         let tipo = controles[0].getAttribute(atControl.tipo);
         if (tipo === TipoControl.ListaDinamica)
             FijarValorEnListaDinamica(controles[0], id, texto);
+        if (tipo === TipoControl.Editor)
+            FijarValorEnEditor(controles[0], id, texto);
     }
     MapearAlControl.Propiedad = Propiedad;
     function Restrictor(restrictor, id, texto) {
@@ -402,5 +404,10 @@ var MapearAlControl;
         input.value = Numero(valor) === 0 ? "" : texto;
     }
     MapearAlControl.ListaDinamica = ListaDinamica;
+    function FijarValorEnEditor(input, id, texto) {
+        Restrictor(input, id, texto);
+        ApiControl.BloquearEditor(input);
+    }
+    MapearAlControl.FijarValorEnEditor = FijarValorEnEditor;
 })(MapearAlControl || (MapearAlControl = {}));
 //# sourceMappingURL=Mapeos.js.map

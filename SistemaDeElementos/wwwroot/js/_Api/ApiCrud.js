@@ -501,10 +501,12 @@ var ApiRuote;
         if (form === null)
             throw new Error(`La opción de menú '${idOpcionDeMenu}' está mal definida, actualice el descriptor`);
         let navegarAlCrud = form.getAttribute(atNavegar.navegarAlCrud);
+        let soloMapearEnELFiltro = EsTrue(form.getAttribute(atNavegar.soloMapearEnElFiltro));
         let valores = new Diccionario();
         valores.Agregar(Sesion.paginaDestino, navegarAlCrud);
         valores.Agregar(Sesion.restrictores, filtroRestrictor);
         valores.Agregar(Sesion.idSeleccionado, idSeleccionado);
+        valores.Agregar(Sesion.SoloMapearEnElFiltro, soloMapearEnELFiltro);
         Navegar(crud, form, valores);
     }
     ApiRuote.NavegarADependientes = NavegarADependientes;
