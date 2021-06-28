@@ -22,8 +22,8 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , datosDependientes: nameof(ProvinciaDto)
                 , navegarAlCrud: DescriptorDeMantenimiento<ProvinciaDto>.NombreMnt
                 , nombreOpcion: "Provincias"
-                , propiedadQueRestringe: nameof(CodigoPostalDto.Id)
-                , propiedadRestrictora: nameof(CpsDeUnaProvinciaDto.IdCp)
+                , propiedadQueRestringe: nameof(CodigoPostalDto.Codigo)
+                , propiedadRestrictora: nameof(CpsDeUnaProvinciaDto.CodigoPostal)
                 , "Provincias de un CP");
 
            var opcionMunicipios = AnadirOpcionDeDependencias(Mnt

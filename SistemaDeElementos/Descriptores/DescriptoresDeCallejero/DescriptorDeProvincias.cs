@@ -40,6 +40,12 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedadRestrictora: nameof(MunicipioDto.IdProvincia)
                 , "Municipios de una provincia");
 
+            new EditorFiltro<ProvinciaDto>(bloque: Mnt.BloqueGeneral
+                , etiqueta: "CP"
+                , propiedad: nameof(CpsDeUnMunicipioDto.CodigoPostal)
+                , ayuda: "buscar por codigo postal"
+                , new Posicion { fila = 1, columna = 1 });
+
             RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1, 0), "Provincia", "Buscar Buscar por nombre de provincia");
             Mnt.OrdenacionInicial = @$"{nameof(ProvinciaDto.Pais)}:pais.nombre:{enumModoOrdenacion.ascendente.Render()};
                                        {nameof(ProvinciaDto.Nombre)}:nombre:{enumModoOrdenacion.ascendente.Render()}";
