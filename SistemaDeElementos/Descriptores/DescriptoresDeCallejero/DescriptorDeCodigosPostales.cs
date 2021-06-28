@@ -32,8 +32,8 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , datosDependientes: nameof(MunicipioDto)
                 , navegarAlCrud: DescriptorDeMantenimiento<MunicipioDto>.NombreMnt
                 , nombreOpcion: "Municipios"
-                , propiedadQueRestringe: nameof(CodigoPostalDto.Id)
-                , propiedadRestrictora: nameof(CpsDeUnMunicipioDto.IdCp)
+                , propiedadQueRestringe: nameof(CodigoPostalDto.Codigo)
+                , propiedadRestrictora: nameof(CpsDeUnMunicipioDto.CodigoPostal)
                 , "Municipios de un CP");
 
             opcionMunicipios.SoloMapearEnElFiltro = true;

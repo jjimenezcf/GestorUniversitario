@@ -11,6 +11,22 @@
 
     export class CrudDeMunicipios extends Crud.CrudMnt {
 
+
+        protected get EditorDePais(): HTMLInputElement {
+            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro,"idpais") as HTMLInputElement;
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de Municipio");
+            return editor;
+        };
+
+
+        protected get EditorDeProvincia(): HTMLInputElement {
+            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idprovincia") as HTMLInputElement;
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDeProvincia", "No se lo caliza el editor de Provincia en el filtro de Municipio");
+            return editor;
+        };
+
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionMunicipio(this, idPanelCreacion);
@@ -19,10 +35,20 @@
 
         public DespuesDeAplicarUnRestrictor(restrictor: Tipos.DatosRestrictor) {
             super.DespuesDeAplicarUnRestrictor(restrictor);
-            let idProvincia: number = restrictor.Valor;
-            ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array<Parametro>())
-                .then((peticion: ApiDeAjax.DescriptorAjax) => this.MapearPais(peticion))
-                .catch((peticion: ApiDeAjax.DescriptorAjax) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola))
+
+
+            if (restrictor.Propiedad === "idcp") {
+                ApiControl.BloquearEditor(this.EditorDePais);
+                ApiControl.BloquearEditor(this.EditorDeProvincia);
+            }
+
+            if (restrictor.Propiedad === "idprovincia") {
+                let idProvincia: number = restrictor.Valor;
+                ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array<Parametro>())
+                    .then((peticion: ApiDeAjax.DescriptorAjax) => this.MapearPais(peticion))
+                    .catch((peticion: ApiDeAjax.DescriptorAjax) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola))
+
+            }
         }
 
         public MapearPais(peticion: ApiDeAjax.DescriptorAjax): void {

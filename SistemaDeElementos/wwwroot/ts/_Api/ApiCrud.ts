@@ -168,7 +168,7 @@
         let listas: NodeListOf<HTMLInputElement> = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`) as NodeListOf<HTMLInputElement>;
         for (let i = 0; i < listas.length; i++) {
             let lista: HTMLInputElement = listas[i] as HTMLInputElement;
-            if (lista.getAttribute(atributo).toLocaleLowerCase() == propiedad.toLocaleLowerCase()) {
+            if (lista.getAttribute(atributo).toLocaleLowerCase() === propiedad.toLocaleLowerCase()) {
                 return lista;
             }
         }

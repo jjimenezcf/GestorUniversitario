@@ -734,7 +734,12 @@
         private ObtenerClausulaEditor(editor: HTMLInputElement): ClausulaDeFiltrado {
             var propiedad: string = editor.getAttribute(atControl.propiedad);
             var criterio: string = editor.getAttribute(atControl.criterio);
-            var valor = editor.value;
+
+            ////Si el control está deshabilitado, se vee si hay id restrictor detras de el nombre mapeado en el selector, si es así es que se ha indicado un id
+            ////por ejemplo al pasar navegar de CPs a Municipio se restringe por IdCP pero se visualiza un CP
+            //let restrictor: string = editor.disabled ? editor.getAttribute(atControl.restrictor) : ""; Numero(restrictor) > 0 ? restrictor :
+
+            let valor: string =  editor.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor))
                 //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };

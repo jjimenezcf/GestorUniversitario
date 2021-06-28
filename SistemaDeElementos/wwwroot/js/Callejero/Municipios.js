@@ -9,6 +9,20 @@ var Callejero;
     }
     Callejero.CrearCrudDeMunicipios = CrearCrudDeMunicipios;
     class CrudDeMunicipios extends Crud.CrudMnt {
+        get EditorDePais() {
+            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de Municipio");
+            return editor;
+        }
+        ;
+        get EditorDeProvincia() {
+            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idprovincia");
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDeProvincia", "No se lo caliza el editor de Provincia en el filtro de Municipio");
+            return editor;
+        }
+        ;
         constructor(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
             super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionMunicipio(this, idPanelCreacion);
@@ -16,10 +30,16 @@ var Callejero;
         }
         DespuesDeAplicarUnRestrictor(restrictor) {
             super.DespuesDeAplicarUnRestrictor(restrictor);
-            let idProvincia = restrictor.Valor;
-            ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array())
-                .then((peticion) => this.MapearPais(peticion))
-                .catch((peticion) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola));
+            if (restrictor.Propiedad === "idcp") {
+                ApiControl.BloquearEditor(this.EditorDePais);
+                ApiControl.BloquearEditor(this.EditorDeProvincia);
+            }
+            if (restrictor.Propiedad === "idprovincia") {
+                let idProvincia = restrictor.Valor;
+                ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array())
+                    .then((peticion) => this.MapearPais(peticion))
+                    .catch((peticion) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola));
+            }
         }
         MapearPais(peticion) {
             let idPais = this.BuscarValorEnJson("idpais", peticion.resultado.datos);

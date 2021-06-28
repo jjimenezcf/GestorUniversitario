@@ -114,6 +114,13 @@ namespace GestoresDeNegocio.Callejero
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
             registros = registros.Include(p => p.Provincia);
             registros = registros.Include(p => p.Provincia.Pais);
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula == nameof(CpsDeUnMunicipioDtm.IdCp).ToLower())
+                {
+                    registros = registros.Include(p => p.Cps);
+                }
+            }
             return registros;
         }
 
@@ -140,11 +147,53 @@ namespace GestoresDeNegocio.Callejero
 
                 if (filtro.Clausula.ToLower() == "nombreMunicipio".ToLower())
                     registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(MunicipioDtm.Nombre));
+
+                if (filtro.Clausula.ToLower() == nameof(CpsDeUnMunicipioDtm.CodigoPostal).ToLower())
+                {
+                    registros = filtro.Valor.Length == 5 
+                    ? registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo == filtro.Valor)) 
+                    : registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo.StartsWith(filtro.Valor)));
+                }
             }
 
             return registros;
 
 
+        }
+
+        //Todo: --> Reglas de negocio
+        protected override void AntesDePersistir(MunicipioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+
+            if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Insertar)
+            {
+
+                //Obtener el código de la provincia del municipio
+
+                //ver si el municipio está relacionado con códigos postales
+
+                //si lo está, validar que los dos primeros dígitos del código postal corresponden con el código de la provincia
+            }
+
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
+            {
+                //Validar que no hay calles relacionadas con el municipio
+
+                //Eliminar los CPS relacionados con el municipio
+
+            }
+
+        }
+
+        //Todo: --> Reglas de negocio
+        protected override void DespuesDePersistir(MunicipioDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Insertar)
+            {
+                //Si la provincia del municipio no está relacionada con el cp, relacionarla
+            }
         }
 
         internal static void ImportarFicheroDeMunicipios(EntornoDeTrabajo entorno, int idArchivo)

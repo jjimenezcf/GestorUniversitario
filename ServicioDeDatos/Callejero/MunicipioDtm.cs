@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ namespace ServicioDeDatos.Callejero
         public string DC { get; set; }
         public int IdProvincia { get; set; }
         public ProvinciaDtm Provincia { get; set; }
+
+        public IEnumerable<CpsDeUnMunicipioDtm> Cps { get; set; }
     }
 
     [Table("MUNICIPIO_AUDITORIA", Schema = "CALLEJERO")]

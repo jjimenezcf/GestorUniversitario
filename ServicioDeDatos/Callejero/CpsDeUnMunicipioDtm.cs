@@ -39,7 +39,7 @@ namespace ServicioDeDatos.Callejero
 
             modelBuilder.Entity<CpsDeUnMunicipioDtm>()
             .HasOne(p => p.Municipio)
-            .WithMany()
+            .WithMany(m => m.Cps)
             .HasForeignKey(p => p.IdMunicipio)
             .HasConstraintName($"FK_MUNICIPIO_CP_ID_MUNICIPIO")
             .OnDelete(DeleteBehavior.Restrict);

@@ -161,7 +161,7 @@ var ApiControl;
         let listas = panel.querySelectorAll(`input[${atControl.tipo}="${TipoControl.ListaDinamica}"]`);
         for (let i = 0; i < listas.length; i++) {
             let lista = listas[i];
-            if (lista.getAttribute(atributo).toLocaleLowerCase() == propiedad.toLocaleLowerCase()) {
+            if (lista.getAttribute(atributo).toLocaleLowerCase() === propiedad.toLocaleLowerCase()) {
                 return lista;
             }
         }
