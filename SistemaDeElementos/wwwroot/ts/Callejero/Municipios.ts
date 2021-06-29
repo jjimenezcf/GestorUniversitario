@@ -11,9 +11,8 @@
 
     export class CrudDeMunicipios extends Crud.CrudMnt {
 
-
         protected get EditorDePais(): HTMLInputElement {
-            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro,"idpais") as HTMLInputElement;
+            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais) as HTMLInputElement;
             if (NoDefinida(editor))
                 MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de Municipio");
             return editor;
@@ -21,7 +20,7 @@
 
 
         protected get EditorDeProvincia(): HTMLInputElement {
-            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idprovincia") as HTMLInputElement;
+            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idprovincia) as HTMLInputElement;
             if (NoDefinida(editor))
                 MensajesSe.EmitirExcepcion("Propiedad EditorDeProvincia", "No se lo caliza el editor de Provincia en el filtro de Municipio");
             return editor;
@@ -37,14 +36,14 @@
             super.DespuesDeAplicarUnRestrictor(restrictor);
 
 
-            if (restrictor.Propiedad === "idcp") {
+            if (restrictor.Propiedad === Callejero.restrictor.codigoPostal) {
                 ApiControl.BloquearEditor(this.EditorDePais);
                 ApiControl.BloquearEditor(this.EditorDeProvincia);
             }
 
-            if (restrictor.Propiedad === "idprovincia") {
+            if (restrictor.Propiedad === Callejero.restrictor.provincia) {
                 let idProvincia: number = restrictor.Valor;
-                ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array<Parametro>())
+                ApiDePeticiones.LeerElementoPorId(this, Callejero.controlador.provincia, idProvincia, new Array<Parametro>())
                     .then((peticion: ApiDeAjax.DescriptorAjax) => this.MapearPais(peticion))
                     .catch((peticion: ApiDeAjax.DescriptorAjax) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola))
 
@@ -52,15 +51,15 @@
         }
 
         public MapearPais(peticion: ApiDeAjax.DescriptorAjax): void {
-            let idPais: number = this.BuscarValorEnJson("idpais", peticion.resultado.datos) as number;
-            let pais: string = this.BuscarValorEnJson("pais", peticion.resultado.datos) as string;
-            let listaDeFiltro: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            let idPais: number = this.BuscarValorEnJson(Callejero.objeto.municipioDto.idpais, peticion.resultado.datos) as number;
+            let pais: string = this.BuscarValorEnJson(Callejero.objeto.municipioDto.pais, peticion.resultado.datos) as string;
+            let listaDeFiltro: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeFiltro, idPais, pais);
 
-            let listaDeCreacion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, "idpais");
+            let listaDeCreacion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, Callejero.atributo.guardarEn.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeCreacion, idPais, pais);
 
-            let listaDeEdicion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, "idpais");
+            let listaDeEdicion: HTMLInputElement = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, Callejero.atributo.guardarEn.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeEdicion, idPais, pais);
         }
     }

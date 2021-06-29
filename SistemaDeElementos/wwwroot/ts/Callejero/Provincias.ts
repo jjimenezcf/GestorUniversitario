@@ -11,11 +11,29 @@
 
     export class CrudDeProvincias extends Crud.CrudMnt {
 
+
+        protected get EditorDePais(): HTMLInputElement {
+            let editor: HTMLInputElement = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais) as HTMLInputElement;
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de provincia");
+            return editor;
+        };
+
         constructor(idPanelMnt: string, idPanelCreacion: string, idPanelEdicion: string, idModalBorrar: string) {
             super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionProvincia(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionProvincia(this, idPanelEdicion);
         }
+
+        public DespuesDeAplicarUnRestrictor(restrictor: Tipos.DatosRestrictor) {
+            super.DespuesDeAplicarUnRestrictor(restrictor);
+
+            if (restrictor.Propiedad === Callejero.restrictor.codigoPostal) {
+                ApiControl.BloquearEditor(this.EditorDePais);
+            }
+
+        }
+
     }
 
     export class CrudCreacionProvincia extends Crud.CrudCreacion {

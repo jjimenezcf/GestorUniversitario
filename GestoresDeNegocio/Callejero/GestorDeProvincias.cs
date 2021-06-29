@@ -192,6 +192,36 @@ namespace GestoresDeNegocio.Callejero
             return registros;
         }
 
+        //Todo: --> Reglas de negocio
+        protected override void AntesDePersistir(ProvinciaDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistir(registro, parametros);
+
+            if (parametros.Operacion == enumTipoOperacion.Modificar)
+            {
+                //validar que si la provincia está relacionada con códigos postales, los dos primeros dígitos del código son igual que el código de la provincia
+            }
+
+            if (parametros.Operacion == enumTipoOperacion.Eliminar)
+            {
+                //Validar que no hay municipios con la provincia
+
+                //Eliminar los CPS relacionados con la provincia
+
+            }
+        }
+
+        //Todo: --> Reglas de negocio
+        protected override void DespuesDePersistir(ProvinciaDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+
+            if (parametros.Operacion == enumTipoOperacion.Modificar || parametros.Operacion == enumTipoOperacion.Insertar)
+            {
+                //Si hay códigos postales que sus dos primeros dígitos corresponden con el de la provincia entonces relacionarlos
+            }
+        }
+
         public List<ProvinciaDto> LeerProvincias(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);

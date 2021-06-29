@@ -10,14 +10,14 @@ var Callejero;
     Callejero.CrearCrudDeMunicipios = CrearCrudDeMunicipios;
     class CrudDeMunicipios extends Crud.CrudMnt {
         get EditorDePais() {
-            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais);
             if (NoDefinida(editor))
                 MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de Municipio");
             return editor;
         }
         ;
         get EditorDeProvincia() {
-            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idprovincia");
+            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idprovincia);
             if (NoDefinida(editor))
                 MensajesSe.EmitirExcepcion("Propiedad EditorDeProvincia", "No se lo caliza el editor de Provincia en el filtro de Municipio");
             return editor;
@@ -30,25 +30,25 @@ var Callejero;
         }
         DespuesDeAplicarUnRestrictor(restrictor) {
             super.DespuesDeAplicarUnRestrictor(restrictor);
-            if (restrictor.Propiedad === "idcp") {
+            if (restrictor.Propiedad === Callejero.restrictor.codigoPostal) {
                 ApiControl.BloquearEditor(this.EditorDePais);
                 ApiControl.BloquearEditor(this.EditorDeProvincia);
             }
-            if (restrictor.Propiedad === "idprovincia") {
+            if (restrictor.Propiedad === Callejero.restrictor.provincia) {
                 let idProvincia = restrictor.Valor;
-                ApiDePeticiones.LeerElementoPorId(this, "Provincias", idProvincia, new Array())
+                ApiDePeticiones.LeerElementoPorId(this, Callejero.controlador.provincia, idProvincia, new Array())
                     .then((peticion) => this.MapearPais(peticion))
                     .catch((peticion) => MensajesSe.Error("DespuesDeAplicarUnRestrictor", peticion.resultado.mensaje, peticion.resultado.consola));
             }
         }
         MapearPais(peticion) {
-            let idPais = this.BuscarValorEnJson("idpais", peticion.resultado.datos);
-            let pais = this.BuscarValorEnJson("pais", peticion.resultado.datos);
-            let listaDeFiltro = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, "idpais");
+            let idPais = this.BuscarValorEnJson(Callejero.objeto.municipioDto.idpais, peticion.resultado.datos);
+            let pais = this.BuscarValorEnJson(Callejero.objeto.municipioDto.pais, peticion.resultado.datos);
+            let listaDeFiltro = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeFiltro, idPais, pais);
-            let listaDeCreacion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, "idpais");
+            let listaDeCreacion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeCreacion.PanelDeCrear, Callejero.atributo.guardarEn.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeCreacion, idPais, pais);
-            let listaDeEdicion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, "idpais");
+            let listaDeEdicion = ApiControl.BuscarListaDinamicaPorGuardarEn(this.crudDeEdicion.PanelDeEditar, Callejero.atributo.guardarEn.idpais);
             MapearAlControl.FijarValorEnListaDinamica(listaDeEdicion, idPais, pais);
         }
     }

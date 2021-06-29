@@ -9,10 +9,23 @@ var Callejero;
     }
     Callejero.CrearCrudDeProvincias = CrearCrudDeProvincias;
     class CrudDeProvincias extends Crud.CrudMnt {
+        get EditorDePais() {
+            let editor = ApiControl.BuscarListaDinamicaPorPropiedad(this.ZonaDeFiltro, Callejero.atributo.propiedad.idpais);
+            if (NoDefinida(editor))
+                MensajesSe.EmitirExcepcion("Propiedad EditorDePais", "No se lo caliza el editor de Pais en el filtro de provincia");
+            return editor;
+        }
+        ;
         constructor(idPanelMnt, idPanelCreacion, idPanelEdicion, idModalBorrar) {
             super(idPanelMnt, idModalBorrar);
             this.crudDeCreacion = new CrudCreacionProvincia(this, idPanelCreacion);
             this.crudDeEdicion = new CrudEdicionProvincia(this, idPanelEdicion);
+        }
+        DespuesDeAplicarUnRestrictor(restrictor) {
+            super.DespuesDeAplicarUnRestrictor(restrictor);
+            if (restrictor.Propiedad === Callejero.restrictor.codigoPostal) {
+                ApiControl.BloquearEditor(this.EditorDePais);
+            }
         }
     }
     Callejero.CrudDeProvincias = CrudDeProvincias;

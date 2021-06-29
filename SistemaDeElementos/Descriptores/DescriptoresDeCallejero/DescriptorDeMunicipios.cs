@@ -59,7 +59,8 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
             var render = base.RenderControl();
 
             render = render +
-                   $@"<script src=¨../../js/Callejero/Municipios.js¨></script>
+                   $@"<script src=¨../../js/Callejero/literales.js¨></script>
+                      <script src=¨../../js/Callejero/Municipios.js¨></script>
                       <script>
                          try {{      
                            Callejero.CrearCrudDeMunicipios('{Mnt.IdHtml}','{Creador.IdHtml}','{Editor.IdHtml}', '{Borrado.IdHtml}') 
