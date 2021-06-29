@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace ServicioDeDatos.Callejero
         public string Prefijo { get; set; }
         public int IdPais { get; set; }
         public PaisDtm Pais { get; set; }
+        public IEnumerable<CpsDeUnaProvinciaDtm> Cps { get; set; }
     }
 
     [Table("PROVINCIA_AUDITORIA", Schema = "CALLEJERO")]

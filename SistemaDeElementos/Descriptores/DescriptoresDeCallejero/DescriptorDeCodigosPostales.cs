@@ -16,7 +16,7 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                , modo
                , rutaBase: "Callejero")
         {            
-            AnadirOpcionDeDependencias(Mnt
+           var opcionProvincias = AnadirOpcionDeDependencias(Mnt
                 , controlador: nameof(ProvinciasController)
                 , vista: nameof(ProvinciasController.CrudProvincias)
                 , datosDependientes: nameof(ProvinciaDto)
@@ -25,6 +25,9 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedadQueRestringe: nameof(CodigoPostalDto.Codigo)
                 , propiedadRestrictora: nameof(CpsDeUnaProvinciaDto.CodigoPostal)
                 , "Provincias de un CP");
+
+            opcionProvincias.SoloMapearEnElFiltro = true;
+
 
            var opcionMunicipios = AnadirOpcionDeDependencias(Mnt
                 , controlador: nameof(MunicipiosController)

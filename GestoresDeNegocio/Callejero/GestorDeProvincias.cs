@@ -165,6 +165,30 @@ namespace GestoresDeNegocio.Callejero
         {
             registros = base.AplicarJoins(registros, filtros, joins, parametros);
             registros = registros.Include(p => p.Pais);
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula == nameof(CpsDeUnaProvinciaDtm.IdCp).ToLower())
+                {
+                    registros = registros.Include(p => p.Cps);
+                }
+            }
+            return registros;
+        }
+
+        protected override IQueryable<ProvinciaDtm> AplicarFiltros(IQueryable<ProvinciaDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            foreach (ClausulaDeFiltrado filtro in filtros)
+            {
+                if (filtro.Clausula.ToLower() == nameof(CpsDeUnaProvinciaDtm.CodigoPostal).ToLower())
+                {
+                    registros = filtro.Valor.Length == 5
+                    ? registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo == filtro.Valor))
+                    : registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo.StartsWith(filtro.Valor)));
+                }
+            }
+
             return registros;
         }
 
