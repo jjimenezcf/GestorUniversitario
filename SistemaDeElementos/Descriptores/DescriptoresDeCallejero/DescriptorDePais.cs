@@ -1,11 +1,11 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Callejero;
-using MVCSistemaDeElementos.Controllers.Callejero;
+using MVCSistemaDeElementos.Controllers;
 using ServicioDeDatos;
-using SistemaDeElementos.Controllers.Callejero;
+using SistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
-namespace MVCSistemaDeElementos.Descriptores.Callejero
+namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDePais : DescriptorDeCrud<PaisDto>
     {

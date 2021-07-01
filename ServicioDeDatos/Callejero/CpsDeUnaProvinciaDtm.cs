@@ -55,7 +55,7 @@ namespace ServicioDeDatos.Callejero
 
             modelBuilder.Entity<CpsDeUnaProvinciaDtm>()
             .HasOne(p => p.CodigoPostal)
-            .WithMany()
+            .WithMany(p => p.Provincias)
             .HasForeignKey(p => p.IdCp)
             .HasConstraintName($"FK_PROVINCIA_CP_ID_CP")
             .OnDelete(DeleteBehavior.Restrict);

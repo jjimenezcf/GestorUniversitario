@@ -86,6 +86,9 @@ namespace GestorDeElementos
                 case CriteriosDeFiltrado.noEsNulo:
                     expresion = $"x => x.{propiedad} != null";
                     return registros.AplicarFiltroPorExpresion(expresion);
+                case CriteriosDeFiltrado.diferente:
+                    expresion = $"x => x.{propiedad} <> {valorEntero}";
+                    return registros.AplicarFiltroPorExpresion(expresion);
                 case CriteriosDeFiltrado.esAlgunoDe:
                     var lista = filtro.Valor.Split(',').Select(s => s.Entero()).ToArray();
                     return registros = registros.Where($"@0.Contains({propiedad})", lista);
@@ -189,6 +192,24 @@ namespace GestorDeElementos
             if (filtro.Valor.IsNullOrEmpty() && !(filtro.Criterio == CriteriosDeFiltrado.esNulo || filtro.Criterio == CriteriosDeFiltrado.noEsNulo))
                 return registros;
 
+            if (filtro.Valor.StartsWith("|") && filtro.Valor.Length>1)
+            {
+                filtro.Valor = filtro.Valor.Substring(1);
+                filtro.Criterio = CriteriosDeFiltrado.comienza;
+            }
+
+            if (filtro.Valor.StartsWith("=") && filtro.Valor.Length > 1)
+            {
+                filtro.Valor = filtro.Valor.Substring(1);
+                filtro.Criterio = CriteriosDeFiltrado.igual;
+            }
+
+            if (filtro.Valor.EndsWith("|") && filtro.Valor.Length > 1)
+            {
+                filtro.Valor = filtro.Valor.Substring(0, filtro.Valor.Length-1);
+                filtro.Criterio = CriteriosDeFiltrado.termina;
+            }
+
             switch (filtro.Criterio)
             {
                 case CriteriosDeFiltrado.igual:
@@ -231,10 +252,10 @@ namespace GestorDeElementos
                 foreach (var propiedad in propiedades)
                 {
 
-                    if (!propiedad.Name.ToLower().Equals(filtro.Clausula.ToLower()))
+                    if (!propiedad.Name.Equals(filtro.Clausula,StringComparison.CurrentCultureIgnoreCase))
                         continue;
 
-                    if (propiedad.Name.ToLower().Equals(nameof(IRegistro.Id).ToLower()) && filtro.Criterio == CriteriosDeFiltrado.igual)
+                    if (propiedad.Name.Equals(nameof(IRegistro.Id), StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.igual)
                         continue;
 
                     registros = registros.AplicarFiltroPorPropiedad(filtro, propiedad);

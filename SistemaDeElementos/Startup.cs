@@ -100,6 +100,9 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeTiposDeVia>();
             services.AddScoped<GestorDeCodigosPostales>();
 
+            services.AddScoped<GestorDeCpsDeUnaProvincia>();
+            
+
             services.AddScoped<GestorDeTrabajosSometido>();
             services.AddScoped<GestorDeTrabajosDeUsuario>();
             services.AddScoped<GestorDeTrazasDeUnTrabajo>();
@@ -110,7 +113,7 @@ namespace MVCSistemaDeElementos
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            //services.AddHostedService<BackgroundCola>();
+            services.AddHostedService<BackgroundCola>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

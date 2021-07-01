@@ -5,12 +5,10 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Callejero;
 using GestoresDeNegocio.Callejero;
 using ModeloDeDto.Callejero;
-using MVCSistemaDeElementos.Controllers;
-using MVCSistemaDeElementos.Descriptores.Callejero;
 using GestorDeElementos;
 using System.Collections.Generic;
 
-namespace SistemaDeElementos.Controllers.Callejero
+namespace MVCSistemaDeElementos.Controllers
 {
     public class CodigosPostalesController : EntidadController<ContextoSe, CodigoPostalDtm, CodigoPostalDto>
     {

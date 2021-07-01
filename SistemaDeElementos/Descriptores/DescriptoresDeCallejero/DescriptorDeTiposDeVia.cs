@@ -1,9 +1,9 @@
 ﻿using ModeloDeDto.Callejero;
-using MVCSistemaDeElementos.Controllers.Callejero;
+using MVCSistemaDeElementos.Controllers;
 using ServicioDeDatos;
 using UtilidadesParaIu;
 
-namespace MVCSistemaDeElementos.Descriptores.Callejero
+namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorTiposDeVia : DescriptorDeCrud<TipoDeViaDto>
     {

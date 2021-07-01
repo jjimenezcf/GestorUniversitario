@@ -5,9 +5,8 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Callejero;
 using GestoresDeNegocio.Callejero;
 using ModeloDeDto.Callejero;
-using MVCSistemaDeElementos.Descriptores.Callejero;
 
-namespace MVCSistemaDeElementos.Controllers.Callejero
+namespace MVCSistemaDeElementos.Controllers
 {
     public class PaisesController : EntidadController<ContextoSe, PaisDtm, PaisDto>
     {

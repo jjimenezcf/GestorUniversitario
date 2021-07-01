@@ -1475,7 +1475,7 @@
 
             input.readOnly = true;
             input.hidden = celdaDelTd.hidden;
-            input.value = IsNumber(valor) ? valor : valor.replace(/\r?\n|\r/g, " | ");
+            input.value = IsNumber(valor) || IsBool(valor) ? valor : valor.replace(/\r?\n|\r/g, " | ");
 
             celdaDelTd.append(input);
 

@@ -1,9 +1,9 @@
 ﻿using ModeloDeDto.Callejero;
 using ServicioDeDatos;
-using SistemaDeElementos.Controllers.Callejero;
+using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
-namespace MVCSistemaDeElementos.Descriptores.Callejero
+namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeProvincias : DescriptorDeCrud<ProvinciaDto>
     {
@@ -45,6 +45,17 @@ namespace MVCSistemaDeElementos.Descriptores.Callejero
                 , propiedad: nameof(CpsDeUnMunicipioDto.CodigoPostal)
                 , ayuda: "buscar por codigo postal"
                 , new Posicion { fila = 1, columna = 1 });
+
+
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(CpsDeUnaProvinciaController)
+                , vista: nameof(CpsDeUnaProvinciaController.CrudCpsDeUnaProvincia)
+                , relacionarCon: nameof(CodigoPostalDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<CpsDeUnaProvinciaDto>.NombreMnt
+                , nombreOpcion: "C.P."
+                , propiedadQueRestringe: nameof(ProvinciaDto.Id)
+                , propiedadRestrictora: nameof(CpsDeUnaProvinciaDto.IdProvincia)
+                , "Añadir puestos al usuario seleccionado");
 
             RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1, 0), "Provincia", "Buscar Buscar por nombre de provincia");
             Mnt.OrdenacionInicial = @$"{nameof(ProvinciaDto.Pais)}:pais.nombre:{enumModoOrdenacion.ascendente.Render()};

@@ -12,6 +12,7 @@ using GestoresDeNegocio.Archivos;
 using System.Linq;
 using ServicioDeDatos.TrabajosSometidos;
 using Microsoft.EntityFrameworkCore;
+using ModeloDeDto;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -39,8 +40,8 @@ namespace GestoresDeNegocio.Callejero
             {
                 CreateMap<CodigoPostalDtm, CodigoPostalDto>();
                 CreateMap<CodigoPostalDto, CodigoPostalDtm>()
-                    .ForMember(dtm => dtm.Provincia, dto => dto.Ignore())
-                    .ForMember(dtm => dtm.Municipios, dto => dto.Ignore());
+                    .ForMember(dtm => dtm.NombreProvincia, dto => dto.Ignore())
+                    .ForMember(dtm => dtm.NombreMunicipio, dto => dto.Ignore());
             }
         }
 
@@ -165,7 +166,7 @@ namespace GestoresDeNegocio.Callejero
             {
                 //relacionar con la provincia usando los dos primeros caractéres
                 var gestorProvincias = GestorDeProvincias.Gestor(Contexto, Contexto.Mapeador);
-                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.Codigo.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false, aplicarJoin:false);
+                var provinciaDtm = gestorProvincias.LeerRegistro(nameof(ProvinciaDtm.Codigo), registro.Codigo.PadLeft(5, '0').Substring(0, 2), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado: false, conBloqueo: false, aplicarJoin: false);
                 GestorDeCpsDeUnaProvincia.CrearRelacion(Contexto, registro, provinciaDtm);
 
                 //relacionar con el municipio usando lo indicado en los parámetros
@@ -181,7 +182,37 @@ namespace GestoresDeNegocio.Callejero
                 //eliminar relación con la provincia
                 //eliminar relación con el municipio
             }
+        }
 
+        protected override IQueryable<CodigoPostalDtm> AplicarJoins(IQueryable<CodigoPostalDtm> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)
+        {
+            registros =  base.AplicarJoins(registros, filtros, joins, parametros);
+
+            //foreach (var filtro in filtros)
+            //{
+            //    if (filtro.Clausula.Equals(nameof(CpsDeUnaProvinciaDtm.IdProvincia), StringComparison.CurrentCultureIgnoreCase))
+            //    {
+            //        registros = registros.Include(x => x.Provincias);
+            //    }
+            //}
+
+            return registros;
+        }
+
+        protected override IQueryable<CodigoPostalDtm> AplicarFiltros(IQueryable<CodigoPostalDtm> registros, List<ClausulaDeFiltrado> filtros, ParametrosDeNegocio parametros)
+        {
+            registros = base.AplicarFiltros(registros, filtros, parametros);
+
+            foreach (var filtro in filtros)
+            {
+                if (filtro.Clausula.Equals(nameof(CpsDeUnaProvinciaDtm.IdProvincia), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    registros = registros.Where(x => !x.Provincias.Any(p => true));
+                    registros = registros.Where(x => x.Codigo.Substring(0, 2) == Contexto.Set<ProvinciaDtm>().FirstOrDefault(p => p.Id.Equals(filtro.Valor.Entero())).Codigo);
+                }
+            }
+
+            return registros;
         }
 
     }

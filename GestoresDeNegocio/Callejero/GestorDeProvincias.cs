@@ -179,14 +179,11 @@ namespace GestoresDeNegocio.Callejero
         {
             registros = base.AplicarFiltros(registros, filtros, parametros);
 
-            foreach (ClausulaDeFiltrado filtro in filtros)
+            foreach (ClausulaDeFiltrado filtro in filtros.Where(filtro => filtro.Clausula.Equals(nameof(CpsDeUnaProvinciaDtm.CodigoPostal), StringComparison.CurrentCultureIgnoreCase)))
             {
-                if (filtro.Clausula.ToLower() == nameof(CpsDeUnaProvinciaDtm.CodigoPostal).ToLower())
-                {
-                    registros = filtro.Valor.Length == 5
-                    ? registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo == filtro.Valor))
-                    : registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo.StartsWith(filtro.Valor)));
-                }
+                registros = filtro.Valor.Length == 5
+                ? registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo == filtro.Valor))
+                : registros.Where(x => x.Cps.Any(y => y.CodigoPostal.Codigo.StartsWith(filtro.Valor)));
             }
 
             return registros;

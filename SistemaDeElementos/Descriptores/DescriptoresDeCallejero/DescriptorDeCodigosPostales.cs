@@ -1,11 +1,10 @@
 ﻿using ModeloDeDto;
 using ModeloDeDto.Callejero;
-using MVCSistemaDeElementos.Controllers.Callejero;
 using ServicioDeDatos;
-using SistemaDeElementos.Controllers.Callejero;
+using MVCSistemaDeElementos.Controllers;
 using UtilidadesParaIu;
 
-namespace MVCSistemaDeElementos.Descriptores.Callejero
+namespace MVCSistemaDeElementos.Descriptores
 {
     public class DescriptorDeCodigosPostales : DescriptorDeCrud<CodigoPostalDto>
     {

@@ -6,6 +6,7 @@ using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -70,10 +71,9 @@ namespace GestoresDeNegocio.Callejero
             if (HayFiltroPorId)
                 return registros;
 
-            foreach (ClausulaDeFiltrado filtro in filtros)
+            foreach (ClausulaDeFiltrado filtro in filtros.Where(filtro => filtro.Clausula.Equals(nameof(CpsDeUnaProvinciaDtm.CodigoPostal), StringComparison.CurrentCultureIgnoreCase)))
             {
-                if (filtro.Clausula.ToLower() == nameof(CpsDeUnaProvinciaDtm.CodigoPostal).ToLower())
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, nameof(CpsDeUnaProvinciaDtm.CodigoPostal));
+                registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, $"{nameof(CpsDeUnaProvinciaDtm.CodigoPostal)}.{nameof(CodigoPostalDtm.Codigo)}");
             }
             return registros;
 

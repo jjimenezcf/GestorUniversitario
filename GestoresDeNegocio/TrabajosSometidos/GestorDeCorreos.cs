@@ -65,7 +65,6 @@ namespace GestoresDeNegocio.TrabajosSometidos
             return true;
         }
 
-
         public GestorDeCorreos(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
@@ -185,7 +184,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        internal async void EnviarCorreoPendientesAsync()
+        internal async Task EnviarCorreoPendientesAsync()
         {
             var filtro = new ClausulaDeFiltrado(nameof(CorreoDtm.Enviado), CriteriosDeFiltrado.esNulo);
             var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
@@ -223,10 +222,12 @@ namespace GestoresDeNegocio.TrabajosSometidos
             var receptores = correoDtm.Receptores.JsonToLista<string>();
             string cuerpo = AdjuntarElementos(correoDtm);
 
-            var manejador = new ManejadorDeCorreo();
-            manejador.CorreoDtm = correoDtm;
-            manejador.Contexto = Contexto;
-            manejador.GestorDeCorreo = typeof(GestorDeCorreos);
+            var manejador = new ManejadorDeCorreo
+            {
+                CorreoDtm = correoDtm,
+                Contexto = ContextoSe.ObtenerContexto(Contexto),
+                GestorDeCorreo = typeof(GestorDeCorreos)
+            };
 
             ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos, manejador);
 
@@ -245,9 +246,8 @@ namespace GestoresDeNegocio.TrabajosSometidos
         public static void IndicarQueElCorreoHaSidoEnviado(ContextoSe contexto,  CorreoDtm correoDtm)
         {
             correoDtm.Enviado = DateTime.Now;
-            //Preguntar a J.Campos
-            //var gestor = Gestor(contexto, contexto.Mapeador);
-            //gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
+            var gestor = Gestor(contexto, contexto.Mapeador);
+            gestor.PersistirRegistro(correoDtm, new ParametrosDeNegocio(enumTipoOperacion.Modificar));
             ActualizarFechaDeEnvio(correoDtm);
         }
 

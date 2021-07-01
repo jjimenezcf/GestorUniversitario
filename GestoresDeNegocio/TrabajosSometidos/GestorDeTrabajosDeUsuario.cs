@@ -142,7 +142,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
     public static class GestorDeTrabajosDeUsuarioExtension
     {
-        public static Task ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
+        public static async Task ProcesarCola(this GestorDeTrabajosDeUsuario gestor, UsuarioDtm usuario)
         {
             CumplimentarDatosDeConexion(gestor, usuario);
 
@@ -170,11 +170,11 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
 
             var gestorDeCorreos = GestorDeCorreos.Gestor(gestor.Contexto, gestor.Contexto.Mapeador);
-            gestorDeCorreos.EnviarCorreoPendientesAsync();
+            await gestorDeCorreos.EnviarCorreoPendientesAsync();
 
             TrabajosDeEntorno.SometerBorrarTrazas(gestor.Contexto);
 
-            return Task.FromResult(new ResultadoDelProceso(true));
+            //return Task.FromResult(new ResultadoDelProceso(true));
         }
 
         private static List<TrabajoDeUsuarioDapper> LeerTrabajoPendiente()

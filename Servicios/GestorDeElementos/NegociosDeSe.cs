@@ -54,6 +54,7 @@ namespace GestorDeElementos
         Provincia,
         Municipio,
         TipoDeVia,
+        CpsDeUnaProvincia,
         Correo
     }
 
