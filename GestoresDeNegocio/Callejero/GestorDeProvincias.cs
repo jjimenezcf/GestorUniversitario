@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
 using ServicioDeDatos.TrabajosSometidos;
+using ServicioDeDatos.Elemento;
+using Dapper;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -197,13 +199,26 @@ namespace GestoresDeNegocio.Callejero
             if (parametros.Operacion == enumTipoOperacion.Modificar)
             {
                 //validar que si la provincia está relacionada con códigos postales, los dos primeros dígitos del código son igual que el código de la provincia
+                var a = Contexto.Set<CpsDeUnaProvinciaDtm>().FirstOrDefault(x => x.IdProvincia == registro.Id && x.CodigoPostal.Codigo.Substring(0, 2) != registro.Codigo);
+                if (a != null)
+                {
+                    var codigoPostal = Contexto.Set<CodigoPostalDtm>().LeerCacheadoPorId(a.IdCp).Codigo;
+                    GestorDeErrores.Emitir($"No se puede modificar la provincia ya que el código de la provincia es {registro.Codigo} y está relacionada con el código postal {codigoPostal}");
+                }
+
             }
 
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
             {
-                //Validar que no hay municipios con la provincia
+                //var sentencia = new ConsultaSql<CpsDeUnaProvinciaDtm>(CpsDeUnaProvinciaSqls.BorrarCps, CacheDeVariable.Cfg_HayQueDebuggar, nameof(CpsDeUnaProvinciaSqls.BorrarCps));
+                //var valores = new Dictionary<string, object> { { $"@{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}", registro.Id } };
+                //sentencia.EjecutarSentencia(new DynamicParameters(valores));
+                Contexto.Set<CpsDeUnaProvinciaDtm>().FromSqlInterpolated($"{CpsDeUnaProvinciaSqls.BorrarCps.Replace($"@{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}", registro.Id.ToString())}");
 
-                //Eliminar los CPS relacionados con la provincia
+                //Validar que no hay municipios con la provincia
+                var municipio = Contexto.Set<MunicipioDtm>().FirstOrDefault(x => x.IdProvincia == registro.Id);
+                if (municipio != null)
+                    GestorDeErrores.Emitir($"No se puede eliminar la provincia por estar relacionada con el municipio {municipio.Expresion}");
 
             }
         }

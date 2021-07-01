@@ -24,6 +24,12 @@ namespace ServicioDeDatos.Callejero
     }
 
 
+    public static class CpsDeUnaProvinciaSqls
+    {
+        public static string BorrarCps = $"DELETE CALLEJERO.PROVINCIA_CP WHERE ID_PROVINCIA = @{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}";
+
+    }
+
     public static partial class ModeloDeCallejero
     {
         public static void ProvinciaCp(ModelBuilder modelBuilder)

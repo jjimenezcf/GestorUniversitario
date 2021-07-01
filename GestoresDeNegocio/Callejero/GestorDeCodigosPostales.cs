@@ -38,10 +38,12 @@ namespace GestoresDeNegocio.Callejero
         {
             public MapearVariables()
             {
-                CreateMap<CodigoPostalDtm, CodigoPostalDto>();
+                CreateMap<CodigoPostalDtm, CodigoPostalDto>()
+                    .ForMember(dto => dto.Provincia, dtm => dtm.MapFrom(x => x.NombreProvincia))
+                    .ForMember(dto => dto.Municipios, dtm => dtm.MapFrom(x => x.Municipios));
                 CreateMap<CodigoPostalDto, CodigoPostalDtm>()
                     .ForMember(dtm => dtm.NombreProvincia, dto => dto.Ignore())
-                    .ForMember(dtm => dtm.NombreMunicipio, dto => dto.Ignore());
+                    .ForMember(dtm => dtm.Municipios, dto => dto.Ignore());
             }
         }
 
@@ -156,6 +158,8 @@ namespace GestoresDeNegocio.Callejero
             {
                 //TODO:
                 //validar que el cp no está usado en ninguna dirección
+                //eliminar relación con la provincia
+                //eliminar relación con el municipio
             }
         }
 
@@ -175,12 +179,6 @@ namespace GestoresDeNegocio.Callejero
                     var municipioDtm = (MunicipioDtm)parametros.Parametros[nameof(MunicipioDtm)];
                     GestorDeCpsDeUnMunicipio.CrearRelacion(Contexto, registro, municipioDtm);
                 }
-            }
-            if (parametros.Operacion == enumTipoOperacion.Eliminar)
-            {
-                //TODO:
-                //eliminar relación con la provincia
-                //eliminar relación con el municipio
             }
         }
 

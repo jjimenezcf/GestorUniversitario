@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
 using AutoMapper;
@@ -9,6 +8,7 @@ using ModeloDeDto;
 using ServicioDeDatos;
 using ServicioDeDatos.Elemento;
 using Utilidades;
+using System.Linq;
 
 namespace GestorDeElementos
 {
@@ -133,7 +133,6 @@ namespace GestorDeElementos
         }
     }
 
-
     public class Gestores<TContexto, TRegistro, TElemento>
         where TRegistro : Registro
         where TElemento : ElementoDto
@@ -170,5 +169,37 @@ namespace GestorDeElementos
 
             //return (GestorDeElementos<TContexto, TRegistro, TElemento>)cache[clase];
         }
+    }
+
+    public static class ApiContextoSe
+    {
+        public static TSource LeerCacheadoPorId<TSource>(this IQueryable<TSource> source, int id, bool errorSiNoHay = true) where TSource : Registro
+        {
+            var cache = ServicioDeCaches.Obtener(typeof(TSource).FullName);
+            var indice = $"{nameof(Registro.Id)}-{id}-0";
+            if (!cache.ContainsKey(indice))
+            {
+                var registro = source.FirstOrDefault(x => x.Id == id);
+                if (registro == null && errorSiNoHay)
+                    GestorDeErrores.Emitir($"No se ha localizado el objeto con id {id} buscado en la entidad {typeof(TSource).Name}");
+                cache[indice] = registro;
+            }
+            return (TSource)cache[indice];
+        }
+
+        public static TSource LeerCacheadoPorNombre<TSource>(this IQueryable<TSource> source, int nombre, bool errorSiNoHay = true) where TSource: INombre
+        {
+            var cache = ServicioDeCaches.Obtener(typeof(TSource).FullName);
+            var indice = $"{nameof(INombre.Nombre)}-{nombre}-0";
+            if (!cache.ContainsKey(indice))
+            {
+                var registro = source.First(x => x.Nombre.Equals(nombre));
+                if (registro == null && errorSiNoHay)
+                    GestorDeErrores.Emitir($"No se ha localizado el objeto con id {nombre} buscado en la entidad {typeof(TSource).Name}");
+                cache[indice] = registro;
+            }
+            return (TSource)cache[indice];
+        }
+
     }
 }
