@@ -30,7 +30,7 @@ namespace MVCSistemaDeElementos.Controllers
         /// <param name="id">id del elemento pasado</param>
         /// <param name="idsJson">lista de ids en formato json de los ids con los que relacionar</param>
         /// <returns></returns>
-        public JsonResult epCrearRelaciones(int id, string idsJson)
+        public JsonResult epCrearRelaciones(string propiedadId, int id, string idsJson)
         {
             var r = new Resultado();
             try
@@ -41,7 +41,7 @@ namespace MVCSistemaDeElementos.Controllers
                 var mensajeInformativo = "";
                 foreach (var idParaRelacionar in listaIds)
                 {
-                    if (!GestorDeRelaciones.CrearRelacion(id, idParaRelacionar, false).existe)
+                    if (!GestorDeRelaciones.CrearRelacion(propiedadId, id, idParaRelacionar, false).existe)
                         relacionados++;
                     else
                         mensajeInformativo = mensajeInformativo + Environment.NewLine + $"Existe la relación {id} con {idParaRelacionar}";

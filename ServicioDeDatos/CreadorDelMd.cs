@@ -49,7 +49,13 @@ namespace ServicioDeDatos
         public DbSet<NegocioDtm> Negocio { get; set; }
         public DbSet<ModoDeAccesoAlNegocioDtm> ModoAccesoAlNegocio { get; set; }
 
-        #endregion        
+        #endregion
+
+
+        #region dbSets del esquema de NEGOCIO
+        public DbSet<CpsDeUnaProvinciaDtm> CpsDeUnaProvincia { get; set; }
+
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

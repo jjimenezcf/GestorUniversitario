@@ -48,7 +48,7 @@ namespace GestoresDeNegocio.Callejero
         public static void CrearRelacion(ContextoSe contexto, CodigoPostalDtm cp, ProvinciaDtm provincia)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
-            gestor.CrearRelacion(cp.Id, provincia.Id, false);
+            gestor.CrearRelacion(nameof(CpsDeUnaProvinciaDtm.IdCp), cp.Id, provincia.Id, false);
         }
 
 

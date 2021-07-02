@@ -94,7 +94,7 @@ namespace GestorDeElementos
 
             if (tipo == enumTipoOperacion.LeerSinBloqueo)
                 LeerParaActualizar = false;
-            
+
             AplicarJoin = aplicarJoin;
         }
     }
@@ -280,6 +280,27 @@ namespace GestorDeElementos
             return registro;
         }
 
+        public virtual void BorrarRegistros(IQueryable<TRegistro> registros)
+        {
+            var transaccion = Contexto.IniciarTransaccion();
+            try
+            {
+                Contexto.RemoveRange(registros);
+                Contexto.SaveChanges();
+                Contexto.Commit(transaccion);
+            }
+            catch (Exception)
+            {
+                Contexto.Rollback(transaccion);
+                throw;
+            }
+            finally
+            {
+                ServicioDeCaches.EliminarCache(typeof(TRegistro).FullName);
+                ServicioDeCaches.EliminarCache($"{typeof(TRegistro).FullName}-ak");
+            }
+        }
+
 
         protected virtual void DespuesDePersistir(TRegistro registro, ParametrosDeNegocio parametros)
         {
@@ -389,7 +410,7 @@ namespace GestorDeElementos
             return Mapeador.ProjectTo<TElemento>(registros).AsNoTracking().ToList();
         }
 
-        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache , bool traqueado , bool conBloqueo, bool aplicarJoin )
+        public TRegistro LeerRegistroPorId(int? id, bool usarLaCache, bool traqueado, bool conBloqueo, bool aplicarJoin)
         {
             if (!usarLaCache)
                 return LeerRegistro(nameof(IRegistro.Id), id.ToString(), errorSiNoHay: true, errorSiHayMasDeUno: true, traqueado, conBloqueo, aplicarJoin);
@@ -406,7 +427,7 @@ namespace GestorDeElementos
             var cache = ServicioDeCaches.Obtener($"{typeof(TRegistro).FullName}-ak");
             if (!cache.ContainsKey(indice))
             {
-                var registros = LeerRegistros(0, -1, filtros,null,null,new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo,apliacarJoin));
+                var registros = LeerRegistros(0, -1, filtros, null, null, new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo, apliacarJoin));
 
                 if (errorSiNoHay && registros.Count == 0)
                     GestorDeErrores.Emitir($"No se ha localizado el registro solicitada para el filtro proporcionado");
@@ -426,7 +447,7 @@ namespace GestorDeElementos
         }
         public TRegistro LeerRegistroCacheado(string propiedad, string valor, bool errorSiNoHay, bool errorSiHayMasDeUno, bool aplicarJoin)
         {
-            var indice = $"{propiedad}-{valor}-{(!aplicarJoin? "0":"1")}";
+            var indice = $"{propiedad}-{valor}-{(!aplicarJoin ? "0" : "1")}";
             var cache = ServicioDeCaches.Obtener(typeof(TRegistro).FullName);
             if (!cache.ContainsKey(indice))
             {
@@ -540,7 +561,7 @@ namespace GestorDeElementos
 
             var registros = DefinirConsulta(0, -1, filtros, new List<ClausulaDeOrdenacion> { orden }, joins, parametros);
 
-            var registro = parametros.LeerParaActualizar ? registros.FirstOrDefault(): registros.AsNoTracking().FirstOrDefault();
+            var registro = parametros.LeerParaActualizar ? registros.FirstOrDefault() : registros.AsNoTracking().FirstOrDefault();
 
             return registro;
         }
@@ -556,7 +577,7 @@ namespace GestorDeElementos
             IQueryable<TRegistro> registros = Contexto.Set<TRegistro>();
 
             if (parametros.AplicarJoin)
-               registros = AplicarJoins(registros, filtros, joins, parametros);
+                registros = AplicarJoins(registros, filtros, joins, parametros);
 
             if (filtros.Count > 0)
                 registros = AplicarFiltros(registros, filtros, parametros);
@@ -921,7 +942,7 @@ namespace GestorDeElementos
 
         public void Dispose()
         {
-            
+
         }
 
         public static class ltrJoinAudt

@@ -5,6 +5,8 @@ using MVCSistemaDeElementos.Descriptores;
 using ServicioDeDatos.Callejero;
 using ModeloDeDto.Callejero;
 using GestoresDeNegocio.Callejero;
+using GestorDeElementos;
+using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
@@ -24,6 +26,15 @@ namespace MVCSistemaDeElementos.Controllers
         public IActionResult CrudCpsDeUnaProvincia()
         {
             return ViewCrud(new DescriptorDeCpsDeUnaProvincia(Contexto, ModoDescriptor.Mantenimiento));
+        }
+
+
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        {
+            if (claseElemento == nameof(CodigoPostalDto))
+                return GestorDeCodigosPostales.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerCodigosPostales(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
         }
 
     }

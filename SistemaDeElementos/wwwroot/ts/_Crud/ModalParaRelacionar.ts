@@ -80,6 +80,7 @@
             let idsJson: string = JSON.stringify(this.InfoSelector.IdsSeleccionados);
             let url: string = `/${this.Crud.Controlador}/${Ajax.EndPoint.CrearRelaciones}`;
             let parametros: string =
+                `${Ajax.Param.propiedadId}=${this.PropiedadRestrictora}` +
                 `&${Ajax.Param.id}=${this.IdRestrictor}` +
                 `&${Ajax.Param.idsJson}=${idsJson}`;
             let peticion: string = url + '?' + parametros;

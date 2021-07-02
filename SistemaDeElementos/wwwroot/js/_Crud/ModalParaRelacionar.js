@@ -54,7 +54,8 @@ var Crud;
         DefinirPeticionDeCrearRelaciones() {
             let idsJson = JSON.stringify(this.InfoSelector.IdsSeleccionados);
             let url = `/${this.Crud.Controlador}/${Ajax.EndPoint.CrearRelaciones}`;
-            let parametros = `&${Ajax.Param.id}=${this.IdRestrictor}` +
+            let parametros = `${Ajax.Param.propiedadId}=${this.PropiedadRestrictora}` +
+                `&${Ajax.Param.id}=${this.IdRestrictor}` +
                 `&${Ajax.Param.idsJson}=${idsJson}`;
             let peticion = url + '?' + parametros;
             return peticion;

@@ -205,21 +205,18 @@ namespace GestoresDeNegocio.Callejero
                     var codigoPostal = Contexto.Set<CodigoPostalDtm>().LeerCacheadoPorId(a.IdCp).Codigo;
                     GestorDeErrores.Emitir($"No se puede modificar la provincia ya que el código de la provincia es {registro.Codigo} y está relacionada con el código postal {codigoPostal}");
                 }
-
             }
 
             if (parametros.Operacion == enumTipoOperacion.Eliminar)
             {
-                //var sentencia = new ConsultaSql<CpsDeUnaProvinciaDtm>(CpsDeUnaProvinciaSqls.BorrarCps, CacheDeVariable.Cfg_HayQueDebuggar, nameof(CpsDeUnaProvinciaSqls.BorrarCps));
-                //var valores = new Dictionary<string, object> { { $"@{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}", registro.Id } };
-                //sentencia.EjecutarSentencia(new DynamicParameters(valores));
-                Contexto.Set<CpsDeUnaProvinciaDtm>().FromSqlInterpolated($"{CpsDeUnaProvinciaSqls.BorrarCps.Replace($"@{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}", registro.Id.ToString())}");
-
                 //Validar que no hay municipios con la provincia
                 var municipio = Contexto.Set<MunicipioDtm>().FirstOrDefault(x => x.IdProvincia == registro.Id);
                 if (municipio != null)
                     GestorDeErrores.Emitir($"No se puede eliminar la provincia por estar relacionada con el municipio {municipio.Expresion}");
 
+                //Elimina las relaciones del los cp con la provincia a borrar
+                var a = Contexto.Set<CpsDeUnaProvinciaDtm>().Where(x => x.IdProvincia == registro.Id);
+                GestorDeCpsDeUnaProvincia.Gestor(Contexto, Contexto.Mapeador).BorrarRegistros(a);
             }
         }
 

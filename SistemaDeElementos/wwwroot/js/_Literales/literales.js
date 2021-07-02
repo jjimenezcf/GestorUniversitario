@@ -279,7 +279,8 @@ const Ajax = {
         extensiones: "extensionesValidas",
         login: "login",
         password: "password",
-        negocio: "negocio"
+        negocio: "negocio",
+        propiedadId: "propiedadId"
     },
     Callejero: {
         Importacion: 'importarCallejero',
