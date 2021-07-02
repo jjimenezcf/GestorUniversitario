@@ -29,12 +29,12 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(CodigoPostalDto))
-                return GestorDeCodigosPostales.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerCodigosPostales(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeCodigosPostales.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerCodigosPostales(posicion, cantidad, filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
 
     }

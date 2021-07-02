@@ -301,6 +301,9 @@ var Crud;
         get EsCrud() {
             return EsObjetoDe(this, Crud.CrudMnt);
         }
+        get ChecksDeSeleccion() {
+            return document.getElementsByName(`${literal.id}.${this.IdGrid}`);
+        }
         get IdCuerpoCabecera() {
             return this._idCuerpoCabecera;
         }
@@ -569,9 +572,6 @@ var Crud;
             }
             return clausula;
         }
-        FiltrosExcluyentes(clausulas) {
-            return clausulas;
-        }
         ObtenerElIdDeLosControlesDeFiltro() {
             var arrayIds = new Array();
             var arrayHtmlInput = this.ZonaDeFiltro.querySelectorAll(`input[${atControl.filtro}="S"]`);
@@ -715,7 +715,7 @@ var Crud;
         MarcarElementos() {
             if (this.InfoSelector.Cantidad === 0)
                 return;
-            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
+            var celdasId = this.ChecksDeSeleccion;
             var len = celdasId.length;
             for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
                 let elemento = this.InfoSelector.LeerElemento(i);
@@ -731,7 +731,7 @@ var Crud;
             }
         }
         BlanquearTodosLosCheck() {
-            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
+            var celdasId = this.ChecksDeSeleccion;
             var len = celdasId.length;
             for (var j = 0; j < len; j++) {
                 var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
@@ -1241,6 +1241,28 @@ var Crud;
                     return registro[propiedad];
             }
             return "";
+        }
+        SeleccionarTodasLasFilas() {
+            let len = this.ChecksDeSeleccion.length;
+            for (var j = 0; j < len; j++) {
+                var idCheck = this.ChecksDeSeleccion[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                let check = document.getElementById(idCheck);
+                if (EsTrue(check.checked))
+                    continue;
+                check.checked = true;
+                this.FilaPulsada(idCheck, idCheck);
+            }
+        }
+        DeselecionarTodasLasFilas() {
+            let len = this.ChecksDeSeleccion.length;
+            for (var j = 0; j < len; j++) {
+                var idCheck = this.ChecksDeSeleccion[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                let check = document.getElementById(idCheck);
+                if (!EsTrue(check.checked))
+                    continue;
+                check.checked = false;
+                this.FilaPulsada(idCheck, idCheck);
+            }
         }
         FilaPulsada(idCheck, idDelInput) {
             let check = document.getElementById(idCheck);

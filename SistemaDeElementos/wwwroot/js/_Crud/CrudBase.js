@@ -358,12 +358,17 @@ var Crud;
             let filtro = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
             if (filtro === null)
                 return;
+            var filtros = new Array();
+            filtros.push(filtro);
             let cantidad = input.getAttribute(atListasDinamicas.cantidad);
-            let url = this.DefinirPeticionDeCargarDinamica(this.Controlador, clase, Numero(cantidad), filtro);
+            let url = this.DefinirPeticionDeCargarDinamica(this.Controlador, clase, Numero(cantidad), filtros);
             let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${filtro.valor}" , "criterio":"${filtro.criterio}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.CargaDinamica, datosDeEntrada, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.AnadirOpcionesListaDinamica, this.SiHayErrorAlCargarListasDinamicas);
             input.setAttribute(atListasDinamicas.cargando, 'S');
             a.Ejecutar();
+        }
+        FiltrosExcluyentes(clausulas) {
+            return clausulas;
         }
         AnadirOpcionesListaDinamica(peticion) {
             let datosDeEntrada = JSON.parse(peticion.DatosDeEntrada);
@@ -425,8 +430,8 @@ var Crud;
             let url = `/${controlador}/${Ajax.EndPoint.CargarLista}?${Ajax.Param.claseElemento}=${claseElemento}`;
             return url;
         }
-        DefinirPeticionDeCargarDinamica(controlador, claseElemento, cantidad, filtro) {
-            let url = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=${cantidad}&filtro=${JSON.stringify(filtro)}`;
+        DefinirPeticionDeCargarDinamica(controlador, claseElemento, cantidad, filtros) {
+            let url = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=${cantidad}&filtrosJson=${JSON.stringify(filtros)}`;
             return url;
         }
     }

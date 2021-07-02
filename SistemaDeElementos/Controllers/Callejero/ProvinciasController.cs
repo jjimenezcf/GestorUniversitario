@@ -28,12 +28,12 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud(new DescriptorDeProvincias(Contexto, ModoDescriptor.Mantenimiento));
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(PaisDto))
-                return GestorDePaises.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPaises(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDePaises.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPaises(posicion, cantidad, filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
 
     }

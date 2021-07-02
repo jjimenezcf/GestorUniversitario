@@ -40,18 +40,18 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud(new DescriptorDeUsuario(Contexto, ModoDescriptor.Mantenimiento));
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(PuestoDto))
-                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado> { filtro });
+                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, filtros);
 
             if (claseElemento == nameof(RolDto))
-                return GestorDeRoles.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerRoles(posicion, cantidad, new List<ClausulaDeFiltrado> { filtro });
+                return GestorDeRoles.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerRoles(posicion, cantidad, filtros);
 
             if (claseElemento == nameof(PermisoDto))
-                return GestorDePermisos.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPermisos(posicion, cantidad, new List<ClausulaDeFiltrado> { filtro });
+                return GestorDePermisos.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPermisos(posicion, cantidad, filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
 
 

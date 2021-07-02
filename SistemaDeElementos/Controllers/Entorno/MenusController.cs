@@ -40,15 +40,15 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(VistaMvcDto))
-                return GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerVistas(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeVistaMvc.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerVistas(posicion, cantidad, filtros);
 
             if (claseElemento == nameof(MenuDto))
-                return GestorDeMenus.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMenus(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeMenus.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMenus(posicion, cantidad, filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
 
         }
 

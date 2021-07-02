@@ -365,6 +365,9 @@
             return EsObjetoDe(this, CrudMnt);
         }
 
+        protected get ChecksDeSeleccion(): NodeListOf<HTMLInputElement> {
+            return document.getElementsByName(`${literal.id}.${this.IdGrid}`) as NodeListOf<HTMLInputElement>;
+        }
 
         private _idCuerpoCabecera: string;
         public get IdCuerpoCabecera(): string {
@@ -689,9 +692,6 @@
             return clausula;
         }
 
-        protected FiltrosExcluyentes(clausulas: ClausulaDeFiltrado[]) {
-            return clausulas;
-        }
 
         private ObtenerElIdDeLosControlesDeFiltro(): Array<string> {
             var arrayIds = new Array<string>();
@@ -739,7 +739,7 @@
             ////por ejemplo al pasar navegar de CPs a Municipio se restringe por IdCP pero se visualiza un CP
             //let restrictor: string = editor.disabled ? editor.getAttribute(atControl.restrictor) : ""; Numero(restrictor) > 0 ? restrictor :
 
-            let valor: string =  editor.value;
+            let valor: string = editor.value;
             var clausula = null;
             if (!IsNullOrEmpty(valor))
                 //clausula = { propiedad: `${propiedad}`, criterio: `${criterio}`, valor: `${valor}` };
@@ -861,7 +861,7 @@
             if (this.InfoSelector.Cantidad === 0)
                 return;
 
-            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
+            var celdasId = this.ChecksDeSeleccion;
             var len = celdasId.length;
             for (var i = this.InfoSelector.Cantidad - 1; i >= 0; i--) {
                 let elemento: Elemento = this.InfoSelector.LeerElemento(i);
@@ -878,7 +878,7 @@
         }
 
         public BlanquearTodosLosCheck() {
-            var celdasId = document.getElementsByName(`${literal.id}.${this.IdGrid}`);
+            var celdasId = this.ChecksDeSeleccion;
             var len = celdasId.length;
             for (var j = 0; j < len; j++) {
                 var idCheck = celdasId[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
@@ -1524,6 +1524,31 @@
                     return registro[propiedad];
             }
             return "";
+        }
+
+        public SeleccionarTodasLasFilas() {
+            let len: number = this.ChecksDeSeleccion.length;
+            for (var j = 0; j < len; j++) {
+                var idCheck = this.ChecksDeSeleccion[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+                if (EsTrue(check.checked))
+                    continue;
+                check.checked = true;
+                this.FilaPulsada(idCheck, idCheck);
+            }
+        }
+
+        public DeselecionarTodasLasFilas() {
+
+            let len: number = this.ChecksDeSeleccion.length;
+            for (var j = 0; j < len; j++) {
+                var idCheck = this.ChecksDeSeleccion[j].id.replace(`.${atControl.id}`, LiteralMnt.postfijoDeCheckDeSeleccion);
+                let check: HTMLInputElement = document.getElementById(idCheck) as HTMLInputElement;
+                if (!EsTrue(check.checked))
+                    continue;
+                check.checked = false;
+                this.FilaPulsada(idCheck, idCheck);
+            }
         }
 
         public FilaPulsada(idCheck: string, idDelInput: string) {

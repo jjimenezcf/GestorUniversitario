@@ -36,15 +36,15 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud(new DescriptorDeTrabajosSometido(Contexto, ModoDescriptor.Mantenimiento));
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(UsuarioDto))
-                return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad, filtros);
 
             if (claseElemento == nameof(PuestoDto))
-                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDePuestosDeTrabajo.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerPuestos(posicion, cantidad, filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
     }
 

@@ -34,15 +34,15 @@ namespace MVCSistemaDeElementos.Controllers
             return ViewCrud(new DescriptorDeTrabajosDeUsuario(Contexto, ModoDescriptor.Mantenimiento));
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             if (claseElemento == nameof(UsuarioDto))
-                return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeUsuarios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerUsuarios(posicion, cantidad,filtros);
 
             if (claseElemento == nameof(TrabajoSometidoDto))
-                return GestorDeTrabajosSometido.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerTrabajos(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return GestorDeTrabajosSometido.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerTrabajos(posicion, cantidad,filtros);
 
-            return base.CargaDinamica(claseElemento, posicion, cantidad, filtro);
+            return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
 
         public JsonResult epIniciarTrabajoDeUsuario(int idTrabajoUsuario)

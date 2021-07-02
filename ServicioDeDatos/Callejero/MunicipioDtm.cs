@@ -18,7 +18,7 @@ namespace ServicioDeDatos.Callejero
         public ProvinciaDtm Provincia { get; set; }
         public IEnumerable<CpsDeUnMunicipioDtm> Cps { get; set; }
 
-        public string Expresion => $"{Codigo}-{Nombre}";
+        public string Expresion => $"({Codigo}) {Nombre}";
 
     }
 

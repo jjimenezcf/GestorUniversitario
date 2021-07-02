@@ -312,16 +312,16 @@ namespace MVCSistemaDeElementos.Controllers
         }
 
         //END-POINT: Desde CrudBase.ts
-        public JsonResult epCargaDinamica(string claseElemento, int posicion, int cantidad, string filtro)
+        public JsonResult epCargaDinamica(string claseElemento, int posicion, int cantidad, string filtrosJson)
         {
             var r = new Resultado();
             dynamic elementos;
             try
             {
-                ClausulaDeFiltrado clausula = filtro == null ? new ClausulaDeFiltrado() : JsonConvert.DeserializeObject<ClausulaDeFiltrado>(filtro);
+                List<ClausulaDeFiltrado> filtros = filtrosJson == null ? new List<ClausulaDeFiltrado>() : JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtrosJson);
 
                 ApiController.CumplimentarDatosDeUsuarioDeConexion(GestorDeElementos.Contexto, GestorDeElementos.Mapeador, HttpContext);
-                elementos = CargaDinamica(claseElemento, posicion, cantidad, clausula);
+                elementos = CargaDinamica(claseElemento, posicion, cantidad, filtros);
                 r.Datos = elementos;
                 r.Estado = enumEstadoPeticion.Ok;
             }
@@ -362,7 +362,7 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
-        protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected virtual dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             throw new Exception($"Debe implementar la función de CargaDinamica para la clase '{claseElemento}' en el controlador '{this.GetType().Name}'");
         }

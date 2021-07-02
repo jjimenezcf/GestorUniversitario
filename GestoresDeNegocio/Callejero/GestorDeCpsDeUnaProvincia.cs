@@ -7,6 +7,7 @@ using ModeloDeDto.Callejero;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Gestor.Errores;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -77,6 +78,17 @@ namespace GestoresDeNegocio.Callejero
             }
             return registros;
 
+        }
+
+        protected override void AntesDePersistirValidarRegistro(CpsDeUnaProvinciaDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.AntesDePersistirValidarRegistro(registro, parametros);
+
+            var provincia = Contexto.Set<ProvinciaDtm>().LeerCacheadoPorId(registro.IdProvincia);
+            var codigoPostal = Contexto.Set<CodigoPostalDtm>().LeerCacheadoPorId(registro.IdCp);
+
+            if (!codigoPostal.Codigo.Substring(0, 2).Equals(provincia.Codigo))
+                GestorDeErrores.Emitir($"El código postal {registro.CodigoPostal.Codigo} no se puede relacionar con la provincia {registro.Provincia.Expresion}");
         }
 
     }

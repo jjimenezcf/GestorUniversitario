@@ -38,11 +38,11 @@ namespace MVCSistemaDeElementos.Controllers
             return base.CargarLista(claseElemento, negocio, filtros);
         }
 
-        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, ClausulaDeFiltrado filtro)
+        protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
 
             if (claseElemento == nameof(ClasePermisoDto))
-                return ((GestorDePermisos)GestorDeElementos).LeerClases(posicion, cantidad, new List<ClausulaDeFiltrado>() { filtro });
+                return ((GestorDePermisos)GestorDeElementos).LeerClases(posicion, cantidad, filtros);
 
             return null;
 

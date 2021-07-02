@@ -110,6 +110,7 @@ var Crud;
         try {
             switch (accion) {
                 case Evento.OpcionesDelGrid.SeleccionarTodo: {
+                    grid.SeleccionarTodasLasFilas();
                     break;
                 }
                 case Evento.OpcionesDelGrid.AnularOrden: {
@@ -117,6 +118,7 @@ var Crud;
                     break;
                 }
                 case Evento.OpcionesDelGrid.AnularSeleccion: {
+                    grid.DeselecionarTodasLasFilas();
                     break;
                 }
                 case Evento.OpcionesDelGrid.AplicarOrdenInicial: {

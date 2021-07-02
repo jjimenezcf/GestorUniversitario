@@ -18,6 +18,8 @@ namespace ServicioDeDatos.Callejero
         public int IdPais { get; set; }
         public PaisDtm Pais { get; set; }
         public IEnumerable<CpsDeUnaProvinciaDtm> Cps { get; set; }
+
+        public string Expresion => $"({Codigo}) {Nombre}";
     }
 
     [Table("PROVINCIA_AUDITORIA", Schema = "CALLEJERO")]
@@ -64,6 +66,8 @@ namespace ServicioDeDatos.Callejero
             .HasForeignKey(p => p.IdPais)
             .HasConstraintName($"FK_PROVINCIA_ID_PAIS")
             .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProvinciaDtm>().Ignore(x => x.Expresion);
         }
 
         public static void ProvinciaAudt(ModelBuilder modelBuilder)
