@@ -54,6 +54,8 @@ namespace MVCSistemaDeElementos.Descriptores
                                          mostrar-expresion=¨[MostrarExpresion]¨
                                          como-buscar=¨[BuscarPor]¨
                                          criterio-de-filtro=¨[CriterioDeFiltro]¨
+                                         restringido-por=¨[RestringidoPor]¨
+                                         contenido-en=¨[ContenidoEn]¨
                                          longitud=¨[Longitud]¨ 
                                          cantidad-a-leer=¨[Cantidad]¨ 
                                          placeholder =¨[Placeholder]¨

@@ -205,6 +205,8 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.seleccionar}',this)";
             valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
             valores["GuardarEn"] = atributos.GuardarEn;
+            valores["RestringidoPor"] = atributos.RestringidoPor.ToLower();
+            valores["ContenidoEn"] = tabla.IdHtmlContenedor;
 
             var a = PlantillasHtml.Render(PlantillasHtml.listaDinamicaDto, valores);
             return a;

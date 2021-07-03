@@ -154,11 +154,14 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public string IdHtml => $"table-{Tipo.Name}-{ModoDeTrabajo}".ToLower();
 
-        public DescriptorDeTabla(Type tipo, enumModoDeTrabajo modoDeTrabajo, string controlador)
+        public string IdHtmlContenedor { get; }
+
+        public DescriptorDeTabla(Type tipo, enumModoDeTrabajo modoDeTrabajo, string controlador, string idHtmlContenedor)
         {
             Tipo = tipo;
             Controlador = controlador;
             ModoDeTrabajo = modoDeTrabajo;
+            IdHtmlContenedor = idHtmlContenedor;
             var propiedades = tipo.GetProperties();
             foreach (var p in propiedades)
                 AnadirPropiedad(p);

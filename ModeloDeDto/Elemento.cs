@@ -91,6 +91,8 @@ namespace ModeloDeDto
         public CriteriosDeFiltrado CriterioDeBusqueda { get; set; } = CriteriosDeFiltrado.contiene;
 
         public string GuardarEn { get; set; }
+
+        public string RestringidoPor { get; set; } = "";
         public string BuscarPor { get; set; } = ltrFiltros.Nombre;
 
         public string MostrarExpresion { get; set; }

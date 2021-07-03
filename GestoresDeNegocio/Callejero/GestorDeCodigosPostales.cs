@@ -62,7 +62,7 @@ namespace GestoresDeNegocio.Callejero
         public List<CodigoPostalDto> LeerCodigosPostales(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
         {
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
-            orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = filtros[0].Clausula, Modo = ModoDeOrdenancion.ascendente });
+            orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(CodigoPostalDtm.Codigo), Modo = ModoDeOrdenancion.ascendente });
 
             var registros = LeerRegistros(posicion, cantidad, filtros, orden);
             return MapearElementos(registros).ToList();

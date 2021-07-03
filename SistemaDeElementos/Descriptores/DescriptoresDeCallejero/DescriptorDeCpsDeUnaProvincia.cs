@@ -3,6 +3,7 @@ using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
 using MVCSistemaDeElementos.Controllers;
 using ServicioDeDatos;
+using ServicioDeDatos.Callejero;
 using ServicioDeDatos.Seguridad;
 using UtilidadesParaIu;
 
@@ -31,6 +32,8 @@ namespace MVCSistemaDeElementos.Descriptores
             var relacionarCps = new RelacionarElementos(modalDePuestos.IdHtml, () => modalDePuestos.RenderControl(), "Añadir códigos postales a la provincia");
             var opcion = new OpcionDeMenu<CpsDeUnaProvinciaDto>(Mnt.ZonaMenu.Menu, relacionarCps, $"C.P.", enumModoDeAccesoDeDatos.Gestor);
             Mnt.ZonaMenu.Menu.Add(opcion);
+
+            Mnt.OrdenacionInicial = @$"{nameof(CpsDeUnaProvinciaDto.CodigoPostal)}:{nameof(CpsDeUnaProvinciaDtm.CodigoPostal)}.{nameof(CpsDeUnaProvinciaDtm.CodigoPostal.Codigo)}:{enumModoOrdenacion.ascendente.Render()}";
 
         }
 

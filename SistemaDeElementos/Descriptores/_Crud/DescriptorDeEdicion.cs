@@ -42,7 +42,7 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Edicion, Crud.Controlador);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Edicion, Crud.Controlador, $"contenedor_edicion_cuerpo_{IdHtml}");
             string htmContenedorEdt;
             if (AbrirEnModal)
             {
@@ -98,7 +98,7 @@ namespace MVCSistemaDeElementos.Descriptores
         private string RenderContenedorDeEdicionCuerpo(DescriptorDeTabla tabla)
         {
             var htmlExpanes = RenderExpanes();
-            var htmlModal = $@"<div id=¨contenedor_edicion_cuerpo_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
+            var htmlModal = $@"<div id=¨{tabla.IdHtmlContenedor}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
                                  {htmlRenderObjetoVacio(tabla)}
                                  {htmlExpanes}
                                </div>";

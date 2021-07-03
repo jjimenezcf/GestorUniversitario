@@ -538,8 +538,27 @@ var ApiFiltro;
             longitud = 3;
         if (valor.length < longitud)
             return null;
+        var filtros = new Array();
+        let restringirPor = input.getAttribute(atListasDinamicas.RestringidoPor);
+        if (Definida(restringirPor)) {
+            let contenedor = input.getAttribute(atListasDinamicas.ContenidoEn);
+            if (NoDefinida(contenedor))
+                MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se puede definir el filtro para la propiedad ${input.id} ya que no se ha definido el atributo ${atListasDinamicas.ContenidoEn}`);
+            let divControl = document.getElementById(contenedor);
+            let restrictor = divControl.querySelector(`[${atControl.propiedad}=${restringirPor}]`);
+            if (NoDefinida(restrictor))
+                MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha encontratado el control con la propiedad ${restringirPor} asociado a la lista ${input.id} en el contenedor ${contenedor}`);
+            let valorRestrictor = "";
+            if (restrictor instanceof HTMLInputElement)
+                valorRestrictor = restrictor.getAttribute(atControl.restrictor);
+            if (Numero(valor) === 0)
+                MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha definido el valor por el que restringir en el control ${restringirPor} asociado a la lista ${input.id} en el contenedor ${contenedor}`);
+            let filtroRestrictor = new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
+            filtros.push(filtroRestrictor);
+        }
         let clausula = new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
-        return clausula;
+        filtros.push(clausula);
+        return filtros;
     }
     ApiFiltro.DefinirFiltroListaDinamica = DefinirFiltroListaDinamica;
 })(ApiFiltro || (ApiFiltro = {}));

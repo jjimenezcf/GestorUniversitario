@@ -443,16 +443,13 @@
 
             let clase: string = input.getAttribute(atListasDinamicas.claseElemento);
             let idInput: string = input.getAttribute('id');
-            let filtro: ClausulaDeFiltrado = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
-            if (filtro === null)
+            let filtros: Array<ClausulaDeFiltrado> = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
+            if (filtros === null)
                 return;
-
-            var filtros = new Array<ClausulaDeFiltrado>();
-            filtros.push(filtro)
 
             let cantidad: string = input.getAttribute(atListasDinamicas.cantidad);
             let url: string = this.DefinirPeticionDeCargarDinamica(this.Controlador, clase, Numero(cantidad), filtros);
-            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${filtro.valor}" , "criterio":"${filtro.criterio}"}`;
+            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${input.value}"}`;
             let a = new ApiDeAjax.DescriptorAjax(this
                 , Ajax.EndPoint.CargaDinamica
                 , datosDeEntrada

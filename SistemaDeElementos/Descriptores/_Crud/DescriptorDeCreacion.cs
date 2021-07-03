@@ -97,8 +97,9 @@ namespace MVCSistemaDeElementos.Descriptores
 
         private string RenderContenedorDeCreacionCuerpo()
         {
-            var htmlModal = $@"<div id=¨contenedor_creacion_cuerpo_{IdHtml}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
-                                 {htmlRenderObjetoVacio()}
+            var idHtmlCuerpoDeCreacion = $"contenedor_creacion_cuerpo_{IdHtml}";
+            var htmlModal = $@"<div id=¨{idHtmlCuerpoDeCreacion}¨ class=¨{Css.Render(enumCssEdicion.ContenedorDeEdicionCuerpo)}¨>
+                                 {htmlRenderObjetoVacio(idHtmlCuerpoDeCreacion)}
                                </div>";
             return htmlModal;
         }
@@ -129,9 +130,9 @@ namespace MVCSistemaDeElementos.Descriptores
             return htmContenedorPie;
         }
 
-        protected virtual string htmlRenderObjetoVacio()
+        protected virtual string htmlRenderObjetoVacio(string idHtmlCuerpoDeCreacion)
         {
-            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Nuevo, Crud.Controlador);
+            var tabla = new DescriptorDeTabla(typeof(TElemento), enumModoDeTrabajo.Nuevo, Crud.Controlador, idHtmlCuerpoDeCreacion);
 
             var htmlObjeto = @$"<table id=¨{tabla.IdHtml}¨ 
                                   name=¨table_propiedad¨  

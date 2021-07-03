@@ -42,6 +42,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
             BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Código Postal", nameof(CodigoPostalDto.Codigo), "Buscar por 'código postal'");
 
+            Mnt.OrdenacionInicial = @$"{nameof(CodigoPostalDto.Codigo)}:codigo:{enumModoOrdenacion.ascendente.Render()}";
+
         }
 
 

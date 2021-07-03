@@ -52,6 +52,7 @@ const atControl = {
     restrictor: "restrictor",
     nombreModal: "idModal",
     editable: "editable",
+    ContenidoEn: "contenido-en",
     eventoJs: {
         onclick: 'onclick'
     }
@@ -190,6 +191,7 @@ const atListas = {
     idDeLaLista: 'list',
     identificador: 'identificador',
     expresionPorDefecto: 'nombre',
+    ContenidoEn: atControl.ContenidoEn
 };
 
 const atListasDeElemento = {
@@ -209,7 +211,9 @@ const atListasDinamicas = {
     cargando: 'cargando',
     expresionPorDefecto: atListas.expresionPorDefecto,
     ultimaCadenaBuscada: 'ultima-busqueda',
-    cantidad: 'cantidad-a-leer'
+    cantidad: 'cantidad-a-leer',
+    RestringidoPor: 'restringido-por',
+    ContenidoEn: atListas.ContenidoEn
 };
 
 
