@@ -451,8 +451,10 @@ var Crud;
             let divAdjuntos = document.getElementById(idAjuntos);
             let adjuntos = [];
             let refAdjuntos = divAdjuntos.querySelectorAll("a");
-            for (let i = 0; i < refAdjuntos.length; i++)
-                adjuntos.push(`${this.Dto}:${refAdjuntos[i].getAttribute(atControl.idElemento)}:${refAdjuntos[i].text}`);
+            for (let i = 0; i < refAdjuntos.length; i++) {
+                let adjunto = new Tipos.TipoDtoElmento(this.Dto, Numero(refAdjuntos[i].getAttribute(atControl.idElemento)), refAdjuntos[i].text);
+                adjuntos.push(adjunto);
+            }
             parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
             parametros.push(new Parametro('usuarios', usuarios));
             parametros.push(new Parametro('puestos', puestos));

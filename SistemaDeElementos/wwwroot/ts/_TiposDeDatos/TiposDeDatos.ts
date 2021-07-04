@@ -236,4 +236,16 @@
         }
     }
 
+    export class TipoDtoElmento {
+        TipoDto: string;
+        IdElemento: number;
+        Referencia: string;
+
+        constructor(dto: string, id: number, texto: string) {
+            this.TipoDto = dto;
+            this.IdElemento = id;
+            this.Referencia = texto;
+        }
+    }
+
 }

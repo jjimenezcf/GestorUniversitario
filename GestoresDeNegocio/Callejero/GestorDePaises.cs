@@ -86,7 +86,7 @@ namespace GestoresDeNegocio.Callejero
 
         public static void ImportarCallejero(EntornoDeTrabajo entorno)
         {
-            var archivos = JsonConvert.DeserializeObject<List<archivoParaImportar>>(entorno.Trabajo.Parametros);
+            var archivos = JsonConvert.DeserializeObject<List<archivoParaImportar>>(entorno.TrabajoDeUsuario.Parametros);
 
             if (archivos.Count == 0)
                 GestorDeErrores.Emitir("No se ha sometido ningún fichero a cargar");

@@ -343,6 +343,17 @@ namespace GestorDeElementos
 
                         break;
                     }
+
+                    if (clase.BaseType.Name.Contains("GestorDeRelaciones") && clase.BaseType.GenericTypeArguments[1].Name == dtm && clase.BaseType.GenericTypeArguments[2].Name == dto)
+                    {
+                        var parametros = new Type[] { typeof(ContextoSe), typeof(IMapper) };
+
+                        cache[clave] = clase.GetConstructor(new Type[] { typeof(ContextoSe), typeof(IMapper) });
+                        if (cache[clave] == null)
+                            throw new Exception($"No se ha definido el constructor Gestor para la clase {clase.Name} con los parámetros de contexto y mapeador.");
+
+                        break;
+                    }
                 }
             }
 

@@ -151,20 +151,26 @@ namespace GestoresDeNegocio.TrabajosSometidos
 
             if (parametros.ContainsKey(ltrParamCorreos.adjuntos))
             {
-                var lista = new List<TipoDtoElmento>();
-                var elementosDto = parametros[ltrParamCorreos.adjuntos].ToString().JsonToLista<string>();
-                foreach (var elementoDto in elementosDto)
-                {
-                    var partes = elementoDto.Split(":");
-                    
-                    if (partes.Length != 3 || partes[0].IsNullOrEmpty() || partes[2].IsNullOrEmpty() || partes[1].Entero() == 0)
-                        GestorDeErrores.Emitir("Intenta enviar un correo adjuntando un elemento mal definido.");
+                //var lista = new List<TipoDtoElmento>();
+                var elementosDto = parametros[ltrParamCorreos.adjuntos].ToString().JsonToLista<TipoDtoElmento>();
+                //foreach (var elementoDto in elementosDto)
+                //{
+                //    var partes = elementoDto.Split("#:#");
 
-                    var elemento = new TipoDtoElmento { TipoDto = partes[0], IdElemento = partes[1].Entero(), Referencia = partes[2]};
-                    lista.Add(GestorDeNegocios.ValidarElementoDto(elemento));
-                 }
+                //    if (partes.Length != 3)
+                //        GestorDeErrores.Emitir($"Intenta enviar un correo adjuntando un elemento mal definido. debe indicar el tipoDto, el IdElemento y la referencia, sólo se han indicado {partes.Length} parámetros");
 
-                parametros[ltrParamCorreos.adjuntos] = lista;
+
+                //    if(partes[0].IsNullOrEmpty() || partes[2].IsNullOrEmpty() || partes[1].Entero() == 0)
+                //    {
+                //        GestorDeErrores.Emitir($"Intenta enviar un correo adjuntando un elemento mal definido. debe indicar el tipoDto, el IdElemento y la referencia, el sistema ha indicado {partes[0]}:{partes[1]}:{partes[2]}");
+                //    }
+
+                //    var elemento = new TipoDtoElmento { TipoDto = partes[0], IdElemento = partes[1].Entero(), Referencia = partes[2]};
+                //    lista.Add(GestorDeNegocios.ValidarElementoDto(elemento));
+                // }
+
+                parametros[ltrParamCorreos.adjuntos] = elementosDto; // lista;
             }
 
             //TODO: Validar que las rutas de los archivos o los Ids de los archivos existen

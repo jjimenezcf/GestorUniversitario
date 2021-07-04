@@ -169,5 +169,13 @@ var Tipos;
         }
     }
     Tipos.DatosParaDependencias = DatosParaDependencias;
+    class TipoDtoElmento {
+        constructor(dto, id, texto) {
+            this.TipoDto = dto;
+            this.IdElemento = id;
+            this.Referencia = texto;
+        }
+    }
+    Tipos.TipoDtoElmento = TipoDtoElmento;
 })(Tipos || (Tipos = {}));
 //# sourceMappingURL=TiposDeDatos.js.map

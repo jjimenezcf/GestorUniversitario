@@ -550,10 +550,12 @@
                 throw new Error("Debe indicar el asunto");
 
             let divAdjuntos: HTMLDivElement = (document.getElementById(idAjuntos) as HTMLDivElement);
-            let adjuntos: string[] = [];
+            let adjuntos: Array<Tipos.TipoDtoElmento> = [];
             let refAdjuntos = divAdjuntos.querySelectorAll("a");
-            for (let i: number = 0; i < refAdjuntos.length; i++)
-                adjuntos.push(`${this.Dto}:${refAdjuntos[i].getAttribute(atControl.idElemento)}:${refAdjuntos[i].text}`);
+            for (let i: number = 0; i < refAdjuntos.length; i++) {
+                let adjunto = new Tipos.TipoDtoElmento(this.Dto, Numero(refAdjuntos[i].getAttribute(atControl.idElemento)), refAdjuntos[i].text);
+                adjuntos.push(adjunto);
+            }
 
 
             parametros.push(new Parametro(Ajax.Param.negocio, this.Negocio));
