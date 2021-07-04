@@ -14,14 +14,14 @@ namespace GestoresDeNegocio.TrabajosSometidos
     class GestorDeSemaforoDeTrabajos
     {
 
-        public static void PonerSemaforo(TrabajoDeUsuarioDtm tu)
+        public static void PonerSemaforo(TrabajoDeUsuarioDtm tu, string login)
         {
             var sentencia = new ConsultaSql<SemaforoDeTrabajosDtm>(SemaforoDeTrabajosSql.CrearSemaforo, CacheDeVariable.Cfg_HayQueDebuggar, $"{nameof(PonerSemaforo)}");
 
             var valores = new Dictionary<string, object> {
                 { $"@{nameof(TrabajoDeUsuarioDtm.Id)}", tu.Id },
                 { $"@{nameof(TrabajoDeUsuarioDtm.Iniciado)}", DateTime.Now },
-                { $"@{nameof(TrabajoDeUsuarioDtm.Sometedor.Login)}", tu.Sometedor.Login } };
+                { $"@{nameof(TrabajoDeUsuarioDtm.Sometedor.Login)}", login } };
             var semaforo = 0;
             semaforo = sentencia.EjecutarSentencia(new DynamicParameters(valores));
 

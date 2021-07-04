@@ -192,23 +192,7 @@ namespace GestorDeElementos
             if (filtro.Valor.IsNullOrEmpty() && !(filtro.Criterio == CriteriosDeFiltrado.esNulo || filtro.Criterio == CriteriosDeFiltrado.noEsNulo))
                 return registros;
 
-            if (filtro.Valor.StartsWith("|") && filtro.Valor.Length>1)
-            {
-                filtro.Valor = filtro.Valor.Substring(1);
-                filtro.Criterio = CriteriosDeFiltrado.comienza;
-            }
-
-            if (filtro.Valor.StartsWith("=") && filtro.Valor.Length > 1)
-            {
-                filtro.Valor = filtro.Valor.Substring(1);
-                filtro.Criterio = CriteriosDeFiltrado.igual;
-            }
-
-            if (filtro.Valor.EndsWith("|") && filtro.Valor.Length > 1)
-            {
-                filtro.Valor = filtro.Valor.Substring(0, filtro.Valor.Length-1);
-                filtro.Criterio = CriteriosDeFiltrado.termina;
-            }
+            filtro = CambiarFiltro(filtro);
 
             switch (filtro.Criterio)
             {
@@ -263,6 +247,29 @@ namespace GestorDeElementos
 
             }
             return registros;
+        }
+
+        public static ClausulaDeFiltrado CambiarFiltro(ClausulaDeFiltrado filtro)
+        {
+            if (filtro.Valor.StartsWith("|") && filtro.Valor.Length > 1)
+            {
+                filtro.Valor = filtro.Valor.Substring(1);
+                filtro.Criterio = CriteriosDeFiltrado.comienza;
+            }
+
+            if (filtro.Valor.StartsWith("=") && filtro.Valor.Length > 1)
+            {
+                filtro.Valor = filtro.Valor.Substring(1);
+                filtro.Criterio = CriteriosDeFiltrado.igual;
+            }
+
+            if (filtro.Valor.EndsWith("|") && filtro.Valor.Length > 1)
+            {
+                filtro.Valor = filtro.Valor.Substring(0, filtro.Valor.Length - 1);
+                filtro.Criterio = CriteriosDeFiltrado.termina;
+            }
+
+            return filtro;
         }
     }
 

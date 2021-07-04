@@ -184,7 +184,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
         }
 
 
-        internal async Task EnviarCorreoPendientesAsync()
+        internal void EnviarCorreoPendientesAsync()
         {
             var filtro = new ClausulaDeFiltrado(nameof(CorreoDtm.Enviado), CriteriosDeFiltrado.esNulo);
             var parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo);
@@ -193,9 +193,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
             foreach (var pendiente in pendientes)
                 try
                 {
-                    //Preguantar a J.Campos
-                    //SpinWait.SpinUntil(() => ServicioDeCorreo.EnviandoCorreo, 40000);
-                    await EnviarCorreoDeAsync(pendiente); 
+                    EnviarCorreoDeAsync(pendiente); 
                 }
                 catch (Exception e)
                 {
@@ -229,7 +227,7 @@ namespace GestoresDeNegocio.TrabajosSometidos
                 GestorDeCorreo = typeof(GestorDeCorreos)
             };
 
-            ServicioDeCorreo.EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos, manejador);
+            EnviarCorreoDe(CacheDeVariable.Cfg_ServidorDeCorreo, correoDtm.Emisor, receptores, correoDtm.Asunto, cuerpo, true, archivos, manejador);
 
             return Task.FromResult(new ResultadoDelProceso(true));
 
