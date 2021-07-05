@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
-using ServicioDeDatos.Entorno;
-using ServicioDeDatos.Negocio;
 
 namespace ServicioDeDatos.Callejero
 {
@@ -21,13 +17,6 @@ namespace ServicioDeDatos.Callejero
             NombreDeLaPropiedadDelIdElemento1 = nameof(IdProvincia);
             NombreDeLaPropiedadDelIdElemento2 = nameof(IdCp);
         }
-    }
-
-
-    public static class CpsDeUnaProvinciaSqls
-    {
-        public static string BorrarCps = $"DELETE CALLEJERO.PROVINCIA_CP WHERE ID_PROVINCIA = @{nameof(CpsDeUnaProvinciaDtm.IdProvincia)}";
-
     }
 
     public static partial class ModeloDeCallejero

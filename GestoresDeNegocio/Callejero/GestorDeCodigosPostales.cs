@@ -40,10 +40,10 @@ namespace GestoresDeNegocio.Callejero
             {
                 CreateMap<CodigoPostalDtm, CodigoPostalDto>()
                     .ForMember(dto => dto.Provincia, dtm => dtm.MapFrom(x => x.NombreProvincia))
-                    .ForMember(dto => dto.Municipios, dtm => dtm.MapFrom(x => x.Municipios));
+                    .ForMember(dto => dto.Municipios, dtm => dtm.MapFrom(x => x.NombreMunicipio));
                 CreateMap<CodigoPostalDto, CodigoPostalDtm>()
                     .ForMember(dtm => dtm.NombreProvincia, dto => dto.Ignore())
-                    .ForMember(dtm => dtm.Municipios, dto => dto.Ignore());
+                    .ForMember(dtm => dtm.NombreMunicipio, dto => dto.Ignore());
             }
         }
 
@@ -206,10 +206,23 @@ namespace GestoresDeNegocio.Callejero
 
             foreach (var filtro in filtros)
             {
+
+                //Selecciona los códigos postales que no están relacionados con niguna provincia y de éstos sólo coge aquellos que el código de la provincia 
+                //coincide con los dos primeros dígitos del código postal.
                 if (filtro.Clausula.Equals(nameof(CpsDeUnaProvinciaDtm.IdProvincia), StringComparison.CurrentCultureIgnoreCase))
                 {
                     registros = registros.Where(x => !x.Provincias.Any(p => true));
                     registros = registros.Where(x => x.Codigo.Substring(0, 2) == Contexto.Set<ProvinciaDtm>().FirstOrDefault(p => p.Id.Equals(filtro.Valor.Entero())).Codigo);
+                }
+
+                //Selecciona los códigos postales que no están relacionados con nigún municipio y de éstos sólo coge aquellos que el código de su provincia 
+                //coincide con los dos primeros dígitos del código postal.
+                if (filtro.Clausula.Equals(nameof(CpsDeUnMunicipioDtm.IdMunicipio), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    registros = registros.Where(x => !x.Municipios.Any(p => true));
+                    registros = registros.Where(x => x.Codigo.Substring(0, 2) == 
+                             Contexto.Set<ProvinciaDtm>().FirstOrDefault(p => p.Id == 
+                                  Contexto.Set<MunicipioDtm>().FirstOrDefault(m => m.Id == filtro.Valor.Entero()).IdProvincia ).Codigo);
                 }
             }
 

@@ -241,9 +241,14 @@ namespace GestoresDeNegocio.Negocio
             if (parametros.Operacion == enumTipoOperacion.Modificar && (!parametros.Parametros.ContainsKey(NegociosDeSe.ActualizarSeguridad) || (bool)parametros.Parametros[NegociosDeSe.ActualizarSeguridad]))
             {
                 var registroEnBD = registro;
-                registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeAdministrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
-                registro.IdPermisoDeGestor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeGestor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
-                registro.IdPermisoDeConsultor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, registroEnBD.PermisoDeConsultor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
+
+                var adminisstrador = Contexto.Set<PermisoDtm>().LeerCacheadoPorId(registroEnBD.IdPermisoDeAdministrador);
+                var gestor = Contexto.Set<PermisoDtm>().LeerCacheadoPorId(registroEnBD.IdPermisoDeGestor);
+                var consultor = Contexto.Set<PermisoDtm>().LeerCacheadoPorId(registroEnBD.IdPermisoDeConsultor);
+
+                registro.IdPermisoDeAdministrador = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, adminisstrador, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Administrador).Id;
+                registro.IdPermisoDeGestor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, gestor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Gestor).Id;
+                registro.IdPermisoDeConsultor = GestorDePermisos.ModificarPermisoDeDatos(Contexto, Mapeador, consultor, registro.Nombre, enumClaseDePermiso.Negocio, enumModoDeAccesoDeDatos.Consultor).Id;
             }
         }
 

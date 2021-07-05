@@ -1,4 +1,5 @@
 ﻿using Enumerados;
+using ServicioDeDatos.Callejero;
 
 namespace ModeloDeDto.Callejero
 {
@@ -42,6 +43,9 @@ namespace ModeloDeDto.Callejero
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = typeof(CodigoPostalDto),
             GuardarEn = nameof(IdCp),
+            RestringidoPor = nameof(IdMunicipio),
+            BuscarPor = nameof(CodigoPostalDtm.Codigo),
+            CriterioDeBusqueda = CriteriosDeFiltrado.comienza,
             Fila = 1,
             Columna = 0,
             Ordenar = true

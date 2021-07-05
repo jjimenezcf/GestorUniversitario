@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ServicioDeDatos.Elemento;
-using ServicioDeDatos.Entorno;
-using ServicioDeDatos.Negocio;
 
 namespace ServicioDeDatos.Callejero
 {
@@ -55,7 +51,7 @@ namespace ServicioDeDatos.Callejero
 
             modelBuilder.Entity<CpsDeUnMunicipioDtm>()
             .HasOne(p => p.CodigoPostal)
-            .WithMany()
+            .WithMany(p => p.Municipios)
             .HasForeignKey(p => p.IdCp)
             .HasConstraintName($"FK_MUNICIPIO_CP_ID_CP")
             .OnDelete(DeleteBehavior.Restrict);

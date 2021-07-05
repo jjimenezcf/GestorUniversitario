@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ModeloDeDto.Callejero;
+﻿using ModeloDeDto.Callejero;
 using ModeloDeDto.Entorno;
 using ServicioDeDatos.Entorno;
 using ModeloDeDto.Seguridad;
@@ -50,7 +44,8 @@ namespace GestoresDeNegocio.Entorno
                 CrearVistaSiNoExiste(gestor, "Municipios", "Municipios", "CrudMunicipios", true, typeof(MunicipioDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Tipos de vía", "TiposDeVia", "CrudTiposDeVia", true, typeof(TipoDeViaDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Codigos postales", "CodigosPostales", "CrudCodigosPostales", true, typeof(CodigoPostalDto).FullName);
-                CrearVistaSiNoExiste(gestor, "Cps de una provincia", "CpsDeUnaProvincia", "CrudCpsDeUnaProvincia", true, typeof(CodigoPostalDto).FullName);
+                CrearVistaSiNoExiste(gestor, "Cps de una provincia", "CpsDeUnaProvincia", "CrudCpsDeUnaProvincia", true, typeof(CpsDeUnaProvinciaDto).FullName);
+                CrearVistaSiNoExiste(gestor, "Cps de un municipio", "CpsDeUnMunicipio", "CrudCpsDeUnMunicipio", true, typeof(CpsDeUnMunicipioDto).FullName);
             }
             finally
             {

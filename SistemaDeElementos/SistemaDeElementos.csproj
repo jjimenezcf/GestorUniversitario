@@ -133,6 +133,9 @@
     <TypeScriptCompile Update="wwwroot\ts\Callejero\CpsDeUnaProvincia.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="wwwroot\ts\Callejero\CpsDeUnMunicipio.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="wwwroot\ts\Callejero\ImportarCallejero.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -99,7 +99,7 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeMunicipios>();
             services.AddScoped<GestorDeTiposDeVia>();
             services.AddScoped<GestorDeCodigosPostales>();
-
+            services.AddScoped<GestorDeCpsDeUnMunicipio>();
             services.AddScoped<GestorDeCpsDeUnaProvincia>();
             
 

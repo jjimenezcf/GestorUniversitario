@@ -47,7 +47,17 @@ namespace MVCSistemaDeElementos.Descriptores
                 , ayuda: "buscar por codigo postal"
                 , new Posicion { fila = 1, columna = 1 });
 
-            RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1,0), "Municipio", "Buscar por nombre de municipio");
+            AnadirOpciondeRelacion(Mnt
+                , controlador: nameof(CpsDeUnMunicipioController)
+                , vista: nameof(CpsDeUnMunicipioController.CrudCpsDeUnMunicipio)
+                , relacionarCon: nameof(CodigoPostalDto)
+                , navegarAlCrud: DescriptorDeMantenimiento<CpsDeUnMunicipioDto>.NombreMnt
+                , nombreOpcion: "C.P."
+                , propiedadQueRestringe: nameof(MunicipioDto.Id)
+                , propiedadRestrictora: nameof(CpsDeUnMunicipioDto.IdMunicipio)
+                , "Añadir puestos al usuario seleccionado");
+
+            RecolocarControl(Mnt.Filtro.FiltroDeNombre, new Posicion(1, 0), "Municipio", "Buscar por nombre de municipio");
             Mnt.OrdenacionInicial = @$"{nameof(MunicipioDto.Pais)}:provincia.pais.nombre:{enumModoOrdenacion.ascendente.Render()};
                                        {nameof(MunicipioDto.Provincia)}:provincia.nombre:{enumModoOrdenacion.ascendente.Render()};
                                        {nameof(MunicipioDto.Nombre)}:nombre:{enumModoOrdenacion.ascendente.Render()}";

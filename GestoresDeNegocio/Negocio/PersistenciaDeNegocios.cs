@@ -22,19 +22,19 @@ namespace GestoresDeNegocio.Negocio
             try
             {
                 gestor.Contexto.DatosDeConexion.CreandoModelo = true;
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Usuario, "Usuarios", typeof(UsuarioDtm), typeof(UsuarioDto), "usuario.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.VistaMvc, "Vistas", typeof(VistaMvcDtm), typeof(VistaMvcDto), "vista.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Variable, "Variables", typeof(VariableDtm), typeof(VariableDto), "cog-solid.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Menu, "Menus", typeof(MenuDtm), typeof(MenuDto), "funcionalidad-3.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Puesto, "Puestos", typeof(PuestoDtm), typeof(PuestoDto), "puestoDeTrabajo.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Permiso, "Permisos", typeof(PermisoDtm), typeof(PermisoDto), "acceso.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Negocio, "Negocios", typeof(NegocioDtm), typeof(NegocioDto), "red.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Rol, "Roles", typeof(RolDtm), typeof(RolDto), "roles.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Pais, "Paises", typeof(PaisDtm), typeof(PaisDto), "paises_1.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Provincia, "Provincias", typeof(ProvinciaDtm), typeof(ProvinciaDto), "provincias_1.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Correo, "Correos", typeof(CorreoDtm), typeof(CorreoDto), "Correo_1.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.Municipio, "Municipios", typeof(MunicipioDtm), typeof(MunicipioDto), "municipio2.svg");
-                //CrearNegocioSiNoExiste(gestor, enumNegocio.TipoDeVia, "Tipos de vía", typeof(TipoDeViaDtm), typeof(TipoDeViaDto), "TipoDeVia.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Usuario, "Usuarios", typeof(UsuarioDtm), typeof(UsuarioDto), "usuario.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.VistaMvc, "Vistas", typeof(VistaMvcDtm), typeof(VistaMvcDto), "vista.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Variable, "Variables", typeof(VariableDtm), typeof(VariableDto), "cog-solid.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Menu, "Menus", typeof(MenuDtm), typeof(MenuDto), "funcionalidad-3.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Puesto, "Puestos", typeof(PuestoDtm), typeof(PuestoDto), "puestoDeTrabajo.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Permiso, "Permisos", typeof(PermisoDtm), typeof(PermisoDto), "acceso.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Negocio, "Negocios", typeof(NegocioDtm), typeof(NegocioDto), "red.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Rol, "Roles", typeof(RolDtm), typeof(RolDto), "roles.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Pais, "Paises", typeof(PaisDtm), typeof(PaisDto), "paises_1.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Provincia, "Provincias", typeof(ProvinciaDtm), typeof(ProvinciaDto), "provincias_1.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Correo, "Correos", typeof(CorreoDtm), typeof(CorreoDto), "Correo_1.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Municipio, "Municipios", typeof(MunicipioDtm), typeof(MunicipioDto), "municipio2.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.TipoDeVia, "Tipos de vía", typeof(TipoDeViaDtm), typeof(TipoDeViaDto), "TipoDeVia.svg");
             }
             finally
             {
