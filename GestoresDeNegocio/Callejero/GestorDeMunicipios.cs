@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
 using ServicioDeDatos.TrabajosSometidos;
-using GestoresDeNegocio.Entorno;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -65,7 +64,7 @@ namespace GestoresDeNegocio.Callejero
             return gestor.LeerRegistro(filtros, p, errorSiNoHay, errorSiMasDeUno);
         }
 
-        private static MunicipioDtm LeerMunicipioPorCodigo(ContextoSe contexto, string iso2Pais, string codigoProvincia, string codigoMunicipio,bool paraActualizar,  bool errorSiNoHay = true, bool errorSiMasDeUno = true)
+        public static MunicipioDtm LeerMunicipioPorCodigo(ContextoSe contexto, string iso2Pais, string codigoProvincia, string codigoMunicipio,bool paraActualizar,  bool errorSiNoHay = true, bool errorSiMasDeUno = true)
         {
             var gestor = Gestor(contexto, contexto.Mapeador);
             var filtros = new List<ClausulaDeFiltrado>();

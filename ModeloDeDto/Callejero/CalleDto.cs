@@ -4,8 +4,8 @@ namespace ModeloDeDto.Callejero
 {
     [IUDto(AnchoEtiqueta = 20
          , AnchoSeparador = 5
-         , MostrarExpresion = "([Codigo]) [Nombre]")]
-    public class MunicipioDto : AuditoriaDto
+         , MostrarExpresion = "Expresion")]
+    public class CalleDto : AuditoriaDto
     {
         [IUPropiedad(
             Etiqueta = nameof(Pais),
@@ -32,7 +32,7 @@ namespace ModeloDeDto.Callejero
             SeleccionarDe = typeof(ProvinciaDto),
             GuardarEn = nameof(IdProvincia),
             Fila = 0,
-            Columna = 0,
+            Columna = 1,
             Obligatorio = true,
             Ordenar = true
             )
@@ -42,10 +42,47 @@ namespace ModeloDeDto.Callejero
         [IUPropiedad(Etiqueta = "Id de la provincia", Visible = false)]
         public int IdProvincia { get; set; }
         //----------------------------------------------
+        
+        [IUPropiedad(
+            Etiqueta = nameof(Municipio),
+            Ayuda = "Seleccione el municipio",
+            TipoDeControl = enumTipoControl.ListaDinamica,
+            SeleccionarDe = typeof(MunicipioDto),
+            GuardarEn = nameof(IdMunicipio),
+            Fila = 0,
+            Columna = 2,
+            Obligatorio = true,
+            Ordenar = true
+            )
+        ]
+        public string Municipio { get; set; }
+
+        [IUPropiedad(Etiqueta = "Id del municipio", Visible = false)]
+        public int IdMunicipio { get; set; }
+
+        //----------------------------------------------
 
         [IUPropiedad(
-            Etiqueta = "Municipio",
-            Ayuda = "Indique el nombre del municipio",
+            Etiqueta = nameof(TipoDeVia),
+            Ayuda = "Seleccione el tipo de vía",
+            TipoDeControl = enumTipoControl.ListaDinamica,
+            SeleccionarDe = typeof(TipoDeViaDto),
+            GuardarEn = nameof(IdTipoDeVia),
+            Fila = 1,
+            Columna = 0,
+            Obligatorio = true,
+            Ordenar = true
+            )
+        ]
+        public string TipoDeVia { get; set; }
+
+        [IUPropiedad(Etiqueta = "Id del tipo de vía", Visible = false)]
+        public int IdTipoDeVia { get; set; }
+
+        //----------------------------------------------
+        [IUPropiedad(
+            Etiqueta = "Calle",
+            Ayuda = "Indique el nombre de la calle",
             Tipo = typeof(string),
             Fila = 1,
             Columna = 1,
@@ -60,10 +97,10 @@ namespace ModeloDeDto.Callejero
         //----------------------------------------------
         [IUPropiedad(
             Etiqueta = "Código",
-            Ayuda = "Código del municipio",
+            Ayuda = "Código de la calle",
             Tipo = typeof(string),
             Fila = 1,
-            Columna = 0,
+            Columna = 2,
             Ordenar = true,
             Obligatorio = true,
             LongitudMaxima = 3,
@@ -71,22 +108,6 @@ namespace ModeloDeDto.Callejero
           )
         ]
         public string Codigo { get; set; }
-
-        //----------------------------------------------
-
-        [IUPropiedad(
-            Etiqueta = "DC",
-            Ayuda = "Dígito postal",
-            Tipo = typeof(string),
-            Fila = 2,
-            Columna = 0,
-            Obligatorio = true,
-            LongitudMaxima = 3,
-            Alineada = Aliniacion.derecha
-          )
-        ]
-        public string DC { get; set; }
-
 
 
     }

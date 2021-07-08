@@ -11,6 +11,7 @@ using System;
 using GestoresDeNegocio.Archivos;
 using System.Linq;
 using ServicioDeDatos.TrabajosSometidos;
+using ServicioDeDatos.Elemento;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -120,6 +121,13 @@ namespace GestoresDeNegocio.Callejero
             }
 
             return gestor.PersistirRegistro(p, operacion);
+        }
+
+
+        protected override void DespuesDePersistir(TipoDeViaDtm registro, ParametrosDeNegocio parametros)
+        {
+            base.DespuesDePersistir(registro, parametros);
+            ServicioDeCaches.EliminarElemento(typeof(TipoDeViaDtm).FullName, $"{nameof(TipoDeViaDtm.Sigla)}-{registro.ValorPropiedad(nameof(TipoDeViaDtm.Sigla))}-0");
         }
 
     }
