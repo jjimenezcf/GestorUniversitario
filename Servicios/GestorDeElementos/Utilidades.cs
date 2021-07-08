@@ -187,19 +187,42 @@ namespace GestorDeElementos
             return (TSource)cache[indice];
         }
 
-        public static TSource LeerCacheadoPorNombre<TSource>(this IQueryable<TSource> source, int nombre, bool errorSiNoHay = true) where TSource: INombre
+        public static TSource LeerCacheadoPorNombre<TSource>(this IQueryable<TSource> source, string nombre, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true) where TSource: INombre
         {
             var cache = ServicioDeCaches.Obtener(typeof(TSource).FullName);
             var indice = $"{nameof(INombre.Nombre)}-{nombre}-0";
             if (!cache.ContainsKey(indice))
             {
-                var registro = source.First(x => x.Nombre.Equals(nombre));
-                if (registro == null && errorSiNoHay)
+                var registros = source.Take(2).Where(x => x.Nombre.Equals(nombre));
+
+                if (registros.Count() == 2 && errorSiNoHay)
                     GestorDeErrores.Emitir($"No se ha localizado el objeto con id {nombre} buscado en la entidad {typeof(TSource).Name}");
-                cache[indice] = registro;
+
+                if (registros.Count() == 2 && errorSiHayMasDeUno)
+                    GestorDeErrores.Emitir($"No se ha localizado el objeto con id {nombre} buscado en la entidad {typeof(TSource).Name}");
+
+                cache[indice] = registros.ToList()[0];
             }
             return (TSource)cache[indice];
         }
 
+        public static TSource LeerCacheadoPorPropiedad<TSource>(this IQueryable<TSource> source, string nombrePropiedad, string valor, bool errorSiNoHay = true, bool errorSiHayMasDeUno = true) where TSource : INombre
+        {
+            var cache = ServicioDeCaches.Obtener(typeof(TSource).FullName);
+            var indice = $"{nameof(INombre.Nombre)}-{nombrePropiedad}-0";
+            if (!cache.ContainsKey(indice))
+            {
+                var registros = source.Take(2).Where(x => x.Nombre.Equals(nombrePropiedad));
+                                
+                if (registros.Count() == 0 && errorSiNoHay)
+                    GestorDeErrores.Emitir($"No se ha localizado el objeto con {nombrePropiedad} {valor} buscado en la entidad {typeof(TSource).Name}");
+
+                if (registros.Count() == 2 && errorSiHayMasDeUno)
+                    GestorDeErrores.Emitir($"Hay más de un objeto con {nombrePropiedad} {valor} buscado en la entidad {typeof(TSource).Name}");
+
+                cache[indice] = registros.ToList()[0];
+            }
+            return (TSource)cache[indice];
+        }
     }
 }
