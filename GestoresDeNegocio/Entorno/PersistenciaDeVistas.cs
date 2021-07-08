@@ -46,6 +46,7 @@ namespace GestoresDeNegocio.Entorno
                 CrearVistaSiNoExiste(gestor, "Codigos postales", "CodigosPostales", "CrudCodigosPostales", true, typeof(CodigoPostalDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Cps de una provincia", "CpsDeUnaProvincia", "CrudCpsDeUnaProvincia", true, typeof(CpsDeUnaProvinciaDto).FullName);
                 CrearVistaSiNoExiste(gestor, "Cps de un municipio", "CpsDeUnMunicipio", "CrudCpsDeUnMunicipio", true, typeof(CpsDeUnMunicipioDto).FullName);
+                CrearVistaSiNoExiste(gestor, "Calles", "Calles", "CrudCalles", true, typeof(CalleDto).FullName);
             }
             finally
             {

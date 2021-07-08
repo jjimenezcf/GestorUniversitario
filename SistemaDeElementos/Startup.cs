@@ -101,7 +101,8 @@ namespace MVCSistemaDeElementos
             services.AddScoped<GestorDeCodigosPostales>();
             services.AddScoped<GestorDeCpsDeUnMunicipio>();
             services.AddScoped<GestorDeCpsDeUnaProvincia>();
-            
+            services.AddScoped<GestorDeCalles>();
+
 
             services.AddScoped<GestorDeTrabajosSometido>();
             services.AddScoped<GestorDeTrabajosDeUsuario>();

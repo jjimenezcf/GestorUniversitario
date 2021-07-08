@@ -35,6 +35,7 @@ namespace GestoresDeNegocio.Negocio
                 CrearNegocioSiNoExiste(gestor, enumNegocio.Correo, "Correos", typeof(CorreoDtm), typeof(CorreoDto), "Correo_1.svg");
                 CrearNegocioSiNoExiste(gestor, enumNegocio.Municipio, "Municipios", typeof(MunicipioDtm), typeof(MunicipioDto), "municipio2.svg");
                 CrearNegocioSiNoExiste(gestor, enumNegocio.TipoDeVia, "Tipos de vía", typeof(TipoDeViaDtm), typeof(TipoDeViaDto), "TipoDeVia.svg");
+                CrearNegocioSiNoExiste(gestor, enumNegocio.Calle, "Calle", typeof(CalleDtm), typeof(CalleDto), "callejero.svg");
             }
             finally
             {

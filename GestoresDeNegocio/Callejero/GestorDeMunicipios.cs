@@ -40,6 +40,7 @@ namespace GestoresDeNegocio.Callejero
 
         }
 
+
         public GestorDeMunicipios(ContextoSe contexto, IMapper mapeador)
         : base(contexto, mapeador)
         {
@@ -49,6 +50,12 @@ namespace GestoresDeNegocio.Callejero
         public static GestorDeMunicipios Gestor(ContextoSe contexto, IMapper mapeador)
         {
             return new GestorDeMunicipios(contexto, mapeador); ;
+        }
+
+        public List<MunicipioDto> LeerMunicipios(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
+        {
+            var registros = LeerRegistrosPorNombre(posicion, cantidad, filtros);
+            return MapearElementos(registros).ToList();
         }
 
         public static MunicipioDtm LeerMunicipioPorClave(ContextoSe contexto, int idProvincia, string codigoMunicipio, bool paraActualizar, bool errorSiNoHay = true, bool errorSiMasDeUno = true)

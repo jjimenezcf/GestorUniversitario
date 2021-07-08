@@ -10,21 +10,21 @@ using System.Collections.Generic;
 
 namespace MVCSistemaDeElementos.Controllers
 {
-    public class MunicipiosController : EntidadController<ContextoSe, MunicipioDtm, MunicipioDto>
+    public class CallesController : EntidadController<ContextoSe, CalleDtm, CalleDto>
     {
 
-        public MunicipiosController(GestorDeMunicipios gestorDeMunicipios, GestorDeErrores gestorDeErrores)
+        public CallesController(GestorDeCalles gestorDeCalles, GestorDeErrores gestorDeErrores)
          : base
          (
-           gestorDeMunicipios,
+           gestorDeCalles,
            gestorDeErrores
          )
         {
         }
 
-        public IActionResult CrudMunicipios()
+        public IActionResult CrudCalles()
         {
-            return ViewCrud(new DescriptorDeMunicipios(Contexto, ModoDescriptor.Mantenimiento));
+            return ViewCrud(new DescriptorDeCalles(Contexto, ModoDescriptor.Mantenimiento));
         }
 
         protected override dynamic CargaDinamica(string claseElemento, int posicion, int cantidad, List<ClausulaDeFiltrado> filtros)
@@ -34,6 +34,9 @@ namespace MVCSistemaDeElementos.Controllers
 
             if (claseElemento == nameof(ProvinciaDto))
                 return GestorDeProvincias.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerProvincias(posicion, cantidad, filtros);
+
+            if (claseElemento == nameof(MunicipioDto))
+                return GestorDeMunicipios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMunicipios(posicion, cantidad, filtros);
 
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
