@@ -131,6 +131,8 @@ namespace ServicioDeDatos
             ModeloDeCallejero.CodigoPostal(modelBuilder);
             ModeloDeCallejero.ProvinciaCp(modelBuilder);
             ModeloDeCallejero.MunicipioCp(modelBuilder);
+            ModeloDeCallejero.Calle(modelBuilder);
+            ModeloDeCallejero.CalleAudt(modelBuilder);
         }
 
 
