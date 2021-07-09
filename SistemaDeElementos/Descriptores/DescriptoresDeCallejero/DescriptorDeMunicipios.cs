@@ -23,7 +23,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(PaisDto.Nombre),
                 mostrarExpresion: $"([{nameof(PaisDto.Codigo)}]) [{nameof(PaisDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 0));
+                posicion: new Posicion(0, 0),
+                controlador: nameof(PaisesController),
+                restringirPor: "");
 
             new ListasDinamicas<MunicipioDto>(Mnt.BloqueGeneral,
                 etiqueta: "Provincia",
@@ -33,7 +35,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(ProvinciaDto.Nombre),
                 mostrarExpresion: $"([{nameof(ProvinciaDto.Codigo)}]) [{nameof(ProvinciaDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 1));
+                posicion: new Posicion(0, 1),
+                controlador: nameof(ProvinciasController),
+                restringirPor: nameof(MunicipioDto.IdPais));
 
             new EditorFiltro<MunicipioDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"

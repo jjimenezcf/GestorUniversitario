@@ -47,7 +47,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 buscarPor: nameof(PuestoDto.Nombre),
                                                 mostrarExpresion: nameof(PuestoDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
-                                                posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 1;
+                                                posicion: new Posicion(1, 0),
+                                                controlador: nameof(PuestoDeTrabajoController),
+                                                restringirPor: "").LongitudMinimaParaBuscar = 1;
 
 
                 new ListasDinamicas<UsuarioDto>(bloque: bloque,
@@ -58,7 +60,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 buscarPor: nameof(RolDto.Nombre),
                                                 mostrarExpresion: nameof(RolDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.contiene,
-                                                posicion: new Posicion(2, 0)).LongitudMinimaParaBuscar = 1;
+                                                posicion: new Posicion(2, 0),
+                                                controlador: nameof(RolController),
+                                                restringirPor: "").LongitudMinimaParaBuscar = 1;
 
 
 
@@ -70,7 +74,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                                 buscarPor: nameof(PermisoDto.Nombre),
                                                 mostrarExpresion: nameof(PermisoDto.Nombre),
                                                 criterioDeBusqueda: CriteriosDeFiltrado.comienza,
-                                                posicion: new Posicion(3, 0)).LongitudMinimaParaBuscar = 3;
+                                                posicion: new Posicion(3, 0),
+                                                controlador: nameof(PermisosController),
+                                                restringirPor: "").LongitudMinimaParaBuscar = 3;
 
             }
             BuscarControlEnFiltro(ltrFiltros.Nombre).CambiarAtributos("Usuario",UsuariosPor.NombreCompleto, "Buscar por 'apellido, nombre'");

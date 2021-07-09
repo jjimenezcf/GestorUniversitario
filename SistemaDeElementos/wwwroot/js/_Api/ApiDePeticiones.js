@@ -40,6 +40,18 @@ var ApiDePeticiones;
         });
     }
     ApiDePeticiones.LeerElementoPorId = LeerElementoPorId;
+    function LeerElemento(llamador, controlador, filtros, parametros) {
+        return new Promise((resolve, reject) => {
+            let url = `/${controlador}/${Ajax.EndPoint.LeerElemento}?${Ajax.Param.filtros}=${JSON.stringify(filtros)}&${Ajax.Param.parametros}=${JSON.stringify(parametros)}`;
+            let a = new ApiDeAjax.DescriptorAjax(llamador, Ajax.EndPoint.LeerElemento, null, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, (peticion) => {
+                resolve(peticion);
+            }, (peticion) => {
+                reject(peticion);
+            });
+            a.Ejecutar();
+        });
+    }
+    ApiDePeticiones.LeerElemento = LeerElemento;
     function Exportar(llamador, controlador, parametros) {
         return new Promise((resolve, reject) => {
             let url = `/${controlador}/${Ajax.EndPoint.Exportar}?${Ajax.Param.parametros}=${Encriptar(literal.ClaveDeEncriptacion, JSON.stringify(parametros))}`;

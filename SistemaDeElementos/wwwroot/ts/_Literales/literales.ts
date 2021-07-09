@@ -53,6 +53,7 @@ const atControl = {
     nombreModal: "idModal",
     editable: "editable",
     ContenidoEn: "contenido-en",
+    BlanquearControlAsociado: 'blanquear',
     eventoJs: {
         onclick: 'onclick'
     }
@@ -208,12 +209,14 @@ const atListasDinamicas = {
     mostrarExpresion: atListas.mostrarExpresion,
     longitudNecesaria: 'longitud',
     idSeleccionado: 'idseleccionado',
+    idSelAlEntrar: 'idAlEntrar',
     cargando: 'cargando',
     expresionPorDefecto: atListas.expresionPorDefecto,
     ultimaCadenaBuscada: 'ultima-busqueda',
     cantidad: 'cantidad-a-leer',
     RestringidoPor: 'restringido-por',
-    ContenidoEn: atListas.ContenidoEn
+    ContenidoEn: atListas.ContenidoEn,
+    BlanquearControlAsociado: 'blanquear'
 };
 
 
@@ -274,6 +277,7 @@ const Ajax = {
         LeerGridEnHtml: "epLeerGridHtml",
         LeerDatosParaElGrid: "epLeerDatosParaElGrid",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
+        LeerElemento: "epLeerElemento",
         LeerPorId: "epLeerPorId",
         Modificar: "epModificarPorId",
         Borrar: "epBorrarPorId",
@@ -301,10 +305,12 @@ const Ajax = {
         posicion: "posicion",
         cantidad: "cantidad",
         filtro: "filtro",
+        aplicarJoin: "AplicarJoin",
         orden: "orden",
         usuario: "usuario",
         id: "id",
         parametros: "parametrosJson",
+        filtros: "filtrosJson",
         idsJson: "idsJson",
         claseElemento: "claseElemento",
         fichero: "fichero",
@@ -432,7 +438,8 @@ const Evento = {
     },
     ListaDinamica: {
         Cargar: 'cargar-lista-dinamica',
-        Seleccionar: 'seleccionar--lista-dinamica'
+        perderFoco: 'perder-foco-lista-dinamica',
+        obtenerFoco: 'obtener-foco-lista-dinamica'
     },
     Mnt: {
         Crear: "crear-elemento",

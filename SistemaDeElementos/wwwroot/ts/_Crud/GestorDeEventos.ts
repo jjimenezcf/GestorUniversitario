@@ -541,8 +541,12 @@
                     crudMnt.CargarListaDinamica(selector);
                     break;
                 }
-                case Evento.ListaDinamica.Seleccionar: {
-                    crudMnt.SeleccionarListaDinamica(selector);
+                case Evento.ListaDinamica.perderFoco: {
+                    crudMnt.PerderFocoListaDinamica(selector);
+                    break;
+                }
+                case Evento.ListaDinamica.obtenerFoco: {
+                    crudMnt.ObtenerFocoListaDinamica(selector);
                     break;
                 }
                 default: {

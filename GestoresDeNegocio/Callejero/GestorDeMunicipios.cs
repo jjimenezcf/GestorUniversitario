@@ -136,6 +136,9 @@ namespace GestoresDeNegocio.Callejero
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
+                if (filtro.Clausula.Equals(nameof(MunicipioDto.IdProvincia), StringComparison.CurrentCultureIgnoreCase))
+                    registros = registros.Where(x => x.Provincia.Id == filtro.Valor.Entero());
+
                 if (filtro.Clausula.ToLower() == nameof(MunicipioDto.IdPais).ToLower())
                     registros = registros.Where(x => x.Provincia.Pais.Id == filtro.Valor.Entero());
 

@@ -56,11 +56,14 @@ namespace MVCSistemaDeElementos.Descriptores
                                          criterio-de-filtro=¨[CriterioDeFiltro]¨
                                          restringido-por=¨[RestringidoPor]¨
                                          contenido-en=¨[ContenidoEn]¨
+                                         controlador=¨[Controlador]¨
+                                         blanquear =¨[Blanquear]¨
                                          longitud=¨[Longitud]¨ 
                                          cantidad-a-leer=¨[Cantidad]¨ 
                                          placeholder =¨[Placeholder]¨
                                          oninput=¨[OnInput]¨ 
-                                         onchange=¨[OnChange]¨ 
+                                         onfocus=¨[OnFocus]¨ 
+                                         onblur=¨[OnChange]¨ 
                                          [RestoDeAtributos]
                                          list=¨[IdHtml]-lista¨>
                                          <datalist id=¨[IdHtml]-lista¨>

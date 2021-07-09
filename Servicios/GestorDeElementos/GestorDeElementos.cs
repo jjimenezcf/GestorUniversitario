@@ -394,7 +394,8 @@ namespace GestorDeElementos
                 opcionesDeMapeo.Add(nameof(ParametrosDeNegocio.Operacion), enumTipoOperacion.LeerSinBloqueo.ToString());
 
             var to = opcionesDeMapeo[nameof(ParametrosDeNegocio.Operacion)].ToTipoOperacion();
-            var p = new ParametrosDeNegocio(to);
+            var aplicarJoin = opcionesDeMapeo.ContainsKey(nameof(ParametrosDeNegocio.AplicarJoin)) ? (bool)opcionesDeMapeo[nameof(ParametrosDeNegocio.AplicarJoin)] : true; 
+            var p = new ParametrosDeNegocio(to,  aplicarJoin);
 
             List<TRegistro> elementosDeBd = LeerRegistros(posicion, cantidad, filtros, orden, null, p);
 
@@ -518,7 +519,7 @@ namespace GestorDeElementos
         }
 
 
-        public List<TRegistro> LeerRegistrosPorNombre(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null)
+        public List<TRegistro> LeerRegistrosPorNombre(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, ParametrosDeNegocio parametros = null)
         {
             if (!typeof(TRegistro).ImplementaNombre())
                 throw new Exception($"se ha solicitado leer registros por nombre, el tipo {typeof(TRegistro).Name} no tiene dicho campo");
@@ -526,7 +527,9 @@ namespace GestorDeElementos
             List<ClausulaDeOrdenacion> orden = new List<ClausulaDeOrdenacion>();
             orden.Add(new ClausulaDeOrdenacion() { OrdenarPor = nameof(INombre.Nombre), Modo = ModoDeOrdenancion.ascendente });
 
-            return LeerRegistros(posicion, cantidad, filtros, orden);
+            if (parametros ==null) parametros = new ParametrosDeNegocio(enumTipoOperacion.LeerSinBloqueo,aplicarJoin: false);
+               
+            return LeerRegistros(posicion, cantidad, filtros, orden,null, parametros);
         }
 
         public List<TRegistro> LeerRegistros(int posicion, int cantidad, List<ClausulaDeFiltrado> filtros = null, List<ClausulaDeOrdenacion> orden = null, List<ClausulaDeJoin> joins = null, ParametrosDeNegocio parametros = null)

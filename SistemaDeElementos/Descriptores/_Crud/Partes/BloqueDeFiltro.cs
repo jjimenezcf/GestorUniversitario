@@ -17,6 +17,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public bool Plegado { get; set; } = false;
 
+        public ZonaDeFiltro<TElemento> ZonaDeFiltrado => (ZonaDeFiltro<TElemento>)Padre;
+
         public BloqueDeFitro(ZonaDeFiltro<TElemento> filtro, string titulo, Dimension dimension)
         : base(
           padre: filtro,
@@ -37,14 +39,18 @@ namespace MVCSistemaDeElementos.Descriptores
         public void AnadirControl(ControlFiltroHtml c)
         {
             Controles.Add(c);
-            AjustarDimensionDeLaTabla();
+           // AjustarDimensionDeLaTabla();
         }
 
-        public void AjustarDimensionDeLaTabla()
+        private void AjustarDimensionDeLaTabla()
         {
             foreach (var control in Controles)
+            {
                 if (control.Tipo != enumTipoControl.GridModal && control.Posicion.fila >= Tabla.Dimension.Filas)
                     Tabla.Dimension.NumeroDeFilas(control.Posicion.fila + 1);
+                if (control.Tipo != enumTipoControl.GridModal && control.Posicion.columna >= Tabla.Dimension.Columnas)
+                    Tabla.Dimension.NumeroDeColumnas(control.Posicion.columna + 1);
+            }
         }
 
         public void AnadirControlEn(ControlFiltroHtml c)
@@ -61,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
                         control.Posicion.fila++;
                 }
             }
-            AjustarDimensionDeLaTabla();
+            //AjustarDimensionDeLaTabla();
         }
 
         public void AnadirSelectorElemento<t1>(ListaDeElemento<t1> s) where t1 : ElementoDto
@@ -112,6 +118,8 @@ namespace MVCSistemaDeElementos.Descriptores
 
         public override string RenderControl()
         {
+            AjustarDimensionDeLaTabla();
+
             return $@"
                   <div id=¨mostrar.{IdHtml}¨ class=¨{Css.Render(enumCssCuerpo.CuerpoDatosFiltroBloque)}¨> 
                         <a id=¨mostrar.{IdHtml}.ref¨ 

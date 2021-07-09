@@ -23,7 +23,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(PaisDto.Nombre),
                 mostrarExpresion: $"([{nameof(PaisDto.Codigo)}]) [{nameof(PaisDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 0));
+                posicion: new Posicion(0, 0),
+                controlador: nameof(PaisesController),
+                restringirPor: "",
+                alSeleccionarBlanquearControl: nameof(CalleDto.IdProvincia));
 
             new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
                 etiqueta: "Provincia",
@@ -33,13 +36,29 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(ProvinciaDto.Nombre),
                 mostrarExpresion: $"([{nameof(ProvinciaDto.Codigo)}]) [{nameof(ProvinciaDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 1));
+                posicion: new Posicion(0, 1),
+                controlador: nameof(ProvinciasController),
+                restringirPor: nameof(MunicipioDto.IdPais),
+                alSeleccionarBlanquearControl: nameof(CalleDto.IdMunicipio));
+
+            new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
+                etiqueta: "Municipio",
+                filtrarPor: nameof(CalleDto.IdMunicipio),
+                ayuda: "seleccione el municipio",
+                seleccionarDe: nameof(MunicipioDto),
+                buscarPor: nameof(MunicipioDto.Nombre),
+                mostrarExpresion: $"([{nameof(MunicipioDto.Codigo)}]) [{nameof(MunicipioDto.Nombre)}]",
+                criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
+                posicion: new Posicion(0, 2),
+                controlador: nameof(MunicipiosController),
+                restringirPor: nameof(MunicipioDto.IdProvincia)
+                );
 
             new EditorFiltro<CalleDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"
                 , propiedad: nameof(CalleDto.Codigo)
                 , ayuda: "buscar por codigo"
-                , new Posicion { fila = 0, columna = 2 });
+                , new Posicion { fila = 1, columna = 1});
 
             //new EditorFiltro<CalleDto>(bloque: Mnt.BloqueGeneral
             //    , etiqueta: "CP"

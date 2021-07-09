@@ -42,7 +42,9 @@ namespace MVCSistemaDeElementos.Descriptores
                                             buscarPor: nameof(PermisoDto.Nombre),
                                             mostrarExpresion: nameof(PermisoDto.Nombre),
                                             criterioDeBusqueda: CriteriosDeFiltrado.contiene,
-                                            posicion: new Posicion(1, 0)).LongitudMinimaParaBuscar = 3;
+                                            posicion: new Posicion(1, 0),
+                                            controlador: nameof(PermisosController),
+                                            restringirPor: "").LongitudMinimaParaBuscar = 3;
         }
 
 

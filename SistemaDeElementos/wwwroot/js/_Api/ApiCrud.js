@@ -224,6 +224,39 @@ var ApiControl;
         return true;
     }
     ApiControl.AjustarColumnaDelGrid = AjustarColumnaDelGrid;
+    function LimpiarEditor(editor) {
+        MapearAlControl.Restrictor(editor, 0, "");
+        BlanquearDependientes(editor);
+    }
+    ApiControl.LimpiarEditor = LimpiarEditor;
+    function LimpiarListaDinamica(lista) {
+        MapearAlControl.ListaDinamica(lista, 0, "");
+        BorrarOpcionesListaDinamica(lista);
+        BlanquearDependientes(lista);
+    }
+    ApiControl.LimpiarListaDinamica = LimpiarListaDinamica;
+    function BorrarOpcionesListaDinamica(lista) {
+        var numChilds = lista.children.length;
+        for (var i = 0; i < numChilds; i++) {
+            lista.children[0].remove();
+        }
+    }
+    ApiControl.BorrarOpcionesListaDinamica = BorrarOpcionesListaDinamica;
+    function BlanquearDependientes(control) {
+        let BlanquearControlDePropiedad = control.getAttribute(atListasDinamicas.BlanquearControlAsociado);
+        if (!IsNullOrEmpty(BlanquearControlDePropiedad)) {
+            let contenedor = control.getAttribute(atListasDinamicas.ContenidoEn);
+            let divContenedor = document.getElementById(contenedor);
+            let controlDependiente = divContenedor.querySelector(`[${atControl.propiedad}=${BlanquearControlDePropiedad}]`);
+            let tipo = controlDependiente.getAttribute(atControl.tipo);
+            if (tipo === TipoControl.restrictorDeEdicion)
+                LimpiarEditor(controlDependiente);
+            else if (tipo === TipoControl.ListaDinamica) {
+                LimpiarListaDinamica(controlDependiente);
+            }
+        }
+    }
+    ApiControl.BlanquearDependientes = BlanquearDependientes;
     function BlanquearEditor(editor) {
         AnularError(editor);
         editor.value = "";
@@ -538,6 +571,13 @@ var ApiFiltro;
             longitud = 3;
         if (valor.length < longitud)
             return null;
+        let filtros = AnadirRestrictores(input);
+        let clausula = new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
+        filtros.push(clausula);
+        return filtros;
+    }
+    ApiFiltro.DefinirFiltroListaDinamica = DefinirFiltroListaDinamica;
+    function AnadirRestrictores(input) {
         var filtros = new Array();
         let restringirPor = input.getAttribute(atListasDinamicas.RestringidoPor);
         if (Definida(restringirPor)) {
@@ -548,18 +588,33 @@ var ApiFiltro;
             let restrictor = divControl.querySelector(`[${atControl.propiedad}=${restringirPor}]`);
             if (NoDefinida(restrictor))
                 MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha encontratado el control con la propiedad ${restringirPor} asociado a la lista ${input.id} en el contenedor ${contenedor}`);
-            let valorRestrictor = "";
-            if (restrictor instanceof HTMLInputElement)
-                valorRestrictor = restrictor.getAttribute(atControl.restrictor);
-            if (Numero(valor) === 0)
-                MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha definido el valor por el que restringir en el control ${restringirPor} asociado a la lista ${input.id} en el contenedor ${contenedor}`);
-            let filtroRestrictor = new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
-            filtros.push(filtroRestrictor);
+            if (restrictor instanceof HTMLInputElement) {
+                let tipo = restrictor.getAttribute(atControl.tipo);
+                if (tipo === TipoControl.restrictorDeEdicion)
+                    filtros.push(ObtenerValorDelRestrictorDeEdicion(restrictor, restringirPor));
+                else if (tipo === TipoControl.ListaDinamica) {
+                    let a = ObtenerValorDeLaListaDinamica(restrictor, restringirPor);
+                    if (Definida(a))
+                        filtros.push(a);
+                }
+                else
+                    MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha definido como obtener el valor que restringir en el control ${restringirPor} asociado a la lista ${input.id} en el contenedor ${contenedor}`);
+            }
         }
-        let clausula = new ClausulaDeFiltrado(buscarPor, criterio, valor.toString());
-        filtros.push(clausula);
         return filtros;
     }
-    ApiFiltro.DefinirFiltroListaDinamica = DefinirFiltroListaDinamica;
+    ApiFiltro.AnadirRestrictores = AnadirRestrictores;
+    function ObtenerValorDelRestrictorDeEdicion(restrictor, restringirPor) {
+        let valorRestrictor = restrictor.getAttribute(atControl.restrictor);
+        if (Numero(valorRestrictor) === 0)
+            MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha definido el valor por el que restringir en el control ${restringirPor}`);
+        return new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
+    }
+    function ObtenerValorDeLaListaDinamica(lista, restringirPor) {
+        let valorRestrictor = lista.getAttribute(atListasDinamicas.idSeleccionado);
+        if (Number(valorRestrictor) === 0)
+            return null;
+        return new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
+    }
 })(ApiFiltro || (ApiFiltro = {}));
 //# sourceMappingURL=ApiCrud.js.map

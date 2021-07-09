@@ -202,7 +202,7 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["Cantidad"] = 10;
             valores["CriterioDeFiltro"] = atributos.CriterioDeBusqueda;
             valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.cargar}',this)";
-            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.seleccionar}',this)";
+            valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.perderFoco}',this)";
             valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
             valores["GuardarEn"] = atributos.GuardarEn;
             valores["RestringidoPor"] = atributos.RestringidoPor.ToLower();

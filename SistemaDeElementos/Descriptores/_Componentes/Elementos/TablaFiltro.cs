@@ -27,9 +27,13 @@ namespace MVCSistemaDeElementos.Descriptores
                 Columnas = posicion.columna + 1;
         }
 
-        internal void NumeroDeFilas(int fila)
+        internal void NumeroDeFilas(int filas)
         {
-            Filas = fila;
+            Filas = filas;
+        }
+        internal void NumeroDeColumnas(int columnas)
+        {
+            Columnas = columnas;
         }
     }
 

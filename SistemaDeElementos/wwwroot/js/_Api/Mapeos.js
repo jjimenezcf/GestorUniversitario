@@ -346,6 +346,7 @@ var MapearAlControl;
     function Restrictor(restrictor, id, texto) {
         restrictor.setAttribute(atControl.valorInput, texto);
         restrictor.setAttribute(atControl.restrictor, id.toString());
+        ApiControl.BlanquearDependientes(restrictor);
     }
     MapearAlControl.Restrictor = Restrictor;
     function Lista(lista, id) {
@@ -400,8 +401,14 @@ var MapearAlControl;
     }
     MapearAlControl.FijarValorEnListaDinamica = FijarValorEnListaDinamica;
     function ListaDinamica(input, valor, texto) {
-        input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
-        input.value = Numero(valor) === 0 ? "" : texto;
+        try {
+            input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
+            input.value = Numero(valor) === 0 ? "" : texto;
+            ApiControl.BlanquearDependientes(input);
+        }
+        finally {
+            input.setAttribute(atListasDinamicas.cargando, 'N');
+        }
     }
     MapearAlControl.ListaDinamica = ListaDinamica;
     function FijarValorEnEditor(input, id, texto) {

@@ -25,7 +25,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(MenuDto.Nombre),
                 mostrarExpresion: $"[{nameof(MenuDto.Padre)}].[{nameof(MenuDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion() { fila = 0, columna = 0 });
+                posicion: new Posicion() { fila = 0, columna = 0 },
+                controlador: nameof(MenusController),
+                restringirPor: "");
 
             new CheckFiltro<MenuDto>(bloque: fltEspecificos,
                 etiqueta: "Mostrar las activas",

@@ -22,7 +22,10 @@ namespace MVCSistemaDeElementos.Descriptores
                 buscarPor: nameof(PaisDto.Nombre),
                 mostrarExpresion: $"([{nameof(PaisDto.Codigo)}]) [{nameof(PaisDto.Nombre)}]",
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
-                posicion: new Posicion(0, 0));
+                posicion: new Posicion(0, 0),
+                controlador: nameof(PaisesController),
+                restringirPor: "",
+                alSeleccionarBlanquearControl: "");
 
             new EditorFiltro<ProvinciaDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"

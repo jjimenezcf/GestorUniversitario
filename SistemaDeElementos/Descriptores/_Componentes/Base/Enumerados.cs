@@ -22,7 +22,8 @@ namespace MVCSistemaDeElementos.Descriptores
     public static class TipoAccionDeListaDinamica
     {
         public const string cargar = "cargar-lista-dinamica";
-        public const string seleccionar = "seleccionar--lista-dinamica";
+        public const string perderFoco = "perder-foco-lista-dinamica";
+        public const string obtenerFoco = "obtener-foco-lista-dinamica";
     }
 
 

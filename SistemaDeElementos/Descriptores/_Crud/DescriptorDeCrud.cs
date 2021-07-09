@@ -145,7 +145,7 @@ namespace MVCSistemaDeElementos.Descriptores
         public ControlFiltroHtml RecolocarControl(ControlFiltroHtml control, Posicion posicion,  string nuevaEtiqueta = null, string ayuda = null)
         {
             control.Posicion = posicion;
-            ((BloqueDeFitro<TElemento>)control.Padre).AjustarDimensionDeLaTabla();
+            //((BloqueDeFitro<TElemento>)control.Padre).AjustarDimensionDeLaTabla();
 
             if (!nuevaEtiqueta.IsNullOrEmpty())
                  control.CambiarEtiqueta(nuevaEtiqueta, ayuda);

@@ -388,6 +388,7 @@ namespace MapearAlControl {
     export function Restrictor(restrictor: HTMLInputElement, id: number, texto: string): void {
         restrictor.setAttribute(atControl.valorInput, texto);
         restrictor.setAttribute(atControl.restrictor, id.toString());
+        ApiControl.BlanquearDependientes(restrictor);
     }
 
     export function Lista(lista: HTMLSelectElement, id: number): void {
@@ -443,8 +444,14 @@ namespace MapearAlControl {
 
 
     export function ListaDinamica(input: HTMLInputElement, valor: number, texto: string) {
-        input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
-        input.value = Numero(valor) === 0 ? "" : texto;
+        try {
+            input.setAttribute(atListasDinamicas.idSeleccionado, Numero(valor).toString());
+            input.value = Numero(valor) === 0 ? "" : texto;
+            ApiControl.BlanquearDependientes(input);
+        }
+        finally {
+            input.setAttribute(atListasDinamicas.cargando, 'N');
+        }
     }
 
     export function FijarValorEnEditor(input: HTMLInputElement, id: number, texto: string) {

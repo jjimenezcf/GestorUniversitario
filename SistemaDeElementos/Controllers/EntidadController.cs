@@ -199,6 +199,45 @@ namespace MVCSistemaDeElementos.Controllers
             return a;
         }
 
+
+        //END-POINT: Desde CrudBase.ts
+        public JsonResult epLeerElemento(string filtrosJson, string parametrosJson)
+        {
+            var r = new Resultado();
+            var parametros = new Dictionary<string, object>();
+            try
+            {
+                if (parametrosJson.IsNullOrEmpty())
+                    GestorDeErrores.Emitir("No se han definido los parámetros con los que leer el elemento");
+
+                var parametrosIn = JsonConvert.DeserializeObject<List<Parametro>>(parametrosJson);
+                foreach (var p in parametrosIn)
+                    parametros.Add(p.parametro, p.valor);
+
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+
+                List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtrosJson);
+
+                var elementos = GestorDeElementos.LeerElementos(0, 1, filtros, new List<ClausulaDeOrdenacion>(), parametros);
+               
+                if (elementos.Count() == 0)
+                    GestorDeErrores.Emitir($"No se han encontrado el elemento seleccionado según el filtro {filtrosJson}");
+
+                if (elementos.Count() > 1)
+                    GestorDeErrores.Emitir($"Hay más de un elemento para el filtro {filtrosJson}");
+                
+                var infoParaDevolver = ElementosLeidos(elementos.ToList());
+                r.Datos = infoParaDevolver.ToList()[0];
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = $"registro leido";
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al leer.");
+            }
+            return new JsonResult(r);
+        }
+
         //END-POINT: desde CrudMantenimiento.Ts
         public JsonResult epExportar(string parametrosJson = null)
         {
