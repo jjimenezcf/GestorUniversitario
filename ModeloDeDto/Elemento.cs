@@ -93,7 +93,13 @@ namespace ModeloDeDto
         public string GuardarEn { get; set; }
 
         public string RestringidoPor { get; set; } = "";
+
+        public string Controlador { get; set; } = "";
+
+        public string AlSeleccionarBlanquearControl { get; set; } = "";
+
         public string BuscarPor { get; set; } = ltrFiltros.Nombre;
+        public int LongitudMinimaParaBuscar { get; set; } = 3;
 
         public string MostrarExpresion { get; set; }
 

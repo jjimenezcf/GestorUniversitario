@@ -198,15 +198,18 @@ namespace MVCSistemaDeElementos.Descriptores
                 ElementoDto.ValorDelAtributo(atributos.SeleccionarDe, nameof(IUDtoAttribute.MostrarExpresion)) :
                 atributos.MostrarExpresion;
             valores["BuscarPor"] = atributos.BuscarPor;
-            valores["Longitud"] = 3;
+            valores["Longitud"] = atributos.LongitudMinimaParaBuscar;
             valores["Cantidad"] = 10;
             valores["CriterioDeFiltro"] = atributos.CriterioDeBusqueda;
             valores["OnInput"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.cargar}',this)";
             valores["OnChange"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.perderFoco}',this)";
+            valores["OnFocus"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.obtenerFoco}',this)";
             valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
             valores["GuardarEn"] = atributos.GuardarEn;
             valores["RestringidoPor"] = atributos.RestringidoPor.ToLower();
             valores["ContenidoEn"] = tabla.IdHtmlContenedor;
+            valores["Controlador"] = atributos.Controlador;
+            valores["Blanquear"] = atributos.AlSeleccionarBlanquearControl.ToLower();
 
             var a = PlantillasHtml.Render(PlantillasHtml.listaDinamicaDto, valores);
             return a;

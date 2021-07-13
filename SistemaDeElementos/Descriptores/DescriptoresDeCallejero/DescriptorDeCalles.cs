@@ -28,7 +28,7 @@ namespace MVCSistemaDeElementos.Descriptores
                 restringirPor: "",
                 alSeleccionarBlanquearControl: nameof(CalleDto.IdProvincia));
 
-            new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
+            var listaProvincia = new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
                 etiqueta: "Provincia",
                 filtrarPor: nameof(CalleDto.IdProvincia),
                 ayuda: "seleccione la provincia",
@@ -40,8 +40,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 controlador: nameof(ProvinciasController),
                 restringirPor: nameof(MunicipioDto.IdPais),
                 alSeleccionarBlanquearControl: nameof(CalleDto.IdMunicipio));
+            listaProvincia.LongitudMinimaParaBuscar = 1;
 
-            new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
+            var listaMunicipio =  new ListasDinamicas<CalleDto>(Mnt.BloqueGeneral,
                 etiqueta: "Municipio",
                 filtrarPor: nameof(CalleDto.IdMunicipio),
                 ayuda: "seleccione el municipio",
@@ -51,8 +52,9 @@ namespace MVCSistemaDeElementos.Descriptores
                 criterioDeBusqueda: ModeloDeDto.CriteriosDeFiltrado.contiene,
                 posicion: new Posicion(0, 2),
                 controlador: nameof(MunicipiosController),
-                restringirPor: nameof(MunicipioDto.IdProvincia)
-                );
+                restringirPor: nameof(MunicipioDto.IdProvincia),
+                alSeleccionarBlanquearControl: "");
+            listaMunicipio.LongitudMinimaParaBuscar = 1;
 
             new EditorFiltro<CalleDto>(bloque: Mnt.BloqueGeneral
                 , etiqueta: "Codigo"
