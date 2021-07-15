@@ -38,6 +38,9 @@ namespace MVCSistemaDeElementos.Controllers
             if (claseElemento == nameof(MunicipioDto))
                 return GestorDeMunicipios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMunicipios(posicion, cantidad, filtros);
 
+            if (claseElemento == nameof(MunicipioDto))
+                return GestorDeMunicipios.Gestor(GestorDeElementos.Contexto, GestorDeElementos.Mapeador).LeerMunicipios(posicion, cantidad, filtros);
+
             return base.CargaDinamica(claseElemento, posicion, cantidad, filtros);
         }
 

@@ -403,18 +403,27 @@ var Crud;
                         return;
                 }
             }
-            let clase = input.getAttribute(atListasDinamicas.claseElemento);
-            let idInput = input.getAttribute('id');
             let filtros = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
             if (filtros === null) {
                 return;
             }
-            let cantidad = input.getAttribute(atListasDinamicas.cantidad);
-            let url = this.DefinirPeticionDeCargarDinamica(this.Controlador, clase, Numero(cantidad), filtros);
-            let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${input.value}"}`;
-            let a = new ApiDeAjax.DescriptorAjax(this, Ajax.EndPoint.CargaDinamica, datosDeEntrada, url, ApiDeAjax.TipoPeticion.Asincrona, ApiDeAjax.ModoPeticion.Get, this.AnadirOpcionesListaDinamica, this.SiHayErrorAlCargarListasDinamicas);
-            input.setAttribute(atListasDinamicas.cargando, 'S');
-            a.Ejecutar();
+            let controlador = input.getAttribute(atControl.controlador);
+            if (!IsNullOrEmpty(controlador)) {
+                let parametros = new Array();
+                parametros.push(new Parametro(Ajax.Param.aplicarJoin, false));
+                let clase = input.getAttribute(atListasDinamicas.claseElemento);
+                let idInput = input.getAttribute('id');
+                let datosDeEntrada = `{"ClaseDeElemento":"${clase}", "IdInput":"${idInput}", "buscada":"${input.value}"}`;
+                let cantidad = input.getAttribute(atListasDinamicas.cantidad);
+                parametros.push(new Parametro(Ajax.Param.cantidad, cantidad));
+                ApiDePeticiones.LeerElementos(this, controlador, filtros, parametros, datosDeEntrada)
+                    .then((peticion) => this.AnadirOpcionesListaDinamica(peticion))
+                    .catch((peticion) => this.SiHayErrorAlCargarListasDinamicas(peticion));
+            }
+            else
+                ApiDePeticiones.CargaDinamica(this, input, filtros)
+                    .then((peticion) => this.AnadirOpcionesListaDinamica(peticion))
+                    .catch((peticion) => this.SiHayErrorAlCargarListasDinamicas(peticion));
         }
         FiltrosExcluyentes(clausulas) {
             return clausulas;
@@ -433,9 +442,11 @@ var Crud;
                     }
                     else
                         expresion = peticion.resultado.datos[i][expresionPorDefecto];
-                    listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, expresion);
+                    let valor = NoDefinida(peticion.resultado.datos[i].id) ? peticion.resultado.datos[i].Id : peticion.resultado.datos[i].id;
+                    if (NoDefinida(valor))
+                        MensajesSe.EmitirExcepcion("Añadir opciones a la lista dinámica", "No se ha definido el ID tras leer elementos en el servidor");
+                    listaDinamica.AgregarOpcion(valor, expresion);
                 }
-                //listaDinamica.Lista.click();
             }
             finally {
                 input.setAttribute(atListasDinamicas.cargando, 'N');
@@ -477,10 +488,6 @@ var Crud;
         }
         DefinirPeticionDeCargarElementos(controlador, claseElemento) {
             let url = `/${controlador}/${Ajax.EndPoint.CargarLista}?${Ajax.Param.claseElemento}=${claseElemento}`;
-            return url;
-        }
-        DefinirPeticionDeCargarDinamica(controlador, claseElemento, cantidad, filtros) {
-            let url = `/${controlador}/${Ajax.EndPoint.CargaDinamica}?${Ajax.Param.claseElemento}=${claseElemento}&posicion=0&cantidad=${cantidad}&filtrosJson=${JSON.stringify(filtros)}`;
             return url;
         }
     }

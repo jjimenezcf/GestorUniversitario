@@ -250,6 +250,7 @@ const Ajax = {
         LeerDatosParaElGrid: "epLeerDatosParaElGrid",
         SolicitarMenuEnHtml: "epSolicitarMenuHtml",
         LeerElemento: "epLeerElemento",
+        LeerElementos: "epLeerElementos",
         LeerPorId: "epLeerPorId",
         Modificar: "epModificarPorId",
         Borrar: "epBorrarPorId",

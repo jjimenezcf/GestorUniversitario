@@ -83,6 +83,8 @@ namespace ModeloDeDto.Callejero
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = typeof(TipoDeViaDto),
             GuardarEn = nameof(IdTipoDeVia),
+            Controlador = "TiposDeVia",
+            LongitudMinimaParaBuscar = 1,
             Fila = 1,
             Columna = 0,
             Obligatorio = true,

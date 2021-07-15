@@ -238,6 +238,41 @@ namespace MVCSistemaDeElementos.Controllers
             return new JsonResult(r);
         }
 
+        public JsonResult epLeerElementos(string filtrosJson, string parametrosJson)
+        {
+            var r = new Resultado();
+            var parametros = new Dictionary<string, object>();
+            try
+            {
+                if (parametrosJson.IsNullOrEmpty())
+                    GestorDeErrores.Emitir("No se han definido los parámetros con los que leer el elemento");
+
+                var parametrosIn = JsonConvert.DeserializeObject<List<Parametro>>(parametrosJson);
+                foreach (var p in parametrosIn)
+                    parametros.Add(p.parametro, p.valor);
+
+                if (!parametros.ContainsKey("cantidad"))
+                    GestorDeErrores.Emitir("Debe indicar la cantidad de elementos a leer");
+
+                ApiController.CumplimentarDatosDeUsuarioDeConexion(Contexto, Mapeador, HttpContext);
+
+                List<ClausulaDeFiltrado> filtros = JsonConvert.DeserializeObject<List<ClausulaDeFiltrado>>(filtrosJson);
+
+                var elementos = GestorDeElementos.LeerElementos(0, Convert.ToInt32(parametros["cantidad"]), filtros, new List<ClausulaDeOrdenacion>(), parametros);
+
+                var infoParaDevolver = ElementosLeidos(elementos.ToList());
+                r.Datos = infoParaDevolver.ToList();
+                r.Estado = enumEstadoPeticion.Ok;
+                r.Mensaje = $"se han leido {infoParaDevolver.Count()} elementos";
+            }
+            catch (Exception e)
+            {
+                ApiController.PrepararError(e, r, "Error al leer.");
+            }
+            return new JsonResult(r);
+        }
+
+
         //END-POINT: desde CrudMantenimiento.Ts
         public JsonResult epExportar(string parametrosJson = null)
         {
