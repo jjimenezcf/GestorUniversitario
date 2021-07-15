@@ -247,6 +247,20 @@ var ApiControl;
         }
     }
     ApiControl.BorrarOpcionesListaDinamica = BorrarOpcionesListaDinamica;
+    function BuscarOpcionesListaDinamica(lista, valor) {
+        let idDatos = lista.getAttribute(atListas.idDeLaLista);
+        if (!IsNullOrEmpty(idDatos)) {
+            var opciones = document.getElementById(idDatos);
+            var numChilds = opciones.children.length;
+            for (var i = 0; i < numChilds; i++) {
+                if (opciones.children[i].attributes[1].value === valor)
+                    return Numero(opciones.children[i].attributes[0].value);
+            }
+            opciones.innerHTML = "";
+        }
+        MensajesSe.EmitirExcepcion("Buscar opción en lista", `No se ha localizado el valor ${valor} en la lista ${lista.id}`);
+    }
+    ApiControl.BuscarOpcionesListaDinamica = BuscarOpcionesListaDinamica;
     function BlanquearDependientes(control) {
         let BlanquearControlDePropiedad = control.getAttribute(atListasDinamicas.BlanquearControlAsociado);
         if (!IsNullOrEmpty(BlanquearControlDePropiedad)) {
@@ -315,6 +329,15 @@ var ApiControl;
 })(ApiControl || (ApiControl = {}));
 var ApiCrud;
 (function (ApiCrud) {
+    function ElementoSeleccionado(lista) {
+        let id = ApiControl.BuscarOpcionesListaDinamica(lista, lista.value);
+        let idAnterior = Numero(lista.getAttribute(atListasDinamicas.idSelAlEntrar));
+        if (idAnterior !== id) {
+            ApiControl.BlanquearDependientes(lista);
+            lista.setAttribute(atListasDinamicas.idSeleccionado, id.toString());
+        }
+    }
+    ApiCrud.ElementoSeleccionado = ElementoSeleccionado;
     function CrearEnlaceAlElemento(divDeElementos, elemento) {
         let a = document.createElement("a");
         let url = `${window.location}`;

@@ -261,6 +261,20 @@
             opciones.innerHTML = "";
         }
     }
+    export function BuscarOpcionesListaDinamica(lista: HTMLInputElement, valor: string): number {
+        let idDatos = lista.getAttribute(atListas.idDeLaLista);
+        if (!IsNullOrEmpty(idDatos)) {
+            var opciones: HTMLDataListElement = document.getElementById(idDatos) as HTMLDataListElement;
+            var numChilds = opciones.children.length;
+            for (var i = 0; i < numChilds; i++) {
+                if (opciones.children[i].attributes[1].value === valor)
+                    return Numero(opciones.children[i].attributes[0].value);
+
+            }
+            opciones.innerHTML = "";
+        }
+        MensajesSe.EmitirExcepcion("Buscar opción en lista", `No se ha localizado el valor ${valor} en la lista ${lista.id}`);
+    }
 
     export function BlanquearDependientes(control: HTMLInputElement) {
         let BlanquearControlDePropiedad: string = control.getAttribute(atListasDinamicas.BlanquearControlAsociado);
@@ -334,6 +348,15 @@
 }
 
 namespace ApiCrud {
+
+    export function ElementoSeleccionado(lista: HTMLInputElement) {
+        let id: number = ApiControl.BuscarOpcionesListaDinamica(lista, lista.value);
+        let idAnterior: number = Numero(lista.getAttribute(atListasDinamicas.idSelAlEntrar));
+        if (idAnterior !== id) {
+            ApiControl.BlanquearDependientes(lista);
+            lista.setAttribute(atListasDinamicas.idSeleccionado, id.toString());
+        }
+    }
 
     export function CrearEnlaceAlElemento(divDeElementos: HTMLDivElement, elemento: Elemento) {
         let a = document.createElement("a");
