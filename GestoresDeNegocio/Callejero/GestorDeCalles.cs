@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDeDto;
 using Gestor.Errores;
 using ServicioDeDatos.TrabajosSometidos;
+using System.Reflection;
 
 namespace GestoresDeNegocio.Callejero
 {
@@ -134,30 +135,38 @@ namespace GestoresDeNegocio.Callejero
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
+                if (filtro.Aplicado)
+                    continue;
+
                 if (filtro.Clausula.Equals(nameof(CalleDto.IdPais), StringComparison.CurrentCultureIgnoreCase))
-                    registros = registros.Where(x => x.Municipio.Provincia.Pais.Id == filtro.Valor.Entero());
+                    registros = registros.Where(x => x.Municipio.Provincia.Pais.Id == filtro.AplicarFiltro().Entero());
+
+                if (filtro.Clausula.Equals(nameof(CalleDto.IdProvincia), StringComparison.CurrentCultureIgnoreCase))
+                    registros = registros.Where(x => x.Municipio.Provincia.Id == filtro.AplicarFiltro().Entero());
+
+                if (filtro.Clausula.Equals(nameof(CalleDto.IdMunicipio), StringComparison.CurrentCultureIgnoreCase))
+                    registros = registros.Where(x => x.IdMunicipio == filtro.AplicarFiltro().Entero());
 
                 if (filtro.Clausula.Equals(ltrCallejero.iso2Pais, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleIso2);
+                    registros = registros.Where(x => x.Municipio.Provincia.Pais.ISO2 == filtro.AplicarFiltro());
 
                 if (filtro.Clausula.Equals(ltrCallejero.codigoProvincia,StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleCodigoProvincia);
+                    registros = registros.Where(x => x.Municipio.Provincia.Codigo == filtro.AplicarFiltro());
 
                 if (filtro.Clausula.Equals(ltrCallejero.codigoMunicipio, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleCodigoMunicipio);
+                    registros = registros.Where(x => x.Municipio.Codigo == filtro.AplicarFiltro());
 
                 if (filtro.Clausula.Equals(ltrCallejero.codigoCalle, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleCodigo);
+                    registros = registros.Where(x => x.Codigo == filtro.AplicarFiltro());
 
+                if (filtro.Clausula.Equals(ltrCallejero.nombreProvincia, StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.comienza)
+                    registros = registros.Where(x => x.Municipio.Provincia.Nombre.StartsWith(filtro.AplicarFiltro()));
 
-                if (filtro.Clausula.Equals(ltrCallejero.nombreProvincia, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleNombreProvincia);
+                if (filtro.Clausula.Equals(ltrCallejero.nombreMunicipio, StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.comienza)
+                    registros = registros.Where(x => x.Municipio.Nombre.StartsWith(filtro.AplicarFiltro()));
 
-                if (filtro.Clausula.Equals(ltrCallejero.nombreMunicipio, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleNombreMunicipio);
-
-                if (filtro.Clausula.Equals(ltrCallejero.nombreCalle, StringComparison.CurrentCultureIgnoreCase))
-                    registros = Filtrar.AplicarFiltroDeCadena(registros, filtro, ltrCallejero.CalleNombre);
+                if (filtro.Clausula.Equals(nameof(CalleDtm.Nombre), StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.contiene)
+                    registros = registros.Where(x => x.Nombre.Contains(filtro.AplicarFiltro()));
 
                 //if (filtro.Clausula.ToLower() == nameof(CpsDeUnCalleDtm.CodigoPostal).ToLower())
                 //{

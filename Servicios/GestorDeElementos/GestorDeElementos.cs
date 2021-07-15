@@ -583,7 +583,10 @@ namespace GestorDeElementos
                 registros = AplicarJoins(registros, filtros, joins, parametros);
 
             if (filtros.Count > 0)
+            {
                 registros = AplicarFiltros(registros, filtros, parametros);
+                registros = registros.AplicarFiltroPorPropiedades(filtros);
+            }
 
             if (parametros.Operacion == enumTipoOperacion.LeerSinBloqueo)
             {
@@ -627,11 +630,14 @@ namespace GestorDeElementos
                 if (filtro.Clausula.ToLower() == nameof(IRegistro.Id).ToLower() && filtro.Criterio == CriteriosDeFiltrado.igual)
                 {
                     HayFiltroPorId = filtro.Criterio == CriteriosDeFiltrado.igual;
-                    return registros.AplicarFiltroPorIdentificador(filtro, nameof(IRegistro.Id));
+                    registros = registros.Where(x => x.Id == filtro.Valor.Entero());
+                    filtro.Aplicado = true;
+                    return registros;
+                    //return registros.AplicarFiltroPorIdentificador(filtro, nameof(IRegistro.Id));
                 }
             }
 
-            return registros.AplicarFiltroPorPropiedades(filtros);
+            return registros;
         }
 
         protected virtual IQueryable<TRegistro> AplicarJoins(IQueryable<TRegistro> registros, List<ClausulaDeFiltrado> filtros, List<ClausulaDeJoin> joins, ParametrosDeNegocio parametros)

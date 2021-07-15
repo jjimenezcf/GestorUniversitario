@@ -96,6 +96,8 @@ namespace GestorDeElementos
                     GestorDeErrores.Emitir($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
                     break;
             }
+
+            filtro.Aplicado = true;
             return registros;
         }
 
@@ -106,6 +108,7 @@ namespace GestorDeElementos
             if (valorEntero == 0 && !(filtro.Criterio == CriteriosDeFiltrado.esNulo || filtro.Criterio == CriteriosDeFiltrado.noEsNulo || filtro.Criterio == CriteriosDeFiltrado.esAlgunoDe))
                 GestorDeErrores.Emitir($"Se ha solicitado filtrar por {filtro.Clausula}, con el criterio {filtro.Criterio} y el valor proporcionado es '{filtro.Valor}', y eso no se puede hacer sobre la tabla {typeof(TRegistro).Name}. ");
 
+            filtro.Aplicado = true;
             return registros.AplicarFiltroPorEntero(filtro, propiedad);
         }
 
@@ -123,6 +126,7 @@ namespace GestorDeElementos
                     GestorDeErrores.Emitir($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
                     break;
             }
+            filtro.Aplicado = true;
             return registros;
         }
 
@@ -182,6 +186,7 @@ namespace GestorDeElementos
                     GestorDeErrores.Emitir($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
                     break;
             }
+            filtro.Aplicado = true;
             return registros;
         }
 
@@ -224,6 +229,7 @@ namespace GestorDeElementos
                     GestorDeErrores.Emitir($"El filtro {filtro.Clausula} para la entidad {registros.GetType()} por el criterio {filtro.Criterio} no está definido");
                     break;
             }
+            filtro.Aplicado = true;
             return registros;
         }
 
@@ -233,6 +239,9 @@ namespace GestorDeElementos
 
             foreach (ClausulaDeFiltrado filtro in filtros)
             {
+                if (filtro.Aplicado)
+                    continue;
+
                 foreach (var propiedad in propiedades)
                 {
 
@@ -242,6 +251,7 @@ namespace GestorDeElementos
                     if (propiedad.Name.Equals(nameof(IRegistro.Id), StringComparison.CurrentCultureIgnoreCase) && filtro.Criterio == CriteriosDeFiltrado.igual)
                         continue;
 
+                    filtro.Aplicado = true;
                     registros = registros.AplicarFiltroPorPropiedad(filtro, propiedad);
                 }
 
@@ -280,7 +290,11 @@ namespace GestorDeElementos
         public CriteriosDeFiltrado Criterio { get; set; }
 
         private string _valor = "";
+
         public string Valor { get { return _valor.Trim(); } set { _valor = value == null ? "" : value; } }
+
+        public bool Aplicado {get; set;} = false;
+
         public ClausulaDeFiltrado()
         {
         }
@@ -293,6 +307,12 @@ namespace GestorDeElementos
         {
             Clausula = clausula;
             Criterio = criterio;
+        }
+
+        public string AplicarFiltro()
+        {
+            Aplicado = true;
+            return Valor;
         }
 
     }
