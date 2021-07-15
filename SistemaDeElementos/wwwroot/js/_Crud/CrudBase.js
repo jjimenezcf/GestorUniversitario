@@ -336,29 +336,41 @@ var Crud;
             let lista = new Tipos.ListaDinamica(input);
             if (input.getAttribute(atListasDinamicas.cargando) === 'S')
                 return;
-            let id = lista.BuscarSeleccionado(input.value);
-            let idsel = input.getAttribute(atListasDinamicas.idSelAlEntrar);
-            if (Numero(idsel) > 0 && Numero(idsel) === id)
+            if (IsNullOrEmpty(input.value)) {
+                input.setAttribute(atListasDinamicas.idSelAlEntrar, '0');
+                input.setAttribute(atListasDinamicas.idSeleccionado, '0');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
                 return;
-            if (id > 0) {
-                ApiControl.BlanquearDependientes(input);
-                let parametros = new Array();
-                parametros.push(new Parametro(Ajax.Param.aplicarJoin, false));
-                let filtros = ApiFiltro.AnadirRestrictores(input);
-                filtros.push(new ClausulaDeFiltrado(atControl.id, atCriterio.igual, id.toString()));
-                let controlador = input.getAttribute(atControl.controlador);
-                if (IsNullOrEmpty(controlador))
-                    MensajesSe.EmitirExcepcion("Al seleccionar en una lista", "Debe indicar el controlador para validar el elemento seleccionado");
-                ApiDePeticiones.LeerElemento(this, controlador, filtros, parametros)
-                    .then((peticion) => MapearAlControl.ListaDinamica(input, id, input.value))
-                    .catch((peticion) => this.SiHayErrorAlSeleccionarEnLaListaDinamica(peticion, input));
             }
-        }
-        ObtenerFocoListaDinamica(input) {
-            if (input.getAttribute(atListasDinamicas.cargando) === 'S')
+            let id = lista.BuscarSeleccionado(input.value);
+            if (id == 0) {
+                input.value = '';
+                input.setAttribute(atListasDinamicas.idSelAlEntrar, '0');
+                input.setAttribute(atListasDinamicas.idSeleccionado, '0');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
                 return;
-            let idsel = input.getAttribute(atListasDinamicas.idSeleccionado);
-            input.setAttribute(atListasDinamicas.idSelAlEntrar, idsel);
+            }
+            let idsel = input.getAttribute(atListasDinamicas.idSelAlEntrar);
+            //if (Numero(idsel) > 0 && Numero(idsel) === id)
+            //    return;
+            ApiControl.BlanquearDependientes(input);
+            let parametros = new Array();
+            parametros.push(new Parametro(Ajax.Param.aplicarJoin, false));
+            let filtros = ApiFiltro.AnadirRestrictores(input);
+            filtros.push(new ClausulaDeFiltrado(atControl.id, atCriterio.igual, id.toString()));
+            let controlador = input.getAttribute(atControl.controlador);
+            if (IsNullOrEmpty(controlador))
+                MensajesSe.EmitirExcepcion("Al seleccionar en una lista", "Debe indicar el controlador para validar el elemento seleccionado");
+            ApiDePeticiones.LeerElemento(this, controlador, filtros, parametros)
+                .then(() => MapearAlControl.ListaDinamica(input, id, input.value))
+                .catch((peticion) => this.SiHayErrorAlSeleccionarEnLaListaDinamica(peticion, input));
+        }
+        ObtenerFocoListaDinamica(lista) {
+            if (lista.getAttribute(atListasDinamicas.cargando) === 'S')
+                return;
+            ApiControl.BorrarOpcionesListaDinamica(lista);
+            let idsel = lista.getAttribute(atListasDinamicas.idSeleccionado);
+            lista.setAttribute(atListasDinamicas.idSelAlEntrar, idsel);
         }
         SiHayErrorAlSeleccionarEnLaListaDinamica(peticion, input) {
             try {
@@ -367,6 +379,7 @@ var Crud;
             }
             finally {
                 input.setAttribute(atListasDinamicas.cargando, 'N');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
             }
         }
         // funciones de carga de elementos para los selectores   ************************************************************************************
@@ -389,7 +402,6 @@ var Crud;
             let idInput = input.getAttribute('id');
             let filtros = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
             if (filtros === null) {
-                ApiControl.BorrarOpcionesListaDinamica(input);
                 return;
             }
             let cantidad = input.getAttribute(atListasDinamicas.cantidad);
@@ -418,7 +430,7 @@ var Crud;
                         expresion = peticion.resultado.datos[i][expresionPorDefecto];
                     listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, expresion);
                 }
-                listaDinamica.Lista.click();
+                //listaDinamica.Lista.click();
             }
             finally {
                 input.setAttribute(atListasDinamicas.cargando, 'N');

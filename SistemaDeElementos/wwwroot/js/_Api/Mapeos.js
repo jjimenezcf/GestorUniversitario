@@ -408,6 +408,7 @@ var MapearAlControl;
         }
         finally {
             input.setAttribute(atListasDinamicas.cargando, 'N');
+            input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
         }
     }
     MapearAlControl.ListaDinamica = ListaDinamica;

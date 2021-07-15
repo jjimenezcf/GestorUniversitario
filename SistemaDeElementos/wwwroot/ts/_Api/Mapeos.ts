@@ -451,6 +451,7 @@ namespace MapearAlControl {
         }
         finally {
             input.setAttribute(atListasDinamicas.cargando, 'N');
+            input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
         }
     }
 

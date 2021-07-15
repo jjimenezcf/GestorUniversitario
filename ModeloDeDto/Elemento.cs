@@ -92,7 +92,8 @@ namespace ModeloDeDto
 
         public string GuardarEn { get; set; }
 
-        public string RestringidoPor { get; set; } = "";
+        public string RestringidoPorControl { get; set; } = "";
+        public string PropiedadRestrictora { get; set; } = "";
 
         public string Controlador { get; set; } = "";
 

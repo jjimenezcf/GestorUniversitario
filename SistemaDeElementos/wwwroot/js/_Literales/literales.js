@@ -194,6 +194,7 @@ const atListasDinamicas = {
     ultimaCadenaBuscada: 'ultima-busqueda',
     cantidad: 'cantidad-a-leer',
     RestringidoPor: 'restringido-por',
+    PropiedadRestrictora: 'propiedad-restrictora',
     ContenidoEn: atListas.ContenidoEn,
     BlanquearControlAsociado: 'blanquear'
 };

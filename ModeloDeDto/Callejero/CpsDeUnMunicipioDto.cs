@@ -43,7 +43,7 @@ namespace ModeloDeDto.Callejero
             TipoDeControl = enumTipoControl.ListaDinamica,
             SeleccionarDe = typeof(CodigoPostalDto),
             GuardarEn = nameof(IdCp),
-            RestringidoPor = nameof(IdMunicipio),
+            RestringidoPorControl = nameof(IdMunicipio),
             BuscarPor = nameof(CodigoPostalDtm.Codigo),
             CriterioDeBusqueda = CriteriosDeFiltrado.comienza,
             Fila = 1,

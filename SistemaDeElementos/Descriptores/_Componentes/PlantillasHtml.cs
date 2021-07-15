@@ -55,6 +55,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                          como-buscar=¨[BuscarPor]¨
                                          criterio-de-filtro=¨[CriterioDeFiltro]¨
                                          restringido-por=¨[RestringidoPor]¨
+                                         propiedad-restrictora=¨[PropiedadRestrictora]¨
                                          contenido-en=¨[ContenidoEn]¨
                                          controlador=¨[Controlador]¨
                                          blanquear =¨[Blanquear]¨
@@ -66,7 +67,7 @@ namespace MVCSistemaDeElementos.Descriptores
                                          onblur=¨[OnChange]¨ 
                                          [RestoDeAtributos]
                                          list=¨[IdHtml]-lista¨>
-                                         <datalist id=¨[IdHtml]-lista¨>
+                                         <datalist id=¨[IdHtml]-lista¨ >
                                          </datalist>
                              </div>";
 

@@ -236,9 +236,14 @@ var ApiControl;
     }
     ApiControl.LimpiarListaDinamica = LimpiarListaDinamica;
     function BorrarOpcionesListaDinamica(lista) {
-        var numChilds = lista.children.length;
-        for (var i = 0; i < numChilds; i++) {
-            lista.children[0].remove();
+        let idDatos = lista.getAttribute(atListas.idDeLaLista);
+        if (!IsNullOrEmpty(idDatos)) {
+            var opciones = document.getElementById(idDatos);
+            //var numChilds = opciones.children.length;
+            //for (var i = 0; i < numChilds; i++) {
+            //    opciones.children[i].remove();
+            //}
+            opciones.innerHTML = "";
         }
     }
     ApiControl.BorrarOpcionesListaDinamica = BorrarOpcionesListaDinamica;
@@ -593,7 +598,9 @@ var ApiFiltro;
                 if (tipo === TipoControl.restrictorDeEdicion)
                     filtros.push(ObtenerValorDelRestrictorDeEdicion(restrictor, restringirPor));
                 else if (tipo === TipoControl.ListaDinamica) {
-                    let a = ObtenerValorDeLaListaDinamica(restrictor, restringirPor);
+                    let propiedadRestrictora = input.getAttribute(atListasDinamicas.PropiedadRestrictora);
+                    let valorRestrictor = restrictor.getAttribute(atListasDinamicas.idSeleccionado);
+                    let a = ObtenerValorDeLaListaDinamica(restrictor, propiedadRestrictora, Numero(valorRestrictor));
                     if (Definida(a))
                         filtros.push(a);
                 }
@@ -610,11 +617,12 @@ var ApiFiltro;
             MensajesSe.EmitirExcepcion("Definir filtro lista dinámica", `No se  ha definido el valor por el que restringir en el control ${restringirPor}`);
         return new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
     }
-    function ObtenerValorDeLaListaDinamica(lista, restringirPor) {
-        let valorRestrictor = lista.getAttribute(atListasDinamicas.idSeleccionado);
+    function ObtenerValorDeLaListaDinamica(lista, propiedadRestrictora, valorRestrictor) {
+        if (IsNullOrEmpty(propiedadRestrictora))
+            MensajesSe.EmitirExcepcion("Obtener filtro de la lista dinámica", `no se ha definido la propiedad restrictora en el control ${lista.id}`);
         if (Number(valorRestrictor) === 0)
             return null;
-        return new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
+        return new ClausulaDeFiltrado(propiedadRestrictora, atCriterio.igual, valorRestrictor.toString());
     }
 })(ApiFiltro || (ApiFiltro = {}));
 //# sourceMappingURL=ApiCrud.js.map

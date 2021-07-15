@@ -421,38 +421,52 @@
             if (input.getAttribute(atListasDinamicas.cargando) === 'S')
                 return;
 
-            let id: number = lista.BuscarSeleccionado(input.value);
-            let idsel = input.getAttribute(atListasDinamicas.idSelAlEntrar);
-
-            if (Numero(idsel) > 0 && Numero(idsel) === id)
+            if (IsNullOrEmpty(input.value)) {
+                input.setAttribute(atListasDinamicas.idSelAlEntrar, '0');
+                input.setAttribute(atListasDinamicas.idSeleccionado, '0');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
                 return;
-
-            if (id > 0) {
-                ApiControl.BlanquearDependientes(input);
-
-                let parametros: Array<Parametro> = new Array<Parametro>();
-                parametros.push(new Parametro(Ajax.Param.aplicarJoin, false));
-
-                let filtros: Array<ClausulaDeFiltrado> = ApiFiltro.AnadirRestrictores(input);
-                filtros.push(new ClausulaDeFiltrado(atControl.id, atCriterio.igual, id.toString()));
-
-                let controlador: string = input.getAttribute(atControl.controlador);
-                if (IsNullOrEmpty(controlador))
-                    MensajesSe.EmitirExcepcion("Al seleccionar en una lista", "Debe indicar el controlador para validar el elemento seleccionado");
-
-                ApiDePeticiones.LeerElemento(this, controlador, filtros, parametros)
-                    .then((peticion) => MapearAlControl.ListaDinamica(input, id, input.value))
-                    .catch((peticion) => this.SiHayErrorAlSeleccionarEnLaListaDinamica(peticion, input));
             }
 
-        }
-        public ObtenerFocoListaDinamica(input: HTMLInputElement) {
+            let id: number = lista.BuscarSeleccionado(input.value);
+            if (id == 0) {
+                input.value = '';
+                input.setAttribute(atListasDinamicas.idSelAlEntrar, '0');
+                input.setAttribute(atListasDinamicas.idSeleccionado, '0');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
+                return;
+            }
+            let idsel = input.getAttribute(atListasDinamicas.idSelAlEntrar);
 
-            if (input.getAttribute(atListasDinamicas.cargando) === 'S')
+            //if (Numero(idsel) > 0 && Numero(idsel) === id)
+            //    return;
+
+            ApiControl.BlanquearDependientes(input);
+
+            let parametros: Array<Parametro> = new Array<Parametro>();
+            parametros.push(new Parametro(Ajax.Param.aplicarJoin, false));
+
+            let filtros: Array<ClausulaDeFiltrado> = ApiFiltro.AnadirRestrictores(input);
+            filtros.push(new ClausulaDeFiltrado(atControl.id, atCriterio.igual, id.toString()));
+
+            let controlador: string = input.getAttribute(atControl.controlador);
+            if (IsNullOrEmpty(controlador))
+                MensajesSe.EmitirExcepcion("Al seleccionar en una lista", "Debe indicar el controlador para validar el elemento seleccionado");
+
+            ApiDePeticiones.LeerElemento(this, controlador, filtros, parametros)
+                .then(() => MapearAlControl.ListaDinamica(input, id, input.value))
+                .catch((peticion) => this.SiHayErrorAlSeleccionarEnLaListaDinamica(peticion, input));
+
+
+        }
+        public ObtenerFocoListaDinamica(lista: HTMLInputElement) {
+
+            if (lista.getAttribute(atListasDinamicas.cargando) === 'S')
                 return;
 
-            let idsel = input.getAttribute(atListasDinamicas.idSeleccionado);
-            input.setAttribute(atListasDinamicas.idSelAlEntrar, idsel);
+            ApiControl.BorrarOpcionesListaDinamica(lista);
+            let idsel = lista.getAttribute(atListasDinamicas.idSeleccionado);
+            lista.setAttribute(atListasDinamicas.idSelAlEntrar, idsel);
         }
 
 
@@ -463,6 +477,7 @@
             }
             finally {
                 input.setAttribute(atListasDinamicas.cargando, 'N');
+                input.setAttribute(atListasDinamicas.ultimaCadenaBuscada, '');
             }
         }
 
@@ -488,7 +503,6 @@
             let idInput: string = input.getAttribute('id');
             let filtros: Array<ClausulaDeFiltrado> = ApiFiltro.DefinirFiltroListaDinamica(input, criterio);
             if (filtros === null) {
-                ApiControl.BorrarOpcionesListaDinamica(input);
                 return;
             }
 
@@ -532,7 +546,7 @@
                     listaDinamica.AgregarOpcion(peticion.resultado.datos[i].id, expresion);
                 }
 
-                listaDinamica.Lista.click();
+                //listaDinamica.Lista.click();
             }
             finally {
                 input.setAttribute(atListasDinamicas.cargando, 'N');

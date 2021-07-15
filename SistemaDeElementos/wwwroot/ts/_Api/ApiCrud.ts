@@ -251,9 +251,14 @@
     }
 
     export function BorrarOpcionesListaDinamica(lista: HTMLInputElement) {
-        var numChilds = lista.children.length;
-        for (var i = 0; i < numChilds; i++) {
-            lista.children[0].remove();
+        let idDatos = lista.getAttribute(atListas.idDeLaLista);
+        if (!IsNullOrEmpty(idDatos)) {
+            var opciones: HTMLDataListElement = document.getElementById(idDatos) as HTMLDataListElement;
+            //var numChilds = opciones.children.length;
+            //for (var i = 0; i < numChilds; i++) {
+            //    opciones.children[i].remove();
+            //}
+            opciones.innerHTML = "";
         }
     }
 
@@ -651,7 +656,9 @@ namespace ApiFiltro {
                     filtros.push(ObtenerValorDelRestrictorDeEdicion(restrictor, restringirPor));
 
                 else if (tipo === TipoControl.ListaDinamica) {
-                    let a: ClausulaDeFiltrado = ObtenerValorDeLaListaDinamica(restrictor, restringirPor);
+                    let propiedadRestrictora: string = input.getAttribute(atListasDinamicas.PropiedadRestrictora);
+                    let valorRestrictor: string = restrictor.getAttribute(atListasDinamicas.idSeleccionado);
+                    let a: ClausulaDeFiltrado = ObtenerValorDeLaListaDinamica(restrictor, propiedadRestrictora, Numero(valorRestrictor));
                     if (Definida(a))
                         filtros.push(a);
                 }
@@ -673,13 +680,14 @@ namespace ApiFiltro {
 
     }
 
-    function ObtenerValorDeLaListaDinamica(lista: HTMLInputElement, restringirPor: string): ClausulaDeFiltrado {
-        let valorRestrictor: string = lista.getAttribute(atListasDinamicas.idSeleccionado);
+    function ObtenerValorDeLaListaDinamica(lista: HTMLInputElement, propiedadRestrictora: string, valorRestrictor: number): ClausulaDeFiltrado {
+        if (IsNullOrEmpty(propiedadRestrictora))
+            MensajesSe.EmitirExcepcion("Obtener filtro de la lista dinámica", `no se ha definido la propiedad restrictora en el control ${lista.id}`);
 
         if (Number(valorRestrictor) === 0)
             return null;
 
-        return new ClausulaDeFiltrado(restringirPor, atCriterio.igual, valorRestrictor);
+        return new ClausulaDeFiltrado(propiedadRestrictora, atCriterio.igual, valorRestrictor.toString());
 
     }
 }

@@ -206,7 +206,8 @@ namespace MVCSistemaDeElementos.Descriptores
             valores["OnFocus"] = $"Crud.{GestorDeEventos.EventosDeListaDinamica}('{TipoAccionDeListaDinamica.obtenerFoco}',this)";
             valores["Placeholder"] = $"Seleccionar ({atributos.CriterioDeBusqueda}) ...";
             valores["GuardarEn"] = atributos.GuardarEn;
-            valores["RestringidoPor"] = atributos.RestringidoPor.ToLower();
+            valores["RestringidoPor"] = atributos.RestringidoPorControl.ToLower();
+            valores["PropiedadRestrictora"] = atributos.PropiedadRestrictora.ToLower();
             valores["ContenidoEn"] = tabla.IdHtmlContenedor;
             valores["Controlador"] = atributos.Controlador;
             valores["Blanquear"] = atributos.AlSeleccionarBlanquearControl.ToLower();
